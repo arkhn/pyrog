@@ -9,7 +9,7 @@ import {
 } from '../types'
 import * as actions from '../actions'
 
-import ResourceSelect from './select'
+import ResourceSelect from '../components/select'
 
 const mapReduxStateToReactProps = (state : appState): appState => {
     return state
@@ -32,12 +32,8 @@ export class App extends React.Component<appState, any> {
     render () {
         let {currentFhirResource, loading} = this.props
 
-        let loadingMessage = loading ? <span>Loading...</span> : null
-
         return (
             <div id='application'>
-                {loadingMessage}
-                {/* <button onClick={() => this.sendFetchAction()}>Fetch Person</button> */}
                 <ResourceSelect />
             </div>
         )

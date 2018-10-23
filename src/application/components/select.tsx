@@ -2,7 +2,6 @@ import * as React from 'react'
 import { Button, MenuItem } from "@blueprintjs/core";
 import { Select } from "@blueprintjs/select";
 
-// import * as Films from "./films";
 import { filmSelectProps, IFilm, TOP_100_FILMS } from "./films";
 import * as actions from '../actions'
 
