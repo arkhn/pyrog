@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "jsx": "react",
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "experimentalDecorators": true,
+        "target": "es6",
+        "allowJs": true
+    },
+    "include": [
+        "**/*.tsx"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}
