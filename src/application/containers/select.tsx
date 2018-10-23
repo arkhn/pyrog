@@ -43,7 +43,6 @@ export default class ResourceSelect extends React.Component<any, ISelectExampleS
                     itemRenderer={filmSelectProps.itemRenderer}
                     noResults={<MenuItem disabled={true} text="No results." />}
                     onItemSelect={this.handleValueChange}
-                    popoverProps={{ minimal: true }}
                 >
                     <Button
                         icon="film"

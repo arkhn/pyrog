@@ -35,7 +35,7 @@ export class App extends React.Component<appState, any> {
         let loadingMessage = loading ? <span>Loading...</span> : null
 
         return (
-            <div>
+            <div id='application'>
                 {loadingMessage}
                 {/* <button onClick={() => this.sendFetchAction()}>Fetch Person</button> */}
                 <ResourceSelect />
