@@ -7,7 +7,6 @@ export interface IFhirResource {
 
 export interface appState {
     currentFhirResource: IFhirResource,
-    loading: number,
     dispatch?: redux.Dispatch<any>,
 }
 

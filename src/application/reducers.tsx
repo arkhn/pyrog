@@ -3,32 +3,20 @@ import {
     appState,
 } from './types'
 
+import {FhirResources} from './mockData'
+
 const initialAppState: appState = {
-    currentFhirResource: null,
-    loading: 0,
+    currentFhirResource: FhirResources[1],
 }
 
 export function reducer(state = initialAppState, action: action): appState {
     switch (action.type) {
-        case 'LOADING':
-            return {
-                ...state,
-                loading: state.loading + 1,
-            }
-
-        case 'FETCH_FHIR_RESOURCE_SUCCESS':
+        case 'CHANGE_FHIR_RESOURCE':
             return {
                 ...state,
                 currentFhirResource: {
-                    ...action.value.entry
-                },
-                loading: state.loading - 1,
-            }
-
-        case 'FETCH_FAILURE':
-            return {
-                ...state,
-                loading: state.loading - 1,
+                    ...action.value
+                }
             }
 
         default:

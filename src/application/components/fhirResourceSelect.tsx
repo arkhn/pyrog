@@ -2,9 +2,8 @@ import * as React from 'react'
 import {Button, MenuItem} from "@blueprintjs/core";
 import {Select, ItemPredicate, ItemRenderer} from "@blueprintjs/select";
 
-import {IFhirResource} from '../types';
-
-import {FhirResources} from '../mockData';
+import {changeCurrentFhirResource} from '../actions'
+import {IFhirResource} from '../types'
 
 // FhirResources typing and utils
 
@@ -22,38 +21,32 @@ const filterByName: ItemPredicate<IFhirResource> = (query, resource) => {
     return `${resource.name.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0;
 };
 
-const fhirResourcesSelectProps = {
-    itemPredicate: filterByName,
-    itemRenderer: renderResource,
-    items: FhirResources,
-};
-
 // React object
 
 const ResourceSelect = Select.ofType<IFhirResource>();
 
-export interface ISelectState {
+interface ISelectProps {
+    items: IFhirResource[];
     resource: IFhirResource;
+    dispatch: any;
 };
 
-export default class FhirResourceSelect extends React.Component<any, ISelectState> {
-    public state: ISelectState = {
-        resource: FhirResources[0],
-    };
+interface ISelectState {
 
-    private handleValueChange = (resource: IFhirResource) => this.setState({
-        resource
-    });
+};
 
-    render () {
-        const {resource} = this.state;
+export default class FhirResourceSelect extends React.Component<ISelectProps, ISelectState> {
+    private handleValueChange = (resource: IFhirResource) => this.props.dispatch(changeCurrentFhirResource(resource))
+
+    public render () {
+        const {items, resource} = this.props;
 
         return (
             <div>
                 <ResourceSelect
-                    items={fhirResourcesSelectProps.items}
-                    itemPredicate={fhirResourcesSelectProps.itemPredicate}
-                    itemRenderer={fhirResourcesSelectProps.itemRenderer}
+                    items={items}
+                    itemPredicate={filterByName}
+                    itemRenderer={renderResource}
                     noResults={<MenuItem disabled={true} text="No results." />}
                     onItemSelect={this.handleValueChange}
                 >

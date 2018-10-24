@@ -1,14 +1,25 @@
 import * as React from "react";
 import {Classes, Icon, ITreeNode, Position, Tooltip, Tree} from "@blueprintjs/core";
 
-import {TreeInitialSate} from '../mockData'
+export interface ITreeExampleProps {
+    nodes: ITreeNode[];
+    dispatch: any;
+}
 
 export interface ITreeExampleState {
     nodes: ITreeNode[];
 }
 
-export default class FhirResourceTree extends React.Component<any, ITreeExampleState> {
-    public state: ITreeExampleState = { nodes: TreeInitialSate };
+export default class FhirResourceTree extends React.Component<ITreeExampleProps, ITreeExampleState> {
+    public state: ITreeExampleState = {
+        nodes: this.props.nodes
+    };
+
+    static getDerivedStateFromProps(props: ITreeExampleProps, state:ITreeExampleState) {
+        return {
+            nodes: props.nodes
+        };
+    }
 
     public render() {
         return (

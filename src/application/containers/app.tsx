@@ -12,6 +12,8 @@ import * as actions from '../actions'
 import FhirResourceSelect from '../components/fhirResourceSelect'
 import FhirResourceTree from '../components/fhirResourceTree'
 
+import {FhirResources} from '../mockData';
+
 const mapReduxStateToReactProps = (state : appState): appState => {
     return state
 }
@@ -22,20 +24,19 @@ function reduxify(mapReduxStateToReactProps: any, mapDispatchToProps?: any, merg
 
 @reduxify(mapReduxStateToReactProps)
 export class App extends React.Component<appState, any> {
-    constructor(props: appState) {
-        super(props)
-    }
-
-    render () {
-        let {currentFhirResource, loading} = this.props
+    public render () {
+        let {currentFhirResource, dispatch} = this.props
 
         return (
             <div id='application'>
                 <FhirResourceSelect
-                    selectedItem={currentFhirResource}
+                    resource={currentFhirResource}
+                    items={FhirResources}
+                    dispatch={dispatch}
                 />
                 <FhirResourceTree
-                    content={currentFhirResource.content}
+                    nodes={currentFhirResource ? currentFhirResource.content : null}
+                    dispatch={dispatch}
                 />
             </div>
         )
