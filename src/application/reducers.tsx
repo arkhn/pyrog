@@ -6,7 +6,7 @@ import {
 import {FhirResources} from './mockData'
 
 const initialAppState: appState = {
-    currentFhirResource: FhirResources[1],
+    currentFhirResource: FhirResources[0],
 }
 
 export function reducer(state = initialAppState, action: action): appState {
