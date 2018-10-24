@@ -2,17 +2,11 @@ import * as React from 'react'
 import {Button, MenuItem} from "@blueprintjs/core";
 import {Select, ItemPredicate, ItemRenderer} from "@blueprintjs/select";
 
+import {IFhirResource} from '../types';
+
+import {FhirResources} from '../mockData';
+
 // FhirResources typing and utils
-
-interface IFhirResource {
-    name: string;
-}
-
-const FhirResources: IFhirResource[] = [
-    {name: 'Patient'},
-    {name: 'Practitionner'},
-    {name: 'Medication'}
-]
 
 const renderResource: ItemRenderer<IFhirResource> = (resource, { handleClick, modifiers, query }) => {
     return (

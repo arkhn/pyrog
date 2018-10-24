@@ -1,7 +1,6 @@
 import {
     action,
     appState,
-    fhirResource,
 } from './types'
 
 const initialAppState: appState = {
@@ -21,10 +20,7 @@ export function reducer(state = initialAppState, action: action): appState {
             return {
                 ...state,
                 currentFhirResource: {
-                    loadedTime: Date.now(),
-                    content: {
-                        ...action.value.entry
-                    }
+                    ...action.value.entry
                 },
                 loading: state.loading - 1,
             }

@@ -5,11 +5,12 @@ import {connect} from 'react-redux'
 
 import {
     appState,
-    fhirResource,
+    IFhirResource,
 } from '../types'
 import * as actions from '../actions'
 
 import FhirResourceSelect from '../components/fhirResourceSelect'
+import FhirResourceTree from '../components/fhirResourceTree'
 
 const mapReduxStateToReactProps = (state : appState): appState => {
     return state
@@ -30,7 +31,12 @@ export class App extends React.Component<appState, any> {
 
         return (
             <div id='application'>
-                <FhirResourceSelect />
+                <FhirResourceSelect
+                    selectedItem={currentFhirResource}
+                />
+                <FhirResourceTree
+                    content={currentFhirResource.content}
+                />
             </div>
         )
     }

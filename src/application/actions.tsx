@@ -1,6 +1,5 @@
 import {
     action,
-    fhirResource,
 } from './types'
 
 import config from './config'

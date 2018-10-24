@@ -1,12 +1,12 @@
 import * as redux from 'redux'
 
-export interface fhirResource {
-    loadedTime: number,
-    content: string,
+export interface IFhirResource {
+    name: string,
+    content: any,
 }
 
 export interface appState {
-    currentFhirResource: fhirResource,
+    currentFhirResource: IFhirResource,
     loading: number,
     dispatch?: redux.Dispatch<any>,
 }
