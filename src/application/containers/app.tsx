@@ -9,7 +9,7 @@ import {
 } from '../types'
 import * as actions from '../actions'
 
-import ResourceSelect from '../components/select'
+import FhirResourceSelect from '../components/fhirResourceSelect'
 
 const mapReduxStateToReactProps = (state : appState): appState => {
     return state
@@ -25,16 +25,12 @@ export class App extends React.Component<appState, any> {
         super(props)
     }
 
-    sendFetchAction() {
-        this.props.dispatch(actions.fetchFhirResource('test_backend/'))
-    }
-
     render () {
         let {currentFhirResource, loading} = this.props
 
         return (
             <div id='application'>
-                <ResourceSelect />
+                <FhirResourceSelect />
             </div>
         )
     }
