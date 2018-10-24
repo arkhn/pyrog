@@ -10,7 +10,7 @@ export const FhirResources : IFhirResource[] = [
             {
                 id: 1,
                 icon: "id-number",
-                isExpanded: false,
+                isExpanded: true,
                 label: (
                     <Tooltip content="I'm a folder <3" position={Position.RIGHT}>
                         Name
