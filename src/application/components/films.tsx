@@ -1,19 +1,10 @@
-/*
- * Copyright 2017 Palantir Technologies, Inc. All rights reserved.
- *
- * Licensed under the terms of the LICENSE file distributed with this project.
- */
-
 import { MenuItem } from "@blueprintjs/core";
 import { ItemPredicate, ItemRenderer } from "@blueprintjs/select";
 import * as React from "react";
 
 export interface IFilm {
-    /** Title of film. */
     title: string;
-    /** Release year. */
     year: number;
-    /** IMDb ranking. */
     rank: number;
 }
 
