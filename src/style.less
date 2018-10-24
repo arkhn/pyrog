@@ -1,4 +1,5 @@
 @import "~@blueprintjs/core/lib/css/blueprint.css";
+@import "~@blueprintjs/core/lib/less/variables";
 
 body {
     background-color: #10161A;
@@ -8,7 +9,6 @@ body {
 }
 
 #application-wrapper {
-    padding: 10px;
     height: 100%;
     width: 100%;
     box-sizing: border-box;
@@ -17,4 +17,11 @@ body {
 .bp3-menu {
     max-height: 50vh;
     overflow-y: auto;
+}
+
+#left-panel {
+    padding: 10px;
+    height: 100vh;
+    max-width: 350px;
+    background-color: @dark-gray1;
 }

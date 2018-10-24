@@ -29,15 +29,17 @@ export class App extends React.Component<appState, any> {
 
         return (
             <div id='application'>
-                <FhirResourceSelect
-                    resource={currentFhirResource}
-                    items={FhirResources}
-                    dispatch={dispatch}
-                />
-                <FhirResourceTree
-                    nodes={currentFhirResource ? currentFhirResource.content : null}
-                    dispatch={dispatch}
-                />
+                <div id='left-panel'>
+                    <FhirResourceSelect
+                        resource={currentFhirResource}
+                        items={FhirResources}
+                        dispatch={dispatch}
+                    />
+                    <FhirResourceTree
+                        nodes={currentFhirResource ? currentFhirResource.content : null}
+                        dispatch={dispatch}
+                    />
+                </div>
             </div>
         )
     }
