@@ -7,7 +7,7 @@ import {IFhirResource} from '../types'
 
 // FhirResources typing and utils
 
-const renderResource: ItemRenderer<IFhirResource> = (resource, { handleClick, modifiers, query }) => {
+const renderResource: ItemRenderer<IFhirResource> = (resource, {handleClick, modifiers, query}) => {
     return (
         <MenuItem
             key={resource.name}

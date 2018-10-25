@@ -3,14 +3,23 @@ import {
     appState,
 } from './types'
 
-import {FhirResources} from './mockData'
+import {fhirResources, inputDatabases} from './mockData'
 
 const initialAppState: appState = {
-    currentFhirResource: FhirResources[0],
+    currentFhirResource: fhirResources[0],
+    currentInputDatabase: inputDatabases[0],
 }
 
 export function reducer(state = initialAppState, action: action): appState {
     switch (action.type) {
+        case 'CHANGE_INPUT_DATABASE':
+            return {
+                ...state,
+                currentInputDatabase: {
+                    ...action.value
+                }
+            }
+
         case 'CHANGE_FHIR_RESOURCE':
             return {
                 ...state,

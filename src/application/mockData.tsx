@@ -1,9 +1,17 @@
 import * as React from "react";
 import {Classes, Icon, ITreeNode, Position, Tooltip, Tree} from "@blueprintjs/core";
 
-import {IFhirResource} from './types'
+import {
+    IFhirResource,
+    IDatabase,
+} from './types'
 
-export const FhirResources : IFhirResource[] = [
+export const inputDatabases : IDatabase[] = [
+    {name: 'CW'},
+    {name: 'DC'}
+]
+
+export const fhirResources : IFhirResource[] = [
     {
         name: 'Patient',
         content: [
