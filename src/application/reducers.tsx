@@ -3,7 +3,7 @@ import {
     appState,
 } from './types'
 
-import {fhirResources, inputDatabases} from './mockData'
+import {fhirResources, inputDatabases} from './mockdata/mockData'
 
 const initialAppState: appState = {
     currentFhirResource: fhirResources[0],
@@ -25,6 +25,36 @@ export function reducer(state = initialAppState, action: action): appState {
                 ...state,
                 currentFhirResource: {
                     ...action.value
+                }
+            }
+
+        case 'CHANGE_CURRENT_DB_OWNER':
+            return {
+                ...state,
+                currentFhirResource: {
+                    ...state.currentFhirResource,
+                    owner: action.value,
+                    table: null,
+                    primaryKey: null,
+                }
+            }
+
+        case 'CHANGE_CURRENT_DB_TABLE':
+            return {
+                ...state,
+                currentFhirResource: {
+                    ...state.currentFhirResource,
+                    table: action.value,
+                    primaryKey: null,
+                }
+            }
+
+        case 'CHANGE_CURRENT_DB_PK':
+            return {
+                ...state,
+                currentFhirResource: {
+                    ...state.currentFhirResource,
+                    primaryKey: action.value,
                 }
             }
 

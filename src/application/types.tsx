@@ -1,17 +1,28 @@
 import * as redux from 'redux'
 
+
 export interface IDatabase {
     name: string,
+    schema: {
+        [owner: string]: {
+            [table: string]: {
+                [column: string]: any
+            }
+        }
+    }
 }
 
 export interface IFhirResource {
-    name: string,
+    resourceType: string,
+    owner: string,
+    table: string,
+    primaryKey: string,
     content: any,
 }
 
 export interface appState {
-    currentFhirResource: IFhirResource,
     currentInputDatabase :IDatabase,
+    currentFhirResource: IFhirResource,
     dispatch?: redux.Dispatch<any>,
 }
 

@@ -3,6 +3,9 @@ import {Route} from 'react-router'
 import {BrowserRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
 
+import {Navbar, Button, Alignment, ControlGroup, FormGroup, MenuItem} from '@blueprintjs/core'
+import {Select, ItemPredicate, ItemRenderer} from "@blueprintjs/select";
+
 import {
     appState,
     IFhirResource,
@@ -10,11 +13,12 @@ import {
 } from '../types'
 import * as actions from '../actions'
 
-import FhirResourceSelect from '../components/fhirResourceSelect'
+import InputDatabaseSelect from '../components/selects/inputDatabaseSelect'
+import FhirResourceSelect from '../components/selects/fhirResourceSelect'
+import StringSelect from '../components/selects/stringSelect'
 import FhirResourceTree from '../components/fhirResourceTree'
-import InputDatabaseSelect from '../components/inputDatabaseSelect'
 
-import {fhirResources, inputDatabases} from '../mockData';
+import {fhirResources, inputDatabases} from '../mockdata/mockData';
 
 const mapReduxStateToReactProps = (state : appState): appState => {
     return state
@@ -29,19 +33,87 @@ export class App extends React.Component<appState, any> {
     public render () {
         let {currentFhirResource, currentInputDatabase, dispatch} = this.props
 
+        let currentOwners = Object.keys(currentInputDatabase.schema);
+
+        let currentTables = currentFhirResource.owner ? Object.keys(
+            currentInputDatabase.schema[currentFhirResource.owner]
+        ) :
+        [];
+
+        let currentColumns = currentFhirResource.owner ? (
+            currentFhirResource.table ?
+            Object.keys(
+                currentInputDatabase.schema[currentFhirResource.owner][currentFhirResource.table]
+            ) :
+            []
+        ) :
+        [];
+
+
         return (
             <div id='application'>
+                <Navbar className={'bp3-dark'}>
+                    <Navbar.Group align={Alignment.LEFT}>
+                        <Navbar.Heading>
+                            Fhirball
+                        </Navbar.Heading>
+                        <Navbar.Divider />
+                        <FormGroup
+                            label="Database"
+                            labelFor="text-input"
+                            inline={true}
+                        >
+                            <InputDatabaseSelect
+                                inputItem={currentInputDatabase}
+                                items={inputDatabases}
+                                action={actions.changeCurrentInputDatabase}
+                                dispatch={dispatch}
+                            />
+                        </FormGroup>
+                        <Navbar.Divider />
+                        <FormGroup
+                            label="FHIR Resource"
+                            labelFor="text-input"
+                            inline={true}
+                        >
+                            <FhirResourceSelect
+                                inputItem={currentFhirResource}
+                                items={fhirResources}
+                                action={actions.changeCurrentFhirResource}
+                                dispatch={dispatch}
+                            />
+                        </FormGroup>
+                        <Navbar.Divider />
+                        <FormGroup
+                            label="Path to Primary Key"
+                            labelFor="text-input"
+                            inline={true}
+                        >
+                            <ControlGroup fill={true} vertical={false}>
+                                <StringSelect
+                                    inputItem={currentFhirResource.owner}
+                                    items={Object.keys(currentInputDatabase.schema)}
+                                    action={actions.changeCurrentDBOwner}
+                                    dispatch={dispatch}
+                                />
+                                <StringSelect
+                                    inputItem={currentFhirResource.table}
+                                    items={currentTables}
+                                    action={actions.changeCurrentDBTable}
+                                    dispatch={dispatch}
+                                />
+                                <StringSelect
+                                    inputItem={currentFhirResource.primaryKey}
+                                    items={currentColumns}
+                                    action={actions.changeCurrentDBPrimaryKey}
+                                    dispatch={dispatch}
+                                />
+                            </ControlGroup>
+                        </FormGroup>
+                    </Navbar.Group>
+                </Navbar>
+
                 <div id='left-panel'>
-                    <InputDatabaseSelect
-                        inputDatabase={currentInputDatabase}
-                        items={inputDatabases}
-                        dispatch={dispatch}
-                    />
-                    <FhirResourceSelect
-                        resource={currentFhirResource}
-                        items={fhirResources}
-                        dispatch={dispatch}
-                    />
                     <FhirResourceTree
                         nodes={currentFhirResource ? currentFhirResource.content : null}
                         dispatch={dispatch}
