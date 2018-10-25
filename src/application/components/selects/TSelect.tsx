@@ -2,9 +2,6 @@ import * as React from 'react'
 import {Button, MenuItem} from "@blueprintjs/core";
 import {Select, ItemPredicate, ItemRenderer} from "@blueprintjs/select";
 
-import {changeCurrentFhirResource} from '../actions'
-import {IFhirResource} from '../types'
-
 interface ISelectProps<T> {
     items: T[];
     inputItem: T;

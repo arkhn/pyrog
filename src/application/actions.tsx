@@ -20,3 +20,24 @@ export function changeCurrentFhirResource(resource: IFhirResource): action {
         value: resource,
     }
 }
+
+export function changeCurrentDBOwner(owner: string): action {
+    return {
+        type: 'CHANGE_CURRENT_DB_OWNER',
+        value: owner,
+    }
+}
+
+export function changeCurrentDBTable(table: string): action {
+    return {
+        type: 'CHANGE_CURRENT_DB_TABLE',
+        value: table,
+    }
+}
+
+export function changeCurrentDBPrimaryKey(pk: string): action {
+    return {
+        type: 'CHANGE_CURRENT_DB_PK',
+        value: pk,
+    }
+}

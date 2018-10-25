@@ -7,16 +7,53 @@ import {
 } from '../types'
 
 export const inputDatabases : IDatabase[] = [
-    {name: 'CW'},
-    {name: 'DC'}
+    {
+        name: 'CW',
+        schema: {
+            'ISCF': {
+                'PATIENT': {
+                    'NOPAT': null,
+                    'PREPAT': null
+                }
+            },
+            'SYSTEM': {
+                'TABLE1': {
+                    'COL1': null,
+                    'COL2': null
+                }
+            }
+        }
+    },
+    {
+        name: 'DC',
+        schema: {
+            'OWNER1': {
+                'TABLE1': {
+                    'COL1': null,
+                    'COL2': null
+                }
+            }
+        }
+    },
+    {
+        name: 'ORB',
+        schema: {
+            'OWNER1': {
+                'TABLE1': {
+                    'COL1': null,
+                    'COL2': null
+                }
+            }
+        }
+    }
 ]
 
 export const fhirResources : IFhirResource[] = [
     {
         resourceType: 'Patient',
-        owner: null,
-        table: null,
-        primaryKey: null,
+        owner: 'ISCF',
+        table: 'PATIENT',
+        primaryKey: 'NOPAT',
         content: [
             {
                 id: 1,
