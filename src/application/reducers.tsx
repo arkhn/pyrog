@@ -3,7 +3,7 @@ import {
     appState,
 } from './types'
 
-import {fhirResources, inputDatabases} from './mockData'
+import {fhirResources, inputDatabases} from './mockdata/mockData'
 
 const initialAppState: appState = {
     currentFhirResource: fhirResources[0],
