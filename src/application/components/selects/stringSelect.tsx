@@ -1,12 +1,14 @@
 import * as React from 'react'
 import {Button, MenuItem} from "@blueprintjs/core";
 import {Select, ItemPredicate, ItemRenderer} from "@blueprintjs/select";
+import {IconName} from '@blueprintjs/icons';
 
 import TSelect from './TSelect'
 
 interface ISelectProps {
     items: string[];
     inputItem: string;
+    icon: IconName;
     action: any;
     dispatch: any;
 };
@@ -31,7 +33,7 @@ export default class InputDatabaseSelect extends React.Component<ISelectProps, a
     };
 
     public render () {
-        const {items, inputItem, action, dispatch} = this.props;
+        const {items, inputItem, icon, action, dispatch} = this.props;
 
         return (
             <div>
@@ -41,6 +43,7 @@ export default class InputDatabaseSelect extends React.Component<ISelectProps, a
                     displayItem={this.displayItem}
                     inputItem={inputItem}
                     items={items}
+                    icon={icon}
                     dispatch={dispatch}
                     action={action}
                 />

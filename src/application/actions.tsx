@@ -41,3 +41,10 @@ export function changeCurrentDBPrimaryKey(pk: string): action {
         value: pk,
     }
 }
+
+export function changeCurrentTreeNode(nodePath: string[]): action {
+    return {
+        type: 'CHANGE_CURRENT_TREE_NODE',
+        value: nodePath,
+    }
+}

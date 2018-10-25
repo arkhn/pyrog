@@ -1,6 +1,8 @@
 @import "~@blueprintjs/core/lib/css/blueprint.css";
 @import "~@blueprintjs/core/lib/less/variables";
 
+@window-padding: 20px;
+
 body {
     background-color: #10161A;
     color: #F5F8FA;
@@ -19,11 +21,88 @@ body {
     overflow-y: auto;
 }
 
+#main-container {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: stretch;
+
+    height: calc(100vh - @pt-navbar-height);
+}
+
 #left-panel {
+    flex-grow: 1;
+    flex-basis: 200px;
+
     padding: 10px 0px;
-    height: 100vh;
-    max-width: 350px;
     background-color: @dark-gray1;
+}
+
+#second-container {
+    flex-grow: 4;
+    flex-basis: 80%;
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-evenly;
+
+    padding: @window-padding;
+
+    & > * {
+        margin-bottom: @window-padding;
+
+        &:last-child {
+            margin-bottom: 0px;
+        }
+    }
+}
+
+#column-viewer {
+    flex-grow: 1;
+    flex-basis: 100px;
+
+    background-color: @dark-gray2;
+    padding: @window-padding;
+
+    .bp3-card {
+        margin-bottom: @window-padding/2;
+        color: @black;
+
+        &:last-child {
+            margin-bottom: 0px;
+        }
+    }
+}
+
+#column-selector {
+    flex-grow: 3;
+    flex-basis: 80%;
+
+    background-color: @dark-gray3;
+
+    .bp3-tab-list {
+        background-color: @dark-gray2;
+
+        * {
+            flex-grow: 2;
+
+            color: @white;
+            text-align: center;
+        }
+    }
+
+    .bp3-tab:focus {
+        outline: none;
+    }
+
+    .bp3-tab-indicator {
+        height: 100%;
+        background-color: @dark-gray3;
+    }
+
+    .within-tab {
+        padding: @window-padding;
+        height: 100%;
+    }
 }
 
 .bp3-form-group {

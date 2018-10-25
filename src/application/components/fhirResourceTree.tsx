@@ -1,6 +1,8 @@
 import * as React from "react";
 import {Classes, Icon, ITreeNode, Position, Tooltip, Tree} from "@blueprintjs/core";
 
+import {changeCurrentTreeNode} from '../actions'
+
 export interface ITreeExampleProps {
     nodes: ITreeNode[];
     dispatch: any;
@@ -40,6 +42,17 @@ export default class FhirResourceTree extends React.Component<ITreeExampleProps,
         }
         nodeData.isSelected = originallySelected == null ? true : !originallySelected;
         this.setState(this.state);
+
+        // Building string path to clicked node.
+        let nodePath : string[] = []
+        let currentNodes : ITreeNode[] = this.props.nodes
+
+        for (var key of _nodePath) {
+            nodePath.push(currentNodes[key].label as string)
+            currentNodes = currentNodes[key].childNodes
+        }
+
+        this.props.dispatch(changeCurrentTreeNode(nodePath))
     };
 
     private handleNodeCollapse = (nodeData: ITreeNode) => {

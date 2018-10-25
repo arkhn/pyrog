@@ -17,6 +17,8 @@ import InputDatabaseSelect from '../components/selects/inputDatabaseSelect'
 import FhirResourceSelect from '../components/selects/fhirResourceSelect'
 import StringSelect from '../components/selects/stringSelect'
 import FhirResourceTree from '../components/fhirResourceTree'
+import ColumnViewer from '../components/columnViewer'
+import TabViewer from '../components/tabViewer'
 
 import {fhirResources, inputDatabases} from '../mockdata/mockData';
 
@@ -31,16 +33,16 @@ function reduxify(mapReduxStateToReactProps: any, mapDispatchToProps?: any, merg
 @reduxify(mapReduxStateToReactProps)
 export class App extends React.Component<appState, any> {
     public render () {
-        let {currentFhirResource, currentInputDatabase, dispatch} = this.props
+        let {currentFhirResource, currentInputDatabase, currentTreeNodePath, dispatch} = this.props
 
-        let currentOwners = Object.keys(currentInputDatabase.schema);
+        let currentOwnerList = Object.keys(currentInputDatabase.schema);
 
-        let currentTables = currentFhirResource.owner ? Object.keys(
+        let currentTableList = currentFhirResource.owner ? Object.keys(
             currentInputDatabase.schema[currentFhirResource.owner]
         ) :
         [];
 
-        let currentColumns = currentFhirResource.owner ? (
+        let currentColumnList = currentFhirResource.owner ? (
             currentFhirResource.table ?
             Object.keys(
                 currentInputDatabase.schema[currentFhirResource.owner][currentFhirResource.table]
@@ -49,6 +51,7 @@ export class App extends React.Component<appState, any> {
         ) :
         [];
 
+        let currentInputColumns = currentFhirResource.inputColumnsDict ? currentFhirResource.inputColumnsDict[currentTreeNodePath.join('.')] : []
 
         return (
             <div id='application'>
@@ -66,6 +69,7 @@ export class App extends React.Component<appState, any> {
                             <InputDatabaseSelect
                                 inputItem={currentInputDatabase}
                                 items={inputDatabases}
+                                icon={'database'}
                                 action={actions.changeCurrentInputDatabase}
                                 dispatch={dispatch}
                             />
@@ -79,6 +83,7 @@ export class App extends React.Component<appState, any> {
                             <FhirResourceSelect
                                 inputItem={currentFhirResource}
                                 items={fhirResources}
+                                icon={'layout-hierarchy'}
                                 action={actions.changeCurrentFhirResource}
                                 dispatch={dispatch}
                             />
@@ -92,19 +97,22 @@ export class App extends React.Component<appState, any> {
                             <ControlGroup fill={true} vertical={false}>
                                 <StringSelect
                                     inputItem={currentFhirResource.owner}
-                                    items={Object.keys(currentInputDatabase.schema)}
+                                    items={currentOwnerList}
+                                    icon={'group-objects'}
                                     action={actions.changeCurrentDBOwner}
                                     dispatch={dispatch}
                                 />
                                 <StringSelect
                                     inputItem={currentFhirResource.table}
-                                    items={currentTables}
+                                    items={currentTableList}
+                                    icon={'th'}
                                     action={actions.changeCurrentDBTable}
                                     dispatch={dispatch}
                                 />
                                 <StringSelect
                                     inputItem={currentFhirResource.primaryKey}
-                                    items={currentColumns}
+                                    items={currentColumnList}
+                                    icon={'column-layout'}
                                     action={actions.changeCurrentDBPrimaryKey}
                                     dispatch={dispatch}
                                 />
@@ -113,11 +121,30 @@ export class App extends React.Component<appState, any> {
                     </Navbar.Group>
                 </Navbar>
 
-                <div id='left-panel'>
-                    <FhirResourceTree
-                        nodes={currentFhirResource ? currentFhirResource.content : null}
-                        dispatch={dispatch}
-                    />
+                <div id='main-container'>
+                    <div id='left-panel'>
+                        <FhirResourceTree
+                            nodes={currentFhirResource ? currentFhirResource.contentAsTree : null}
+                            dispatch={dispatch}
+                        />
+                    </div>
+
+                    <div id='second-container'>
+                        <div id='column-viewer'>
+                            <ColumnViewer
+                                columns={currentInputColumns}
+                                currentOwnerList={currentOwnerList}
+                                currentTableList={currentTableList}
+                                currentColumnList={currentColumnList}
+                                dispatch={dispatch}
+                            />
+                        </div>
+                        <div id='column-selector'>
+                            <TabViewer
+                                dispatch={dispatch}
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
         )

@@ -1,6 +1,7 @@
 import * as React from 'react'
 import {Button, MenuItem} from "@blueprintjs/core";
 import {Select, ItemPredicate, ItemRenderer} from "@blueprintjs/select";
+import {IconName} from '@blueprintjs/icons';
 
 import {IFhirResource} from '../../types'
 import TSelect from './TSelect'
@@ -8,6 +9,7 @@ import TSelect from './TSelect'
 interface ISelectProps {
     items: IFhirResource[];
     inputItem: IFhirResource;
+    icon: IconName;
     action: any;
     dispatch: any;
 };
@@ -32,7 +34,7 @@ export default class FhirResourceSelect extends React.Component<ISelectProps, an
     }
 
     public render () {
-        const {items, inputItem, action, dispatch} = this.props;
+        const {items, inputItem, icon, action, dispatch} = this.props;
 
         return (
             <div>
@@ -42,6 +44,7 @@ export default class FhirResourceSelect extends React.Component<ISelectProps, an
                     displayItem={this.displayItem}
                     inputItem={inputItem}
                     items={items}
+                    icon={icon}
                     action={action}
                     dispatch={dispatch}
                 />
