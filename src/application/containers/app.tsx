@@ -66,6 +66,7 @@ export class App extends React.Component<appState, any> {
                             <InputDatabaseSelect
                                 inputItem={currentInputDatabase}
                                 items={inputDatabases}
+                                icon={'database'}
                                 action={actions.changeCurrentInputDatabase}
                                 dispatch={dispatch}
                             />
@@ -79,6 +80,7 @@ export class App extends React.Component<appState, any> {
                             <FhirResourceSelect
                                 inputItem={currentFhirResource}
                                 items={fhirResources}
+                                icon={'layout-hierarchy'}
                                 action={actions.changeCurrentFhirResource}
                                 dispatch={dispatch}
                             />
@@ -93,18 +95,21 @@ export class App extends React.Component<appState, any> {
                                 <StringSelect
                                     inputItem={currentFhirResource.owner}
                                     items={Object.keys(currentInputDatabase.schema)}
+                                    icon={'group-objects'}
                                     action={actions.changeCurrentDBOwner}
                                     dispatch={dispatch}
                                 />
                                 <StringSelect
                                     inputItem={currentFhirResource.table}
                                     items={currentTables}
+                                    icon={'th'}
                                     action={actions.changeCurrentDBTable}
                                     dispatch={dispatch}
                                 />
                                 <StringSelect
                                     inputItem={currentFhirResource.primaryKey}
                                     items={currentColumns}
+                                    icon={'column-layout'}
                                     action={actions.changeCurrentDBPrimaryKey}
                                     dispatch={dispatch}
                                 />
