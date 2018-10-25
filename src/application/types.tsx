@@ -5,7 +5,10 @@ export interface IDatabase {
 }
 
 export interface IFhirResource {
-    name: string,
+    resourceType: string,
+    owner: string,
+    table: string,
+    primaryKey: string,
     content: any,
 }
 

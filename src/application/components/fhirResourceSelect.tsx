@@ -10,15 +10,15 @@ import {IFhirResource} from '../types'
 const renderResource: ItemRenderer<IFhirResource> = (resource, {handleClick, modifiers, query}) => {
     return (
         <MenuItem
-            key={resource.name}
+            key={resource.resourceType}
             onClick={handleClick}
-            text={resource.name}
+            text={resource.resourceType}
         />
     );
 };
 
 const filterByName: ItemPredicate<IFhirResource> = (query, resource) => {
-    return `${resource.name.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0;
+    return `${resource.resourceType.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0;
 };
 
 // React object
@@ -49,14 +49,11 @@ export default class FhirResourceSelect extends React.Component<ISelectProps, IS
                     itemRenderer={renderResource}
                     noResults={<MenuItem disabled={true} text="No results." />}
                     onItemSelect={this.handleValueChange}
-                    popoverProps={{
-                        targetClassName: 'main-select'
-                    }}
                 >
                     <Button
                         icon="diagram-tree"
                         rightIcon="caret-down"
-                        text={resource ? resource.name : "(No selection)"}
+                        text={resource ? resource.resourceType : "(No selection)"}
                     />
                 </ResourceSelect>
             </div>
