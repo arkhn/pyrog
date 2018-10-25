@@ -4,58 +4,47 @@ import {Select, ItemPredicate, ItemRenderer} from "@blueprintjs/select";
 
 import {changeCurrentFhirResource} from '../actions'
 import {IFhirResource} from '../types'
-
-// FhirResources typing and utils
-
-const renderResource: ItemRenderer<IFhirResource> = (resource, {handleClick, modifiers, query}) => {
-    return (
-        <MenuItem
-            key={resource.resourceType}
-            onClick={handleClick}
-            text={resource.resourceType}
-        />
-    );
-};
-
-const filterByName: ItemPredicate<IFhirResource> = (query, resource) => {
-    return `${resource.resourceType.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0;
-};
-
-// React object
-
-const ResourceSelect = Select.ofType<IFhirResource>();
+import TSelect from './TSelect'
 
 interface ISelectProps {
     items: IFhirResource[];
-    resource: IFhirResource;
+    inputItem: IFhirResource;
     dispatch: any;
 };
 
-interface ISelectState {
+export default class FhirResourceSelect extends React.Component<ISelectProps, any> {
+    private renderItem: ItemRenderer<IFhirResource> = (resource, {handleClick, modifiers, query}) => {
+        return (
+            <MenuItem
+                key={resource.resourceType}
+                onClick={handleClick}
+                text={resource.resourceType}
+            />
+        );
+    };
 
-};
+    private filterByName: ItemPredicate<IFhirResource> = (query, resource) => {
+        return `${resource.resourceType.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0;
+    };
 
-export default class FhirResourceSelect extends React.Component<ISelectProps, ISelectState> {
-    private handleValueChange = (resource: IFhirResource) => this.props.dispatch(changeCurrentFhirResource(resource))
+    private displayItem = function(resource: IFhirResource): string {
+        return (resource ? resource.resourceType : "(No selection)");
+    }
 
     public render () {
-        const {items, resource} = this.props;
+        const {items, inputItem, dispatch} = this.props;
 
         return (
             <div>
-                <ResourceSelect
+                <TSelect<IFhirResource>
+                    renderItem={this.renderItem}
+                    filterItems={this.filterByName}
+                    displayItem={this.displayItem}
+                    inputItem={inputItem}
                     items={items}
-                    itemPredicate={filterByName}
-                    itemRenderer={renderResource}
-                    noResults={<MenuItem disabled={true} text="No results." />}
-                    onItemSelect={this.handleValueChange}
-                >
-                    <Button
-                        icon="diagram-tree"
-                        rightIcon="caret-down"
-                        text={resource ? resource.resourceType : "(No selection)"}
-                    />
-                </ResourceSelect>
+                    dispatch={dispatch}
+                    action={changeCurrentFhirResource}
+                />
             </div>
         )
     }

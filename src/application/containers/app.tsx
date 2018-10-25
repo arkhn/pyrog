@@ -13,11 +13,9 @@ import {
 } from '../types'
 import * as actions from '../actions'
 
+import InputDatabaseSelect from '../components/inputDatabaseSelect'
 import FhirResourceSelect from '../components/fhirResourceSelect'
 import FhirResourceTree from '../components/fhirResourceTree'
-import InputDatabaseSelect from '../components/inputDatabaseSelect'
-
-import TSelect from '../components/TSelect'
 
 import {fhirResources, inputDatabases} from '../mockdata/mockData';
 
@@ -34,24 +32,6 @@ export class App extends React.Component<appState, any> {
     public render () {
         let {currentFhirResource, currentInputDatabase, dispatch} = this.props
 
-        const renderDatabase: ItemRenderer<IDatabase> = (resource, {handleClick, modifiers, query}) => {
-            return (
-                <MenuItem
-                    key={resource.name}
-                    onClick={handleClick}
-                    text={resource.name}
-                />
-            );
-        };
-
-        const filterByName: ItemPredicate<IDatabase> = (query, database) => {
-            return `${database.name.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0;
-        };
-
-        const displayItem = function(item: IDatabase): string {
-            return (item ? item.name : "(No selection)");
-        }
-
         return (
             <div id='application'>
                 <Navbar className={'bp3-dark'}>
@@ -65,14 +45,10 @@ export class App extends React.Component<appState, any> {
                             labelFor="text-input"
                             inline={true}
                         >
-                            <TSelect<IDatabase>
-                                renderItem={renderDatabase}
-                                filterItems={filterByName}
-                                displayItem={displayItem}
+                            <InputDatabaseSelect
                                 inputItem={currentInputDatabase}
                                 items={inputDatabases}
                                 dispatch={dispatch}
-                                action={actions.changeCurrentInputDatabase}
                             />
                         </FormGroup>
                         <Navbar.Divider />
@@ -82,7 +58,7 @@ export class App extends React.Component<appState, any> {
                             inline={true}
                         >
                             <FhirResourceSelect
-                                resource={currentFhirResource}
+                                inputItem={currentFhirResource}
                                 items={fhirResources}
                                 dispatch={dispatch}
                             />

@@ -15,14 +15,7 @@ interface ISelectProps<T> {
     dispatch: any;
 };
 
-interface ISelectState<T> {
-    renderItem: ItemRenderer<T>;
-    filterItems: ItemPredicate<T>;
-    displayItem: (item: any) => string;
-    action: any;
-};
-
-export default class InputDatabaseSelect<T> extends React.Component<ISelectProps<T>, ISelectState<T>> {
+export default class InputDatabaseSelect<T> extends React.Component<ISelectProps<T>, any> {
     constructor(props: ISelectProps<T>) {
         super(props);
         console.log(props)

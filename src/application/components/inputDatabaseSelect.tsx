@@ -4,58 +4,47 @@ import {Select, ItemPredicate, ItemRenderer} from "@blueprintjs/select";
 
 import {changeCurrentInputDatabase} from '../actions'
 import {IDatabase} from '../types'
-
-// FhirResources typing and utils
-
-const renderDatabase: ItemRenderer<IDatabase> = (resource, {handleClick, modifiers, query}) => {
-    return (
-        <MenuItem
-            key={resource.name}
-            onClick={handleClick}
-            text={resource.name}
-        />
-    );
-};
-
-const filterByName: ItemPredicate<IDatabase> = (query, database) => {
-    return `${database.name.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0;
-};
-
-// React object
-
-const DatabaseSelect = Select.ofType<IDatabase>();
+import TSelect from './TSelect'
 
 interface ISelectProps {
     items: IDatabase[];
-    inputDatabase: IDatabase;
+    inputItem: IDatabase;
     dispatch: any;
 };
 
-interface ISelectState {
+export default class InputDatabaseSelect extends React.Component<ISelectProps, any> {
+    private renderItem: ItemRenderer<IDatabase> = (resource, {handleClick, modifiers, query}) => {
+        return (
+            <MenuItem
+                key={resource.name}
+                onClick={handleClick}
+                text={resource.name}
+            />
+        );
+    };
 
-};
+    private filterByName: ItemPredicate<IDatabase> = (query, database) => {
+        return `${database.name.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0;
+    };
 
-export default class InputDatabaseSelect extends React.Component<ISelectProps, ISelectState> {
-    private handleValueChange = (database: IDatabase) => this.props.dispatch(changeCurrentInputDatabase(database))
+    private displayItem = function(resource: IDatabase): string {
+        return (resource ? resource.name : "(No selection)");
+    };
 
     public render () {
-        const {items, inputDatabase} = this.props;
+        const {items, inputItem, dispatch} = this.props;
 
         return (
             <div>
-                <DatabaseSelect
+                <TSelect<IDatabase>
+                    renderItem={this.renderItem}
+                    filterItems={this.filterByName}
+                    displayItem={this.displayItem}
+                    inputItem={inputItem}
                     items={items}
-                    itemPredicate={filterByName}
-                    itemRenderer={renderDatabase}
-                    noResults={<MenuItem disabled={true} text="No results." />}
-                    onItemSelect={this.handleValueChange}
-                >
-                    <Button
-                        icon="database"
-                        rightIcon="caret-down"
-                        text={inputDatabase ? inputDatabase.name : "(No selection)"}
-                    />
-                </DatabaseSelect>
+                    dispatch={dispatch}
+                    action={changeCurrentInputDatabase}
+                />
             </div>
         )
     }
