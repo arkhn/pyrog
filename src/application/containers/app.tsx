@@ -50,6 +50,7 @@ export class App extends React.Component<appState, any> {
         ) :
         [];
 
+        let currentInputColumns = currentFhirResource.inputColumnsDict ? currentFhirResource.inputColumnsDict[currentTreeNodePath.join('.')] : []
 
         return (
             <div id='application'>
