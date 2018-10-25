@@ -49,6 +49,9 @@ export default class FhirResourceSelect extends React.Component<ISelectProps, IS
                     itemRenderer={renderResource}
                     noResults={<MenuItem disabled={true} text="No results." />}
                     onItemSelect={this.handleValueChange}
+                    popoverProps={{
+                        targetClassName: 'main-select'
+                    }}
                 >
                     <Button
                         icon="diagram-tree"

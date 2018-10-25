@@ -49,6 +49,9 @@ export default class InputDatabaseSelect extends React.Component<ISelectProps, I
                     itemRenderer={renderDatabase}
                     noResults={<MenuItem disabled={true} text="No results." />}
                     onItemSelect={this.handleValueChange}
+                    popoverProps={{
+                        targetClassName: 'main-select'
+                    }}
                 >
                     <Button
                         icon="database"
