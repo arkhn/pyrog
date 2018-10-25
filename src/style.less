@@ -1,6 +1,8 @@
 @import "~@blueprintjs/core/lib/css/blueprint.css";
 @import "~@blueprintjs/core/lib/less/variables";
 
+@window-padding: 20px;
+
 body {
     background-color: #10161A;
     color: #F5F8FA;
@@ -43,7 +45,15 @@ body {
     flex-flow: column nowrap;
     justify-content: space-evenly;
 
-    padding: 30px;
+    padding: @window-padding;
+
+    & > * {
+        margin-bottom: @window-padding;
+
+        &:last-child {
+            margin-bottom: 0px;
+        }
+    }
 }
 
 #column-viewer {
@@ -51,11 +61,15 @@ body {
     flex-basis: 100px;
 
     background-color: @dark-gray2;
-    padding: 30px;
+    padding: @window-padding;
 
     .bp3-card {
-        margin-bottom: 5px;
+        margin-bottom: @window-padding/2;
         color: @black;
+
+        &:last-child {
+            margin-bottom: 0px;
+        }
     }
 }
 
@@ -64,7 +78,31 @@ body {
     flex-basis: 80%;
 
     background-color: @dark-gray3;
-    padding: 30px;
+
+    .bp3-tab-list {
+        background-color: @dark-gray2;
+
+        * {
+            flex-grow: 2;
+
+            color: @white;
+            text-align: center;
+        }
+    }
+
+    .bp3-tab:focus {
+        outline: none;
+    }
+
+    .bp3-tab-indicator {
+        height: 100%;
+        background-color: @dark-gray3;
+    }
+
+    .within-tab {
+        padding: @window-padding;
+        height: 100%;
+    }
 }
 
 .bp3-form-group {

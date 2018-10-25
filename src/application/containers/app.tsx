@@ -18,6 +18,7 @@ import FhirResourceSelect from '../components/selects/fhirResourceSelect'
 import StringSelect from '../components/selects/stringSelect'
 import FhirResourceTree from '../components/fhirResourceTree'
 import ColumnViewer from '../components/columnViewer'
+import TabViewer from '../components/tabViewer'
 
 import {fhirResources, inputDatabases} from '../mockdata/mockData';
 
@@ -139,7 +140,9 @@ export class App extends React.Component<appState, any> {
                             />
                         </div>
                         <div id='column-selector'>
-                            <h2>Bonjour</h2>
+                            <TabViewer
+                                dispatch={dispatch}
+                            />
                         </div>
                     </div>
                 </div>
