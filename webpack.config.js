@@ -48,12 +48,6 @@ module.exports = {
                     'css-loader',
                     'less-loader'
                 ],
-            },
-            {
-                test:  /\.(png|jpg|gif|svg)$/,
-                use: [
-                    'file-loader',
-                ],
             }
         ],
     },

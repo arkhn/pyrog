@@ -49,6 +49,12 @@ export const fhirResources : IFhirResource[] = [
                         ),
                     }
                 ],
+            },
+            {
+                id: 0,
+                hasCaret: false,
+                icon: "id-number",
+                label: "Gender",
             }
         ]
     },
