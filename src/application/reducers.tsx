@@ -8,6 +8,7 @@ import {fhirResources, inputDatabases} from './mockdata/mockData'
 const initialAppState: appState = {
     currentFhirResource: fhirResources[0],
     currentInputDatabase: inputDatabases[0],
+    currentTreeNodePath: null,
 }
 
 export function reducer(state = initialAppState, action: action): appState {
@@ -56,6 +57,12 @@ export function reducer(state = initialAppState, action: action): appState {
                     ...state.currentFhirResource,
                     primaryKey: action.value,
                 }
+            }
+
+        case 'CHANGE_CURRENT_TREE_NODE':
+            return {
+                ...state,
+                currentTreeNodePath: action.value,
             }
 
         default:

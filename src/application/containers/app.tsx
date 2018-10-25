@@ -115,7 +115,7 @@ export class App extends React.Component<appState, any> {
 
                 <div id='left-panel'>
                     <FhirResourceTree
-                        nodes={currentFhirResource ? currentFhirResource.content : null}
+                        nodes={currentFhirResource ? currentFhirResource.contentAsTree : null}
                         dispatch={dispatch}
                     />
                 </div>

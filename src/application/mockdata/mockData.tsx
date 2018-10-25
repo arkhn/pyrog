@@ -54,15 +54,11 @@ export const fhirResources : IFhirResource[] = [
         owner: 'ISCF',
         table: 'PATIENT',
         primaryKey: 'NOPAT',
-        content: [
+        contentAsTree: [
             {
                 id: 1,
                 isExpanded: true,
-                label: (
-                    <Tooltip content="I'm a folder <3" position={Position.RIGHT}>
-                        Name
-                    </Tooltip>
-                ),
+                label: 'Name',
                 childNodes: [
                     {
                         id: 3,
@@ -89,14 +85,19 @@ export const fhirResources : IFhirResource[] = [
                 hasCaret: false,
                 label: "Gender",
             }
-        ]
+        ],
+        inputColumnsDict: {
+            'Name.First Name': [
+                {owner: 'ISCF', table: 'PATIENT', column: 'PREPAT'}
+            ]
+        }
     },
     {
         resourceType: 'Practitioner',
         owner: null,
         table: null,
         primaryKey: null,
-        content: [
+        contentAsTree: [
             {
                 id: 0,
                 hasCaret: true,
@@ -109,7 +110,7 @@ export const fhirResources : IFhirResource[] = [
         owner: null,
         table: null,
         primaryKey: null,
-        content: [
+        contentAsTree: [
             {
                 id: 0,
                 hasCaret: true,
