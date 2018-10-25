@@ -19,11 +19,52 @@ body {
     overflow-y: auto;
 }
 
+#main-container {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: stretch;
+
+    height: calc(100vh - @pt-navbar-height);
+}
+
 #left-panel {
+    flex-grow: 1;
+    flex-basis: 200px;
+
     padding: 10px 0px;
-    height: 100vh;
-    max-width: 350px;
     background-color: @dark-gray1;
+}
+
+#second-container {
+    flex-grow: 4;
+    flex-basis: 80%;
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-evenly;
+
+    padding: 30px;
+}
+
+#column-viewer {
+    flex-grow: 1;
+    flex-basis: 100px;
+
+    background-color: @dark-gray2;
+    padding: 30px;
+
+    .bp3-card {
+        margin-bottom: 5px;
+        color: @black;
+    }
+}
+
+#column-selector {
+    flex-grow: 3;
+    flex-basis: 80%;
+
+    background-color: @dark-gray3;
+    padding: 30px;
 }
 
 .bp3-form-group {

@@ -88,7 +88,11 @@ export const fhirResources : IFhirResource[] = [
         ],
         inputColumnsDict: {
             'Name.First Name': [
-                {owner: 'ISCF', table: 'PATIENT', column: 'PREPAT'}
+                {owner: 'ISCF', table: 'PATIENT', column: 'PREPAT'},
+                {owner: 'ISCF', table: 'PATIENT', column: 'XXXPAT'},
+            ],
+            'Name.Last Name': [
+                {owner: 'ISCF', table: 'PATIENT', column: 'FAMPAT'},
             ]
         }
     },

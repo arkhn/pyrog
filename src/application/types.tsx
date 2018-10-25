@@ -11,14 +11,14 @@ export interface IDatabase {
     }
 }
 
-export interface IInputColumns {
+export interface IInputColumn {
     owner: string,
     table: string,
     column: string,
 }
 
 export interface IInputColumnsDict {
-    [key: string]: IInputColumns[],
+    [key: string]: IInputColumn[],
 }
 
 // Describes all elements of a Fhir Resource in the view.
@@ -36,7 +36,9 @@ export interface IFhirResource {
     // it is supposed to be a simple transformation of
     // the attribute 'content'
     contentAsTree?: any,
-    //
+    // dict containing columns from which to pick information;
+    // key = fhir resource path
+    // value = input columns from which to find information
     inputColumnsDict?: IInputColumnsDict,
 }
 
