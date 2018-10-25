@@ -3,7 +3,8 @@ import {Route} from 'react-router'
 import {BrowserRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
 
-import {Navbar, Button, Alignment, ControlGroup, FormGroup} from '@blueprintjs/core'
+import {Navbar, Button, Alignment, ControlGroup, FormGroup, MenuItem} from '@blueprintjs/core'
+import {Select, ItemPredicate, ItemRenderer} from "@blueprintjs/select";
 
 import {
     appState,
@@ -15,6 +16,8 @@ import * as actions from '../actions'
 import FhirResourceSelect from '../components/fhirResourceSelect'
 import FhirResourceTree from '../components/fhirResourceTree'
 import InputDatabaseSelect from '../components/inputDatabaseSelect'
+
+import TSelect from '../components/TSelect'
 
 import {fhirResources, inputDatabases} from '../mockdata/mockData';
 
@@ -31,6 +34,24 @@ export class App extends React.Component<appState, any> {
     public render () {
         let {currentFhirResource, currentInputDatabase, dispatch} = this.props
 
+        const renderDatabase: ItemRenderer<IDatabase> = (resource, {handleClick, modifiers, query}) => {
+            return (
+                <MenuItem
+                    key={resource.name}
+                    onClick={handleClick}
+                    text={resource.name}
+                />
+            );
+        };
+
+        const filterByName: ItemPredicate<IDatabase> = (query, database) => {
+            return `${database.name.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0;
+        };
+
+        const displayItem = function(item: IDatabase): string {
+            return (item ? item.name : "(No selection)");
+        }
+
         return (
             <div id='application'>
                 <Navbar className={'bp3-dark'}>
@@ -44,10 +65,14 @@ export class App extends React.Component<appState, any> {
                             labelFor="text-input"
                             inline={true}
                         >
-                            <InputDatabaseSelect
-                                inputDatabase={currentInputDatabase}
+                            <TSelect<IDatabase>
+                                renderItem={renderDatabase}
+                                filterItems={filterByName}
+                                displayItem={displayItem}
+                                inputItem={currentInputDatabase}
                                 items={inputDatabases}
                                 dispatch={dispatch}
+                                action={actions.changeCurrentInputDatabase}
                             />
                         </FormGroup>
                         <Navbar.Divider />
