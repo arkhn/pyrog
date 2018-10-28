@@ -115,9 +115,16 @@ export class App extends React.Component<appState, any> {
                                     icon={'column-layout'}
                                     action={actions.changeCurrentDBPrimaryKey}
                                     dispatch={dispatch}
+                                    intent={'primary'}
                                 />
                             </ControlGroup>
                         </FormGroup>
+                    </Navbar.Group>
+                    <Navbar.Group align={Alignment.RIGHT}>
+                        <Button
+                            icon={'git-push'}
+                            intent={'primary'}
+                        />
                     </Navbar.Group>
                 </Navbar>
 

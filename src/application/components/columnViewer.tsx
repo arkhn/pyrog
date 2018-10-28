@@ -5,6 +5,8 @@ import StringSelect from '../components/selects/stringSelect'
 
 import {IInputColumn} from '../types'
 
+import {scriptList} from '../mockdata/scriptList'
+
 export interface IColumnViewerProps {
     columns: IInputColumn[];
     currentOwnerList: string[];
@@ -21,41 +23,71 @@ export default class ColumnViewer extends React.Component<IColumnViewerProps, IC
     public render() {
         let {columns, currentOwnerList, currentTableList, currentColumnList, dispatch} = this.props;
 
-        let cards = columns ? columns.map((column: IInputColumn, index: number) =>
-            <Card
-                interactive={true}
-                elevation={Elevation.ONE}
+        let rows = columns ? columns.map((column: IInputColumn, index: number) =>
+            <tr
                 key={index}
             >
-                <ControlGroup fill={false} vertical={false}>
+                <td>
+                    <Button
+                        icon={'delete'}
+                        minimal={true}
+                    />
+                </td>
+                <td>
+                    <ControlGroup fill={false} vertical={false}>
+                        <StringSelect
+                            inputItem={column.owner}
+                            items={currentOwnerList}
+                            icon={'group-objects'}
+                            action={null}
+                            dispatch={dispatch}
+                        />
+                        <StringSelect
+                            inputItem={column.table}
+                            items={currentTableList}
+                            icon={'th'}
+                            action={null}
+                            dispatch={dispatch}
+                        />
+                        <StringSelect
+                            inputItem={column.column}
+                            items={currentColumnList}
+                            icon={'column-layout'}
+                            action={null}
+                            dispatch={dispatch}
+                        />
+                    </ControlGroup>
+                </td>
+                <td>
                     <StringSelect
-                        inputItem={column.owner}
-                        items={currentOwnerList}
-                        icon={'group-objects'}
+                        inputItem={null}
+                        items={scriptList}
+                        icon={'function'}
                         action={null}
                         dispatch={dispatch}
                     />
-                    <StringSelect
-                        inputItem={column.table}
-                        items={currentTableList}
-                        icon={'th'}
-                        action={null}
-                        dispatch={dispatch}
-                    />
-                    <StringSelect
-                        inputItem={column.column}
-                        items={currentColumnList}
-                        icon={'column-layout'}
-                        action={null}
-                        dispatch={dispatch}
-                    />
-                </ControlGroup>
-            </Card>
+                </td>
+                {index == 0 ?
+                    <td rowSpan={columns.length}>
+                        <StringSelect
+                            inputItem={null}
+                            items={scriptList}
+                            icon={'function'}
+                            action={null}
+                            dispatch={dispatch}
+                        />
+                    </td>
+                : null}
+            </tr>
         ) : []
 
         return (
             <div>
-                {cards}
+                <table className={'bp3-dark'}>
+                    <tbody>
+                        {rows}
+                    </tbody>
+                </table>
             </div>
         );
     }

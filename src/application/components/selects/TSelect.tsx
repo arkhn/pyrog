@@ -17,7 +17,6 @@ interface ISelectProps<T> {
 export default class InputDatabaseSelect<T> extends React.Component<ISelectProps<T>, any> {
     constructor(props: ISelectProps<T>) {
         super(props);
-        console.log(props)
     }
 
     private CustomSelect = Select.ofType<T>();

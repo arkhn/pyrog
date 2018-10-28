@@ -2,6 +2,7 @@
 @import "~@blueprintjs/core/lib/less/variables";
 
 @window-padding: 20px;
+@border-radius: 6px;
 
 body {
     background-color: #10161A;
@@ -57,18 +58,27 @@ body {
 }
 
 #column-viewer {
-    flex-grow: 1;
-    flex-basis: 100px;
+    table {
+        width: 100%;
+        background-color: @dark-gray2;
+        border-radius: @border-radius;
+        border-collapse: collapse;
 
-    background-color: @dark-gray2;
-    padding: @window-padding;
+        td {
+            text-align: center;
+            vertical-align: middle;
+            border-color: @dark-gray3;
+            border-width: 0px 1px 1px 0px;
+            border-style: solid;
+            padding: 5px;
+        }
 
-    .bp3-card {
-        margin-bottom: @window-padding/2;
-        color: @black;
+        tr:first-child td:last-child {
+            border: 0px;
+        }
 
-        &:last-child {
-            margin-bottom: 0px;
+        tr:last-child td {
+            border-bottom: 0px;
         }
     }
 }
