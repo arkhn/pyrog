@@ -117,3 +117,25 @@ body {
 .bp3-form-group {
     margin: 0;
 }
+
+#text-tab-search-group {
+    display: flex;
+    align-items: center;
+    padding: @window-padding;
+
+    & > * {
+        margin-right: 20px;
+    }
+
+    & > *:last-child {
+        margin-right: 0px;
+    }
+
+    #text-input {
+        flex-grow: 1;
+    }
+
+    #switch > * {
+        margin-bottom: 0px;
+    }
+}
