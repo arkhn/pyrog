@@ -137,7 +137,7 @@ export class App extends React.Component<appState, any> {
                     </div>
 
                     <div id='second-container'>
-                        <div id='column-viewer'>
+                        <div id='input-columns-viewer'>
                             <InputColumnsTable
                                 columns={currentInputColumns}
                                 currentOwnerList={currentOwnerList}

@@ -36,40 +36,38 @@ export default class TextSearchInputs extends React.Component<ITextSearchInputsP
         let {filterValue, searchByEmbedding} = this.state;
 
         return (
-            <div>
-                <div id={'text-tab-search-group'}>
-                    <div className={'row'}>
-                        <StringSelect
-                            inputItem={''}
-                            items={ownerList}
-                            icon={'group-objects'}
-                            action={null}
-                            dispatch={dispatch}
+            <div id={'text-tab-search-group'}>
+                <div className={'row'}>
+                    <StringSelect
+                        inputItem={''}
+                        items={ownerList}
+                        icon={'group-objects'}
+                        action={null}
+                        dispatch={dispatch}
+                    />
+                    <StringSelect
+                        inputItem={''}
+                        items={tableList}
+                        icon={'th'}
+                        action={null}
+                        dispatch={dispatch}
+                    />
+                    <div id={'switch'}>
+                        <Switch
+                            checked={this.state.searchByEmbedding}
+                            label="Search by Embedding"
+                            onChange={this.handleSwitchChange.bind(this)}
                         />
-                        <StringSelect
-                            inputItem={''}
-                            items={tableList}
-                            icon={'th'}
-                            action={null}
-                            dispatch={dispatch}
-                        />
-                        <div id={'switch'}>
-                            <Switch
-                                checked={this.state.searchByEmbedding}
-                                label="Search by Embedding"
-                                onChange={this.handleSwitchChange.bind(this)}
-                            />
-                        </div>
                     </div>
-                    <div className='row'>
-                        <div id={'text-input'}>
-                            <InputGroup
-                                leftIcon="search"
-                                onChange={this.handleSearchChange.bind(this)}
-                                placeholder="Text example..."
-                                value={filterValue}
-                            />
-                        </div>
+                </div>
+                <div className='row'>
+                    <div id={'text-input'}>
+                        <InputGroup
+                            leftIcon="search"
+                            onChange={this.handleSearchChange.bind(this)}
+                            placeholder="Text example..."
+                            value={filterValue}
+                        />
                     </div>
                 </div>
             </div>

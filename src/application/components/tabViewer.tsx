@@ -2,6 +2,7 @@ import * as React from "react";
 import {Tabs, Tab, TabId} from "@blueprintjs/core";
 
 import TextSearchInputs from './textSearchInputs'
+import ColumnViewer from './columnViewer'
 
 export interface ITabViewProps {
     dispatch: any;
@@ -26,7 +27,10 @@ export default class TabViewer extends React.Component<ITabViewProps, ITabViewSt
             <h2>First tab</h2>
         </div>
 
-        let secondTab = <TextSearchInputs dispatch={dispatch} />
+        let secondTab = <div className={'vertical-flex'}>
+            <TextSearchInputs dispatch={dispatch} />
+            <ColumnViewer dispatch={dispatch} />
+        </div>
 
         return (
             <Tabs
