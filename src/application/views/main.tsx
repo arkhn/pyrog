@@ -31,7 +31,7 @@ function reduxify(mapReduxStateToReactProps: any, mapDispatchToProps?: any, merg
 }
 
 @reduxify(mapReduxStateToReactProps)
-export class App extends React.Component<appState, any> {
+export class MainView extends React.Component<appState, any> {
     public render () {
         let {currentFhirResource, currentInputDatabase, currentTreeNodePath, dispatch} = this.props
 

@@ -13,7 +13,7 @@ module.exports = {
     target: 'web',
     context: SRC_DIR,
     entry: {
-        main: './application/main.tsx',
+        main: './application/app.tsx',
         bundleLibraries: [
             'react',
             'react-dom',
