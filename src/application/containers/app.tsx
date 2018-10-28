@@ -57,10 +57,6 @@ export class App extends React.Component<appState, any> {
             <div id='application'>
                 <Navbar className={'bp3-dark'}>
                     <Navbar.Group align={Alignment.LEFT}>
-                        <Navbar.Heading>
-                            Fhirball
-                        </Navbar.Heading>
-                        <Navbar.Divider />
                         <FormGroup
                             label="Database"
                             labelFor="text-input"
