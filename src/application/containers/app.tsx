@@ -72,6 +72,7 @@ export class App extends React.Component<appState, any> {
                                 icon={'database'}
                                 action={actions.changeCurrentInputDatabase}
                                 dispatch={dispatch}
+                                intent={'primary'}
                             />
                         </FormGroup>
                         <Navbar.Divider />
@@ -86,6 +87,7 @@ export class App extends React.Component<appState, any> {
                                 icon={'layout-hierarchy'}
                                 action={actions.changeCurrentFhirResource}
                                 dispatch={dispatch}
+                                intent={'primary'}
                             />
                         </FormGroup>
                         <Navbar.Divider />
@@ -101,6 +103,7 @@ export class App extends React.Component<appState, any> {
                                     icon={'group-objects'}
                                     action={actions.changeCurrentDBOwner}
                                     dispatch={dispatch}
+                                    intent={'primary'}
                                 />
                                 <StringSelect
                                     inputItem={currentFhirResource.table}
@@ -108,6 +111,7 @@ export class App extends React.Component<appState, any> {
                                     icon={'th'}
                                     action={actions.changeCurrentDBTable}
                                     dispatch={dispatch}
+                                    intent={'primary'}
                                 />
                                 <StringSelect
                                     inputItem={currentFhirResource.primaryKey}

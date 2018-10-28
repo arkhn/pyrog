@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {Button, MenuItem} from "@blueprintjs/core";
+import {Button, MenuItem, Intent} from "@blueprintjs/core";
 import {Select, ItemPredicate, ItemRenderer} from "@blueprintjs/select";
 import {IconName} from '@blueprintjs/icons';
 
@@ -10,6 +10,7 @@ interface ISelectProps {
     items: IFhirResource[];
     inputItem: IFhirResource;
     icon: IconName;
+    intent?: Intent;
     action: any;
     dispatch: any;
 };
@@ -34,7 +35,7 @@ export default class FhirResourceSelect extends React.Component<ISelectProps, an
     }
 
     public render () {
-        const {items, inputItem, icon, action, dispatch} = this.props;
+        const {items, inputItem, icon, intent, action, dispatch} = this.props;
 
         return (
             <div>
@@ -45,6 +46,7 @@ export default class FhirResourceSelect extends React.Component<ISelectProps, an
                     inputItem={inputItem}
                     items={items}
                     icon={icon}
+                    intent={intent}
                     action={action}
                     dispatch={dispatch}
                 />

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {Button, MenuItem} from "@blueprintjs/core";
+import {Button, MenuItem, Intent} from "@blueprintjs/core";
 import {Select, ItemPredicate, ItemRenderer} from "@blueprintjs/select";
 import {IconName} from '@blueprintjs/icons';
 
@@ -10,6 +10,7 @@ interface ISelectProps<T> {
     filterItems: ItemPredicate<T>;
     displayItem: (item: any) => string;
     icon: IconName;
+    intent?: Intent;
     action: any;
     dispatch: any;
 };
@@ -24,7 +25,7 @@ export default class InputDatabaseSelect<T> extends React.Component<ISelectProps
     private handleValueChange = (item: T) => this.props.dispatch(this.props.action(item))
 
     public render () {
-        const {items, inputItem} = this.props;
+        const {items, inputItem, intent} = this.props;
 
         return (
             <div>
@@ -39,6 +40,7 @@ export default class InputDatabaseSelect<T> extends React.Component<ISelectProps
                         icon={this.props.icon}
                         rightIcon="caret-down"
                         text={this.props.displayItem(inputItem)}
+                        intent={intent ? intent : null}
                     />
                 </this.CustomSelect>
             </div>
