@@ -14,7 +14,7 @@ export default class ColumnViewer extends React.Component<IColumnViewerProps, IC
     public render() {
         let {data, dispatch} = this.props
 
-        let columns = columnExamples.map((column: any) =>
+        let columns = data.map((column: any) =>
             <div>
                 <div className={'add-button'}>
                     <Icon icon={'plus'}/>
