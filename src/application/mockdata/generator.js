@@ -2,11 +2,11 @@ var faker = require('faker/locale/fr');
 
 var columns = [];
 
-for (var column = 0; column < 4; column++) {
+for (var column = 0; column < 10; column++) {
     var rows = [];
 
-    for (var i = 0; i < 20; i++) {
-        rows.push(faker.random.number());
+    for (var i = 0; i < 15; i++) {
+        rows.push(faker.name.firstName());
     }
 
     columns.push({
