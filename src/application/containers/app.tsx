@@ -17,7 +17,7 @@ import InputDatabaseSelect from '../components/selects/inputDatabaseSelect'
 import FhirResourceSelect from '../components/selects/fhirResourceSelect'
 import StringSelect from '../components/selects/stringSelect'
 import FhirResourceTree from '../components/fhirResourceTree'
-import ColumnViewer from '../components/columnViewer'
+import InputColumnsTable from '../components/inputColumnsTable'
 import TabViewer from '../components/tabViewer'
 
 import {fhirResources, inputDatabases} from '../mockdata/mockData';
@@ -121,10 +121,14 @@ export class App extends React.Component<appState, any> {
                         </FormGroup>
                     </Navbar.Group>
                     <Navbar.Group align={Alignment.RIGHT}>
-                        <Button
-                            icon={'git-push'}
-                            intent={'primary'}
-                        />
+                        <ControlGroup>
+                            <Button
+                                icon={'cloud-download'}
+                            />
+                            <Button
+                                icon={'cloud-upload'}
+                            />
+                        </ControlGroup>
                     </Navbar.Group>
                 </Navbar>
 
@@ -137,8 +141,8 @@ export class App extends React.Component<appState, any> {
                     </div>
 
                     <div id='second-container'>
-                        <div id='column-viewer'>
-                            <ColumnViewer
+                        <div id='input-columns-viewer'>
+                            <InputColumnsTable
                                 columns={currentInputColumns}
                                 currentOwnerList={currentOwnerList}
                                 currentTableList={currentTableList}

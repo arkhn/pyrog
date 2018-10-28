@@ -1,5 +1,9 @@
 import * as React from "react";
-import {Tabs, Tab, TabId} from "@blueprintjs/core";
+import {Icon, Tabs, Tab, TabId} from "@blueprintjs/core";
+
+import TextSearchInputs from './textSearchInputs'
+import ClusterSearchInputs from './clusterSearchInputs'
+import ColumnViewer from './columnViewer'
 
 export interface ITabViewProps {
     dispatch: any;
@@ -11,24 +15,41 @@ export interface ITabViewState {
 
 export default class TabViewer extends React.Component<ITabViewProps, ITabViewState> {
     public state: ITabViewState = {
-        navbarTabId: 'clustering'
+        navbarTabId: 'text'
     };
 
     private handleNavbarTabChange = (navbarTabId: TabId) => this.setState({ navbarTabId });
 
     public render() {
+        let {dispatch} = this.props
         let {navbarTabId} = this.state
-        let firstTab = <div className={'within-tab'}>
-            <h2>First tab</h2>
+
+        const clusterTabTitle = <div className={'tab-title'}>
+            <Icon icon={'layout'} />
+            <span>Explore Clusters</span>
         </div>
 
-        let secondTab = <div className={'within-tab'}>
-            <h2>Second tab</h2>
+        const clusterTab = <div className={'vertical-flex'}>
+            <ClusterSearchInputs dispatch={dispatch} />
+            <ColumnViewer dispatch={dispatch} />
         </div>
+
+        const textTabTitle = <div className={'tab-title'}>
+            <Icon icon={'paragraph'} />
+            <span>Search by Text</span>
+        </div>
+
+        const textTab = <div className={'vertical-flex'}>
+            <TextSearchInputs dispatch={dispatch} />
+            <ColumnViewer dispatch={dispatch} />
+        </div>
+
         return (
-            <Tabs selectedTabId={navbarTabId} onChange={this.handleNavbarTabChange}>
-                <Tab id="clustering" title="Clustering" panel={firstTab} />
-                <Tab id="text" title="Text" panel={secondTab} />
+            <Tabs
+                selectedTabId={navbarTabId} onChange={this.handleNavbarTabChange}
+            >
+                <Tab id="text" title={textTabTitle} panel={textTab} />
+                <Tab id="clustering" title={clusterTabTitle} panel={clusterTab} />
             </Tabs>
         );
     }
