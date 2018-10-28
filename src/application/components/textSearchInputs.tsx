@@ -4,17 +4,17 @@ import {ControlGroup, InputGroup, Switch} from '@blueprintjs/core';
 import StringSelect from './selects/stringSelect'
 import {ownerList, tableList} from '../mockdata/database'
 
-export interface ITabViewProps {
+export interface ITextSearchInputsProps {
     dispatch: any;
 }
 
-export interface ITabViewState {
+export interface ITextSearchInputsState {
     filterValue: string;
     searchByEmbedding: boolean;
 }
 
-export default class TextSearchInputs extends React.Component<ITabViewProps, ITabViewState> {
-    public state: ITabViewState = {
+export default class TextSearchInputs extends React.Component<ITextSearchInputsProps, ITextSearchInputsState> {
+    public state: ITextSearchInputsProps = {
         filterValue: '',
         searchByEmbedding: false
     };

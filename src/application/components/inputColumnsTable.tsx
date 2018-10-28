@@ -7,7 +7,7 @@ import {IInputColumn} from '../types'
 
 import {scriptList} from '../mockdata/scriptList'
 
-export interface IColumnViewerProps {
+export interface IInputColumnsTableProps {
     columns: IInputColumn[];
     currentOwnerList: string[];
     currentTableList: string[];
@@ -15,11 +15,11 @@ export interface IColumnViewerProps {
     dispatch: any;
 }
 
-export interface IColumnViewerState {
+export interface IInputColumnsTableState {
 
 }
 
-export default class InputColumnsTable extends React.Component<IColumnViewerProps, IColumnViewerState> {
+export default class InputColumnsTable extends React.Component<IInputColumnsTableProps, IInputColumnsTableState> {
     public render() {
         let {columns, currentOwnerList, currentTableList, currentColumnList, dispatch} = this.props;
 
