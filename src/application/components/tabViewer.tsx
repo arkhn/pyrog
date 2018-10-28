@@ -2,6 +2,7 @@ import * as React from "react";
 import {Icon, Tabs, Tab, TabId} from "@blueprintjs/core";
 
 import TextSearchInputs from './textSearchInputs'
+import ClusterSearchInputs from './clusterSearchInputs'
 import ColumnViewer from './columnViewer'
 
 export interface ITabViewProps {
@@ -25,11 +26,12 @@ export default class TabViewer extends React.Component<ITabViewProps, ITabViewSt
 
         const clusterTabTitle = <div className={'tab-title'}>
             <Icon icon={'layout'} />
-            <span>Explore Cluster</span>
+            <span>Explore Clusters</span>
         </div>
 
-        const clusterTab = <div className={'within-tab'}>
-            <h2>First tab</h2>
+        const clusterTab = <div className={'vertical-flex'}>
+            <ClusterSearchInputs dispatch={dispatch} />
+            <ColumnViewer dispatch={dispatch} />
         </div>
 
         const textTabTitle = <div className={'tab-title'}>
