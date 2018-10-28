@@ -33,31 +33,9 @@ export default class ColumnViewer extends React.Component<IColumnViewerProps, IC
                         minimal={true}
                     />
                 </td>
-                <td>
-                    <ControlGroup fill={false} vertical={false}>
-                        <StringSelect
-                            inputItem={column.owner}
-                            items={currentOwnerList}
-                            icon={'group-objects'}
-                            action={null}
-                            dispatch={dispatch}
-                        />
-                        <StringSelect
-                            inputItem={column.table}
-                            items={currentTableList}
-                            icon={'th'}
-                            action={null}
-                            dispatch={dispatch}
-                        />
-                        <StringSelect
-                            inputItem={column.column}
-                            items={currentColumnList}
-                            icon={'column-layout'}
-                            action={null}
-                            dispatch={dispatch}
-                        />
-                    </ControlGroup>
-                </td>
+                <td>{column.owner}</td>
+                <td>{column.table}</td>
+                <td>{column.column}</td>
                 <td>
                     <StringSelect
                         inputItem={null}
