@@ -121,10 +121,14 @@ export class App extends React.Component<appState, any> {
                         </FormGroup>
                     </Navbar.Group>
                     <Navbar.Group align={Alignment.RIGHT}>
-                        <Button
-                            icon={'git-push'}
-                            intent={'primary'}
-                        />
+                        <ControlGroup>
+                            <Button
+                                icon={'cloud-download'}
+                            />
+                            <Button
+                                icon={'cloud-upload'}
+                            />
+                        </ControlGroup>
                     </Navbar.Group>
                 </Navbar>
 
