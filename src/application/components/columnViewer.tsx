@@ -1,10 +1,9 @@
 import * as React from 'react';
 import {Icon, ControlGroup, InputGroup, Switch} from '@blueprintjs/core';
 
-import {columnExamples} from '../mockdata/database'
-
 export interface IColumnViewerProps {
     dispatch: any;
+    data: any;
 }
 
 export interface IColumnViewerState {
@@ -13,7 +12,7 @@ export interface IColumnViewerState {
 
 export default class ColumnViewer extends React.Component<IColumnViewerProps, IColumnViewerState> {
     public render() {
-        let {dispatch} = this.props
+        let {data, dispatch} = this.props
 
         let columns = columnExamples.map((column: any) =>
             <div>
