@@ -36,8 +36,8 @@ export default class TabViewer extends React.Component<ITabViewProps, ITabViewSt
             <Tabs
                 selectedTabId={navbarTabId} onChange={this.handleNavbarTabChange}
             >
-                <Tab id="clustering" title="Clustering" panel={firstTab} />
-                <Tab id="text" title="Text" panel={secondTab} />
+                <Tab id="text" title="Search by Text" panel={secondTab} />
+                <Tab id="clustering" title="Explore Cluster" panel={firstTab} />
             </Tabs>
         );
     }
