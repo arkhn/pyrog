@@ -128,11 +128,21 @@ body {
         overflow: hidden;
         padding: 5px;
 
-        * {
+        & > * {
             flex-grow: 2;
 
             color: @white;
             text-align: center;
+        }
+
+        .tab-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            & > *:first-child {
+                margin-right: 5px;
+            }
         }
     }
 

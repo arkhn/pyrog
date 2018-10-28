@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Tabs, Tab, TabId} from "@blueprintjs/core";
+import {Icon, Tabs, Tab, TabId} from "@blueprintjs/core";
 
 import TextSearchInputs from './textSearchInputs'
 import ColumnViewer from './columnViewer'
@@ -23,11 +23,21 @@ export default class TabViewer extends React.Component<ITabViewProps, ITabViewSt
         let {dispatch} = this.props
         let {navbarTabId} = this.state
 
-        let firstTab = <div className={'within-tab'}>
+        const clusterTabTitle = <div className={'tab-title'}>
+            <Icon icon={'layout'} />
+            <span>Explore Cluster</span>
+        </div>
+
+        const clusterTab = <div className={'within-tab'}>
             <h2>First tab</h2>
         </div>
 
-        let secondTab = <div className={'vertical-flex'}>
+        const textTabTitle = <div className={'tab-title'}>
+            <Icon icon={'paragraph'} />
+            <span>Search by Text</span>
+        </div>
+
+        const textTab = <div className={'vertical-flex'}>
             <TextSearchInputs dispatch={dispatch} />
             <ColumnViewer dispatch={dispatch} />
         </div>
@@ -36,8 +46,8 @@ export default class TabViewer extends React.Component<ITabViewProps, ITabViewSt
             <Tabs
                 selectedTabId={navbarTabId} onChange={this.handleNavbarTabChange}
             >
-                <Tab id="text" title="Search by Text" panel={secondTab} />
-                <Tab id="clustering" title="Explore Cluster" panel={firstTab} />
+                <Tab id="text" title={textTabTitle} panel={textTab} />
+                <Tab id="clustering" title={clusterTabTitle} panel={clusterTab} />
             </Tabs>
         );
     }
