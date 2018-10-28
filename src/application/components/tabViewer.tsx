@@ -5,6 +5,8 @@ import TextSearchInputs from './textSearchInputs'
 import ClusterSearchInputs from './clusterSearchInputs'
 import ColumnViewer from './columnViewer'
 
+import {firstNameColumnsExample, filePathColumnsExample} from '../mockdata/database'
+
 export interface ITabViewProps {
     dispatch: any;
 }
@@ -31,7 +33,10 @@ export default class TabViewer extends React.Component<ITabViewProps, ITabViewSt
 
         const clusterTab = <div className={'vertical-flex'}>
             <ClusterSearchInputs dispatch={dispatch} />
-            <ColumnViewer dispatch={dispatch} />
+            <ColumnViewer
+                dispatch={dispatch}
+                data={filePathColumnsExample}
+            />
         </div>
 
         const textTabTitle = <div className={'tab-title'}>
@@ -41,7 +46,10 @@ export default class TabViewer extends React.Component<ITabViewProps, ITabViewSt
 
         const textTab = <div className={'vertical-flex'}>
             <TextSearchInputs dispatch={dispatch} />
-            <ColumnViewer dispatch={dispatch} />
+            <ColumnViewer
+                dispatch={dispatch}
+                data={firstNameColumnsExample}
+            />
         </div>
 
         return (
