@@ -1,6 +1,9 @@
 import * as React from "react";
 import {ControlGroup, InputGroup, Switch} from '@blueprintjs/core';
 
+import StringSelect from './selects/stringSelect'
+import {ownerList, tableList} from '../mockdata/database'
+
 export interface ITabViewProps {
     dispatch: any;
 }
@@ -29,24 +32,45 @@ export default class TextSearchInputs extends React.Component<ITabViewProps, ITa
     }
 
     public render() {
+        let {dispatch} = this.props
         let {filterValue, searchByEmbedding} = this.state;
 
         return (
-            <div id={'text-tab-search-group'}>
-                <div id={'text-input'}>
-                    <InputGroup
-                        leftIcon="search"
-                        onChange={this.handleSearchChange.bind(this)}
-                        placeholder="Text example..."
-                        value={filterValue}
-                    />
-                </div>
-                <div id={'switch'}>
-                    <Switch
-                        checked={this.state.searchByEmbedding}
-                        label="Search by Embedding"
-                        onChange={this.handleSwitchChange.bind(this)}
-                    />
+            <div>
+                <div id={'text-tab-search-group'}>
+                    <div className={'row'}>
+                        <StringSelect
+                            inputItem={''}
+                            items={ownerList}
+                            icon={'group-objects'}
+                            action={null}
+                            dispatch={dispatch}
+                        />
+                        <StringSelect
+                            inputItem={''}
+                            items={tableList}
+                            icon={'th'}
+                            action={null}
+                            dispatch={dispatch}
+                        />
+                        <div id={'switch'}>
+                            <Switch
+                                checked={this.state.searchByEmbedding}
+                                label="Search by Embedding"
+                                onChange={this.handleSwitchChange.bind(this)}
+                            />
+                        </div>
+                    </div>
+                    <div className='row'>
+                        <div id={'text-input'}>
+                            <InputGroup
+                                leftIcon="search"
+                                onChange={this.handleSearchChange.bind(this)}
+                                placeholder="Text example..."
+                                value={filterValue}
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
         );

@@ -119,23 +119,28 @@ body {
 }
 
 #text-tab-search-group {
-    display: flex;
-    align-items: center;
     padding: @window-padding;
 
-    & > * {
-        margin-right: 20px;
-    }
+    .row {
+        display: flex;
+        align-items: center;
+        // justify-content: space-between;
+        margin-bottom: 10px;
 
-    & > *:last-child {
-        margin-right: 0px;
-    }
+        & > * {
+            margin-right: 20px;
+        }
 
-    #text-input {
-        flex-grow: 1;
-    }
+        & > *:last-child {
+            margin-right: 0px;
+        }
 
-    #switch > * {
-        margin-bottom: 0px;
+        #text-input {
+            flex-grow: 1;
+        }
+
+        #switch > * {
+            margin-bottom: 0px;
+        }
     }
 }
