@@ -19,7 +19,7 @@ export interface IColumnViewerState {
 
 }
 
-export default class ColumnViewer extends React.Component<IColumnViewerProps, IColumnViewerState> {
+export default class InputColumnsTable extends React.Component<IColumnViewerProps, IColumnViewerState> {
     public render() {
         let {columns, currentOwnerList, currentTableList, currentColumnList, dispatch} = this.props;
 
