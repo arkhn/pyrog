@@ -14,7 +14,7 @@ export interface ITextSearchInputsState {
 }
 
 export default class TextSearchInputs extends React.Component<ITextSearchInputsProps, ITextSearchInputsState> {
-    public state: ITextSearchInputsProps = {
+    public state: ITextSearchInputsState = {
         filterValue: '',
         searchByEmbedding: false
     };
