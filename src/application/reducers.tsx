@@ -65,7 +65,7 @@ export function reducer(state = initialAppState, action: action): appState {
         case 'CHANGE_CURRENT_TREE_NODE':
             return {
                 ...state,
-                currentTreeNodePath: action.value,
+                currentTreeNodePath: !action.value.originallySelected ? action.value.nodePath : [],
             }
 
         default:
