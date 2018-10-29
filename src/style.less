@@ -49,17 +49,11 @@ body {
     justify-content: space-evenly;
 
     padding: @window-padding;
-
-    & > * {
-        margin-bottom: @window-padding;
-
-        &:last-child {
-            margin-bottom: 0px;
-        }
-    }
 }
 
 #input-columns-viewer {
+    margin-bottom: @window-padding;
+
     table {
         width: 100%;
         background-color: @dark-gray2;
