@@ -1,4 +1,4 @@
-import * as redux from 'redux'
+import * as redux from 'redux';
 
 export interface IDatabase {
     name: string,
@@ -43,10 +43,11 @@ export interface IFhirResource {
 }
 
 export interface appState {
-    currentInputDatabase :IDatabase,
-    currentFhirResource: IFhirResource,
-    currentTreeNodePath: string[],
-    dispatch?: redux.Dispatch<any>,
+    dialogIsOpen        : boolean;
+    currentInputDatabase: IDatabase,
+    currentFhirResource : IFhirResource,
+    currentTreeNodePath : string[],
+    dispatch?           : redux.Dispatch<any>,
 }
 
 export interface action {

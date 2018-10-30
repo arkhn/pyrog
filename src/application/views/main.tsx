@@ -1,34 +1,37 @@
-import * as React from 'react'
-import {Route} from 'react-router'
-import {BrowserRouter} from 'react-router-dom'
-import {connect} from 'react-redux'
-
+import * as actions from '../actions';
+import * as React from 'react';
+import FhirResourceSelect from '../components/selects/fhirResourceSelect';
+import FhirResourceTree from '../components/fhirResourceTree';
+import InputColumnsTable from '../components/inputColumnsTable';
+import InputDatabaseSelect from '../components/selects/inputDatabaseSelect';
+import StringSelect from '../components/selects/stringSelect';
+import TabViewer from '../components/tabViewer';
 import {
     Alignment,
     Button,
+    Classes,
     ControlGroup,
+    Dialog,
     FormGroup,
     MenuItem,
     Navbar,
     NonIdealState
-} from '@blueprintjs/core'
-import {Select, ItemPredicate, ItemRenderer} from "@blueprintjs/select";
+    } from '@blueprintjs/core';
+import { BrowserRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { fhirResources, inputDatabases } from '../mockdata/mockData';
+import { ItemPredicate, ItemRenderer, Select } from '@blueprintjs/select';
+import { JsonViewer } from '../components/jsonViewer';
+import { Route } from 'react-router';
+
 
 import {
     appState,
     IFhirResource,
     IDatabase,
 } from '../types'
-import * as actions from '../actions'
 
-import InputDatabaseSelect from '../components/selects/inputDatabaseSelect'
-import FhirResourceSelect from '../components/selects/fhirResourceSelect'
-import StringSelect from '../components/selects/stringSelect'
-import FhirResourceTree from '../components/fhirResourceTree'
-import InputColumnsTable from '../components/inputColumnsTable'
-import TabViewer from '../components/tabViewer'
 
-import {fhirResources, inputDatabases} from '../mockdata/mockData';
 
 const arkhnLogo = require("../img/arkhn_logo_only_white.svg") as string;
 
@@ -37,11 +40,12 @@ const mapReduxStateToReactProps = (state : appState): appState => {
 }
 
 function reduxify(mapReduxStateToReactProps: any, mapDispatchToProps?: any, mergeProps?: any, options?: any) {
-    return (target: any) => (connect(mapReduxStateToReactProps, mapDispatchToProps, mergeProps, options)(target) as any)
+     return (target: any) => (connect(mapReduxStateToReactProps, mapDispatchToProps, mergeProps, options)(target) as any)
 }
 
 @reduxify(mapReduxStateToReactProps)
 export class MainView extends React.Component<appState, any> {
+    private TEST_JSON: string = `{"glossary":{"title":"example glossary","GlossDiv":{"title":"S","GlossList":{"GlossEntry":{"ID":"SGML","SortAs":"SGML","GlossTerm":"Standard Generalized Markup Language","Acronym":"SGML","Abbrev":"ISO 8879:1986","GlossDef":{"para":"A meta-markup language, used to create markup languages such as DocBook.","GlossSeeAlso":["GML","XML"]},"GlossSee":"markup"}}}}}`;
     public render () {
         let {currentFhirResource, currentInputDatabase, currentTreeNodePath, dispatch} = this.props
 
@@ -139,6 +143,13 @@ export class MainView extends React.Component<appState, any> {
                                 icon={'cloud-upload'}
                             />
                         </ControlGroup>
+                        <FormGroup >
+                        </FormGroup>
+                        <Dialog isOpen={true}>
+                            <div className={Classes.DIALOG_BODY}>
+                                <JsonViewer json={this.TEST_JSON}/>
+                            </div>
+                        </Dialog> 
                     </Navbar.Group>
                 </Navbar>
 
