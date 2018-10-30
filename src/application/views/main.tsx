@@ -148,10 +148,10 @@ export class MainView extends React.Component<appState, any> {
                         />
                     </div>
 
-                    <div id='second-container' className={'bp3-dark'}>
+                    <div id='right-container' className={'bp3-dark'}>
                         {
                             currentTreeNodePath.length > 0 ?
-                                <div>
+                                <div id='input-columns-container'>
                                     <div id='input-columns-viewer'>
                                         <InputColumnsTable
                                             columns={currentInputColumns}
@@ -168,7 +168,7 @@ export class MainView extends React.Component<appState, any> {
                                     </div>
                                 </div>
                             : <NonIdealState
-                                icon={'ninja'}
+                                icon={'search'}
                                 title={'No FHIR attribute selected'}
                                 description={'Select a FHIR resource attribute by clicking on a node in the left panel.'}
                             />
