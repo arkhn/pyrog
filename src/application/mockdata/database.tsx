@@ -1,12 +1,18 @@
 export const ownerList : string[] = [
     'ICSF',
-    'SYSTEM'
+    'SYSTEM',
 ]
 
 export const tableList : string[] = [
     'PATIENT',
     'JOURNAL',
-    'MEDICATION'
+    'MEDICATION',
+]
+
+export const columnList : string[] = [
+    'NOPAT',
+    'PREPAT',
+    'FAMPAT',
 ]
 
 export const firstNameColumnsExample : any = [ { owner: 'UPDATEDAT',
