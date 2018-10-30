@@ -52,7 +52,7 @@ export default class FhirResourceTree extends React.Component<ITreeExampleProps,
             currentNodes = currentNodes[key].childNodes
         }
 
-        this.props.dispatch(changeCurrentTreeNode(nodePath))
+        this.props.dispatch(changeCurrentTreeNode(originallySelected, nodePath))
     };
 
     private handleNodeCollapse = (nodeData: ITreeNode) => {

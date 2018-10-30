@@ -3,7 +3,15 @@ import {Route} from 'react-router'
 import {BrowserRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
 
-import {Navbar, Button, Alignment, ControlGroup, FormGroup, MenuItem} from '@blueprintjs/core'
+import {
+    Alignment,
+    Button,
+    ControlGroup,
+    FormGroup,
+    MenuItem,
+    Navbar,
+    NonIdealState
+} from '@blueprintjs/core'
 import {Select, ItemPredicate, ItemRenderer} from "@blueprintjs/select";
 
 import {
@@ -21,6 +29,8 @@ import InputColumnsTable from '../components/inputColumnsTable'
 import TabViewer from '../components/tabViewer'
 
 import {fhirResources, inputDatabases} from '../mockdata/mockData';
+
+const arkhnLogo = require("../img/arkhn_logo_only_white.svg") as string;
 
 const mapReduxStateToReactProps = (state : appState): appState => {
     return state
@@ -140,21 +150,31 @@ export class MainView extends React.Component<appState, any> {
                         />
                     </div>
 
-                    <div id='second-container'>
-                        <div id='input-columns-viewer'>
-                            <InputColumnsTable
-                                columns={currentInputColumns}
-                                currentOwnerList={currentOwnerList}
-                                currentTableList={currentTableList}
-                                currentColumnList={currentColumnList}
-                                dispatch={dispatch}
+                    <div id='right-container' className={'bp3-dark'}>
+                        {
+                            currentTreeNodePath.length > 0 ?
+                                <div id='input-columns-container'>
+                                    <div id='input-columns-viewer'>
+                                        <InputColumnsTable
+                                            columns={currentInputColumns}
+                                            currentOwnerList={currentOwnerList}
+                                            currentTableList={currentTableList}
+                                            currentColumnList={currentColumnList}
+                                            dispatch={dispatch}
+                                        />
+                                    </div>
+                                    <div id='column-selector'>
+                                        <TabViewer
+                                            dispatch={dispatch}
+                                        />
+                                    </div>
+                                </div>
+                            : <NonIdealState
+                                icon={<span dangerouslySetInnerHTML={{__html: arkhnLogo}}/>}
+                                title={'No FHIR attribute selected'}
+                                description={'Select a FHIR resource attribute by clicking on a node in the left panel.'}
                             />
-                        </div>
-                        <div id='column-selector'>
-                            <TabViewer
-                                dispatch={dispatch}
-                            />
-                        </div>
+                        }
                     </div>
                 </div>
             </div>

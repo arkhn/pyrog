@@ -14,8 +14,8 @@ export default class ColumnViewer extends React.Component<IColumnViewerProps, IC
     public render() {
         let {data, dispatch} = this.props
 
-        let columns = data.map((column: any) =>
-            <div>
+        let columns = data.map((column: any, index: number) =>
+            <div key={index}>
                 <div className={'add-button'}>
                     <Icon icon={'plus'}/>
                 </div>
@@ -26,8 +26,8 @@ export default class ColumnViewer extends React.Component<IColumnViewerProps, IC
                         <div>{column.column}</div>
                     </div>
                     <div className={'column-rows'}>
-                        {column.rows.map((row: string) =>
-                            <div>{row}</div>
+                        {column.rows.map((row: string, index: number) =>
+                            <div key={index}>{row}</div>
                         )}
                     </div>
                 </div>
