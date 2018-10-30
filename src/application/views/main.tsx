@@ -30,6 +30,8 @@ import TabViewer from '../components/tabViewer'
 
 import {fhirResources, inputDatabases} from '../mockdata/mockData';
 
+const arkhnLogo = require("../img/arkhn_logo_only_white.svg") as string;
+
 const mapReduxStateToReactProps = (state : appState): appState => {
     return state
 }
@@ -168,7 +170,7 @@ export class MainView extends React.Component<appState, any> {
                                     </div>
                                 </div>
                             : <NonIdealState
-                                icon={'search'}
+                                icon={<span dangerouslySetInnerHTML={{__html: arkhnLogo}}/>}
                                 title={'No FHIR attribute selected'}
                                 description={'Select a FHIR resource attribute by clicking on a node in the left panel.'}
                             />

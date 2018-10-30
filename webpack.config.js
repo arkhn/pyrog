@@ -36,8 +36,6 @@ module.exports = {
             {
                 test: /\.tsx?$/,
                 use: [
-                    // 'react-hot-loader/webpack',
-                    // 'react-hot-loader',
                     'awesome-typescript-loader'
                 ],
             },
@@ -48,6 +46,10 @@ module.exports = {
                     'css-loader',
                     'less-loader'
                 ],
+            },
+            {
+                test: /\.svg$/,
+                loader: 'svg-inline-loader'
             }
         ],
     },
