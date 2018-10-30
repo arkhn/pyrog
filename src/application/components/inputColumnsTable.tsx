@@ -65,6 +65,12 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
             <div>
                 <table className={'bp3-dark'}>
                     <tbody>
+                        <tr>
+                            <th></th>
+                            <th colSpan={3}>Column Path</th>
+                            <th>Column Script</th>
+                            {columns.length > 1 ? <th>Final Script</th> : null}
+                        </tr>
                         {rows}
                     </tbody>
                 </table>
