@@ -45,16 +45,18 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
                         dispatch={dispatch}
                     />
                 </td>
-                {index == 0 ?
-                    <td rowSpan={columns.length}>
-                        <StringSelect
-                            inputItem={null}
-                            items={scriptList}
-                            icon={'function'}
-                            action={null}
-                            dispatch={dispatch}
-                        />
-                    </td>
+                {columns.length > 1 ?
+                    (index == 0 ?
+                        <td rowSpan={columns.length}>
+                            <StringSelect
+                                inputItem={null}
+                                items={scriptList}
+                                icon={'function'}
+                                action={null}
+                                dispatch={dispatch}
+                            />
+                        </td>
+                    : null)
                 : null}
             </tr>
         ) : []
