@@ -1,11 +1,19 @@
 import * as React from "react";
-import {Button, Card, ControlGroup, Divider, Elevation} from "@blueprintjs/core";
+import {
+    Button,
+    ControlGroup,
+} from "@blueprintjs/core";
 
 import StringSelect from '../components/selects/stringSelect'
 
 import {IInputColumn} from '../types'
 
 import {scriptList} from '../mockdata/scriptList'
+import {
+    columnList,
+    ownerList,
+    tableList,
+} from '../mockdata/database'
 
 export interface IInputColumnsTableProps {
     columns: IInputColumn[];
@@ -33,9 +41,41 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
                         minimal={true}
                     />
                 </td>
-                <td>{column.owner}</td>
-                <td>{column.table}</td>
-                <td>{column.column}</td>
+                <td>{`${column.owner} > ${column.table} > ${column.column}`}</td>
+                <td>
+                    <StringSelect
+                        inputItem={null}
+                        items={columnList}
+                        icon={'column-layout'}
+                        action={null}
+                        dispatch={dispatch}
+                    />
+                </td>
+                <td>
+                    <ControlGroup fill={false} vertical={false}>
+                        <StringSelect
+                            inputItem={null}
+                            items={ownerList}
+                            icon={'group-objects'}
+                            action={null}
+                            dispatch={dispatch}
+                        />
+                        <StringSelect
+                            inputItem={null}
+                            items={tableList}
+                            icon={'th'}
+                            action={null}
+                            dispatch={dispatch}
+                        />
+                        <StringSelect
+                            inputItem={null}
+                            items={columnList}
+                            icon={'column-layout'}
+                            action={null}
+                            dispatch={dispatch}
+                        />
+                    </ControlGroup>
+                </td>
                 <td>
                     <StringSelect
                         inputItem={null}
@@ -67,7 +107,8 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
                     <tbody>
                         <tr>
                             <th></th>
-                            <th colSpan={3}>Column Path</th>
+                            <th>Column Path</th>
+                            <th colSpan={2}>Join</th>
                             <th>Column Script</th>
                             {columns.length > 1 ? <th>Final Script</th> : null}
                         </tr>
