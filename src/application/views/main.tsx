@@ -30,6 +30,7 @@ import {
     reduxAppState,
 } from '../types'
 import {
+    fetchInfoNameList,
     changeCurrentDatabase,
     changeCurrentFhirResource,
 } from '../actions'
@@ -49,12 +50,17 @@ function reduxify(mapReduxStateToReactProps: any, mapDispatchToProps?: any, merg
 @reduxify(mapReduxStateToReactProps)
 export class MainView extends React.Component<reduxAppState, any> {
     private TEST_JSON: string = `{"glossary":{"title":"example glossary","GlossDiv":{"title":"S","GlossList":{"GlossEntry":{"ID":"SGML","SortAs":"SGML","GlossTerm":"Standard Generalized Markup Language","Acronym":"SGML","Abbrev":"ISO 8879:1986","GlossDef":{"para":"A meta-markup language, used to create markup languages such as DocBook.","GlossSeeAlso":["GML","XML"]},"GlossSee":"markup"}}}}}`;
+
+    public componentDidMount() {
+        this.props.dispatch(fetchInfoNameList())
+    }
     public render () {
         let {
             dispatch,
             currentDatabase,
             currentFhirResource,
             currentFhirAttribute,
+            loadingNameLists,
             databaseNameList,
             fhirResourceNameList,
             databaseSchema,
@@ -65,54 +71,62 @@ export class MainView extends React.Component<reduxAppState, any> {
         return (
             <div id='application'>
                 <Navbar className={'bp3-dark'}>
-                    <Navbar.Group align={Alignment.LEFT}>
-                        <FormGroup
-                            label="Database"
-                            labelFor="text-input"
-                            inline={true}
-                        >
-                            <StringSelect
-                                inputItem={currentDatabase}
-                                items={databaseNameList}
-                                icon={'database'}
-                                action={changeCurrentDatabase}
-                                dispatch={dispatch}
-                                intent={'primary'}
-                            />
-                        </FormGroup>
-                        <Navbar.Divider />
-                        <FormGroup
-                            label="FHIR Resource"
-                            labelFor="text-input"
-                            inline={true}
-                        >
-                            <StringSelect
-                                inputItem={currentFhirResource}
-                                items={fhirResourceNameList}
-                                icon={'layout-hierarchy'}
-                                action={changeCurrentFhirResource}
-                                dispatch={dispatch}
-                                intent={'primary'}
-                            />
-                        </FormGroup>
-                    </Navbar.Group>
-                    <Navbar.Group align={Alignment.RIGHT}>
-                        <ControlGroup>
-                            <Button
-                                icon={'cloud-download'}
-                            />
-                            <Button
-                                icon={'cloud-upload'}
-                            />
-                        </ControlGroup>
-                        <FormGroup >
-                        </FormGroup>
-                        <Dialog isOpen={true}>
-                            <div className={Classes.DIALOG_BODY}>
-                                <JsonViewer json={this.TEST_JSON}/>
-                            </div>
-                        </Dialog>
-                    </Navbar.Group>
+                    {loadingNameLists ?
+                        <Navbar.Group align={Alignment.CENTER}>
+                            <Spinner size={25}/>
+                        </Navbar.Group> :
+                        <div>
+                            <Navbar.Group align={Alignment.LEFT}>
+                                <FormGroup
+                                    label="Database"
+                                    labelFor="text-input"
+                                    inline={true}
+                                >
+                                    <StringSelect
+                                        inputItem={currentDatabase}
+                                        items={databaseNameList}
+                                        icon={'database'}
+                                        action={changeCurrentDatabase}
+                                        dispatch={dispatch}
+                                        intent={'primary'}
+                                    />
+                                </FormGroup>
+                                <Navbar.Divider />
+                                <FormGroup
+                                    label="FHIR Resource"
+                                    labelFor="text-input"
+                                    inline={true}
+                                >
+                                    <StringSelect
+                                        inputItem={currentFhirResource}
+                                        items={fhirResourceNameList}
+                                        icon={'layout-hierarchy'}
+                                        action={changeCurrentFhirResource}
+                                        dispatch={dispatch}
+                                        intent={'primary'}
+                                    />
+                                </FormGroup>
+                            </Navbar.Group>
+                            <Navbar.Group align={Alignment.RIGHT}>
+                                <ControlGroup>
+                                    <Button
+                                        icon={'cloud-download'}
+                                    />
+                                    <Button
+                                        icon={'cloud-upload'}
+                                    />
+                                </ControlGroup>
+                                <FormGroup >
+                                </FormGroup>
+                                <Dialog isOpen={true}>
+                                    <div className={Classes.DIALOG_BODY}>
+                                        <JsonViewer json={this.TEST_JSON}/>
+                                    </div>
+                                </Dialog>
+                            </Navbar.Group>
+                        </div>
+                    }
+>>>>>>> Add redux actions and reducers for fetching database name list and fhir resource name list
                 </Navbar>
 
                 {loadingMapping ? <Spinner /> :

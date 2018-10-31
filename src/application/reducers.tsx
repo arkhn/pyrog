@@ -13,8 +13,9 @@ const initialAppState: reduxAppState = {
     currentFhirResource: null,
     currentFhirAttribute: [],
 
-    databaseNameList: ['CW', 'DC', 'ORB'],
-    fhirResourceNameList: ['Patient', 'Practioner', 'Medication'],
+    loadingNameLists: false,
+    databaseNameList: [],
+    fhirResourceNameList: [],
     databaseSchema: null,
     loadingMapping: false,
     mapping: null,
@@ -26,6 +27,29 @@ export function reducer(state = initialAppState, action: action): reduxAppState 
             return {
                 ...state,
                 dialogIsOpen: !state.dialogIsOpen,
+
+        case 'LOADING_NAME_LISTS':
+            return {
+                ...state,
+                loadingNameLists: true,
+            }
+
+        case 'FETCH_INFO_NAME_LIST_SUCCESS':
+            return {
+                ...state,
+                loadingNameLists: false,
+            }
+
+        case 'FETCH_DATABASE_NAME_LIST_SUCCESS':
+            return {
+                ...state,
+                databaseNameList: action.value,
+            }
+
+        case 'FETCH_FHIR_RESOURCE_NAME_LIST_SUCCESS':
+            return {
+                ...state,
+                fhirResourceNameList: action.value,
             }
 
         case 'UPDATE_STATE_CURRENT_DATABASE':
