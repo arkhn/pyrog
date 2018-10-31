@@ -1,5 +1,6 @@
 @import "~@blueprintjs/core/lib/css/blueprint.css";
 @import "~@blueprintjs/core/lib/less/variables";
+@import "~react-json-pretty/src/JSONPretty.monikai.css";
 
 @window-padding: 20px;
 @border-radius: 6px;
@@ -307,4 +308,14 @@ body {
 
 .center-flex {
     justify-content: center;
+}
+
+
+.jsonView span {
+    color: slategray;
+}
+
+#json-pretty{
+    text-overflow: ellipsis;
+    overflow: hidden;
 }

@@ -1,11 +1,17 @@
+import config from './config';
 import {
     action,
     IFhirResource,
     IDatabase,
 } from './types'
 
-import config from './config'
 const serverUrl = config('app').serverURL
+
+export function toggleDialogVisibility(): action{
+    return {
+        type: 'TOGGLE_DIALOG',
+    }
+}
 
 export function changeCurrentInputDatabase(database: IDatabase): action {
     return {
