@@ -1,71 +1,86 @@
 import {
     action,
-    appState,
+    reduxAppState,
 } from './types'
 
 import {fhirResources, inputDatabases} from './mockdata/mockData'
 
-const initialAppState: appState = {
-    currentFhirResource: fhirResources[0],
-    currentInputDatabase: inputDatabases[0],
-    currentTreeNodePath: [],
+const initialAppState: reduxAppState = {
+    distantServerUrl: 'http://localhost:3000',
+
+    currentDatabase: null,
+    currentFhirResource: null,
+    currentFhirAttribute: [],
+
+    databaseNameList: ['CW', 'DC', 'ORB'],
+    fhirResourceNameList: ['Patient', 'Practioner', 'Medication'],
+    databaseSchema: null,
+
+    mapping: null,
 }
 
-export function reducer(state = initialAppState, action: action): appState {
+export function reducer(state = initialAppState, action: action): reduxAppState {
     switch (action.type) {
-        case 'CHANGE_INPUT_DATABASE':
+        case 'UPDATE_STATE_CURRENT_DATABASE':
             return {
                 ...state,
-                currentInputDatabase: {
-                    ...action.value
-                },
-                currentFhirResource: fhirResources[0],
-                currentTreeNodePath: [],
+                currentDatabase: action.value,
             }
 
-        case 'CHANGE_FHIR_RESOURCE':
+        case 'CHANGE_CURRENT_FHIR_RESOURCE':
             return {
                 ...state,
-                currentFhirResource: {
-                    ...action.value
-                },
-                currentTreeNodePath: [],
+                currentFhirResource: action.value,
             }
 
-        case 'CHANGE_CURRENT_DB_OWNER':
+        case 'UPDATE_STATE_CURRENT_FHIR_RESOURCE':
             return {
                 ...state,
-                currentFhirResource: {
-                    ...state.currentFhirResource,
-                    owner: action.value,
-                    table: null,
-                    primaryKey: null,
+                currentFhirResource: action.value,
+            }
+
+        case 'CHANGE_PK_OWNER':
+            return {
+                ...state,
+                mapping: {
+                    ...state.mapping,
+                    pathToPrimaryKey: {
+                        owner: action.value,
+                        table: null,
+                        column: null,
+                    }
                 }
             }
 
-        case 'CHANGE_CURRENT_DB_TABLE':
+        case 'CHANGE_PK_TABLE':
             return {
                 ...state,
-                currentFhirResource: {
-                    ...state.currentFhirResource,
-                    table: action.value,
-                    primaryKey: null,
+                mapping: {
+                    ...state.mapping,
+                    pathToPrimaryKey: {
+                        ...state.mapping.pathToPrimaryKey,
+                        table: action.value,
+                        column: null,
+                    }
                 }
             }
 
-        case 'CHANGE_CURRENT_DB_PK':
+        case 'CHANGE_PK_COLUMN':
             return {
                 ...state,
-                currentFhirResource: {
-                    ...state.currentFhirResource,
-                    primaryKey: action.value,
+                mapping: {
+                    ...state.mapping,
+                    pathToPrimaryKey: {
+                        ...state.mapping.pathToPrimaryKey,
+                        column: action.value,
+                    }
                 }
             }
 
-        case 'CHANGE_CURRENT_TREE_NODE':
+        case 'CHANGE_CURRENT_FHIR_ATTRIBUTE':
             return {
                 ...state,
-                currentTreeNodePath: !action.value.originallySelected ? action.value.nodePath : [],
+                currentFhirAttribute: !action.value.originallySelected ? action.value.nodePath : [],
             }
 
         default:

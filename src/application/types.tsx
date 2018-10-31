@@ -1,56 +1,77 @@
 import * as redux from 'redux'
 
+// TODO: Deprecate type
+export interface IFhirResource {
+    resourceType: string,
+    owner: string,
+    table: string,
+    primaryKey: string,
+    contentAsTree: any,
+    inputColumnsDict?: any,
+}
+
+// TODO: Deprecate type
 export interface IDatabase {
+    name: string,
+    schema: any,
+}
+
+export interface IDatabaseSchema {
     name: string,
     schema: {
         [owner: string]: {
-            [table: string]: {
-                [column: string]: any
-            }
+            [table: string]: string[],
         }
     }
 }
 
-export interface IInputColumn {
+export interface IDatabaseColumn {
     owner: string,
     table: string,
     column: string,
 }
 
-export interface IInputColumnsDict {
-    [key: string]: IInputColumn[],
-}
-
-// Describes all elements of a Fhir Resource in the view.
-// In particular, it contains the mapping.
-
-export interface IFhirResource {
-    resourceType: string,
-    // attributes indicating path to the primary key for this resource
+export interface IInputColumn extends IDatabaseColumn {
     owner: string,
     table: string,
-    primaryKey: string,
-    // json description
-    content?: any,
-    // json description turned into a react tree;
-    // it is supposed to be a simple transformation of
-    // the attribute 'content'
-    contentAsTree?: any,
-    // dict containing columns from which to pick information;
-    // key = fhir resource path
-    // value = input columns from which to find information
-    inputColumnsDict?: IInputColumnsDict,
+    column: string,
+    join: {
+        sourceColumn: IDatabaseColumn,
+        targetColumn: IDatabaseColumn,
+    }
+    script: any,
 }
 
-export interface appState {
-    currentInputDatabase :IDatabase,
-    currentFhirResource: IFhirResource,
-    currentTreeNodePath: string[],
+export interface reduxAppState {
     dispatch?: redux.Dispatch<any>,
+
+    // App information
+    distantServerUrl: string,
+
+    // User-selected variables
+    currentDatabase: string,
+    currentFhirResource: string,
+    currentFhirAttribute: string[],
+
+    // To fetch from backend
+    databaseNameList: string[],
+    fhirResourceNameList: string[],
+    databaseSchema: IDatabaseSchema,
+
+    // This is what users acutally modify
+    // and upload.
+    mapping: {
+        pathToPrimaryKey: IDatabaseColumn,
+        fhirMapping: {
+            [fhirAttribute: string]: {
+                inputColumns: IInputColumn[],
+                mergingScript: any,
+            }
+        }
+    },
 }
 
 export interface action {
     type: string,
-    promise?: (dispatch: any, getState: any) => any,
     value?: any,
 }

@@ -1,22 +1,34 @@
 import {
     action,
-    IFhirResource,
-    IDatabase,
 } from './types'
 
 import config from './config'
 const serverUrl = config('app').serverURL
 
-export function changeCurrentInputDatabase(database: IDatabase): action {
+export function changeCurrentDatabase(database: string): any {
     return {
-        type: 'CHANGE_INPUT_DATABASE',
+        type: 'CHANGE_CURRENT_DATABASE',
         value: database,
     }
 }
 
-export function changeCurrentFhirResource(resource: IFhirResource): action {
+export function updateStateCurrentDatabase(database: string): action {
     return {
-        type: 'CHANGE_FHIR_RESOURCE',
+        type: 'UPDATE_STATE_CURRENT_DATABASE',
+        value: database,
+    }
+}
+
+export function changeCurrentFhirResource(resource: string): action {
+    return {
+        type: 'CHANGE_CURRENT_FHIR_RESOURCE',
+        value: resource,
+    }
+}
+
+export function updateStateCurrentFhirResource(resource: string): action {
+    return {
+        type: 'UPDATE_STATE_CURRENT_FHIR_RESOURCE',
         value: resource,
     }
 }
