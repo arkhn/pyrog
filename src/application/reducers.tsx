@@ -9,7 +9,7 @@ const initialAppState: appState = {
     currentFhirResource: fhirResources[0],
     currentInputDatabase: inputDatabases[0],
     currentTreeNodePath: [],
-    dialogIsOpen: false
+    dialogIsOpen: false,
 }
 
 export function reducer(state = initialAppState, action: action): appState {
