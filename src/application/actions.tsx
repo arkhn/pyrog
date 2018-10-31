@@ -9,7 +9,7 @@ const serverUrl = config('app').serverURL
 
 export function toggleDialogVisibility(): action{
     return {
-        type: 'TOGGLE_DIALOG'
+        type: 'TOGGLE_DIALOG',
     }
 }
 
