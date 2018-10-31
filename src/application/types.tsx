@@ -32,9 +32,6 @@ export interface IDatabaseColumn {
 }
 
 export interface IInputColumn extends IDatabaseColumn {
-    owner: string,
-    table: string,
-    column: string,
     join: {
         sourceColumn: IDatabaseColumn,
         targetColumn: IDatabaseColumn,
