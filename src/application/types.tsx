@@ -62,6 +62,7 @@ export interface reduxAppState {
     currentFhirAttribute: string[],
 
     // To fetch from backend
+    loadingNameLists: boolean,
     databaseNameList: string[],
     fhirResourceNameList: string[],
     databaseSchema: IDatabaseSchema,

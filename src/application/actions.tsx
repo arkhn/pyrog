@@ -6,11 +6,75 @@ import config from './config'
 const serverUrl = config('app').serverURL
 
 import {cw_patient_mapping} from './mockdata/mappings'
+import {databaseNameList, fhirResourceNameList} from './mockdata/nameLists'
+
+// Fetching databaseNameList and fhirResourceNameList
+
+function simulateFetch(successCallback: any, delay: number) {
+    return new Promise((sucessCallback: any) => setTimeout(sucessCallback, delay))
+}
+
+export function fetchInfoNameList(): any {
+    return (dispatch: any, getState: any) => {
+        dispatch(loadingNameLists())
+
+        Promise.all([
+            simulateFetch(dispatch(fetchDatabaseNameListSuccess(databaseNameList)), 500),
+            simulateFetch(dispatch(fetchFhirResourceNameListSuccess(fhirResourceNameList)), 500),
+        ]).then((response: any) => {
+            // TODO: handle errors
+            dispatch(fetchInfoNameListSuccess())
+        })
+    }
+}
+
+export function loadingNameLists() {
+    return {
+        type: 'LOADING_NAME_LISTS',
+    }
+}
+
+export const fetchInfoNameListSuccess = () : action => {
+    return {
+        type: 'FETCH_INFO_NAME_LIST_SUCCESS',
+    }
+}
+
+export function fetchDatabaseNameListSuccess(databaseNameList: string[]): action {
+    return {
+        type: 'FETCH_DATABASE_NAME_LIST_SUCCESS',
+        value: databaseNameList,
+    }
+}
+
+export function fetchDatabaseNameListFailure(error: any): action {
+    return {
+        type: 'FETCH_DATABASE_NAME_LIST_FAILURE',
+        value: error,
+    }
+}
+
+export function fetchFhirResourceNameListSuccess(fhirResourceNameList: string[]): action {
+    return {
+        type: 'FETCH_FHIR_RESOURCE_NAME_LIST_SUCCESS',
+        value: fhirResourceNameList,
+    }
+}
+
+export function fetchFhirResourceNameListFailure(error: any): action {
+    return {
+        type: 'FETCH_FHIR_RESOURCE_NAME_LIST_FAILURE',
+        value: error,
+    }
+}
+
+// currentDatabase changes
 
 export function changeCurrentDatabase(database: string): any {
     return (dispatch: any, getState: any) => {
         dispatch(updateStateCurrentDatabase(database))
         dispatch(fetchMapping())
+        // TODO: fetch database schema
     }
 }
 
@@ -20,6 +84,8 @@ export function updateStateCurrentDatabase(database: string): action {
         value: database,
     }
 }
+
+// currentFhirResource changes
 
 export function changeCurrentFhirResource(resource: string): any {
     return (dispatch: any, getState: any) => {
@@ -34,6 +100,9 @@ export function updateStateCurrentFhirResource(resource: string): action {
         value: resource,
     }
 }
+
+// Fetching mapping when currentDatabase and currentFhirResource
+// are both set
 
 export function fetchMapping(): any {
     return (dispatch: any, getState: any) => {
