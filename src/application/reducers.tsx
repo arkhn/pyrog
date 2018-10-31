@@ -17,7 +17,7 @@ export function reducer(state = initialAppState, action: action): appState {
         case 'TOGGLE_DIALOG':
             return {
                 ...state,
-                dialogIsOpen: !state
+                dialogIsOpen: !state.dialogIsOpen,
             } 
         case 'CHANGE_INPUT_DATABASE':
             return {
