@@ -7,8 +7,9 @@ const serverUrl = config('app').serverURL
 
 import {cw_patient_mapping} from './mockdata/mappings'
 import {databaseNameList, fhirResourceNameList} from './mockdata/nameLists'
+import {patientFhirResource} from './mockdata/fhirResources'
 
-// Fetching databaseNameList and fhirResourceNameList
+// Fetch databaseNameList and fhirResourceNameList
 
 function simulateFetch(successCallback: any, delay: number) {
     return new Promise((sucessCallback: any) => setTimeout(sucessCallback, delay))
@@ -18,6 +19,7 @@ export function fetchInfoNameList(): any {
     return (dispatch: any, getState: any) => {
         dispatch(loadingNameLists())
 
+        // TODO: add real data fetching
         Promise.all([
             simulateFetch(dispatch(fetchDatabaseNameListSuccess(databaseNameList)), 500),
             simulateFetch(dispatch(fetchFhirResourceNameListSuccess(fhirResourceNameList)), 500),
@@ -90,6 +92,7 @@ export function updateStateCurrentDatabase(database: string): action {
 export function changeCurrentFhirResource(resource: string): any {
     return (dispatch: any, getState: any) => {
         dispatch(updateStateCurrentFhirResource(resource))
+        dispatch(fetchFhirResourceDescription(resource))
         dispatch(fetchMapping())
     }
 }
@@ -101,7 +104,49 @@ export function updateStateCurrentFhirResource(resource: string): action {
     }
 }
 
-// Fetching mapping when currentDatabase and currentFhirResource
+// Fetch fhirResourceDescription
+
+export function fetchFhirResourceDescription(resource: string): any {
+    return (dispatch: any, getState: any) => {
+        const state = getState()
+        if (state.currentDatabase && state.currentFhirResource) {
+            // Either load and dispatch mock data
+            // or implement true fetching code
+            if (state.testState) {
+                setTimeout(() => {
+                    dispatch(fetchFhirResourceDescriptionSuccess(patientFhirResource))
+                }, 500)
+            } else {
+                // TODO: parse url correctly
+                let url = state.distantServerUrl + state.currentDatabase + state.currentFhirResource
+
+                fetch(url)
+                .then((response: any) => {
+                    dispatch(fetchFhirResourceDescriptionSuccess(response.json()))
+                }).catch( (err: any) => {
+                    console.log(err)
+                    dispatch(fetchFhirResourceDescriptionFailure(err))
+                })
+            }
+        }
+    }
+}
+
+export function fetchFhirResourceDescriptionSuccess(description: any): action {
+    return {
+        type: 'FETCH_FHIR_RESOURCE_DESCRIPTION_SUCCESS',
+        value: description,
+    }
+}
+
+export function fetchFhirResourceDescriptionFailure(error: any): action {
+    return {
+        type: 'FETCH_MAPPING_FAILURE',
+        value: error,
+    }
+}
+
+// Fetch mapping when currentDatabase and currentFhirResource
 // are both set
 
 export function fetchMapping(): any {
