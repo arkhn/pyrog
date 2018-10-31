@@ -26,16 +26,19 @@ import { Route } from 'react-router';
 
 
 import {
-    appState,
-    IFhirResource,
-    IDatabase,
+    reduxAppState,
 } from '../types'
+import {
+    changeCurrentDatabase,
+    updateStateCurrentDatabase,
+    updateStateCurrentFhirResource,
+} from '../actions'
 
 
 
 const arkhnLogo = require("../img/arkhn_logo_only_white.svg") as string;
 
-const mapReduxStateToReactProps = (state : appState): appState => {
+const mapReduxStateToReactProps = (state : reduxAppState): reduxAppState => {
     return state
 }
 
@@ -44,28 +47,19 @@ function reduxify(mapReduxStateToReactProps: any, mapDispatchToProps?: any, merg
 }
 
 @reduxify(mapReduxStateToReactProps)
-export class MainView extends React.Component<appState, any> {
+export class MainView extends React.Component<reduxAppState, any> {
     private TEST_JSON: string = `{"glossary":{"title":"example glossary","GlossDiv":{"title":"S","GlossList":{"GlossEntry":{"ID":"SGML","SortAs":"SGML","GlossTerm":"Standard Generalized Markup Language","Acronym":"SGML","Abbrev":"ISO 8879:1986","GlossDef":{"para":"A meta-markup language, used to create markup languages such as DocBook.","GlossSeeAlso":["GML","XML"]},"GlossSee":"markup"}}}}}`;
     public render () {
-        let {currentFhirResource, currentInputDatabase, currentTreeNodePath, dispatch} = this.props
-
-        let currentOwnerList = Object.keys(currentInputDatabase.schema);
-
-        let currentTableList = currentFhirResource.owner ? Object.keys(
-            currentInputDatabase.schema[currentFhirResource.owner]
-        ) :
-        [];
-
-        let currentColumnList = currentFhirResource.owner ? (
-            currentFhirResource.table ?
-            Object.keys(
-                currentInputDatabase.schema[currentFhirResource.owner][currentFhirResource.table]
-            ) :
-            []
-        ) :
-        [];
-
-        let currentInputColumns = currentFhirResource.inputColumnsDict ? currentFhirResource.inputColumnsDict[currentTreeNodePath.join('.')] : []
+        let {
+            dispatch,
+            currentDatabase,
+            currentFhirResource,
+            currentFhirAttribute,
+            databaseNameList,
+            fhirResourceNameList,
+            databaseSchema,
+            mapping,
+        } = this.props
 
         return (
             <div id='application'>
@@ -76,11 +70,11 @@ export class MainView extends React.Component<appState, any> {
                             labelFor="text-input"
                             inline={true}
                         >
-                            <InputDatabaseSelect
-                                inputItem={currentInputDatabase}
-                                items={inputDatabases}
+                            <StringSelect
+                                inputItem={currentDatabase}
+                                items={databaseNameList}
                                 icon={'database'}
-                                action={actions.changeCurrentInputDatabase}
+                                action={updateStateCurrentDatabase}
                                 dispatch={dispatch}
                                 intent={'primary'}
                             />
@@ -91,47 +85,14 @@ export class MainView extends React.Component<appState, any> {
                             labelFor="text-input"
                             inline={true}
                         >
-                            <FhirResourceSelect
+                            <StringSelect
                                 inputItem={currentFhirResource}
-                                items={fhirResources}
+                                items={fhirResourceNameList}
                                 icon={'layout-hierarchy'}
-                                action={actions.changeCurrentFhirResource}
+                                action={updateStateCurrentFhirResource}
                                 dispatch={dispatch}
                                 intent={'primary'}
                             />
-                        </FormGroup>
-                        <Navbar.Divider />
-                        <FormGroup
-                            label="Path to Primary Key"
-                            labelFor="text-input"
-                            inline={true}
-                        >
-                            <ControlGroup fill={true} vertical={false}>
-                                <StringSelect
-                                    inputItem={currentFhirResource.owner}
-                                    items={currentOwnerList}
-                                    icon={'group-objects'}
-                                    action={actions.changeCurrentDBOwner}
-                                    dispatch={dispatch}
-                                    intent={'primary'}
-                                />
-                                <StringSelect
-                                    inputItem={currentFhirResource.table}
-                                    items={currentTableList}
-                                    icon={'th'}
-                                    action={actions.changeCurrentDBTable}
-                                    dispatch={dispatch}
-                                    intent={'primary'}
-                                />
-                                <StringSelect
-                                    inputItem={currentFhirResource.primaryKey}
-                                    items={currentColumnList}
-                                    icon={'column-layout'}
-                                    action={actions.changeCurrentDBPrimaryKey}
-                                    dispatch={dispatch}
-                                    intent={'primary'}
-                                />
-                            </ControlGroup>
                         </FormGroup>
                     </Navbar.Group>
                     <Navbar.Group align={Alignment.RIGHT}>
@@ -149,30 +110,59 @@ export class MainView extends React.Component<appState, any> {
                             <div className={Classes.DIALOG_BODY}>
                                 <JsonViewer json={this.TEST_JSON}/>
                             </div>
-                        </Dialog> 
+                        </Dialog>
                     </Navbar.Group>
                 </Navbar>
 
                 <div id='main-container'>
                     <div id='left-panel'>
-                        <FhirResourceTree
+                        TODO
+                        {/* <FhirResourceTree
                             nodes={currentFhirResource ? currentFhirResource.contentAsTree : null}
                             dispatch={dispatch}
-                        />
+                        /> */}
                     </div>
 
                     <div id='right-container' className={'bp3-dark'}>
                         {
-                            currentTreeNodePath.length > 0 ?
+                            currentFhirAttribute.length > 0 ?
                                 <div id='input-columns-container'>
+                                    <div id='path-to-pk-viewer'>
+                                        {/* <ControlGroup fill={true} vertical={false}>
+                                            <StringSelect
+                                                inputItem={mapping.pathToPrimaryKey.owner}
+                                                items={currentOwnerList}
+                                                icon={'group-objects'}
+                                                action={actions.changeCurrentDBOwner}
+                                                dispatch={dispatch}
+                                                intent={'primary'}
+                                            />
+                                            <StringSelect
+                                                inputItem={currentFhirResource.table}
+                                                items={currentTableList}
+                                                icon={'th'}
+                                                action={actions.changeCurrentDBTable}
+                                                dispatch={dispatch}
+                                                intent={'primary'}
+                                            />
+                                            <StringSelect
+                                                inputItem={currentFhirResource.primaryKey}
+                                                items={currentColumnList}
+                                                icon={'column-layout'}
+                                                action={actions.changeCurrentDBPrimaryKey}
+                                                dispatch={dispatch}
+                                                intent={'primary'}
+                                            />
+                                        </ControlGroup> */}
+                                    </div>
                                     <div id='input-columns-viewer'>
-                                        <InputColumnsTable
+                                        {/* <InputColumnsTable
                                             columns={currentInputColumns}
                                             currentOwnerList={currentOwnerList}
                                             currentTableList={currentTableList}
                                             currentColumnList={currentColumnList}
                                             dispatch={dispatch}
-                                        />
+                                        /> */}
                                     </div>
                                     <div id='column-selector'>
                                         <TabViewer
