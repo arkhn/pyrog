@@ -9,12 +9,13 @@ import Routes from './routes'
 import middlewares from './middlewares'
 import * as viewReducers from './reducers'
 
+// Redux initialisation
 const loggerMiddleware = createLogger({})
-
 const reducer = viewReducers.reducer
 const finalCreateStore = applyMiddleware(...middlewares, loggerMiddleware)(createStore)
 const store = finalCreateStore(reducer)
 
+// Render React app in DOM
 ReactDOM.render(
     <Provider store={store}>
         <Routes />
