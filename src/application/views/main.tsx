@@ -69,8 +69,8 @@ export class MainView extends React.Component<reduxAppState, any> {
         } = this.props
 
         return (
-            <div id='application'>
-                <Navbar className={'bp3-dark'}>
+            <div id='application' className={'bp3-dark'}>
+                <Navbar>
                     {loadingNameLists ?
                         <Navbar.Group align={Alignment.CENTER}>
                             <Spinner size={25}/>
@@ -195,7 +195,11 @@ export class MainView extends React.Component<reduxAppState, any> {
                                 }
                             </div>
                         </div>
-                    : null)
+                    : <NonIdealState
+                        icon={<span dangerouslySetInnerHTML={{__html: arkhnLogo}}/>}
+                        title={'More information needed'}
+                        description={'Select an input database schema and a FHIR Resource in the navigation bar.'}
+                    />)
                 }
             </div>
         )
