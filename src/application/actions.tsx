@@ -9,6 +9,12 @@ import {cw_patient_mapping} from './mockdata/mappings'
 import {databaseNameList, fhirResourceNameList} from './mockdata/nameLists'
 import {patientFhirResource} from './mockdata/fhirResources'
 
+export function toggleDialogVisibility(): action{
+    return {
+        type: 'TOGGLE_DIALOG',
+    }
+}
+
 // Fetch databaseNameList and fhirResourceNameList
 
 function simulateFetch(successCallback: any, delay: number) {
@@ -71,12 +77,6 @@ export function fetchFhirResourceNameListFailure(error: any): action {
 }
 
 // currentDatabase changes
-
-export function toggleDialogVisibility(): action{
-    return {
-        type: 'TOGGLE_DIALOG',
-    }
-}
 
 export function changeCurrentDatabase(database: string): any {
     return (dispatch: any, getState: any) => {

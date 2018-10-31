@@ -9,11 +9,14 @@ import StringSelect from '../components/selects/stringSelect'
 import {IInputColumn} from '../types'
 
 import {scriptList} from '../mockdata/nameLists'
+<<<<<<< HEAD
 import {
     columnList,
     ownerList,
     tableList,
 } from '../mockdata/database'
+=======
+>>>>>>> 25ba351f1457440f7b1863c4345fa1415e20899f
 
 export interface IInputColumnsTableProps {
     columns: IInputColumn[];

@@ -6,7 +6,10 @@ import {
 
 const initialAppState: reduxAppState = {
     distantServerUrl: 'http://localhost:3000',
+<<<<<<< HEAD
     dialogIsOpen: false,
+=======
+>>>>>>> 25ba351f1457440f7b1863c4345fa1415e20899f
     testState: true,
 
     currentDatabase: null,
@@ -24,12 +27,15 @@ const initialAppState: reduxAppState = {
 
 export function reducer(state = initialAppState, action: action): reduxAppState {
     switch (action.type) {
+<<<<<<< HEAD
         case 'TOGGLE_DIALOG':
             return {
                 ...state,
                 dialogIsOpen: !state.dialogIsOpen,
             }
 
+=======
+>>>>>>> 25ba351f1457440f7b1863c4345fa1415e20899f
         case 'LOADING_NAME_LISTS':
             return {
                 ...state,

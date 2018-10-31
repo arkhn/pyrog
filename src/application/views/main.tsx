@@ -17,6 +17,7 @@ import {
     Navbar,
     NonIdealState,
     Spinner,
+<<<<<<< HEAD
     } from '@blueprintjs/core';
 
 import { BrowserRouter } from 'react-router-dom';
@@ -25,15 +26,35 @@ import { fhirResources, inputDatabases } from '../mockdata/mockData';
 import { ItemPredicate, ItemRenderer, Select } from '@blueprintjs/select';
 import { JsonViewer } from '../components/jsonViewer';
 import { Route } from 'react-router';
+=======
+} from '@blueprintjs/core'
+import {Select, ItemPredicate, ItemRenderer} from "@blueprintjs/select";
+>>>>>>> 25ba351f1457440f7b1863c4345fa1415e20899f
 
 import {
     reduxAppState,
 } from '../types'
+<<<<<<< HEAD
+=======
+
+>>>>>>> 25ba351f1457440f7b1863c4345fa1415e20899f
 import {
     fetchInfoNameList,
     changeCurrentDatabase,
     changeCurrentFhirResource,
 } from '../actions'
+<<<<<<< HEAD
+=======
+
+import InputDatabaseSelect from '../components/selects/inputDatabaseSelect'
+import FhirResourceSelect from '../components/selects/fhirResourceSelect'
+import StringSelect from '../components/selects/stringSelect'
+import FhirResourceTree from '../components/fhirResourceTree'
+import InputColumnsTable from '../components/inputColumnsTable'
+import TabViewer from '../components/tabViewer'
+
+import {fhirResources, inputDatabases} from '../mockdata/mockData';
+>>>>>>> 25ba351f1457440f7b1863c4345fa1415e20899f
 
 const arkhnLogo = require("../img/arkhn_logo_only_white.svg") as string;
 
@@ -113,6 +134,7 @@ export class MainView extends React.Component<reduxAppState, any> {
                                         icon={'cloud-upload'}
                                     />
                                 </ControlGroup>
+<<<<<<< HEAD
                                 <FormGroup >
                                 </FormGroup>
                                 {/* <Dialog isOpen={true}>
@@ -120,6 +142,8 @@ export class MainView extends React.Component<reduxAppState, any> {
                                         <JsonViewer json={this.TEST_JSON}/>
                                     </div>
                                 </Dialog> */}
+=======
+>>>>>>> 25ba351f1457440f7b1863c4345fa1415e20899f
                             </Navbar.Group>
                         </div>
                     }

@@ -51,7 +51,7 @@ export interface IMapping {
 
 export interface reduxAppState {
     dispatch?: redux.Dispatch<any>,
-    dialogIsOpen        : boolean;
+    dialogIsOpen: boolean;
 
     // App information
     distantServerUrl: string,
