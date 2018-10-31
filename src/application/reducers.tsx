@@ -7,6 +7,7 @@ import {
 const initialAppState: reduxAppState = {
     distantServerUrl: 'http://localhost:3000',
     dialogIsOpen: false,
+    testState: true,
 
     currentDatabase: null,
     currentFhirResource: null,
@@ -15,7 +16,7 @@ const initialAppState: reduxAppState = {
     databaseNameList: ['CW', 'DC', 'ORB'],
     fhirResourceNameList: ['Patient', 'Practioner', 'Medication'],
     databaseSchema: null,
-
+    loadingMapping: false,
     mapping: null,
 }
 
@@ -33,16 +34,29 @@ export function reducer(state = initialAppState, action: action): reduxAppState 
                 currentDatabase: action.value,
             }
 
-        case 'CHANGE_CURRENT_FHIR_RESOURCE':
+        case 'UPDATE_STATE_CURRENT_FHIR_RESOURCE':
             return {
                 ...state,
                 currentFhirResource: action.value,
             }
 
-        case 'UPDATE_STATE_CURRENT_FHIR_RESOURCE':
+        case 'LOADING_MAPPING':
             return {
                 ...state,
-                currentFhirResource: action.value,
+                loadingMapping: true,
+            }
+
+        case 'FETCH_MAPPING_SUCCESS':
+            return {
+                ...state,
+                loadingMapping: false,
+                mapping: action.value,
+            }
+
+        case 'FETCH_MAPPING_FAILURE':
+            return {
+                ...state,
+                loadingMapping: false,
             }
 
         case 'CHANGE_PK_OWNER':

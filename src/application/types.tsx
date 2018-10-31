@@ -42,12 +42,23 @@ export interface IInputColumn extends IDatabaseColumn {
     script: any,
 }
 
+export interface IMapping {
+    pathToPrimaryKey: IDatabaseColumn,
+    fhirMapping: {
+        [fhirAttribute: string]: {
+            inputColumns: IInputColumn[],
+            mergingScript?: any,
+        }
+    }
+}
+
 export interface reduxAppState {
     dispatch?: redux.Dispatch<any>,
     dialogIsOpen        : boolean;
 
     // App information
     distantServerUrl: string,
+    testState: boolean,
 
     // User-selected variables
     currentDatabase: string,
@@ -58,18 +69,10 @@ export interface reduxAppState {
     databaseNameList: string[],
     fhirResourceNameList: string[],
     databaseSchema: IDatabaseSchema,
-
     // This is what users acutally modify
     // and upload.
-    mapping: {
-        pathToPrimaryKey: IDatabaseColumn,
-        fhirMapping: {
-            [fhirAttribute: string]: {
-                inputColumns: IInputColumn[],
-                mergingScript: any,
-            }
-        }
-    },
+    loadingMapping: boolean,
+    mapping: IMapping,
 }
 
 export interface action {
