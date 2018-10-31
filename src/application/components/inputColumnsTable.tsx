@@ -5,7 +5,7 @@ import StringSelect from '../components/selects/stringSelect'
 
 import {IInputColumn} from '../types'
 
-import {scriptList} from '../mockdata/scriptList'
+import {scriptList} from '../mockdata/nameLists'
 
 export interface IInputColumnsTableProps {
     columns: IInputColumn[];
