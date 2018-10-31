@@ -8,7 +8,7 @@ import StringSelect from '../components/selects/stringSelect'
 
 import {IInputColumn} from '../types'
 
-import {scriptList} from '../mockdata/scriptList'
+import {scriptList} from '../mockdata/nameLists'
 import {
     columnList,
     ownerList,

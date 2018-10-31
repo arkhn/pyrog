@@ -35,8 +35,6 @@ import {
     changeCurrentFhirResource,
 } from '../actions'
 
-
-
 const arkhnLogo = require("../img/arkhn_logo_only_white.svg") as string;
 
 const mapReduxStateToReactProps = (state : reduxAppState): reduxAppState => {
@@ -49,11 +47,10 @@ function reduxify(mapReduxStateToReactProps: any, mapDispatchToProps?: any, merg
 
 @reduxify(mapReduxStateToReactProps)
 export class MainView extends React.Component<reduxAppState, any> {
-    private TEST_JSON: string = `{"glossary":{"title":"example glossary","GlossDiv":{"title":"S","GlossList":{"GlossEntry":{"ID":"SGML","SortAs":"SGML","GlossTerm":"Standard Generalized Markup Language","Acronym":"SGML","Abbrev":"ISO 8879:1986","GlossDef":{"para":"A meta-markup language, used to create markup languages such as DocBook.","GlossSeeAlso":["GML","XML"]},"GlossSee":"markup"}}}}}`;
-
     public componentDidMount() {
         this.props.dispatch(fetchInfoNameList())
     }
+
     public render () {
         let {
             dispatch,
@@ -118,15 +115,14 @@ export class MainView extends React.Component<reduxAppState, any> {
                                 </ControlGroup>
                                 <FormGroup >
                                 </FormGroup>
-                                <Dialog isOpen={true}>
+                                {/* <Dialog isOpen={true}>
                                     <div className={Classes.DIALOG_BODY}>
                                         <JsonViewer json={this.TEST_JSON}/>
                                     </div>
-                                </Dialog>
+                                </Dialog> */}
                             </Navbar.Group>
                         </div>
                     }
->>>>>>> Add redux actions and reducers for fetching database name list and fhir resource name list
                 </Navbar>
 
                 {loadingMapping ? <Spinner /> :

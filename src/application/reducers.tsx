@@ -28,6 +28,7 @@ export function reducer(state = initialAppState, action: action): reduxAppState 
             return {
                 ...state,
                 dialogIsOpen: !state.dialogIsOpen,
+            }
 
         case 'LOADING_NAME_LISTS':
             return {
