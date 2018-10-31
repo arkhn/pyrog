@@ -17,6 +17,7 @@ const initialAppState: reduxAppState = {
     databaseNameList: [],
     fhirResourceNameList: [],
     databaseSchema: null,
+    fhirResourceDescription: null,
     loadingMapping: false,
     mapping: null,
 }
