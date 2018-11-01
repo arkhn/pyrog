@@ -23,7 +23,10 @@ The Webpack config file is located at `./webpack.config.js`. It mainly calls two
 
 ### Redux
 Redux is used to manage the application's state.
-All redux actions, middlewares and reducers are located under `./src/application/{actions, middlewares, reducers}.tsx`.
+* All Redux actions and reducers are located at `./src/application/{actions, reducers}/`.
+* All middlewares are located at `./src/application/middlewares.tsx`.
+Reducers are combined in `./src/application/reducers/mainReducer.tsx`.
+
 I personally read this course so as to understand what Redux is and how it works: [https://github.com/happypoulp/redux-tutorial](https://github.com/happypoulp/redux-tutorial)
 
 ### React
@@ -33,7 +36,6 @@ React routes are defined in `./src/application/routes.tsx`. Links between React 
 * All views of this application are React components and are stored under `./src/application/views`.
 
 ### Mock data
-
 Fake data is used to populate this web app. All mock data is present in `./src/application/mockdata/`.
 
 Generating mock data can easily be done using javascript libraries such as Faker.js. An example is given in `./src/application/mockdata/generator.js`.
