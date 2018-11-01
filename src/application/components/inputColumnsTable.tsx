@@ -48,7 +48,7 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
                     <td>{`${column.owner} > ${column.table} > ${column.column}`}</td>
                     <td>
                         <StringSelect
-                            inputItem={null}
+                            inputItem={column.join ? column.join.sourceColumn : null}
                             items={columnList}
                             icon={'column-layout'}
                             action={null}
@@ -56,23 +56,23 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
                         />
                     </td>
                     <td>
-                        <ControlGroup fill={false} vertical={false}>
+                        <ControlGroup fill={false} vertical={true}>
                             <StringSelect
-                                inputItem={null}
+                                inputItem={column.join ? column.join.targetColumn.owner : null}
                                 items={ownerList}
                                 icon={'group-objects'}
                                 action={null}
                                 dispatch={dispatch}
                             />
                             <StringSelect
-                                inputItem={null}
+                                inputItem={column.join ? column.join.targetColumn.table : null}
                                 items={tableList}
                                 icon={'th'}
                                 action={null}
                                 dispatch={dispatch}
                             />
                             <StringSelect
-                                inputItem={null}
+                                inputItem={column.join ? column.join.targetColumn.column : null}
                                 items={columnList}
                                 icon={'column-layout'}
                                 action={null}

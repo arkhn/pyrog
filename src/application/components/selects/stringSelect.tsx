@@ -30,7 +30,7 @@ export default class InputDatabaseSelect extends React.Component<ISelectProps, a
     };
 
     private displayItem = function(item: string): string {
-        return (item ? item : "(No selection)");
+        return (item ? item : "None");
     };
 
     public render () {

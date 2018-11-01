@@ -32,11 +32,11 @@ export interface IDatabaseColumn {
 }
 
 export interface IInputColumn extends IDatabaseColumn {
-    join: {
-        sourceColumn: IDatabaseColumn,
+    join?: {
+        sourceColumn: string,
         targetColumn: IDatabaseColumn,
     }
-    script: any,
+    script?: any,
 }
 
 export interface IMapping {

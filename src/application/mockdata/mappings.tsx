@@ -15,8 +15,7 @@ export const cw_patient_mapping: IMapping = {
                     column: 'PREPAT',
                     join: null,
                     script: 'parsePrenom.py'
-                }
-
+                },
             ]
         },
         'name': {
@@ -25,10 +24,16 @@ export const cw_patient_mapping: IMapping = {
                     owner: 'ISCF',
                     table: 'PATIENT',
                     column: 'FAKPAT',
-                    join: null,
+                    join: {
+                        sourceColumn: 'INJOIN',
+                        targetColumn: {
+                            owner: 'ISCF',
+                            table: 'TABLE',
+                            column: 'COL1'
+                        }
+                    },
                     script: 'parsePrenom.py'
-                }
-
+                },
             ]
         },
     }
