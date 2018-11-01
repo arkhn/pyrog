@@ -29,7 +29,7 @@ export const cw_patient_mapping: IMapping = {
                         targetColumn: {
                             owner: 'ISCF',
                             table: 'TABLE',
-                            column: 'COL1'
+                            column: 'COL1',
                         }
                     },
                     script: 'parsePrenom.py'

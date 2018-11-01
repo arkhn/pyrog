@@ -34,6 +34,7 @@ import {
     fetchInfoNameList,
     changeCurrentDatabase,
     changeCurrentFhirResource,
+    changeCurrentFhirAttribute,
 } from '../actions'
 
 const arkhnLogo = require("../img/arkhn_logo_only_white.svg") as string;
@@ -50,6 +51,12 @@ function reduxify(mapReduxStateToReactProps: any, mapDispatchToProps?: any, merg
 export class MainView extends React.Component<reduxAppState, any> {
     public componentDidMount() {
         this.props.dispatch(fetchInfoNameList())
+
+        // Auto load state for testing purposes
+        this.props.dispatch(changeCurrentDatabase('CW'))
+        this.props.dispatch(changeCurrentFhirResource('Patient'))
+        this.props.dispatch(changeCurrentFhirResource('Patient'))
+        this.props.dispatch(changeCurrentFhirAttribute(false, ['name']))
     }
 
     public render () {
@@ -198,12 +205,13 @@ export class MainView extends React.Component<reduxAppState, any> {
                                         />
                                     }
                                 </div>
-                            </div>
-                        : <NonIdealState
-                            icon={<span dangerouslySetInnerHTML={{__html: arkhnLogo}}/>}
-                            title={'Fhirball'}
-                            description={'Select an input database schema and a FHIR Resource in the navigation bar to start mapping.'}
-                        />)
+                            </div> :
+                            <NonIdealState
+                                icon={<span dangerouslySetInnerHTML={{__html: arkhnLogo}}/>}
+                                title={'Fhirball'}
+                                description={'Select an input database schema and a FHIR Resource in the navigation bar to start mapping.'}
+                            />
+                        )
                     }
                 </div>
             </div>
