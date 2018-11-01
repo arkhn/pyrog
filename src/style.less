@@ -42,13 +42,17 @@ body {
     background-color: @dark-gray1;
     overflow-y: scroll;
 
-    .bp3-tree-node-label div {
+    .bp3-tree-node-label > div {
         line-height: 1.1em;
 
-        div:nth-child(2) {
+        & > div:nth-child(2) {
             color: @gray2;
             font-size: 0.8em;
         }
+    }
+
+    .bp3-tree-node-selected .bp3-tree-node-label > div > div:nth-child(2) {
+        color: @gray5;
     }
 }
 
