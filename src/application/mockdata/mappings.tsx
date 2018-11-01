@@ -18,6 +18,18 @@ export const cw_patient_mapping: IMapping = {
                 }
 
             ]
-        }
+        },
+        'name': {
+            inputColumns: [
+                {
+                    owner: 'ISCF',
+                    table: 'PATIENT',
+                    column: 'PREPAT',
+                    join: null,
+                    script: 'parsePrenom.py'
+                }
+
+            ]
+        },
     }
 }
