@@ -125,7 +125,6 @@ export function fetchFhirResourceJson(resource: string): any {
             // Either load and dispatch mock data
             // or implement true fetching code
             if (state.testState) {
-                console.log('here')
                 setTimeout(() => {
                     dispatch(fetchFhirResourceJsonSuccess(JSON.parse(patientJson)))
                 }, 500)
