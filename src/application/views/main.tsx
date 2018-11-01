@@ -187,7 +187,7 @@ export class MainView extends React.Component<reduxAppState, any> {
                                                 </div>
                                                 <div id='input-columns-viewer'>
                                                     <InputColumnsTable
-                                                        currentInputColumns={mapping.fhirMapping[currentFhirAttribute.join('.')].inputColumns}
+                                                        spec={mapping.fhirMapping[currentFhirAttribute.join('.')]}
                                                         databaseSchema={databaseSchema}
                                                         dispatch={dispatch}
                                                     />

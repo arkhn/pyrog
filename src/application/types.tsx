@@ -39,13 +39,15 @@ export interface IInputColumn extends IDatabaseColumn {
     script?: any,
 }
 
+export interface IFhirIntegrationSpec {
+    inputColumns: IInputColumn[],
+    mergingScript?: any,
+}
+
 export interface IMapping {
     pathToPrimaryKey: IDatabaseColumn,
     fhirMapping: {
-        [fhirAttribute: string]: {
-            inputColumns: IInputColumn[],
-            mergingScript?: any,
-        }
+        [fhirAttribute: string]: IFhirIntegrationSpec,
     }
 }
 

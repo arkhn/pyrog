@@ -9,6 +9,7 @@ import StringSelect from '../components/selects/stringSelect'
 import {
     IDatabaseSchema,
     IInputColumn,
+    IFhirIntegrationSpec,
 } from '../types'
 
 import {scriptList} from '../mockdata/nameLists'
@@ -19,7 +20,7 @@ import {
 } from '../mockdata/database'
 
 export interface IInputColumnsTableProps {
-    currentInputColumns: IInputColumn[];
+    spec: IFhirIntegrationSpec;
     databaseSchema: IDatabaseSchema;
     dispatch: any;
 }
@@ -31,13 +32,13 @@ export interface IInputColumnsTableState {
 export default class InputColumnsTable extends React.Component<IInputColumnsTableProps, IInputColumnsTableState> {
     public render() {
         let {
-            currentInputColumns,
+            spec,
             databaseSchema,
             dispatch,
         } = this.props;
 
-        let rows = currentInputColumns ?
-            currentInputColumns.map((column: IInputColumn, index: number) =>
+        let rows = spec.inputColumns ?
+            spec.inputColumns.map((column: IInputColumn, index: number) =>
                 <tr key={index}>
                     <td>
                         <Button
@@ -82,7 +83,7 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
                     </td>
                     <td>
                         <StringSelect
-                            inputItem={null}
+                            inputItem={column.script}
                             items={scriptList}
                             icon={'function'}
                             action={null}
@@ -90,12 +91,12 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
                         />
                     </td>
                     {
-                        currentInputColumns.length > 1 ?
+                        spec.inputColumns.length > 1 ?
                             (
                                 index == 0 ?
-                                    <td rowSpan={currentInputColumns.length}>
+                                    <td rowSpan={spec.inputColumns.length}>
                                         <StringSelect
-                                            inputItem={null}
+                                            inputItem={spec.mergingScript}
                                             items={scriptList}
                                             icon={'function'}
                                             action={null}
@@ -118,7 +119,7 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
                             <th>Column Path</th>
                             <th colSpan={2}>Join</th>
                             <th>Column Script</th>
-                            {currentInputColumns.length > 1 ? <th>Final Script</th> : null}
+                            {spec.inputColumns.length > 1 ? <th>Final Script</th> : null}
                         </tr>
                         {rows}
                     </tbody>

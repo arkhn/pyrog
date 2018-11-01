@@ -34,7 +34,22 @@ export const cw_patient_mapping: IMapping = {
                     },
                     script: 'parsePrenom.py'
                 },
-            ]
+                {
+                    owner: 'ISCF',
+                    table: 'PATIENT',
+                    column: 'FAK2PAT',
+                    join: {
+                        sourceColumn: 'IN2JOIN',
+                        targetColumn: {
+                            owner: 'ISCF',
+                            table: 'TABLE',
+                            column: 'COL2',
+                        }
+                    },
+                    script: 'parsePrenom.py'
+                },
+            ],
+            mergingScript: 'mergingScript.py'
         },
     }
 }
