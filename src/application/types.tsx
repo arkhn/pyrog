@@ -53,27 +53,39 @@ export interface IMapping {
 
 export interface reduxAppState {
     dispatch?: redux.Dispatch<any>,
-    dialogIsOpen: boolean;
+    appData: IReduxAppData,
+    nameLists: IReduxNameLists,
+    currentDatabase: IReduxCurrentDatabase,
+    currentFhirResource: IReduxCurrentFhirResource,
+    currentFhirAttribute: string[],
+    mapping: IReduxMapping,
+}
 
-    // App information
+export interface IReduxAppData {
+    dialogIsOpen: boolean,
     distantServerUrl: string,
     testState: boolean,
+}
 
-    // User-selected variables
-    currentDatabase: string,
-    currentFhirResource: string,
-    currentFhirAttribute: string[],
-
-    // To fetch from backend
+export interface IReduxNameLists {
     loadingNameLists: boolean,
     databaseNameList: string[],
     fhirResourceNameList: string[],
-    databaseSchema: IDatabaseSchema,
-    fhirResourceJson: any,
-    // This is what users acutally modify
-    // and upload.
-    loadingMapping: boolean,
-    mapping: IMapping,
+}
+
+export interface IReduxCurrentDatabase {
+    name: string,
+    schema: IDatabaseSchema,
+}
+
+export interface IReduxCurrentFhirResource {
+    name: string,
+    json: any,
+}
+
+export interface IReduxMapping {
+    loading: boolean,
+    content: IMapping,
 }
 
 export interface action {

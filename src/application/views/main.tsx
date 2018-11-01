@@ -1,4 +1,3 @@
-import * as actions from '../actions';
 import * as React from 'react';
 import FhirResourceSelect from '../components/selects/fhirResourceSelect';
 import FhirResourceTree from '../components/fhirResourceTree';
@@ -30,12 +29,10 @@ import {
     reduxAppState,
 } from '../types'
 
-import {
-    fetchInfoNameList,
-    changeCurrentDatabase,
-    changeCurrentFhirResource,
-    changeCurrentFhirAttribute,
-} from '../actions'
+import {changeCurrentDatabase} from '../actions/currentDatabase'
+import {changeCurrentFhirResource} from '../actions/currentFhirResource'
+import {changeCurrentFhirAttribute} from '../actions/currentFhirAttribute'
+import {fetchInfoNameList} from '../actions/nameLists'
 
 const arkhnLogo = require("../img/arkhn_logo_only_white.svg") as string;
 
@@ -44,7 +41,14 @@ const mapReduxStateToReactProps = (state : reduxAppState): reduxAppState => {
 }
 
 function reduxify(mapReduxStateToReactProps: any, mapDispatchToProps?: any, mergeProps?: any, options?: any) {
-     return (target: any) => (connect(mapReduxStateToReactProps, mapDispatchToProps, mergeProps, options)(target) as any)
+     return (target: any) => (
+         connect(
+             mapReduxStateToReactProps,
+             mapDispatchToProps,
+             mergeProps,
+             options
+         )(target) as any
+     )
 }
 
 @reduxify(mapReduxStateToReactProps)
@@ -55,27 +59,28 @@ export class MainView extends React.Component<reduxAppState, any> {
         // Auto load state for testing purposes
         this.props.dispatch(changeCurrentDatabase('CW'))
         this.props.dispatch(changeCurrentFhirResource('Patient'))
-        this.props.dispatch(changeCurrentFhirResource('Patient'))
         // this.props.dispatch(changeCurrentFhirAttribute(false, ['name']))
     }
 
     public render () {
         let {
-            dispatch,
             currentDatabase,
             currentFhirResource,
             currentFhirAttribute,
-            loadingNameLists,
-            databaseNameList,
-            fhirResourceNameList,
-            databaseSchema,
-            fhirResourceJson,
-            loadingMapping,
             mapping,
         } = this.props
 
-        const selectableOwnerList = databaseSchema ?
-            Object.keys(databaseSchema.schema) :
+        let {
+            loadingNameLists,
+            databaseNameList,
+            fhirResourceNameList,
+        } = this.props.nameLists
+
+        let {schema} = currentDatabase
+        let {dispatch} = this.props
+
+        const selectableOwnerList = schema ?
+            Object.keys(schema.schema) :
             []
 
         return (
@@ -93,7 +98,7 @@ export class MainView extends React.Component<reduxAppState, any> {
                                     inline={true}
                                 >
                                     <StringSelect
-                                        inputItem={currentDatabase}
+                                        inputItem={currentDatabase.name}
                                         items={databaseNameList}
                                         icon={'database'}
                                         action={changeCurrentDatabase}
@@ -108,7 +113,7 @@ export class MainView extends React.Component<reduxAppState, any> {
                                     inline={true}
                                 >
                                     <StringSelect
-                                        inputItem={currentFhirResource}
+                                        inputItem={currentFhirResource.name}
                                         items={fhirResourceNameList}
                                         icon={'layout-hierarchy'}
                                         action={changeCurrentFhirResource}
@@ -139,13 +144,13 @@ export class MainView extends React.Component<reduxAppState, any> {
                 </Navbar>
 
                 <div id='main-container'>
-                    {loadingMapping ?
+                    {mapping.loading ?
                         <Spinner /> :
                         (mapping ?
                             <div id='flex-container'>
                                 <div id='left-panel'>
                                     <FhirResourceTree
-                                        json={fhirResourceJson}
+                                        json={currentFhirResource.json}
                                         dispatch={dispatch}
                                     />
                                 </div>
@@ -162,24 +167,24 @@ export class MainView extends React.Component<reduxAppState, any> {
                                                     >
                                                         <ControlGroup fill={false} vertical={false}>
                                                             <StringSelect
-                                                                inputItem={mapping.pathToPrimaryKey.owner}
+                                                                inputItem={mapping.content.pathToPrimaryKey.owner}
                                                                 items={selectableOwnerList}
                                                                 icon={'group-objects'}
-                                                                action={actions.changeCurrentDBOwner}
+                                                                action={null}
                                                                 dispatch={dispatch}
                                                             />
                                                             <StringSelect
-                                                                inputItem={mapping.pathToPrimaryKey.table}
+                                                                inputItem={mapping.content.pathToPrimaryKey.table}
                                                                 items={[]}
                                                                 icon={'th'}
-                                                                action={actions.changeCurrentDBTable}
+                                                                action={null}
                                                                 dispatch={dispatch}
                                                             />
                                                             <StringSelect
-                                                                inputItem={mapping.pathToPrimaryKey.column}
+                                                                inputItem={mapping.content.pathToPrimaryKey.column}
                                                                 items={[]}
                                                                 icon={'column-layout'}
-                                                                action={actions.changeCurrentDBPrimaryKey}
+                                                                action={null}
                                                                 dispatch={dispatch}
                                                             />
                                                         </ControlGroup>
@@ -187,8 +192,8 @@ export class MainView extends React.Component<reduxAppState, any> {
                                                 </div>
                                                 <div id='input-columns-viewer'>
                                                     <InputColumnsTable
-                                                        spec={mapping.fhirMapping[currentFhirAttribute.join('.')]}
-                                                        databaseSchema={databaseSchema}
+                                                        spec={mapping.content.fhirMapping[currentFhirAttribute.join('.')]}
+                                                        databaseSchema={schema}
                                                         dispatch={dispatch}
                                                     />
                                                 </div>

@@ -9,7 +9,7 @@ import {
 } from "@blueprintjs/core";
 import {isNullOrUndefined} from 'util';
 
-import {changeCurrentFhirAttribute} from '../actions'
+import {changeCurrentFhirAttribute} from '../actions/currentFhirAttribute'
 
 interface nodeData {
     name: string,
