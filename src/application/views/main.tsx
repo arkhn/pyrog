@@ -20,7 +20,6 @@ import {
 
 import { BrowserRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { fhirResources, inputDatabases } from '../mockdata/mockData';
 import { ItemPredicate, ItemRenderer, Select } from '@blueprintjs/select';
 import { JsonViewer } from '../components/jsonViewer';
 import { Route } from 'react-router';
