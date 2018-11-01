@@ -43,12 +43,16 @@ export default class FhirResourceTree extends React.Component<IFhirResourceTreeP
     private static genNode(_key: string, _obj: any): ITreeNode {
         const hasChildren = !isNullOrUndefined(_obj) && (_obj instanceof Array || _obj instanceof Object);
 
+        const regex = /(.*)<(.*)>/
+        const regexResult = regex.exec(_key)
+
         const result : ITreeNode = {
             id: this.getId(),
             hasCaret: hasChildren,
             icon: hasChildren ? "folder-open" : "tag",
             isExpanded: false,
-            label: hasChildren ? _key : `${_key} : ${_obj}`,
+            label: regexResult ? regexResult[1] : _key,
+            secondaryLabel: regexResult ? regexResult[2] : '',
         }
 
         if (hasChildren) {
@@ -83,7 +87,6 @@ export default class FhirResourceTree extends React.Component<IFhirResourceTreeP
         if(props.json !== state.renderJson) {
             try {
                 const nodes = FhirResourceTree.genObjNodes(props.json);
-                console.log(nodes);
 
                 return {
                     nodes: nodes,
