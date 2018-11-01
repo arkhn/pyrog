@@ -148,29 +148,35 @@ export class MainView extends React.Component<reduxAppState, any> {
                                         currentFhirAttribute.length > 0 ?
                                             <div id='input-columns-container'>
                                                 <div id='path-to-pk-viewer'>
-                                                    <ControlGroup fill={false} vertical={false}>
-                                                        <StringSelect
-                                                            inputItem={mapping.pathToPrimaryKey.owner}
-                                                            items={selectableOwnerList}
-                                                            icon={'group-objects'}
-                                                            action={actions.changeCurrentDBOwner}
-                                                            dispatch={dispatch}
-                                                        />
-                                                        <StringSelect
-                                                            inputItem={mapping.pathToPrimaryKey.table}
-                                                            items={[]}
-                                                            icon={'th'}
-                                                            action={actions.changeCurrentDBTable}
-                                                            dispatch={dispatch}
-                                                        />
-                                                        <StringSelect
-                                                            inputItem={mapping.pathToPrimaryKey.column}
-                                                            items={[]}
-                                                            icon={'column-layout'}
-                                                            action={actions.changeCurrentDBPrimaryKey}
-                                                            dispatch={dispatch}
-                                                        />
-                                                    </ControlGroup>
+                                                    <FormGroup
+                                                        label="Path to main primary key"
+                                                        labelFor="text-input"
+                                                        inline={true}
+                                                    >
+                                                        <ControlGroup fill={false} vertical={false}>
+                                                            <StringSelect
+                                                                inputItem={mapping.pathToPrimaryKey.owner}
+                                                                items={selectableOwnerList}
+                                                                icon={'group-objects'}
+                                                                action={actions.changeCurrentDBOwner}
+                                                                dispatch={dispatch}
+                                                            />
+                                                            <StringSelect
+                                                                inputItem={mapping.pathToPrimaryKey.table}
+                                                                items={[]}
+                                                                icon={'th'}
+                                                                action={actions.changeCurrentDBTable}
+                                                                dispatch={dispatch}
+                                                            />
+                                                            <StringSelect
+                                                                inputItem={mapping.pathToPrimaryKey.column}
+                                                                items={[]}
+                                                                icon={'column-layout'}
+                                                                action={actions.changeCurrentDBPrimaryKey}
+                                                                dispatch={dispatch}
+                                                            />
+                                                        </ControlGroup>
+                                                    </FormGroup>
                                                 </div>
                                                 <div id='input-columns-viewer'>
                                                     <InputColumnsTable

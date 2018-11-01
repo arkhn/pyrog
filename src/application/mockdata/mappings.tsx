@@ -4,7 +4,7 @@ export const cw_patient_mapping: IMapping = {
     pathToPrimaryKey: {
         owner: 'ISCF',
         table: 'PATIENT',
-        column: 'NOPAT',
+        column: 'PKPAT',
     },
     fhirMapping: {
         'Name.FirstName': {
@@ -24,7 +24,7 @@ export const cw_patient_mapping: IMapping = {
                 {
                     owner: 'ISCF',
                     table: 'PATIENT',
-                    column: 'PREPAT',
+                    column: 'FAKPAT',
                     join: null,
                     script: 'parsePrenom.py'
                 }
