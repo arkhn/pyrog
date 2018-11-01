@@ -230,9 +230,9 @@ export function changeCurrentDBPrimaryKey(pk: string): action {
     }
 }
 
-export function changeCurrentTreeNode(originallySelected: boolean, nodePath: string[]): action {
+export function changeCurrentFhirAttribute(originallySelected: boolean, nodePath: string[]): action {
     return {
-        type: 'CHANGE_CURRENT_TREE_NODE',
+        type: 'CHANGE_CURRENT_FHIR_ATTRIBUTE',
         value: {
             originallySelected,
             nodePath,

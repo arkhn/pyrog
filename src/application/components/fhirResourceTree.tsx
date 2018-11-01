@@ -10,7 +10,7 @@ import {
 import {isNullOrUndefined} from 'util';
 
 
-import {changeCurrentTreeNode} from '../actions'
+import {changeCurrentFhirAttribute} from '../actions'
 
 export interface IFhirResourceTreeProps {
     json: any,
@@ -138,7 +138,7 @@ export default class FhirResourceTree extends React.Component<IFhirResourceTreeP
                 currentNodes = currentNodes[key].childNodes
             }
 
-            this.props.dispatch(changeCurrentTreeNode(originallySelected, nodePath))
+            this.props.dispatch(changeCurrentFhirAttribute(originallySelected, nodePath))
         }
     };
 
