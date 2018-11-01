@@ -80,7 +80,7 @@ export default class FhirResourceTree extends React.Component<IFhirResourceTreeP
     }
 
     static getDerivedStateFromProps(props: IFhirResourceTreeProps, state: IFhirResourceTreeState) {
-        if(props.json !== state.renderJson){
+        if(props.json !== state.renderJson) {
             try {
                 const nodes = FhirResourceTree.genObjNodes(props.json);
                 console.log(nodes);
@@ -97,6 +97,8 @@ export default class FhirResourceTree extends React.Component<IFhirResourceTreeP
                     isBroken: true,
                 }
             }
+        } else {
+            return state
         }
     }
 
@@ -113,25 +115,28 @@ export default class FhirResourceTree extends React.Component<IFhirResourceTreeP
     }
 
     private handleNodeClick = (nodeData: ITreeNode, _nodePath: number[], e: React.MouseEvent<HTMLElement>) => {
-        const originallySelected = nodeData.isSelected;
+        // Can only select tree leaves
+        if (!nodeData.hasCaret) {
+            const originallySelected = nodeData.isSelected;
 
-        if (!e.shiftKey) {
-            this.forEachNode(this.state.nodes, n => (n.isSelected = false));
+            if (!e.shiftKey) {
+                this.forEachNode(this.state.nodes, n => (n.isSelected = false));
+            }
+
+            nodeData.isSelected = originallySelected == null ? true : !originallySelected;
+            this.setState(this.state);
+
+            // Building string path to clicked node.
+            let nodePath : string[] = []
+            let currentNodes : ITreeNode[] = this.state.nodes
+
+            for (var key of _nodePath) {
+                nodePath.push(currentNodes[key].label as string)
+                currentNodes = currentNodes[key].childNodes
+            }
+
+            this.props.dispatch(changeCurrentTreeNode(originallySelected, nodePath))
         }
-
-        nodeData.isSelected = originallySelected == null ? true : !originallySelected;
-        this.setState(this.state);
-
-        // Building string path to clicked node.
-        let nodePath : string[] = []
-        let currentNodes : ITreeNode[] = this.state.nodes
-
-        for (var key of _nodePath) {
-            nodePath.push(currentNodes[key].label as string)
-            currentNodes = currentNodes[key].childNodes
-        }
-
-        this.props.dispatch(changeCurrentTreeNode(originallySelected, nodePath))
     };
 
     private handleNodeCollapse = (nodeData: ITreeNode) => {
