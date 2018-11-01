@@ -42,6 +42,12 @@ export function reducer(state = initialAppState, action: action): reduxAppState 
                 loadingNameLists: false,
             }
 
+        case 'FETCH_INFO_NAME_LIST_FAILURE':
+            return {
+                ...state,
+                loadingNameLists: false,
+            }
+
         case 'FETCH_DATABASE_NAME_LIST_SUCCESS':
             return {
                 ...state,

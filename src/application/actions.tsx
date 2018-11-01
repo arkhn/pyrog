@@ -48,6 +48,12 @@ export const fetchInfoNameListSuccess = () : action => {
     }
 }
 
+export const fetchInfoNameListFailure= () : action => {
+    return {
+        type: 'FETCH_INFO_NAME_LIST_FAILURE',
+    }
+}
+
 export function fetchDatabaseNameListSuccess(databaseNameList: string[]): action {
     return {
         type: 'FETCH_DATABASE_NAME_LIST_SUCCESS',
