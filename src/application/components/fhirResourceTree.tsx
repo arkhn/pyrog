@@ -53,6 +53,7 @@ export default class FhirResourceTree extends React.Component<IFhirResourceTreeP
             isExpanded: false,
             label: regexResult ? regexResult[1] : _key,
             secondaryLabel: regexResult ? regexResult[2] : '',
+            isSelected: false,
         }
 
         if (hasChildren) {

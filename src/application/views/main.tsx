@@ -144,46 +144,41 @@ export class MainView extends React.Component<reduxAppState, any> {
                                         currentFhirAttribute.length > 0 ?
                                             <div id='input-columns-container'>
                                                 <div id='path-to-pk-viewer'>
-                                                    {/* <ControlGroup fill={true} vertical={false}>
+                                                    <ControlGroup fill={false} vertical={false}>
                                                         <StringSelect
                                                             inputItem={mapping.pathToPrimaryKey.owner}
-                                                            items={currentOwnerList}
+                                                            items={selectableOwnerList}
                                                             icon={'group-objects'}
                                                             action={actions.changeCurrentDBOwner}
                                                             dispatch={dispatch}
-                                                            intent={'primary'}
                                                         />
                                                         <StringSelect
-                                                            inputItem={currentFhirResource.table}
-                                                            items={currentTableList}
+                                                            inputItem={mapping.pathToPrimaryKey.table}
+                                                            items={[]}
                                                             icon={'th'}
                                                             action={actions.changeCurrentDBTable}
                                                             dispatch={dispatch}
-                                                            intent={'primary'}
                                                         />
                                                         <StringSelect
-                                                            inputItem={currentFhirResource.primaryKey}
-                                                            items={currentColumnList}
+                                                            inputItem={mapping.pathToPrimaryKey.column}
+                                                            items={[]}
                                                             icon={'column-layout'}
                                                             action={actions.changeCurrentDBPrimaryKey}
                                                             dispatch={dispatch}
-                                                            intent={'primary'}
                                                         />
-                                                    </ControlGroup> */}
+                                                    </ControlGroup>
                                                 </div>
                                                 <div id='input-columns-viewer'>
-                                                    {/* <InputColumnsTable
-                                                        columns={currentInputColumns}
-                                                        currentOwnerList={currentOwnerList}
-                                                        currentTableList={currentTableList}
-                                                        currentColumnList={currentColumnList}
-                                                        dispatch={dispatch}
-                                                    /> */}
-                                                </div>
-                                                <div id='column-selector'>
-                                                    <TabViewer
+                                                    <InputColumnsTable
+                                                        currentInputColumns={mapping.fhirMapping[currentFhirAttribute.join('.')].inputColumns}
+                                                        databaseSchema={databaseSchema}
                                                         dispatch={dispatch}
                                                     />
+                                                </div>
+                                                <div id='column-selector'>
+                                                    {/* <TabViewer
+                                                        dispatch={dispatch}
+                                                    /> */}
                                                 </div>
                                             </div>
                                         : <NonIdealState

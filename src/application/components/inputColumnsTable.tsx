@@ -6,7 +6,10 @@ import {
 
 import StringSelect from '../components/selects/stringSelect'
 
-import {IInputColumn} from '../types'
+import {
+    IDatabaseSchema,
+    IInputColumn,
+} from '../types'
 
 import {scriptList} from '../mockdata/nameLists'
 import {
@@ -16,10 +19,8 @@ import {
 } from '../mockdata/database'
 
 export interface IInputColumnsTableProps {
-    columns: IInputColumn[];
-    currentOwnerList: string[];
-    currentTableList: string[];
-    currentColumnList: string[];
+    currentInputColumns: IInputColumn[];
+    databaseSchema: IDatabaseSchema;
     dispatch: any;
 }
 
@@ -29,44 +30,23 @@ export interface IInputColumnsTableState {
 
 export default class InputColumnsTable extends React.Component<IInputColumnsTableProps, IInputColumnsTableState> {
     public render() {
-        let {columns, currentOwnerList, currentTableList, currentColumnList, dispatch} = this.props;
+        let {
+            currentInputColumns,
+            databaseSchema,
+            dispatch,
+        } = this.props;
 
-        let rows = columns ? columns.map((column: IInputColumn, index: number) =>
-            <tr
-                key={index}
-            >
-                <td>
-                    <Button
-                        icon={'delete'}
-                        minimal={true}
-                    />
-                </td>
-                <td>{`${column.owner} > ${column.table} > ${column.column}`}</td>
-                <td>
-                    <StringSelect
-                        inputItem={null}
-                        items={columnList}
-                        icon={'column-layout'}
-                        action={null}
-                        dispatch={dispatch}
-                    />
-                </td>
-                <td>
-                    <ControlGroup fill={false} vertical={false}>
-                        <StringSelect
-                            inputItem={null}
-                            items={ownerList}
-                            icon={'group-objects'}
-                            action={null}
-                            dispatch={dispatch}
+        let rows = currentInputColumns ?
+            currentInputColumns.map((column: IInputColumn, index: number) =>
+                <tr key={index}>
+                    <td>
+                        <Button
+                            icon={'delete'}
+                            minimal={true}
                         />
-                        <StringSelect
-                            inputItem={null}
-                            items={tableList}
-                            icon={'th'}
-                            action={null}
-                            dispatch={dispatch}
-                        />
+                    </td>
+                    <td>{`${column.owner} > ${column.table} > ${column.column}`}</td>
+                    <td>
                         <StringSelect
                             inputItem={null}
                             items={columnList}
@@ -74,32 +54,60 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
                             action={null}
                             dispatch={dispatch}
                         />
-                    </ControlGroup>
-                </td>
-                <td>
-                    <StringSelect
-                        inputItem={null}
-                        items={scriptList}
-                        icon={'function'}
-                        action={null}
-                        dispatch={dispatch}
-                    />
-                </td>
-                {columns.length > 1 ?
-                    (index == 0 ?
-                        <td rowSpan={columns.length}>
+                    </td>
+                    <td>
+                        <ControlGroup fill={false} vertical={false}>
                             <StringSelect
                                 inputItem={null}
-                                items={scriptList}
-                                icon={'function'}
+                                items={ownerList}
+                                icon={'group-objects'}
                                 action={null}
                                 dispatch={dispatch}
                             />
-                        </td>
-                    : null)
-                : null}
-            </tr>
-        ) : []
+                            <StringSelect
+                                inputItem={null}
+                                items={tableList}
+                                icon={'th'}
+                                action={null}
+                                dispatch={dispatch}
+                            />
+                            <StringSelect
+                                inputItem={null}
+                                items={columnList}
+                                icon={'column-layout'}
+                                action={null}
+                                dispatch={dispatch}
+                            />
+                        </ControlGroup>
+                    </td>
+                    <td>
+                        <StringSelect
+                            inputItem={null}
+                            items={scriptList}
+                            icon={'function'}
+                            action={null}
+                            dispatch={dispatch}
+                        />
+                    </td>
+                    {
+                        currentInputColumns.length > 1 ?
+                            (
+                                index == 0 ?
+                                    <td rowSpan={currentInputColumns.length}>
+                                        <StringSelect
+                                            inputItem={null}
+                                            items={scriptList}
+                                            icon={'function'}
+                                            action={null}
+                                            dispatch={dispatch}
+                                        />
+                                    </td> :
+                                    null
+                            ) :
+                            null
+                    }
+                </tr>) :
+            []
 
         return (
             <div>
@@ -110,7 +118,7 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
                             <th>Column Path</th>
                             <th colSpan={2}>Join</th>
                             <th>Column Script</th>
-                            {columns.length > 1 ? <th>Final Script</th> : null}
+                            {currentInputColumns.length > 1 ? <th>Final Script</th> : null}
                         </tr>
                         {rows}
                     </tbody>
