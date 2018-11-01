@@ -51,8 +51,11 @@ export default class FhirResourceTree extends React.Component<IFhirResourceTreeP
             hasCaret: hasChildren,
             icon: hasChildren ? "folder-open" : "tag",
             isExpanded: false,
-            label: regexResult ? regexResult[1] : _key,
-            secondaryLabel: regexResult ? regexResult[2] : '',
+            label: <div>
+                <div>{regexResult ? regexResult[1] : _key}</div>
+                <div>{regexResult ? regexResult[2] : ''}</div>
+            </div>,
+            // secondaryLabel: regexResult ? regexResult[2] : '',
             isSelected: false,
         }
 
