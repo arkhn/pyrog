@@ -17,7 +17,7 @@ const initialAppState: reduxAppState = {
     databaseNameList: [],
     fhirResourceNameList: [],
     databaseSchema: null,
-    fhirResourceDescription: null,
+    fhirResourceJson: null,
     loadingMapping: false,
     mapping: null,
 }
@@ -64,6 +64,12 @@ export function reducer(state = initialAppState, action: action): reduxAppState 
             return {
                 ...state,
                 currentFhirResource: action.value,
+            }
+
+        case 'FETCH_FHIR_RESOURCE_JSON_SUCCESS':
+            return {
+                ...state,
+                fhirResourceJson: action.value,
             }
 
         case 'LOADING_MAPPING':

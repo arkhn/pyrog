@@ -7,7 +7,7 @@ const serverUrl = config('app').serverURL
 
 import {cw_patient_mapping} from './mockdata/mappings'
 import {databaseNameList, fhirResourceNameList} from './mockdata/nameLists'
-import {patientFhirResource} from './mockdata/fhirResources'
+import {patientJson} from './mockdata/fhirJson'
 
 export function toggleDialogVisibility(): action{
     return {
@@ -98,7 +98,7 @@ export function updateStateCurrentDatabase(database: string): action {
 export function changeCurrentFhirResource(resource: string): any {
     return (dispatch: any, getState: any) => {
         dispatch(updateStateCurrentFhirResource(resource))
-        dispatch(fetchFhirResourceDescription(resource))
+        dispatch(fetchFhirResourceJson(resource))
         dispatch(fetchMapping())
     }
 }
@@ -110,17 +110,18 @@ export function updateStateCurrentFhirResource(resource: string): action {
     }
 }
 
-// Fetch fhirResourceDescription
+// Fetch fhirResourceJson
 
-export function fetchFhirResourceDescription(resource: string): any {
+export function fetchFhirResourceJson(resource: string): any {
     return (dispatch: any, getState: any) => {
         const state = getState()
         if (state.currentDatabase && state.currentFhirResource) {
             // Either load and dispatch mock data
             // or implement true fetching code
             if (state.testState) {
+                console.log('here')
                 setTimeout(() => {
-                    dispatch(fetchFhirResourceDescriptionSuccess(patientFhirResource))
+                    dispatch(fetchFhirResourceJsonSuccess(JSON.parse(patientJson)))
                 }, 500)
             } else {
                 // TODO: parse url correctly
@@ -128,26 +129,26 @@ export function fetchFhirResourceDescription(resource: string): any {
 
                 fetch(url)
                 .then((response: any) => {
-                    dispatch(fetchFhirResourceDescriptionSuccess(response.json()))
+                    dispatch(fetchFhirResourceJsonSuccess(response.json()))
                 }).catch( (err: any) => {
                     console.log(err)
-                    dispatch(fetchFhirResourceDescriptionFailure(err))
+                    dispatch(fetchFhirResourceJsonFailure(err))
                 })
             }
         }
     }
 }
 
-export function fetchFhirResourceDescriptionSuccess(description: any): action {
+export function fetchFhirResourceJsonSuccess(json: any): action {
     return {
-        type: 'FETCH_FHIR_RESOURCE_DESCRIPTION_SUCCESS',
-        value: description,
+        type: 'FETCH_FHIR_RESOURCE_JSON_SUCCESS',
+        value: json,
     }
 }
 
-export function fetchFhirResourceDescriptionFailure(error: any): action {
+export function fetchFhirResourceJsonFailure(error: any): action {
     return {
-        type: 'FETCH_MAPPING_FAILURE',
+        type: 'FETCH_FHIR_RESOURCE_JSON_FAILURE',
         value: error,
     }
 }

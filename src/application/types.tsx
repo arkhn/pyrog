@@ -67,7 +67,7 @@ export interface reduxAppState {
     databaseNameList: string[],
     fhirResourceNameList: string[],
     databaseSchema: IDatabaseSchema,
-    fhirResourceDescription: any,
+    fhirResourceJson: any,
     // This is what users acutally modify
     // and upload.
     loadingMapping: boolean,

@@ -27,7 +27,7 @@ export interface IJsonViewerState {
 
 export class JsonViewer extends React.Component<IJsonViewerProps, IJsonViewerState> {
     static id: number = 0;
-   
+
     constructor(props: IJsonViewerProps) {
         super(props);
         this.state = {nodes:[], renderJson: "", isBroken: false, navbarTabId: "treeview"}
@@ -65,7 +65,6 @@ export class JsonViewer extends React.Component<IJsonViewerProps, IJsonViewerSta
         }
         return result;
     }
-   
 
     private static genNodes(_obj: any): ITreeNode[] {
         let returnList = [];
@@ -78,7 +77,6 @@ export class JsonViewer extends React.Component<IJsonViewerProps, IJsonViewerSta
     }
 
     public componentDidUpdate(prevProps: IJsonViewerProps) {
-        
         if(this.props.json !== this.state.renderJson){
             try{
                 const nodes = JsonViewer.genObjNodes(this.props.json);
@@ -89,15 +87,13 @@ export class JsonViewer extends React.Component<IJsonViewerProps, IJsonViewerSta
             }
         }
     }
-    
-     
 
     public render() {
-        return this.state.isBroken? 
-            <NonIdealState icon="error" title="Invalid json"/> : 
+        return this.state.isBroken?
+            <NonIdealState icon="error" title="Invalid json"/> :
             <Tabs id="TabsExample" onChange={this.handleTabChange} selectedTabId={this.state.navbarTabId}>
                 <Tab id="treeview" title="Tree View" panel={
-                    <Tree className="jsonView" contents={this.state.nodes}  
+                    <Tree className="jsonView" contents={this.state.nodes}
                         onNodeCollapse={this.handleNodeCollapse}
                         onNodeExpand={this.handleNodeExpand} />} />
                 <Tab id="stringview" title="Plain View" panel={ <JSONPretty id="json-pretty" json={this.state.renderJson} />} />
@@ -105,7 +101,7 @@ export class JsonViewer extends React.Component<IJsonViewerProps, IJsonViewerSta
                 <Button />
                 <Button />
             </Tabs>
-            
+
     }
 
     private handleTabChange = (navbarTabId: TabId) => this.setState({ navbarTabId });

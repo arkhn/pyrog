@@ -1,25 +1,67 @@
 import * as React from "react";
-import {Classes, Icon, ITreeNode, Position, Tooltip, Tree} from "@blueprintjs/core";
+import {
+    Classes,
+    Icon,
+    ITreeNode,
+    Position,
+    Tooltip,
+    Tree
+} from "@blueprintjs/core";
+import {isNullOrUndefined} from 'util';
+
 
 import {changeCurrentTreeNode} from '../actions'
 
-export interface ITreeExampleProps {
-    nodes: ITreeNode[];
+export interface IFhirResourceTreeProps {
+    json: any;
     dispatch: any;
 }
 
-export interface ITreeExampleState {
+export interface IFhirResourceTreeState {
     nodes: ITreeNode[];
 }
 
-export default class FhirResourceTree extends React.Component<ITreeExampleProps, ITreeExampleState> {
-    public state: ITreeExampleState = {
-        nodes: this.props.nodes
+export default class FhirResourceTree extends React.Component<IFhirResourceTreeProps, IFhirResourceTreeState> {
+    static id: number = 0;
+
+    static getId(): number {
+        this.id++;
+        return this.id;
+    }
+
+    private static genNode(_key: string, _obj: any): ITreeNode {
+        const hasChildren = !isNullOrUndefined(_obj) && (_obj instanceof Array || _obj instanceof Object);
+        const result = {
+            id: this.getId(),
+            hasCaret: hasChildren,
+            icon: hasChildren ? "folder-open" : "new-object",
+            isExpanded: hasChildren,
+            label: hasChildren ? _key : `${_key} : ${_obj}`,
+        } as ITreeNode
+
+        if (hasChildren){
+            return Object.assign(result,{childNodes: FhirResourceTree.genNodes(_obj)})
+        }
+        return result;
+    }
+
+    private static genNodes(_obj: any): ITreeNode[] {
+        let returnList = [];
+        for (let key of Object.keys(_obj))
+        {
+            returnList.push(FhirResourceTree.genNode(key, _obj[key]));
+        }
+
+        return returnList;
+    }
+
+    public state: IFhirResourceTreeState = {
+        nodes: FhirResourceTree.genNodes(this.props.json),
     };
 
-    static getDerivedStateFromProps(props: ITreeExampleProps, state:ITreeExampleState) {
+    static getDerivedStateFromProps(props: IFhirResourceTreeProps, state:IFhirResourceTreeState) {
         return {
-            nodes: props.nodes
+            nodes: FhirResourceTree.genNodes(props.json),
         };
     }
 
@@ -45,7 +87,7 @@ export default class FhirResourceTree extends React.Component<ITreeExampleProps,
 
         // Building string path to clicked node.
         let nodePath : string[] = []
-        let currentNodes : ITreeNode[] = this.props.nodes
+        let currentNodes : ITreeNode[] = this.state.nodes
 
         for (var key of _nodePath) {
             nodePath.push(currentNodes[key].label as string)

@@ -62,6 +62,7 @@ export class MainView extends React.Component<reduxAppState, any> {
             databaseNameList,
             fhirResourceNameList,
             databaseSchema,
+            fhirResourceJson,
             loadingMapping,
             mapping,
         } = this.props
@@ -130,11 +131,10 @@ export class MainView extends React.Component<reduxAppState, any> {
                     (mapping ?
                         <div id='main-container'>
                             <div id='left-panel'>
-                                TODO
-                                {/* <FhirResourceTree
-                                    nodes={currentFhirResource ? currentFhirResource.contentAsTree : null}
+                                <FhirResourceTree
+                                    json={fhirResourceJson}
                                     dispatch={dispatch}
-                                /> */}
+                                />
                             </div>
 
                             <div id='right-container' className={'bp3-dark'}>
