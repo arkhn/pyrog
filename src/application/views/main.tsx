@@ -56,7 +56,7 @@ export class MainView extends React.Component<reduxAppState, any> {
         this.props.dispatch(changeCurrentDatabase('CW'))
         this.props.dispatch(changeCurrentFhirResource('Patient'))
         this.props.dispatch(changeCurrentFhirResource('Patient'))
-        this.props.dispatch(changeCurrentFhirAttribute(false, ['name']))
+        // this.props.dispatch(changeCurrentFhirAttribute(false, ['name']))
     }
 
     public render () {

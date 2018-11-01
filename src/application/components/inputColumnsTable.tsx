@@ -37,7 +37,7 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
             dispatch,
         } = this.props;
 
-        let rows = spec.inputColumns ?
+        let rows = (spec && spec.inputColumns) ?
             spec.inputColumns.map((column: IInputColumn, index: number) =>
                 <tr key={index}>
                     <td>
@@ -119,7 +119,7 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
                             <th>Column Path</th>
                             <th colSpan={2}>Join</th>
                             <th>Column Script</th>
-                            {spec.inputColumns.length > 1 ? <th>Final Script</th> : null}
+                            {(spec && spec.inputColumns.length> 1) ? <th>Final Script</th> : null}
                         </tr>
                         {rows}
                     </tbody>

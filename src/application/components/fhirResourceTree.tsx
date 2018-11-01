@@ -9,8 +9,11 @@ import {
 } from "@blueprintjs/core";
 import {isNullOrUndefined} from 'util';
 
-
 import {changeCurrentFhirAttribute} from '../actions'
+
+interface nodeData {
+    name: string,
+}
 
 export interface IFhirResourceTreeProps {
     json: any,
@@ -18,7 +21,7 @@ export interface IFhirResourceTreeProps {
 }
 
 export interface IFhirResourceTreeState {
-    nodes: ITreeNode[],
+    nodes: ITreeNode<nodeData>[],
     renderJson: string,
     isBroken: boolean,
 }
@@ -46,16 +49,18 @@ export default class FhirResourceTree extends React.Component<IFhirResourceTreeP
         const regex = /(.*)<(.*)>/
         const regexResult = regex.exec(_key)
 
-        const result : ITreeNode = {
+        const result : ITreeNode<nodeData> = {
             id: this.getId(),
             hasCaret: hasChildren,
             icon: hasChildren ? "folder-open" : "tag",
             isExpanded: false,
+            nodeData: {
+                name: regexResult ? regexResult[1] : _key,
+            },
             label: <div>
                 <div>{regexResult ? regexResult[1] : _key}</div>
                 <div>{regexResult ? regexResult[2] : ''}</div>
             </div>,
-            // secondaryLabel: regexResult ? regexResult[2] : '',
             isSelected: false,
         }
 
@@ -135,10 +140,10 @@ export default class FhirResourceTree extends React.Component<IFhirResourceTreeP
 
             // Building string path to clicked node.
             let nodePath : string[] = []
-            let currentNodes : ITreeNode[] = this.state.nodes
+            let currentNodes : ITreeNode<nodeData>[] = this.state.nodes
 
             for (var key of _nodePath) {
-                nodePath.push(currentNodes[key].label as string)
+                nodePath.push(currentNodes[key].nodeData.name as string)
                 currentNodes = currentNodes[key].childNodes
             }
 
