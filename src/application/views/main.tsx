@@ -67,6 +67,10 @@ export class MainView extends React.Component<reduxAppState, any> {
             mapping,
         } = this.props
 
+        const selectableOwnerList = databaseSchema ?
+            Object.keys(databaseSchema.schema) :
+            []
+
         return (
             <div id='application' className={'bp3-dark'}>
                 <Navbar>
