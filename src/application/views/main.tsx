@@ -127,77 +127,80 @@ export class MainView extends React.Component<reduxAppState, any> {
                     }
                 </Navbar>
 
-                {loadingMapping ? <Spinner /> :
-                    (mapping ?
-                        <div id='main-container'>
-                            <div id='left-panel'>
-                                <FhirResourceTree
-                                    json={fhirResourceJson}
-                                    dispatch={dispatch}
-                                />
-                            </div>
-
-                            <div id='right-container' className={'bp3-dark'}>
-                                {
-                                    currentFhirAttribute.length > 0 ?
-                                        <div id='input-columns-container'>
-                                            <div id='path-to-pk-viewer'>
-                                                {/* <ControlGroup fill={true} vertical={false}>
-                                                    <StringSelect
-                                                        inputItem={mapping.pathToPrimaryKey.owner}
-                                                        items={currentOwnerList}
-                                                        icon={'group-objects'}
-                                                        action={actions.changeCurrentDBOwner}
-                                                        dispatch={dispatch}
-                                                        intent={'primary'}
-                                                    />
-                                                    <StringSelect
-                                                        inputItem={currentFhirResource.table}
-                                                        items={currentTableList}
-                                                        icon={'th'}
-                                                        action={actions.changeCurrentDBTable}
-                                                        dispatch={dispatch}
-                                                        intent={'primary'}
-                                                    />
-                                                    <StringSelect
-                                                        inputItem={currentFhirResource.primaryKey}
-                                                        items={currentColumnList}
-                                                        icon={'column-layout'}
-                                                        action={actions.changeCurrentDBPrimaryKey}
-                                                        dispatch={dispatch}
-                                                        intent={'primary'}
-                                                    />
-                                                </ControlGroup> */}
-                                            </div>
-                                            <div id='input-columns-viewer'>
-                                                {/* <InputColumnsTable
-                                                    columns={currentInputColumns}
-                                                    currentOwnerList={currentOwnerList}
-                                                    currentTableList={currentTableList}
-                                                    currentColumnList={currentColumnList}
-                                                    dispatch={dispatch}
-                                                /> */}
-                                            </div>
-                                            <div id='column-selector'>
-                                                <TabViewer
-                                                    dispatch={dispatch}
-                                                />
-                                            </div>
-                                        </div>
-                                    : <NonIdealState
-                                        icon={<span dangerouslySetInnerHTML={{__html: arkhnLogo}}/>}
-                                        title={'No FHIR attribute selected'}
-                                        description={'Select a FHIR resource attribute by clicking on a node in the left panel.'}
+                <div id='main-container'>
+                    {loadingMapping ?
+                        <Spinner /> :
+                        (mapping ?
+                            <div id='flex-container'>
+                                <div id='left-panel'>
+                                    <FhirResourceTree
+                                        json={fhirResourceJson}
+                                        dispatch={dispatch}
                                     />
-                                }
+                                </div>
+
+                                <div id='right-container' className={'bp3-dark'}>
+                                    {
+                                        currentFhirAttribute.length > 0 ?
+                                            <div id='input-columns-container'>
+                                                <div id='path-to-pk-viewer'>
+                                                    {/* <ControlGroup fill={true} vertical={false}>
+                                                        <StringSelect
+                                                            inputItem={mapping.pathToPrimaryKey.owner}
+                                                            items={currentOwnerList}
+                                                            icon={'group-objects'}
+                                                            action={actions.changeCurrentDBOwner}
+                                                            dispatch={dispatch}
+                                                            intent={'primary'}
+                                                        />
+                                                        <StringSelect
+                                                            inputItem={currentFhirResource.table}
+                                                            items={currentTableList}
+                                                            icon={'th'}
+                                                            action={actions.changeCurrentDBTable}
+                                                            dispatch={dispatch}
+                                                            intent={'primary'}
+                                                        />
+                                                        <StringSelect
+                                                            inputItem={currentFhirResource.primaryKey}
+                                                            items={currentColumnList}
+                                                            icon={'column-layout'}
+                                                            action={actions.changeCurrentDBPrimaryKey}
+                                                            dispatch={dispatch}
+                                                            intent={'primary'}
+                                                        />
+                                                    </ControlGroup> */}
+                                                </div>
+                                                <div id='input-columns-viewer'>
+                                                    {/* <InputColumnsTable
+                                                        columns={currentInputColumns}
+                                                        currentOwnerList={currentOwnerList}
+                                                        currentTableList={currentTableList}
+                                                        currentColumnList={currentColumnList}
+                                                        dispatch={dispatch}
+                                                    /> */}
+                                                </div>
+                                                <div id='column-selector'>
+                                                    <TabViewer
+                                                        dispatch={dispatch}
+                                                    />
+                                                </div>
+                                            </div>
+                                        : <NonIdealState
+                                            icon={<span dangerouslySetInnerHTML={{__html: arkhnLogo}}/>}
+                                            title={'No FHIR attribute selected'}
+                                            description={'Select a FHIR resource attribute by clicking on a node in the left panel.'}
+                                        />
+                                    }
+                                </div>
                             </div>
-                        </div>
-                    : <NonIdealState
-                        icon={<span dangerouslySetInnerHTML={{__html: arkhnLogo}}/>}
-                        title={'More information needed'}
-                        description={'Select an input database schema and a FHIR Resource in the navigation bar.'}
-                    />)
-                }
+                        : <NonIdealState
+                            icon={<span dangerouslySetInnerHTML={{__html: arkhnLogo}}/>}
+                            title={'Fhirball'}
+                            description={'Select an input database schema and a FHIR Resource in the navigation bar to start mapping.'}
+                        />)
+                    }
+                </div>
             </div>
         )
     }
