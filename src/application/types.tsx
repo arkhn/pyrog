@@ -1,57 +1,95 @@
 import * as redux from 'redux';
 
+// TODO: Deprecate type
+export interface IFhirResource {
+    resourceType: string,
+    owner: string,
+    table: string,
+    primaryKey: string,
+    contentAsTree: any,
+    inputColumnsDict?: any,
+}
+
+// TODO: Deprecate type
 export interface IDatabase {
+    name: string,
+    schema: any,
+}
+
+export interface IDatabaseSchema {
     name: string,
     schema: {
         [owner: string]: {
-            [table: string]: {
-                [column: string]: any
-            }
+            [table: string]: string[],
         }
     }
 }
 
-export interface IInputColumn {
+export interface IDatabaseColumn {
     owner: string,
     table: string,
     column: string,
 }
 
-export interface IInputColumnsDict {
-    [key: string]: IInputColumn[],
+export interface IInputColumn extends IDatabaseColumn {
+    join?: {
+        sourceColumn: string,
+        targetColumn: IDatabaseColumn,
+    }
+    script?: any,
 }
 
-// Describes all elements of a Fhir Resource in the view.
-// In particular, it contains the mapping.
-
-export interface IFhirResource {
-    resourceType: string,
-    // attributes indicating path to the primary key for this resource
-    owner: string,
-    table: string,
-    primaryKey: string,
-    // json description
-    content?: any,
-    // json description turned into a react tree;
-    // it is supposed to be a simple transformation of
-    // the attribute 'content'
-    contentAsTree?: any,
-    // dict containing columns from which to pick information;
-    // key = fhir resource path
-    // value = input columns from which to find information
-    inputColumnsDict?: IInputColumnsDict,
+export interface IFhirIntegrationSpec {
+    inputColumns: IInputColumn[],
+    mergingScript?: any,
+    [Symbol.iterator]?: any,
 }
 
-export interface appState {
-    dialogIsOpen        : boolean;
-    currentInputDatabase: IDatabase,
-    currentFhirResource : IFhirResource,
-    currentTreeNodePath : string[],
-    dispatch?           : redux.Dispatch<any>,
+export interface IMapping {
+    pathToPrimaryKey: IDatabaseColumn,
+    fhirMapping: {
+        [fhirAttribute: string]: IFhirIntegrationSpec,
+    }
+}
+
+export interface reduxAppState {
+    dispatch?: redux.Dispatch<any>,
+    appData: IReduxAppData,
+    nameLists: IReduxNameLists,
+    currentDatabase: IReduxCurrentDatabase,
+    currentFhirResource: IReduxCurrentFhirResource,
+    currentFhirAttribute: string[],
+    mapping: IReduxMapping,
+}
+
+export interface IReduxAppData {
+    dialogIsOpen: boolean,
+    distantServerUrl: string,
+    testState: boolean,
+}
+
+export interface IReduxNameLists {
+    loadingNameLists: boolean,
+    databaseNameList: string[],
+    fhirResourceNameList: string[],
+}
+
+export interface IReduxCurrentDatabase {
+    name: string,
+    schema: IDatabaseSchema,
+}
+
+export interface IReduxCurrentFhirResource {
+    name: string,
+    json: any,
+}
+
+export interface IReduxMapping {
+    loading: boolean,
+    content: IMapping,
 }
 
 export interface action {
     type: string,
-    promise?: (dispatch: any, getState: any) => any,
     value?: any,
 }
