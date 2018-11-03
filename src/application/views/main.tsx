@@ -195,6 +195,7 @@ export class MainView extends React.Component<reduxAppState, any> {
                                                 </div>
                                                 <div id='column-selector'>
                                                     <TabViewer
+                                                        databaseSchema={currentDatabase.schema}
                                                         dispatch={dispatch}
                                                     />
                                                 </div>
