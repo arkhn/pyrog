@@ -42,6 +42,7 @@ export interface IInputColumn extends IDatabaseColumn {
 export interface IFhirIntegrationSpec {
     inputColumns: IInputColumn[],
     mergingScript?: any,
+    [Symbol.iterator]?: any,
 }
 
 export interface IMapping {

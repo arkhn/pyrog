@@ -48,3 +48,19 @@ export const fetchMappingFailure = (error: any): action => {
         value: error,
     }
 }
+
+export const clickAddInputColumn = (column: any): any => {
+    return (dispatch: any, getState: any) => {
+        dispatch(addInputColumn(column, getState().currentFhirAttribute))
+    }
+}
+
+export const addInputColumn = (column: any, currentFhirAttribute: any): action => {
+    return {
+        type: 'ADD_INPUT_COLUMN',
+        value: {
+            currentFhirAttribute,
+            column,
+        },
+    }
+}

@@ -197,9 +197,9 @@ export class MainView extends React.Component<reduxAppState, any> {
                                                     />
                                                 </div>
                                                 <div id='column-selector'>
-                                                    {/* <TabViewer
+                                                    <TabViewer
                                                         dispatch={dispatch}
-                                                    /> */}
+                                                    />
                                                 </div>
                                             </div>
                                         : <NonIdealState
