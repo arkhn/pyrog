@@ -183,6 +183,7 @@ export class MainView extends React.Component<reduxAppState, any> {
                                                         databaseColumn={mapping.content.primaryKeyColumn}
                                                         databaseSchema={currentDatabase.schema}
                                                         dispatch={dispatch}
+                                                        label={'Path to Primary Key'}
                                                     />
                                                 </div>
                                                 <div id='input-columns-viewer'>

@@ -19,6 +19,7 @@ export interface IColumnPickerProps {
     databaseColumn: IDatabaseColumn,
     databaseSchema: IDatabaseSchema,
     dispatch: any,
+    label?: string,
     vertical?: boolean,
 }
 
@@ -35,6 +36,8 @@ export default class ColumnPicker extends React.Component<IColumnPickerProps, IC
             databaseColumn,
             databaseSchema,
             dispatch,
+            label,
+            vertical,
         } = this.props
 
         let {
@@ -53,36 +56,38 @@ export default class ColumnPicker extends React.Component<IColumnPickerProps, IC
             databaseSchema[owner][table] :
             []
 
-        return (
+        let controlGroup = <ControlGroup fill={false} vertical={vertical || false}>
+            <StringSelect
+                inputItem={owner}
+                items={owners}
+                icon={'group-objects'}
+                action={changeOwner}
+                dispatch={dispatch}
+            />
+            <StringSelect
+                inputItem={table}
+                items={tables}
+                icon={'th'}
+                action={changeTable}
+                dispatch={dispatch}
+            />
+            <StringSelect
+                inputItem={column}
+                items={columns}
+                icon={'column-layout'}
+                action={changeColumn}
+                dispatch={dispatch}
+            />
+        </ControlGroup>
+
+        return label ?
             <FormGroup
-                label="label"
+                label={label}
                 labelFor="text-input"
                 inline={true}
             >
-                <ControlGroup fill={false} vertical={this.props.vertical || false}>
-                    <StringSelect
-                        inputItem={owner}
-                        items={owners}
-                        icon={'group-objects'}
-                        action={changeOwner}
-                        dispatch={dispatch}
-                    />
-                    <StringSelect
-                        inputItem={table}
-                        items={tables}
-                        icon={'th'}
-                        action={changeTable}
-                        dispatch={dispatch}
-                    />
-                    <StringSelect
-                        inputItem={column}
-                        items={columns}
-                        icon={'column-layout'}
-                        action={changeColumn}
-                        dispatch={dispatch}
-                    />
-                </ControlGroup>
-            </FormGroup>
-        );
+                {controlGroup}
+            </FormGroup> :
+            controlGroup
     }
 }
