@@ -23,9 +23,8 @@ The Webpack config file is located at `./webpack.config.js`. It mainly calls two
 
 ### Redux
 Redux is used to manage the application's state.
-* All Redux actions and reducers are located at `./src/application/{actions, reducers}/`.
-* All middlewares are located at `./src/application/middlewares.tsx`.
-Reducers are combined in `./src/application/reducers/mainReducer.tsx`.
+* All Redux actions, reducers and middlewares are located at `./src/application/{actions, middlewares, reducers}/`.
+* Reducers are combined in `./src/application/reducers/mainReducer.tsx`. They handle independent parts of the state.
 
 I personally read this course so as to understand what Redux is and how it works: [https://github.com/happypoulp/redux-tutorial](https://github.com/happypoulp/redux-tutorial)
 

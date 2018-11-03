@@ -6,7 +6,7 @@ import {createLogger} from 'redux-logger'
 
 import './../style.less'
 import Routes from './routes'
-import middlewares from './middlewares'
+import middlewares from './middlewares/middlewares'
 import {mainReducer} from './reducers/mainReducer'
 
 // Redux initialisation
