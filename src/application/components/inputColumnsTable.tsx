@@ -1,27 +1,29 @@
-import * as React from "react";
 import {
     Button,
     ControlGroup,
-} from "@blueprintjs/core";
+} from "@blueprintjs/core"
+import * as React from 'react'
 
-import StringSelect from '../components/selects/stringSelect'
+// Import custom actions
+import {
+    clickRemoveInputColumn
+} from '../actions/mapping'
 
+// Import custom components
+import ColumnPicker from './columnPicker'
+import StringSelect from './selects/stringSelect'
+
+// Import custom types
 import {
     IDatabaseSchema,
     IInputColumn,
     IFhirIntegrationSpec,
 } from '../types'
 
+// Import mock data
 import {
-    clickRemoveInputColumn
-} from '../actions/mapping'
-
-import {scriptList} from '../mockdata/nameLists'
-import {
-    columnList,
-    ownerList,
-    tableList,
-} from '../mockdata/database'
+    scriptList,
+} from '../mockdata/nameLists'
 
 export interface IInputColumnsTableProps {
     spec: IFhirIntegrationSpec;
@@ -59,38 +61,31 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
                     </td>
                     <td>{`${column.owner} > ${column.table} > ${column.column}`}</td>
                     <td>
-                        <StringSelect
-                            inputItem={column.join ? column.join.sourceColumn : null}
-                            items={columnList}
-                            icon={'column-layout'}
-                            action={null}
-                            dispatch={dispatch}
-                        />
+                        {
+                            column.join ?
+                                <StringSelect
+                                    inputItem={column.join.sourceColumn}
+                                    items={databaseSchema[column.owner][column.table]}
+                                    icon={'column-layout'}
+                                    action={null}
+                                    dispatch={dispatch}
+                                /> :
+                                null
+                        }
                     </td>
                     <td>
-                        <ControlGroup fill={false} vertical={true}>
-                            <StringSelect
-                                inputItem={column.join ? column.join.targetColumn.owner : null}
-                                items={ownerList}
-                                icon={'group-objects'}
-                                action={null}
-                                dispatch={dispatch}
-                            />
-                            <StringSelect
-                                inputItem={column.join ? column.join.targetColumn.table : null}
-                                items={tableList}
-                                icon={'th'}
-                                action={null}
-                                dispatch={dispatch}
-                            />
-                            <StringSelect
-                                inputItem={column.join ? column.join.targetColumn.column : null}
-                                items={columnList}
-                                icon={'column-layout'}
-                                action={null}
-                                dispatch={dispatch}
-                            />
-                        </ControlGroup>
+                        {
+                            column.join ?
+                                <ColumnPicker
+                                    changeOwner={null}
+                                    changeTable={null}
+                                    changeColumn={null}
+                                    databaseColumn={column.join.targetColumn}
+                                    databaseSchema={databaseSchema}
+                                    dispatch={dispatch}
+                                /> :
+                                null
+                        }
                     </td>
                     <td>
                         <StringSelect

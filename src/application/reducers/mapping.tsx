@@ -93,6 +93,43 @@ export const mapping = (state = initialState, action: action): IReduxMapping => 
             }
         } break;
 
+        case 'UPDATE_PK_OWNER':
+            return {
+                ...state,
+                content: {
+                    ...state.content,
+                    primaryKeyColumn: {
+                        ...state.content.primaryKeyColumn,
+                        owner: action.value,
+                    },
+                },
+            }
+
+        case 'UPDATE_PK_TABLE':
+            return {
+                ...state,
+                content: {
+                    ...state.content,
+                    primaryKeyColumn: {
+                        ...state.content.primaryKeyColumn,
+                        table: action.value,
+                    },
+                },
+            }
+
+        case 'UPDATE_PK_COLUMN':
+            return {
+                ...state,
+                content: {
+                    ...state.content,
+                    primaryKeyColumn: {
+                        ...state.content.primaryKeyColumn,
+                        column: action.value,
+                    },
+                },
+            }
+
+
         default:
             return state
     }

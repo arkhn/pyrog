@@ -17,11 +17,8 @@ export interface IDatabase {
 }
 
 export interface IDatabaseSchema {
-    name: string,
-    schema: {
-        [owner: string]: {
-            [table: string]: string[],
-        }
+    [owner: string]: {
+        [table: string]: string[],
     }
 }
 
@@ -46,7 +43,7 @@ export interface IFhirIntegrationSpec {
 }
 
 export interface IMapping {
-    pathToPrimaryKey: IDatabaseColumn,
+    primaryKeyColumn: IDatabaseColumn,
     fhirMapping: {
         [fhirAttribute: string]: IFhirIntegrationSpec,
     }

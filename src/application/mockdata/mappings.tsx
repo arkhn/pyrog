@@ -1,29 +1,18 @@
 import {IMapping} from '../types'
 
 export const cw_patient_mapping: IMapping = {
-    pathToPrimaryKey: {
+    primaryKeyColumn: {
         owner: 'ISCF',
         table: 'PATIENT',
-        column: 'PKPAT',
+        column: 'NOPAT',
     },
     fhirMapping: {
-        'Name.FirstName': {
-            inputColumns: [
-                {
-                    owner: 'ISCF',
-                    table: 'PATIENT',
-                    column: 'PREPAT',
-                    join: null,
-                    script: 'parsePrenom.py'
-                },
-            ]
-        },
         'name': {
             inputColumns: [
                 {
                     owner: 'ISCF',
                     table: 'PATIENT',
-                    column: 'FAKPAT',
+                    column: 'PREPAT',
                     join: {
                         sourceColumn: 'INJOIN',
                         targetColumn: {
@@ -32,21 +21,13 @@ export const cw_patient_mapping: IMapping = {
                             column: 'COL1',
                         }
                     },
-                    script: 'parsePrenom.py'
+                    script: 'parsePrenom1.py'
                 },
                 {
                     owner: 'ISCF',
                     table: 'PATIENT',
-                    column: 'FAK2PAT',
-                    join: {
-                        sourceColumn: 'IN2JOIN',
-                        targetColumn: {
-                            owner: 'ISCF',
-                            table: 'TABLE',
-                            column: 'COL2',
-                        }
-                    },
-                    script: 'parsePrenom.py'
+                    column: 'FAKPAT',
+                    script: 'parseCol.py'
                 },
             ],
             mergingScript: 'mergingScript.py'

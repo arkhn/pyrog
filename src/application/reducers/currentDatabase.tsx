@@ -3,9 +3,13 @@ import {
     IReduxCurrentDatabase
 } from '../types'
 
+import {
+    cwDatabaseSchema
+} from '../mockdata/databaseSchema'
+
 const initialState: IReduxCurrentDatabase = {
     name: null,
-    schema: null,
+    schema: cwDatabaseSchema,
 }
 
 export const currentDatabase = (state = initialState, action: action): IReduxCurrentDatabase => {
