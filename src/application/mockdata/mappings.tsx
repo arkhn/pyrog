@@ -8,12 +8,6 @@ export const cw_patient_mapping: IMapping = {
     },
     fhirMapping: {
         'Name.FirstName': {
-            [Symbol.iterator]: function* () {
-                let properties = Object.keys(this);
-                for (let i of properties) {
-                    yield [i, this[i]];
-                }
-            },
             inputColumns: [
                 {
                     owner: 'ISCF',
@@ -25,12 +19,6 @@ export const cw_patient_mapping: IMapping = {
             ]
         },
         'name': {
-            [Symbol.iterator]: function* () {
-                let properties = Object.keys(this);
-                for (let i of properties) {
-                    yield [i, this[i]];
-                }
-            },
             inputColumns: [
                 {
                     owner: 'ISCF',

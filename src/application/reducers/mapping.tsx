@@ -47,10 +47,7 @@ export const mapping = (state = initialState, action: action): IReduxMapping => 
                             state.content.fhirMapping,
                             {[currentFhirAttributePath]: {
                                 ...state.content.fhirMapping[currentFhirAttributePath],
-                                inputColumns: [
-                                    ...state.content.fhirMapping[currentFhirAttributePath].inputColumns,
-                                    newInputColumn
-                                ]
+                                inputColumns: state.content.fhirMapping[currentFhirAttributePath].inputColumns.concat(newInputColumn)
                             }}
                         ),
                     }
