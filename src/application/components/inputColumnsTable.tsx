@@ -1,12 +1,14 @@
 import {
     Button,
     ControlGroup,
-} from "@blueprintjs/core"
+} from '@blueprintjs/core'
 import * as React from 'react'
 
 // Import custom actions
 import {
-    clickRemoveInputColumn
+    clickRemoveInputColumn,
+    clickRemoveJoin,
+    clickAddJoin,
 } from '../actions/mapping'
 
 // Import custom components
@@ -36,9 +38,21 @@ export interface IInputColumnsTableState {
 }
 
 export default class InputColumnsTable extends React.Component<IInputColumnsTableProps, IInputColumnsTableState> {
-    private handleRemoveClick = (columnIndex: number) => {
+    private handleRemoveColumnClick = (columnIndex: number) => {
         return (event: any) => {
             this.props.dispatch(clickRemoveInputColumn(columnIndex))
+        }
+    }
+
+    private handleRemoveJoinClick = (columnIndex: number) => {
+        return (event: any) => {
+            this.props.dispatch(clickRemoveJoin(columnIndex))
+        }
+    }
+
+    private handleAddJoinClick = (columnIndex: number) => {
+        return (event: any) => {
+            this.props.dispatch(clickAddJoin(columnIndex))
         }
     }
 
@@ -56,7 +70,7 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
                         <Button
                             icon={'delete'}
                             minimal={true}
-                            onClick={this.handleRemoveClick(index)}
+                            onClick={this.handleRemoveColumnClick(index)}
                         />
                     </td>
                     <td>{`${column.owner} > ${column.table} > ${column.column}`}</td>
@@ -66,14 +80,14 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
                                 <Button
                                     icon={'delete'}
                                     minimal={true}
-                                    onClick={null}
+                                    onClick={this.handleRemoveJoinClick(index)}
                                 />
                             </td> :
                             <td colSpan={3}>
                                 <Button
                                     icon={'add'}
                                     minimal={true}
-                                    onClick={null}
+                                    onClick={this.handleAddJoinClick(index)}
                                 />
                             </td>
                     }

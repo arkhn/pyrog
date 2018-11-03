@@ -1,5 +1,11 @@
-import {action} from '../types'
-import {cw_patient_mapping} from '../mockdata/mappings'
+import {
+    action,
+    IReduxCurrentFhirResource,
+} from '../types'
+
+import {
+    cw_patient_mapping,
+} from '../mockdata/mappings'
 
 export const fetchMapping = (): any => {
     return (dispatch: any, getState: any) => {
@@ -99,5 +105,37 @@ export const updatePKColumn = (column: string): action => {
     return {
         type: 'UPDATE_PK_COLUMN',
         value: column,
+    }
+}
+
+export const clickRemoveJoin = (index: number) : any => {
+    return (dispatch: any, getState: any) => {
+        dispatch(deleteJoin(index, getState().currentFhirAttribute))
+    }
+}
+
+export const deleteJoin = (index: number, currentFhirAttribute: IReduxCurrentFhirResource) : action => {
+    return {
+        type: 'DELETE_JOIN',
+        value: {
+            columnIndex: index,
+            currentFhirAttribute: currentFhirAttribute,
+        },
+    }
+}
+
+export const clickAddJoin = (index: number) : any => {
+    return (dispatch: any, getState: any) => {
+        dispatch(addJoin(index, getState().currentFhirAttribute))
+    }
+}
+
+export const addJoin = (index: number, currentFhirAttribute: IReduxCurrentFhirResource) : action => {
+    return {
+        type: 'ADD_JOIN',
+        value: {
+            columnIndex: index,
+            currentFhirAttribute: currentFhirAttribute,
+        },
     }
 }

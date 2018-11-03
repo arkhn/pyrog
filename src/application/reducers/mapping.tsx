@@ -129,6 +129,55 @@ export const mapping = (state = initialState, action: action): IReduxMapping => 
                 },
             }
 
+        case 'DELETE_JOIN': {
+            const currentFhirAttributePath = action.value.currentFhirAttribute.join('.')
+            let modifiedInputColumns = state.content.fhirMapping[currentFhirAttributePath].inputColumns
+            delete modifiedInputColumns[action.value.columnIndex]['join']
+
+            return {
+                ...state,
+                content: {
+                    ...state.content,
+                    fhirMapping : Object.assign(
+                        {},
+                        state.content.fhirMapping,
+                        {[currentFhirAttributePath]: {
+                            ...state.content.fhirMapping[currentFhirAttributePath],
+                            inputColumns: modifiedInputColumns,
+                        }}
+                    ),
+                }
+            }
+        }
+
+        case 'ADD_JOIN': {
+            const currentFhirAttributePath = action.value.currentFhirAttribute.join('.')
+            let modifiedInputColumns = state.content.fhirMapping[currentFhirAttributePath].inputColumns
+
+            modifiedInputColumns[action.value.columnIndex]['join'] = {
+                sourceColumn: null,
+                targetColumn: {
+                    owner: null,
+                    table: null,
+                    column: null,
+                },
+            }
+
+            return {
+                ...state,
+                content: {
+                    ...state.content,
+                    fhirMapping : Object.assign(
+                        {},
+                        state.content.fhirMapping,
+                        {[currentFhirAttributePath]: {
+                            ...state.content.fhirMapping[currentFhirAttributePath],
+                            inputColumns: modifiedInputColumns,
+                        }}
+                    ),
+                }
+            }
+        }
 
         default:
             return state
