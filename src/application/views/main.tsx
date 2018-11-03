@@ -1,10 +1,3 @@
-import * as React from 'react';
-import FhirResourceSelect from '../components/selects/fhirResourceSelect';
-import FhirResourceTree from '../components/fhirResourceTree';
-import InputColumnsTable from '../components/inputColumnsTable';
-import InputDatabaseSelect from '../components/selects/inputDatabaseSelect';
-import StringSelect from '../components/selects/stringSelect';
-import TabViewer from '../components/tabViewer';
 import {
     Alignment,
     Button,
@@ -16,22 +9,37 @@ import {
     Navbar,
     NonIdealState,
     Spinner,
-} from '@blueprintjs/core';
-
-import { BrowserRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { ItemPredicate, ItemRenderer, Select } from '@blueprintjs/select';
-import { JsonViewer } from '../components/jsonViewer';
-import { Route } from 'react-router';
-
+} from '@blueprintjs/core'
 import {
-    reduxAppState,
-} from '../types'
+    ItemPredicate,
+    ItemRenderer,
+    Select,
+} from '@blueprintjs/select'
+import * as React from 'react'
+import {Route} from 'react-router'
+import {BrowserRouter} from 'react-router-dom'
+import {connect} from 'react-redux'
 
+// Import custom actions
 import {changeCurrentDatabase} from '../actions/currentDatabase'
 import {changeCurrentFhirResource} from '../actions/currentFhirResource'
 import {changeCurrentFhirAttribute} from '../actions/currentFhirAttribute'
 import {fetchInfoNameList} from '../actions/nameLists'
+
+// Import custom components
+import ColumnPicker from '../components/columnPicker'
+import FhirResourceSelect from '../components/selects/fhirResourceSelect'
+import FhirResourceTree from '../components/fhirResourceTree'
+import InputColumnsTable from '../components/inputColumnsTable'
+import InputDatabaseSelect from '../components/selects/inputDatabaseSelect'
+import StringSelect from '../components/selects/stringSelect'
+import TabViewer from '../components/tabViewer'
+import { JsonViewer } from '../components/jsonViewer'
+
+// Import custom types
+import {
+    reduxAppState,
+} from '../types'
 
 const arkhnLogo = require("../img/arkhn_logo_only_white.svg") as string;
 
@@ -77,10 +85,6 @@ export class MainView extends React.Component<reduxAppState, any> {
 
         let {schema} = currentDatabase
         let {dispatch} = this.props
-
-        const selectableOwnerList = schema ?
-            Object.keys(schema.schema) :
-            []
 
         return (
             <div id='application' className={'bp3-dark'}>
@@ -159,35 +163,11 @@ export class MainView extends React.Component<reduxAppState, any> {
                                         currentFhirAttribute.length > 0 ?
                                             <div id='input-columns-container'>
                                                 <div id='path-to-pk-viewer'>
-                                                    <FormGroup
-                                                        label="Path to main primary key"
-                                                        labelFor="text-input"
-                                                        inline={true}
-                                                    >
-                                                        <ControlGroup fill={false} vertical={false}>
-                                                            <StringSelect
-                                                                inputItem={mapping.content.pathToPrimaryKey.owner}
-                                                                items={selectableOwnerList}
-                                                                icon={'group-objects'}
-                                                                action={null}
-                                                                dispatch={dispatch}
-                                                            />
-                                                            <StringSelect
-                                                                inputItem={mapping.content.pathToPrimaryKey.table}
-                                                                items={[]}
-                                                                icon={'th'}
-                                                                action={null}
-                                                                dispatch={dispatch}
-                                                            />
-                                                            <StringSelect
-                                                                inputItem={mapping.content.pathToPrimaryKey.column}
-                                                                items={[]}
-                                                                icon={'column-layout'}
-                                                                action={null}
-                                                                dispatch={dispatch}
-                                                            />
-                                                        </ControlGroup>
-                                                    </FormGroup>
+                                                    <ColumnPicker
+                                                        databaseColumn={mapping.content.primaryKeyColumn}
+                                                        databaseSchema={currentDatabase.schema}
+                                                        dispatch={dispatch}
+                                                    />
                                                 </div>
                                                 <div id='input-columns-viewer'>
                                                     <InputColumnsTable

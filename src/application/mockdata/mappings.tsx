@@ -1,7 +1,7 @@
 import {IMapping} from '../types'
 
 export const cw_patient_mapping: IMapping = {
-    pathToPrimaryKey: {
+    primaryKeyColumn: {
         owner: 'ISCF',
         table: 'PATIENT',
         column: 'PKPAT',
