@@ -6,6 +6,7 @@ import * as React from 'react'
 
 // Import custom actions
 import {
+    changeJoinSourceColumn,
     clickRemoveInputColumn,
     clickRemoveJoin,
     clickAddJoin,
@@ -98,7 +99,7 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
                                     inputItem={column.join.sourceColumn}
                                     items={databaseSchema[column.owner][column.table]}
                                     icon={'column-layout'}
-                                    action={null}
+                                    action={changeJoinSourceColumn(index)}
                                     dispatch={dispatch}
                                 />
                             </td> :

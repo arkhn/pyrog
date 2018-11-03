@@ -139,3 +139,22 @@ export const addJoin = (index: number, currentFhirAttribute: IReduxCurrentFhirRe
         },
     }
 }
+
+export const changeJoinSourceColumn = (index: number) : any => {
+    return (item: any) : any => {
+        return (dispatch: any, getState: any) => {
+            dispatch(updateJoinSourceColumn(item, index, getState().currentFhirAttribute))
+        }
+    }
+}
+
+export const updateJoinSourceColumn = (item: any, index: number, currentFhirAttribute: IReduxCurrentFhirResource) : action => {
+    return {
+        type: 'UPDATE_JOIN_SOURCE_COLUMN',
+        value: {
+            item,
+            columnIndex: index,
+            currentFhirAttribute: currentFhirAttribute,
+        },
+    }
+}

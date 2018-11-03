@@ -179,6 +179,27 @@ export const mapping = (state = initialState, action: action): IReduxMapping => 
             }
         }
 
+        case 'UPDATE_JOIN_SOURCE_COLUMN': {
+            const currentFhirAttributePath = action.value.currentFhirAttribute.join('.')
+            let modifiedInputColumns = state.content.fhirMapping[currentFhirAttributePath].inputColumns
+            modifiedInputColumns[action.value.columnIndex].join.sourceColumn = action.value.item
+
+            return {
+                ...state,
+                content: {
+                    ...state.content,
+                    fhirMapping : Object.assign(
+                        {},
+                        state.content.fhirMapping,
+                        {[currentFhirAttributePath]: {
+                            ...state.content.fhirMapping[currentFhirAttributePath],
+                            inputColumns: modifiedInputColumns,
+                        }}
+                    ),
+                }
+            }
+        }
+
         default:
             return state
     }
