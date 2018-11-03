@@ -25,7 +25,7 @@ export interface IJsonViewerState {
     navbarTabId: TabId
 }
 
-export class JsonViewer extends React.Component<IJsonViewerProps, IJsonViewerState> {
+export default class JsonViewer extends React.Component<IJsonViewerProps, IJsonViewerState> {
     static id: number = 0;
 
     constructor(props: IJsonViewerProps) {

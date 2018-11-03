@@ -21,20 +21,33 @@ import {BrowserRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
 
 // Import custom actions
-import {changeCurrentDatabase} from '../actions/currentDatabase'
-import {changeCurrentFhirResource} from '../actions/currentFhirResource'
-import {changeCurrentFhirAttribute} from '../actions/currentFhirAttribute'
-import {fetchInfoNameList} from '../actions/nameLists'
+import {
+    changeCurrentDatabase,
+} from '../actions/currentDatabase'
+import {
+    changeCurrentFhirResource,
+} from '../actions/currentFhirResource'
+import {
+    changeCurrentFhirAttribute,
+} from '../actions/currentFhirAttribute'
+import {
+    updatePKOwner,
+    updatePKTable,
+    updatePKColumn,
+} from '../actions/mapping'
+import {
+    fetchInfoNameList,
+} from '../actions/nameLists'
 
 // Import custom components
 import ColumnPicker from '../components/columnPicker'
+import JsonViewer from '../components/jsonViewer'
 import FhirResourceSelect from '../components/selects/fhirResourceSelect'
 import FhirResourceTree from '../components/fhirResourceTree'
 import InputColumnsTable from '../components/inputColumnsTable'
 import InputDatabaseSelect from '../components/selects/inputDatabaseSelect'
 import StringSelect from '../components/selects/stringSelect'
 import TabViewer from '../components/tabViewer'
-import { JsonViewer } from '../components/jsonViewer'
 
 // Import custom types
 import {
