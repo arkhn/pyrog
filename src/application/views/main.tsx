@@ -164,6 +164,9 @@ export class MainView extends React.Component<reduxAppState, any> {
                                             <div id='input-columns-container'>
                                                 <div id='path-to-pk-viewer'>
                                                     <ColumnPicker
+                                                        changeOwner={updatePKOwner}
+                                                        changeTable={updatePKTable}
+                                                        changeColumn={updatePKColumn}
                                                         databaseColumn={mapping.content.primaryKeyColumn}
                                                         databaseSchema={currentDatabase.schema}
                                                         dispatch={dispatch}

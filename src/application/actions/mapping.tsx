@@ -80,3 +80,24 @@ export const removeInputColumn = (columnIndex: number, currentFhirAttribute: any
         },
     }
 }
+
+export const updatePKOwner = (owner: string): action => {
+    return {
+        type: 'UPDATE_PK_OWNER',
+        value: owner,
+    }
+}
+
+export const updatePKTable = (table: string): action => {
+    return {
+        type: 'UPDATE_PK_TABLE',
+        value: table,
+    }
+}
+
+export const updatePKColumn = (column: string): action => {
+    return {
+        type: 'UPDATE_PK_COLUMN',
+        value: column,
+    }
+}
