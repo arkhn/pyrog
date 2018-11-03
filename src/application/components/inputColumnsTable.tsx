@@ -60,22 +60,39 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
                         />
                     </td>
                     <td>{`${column.owner} > ${column.table} > ${column.column}`}</td>
-                    <td>
-                        {
-                            column.join ?
+                    {
+                        column.join ?
+                            <td>
+                                <Button
+                                    icon={'delete'}
+                                    minimal={true}
+                                    onClick={null}
+                                />
+                            </td> :
+                            <td colSpan={3}>
+                                <Button
+                                    icon={'add'}
+                                    minimal={true}
+                                    onClick={null}
+                                />
+                            </td>
+                    }
+                    {
+                        column.join ?
+                            <td>
                                 <StringSelect
                                     inputItem={column.join.sourceColumn}
                                     items={databaseSchema[column.owner][column.table]}
                                     icon={'column-layout'}
                                     action={null}
                                     dispatch={dispatch}
-                                /> :
-                                null
-                        }
-                    </td>
-                    <td>
-                        {
-                            column.join ?
+                                />
+                            </td> :
+                            null
+                    }
+                    {
+                        column.join ?
+                            <td>
                                 <ColumnPicker
                                     changeOwner={null}
                                     changeTable={null}
@@ -83,10 +100,10 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
                                     databaseColumn={column.join.targetColumn}
                                     databaseSchema={databaseSchema}
                                     dispatch={dispatch}
-                                /> :
-                                null
-                        }
-                    </td>
+                                />
+                            </td> :
+                            null
+                    }
                     <td>
                         <StringSelect
                             inputItem={column.script}
@@ -123,7 +140,7 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
                         <tr>
                             <th></th>
                             <th>Column Path</th>
-                            <th colSpan={2}>Join</th>
+                            <th colSpan={3}>Join</th>
                             <th>Column Script</th>
                             {(spec && spec.inputColumns.length> 1) ? <th>Final Script</th> : null}
                         </tr>
