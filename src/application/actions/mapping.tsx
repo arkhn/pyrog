@@ -64,3 +64,19 @@ export const addInputColumn = (column: any, currentFhirAttribute: any): action =
         },
     }
 }
+
+export const clickRemoveInputColumn = (columnIndex: number): any => {
+    return (dispatch: any, getState: any) => {
+        dispatch(removeInputColumn(columnIndex, getState().currentFhirAttribute))
+    }
+}
+
+export const removeInputColumn = (columnIndex: number, currentFhirAttribute: any): action => {
+    return {
+        type: 'REMOVE_INPUT_COLUMN',
+        value: {
+            currentFhirAttribute,
+            columnIndex,
+        },
+    }
+}

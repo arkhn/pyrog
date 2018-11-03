@@ -12,6 +12,10 @@ import {
     IFhirIntegrationSpec,
 } from '../types'
 
+import {
+    clickRemoveInputColumn
+} from '../actions/mapping'
+
 import {scriptList} from '../mockdata/nameLists'
 import {
     columnList,
@@ -30,6 +34,12 @@ export interface IInputColumnsTableState {
 }
 
 export default class InputColumnsTable extends React.Component<IInputColumnsTableProps, IInputColumnsTableState> {
+    private handleRemoveClick = (columnIndex: number) => {
+        return (event: any) => {
+            this.props.dispatch(clickRemoveInputColumn(columnIndex))
+        }
+    }
+
     public render() {
         let {
             spec,
@@ -44,6 +54,7 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
                         <Button
                             icon={'delete'}
                             minimal={true}
+                            onClick={this.handleRemoveClick(index)}
                         />
                     </td>
                     <td>{`${column.owner} > ${column.table} > ${column.column}`}</td>

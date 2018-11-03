@@ -6,7 +6,9 @@ import {
     Switch
 } from '@blueprintjs/core';
 
-import {clickAddInputColumn} from '../actions/mapping'
+import {
+    clickAddInputColumn,
+} from '../actions/mapping'
 
 export interface IColumnViewerProps {
     dispatch: any;

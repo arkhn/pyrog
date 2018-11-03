@@ -28,7 +28,7 @@ export const mapping = (state = initialState, action: action): IReduxMapping => 
                 loading: false,
             }
 
-        case 'ADD_INPUT_COLUMN':
+        case 'ADD_INPUT_COLUMN': {
             const newInputColumn = {
                 owner: action.value.column.owner,
                 table: action.value.column.table,
@@ -69,6 +69,29 @@ export const mapping = (state = initialState, action: action): IReduxMapping => 
                     }
                 }
             }
+        } break;
+
+        case 'REMOVE_INPUT_COLUMN': {
+            const currentFhirAttributePath = action.value.currentFhirAttribute.join('.')
+
+            const inputColumns = state.content.fhirMapping[currentFhirAttributePath].inputColumns
+            inputColumns.splice(action.value.columnIndex, 1)
+
+            return {
+                ...state,
+                content: {
+                    ...state.content,
+                    fhirMapping : Object.assign(
+                        {},
+                        state.content.fhirMapping,
+                        {[currentFhirAttributePath]: {
+                            ...state.content.fhirMapping[currentFhirAttributePath],
+                            inputColumns,
+                        }}
+                    ),
+                }
+            }
+        } break;
 
         default:
             return state
