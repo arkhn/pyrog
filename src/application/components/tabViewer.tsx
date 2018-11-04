@@ -81,6 +81,7 @@ export default class TabViewer extends React.Component<ITabViewProps, ITabViewSt
             }
         })
     }
+
     private changeColumn = (column: string) => {
         this.setState({
             databaseColumn: {

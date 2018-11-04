@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
     Classes,
     Icon,
@@ -6,7 +5,9 @@ import {
     Position,
     Tooltip,
     Tree
-} from "@blueprintjs/core";
+} from '@blueprintjs/core'
+import * as React from 'react'
+
 import {isNullOrUndefined} from 'util';
 
 import {changeCurrentFhirAttribute} from '../actions/currentFhirAttribute'
@@ -48,11 +49,13 @@ export default class FhirResourceTree extends React.Component<IFhirResourceTreeP
 
         const regex = /(.*)<(.*)>/
         const regexResult = regex.exec(_key)
+        // Compute is current node's fhir type is 'list'
+        const nodeIsTypeList = (regexResult && regexResult.length > 1) ? regexResult[2].startsWith('list') : false
 
         const result : ITreeNode<nodeData> = {
             id: this.getId(),
             hasCaret: hasChildren,
-            icon: hasChildren ? "folder-open" : "tag",
+            icon: hasChildren ? 'folder-open' : 'tag',
             isExpanded: false,
             nodeData: {
                 name: regexResult ? regexResult[1] : _key,
@@ -65,7 +68,13 @@ export default class FhirResourceTree extends React.Component<IFhirResourceTreeP
         }
 
         if (hasChildren) {
-            return Object.assign(result, {childNodes: FhirResourceTree.genNodes(_obj)})
+            return Object.assign(
+                result,
+                {
+                    // If current node's fhir type is list, skip the next node
+                    childNodes: FhirResourceTree.genNodes(nodeIsTypeList ? _obj[0] : _obj),
+                }
+            )
         }
 
         return result;
@@ -84,8 +93,7 @@ export default class FhirResourceTree extends React.Component<IFhirResourceTreeP
     private static genObjNodes(json: any): ITreeNode[] {
         let returnList = [];
 
-        for (let key of Object.keys(json))
-        {
+        for (let key of Object.keys(json)) {
             returnList.push(this.genNode(key, json[key]));
         }
 
