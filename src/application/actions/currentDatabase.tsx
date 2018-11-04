@@ -12,6 +12,6 @@ export function changeCurrentDatabase(database: string): any {
 export function updateStateCurrentDatabase(database: string): action {
     return {
         type: 'UPDATE_STATE_CURRENT_DATABASE',
-        value: database,
+        payload: database,
     }
 }

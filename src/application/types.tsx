@@ -88,5 +88,5 @@ export interface IReduxMapping {
 
 export interface action {
     type: string,
-    value?: any,
+    payload?: any,
 }

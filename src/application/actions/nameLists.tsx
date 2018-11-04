@@ -48,14 +48,14 @@ export const fetchInfoNameListFailure = (): action => {
 export const fetchDatabaseNameListSuccess = (databaseNameList: string[]): action => {
     return {
         type: 'FETCH_DATABASE_NAME_LIST_SUCCESS',
-        value: databaseNameList,
+        payload: databaseNameList,
     }
 }
 
 export const fetchDatabaseNameListFailure = (error: any): action => {
     return {
         type: 'FETCH_DATABASE_NAME_LIST_FAILURE',
-        value: error,
+        payload: error,
     }
 }
 
@@ -64,13 +64,13 @@ export const fetchDatabaseNameListFailure = (error: any): action => {
 export const fetchFhirResourceNameListSuccess = (fhirResourceNameList: string[]): action => {
     return {
         type: 'FETCH_FHIR_RESOURCE_NAME_LIST_SUCCESS',
-        value: fhirResourceNameList,
+        payload: fhirResourceNameList,
     }
 }
 
 export const fetchFhirResourceNameListFailure = (error: any): action => {
     return {
         type: 'FETCH_FHIR_RESOURCE_NAME_LIST_FAILURE',
-        value: error,
+        payload: error,
     }
 }

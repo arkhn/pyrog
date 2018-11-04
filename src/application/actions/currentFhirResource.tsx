@@ -13,7 +13,7 @@ export function changeCurrentFhirResource(resource: string): any {
 export function updateStateCurrentFhirResource(resource: string): action {
     return {
         type: 'UPDATE_STATE_CURRENT_FHIR_RESOURCE',
-        value: resource,
+        payload: resource,
     }
 }
 
@@ -46,13 +46,13 @@ export function fetchFhirResourceJson(resource: string): any {
 export function fetchFhirResourceJsonSuccess(json: any): action {
     return {
         type: 'FETCH_FHIR_RESOURCE_JSON_SUCCESS',
-        value: json,
+        payload: json,
     }
 }
 
 export function fetchFhirResourceJsonFailure(error: any): action {
     return {
         type: 'FETCH_FHIR_RESOURCE_JSON_FAILURE',
-        value: error,
+        payload: error,
     }
 }
