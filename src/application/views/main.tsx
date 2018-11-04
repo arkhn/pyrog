@@ -159,7 +159,9 @@ export class MainView extends React.Component<reduxAppState, any> {
 
                 <div id='main-container'>
                     {mapping.loading ?
-                        <Spinner /> :
+                        <div id='main-container-spinner'>
+                            <Spinner />
+                        </div> :
                         (mapping.content ?
                             <div id='flex-container'>
                                 <div id='left-panel'>
