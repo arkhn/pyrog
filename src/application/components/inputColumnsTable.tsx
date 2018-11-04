@@ -6,10 +6,12 @@ import * as React from 'react'
 
 // Import custom actions
 import {
+    changeInputColumnScript,
     changeJoinSourceColumn,
     changeJoinTargetColumnOwner,
     changeJoinTargetColumnTable,
     changeJoinTargetColumnColumn,
+    changeMergingScript,
     clickRemoveInputColumn,
     clickRemoveJoin,
     clickAddJoin,
@@ -127,7 +129,7 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
                             inputItem={column.script}
                             items={scriptList}
                             icon={'function'}
-                            action={null}
+                            action={changeInputColumnScript(index)}
                             dispatch={dispatch}
                         />
                     </td>
@@ -140,7 +142,7 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
                                             inputItem={spec.mergingScript}
                                             items={scriptList}
                                             icon={'function'}
-                                            action={null}
+                                            action={changeMergingScript}
                                             dispatch={dispatch}
                                         />
                                     </td> :

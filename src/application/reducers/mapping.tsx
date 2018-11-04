@@ -276,6 +276,46 @@ export const mapping = (state = initialState, action: action): IReduxMapping => 
             }
         }
 
+        case 'UPDATE_INPUT_COLUMN_SCRIPT': {
+            const currentFhirAttributePath = action.value.currentFhirAttribute.join('.')
+            let modifiedInputColumns = state.content.fhirMapping[currentFhirAttributePath].inputColumns
+            modifiedInputColumns[action.value.columnIndex].script = action.value.item
+
+            return {
+                ...state,
+                content: {
+                    ...state.content,
+                    fhirMapping : Object.assign(
+                        {},
+                        state.content.fhirMapping,
+                        {[currentFhirAttributePath]: {
+                            ...state.content.fhirMapping[currentFhirAttributePath],
+                            inputColumns: modifiedInputColumns,
+                        }}
+                    ),
+                }
+            }
+        }
+
+        case 'UPDATE_MERGING_SCRIPT': {
+            const currentFhirAttributePath = action.value.currentFhirAttribute.join('.')
+
+            return {
+                ...state,
+                content: {
+                    ...state.content,
+                    fhirMapping : Object.assign(
+                        {},
+                        state.content.fhirMapping,
+                        {[currentFhirAttributePath]: {
+                            ...state.content.fhirMapping[currentFhirAttributePath],
+                            mergingScript: action.value.item,
+                        }}
+                    ),
+                }
+            }
+        }
+
         default:
             return state
     }

@@ -215,3 +215,38 @@ export const updateJoinTargetColumnColumn = (item: any, index: number, currentFh
         },
     }
 }
+
+export const changeInputColumnScript = (index: number) : any => {
+    return (item: any) : any => {
+        return (dispatch: any, getState: any) => {
+            dispatch(updateInputColumnScript(item, index, getState().currentFhirAttribute))
+        }
+    }
+}
+
+export const updateInputColumnScript = (item: any, index: number, currentFhirAttribute: IReduxCurrentFhirResource) : action => {
+    return {
+        type: 'UPDATE_INPUT_COLUMN_SCRIPT',
+        value: {
+            item,
+            columnIndex: index,
+            currentFhirAttribute: currentFhirAttribute,
+        },
+    }
+}
+
+export const changeMergingScript = (item: any) => {
+    return (dispatch: any, getState: any) => {
+        dispatch(updateMergingScript(item, getState().currentFhirAttribute))
+    }
+}
+
+export const updateMergingScript = (item: any, currentFhirAttribute: IReduxCurrentFhirResource) : action => {
+    return {
+        type: 'UPDATE_MERGING_SCRIPT',
+        value: {
+            item,
+            currentFhirAttribute: currentFhirAttribute,
+        },
+    }
+}
