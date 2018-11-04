@@ -17,7 +17,7 @@ export const currentDatabase = (state = initialState, action: action): IReduxCur
         case 'UPDATE_STATE_CURRENT_DATABASE':
             return {
                 ...state,
-                name: action.value,
+                name: action.payload,
             }
 
         default:

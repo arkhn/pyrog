@@ -13,13 +13,13 @@ export const currentFhirResource = (state = initialState, action: action): IRedu
         case 'UPDATE_STATE_CURRENT_FHIR_RESOURCE':
             return {
                 ...state,
-                name: action.value,
+                name: action.payload,
             }
 
         case 'FETCH_FHIR_RESOURCE_JSON_SUCCESS':
             return {
                 ...state,
-                json: action.value,
+                json: action.payload,
             }
 
         default:

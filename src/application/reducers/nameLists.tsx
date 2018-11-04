@@ -32,13 +32,13 @@ export const nameLists = (state = initialState, action: action): IReduxNameLists
         case 'FETCH_DATABASE_NAME_LIST_SUCCESS':
             return {
                 ...state,
-                databaseNameList: action.value,
+                databaseNameList: action.payload,
             }
 
         case 'FETCH_FHIR_RESOURCE_NAME_LIST_SUCCESS':
             return {
                 ...state,
-                fhirResourceNameList: action.value,
+                fhirResourceNameList: action.payload,
             }
 
         default:

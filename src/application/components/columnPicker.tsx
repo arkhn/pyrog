@@ -13,12 +13,12 @@ import {
 } from '../types'
 
 export interface IColumnPickerProps {
-    changeOwner: any,
-    changeTable: any,
-    changeColumn: any,
+    onChangeOwner: any,
+    onChangeTable: any,
+    onChangeColumn: any,
     databaseColumn: IDatabaseColumn,
     databaseSchema: IDatabaseSchema,
-    dispatch: any,
+    dispatch?: any,
     label?: string,
     vertical?: boolean,
 }
@@ -30,9 +30,9 @@ export interface IColumnPickerState {
 export default class ColumnPicker extends React.Component<IColumnPickerProps, IColumnPickerState> {
     public render() {
         let {
-            changeOwner,
-            changeTable,
-            changeColumn,
+            onChangeOwner,
+            onChangeTable,
+            onChangeColumn,
             databaseColumn,
             databaseSchema,
             dispatch,
@@ -56,21 +56,21 @@ export default class ColumnPicker extends React.Component<IColumnPickerProps, IC
                 inputItem={databaseColumn ? databaseColumn.owner : null}
                 items={owners}
                 icon={'group-objects'}
-                action={changeOwner}
+                onChange={onChangeOwner}
                 dispatch={dispatch}
             />
             <StringSelect
                 inputItem={databaseColumn ? databaseColumn.table : null}
                 items={tables}
                 icon={'th'}
-                action={changeTable}
+                onChange={onChangeTable}
                 dispatch={dispatch}
             />
             <StringSelect
                 inputItem={databaseColumn ? databaseColumn.column : null}
                 items={columns}
                 icon={'column-layout'}
-                action={changeColumn}
+                onChange={onChangeColumn}
                 dispatch={dispatch}
             />
         </ControlGroup>

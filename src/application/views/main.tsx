@@ -42,10 +42,8 @@ import {
 // Import custom components
 import ColumnPicker from '../components/columnPicker'
 import JsonViewer from '../components/jsonViewer'
-import FhirResourceSelect from '../components/selects/fhirResourceSelect'
 import FhirResourceTree from '../components/fhirResourceTree'
 import InputColumnsTable from '../components/inputColumnsTable'
-import InputDatabaseSelect from '../components/selects/inputDatabaseSelect'
 import StringSelect from '../components/selects/stringSelect'
 import TabViewer from '../components/tabViewer'
 
@@ -77,8 +75,8 @@ export class MainView extends React.Component<reduxAppState, any> {
         this.props.dispatch(fetchInfoNameList())
 
         // Auto load state for testing purposes
-        this.props.dispatch(changeCurrentDatabase('CW'))
-        this.props.dispatch(changeCurrentFhirResource('Patient'))
+        // this.props.dispatch(changeCurrentDatabase('CW'))
+        // this.props.dispatch(changeCurrentFhirResource('Patient'))
         // this.props.dispatch(changeCurrentFhirAttribute(false, ['name']))
     }
 
@@ -117,7 +115,7 @@ export class MainView extends React.Component<reduxAppState, any> {
                                         inputItem={currentDatabase.name}
                                         items={databaseNameList}
                                         icon={'database'}
-                                        action={changeCurrentDatabase}
+                                        onChange={changeCurrentDatabase}
                                         dispatch={dispatch}
                                         intent={'primary'}
                                     />
@@ -132,7 +130,7 @@ export class MainView extends React.Component<reduxAppState, any> {
                                         inputItem={currentFhirResource.name}
                                         items={fhirResourceNameList}
                                         icon={'layout-hierarchy'}
-                                        action={changeCurrentFhirResource}
+                                        onChange={changeCurrentFhirResource}
                                         dispatch={dispatch}
                                         intent={'primary'}
                                     />
@@ -161,8 +159,10 @@ export class MainView extends React.Component<reduxAppState, any> {
 
                 <div id='main-container'>
                     {mapping.loading ?
-                        <Spinner /> :
-                        (mapping ?
+                        <div id='main-container-spinner'>
+                            <Spinner />
+                        </div> :
+                        (mapping.content ?
                             <div id='flex-container'>
                                 <div id='left-panel'>
                                     <FhirResourceTree
@@ -177,9 +177,9 @@ export class MainView extends React.Component<reduxAppState, any> {
                                             <div id='input-columns-container'>
                                                 <div id='path-to-pk-viewer'>
                                                     <ColumnPicker
-                                                        changeOwner={updatePKOwner}
-                                                        changeTable={updatePKTable}
-                                                        changeColumn={updatePKColumn}
+                                                        onChangeOwner={updatePKOwner}
+                                                        onChangeTable={updatePKTable}
+                                                        onChangeColumn={updatePKColumn}
                                                         databaseColumn={mapping.content.primaryKeyColumn}
                                                         databaseSchema={currentDatabase.schema}
                                                         dispatch={dispatch}

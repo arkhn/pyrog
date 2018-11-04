@@ -42,14 +42,14 @@ export default class TextSearchInputs extends React.Component<ITextSearchInputsP
                         inputItem={''}
                         items={ownerList}
                         icon={'group-objects'}
-                        action={null}
+                        onChange={null}
                         dispatch={dispatch}
                     />
                     <StringSelect
                         inputItem={''}
                         items={tableList}
                         icon={'th'}
-                        action={null}
+                        onChange={null}
                         dispatch={dispatch}
                     />
                     <div id={'switch'}>

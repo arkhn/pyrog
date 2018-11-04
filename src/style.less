@@ -27,6 +27,13 @@ body {
     height: calc(100vh - @pt-navbar-height);
 }
 
+#main-container-spinner {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 #flex-container {
     display: flex;
     flex-flow: row nowrap;
@@ -110,6 +117,10 @@ body {
             border-color: @dark-gray3;
             border-width: 0px 1px 1px 0px;
             border-style: solid;
+
+            .bp3-control-group {
+                justify-content: center;
+            }
         }
 
         td:first-child {
