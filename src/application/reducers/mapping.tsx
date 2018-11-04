@@ -200,6 +200,82 @@ export const mapping = (state = initialState, action: action): IReduxMapping => 
             }
         }
 
+        case 'UPDATE_JOIN_TARGET_COLUMN_OWNER': {
+            const currentFhirAttributePath = action.value.currentFhirAttribute.join('.')
+            let modifiedInputColumns = state.content.fhirMapping[currentFhirAttributePath].inputColumns
+            let change = (action.value.item != modifiedInputColumns[action.value.columnIndex].join.targetColumn.owner)
+            modifiedInputColumns[action.value.columnIndex].join.targetColumn = {
+                owner: action.value.item,
+                table: change ? null : modifiedInputColumns[action.value.columnIndex].join.targetColumn.table,
+                column: change ? null : modifiedInputColumns[action.value.columnIndex].join.targetColumn.column,
+            }
+
+            return {
+                ...state,
+                content: {
+                    ...state.content,
+                    fhirMapping : Object.assign(
+                        {},
+                        state.content.fhirMapping,
+                        {[currentFhirAttributePath]: {
+                            ...state.content.fhirMapping[currentFhirAttributePath],
+                            inputColumns: modifiedInputColumns,
+                        }}
+                    ),
+                }
+            }
+        }
+
+        case 'UPDATE_JOIN_TARGET_COLUMN_TABLE': {
+            const currentFhirAttributePath = action.value.currentFhirAttribute.join('.')
+            let modifiedInputColumns = state.content.fhirMapping[currentFhirAttributePath].inputColumns
+            let change = (action.value.item != modifiedInputColumns[action.value.columnIndex].join.targetColumn.table)
+            modifiedInputColumns[action.value.columnIndex].join.targetColumn = {
+                ...modifiedInputColumns[action.value.columnIndex].join.targetColumn,
+                table: action.value.item,
+                column: change ? null : modifiedInputColumns[action.value.columnIndex].join.targetColumn.column,
+            }
+
+            return {
+                ...state,
+                content: {
+                    ...state.content,
+                    fhirMapping : Object.assign(
+                        {},
+                        state.content.fhirMapping,
+                        {[currentFhirAttributePath]: {
+                            ...state.content.fhirMapping[currentFhirAttributePath],
+                            inputColumns: modifiedInputColumns,
+                        }}
+                    ),
+                }
+            }
+        }
+
+        case 'UPDATE_JOIN_TARGET_COLUMN_COLUMN': {
+            const currentFhirAttributePath = action.value.currentFhirAttribute.join('.')
+            let modifiedInputColumns = state.content.fhirMapping[currentFhirAttributePath].inputColumns
+            modifiedInputColumns[action.value.columnIndex].join.targetColumn = {
+                ...modifiedInputColumns[action.value.columnIndex].join.targetColumn,
+                column: action.value.item,
+            }
+
+            return {
+                ...state,
+                content: {
+                    ...state.content,
+                    fhirMapping : Object.assign(
+                        {},
+                        state.content.fhirMapping,
+                        {[currentFhirAttributePath]: {
+                            ...state.content.fhirMapping[currentFhirAttributePath],
+                            inputColumns: modifiedInputColumns,
+                        }}
+                    ),
+                }
+            }
+        }
+
         default:
             return state
     }

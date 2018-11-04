@@ -7,6 +7,9 @@ import * as React from 'react'
 // Import custom actions
 import {
     changeJoinSourceColumn,
+    changeJoinTargetColumnOwner,
+    changeJoinTargetColumnTable,
+    changeJoinTargetColumnColumn,
     clickRemoveInputColumn,
     clickRemoveJoin,
     clickAddJoin,
@@ -109,9 +112,9 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
                         column.join ?
                             <td>
                                 <ColumnPicker
-                                    changeOwner={null}
-                                    changeTable={null}
-                                    changeColumn={null}
+                                    changeOwner={changeJoinTargetColumnOwner(index)}
+                                    changeTable={changeJoinTargetColumnTable(index)}
+                                    changeColumn={changeJoinTargetColumnColumn(index)}
                                     databaseColumn={column.join.targetColumn}
                                     databaseSchema={databaseSchema}
                                     dispatch={dispatch}

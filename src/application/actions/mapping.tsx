@@ -158,3 +158,60 @@ export const updateJoinSourceColumn = (item: any, index: number, currentFhirAttr
         },
     }
 }
+
+export const changeJoinTargetColumnOwner = (index: number) : any => {
+    return (item: any) : any => {
+        return (dispatch: any, getState: any) => {
+            dispatch(updateJoinTargetColumnOwner(item, index, getState().currentFhirAttribute))
+        }
+    }
+}
+
+export const updateJoinTargetColumnOwner = (item: any, index: number, currentFhirAttribute: IReduxCurrentFhirResource) : action => {
+    return {
+        type: 'UPDATE_JOIN_TARGET_COLUMN_OWNER',
+        value: {
+            item,
+            columnIndex: index,
+            currentFhirAttribute: currentFhirAttribute,
+        },
+    }
+}
+
+export const changeJoinTargetColumnTable = (index: number) : any => {
+    return (item: any) : any => {
+        return (dispatch: any, getState: any) => {
+            dispatch(updateJoinTargetColumnTable(item, index, getState().currentFhirAttribute))
+        }
+    }
+}
+
+export const updateJoinTargetColumnTable = (item: any, index: number, currentFhirAttribute: IReduxCurrentFhirResource) : action => {
+    return {
+        type: 'UPDATE_JOIN_TARGET_COLUMN_TABLE',
+        value: {
+            item,
+            columnIndex: index,
+            currentFhirAttribute: currentFhirAttribute,
+        },
+    }
+}
+
+export const changeJoinTargetColumnColumn = (index: number) : any => {
+    return (item: any) : any => {
+        return (dispatch: any, getState: any) => {
+            dispatch(updateJoinTargetColumnColumn(item, index, getState().currentFhirAttribute))
+        }
+    }
+}
+
+export const updateJoinTargetColumnColumn = (item: any, index: number, currentFhirAttribute: IReduxCurrentFhirResource) : action => {
+    return {
+        type: 'UPDATE_JOIN_TARGET_COLUMN_COLUMN',
+        value: {
+            item,
+            columnIndex: index,
+            currentFhirAttribute: currentFhirAttribute,
+        },
+    }
+}
