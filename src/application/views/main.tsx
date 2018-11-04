@@ -42,10 +42,8 @@ import {
 // Import custom components
 import ColumnPicker from '../components/columnPicker'
 import JsonViewer from '../components/jsonViewer'
-import FhirResourceSelect from '../components/selects/fhirResourceSelect'
 import FhirResourceTree from '../components/fhirResourceTree'
 import InputColumnsTable from '../components/inputColumnsTable'
-import InputDatabaseSelect from '../components/selects/inputDatabaseSelect'
 import StringSelect from '../components/selects/stringSelect'
 import TabViewer from '../components/tabViewer'
 
