@@ -75,8 +75,8 @@ export class MainView extends React.Component<reduxAppState, any> {
         this.props.dispatch(fetchInfoNameList())
 
         // Auto load state for testing purposes
-        this.props.dispatch(changeCurrentDatabase('CW'))
-        this.props.dispatch(changeCurrentFhirResource('Patient'))
+        // this.props.dispatch(changeCurrentDatabase('CW'))
+        // this.props.dispatch(changeCurrentFhirResource('Patient'))
         // this.props.dispatch(changeCurrentFhirAttribute(false, ['name']))
     }
 
@@ -160,7 +160,7 @@ export class MainView extends React.Component<reduxAppState, any> {
                 <div id='main-container'>
                     {mapping.loading ?
                         <Spinner /> :
-                        (mapping ?
+                        (mapping.content ?
                             <div id='flex-container'>
                                 <div id='left-panel'>
                                     <FhirResourceTree

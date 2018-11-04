@@ -10,7 +10,7 @@ import {
 export const fetchMapping = (): any => {
     return (dispatch: any, getState: any) => {
         const state = getState()
-        if (state.currentDatabase && state.currentFhirResource) {
+        if (state.currentDatabase.name && state.currentFhirResource.name) {
             dispatch(loadingMapping())
 
             // Either load and dispatch mock data
