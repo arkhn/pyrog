@@ -40,39 +40,34 @@ export default class ColumnPicker extends React.Component<IColumnPickerProps, IC
             vertical,
         } = this.props
 
-        let {
-            owner,
-            table,
-            column
-        } = databaseColumn
 
         let owners = Object.keys(databaseSchema)
 
-        let tables = owner ?
-            Object.keys(databaseSchema[owner]) :
+        let tables = (databaseColumn && databaseColumn.owner) ?
+            Object.keys(databaseSchema[databaseColumn.owner]) :
             []
 
-        let columns = table ?
-            databaseSchema[owner][table] :
+        let columns = (databaseColumn && databaseColumn.table) ?
+            databaseSchema[databaseColumn.owner][databaseColumn.table] :
             []
 
         let controlGroup = <ControlGroup fill={false} vertical={vertical || false}>
             <StringSelect
-                inputItem={owner}
+                inputItem={databaseColumn ? databaseColumn.owner : null}
                 items={owners}
                 icon={'group-objects'}
                 action={changeOwner}
                 dispatch={dispatch}
             />
             <StringSelect
-                inputItem={table}
+                inputItem={databaseColumn ? databaseColumn.table : null}
                 items={tables}
                 icon={'th'}
                 action={changeTable}
                 dispatch={dispatch}
             />
             <StringSelect
-                inputItem={column}
+                inputItem={databaseColumn ? databaseColumn.column : null}
                 items={columns}
                 icon={'column-layout'}
                 action={changeColumn}

@@ -164,7 +164,7 @@ body {
     flex-grow: 1;
     overflow: auto;
 
-    background-color: @dark-gray2;
+    background-color: @dark-gray1;
 
     border-radius: @border-radius;
 
@@ -204,7 +204,7 @@ body {
     }
 
     .bp3-tab-list {
-        background-color: @dark-gray1;
+        background-color: @black;
         border-radius: @border-radius @border-radius 0px 0px;
         overflow: hidden;
 
@@ -235,13 +235,24 @@ body {
     }
 
     .bp3-tab-indicator {
-        background-color: @dark-gray2;
+        background-color: @dark-gray1;
         height: 100%;
     }
 }
 
 .bp3-form-group {
     margin: 0;
+}
+
+#dummy-column-picker {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-top: @window-padding;
+
+    .bp3-form-group {
+        justify-content: center;
+    }
 }
 
 #text-tab-search-group {

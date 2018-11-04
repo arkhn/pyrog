@@ -27,10 +27,10 @@ export const cw_patient_mapping: IMapping = {
                     owner: 'ISCF',
                     table: 'PATIENT',
                     column: 'FAKPAT',
-                    script: 'parseCol.py'
+                    script: 'parseCol.py',
                 },
             ],
-            mergingScript: 'mergingScript.py'
+            mergingScript: 'mergingScript.py',
         },
     }
 }

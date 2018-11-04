@@ -1,5 +1,11 @@
-import {action} from '../types'
-import {cw_patient_mapping} from '../mockdata/mappings'
+import {
+    action,
+    IReduxCurrentFhirResource,
+} from '../types'
+
+import {
+    cw_patient_mapping,
+} from '../mockdata/mappings'
 
 export const fetchMapping = (): any => {
     return (dispatch: any, getState: any) => {
@@ -99,5 +105,148 @@ export const updatePKColumn = (column: string): action => {
     return {
         type: 'UPDATE_PK_COLUMN',
         value: column,
+    }
+}
+
+export const clickRemoveJoin = (index: number) : any => {
+    return (dispatch: any, getState: any) => {
+        dispatch(deleteJoin(index, getState().currentFhirAttribute))
+    }
+}
+
+export const deleteJoin = (index: number, currentFhirAttribute: IReduxCurrentFhirResource) : action => {
+    return {
+        type: 'DELETE_JOIN',
+        value: {
+            columnIndex: index,
+            currentFhirAttribute: currentFhirAttribute,
+        },
+    }
+}
+
+export const clickAddJoin = (index: number) : any => {
+    return (dispatch: any, getState: any) => {
+        dispatch(addJoin(index, getState().currentFhirAttribute))
+    }
+}
+
+export const addJoin = (index: number, currentFhirAttribute: IReduxCurrentFhirResource) : action => {
+    return {
+        type: 'ADD_JOIN',
+        value: {
+            columnIndex: index,
+            currentFhirAttribute: currentFhirAttribute,
+        },
+    }
+}
+
+export const changeJoinSourceColumn = (index: number) : any => {
+    return (item: any) : any => {
+        return (dispatch: any, getState: any) => {
+            dispatch(updateJoinSourceColumn(item, index, getState().currentFhirAttribute))
+        }
+    }
+}
+
+export const updateJoinSourceColumn = (item: any, index: number, currentFhirAttribute: IReduxCurrentFhirResource) : action => {
+    return {
+        type: 'UPDATE_JOIN_SOURCE_COLUMN',
+        value: {
+            item,
+            columnIndex: index,
+            currentFhirAttribute: currentFhirAttribute,
+        },
+    }
+}
+
+export const changeJoinTargetColumnOwner = (index: number) : any => {
+    return (item: any) : any => {
+        return (dispatch: any, getState: any) => {
+            dispatch(updateJoinTargetColumnOwner(item, index, getState().currentFhirAttribute))
+        }
+    }
+}
+
+export const updateJoinTargetColumnOwner = (item: any, index: number, currentFhirAttribute: IReduxCurrentFhirResource) : action => {
+    return {
+        type: 'UPDATE_JOIN_TARGET_COLUMN_OWNER',
+        value: {
+            item,
+            columnIndex: index,
+            currentFhirAttribute: currentFhirAttribute,
+        },
+    }
+}
+
+export const changeJoinTargetColumnTable = (index: number) : any => {
+    return (item: any) : any => {
+        return (dispatch: any, getState: any) => {
+            dispatch(updateJoinTargetColumnTable(item, index, getState().currentFhirAttribute))
+        }
+    }
+}
+
+export const updateJoinTargetColumnTable = (item: any, index: number, currentFhirAttribute: IReduxCurrentFhirResource) : action => {
+    return {
+        type: 'UPDATE_JOIN_TARGET_COLUMN_TABLE',
+        value: {
+            item,
+            columnIndex: index,
+            currentFhirAttribute: currentFhirAttribute,
+        },
+    }
+}
+
+export const changeJoinTargetColumnColumn = (index: number) : any => {
+    return (item: any) : any => {
+        return (dispatch: any, getState: any) => {
+            dispatch(updateJoinTargetColumnColumn(item, index, getState().currentFhirAttribute))
+        }
+    }
+}
+
+export const updateJoinTargetColumnColumn = (item: any, index: number, currentFhirAttribute: IReduxCurrentFhirResource) : action => {
+    return {
+        type: 'UPDATE_JOIN_TARGET_COLUMN_COLUMN',
+        value: {
+            item,
+            columnIndex: index,
+            currentFhirAttribute: currentFhirAttribute,
+        },
+    }
+}
+
+export const changeInputColumnScript = (index: number) : any => {
+    return (item: any) : any => {
+        return (dispatch: any, getState: any) => {
+            dispatch(updateInputColumnScript(item, index, getState().currentFhirAttribute))
+        }
+    }
+}
+
+export const updateInputColumnScript = (item: any, index: number, currentFhirAttribute: IReduxCurrentFhirResource) : action => {
+    return {
+        type: 'UPDATE_INPUT_COLUMN_SCRIPT',
+        value: {
+            item,
+            columnIndex: index,
+            currentFhirAttribute: currentFhirAttribute,
+        },
+    }
+}
+
+export const changeMergingScript = (item: any) => {
+    return (dispatch: any, getState: any) => {
+        dispatch(updateMergingScript(item, getState().currentFhirAttribute))
+    }
+}
+
+export const updateMergingScript = (item: any, currentFhirAttribute: IReduxCurrentFhirResource) : action => {
+    return {
+        type: 'UPDATE_MERGING_SCRIPT',
+        value: {
+            item,
+            currentFhirAttribute: currentFhirAttribute,
+        },
     }
 }
