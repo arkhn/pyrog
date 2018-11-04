@@ -1,6 +1,7 @@
 import {
     action,
-    IReduxMapping
+    IInputColumn,
+    IReduxMapping,
 } from '../types'
 
 const initialState: IReduxMapping = {
@@ -9,6 +10,23 @@ const initialState: IReduxMapping = {
 }
 
 export const mapping = (state = initialState, action: action): IReduxMapping => {
+    const changeInputColumns = (state: IReduxMapping, currentFhirAttributePath: string, modifiedInputColumns: IInputColumn[]) => {
+        return {
+            ...state,
+            content: {
+                ...state.content,
+                fhirMapping : Object.assign(
+                    {},
+                    state.content.fhirMapping,
+                    {[currentFhirAttributePath]: {
+                        ...state.content.fhirMapping[currentFhirAttributePath],
+                        inputColumns: modifiedInputColumns,
+                    }}
+                ),
+            }
+        }
+    }
+
     switch (action.type) {
         case 'LOADING_MAPPING':
             return {
@@ -74,23 +92,10 @@ export const mapping = (state = initialState, action: action): IReduxMapping => 
         case 'REMOVE_INPUT_COLUMN': {
             const currentFhirAttributePath = action.value.currentFhirAttribute.join('.')
 
-            const inputColumns = state.content.fhirMapping[currentFhirAttributePath].inputColumns
-            inputColumns.splice(action.value.columnIndex, 1)
+            const modifiedInputColumns = state.content.fhirMapping[currentFhirAttributePath].inputColumns
+            modifiedInputColumns.splice(action.value.columnIndex, 1)
 
-            return {
-                ...state,
-                content: {
-                    ...state.content,
-                    fhirMapping : Object.assign(
-                        {},
-                        state.content.fhirMapping,
-                        {[currentFhirAttributePath]: {
-                            ...state.content.fhirMapping[currentFhirAttributePath],
-                            inputColumns,
-                        }}
-                    ),
-                }
-            }
+            return changeInputColumns(state, currentFhirAttributePath, modifiedInputColumns)
         } break;
 
         case 'UPDATE_PK_OWNER':
@@ -134,20 +139,7 @@ export const mapping = (state = initialState, action: action): IReduxMapping => 
             let modifiedInputColumns = state.content.fhirMapping[currentFhirAttributePath].inputColumns
             delete modifiedInputColumns[action.value.columnIndex]['join']
 
-            return {
-                ...state,
-                content: {
-                    ...state.content,
-                    fhirMapping : Object.assign(
-                        {},
-                        state.content.fhirMapping,
-                        {[currentFhirAttributePath]: {
-                            ...state.content.fhirMapping[currentFhirAttributePath],
-                            inputColumns: modifiedInputColumns,
-                        }}
-                    ),
-                }
-            }
+            return changeInputColumns(state, currentFhirAttributePath, modifiedInputColumns)
         }
 
         case 'ADD_JOIN': {
@@ -163,20 +155,7 @@ export const mapping = (state = initialState, action: action): IReduxMapping => 
                 },
             }
 
-            return {
-                ...state,
-                content: {
-                    ...state.content,
-                    fhirMapping : Object.assign(
-                        {},
-                        state.content.fhirMapping,
-                        {[currentFhirAttributePath]: {
-                            ...state.content.fhirMapping[currentFhirAttributePath],
-                            inputColumns: modifiedInputColumns,
-                        }}
-                    ),
-                }
-            }
+            return changeInputColumns(state, currentFhirAttributePath, modifiedInputColumns)
         }
 
         case 'UPDATE_JOIN_SOURCE_COLUMN': {
@@ -184,20 +163,7 @@ export const mapping = (state = initialState, action: action): IReduxMapping => 
             let modifiedInputColumns = state.content.fhirMapping[currentFhirAttributePath].inputColumns
             modifiedInputColumns[action.value.columnIndex].join.sourceColumn = action.value.item
 
-            return {
-                ...state,
-                content: {
-                    ...state.content,
-                    fhirMapping : Object.assign(
-                        {},
-                        state.content.fhirMapping,
-                        {[currentFhirAttributePath]: {
-                            ...state.content.fhirMapping[currentFhirAttributePath],
-                            inputColumns: modifiedInputColumns,
-                        }}
-                    ),
-                }
-            }
+            return changeInputColumns(state, currentFhirAttributePath, modifiedInputColumns)
         }
 
         case 'UPDATE_JOIN_TARGET_COLUMN_OWNER': {
@@ -210,20 +176,7 @@ export const mapping = (state = initialState, action: action): IReduxMapping => 
                 column: change ? null : modifiedInputColumns[action.value.columnIndex].join.targetColumn.column,
             }
 
-            return {
-                ...state,
-                content: {
-                    ...state.content,
-                    fhirMapping : Object.assign(
-                        {},
-                        state.content.fhirMapping,
-                        {[currentFhirAttributePath]: {
-                            ...state.content.fhirMapping[currentFhirAttributePath],
-                            inputColumns: modifiedInputColumns,
-                        }}
-                    ),
-                }
-            }
+            return changeInputColumns(state, currentFhirAttributePath, modifiedInputColumns)
         }
 
         case 'UPDATE_JOIN_TARGET_COLUMN_TABLE': {
@@ -236,20 +189,7 @@ export const mapping = (state = initialState, action: action): IReduxMapping => 
                 column: change ? null : modifiedInputColumns[action.value.columnIndex].join.targetColumn.column,
             }
 
-            return {
-                ...state,
-                content: {
-                    ...state.content,
-                    fhirMapping : Object.assign(
-                        {},
-                        state.content.fhirMapping,
-                        {[currentFhirAttributePath]: {
-                            ...state.content.fhirMapping[currentFhirAttributePath],
-                            inputColumns: modifiedInputColumns,
-                        }}
-                    ),
-                }
-            }
+            return changeInputColumns(state, currentFhirAttributePath, modifiedInputColumns)
         }
 
         case 'UPDATE_JOIN_TARGET_COLUMN_COLUMN': {
@@ -260,20 +200,7 @@ export const mapping = (state = initialState, action: action): IReduxMapping => 
                 column: action.value.item,
             }
 
-            return {
-                ...state,
-                content: {
-                    ...state.content,
-                    fhirMapping : Object.assign(
-                        {},
-                        state.content.fhirMapping,
-                        {[currentFhirAttributePath]: {
-                            ...state.content.fhirMapping[currentFhirAttributePath],
-                            inputColumns: modifiedInputColumns,
-                        }}
-                    ),
-                }
-            }
+            return changeInputColumns(state, currentFhirAttributePath, modifiedInputColumns)
         }
 
         case 'UPDATE_INPUT_COLUMN_SCRIPT': {
@@ -281,20 +208,7 @@ export const mapping = (state = initialState, action: action): IReduxMapping => 
             let modifiedInputColumns = state.content.fhirMapping[currentFhirAttributePath].inputColumns
             modifiedInputColumns[action.value.columnIndex].script = action.value.item
 
-            return {
-                ...state,
-                content: {
-                    ...state.content,
-                    fhirMapping : Object.assign(
-                        {},
-                        state.content.fhirMapping,
-                        {[currentFhirAttributePath]: {
-                            ...state.content.fhirMapping[currentFhirAttributePath],
-                            inputColumns: modifiedInputColumns,
-                        }}
-                    ),
-                }
-            }
+            return changeInputColumns(state, currentFhirAttributePath, modifiedInputColumns)
         }
 
         case 'UPDATE_MERGING_SCRIPT': {
