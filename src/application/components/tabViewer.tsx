@@ -92,7 +92,6 @@ export default class TabViewer extends React.Component<ITabViewProps, ITabViewSt
     }
 
     private handleClick = (column: any) => {
-        this.props.dispatch(clickAddInputColumn(this.state.databaseColumn))
         this.setState({
             databaseColumn: {
                 owner: null,
@@ -100,6 +99,7 @@ export default class TabViewer extends React.Component<ITabViewProps, ITabViewSt
                 column: null,
             },
         })
+        this.props.dispatch(clickAddInputColumn(this.state.databaseColumn))
     }
 
     public render() {
