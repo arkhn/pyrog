@@ -24,7 +24,7 @@ export default class ClusterSearchInputs extends React.Component<IClusterSearchI
                         inputItem={''}
                         items={clusterLabels}
                         icon={'layout-auto'}
-                        action={null}
+                        onChange={null}
                         dispatch={dispatch}
                     />
                 </div>

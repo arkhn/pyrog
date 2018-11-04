@@ -10,7 +10,7 @@ interface ISelectProps {
     items: IDatabase[];
     inputItem: IDatabase;
     icon: IconName;
-    action: any;
+    onChange: any;
     intent?: Intent;
     dispatch: any;
 };
@@ -35,7 +35,7 @@ export default class InputDatabaseSelect extends React.Component<ISelectProps, a
     };
 
     public render () {
-        const {items, inputItem, icon, intent, action, dispatch} = this.props;
+        const {items, inputItem, icon, intent, onChange, dispatch} = this.props;
 
         return (
             <div>
@@ -46,7 +46,7 @@ export default class InputDatabaseSelect extends React.Component<ISelectProps, a
                     inputItem={inputItem}
                     items={items}
                     icon={icon}
-                    action={action}
+                    onChange={onChange}
                     intent={intent}
                     dispatch={dispatch}
                 />

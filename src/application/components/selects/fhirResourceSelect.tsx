@@ -11,7 +11,7 @@ interface ISelectProps {
     inputItem: IFhirResource;
     icon: IconName;
     intent?: Intent;
-    action: any;
+    onChange: any;
     dispatch: any;
 };
 
@@ -35,7 +35,7 @@ export default class FhirResourceSelect extends React.Component<ISelectProps, an
     }
 
     public render () {
-        const {items, inputItem, icon, intent, action, dispatch} = this.props;
+        const {items, inputItem, icon, intent, onChange, dispatch} = this.props;
 
         return (
             <div>
@@ -47,7 +47,7 @@ export default class FhirResourceSelect extends React.Component<ISelectProps, an
                     items={items}
                     icon={icon}
                     intent={intent}
-                    action={action}
+                    onChange={onChange}
                     dispatch={dispatch}
                 />
             </div>

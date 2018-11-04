@@ -117,7 +117,7 @@ export class MainView extends React.Component<reduxAppState, any> {
                                         inputItem={currentDatabase.name}
                                         items={databaseNameList}
                                         icon={'database'}
-                                        action={changeCurrentDatabase}
+                                        onChange={changeCurrentDatabase}
                                         dispatch={dispatch}
                                         intent={'primary'}
                                     />
@@ -132,7 +132,7 @@ export class MainView extends React.Component<reduxAppState, any> {
                                         inputItem={currentFhirResource.name}
                                         items={fhirResourceNameList}
                                         icon={'layout-hierarchy'}
-                                        action={changeCurrentFhirResource}
+                                        onChange={changeCurrentFhirResource}
                                         dispatch={dispatch}
                                         intent={'primary'}
                                     />
@@ -177,9 +177,9 @@ export class MainView extends React.Component<reduxAppState, any> {
                                             <div id='input-columns-container'>
                                                 <div id='path-to-pk-viewer'>
                                                     <ColumnPicker
-                                                        changeOwner={updatePKOwner}
-                                                        changeTable={updatePKTable}
-                                                        changeColumn={updatePKColumn}
+                                                        onChangeOwner={updatePKOwner}
+                                                        onChangeTable={updatePKTable}
+                                                        onChangeColumn={updatePKColumn}
                                                         databaseColumn={mapping.content.primaryKeyColumn}
                                                         databaseSchema={currentDatabase.schema}
                                                         dispatch={dispatch}

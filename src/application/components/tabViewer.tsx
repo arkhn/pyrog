@@ -61,11 +61,13 @@ export default class TabViewer extends React.Component<ITabViewProps, ITabViewSt
     private changeOwner = (owner: string) => {
         const change = (owner != this.state.databaseColumn.owner)
 
-        this.setState({
-            databaseColumn: {
-                owner: owner,
-                table: change ? null : this.state.databaseColumn.table,
-                column: change ? null : this.state.databaseColumn.column,
+        this.setState((state: ITabViewState) => {
+            return {
+                databaseColumn: {
+                    owner: owner,
+                    table: change ? null : state.databaseColumn.table,
+                    column: change ? null : state.databaseColumn.column,
+                }
             }
         })
     }
@@ -73,26 +75,31 @@ export default class TabViewer extends React.Component<ITabViewProps, ITabViewSt
     private changeTable = (table: string) => {
         const change = (table != this.state.databaseColumn.table)
 
-        this.setState({
-            databaseColumn: {
-                owner: this.state.databaseColumn.owner,
-                table: table,
-                column: change ? null : this.state.databaseColumn.column,
+        this.setState((state: ITabViewState) => {
+            return {
+                databaseColumn: {
+                    owner: state.databaseColumn.owner,
+                    table: table,
+                    column: change ? null : state.databaseColumn.column,
+                }
             }
         })
     }
 
     private changeColumn = (column: string) => {
-        this.setState({
-            databaseColumn: {
-                owner: this.state.databaseColumn.owner,
-                table: this.state.databaseColumn.table,
-                column: column,
+        this.setState((state: ITabViewState) => {
+            return {
+                databaseColumn: {
+                    owner: state.databaseColumn.owner,
+                    table: state.databaseColumn.table,
+                    column: column,
+                }
             }
         })
     }
 
     private handleClick = (column: any) => {
+        this.props.dispatch(clickAddInputColumn(this.state.databaseColumn))
         this.setState({
             databaseColumn: {
                 owner: null,
@@ -100,7 +107,6 @@ export default class TabViewer extends React.Component<ITabViewProps, ITabViewSt
                 column: null,
             },
         })
-        this.props.dispatch(clickAddInputColumn(this.state.databaseColumn))
     }
 
     public render() {
@@ -122,18 +128,17 @@ export default class TabViewer extends React.Component<ITabViewProps, ITabViewSt
 
         const dummyTab = <div id={'dummy-column-picker'}>
             <FormGroup
-                label={'Choose column'}
-                labelFor="text-input"
+                label='Choose column'
+                labelFor='text-input'
                 inline={true}
             >
                 <ControlGroup>
                     <ColumnPicker
-                        changeOwner={this.changeOwner}
-                        changeTable={this.changeTable}
-                        changeColumn={this.changeColumn}
+                        onChangeOwner={this.changeOwner}
+                        onChangeTable={this.changeTable}
+                        onChangeColumn={this.changeColumn}
                         databaseColumn={databaseColumn}
                         databaseSchema={databaseSchema}
-                        dispatch={dispatch}
                     />
                     <Button
                         disabled={!databaseColumn.column}

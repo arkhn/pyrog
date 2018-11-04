@@ -11,8 +11,8 @@ interface ISelectProps<T> {
     displayItem: (item: any) => string;
     icon: IconName;
     intent?: Intent;
-    action: any;
-    dispatch: any;
+    onChange: any;
+    dispatch?: any;
 };
 
 export default class InputDatabaseSelect<T> extends React.Component<ISelectProps<T>, any> {
@@ -22,7 +22,13 @@ export default class InputDatabaseSelect<T> extends React.Component<ISelectProps
 
     private CustomSelect = Select.ofType<T>();
 
-    private handleValueChange = (item: T) => this.props.dispatch(this.props.action(item))
+    private handleValueChange = (item: T) => {
+        if (this.props.dispatch) {
+            this.props.dispatch(this.props.onChange(item))
+        } else {
+            this.props.onChange(item)
+        }
+    }
 
     public render () {
         const {items, inputItem, intent} = this.props;
