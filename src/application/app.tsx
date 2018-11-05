@@ -10,9 +10,11 @@ import middlewares from './middlewares/middlewares'
 import {mainReducer} from './reducers/mainReducer'
 
 // Redux initialisation
-const loggerMiddleware = createLogger({})
-// const reducer = viewReducers.reducer
-const finalCreateStore = applyMiddleware(...middlewares, loggerMiddleware)(createStore)
+if (process.env.NODE_ENV === 'development') {
+    // Log redux dispatch only in development
+    middlewares.push(createLogger({}))
+}
+const finalCreateStore = applyMiddleware(...middlewares)(createStore)
 const store = finalCreateStore(mainReducer)
 
 // Render React app in DOM

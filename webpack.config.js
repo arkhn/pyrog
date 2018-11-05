@@ -1,36 +1,21 @@
-var webpack = require('webpack'),
-    path = require('path'),
-    htmlPlugin = require('html-webpack-plugin'),
-    extractTextWebpackPlugin = require('extract-text-webpack-plugin'),
-    UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+var path = require('path'),
+    htmlPlugin = require('html-webpack-plugin')
 
 var SRC_DIR = path.join(__dirname, './src')
 var DIST_DIR = path.join(__dirname, './dist')
 
-console.log('Node environment: ' + process.env.NODE_ENV)
-
 module.exports = {
-    target: 'web',
+    // Indicates where to start so as to build the module dependency graph
     context: SRC_DIR,
-    entry: {
-        main: './application/app.tsx',
-        bundleLibraries: [
-            'react',
-            'react-dom',
-            'react-redux',
-            'react-router',
-            'redux',
-        ]
-    },
-    devtool: 'source-map',
+    entry: './application/app.tsx',
+    // Where bundles should be emitted
     output: {
         path: DIST_DIR,
-        publicPath: '/',
-        filename: 'app.bundle.js',
+        filename: 'fhirball.bundle.js',
     },
-    resolve: {
-        extensions: ['.js', '.ts', '.tsx', '.json']
-    },
+    // By default, webpack only handles js and json files.
+    // In order to process other types of files, one should use
+    // "loaders".
     module: {
         rules: [
             {
@@ -53,34 +38,24 @@ module.exports = {
             }
         ],
     },
-    optimization: {
-        splitChunks: {
-            cacheGroups: {
-                commons: {
-                    test: /[\\/]node_modules[\\/]/,
-                    name: 'bundleLibraries',
-                    chunks: 'all'
-                }
-            }
-        }
-    },
-    plugins: ((process.env.NODE_ENV == 'production') ? [new UglifyJSPlugin()] : []).concat([
+    // In this app, plugins are used to optimize emitted bundles and
+    // set environment variables.
+    plugins: [
         new htmlPlugin({
             template: 'index.html'
         }),
-        new webpack.DefinePlugin({
-            'process.env': {
-                NODE_ENV: JSON.stringify(process.env.NODE_ENV)
-            }
-        }),
-    ]),
-    devServer: {
-        historyApiFallback: true
+    ],
+    // Resolvers are used to locate modules using absolute paths.
+    // This allows to write `import * from './module'` instead of
+    // `import * from './module.tsx'`
+    resolve: {
+        extensions: ['.js', '.ts', '.tsx', '.json']
     },
-    node: {
-        // workaround for webpack-dev-server issue
-        // https://github.com/webpack/webpack-dev-server/issues/60#issuecomment-103411179
-        fs: 'empty',
-        net: 'empty'
-    }
+    // Run optimisation scripts depending on the `mode` (dev or prod).
+    // webpack minimises the code by default on prod
+    optimization: {
+        splitChunks: {
+            chunks: 'all',
+        }
+    },
 };
