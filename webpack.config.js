@@ -39,7 +39,7 @@ module.exports = {
         ],
     },
     // In this app, plugins are used to optimize emitted bundles and
-    // set environment variables.
+    // set environment variables if need be.
     plugins: [
         new htmlPlugin({
             template: 'index.html'

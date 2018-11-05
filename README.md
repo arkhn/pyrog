@@ -1,4 +1,9 @@
+[![GitHub license](https://img.shields.io/github/license/arkhn/fhir-pipe.svg)](https://github.com/arkhn/fhir-pipe/blob/master/LICENSE)
+[![Website arkhn.org](https://img.shields.io/website-up-down-green-red/https/arkhn.org.svg)](http://arkhn.org/)
+
 # Fhirball client
+
+Fhirball is a web application meant to help people build and share database mappings.
 
 ## Introduction
 
@@ -8,18 +13,30 @@ You can start the app by running `npm start`, which will basically build a webpa
 
 ## Installation
 
-Simply clone the repo and run
-
+The first thing to do after cloning this repository is to install all needed node modules:
 ```
 npm install
+```
+All commands listed in the coming sections can be tweaked in `./package.json`.
+
+### Running the app locally
+Hitting the following command will run a `webpack-dev-server` which serves a _development_ version of the app under _http://0.0.0.0:3000_:
+```
 npm start
 ```
 
+### Building production files
+A _production_ version of the application can be built using the following command:
+```
+npm run build-prod
+```
+This will create bundles and output them in `./dist/`. These files can then be exported to a distant production server running the application.
+
 ## Code organisation
 
-## Webpack
+### Webpack
 
-The Webpack config file is located at `./webpack.config.js`. It mainly calls two files: `./src/index.html` and `./src/application/app.tsx` which are the root files to all other files of the application.
+The webpack config file is located at `./webpack.config.js`. It mainly calls two files: `./src/index.html` and `./src/application/app.tsx` which are the root files to all other files of the application.
 
 ### Redux
 Redux is used to manage the application's state.
@@ -45,3 +62,9 @@ For Linux users, the output can easily be copied to the clipboard using `xclip` 
 ```
 node src/application/mockdata/generator.js | xclip
 ```
+
+## Start contributing
+
+We have reported several issues with the label `Good first issue` which can be a good way to start! Also of course, feel free to contact us on Slack in you have trouble with the project.
+
+If you're enthusiastic about our project, :star: it to show your support! :heart:
