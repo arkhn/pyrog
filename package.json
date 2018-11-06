@@ -1,5 +1,5 @@
 {
-    "name": "app",
+    "name": "fhirball",
     "version": "0.0.0",
     "private": true,
     "scripts": {
