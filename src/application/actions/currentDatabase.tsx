@@ -15,9 +15,8 @@ export const changeCurrentDatabase = (database: string): action => {
         ])
         .then(() => {
             dispatch(updateStateCurrentDatabase(database))
+            dispatch(fetchMapping())
         })
-        dispatch(fetchMapping())
-        // TODO: fetch database schema
     }
 }
 

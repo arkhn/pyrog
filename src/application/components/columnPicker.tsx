@@ -40,7 +40,6 @@ export default class ColumnPicker extends React.Component<IColumnPickerProps, IC
             vertical,
         } = this.props
 
-
         let owners = Object.keys(databaseSchema)
 
         let tables = (databaseColumn && databaseColumn.owner) ?

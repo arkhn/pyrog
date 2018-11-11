@@ -26,7 +26,7 @@ export default class StringSelect extends React.Component<ISelectProps, any> {
     };
 
     private filterByName: ItemPredicate<string> = (query, item) => {
-        return `${item}`.indexOf(query.toLowerCase()) >= 0;
+        return `${item.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0;
     };
 
     private displayItem = function(item: string): string {
