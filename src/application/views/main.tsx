@@ -47,6 +47,9 @@ import InputColumnsTable from '../components/inputColumnsTable'
 import StringSelect from '../components/selects/stringSelect'
 import TabViewer from '../components/tabViewer'
 
+// Import mock data
+import {TEST_JSON} from '../mockdata/testJson'
+
 // Import custom types
 import {
     reduxAppState,
@@ -149,7 +152,7 @@ export class MainView extends React.Component<reduxAppState, any> {
                                 </FormGroup>
                                 {/* <Dialog isOpen={true}>
                                     <div className={Classes.DIALOG_BODY}>
-                                        <JsonViewer json={this.TEST_JSON}/>
+                                        <JsonViewer json={TEST_JSON}/>
                                     </div>
                                 </Dialog> */}
                             </Navbar.Group>

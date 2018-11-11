@@ -14,7 +14,7 @@ interface ISelectProps {
     dispatch: any;
 };
 
-export default class InputDatabaseSelect extends React.Component<ISelectProps, any> {
+export default class StringSelect extends React.Component<ISelectProps, any> {
     private renderItem: ItemRenderer<string> = (item, {handleClick, modifiers, query}) => {
         return (
             <MenuItem

@@ -15,7 +15,7 @@ interface ISelectProps<T> {
     dispatch?: any;
 };
 
-export default class InputDatabaseSelect<T> extends React.Component<ISelectProps<T>, any> {
+export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
     constructor(props: ISelectProps<T>) {
         super(props);
     }

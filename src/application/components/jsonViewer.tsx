@@ -101,7 +101,6 @@ export default class JsonViewer extends React.Component<IJsonViewerProps, IJsonV
                 <Button />
                 <Button />
             </Tabs>
-
     }
 
     private handleTabChange = (navbarTabId: TabId) => this.setState({ navbarTabId });
