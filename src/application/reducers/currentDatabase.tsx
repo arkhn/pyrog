@@ -1,5 +1,5 @@
 import {
-    action,
+    simpleAction,
     IReduxCurrentDatabase
 } from '../types'
 
@@ -12,12 +12,18 @@ const initialState: IReduxCurrentDatabase = {
     schema: cwDatabaseSchema,
 }
 
-export const currentDatabase = (state = initialState, action: action): IReduxCurrentDatabase => {
+export const currentDatabase = (state = initialState, action: simpleAction): IReduxCurrentDatabase => {
     switch (action.type) {
         case 'UPDATE_STATE_CURRENT_DATABASE':
             return {
                 ...state,
                 name: action.payload,
+            }
+
+        case 'FETCH_DATABASE_SCHEMA_SUCCESS':
+            return {
+                ...state,
+                schema: action.payload,
             }
 
         default:

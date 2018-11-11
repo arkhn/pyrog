@@ -1,6 +1,5 @@
 import {action} from '../types'
 import {
-    databaseNameList,
     fhirResourceNameList
 } from '../mockdata/nameLists'
 
@@ -14,9 +13,8 @@ export const fetchInfoNameList = (): any => {
     return (dispatch: any, getState: any) => {
         dispatch(loadingNameLists())
 
-        // TODO: add real data fetching
         Promise.all([
-            simulateFetch(dispatch(fetchDatabaseNameListSuccess(databaseNameList)), 500),
+            dispatch(fetchDatabaseNames('https://api.live.arkhn.org/schemas')),
             simulateFetch(dispatch(fetchFhirResourceNameListSuccess(fhirResourceNameList)), 500),
         ]).then((response: any) => {
             // TODO: handle errors
@@ -44,6 +42,20 @@ export const fetchInfoNameListFailure = (): action => {
 }
 
 // Fetch databaseNameList
+
+export const fetchDatabaseNames = (url: string) : action => {
+    return (dispatch: any, getState: any) => {
+        return fetch(url)
+            .then((response: any) => {
+                return response.json()
+            }).then((response: any) => {
+                dispatch(fetchDatabaseNameListSuccess(response))
+            }).catch((err: any) => {
+                console.log(err)
+                dispatch(fetchDatabaseNameListFailure(err))
+            })
+    }
+}
 
 export const fetchDatabaseNameListSuccess = (databaseNameList: string[]): action => {
     return {

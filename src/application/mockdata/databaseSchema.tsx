@@ -3,7 +3,7 @@ import {
 } from '../types'
 
 export const cwDatabaseSchema : any = {
-    'ISCF': {
+    'ICSF': {
         'PATIENT': [
             'NOPAT',
             'PREPAT',

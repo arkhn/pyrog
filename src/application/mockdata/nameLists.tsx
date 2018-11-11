@@ -1,4 +1,4 @@
-export const databaseNameList: string[] = [
+export const databaseNames: string[] = [
     'CW',
     'DC',
     'ORB',

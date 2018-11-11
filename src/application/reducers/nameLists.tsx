@@ -1,15 +1,15 @@
 import {
-    action,
+    simpleAction,
     IReduxNameLists,
 } from '../types'
 
 const initialState: IReduxNameLists = {
     loadingNameLists: false,
-    databaseNameList: [],
+    databaseNames: {},
     fhirResourceNameList: [],
 }
 
-export const nameLists = (state = initialState, action: action): IReduxNameLists => {
+export const nameLists = (state = initialState, action: simpleAction): IReduxNameLists => {
     switch (action.type) {
         case 'LOADING_NAME_LISTS':
             return {
@@ -32,7 +32,7 @@ export const nameLists = (state = initialState, action: action): IReduxNameLists
         case 'FETCH_DATABASE_NAME_LIST_SUCCESS':
             return {
                 ...state,
-                databaseNameList: action.payload,
+                databaseNames: action.payload,
             }
 
         case 'FETCH_FHIR_RESOURCE_NAME_LIST_SUCCESS':

@@ -1,4 +1,16 @@
-import * as redux from 'redux';
+import * as redux from 'redux'
+
+// Redux types
+export interface simpleAction {
+    type: string,
+    payload?: any,
+}
+
+export type thunkAction = (dispatch: redux.Dispatch<any>, getState: any) => void
+
+export type action = simpleAction | thunkAction
+
+// React types
 
 // TODO: Deprecate type
 export interface IFhirResource {
@@ -67,7 +79,11 @@ export interface IReduxAppData {
 
 export interface IReduxNameLists {
     loadingNameLists: boolean,
-    databaseNameList: string[],
+    databaseNames: {
+        [database_name: string]: {
+            name: string,
+        }
+    },
     fhirResourceNameList: string[],
 }
 
@@ -84,9 +100,4 @@ export interface IReduxCurrentFhirResource {
 export interface IReduxMapping {
     loading: boolean,
     content: IMapping,
-}
-
-export interface action {
-    type: string,
-    payload?: any,
 }

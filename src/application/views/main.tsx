@@ -93,7 +93,7 @@ export class MainView extends React.Component<reduxAppState, any> {
 
         let {
             loadingNameLists,
-            databaseNameList,
+            databaseNames,
             fhirResourceNameList,
         } = this.props.nameLists
 
@@ -116,7 +116,7 @@ export class MainView extends React.Component<reduxAppState, any> {
                                 >
                                     <StringSelect
                                         inputItem={currentDatabase.name}
-                                        items={databaseNameList}
+                                        items={Object.keys(databaseNames)}
                                         icon={'database'}
                                         onChange={changeCurrentDatabase}
                                         dispatch={dispatch}
