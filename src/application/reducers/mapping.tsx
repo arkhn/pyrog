@@ -1,5 +1,5 @@
 import {
-    action,
+    simpleAction,
     IInputColumn,
     IReduxMapping,
 } from '../types'
@@ -9,7 +9,7 @@ const initialState: IReduxMapping = {
     content: null,
 }
 
-export const mapping = (state = initialState, action: action): IReduxMapping => {
+export const mapping = (state = initialState, action: simpleAction): IReduxMapping => {
     const changeInputColumns = (state: IReduxMapping, currentFhirAttributePath: string, modifiedInputColumns: IInputColumn[]) => {
         return {
             ...state,

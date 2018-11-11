@@ -1,5 +1,5 @@
 import {
-    action,
+    simpleAction,
     IReduxCurrentFhirResource
 } from '../types'
 
@@ -8,7 +8,7 @@ const initialState: IReduxCurrentFhirResource = {
     json: null,
 }
 
-export const currentFhirResource = (state = initialState, action: action): IReduxCurrentFhirResource => {
+export const currentFhirResource = (state = initialState, action: simpleAction): IReduxCurrentFhirResource => {
     switch (action.type) {
         case 'UPDATE_STATE_CURRENT_FHIR_RESOURCE':
             return {
