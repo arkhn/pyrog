@@ -84,7 +84,12 @@ export interface IReduxNameLists {
             name: string,
         }
     },
-    fhirResourceNameList: string[],
+    fhirResources: {
+        [resource_name: string]: any,
+    },
+    fhirDatatypes: {
+        [datatype_name: string]: any,
+    },
 }
 
 export interface IReduxCurrentDatabase {
@@ -96,6 +101,7 @@ export interface IReduxCurrentDatabase {
 export interface IReduxCurrentFhirResource {
     name: string,
     json: any,
+    loadingResource: boolean,
 }
 
 export interface IReduxMapping {

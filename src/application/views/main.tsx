@@ -93,7 +93,7 @@ export class MainView extends React.Component<reduxAppState, any> {
 
         let {
             databaseNames,
-            fhirResourceNameList,
+            fhirResources,
             loadingNameLists,
         } = this.props.nameLists
 
@@ -135,7 +135,8 @@ export class MainView extends React.Component<reduxAppState, any> {
                                         icon={'layout-hierarchy'}
                                         inputItem={currentFhirResource.name}
                                         intent={'primary'}
-                                        items={fhirResourceNameList}
+                                        items={Object.keys(fhirResources)}
+                                        loading={currentFhirResource.loadingResource}
                                         onChange={changeCurrentFhirResource}
                                     />
                                 </FormGroup>

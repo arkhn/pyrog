@@ -6,10 +6,17 @@ import {
 const initialState: IReduxCurrentFhirResource = {
     name: null,
     json: null,
+    loadingResource: false,
 }
 
 export const currentFhirResource = (state = initialState, action: simpleAction): IReduxCurrentFhirResource => {
     switch (action.type) {
+        case 'LOADING_FHIR_RESOURCE':
+            return {
+                ...state,
+                loadingResource: true,
+            }
+
         case 'UPDATE_STATE_CURRENT_FHIR_RESOURCE':
             return {
                 ...state,
@@ -20,6 +27,13 @@ export const currentFhirResource = (state = initialState, action: simpleAction):
             return {
                 ...state,
                 json: action.payload,
+                loadingResource: false,
+            }
+
+        case 'FETCH_FHIR_RESOURCE_JSON_FAILURE':
+            return {
+                ...state,
+                loadingResource: false,
             }
 
         default:
