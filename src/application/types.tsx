@@ -88,6 +88,7 @@ export interface IReduxNameLists {
 }
 
 export interface IReduxCurrentDatabase {
+    loadingSchema: boolean,
     name: string,
     schema: IDatabaseSchema,
 }

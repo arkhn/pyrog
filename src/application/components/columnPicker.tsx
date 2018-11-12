@@ -52,25 +52,25 @@ export default class ColumnPicker extends React.Component<IColumnPickerProps, IC
 
         let controlGroup = <ControlGroup fill={false} vertical={vertical || false}>
             <StringSelect
+                dispatch={dispatch}
+                icon={'group-objects'}
                 inputItem={databaseColumn ? databaseColumn.owner : null}
                 items={owners}
-                icon={'group-objects'}
                 onChange={onChangeOwner}
-                dispatch={dispatch}
             />
             <StringSelect
+                dispatch={dispatch}
+                icon={'th'}
                 inputItem={databaseColumn ? databaseColumn.table : null}
                 items={tables}
-                icon={'th'}
                 onChange={onChangeTable}
-                dispatch={dispatch}
             />
             <StringSelect
+                dispatch={dispatch}
+                icon={'column-layout'}
                 inputItem={databaseColumn ? databaseColumn.column : null}
                 items={columns}
-                icon={'column-layout'}
                 onChange={onChangeColumn}
-                dispatch={dispatch}
             />
         </ControlGroup>
 

@@ -92,9 +92,9 @@ export class MainView extends React.Component<reduxAppState, any> {
         } = this.props
 
         let {
-            loadingNameLists,
             databaseNames,
             fhirResourceNameList,
+            loadingNameLists,
         } = this.props.nameLists
 
         let {schema} = currentDatabase
@@ -110,32 +110,33 @@ export class MainView extends React.Component<reduxAppState, any> {
                         <div>
                             <Navbar.Group align={Alignment.LEFT}>
                                 <FormGroup
+                                    inline={true}
                                     label="Database"
                                     labelFor="text-input"
-                                    inline={true}
                                 >
                                     <StringSelect
-                                        inputItem={currentDatabase.name}
-                                        items={Object.keys(databaseNames)}
-                                        icon={'database'}
-                                        onChange={changeCurrentDatabase}
                                         dispatch={dispatch}
+                                        icon={'database'}
+                                        inputItem={currentDatabase.name}
                                         intent={'primary'}
+                                        items={Object.keys(databaseNames)}
+                                        loading={currentDatabase.loadingSchema}
+                                        onChange={changeCurrentDatabase}
                                     />
                                 </FormGroup>
                                 <Navbar.Divider />
                                 <FormGroup
+                                    inline={true}
                                     label="FHIR Resource"
                                     labelFor="text-input"
-                                    inline={true}
                                 >
                                     <StringSelect
-                                        inputItem={currentFhirResource.name}
-                                        items={fhirResourceNameList}
-                                        icon={'layout-hierarchy'}
-                                        onChange={changeCurrentFhirResource}
                                         dispatch={dispatch}
+                                        icon={'layout-hierarchy'}
+                                        inputItem={currentFhirResource.name}
                                         intent={'primary'}
+                                        items={fhirResourceNameList}
+                                        onChange={changeCurrentFhirResource}
                                     />
                                 </FormGroup>
                             </Navbar.Group>
@@ -169,8 +170,8 @@ export class MainView extends React.Component<reduxAppState, any> {
                             <div id='flex-container'>
                                 <div id='left-panel'>
                                     <FhirResourceTree
-                                        json={currentFhirResource.json}
                                         dispatch={dispatch}
+                                        json={currentFhirResource.json}
                                     />
                                 </div>
 
@@ -180,20 +181,20 @@ export class MainView extends React.Component<reduxAppState, any> {
                                             <div id='input-columns-container'>
                                                 <div id='path-to-pk-viewer'>
                                                     <ColumnPicker
+                                                        databaseSchema={currentDatabase.schema}
+                                                        dispatch={dispatch}
+                                                        label={'Path to Primary Key'}
                                                         onChangeOwner={updatePKOwner}
                                                         onChangeTable={updatePKTable}
                                                         onChangeColumn={updatePKColumn}
                                                         databaseColumn={mapping.content.primaryKeyColumn}
-                                                        databaseSchema={currentDatabase.schema}
-                                                        dispatch={dispatch}
-                                                        label={'Path to Primary Key'}
                                                     />
                                                 </div>
                                                 <div id='input-columns-viewer'>
                                                     <InputColumnsTable
-                                                        spec={mapping.content.fhirMapping[currentFhirAttribute.join('.')]}
                                                         databaseSchema={schema}
                                                         dispatch={dispatch}
+                                                        spec={mapping.content.fhirMapping[currentFhirAttribute.join('.')]}
                                                     />
                                                 </div>
                                                 <div id='column-selector'>
@@ -204,17 +205,17 @@ export class MainView extends React.Component<reduxAppState, any> {
                                                 </div>
                                             </div>
                                         : <NonIdealState
+                                            description={'Select a FHIR resource attribute by clicking on a node in the left panel.'}
                                             icon={<span dangerouslySetInnerHTML={{__html: arkhnLogo}}/>}
                                             title={'No FHIR attribute selected'}
-                                            description={'Select a FHIR resource attribute by clicking on a node in the left panel.'}
                                         />
                                     }
                                 </div>
                             </div> :
                             <NonIdealState
+                                description={'Select an input database schema and a FHIR Resource in the navigation bar to start mapping.'}
                                 icon={<span dangerouslySetInnerHTML={{__html: arkhnLogo}}/>}
                                 title={'Fhirball'}
-                                description={'Select an input database schema and a FHIR Resource in the navigation bar to start mapping.'}
                             />
                         )
                     }
