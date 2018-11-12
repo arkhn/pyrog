@@ -1,7 +1,4 @@
 import {action} from '../types'
-import {
-    fhirResourceNameList
-} from '../mockdata/nameLists'
 
 function simulateFetch(successCallback: any, delay: number) {
     return new Promise((sucessCallback: any) => setTimeout(sucessCallback, delay))
@@ -15,7 +12,8 @@ export const fetchInfoNameList = (): any => {
 
         Promise.all([
             dispatch(fetchDatabaseNames('https://api.live.arkhn.org/schemas')),
-            simulateFetch(dispatch(fetchFhirResourceNameListSuccess(fhirResourceNameList)), 500),
+            dispatch(fetchFhirResources('https://api.live.arkhn.org/fhir_resources')),
+            dispatch(fetchFhirDatatypes('https://api.live.arkhn.org/fhir_datatypes')),
         ]).then((response: any) => {
             // TODO: handle errors
             dispatch(fetchInfoNameListSuccess())
@@ -73,16 +71,60 @@ export const fetchDatabaseNameListFailure = (error: any): action => {
 
 // Fetch fhirResourceNameList
 
-export const fetchFhirResourceNameListSuccess = (fhirResourceNameList: string[]): action => {
+export const fetchFhirResources = (url: string) : action => {
+    return (dispatch: any, getState: any) => {
+        return fetch(url)
+            .then((response: any) => {
+                return response.json()
+            }).then((response: any) => {
+                dispatch(fetchFhirResourcesSuccess(response))
+            }).catch((err: any) => {
+                console.log(err)
+                dispatch(fetchFhirResourcesFailure(err))
+            })
+    }
+}
+
+export const fetchFhirResourcesSuccess = (fhirResourceNameList: string[]): action => {
     return {
-        type: 'FETCH_FHIR_RESOURCE_NAME_LIST_SUCCESS',
+        type: 'FETCH_FHIR_RESOURCES_SUCCESS',
         payload: fhirResourceNameList,
     }
 }
 
-export const fetchFhirResourceNameListFailure = (error: any): action => {
+export const fetchFhirResourcesFailure = (error: any): action => {
     return {
-        type: 'FETCH_FHIR_RESOURCE_NAME_LIST_FAILURE',
+        type: 'FETCH_FHIR_RESOURCES_FAILURE',
+        payload: error,
+    }
+}
+
+// Fetch fhirDatatypeNameList
+
+export const fetchFhirDatatypes = (url: string) : action => {
+    return (dispatch: any, getState: any) => {
+        return fetch(url)
+            .then((response: any) => {
+                return response.json()
+            }).then((response: any) => {
+                dispatch(fetchFhirDatatypesSuccess(response))
+            }).catch((err: any) => {
+                console.log(err)
+                dispatch(fetchFhirDatatypesFailure(err))
+            })
+    }
+}
+
+export const fetchFhirDatatypesSuccess = (fhirDatatypes: any): action => {
+    return {
+        type: 'FETCH_FHIR_DATATYPES_SUCCESS',
+        payload: fhirDatatypes,
+    }
+}
+
+export const fetchFhirDatatypesFailure = (error: any): action => {
+    return {
+        type: 'FETCH_FHIR_DATATYPES_FAILURE',
         payload: error,
     }
 }

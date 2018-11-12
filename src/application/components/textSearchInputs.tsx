@@ -39,18 +39,18 @@ export default class TextSearchInputs extends React.Component<ITextSearchInputsP
             <div id={'text-tab-search-group'}>
                 <div className={'row'}>
                     <StringSelect
+                        dispatch={dispatch}
+                        icon={'group-objects'}
                         inputItem={''}
                         items={ownerList}
-                        icon={'group-objects'}
                         onChange={null}
-                        dispatch={dispatch}
                     />
                     <StringSelect
+                        dispatch={dispatch}
+                        icon={'th'}
                         inputItem={''}
                         items={tableList}
-                        icon={'th'}
                         onChange={null}
-                        dispatch={dispatch}
                     />
                     <div id={'switch'}>
                         <Switch

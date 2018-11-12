@@ -101,11 +101,11 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
                         column.join ?
                             <td>
                                 <StringSelect
+                                    dispatch={dispatch}
+                                    icon={'column-layout'}
                                     inputItem={column.join.sourceColumn}
                                     items={databaseSchema[column.owner][column.table]}
-                                    icon={'column-layout'}
                                     onChange={changeJoinSourceColumn(index)}
-                                    dispatch={dispatch}
                                 />
                             </td> :
                             null
@@ -114,23 +114,23 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
                         column.join ?
                             <td>
                                 <ColumnPicker
-                                    onChangeOwner={changeJoinTargetColumnOwner(index)}
-                                    onChangeTable={changeJoinTargetColumnTable(index)}
-                                    onChangeColumn={changeJoinTargetColumnColumn(index)}
                                     databaseColumn={column.join.targetColumn}
                                     databaseSchema={databaseSchema}
                                     dispatch={dispatch}
+                                    onChangeOwner={changeJoinTargetColumnOwner(index)}
+                                    onChangeTable={changeJoinTargetColumnTable(index)}
+                                    onChangeColumn={changeJoinTargetColumnColumn(index)}
                                 />
                             </td> :
                             null
                     }
                     <td>
                         <StringSelect
+                            dispatch={dispatch}
+                            icon={'function'}
                             inputItem={column.script}
                             items={scriptList}
-                            icon={'function'}
                             onChange={changeInputColumnScript(index)}
-                            dispatch={dispatch}
                         />
                     </td>
                     {
@@ -139,11 +139,11 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
                                 index == 0 ?
                                     <td rowSpan={spec.inputColumns.length}>
                                         <StringSelect
+                                            dispatch={dispatch}
+                                            icon={'function'}
                                             inputItem={spec.mergingScript}
                                             items={scriptList}
-                                            icon={'function'}
                                             onChange={changeMergingScript}
-                                            dispatch={dispatch}
                                         />
                                     </td> :
                                     null

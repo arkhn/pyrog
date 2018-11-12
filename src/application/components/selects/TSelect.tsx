@@ -1,18 +1,28 @@
+import {
+    Button,
+    Intent,
+    MenuItem,
+} from '@blueprintjs/core'
+import {IconName} from '@blueprintjs/icons'
+import {
+    ItemPredicate,
+    ItemRenderer,
+    Select,
+} from '@blueprintjs/select'
 import * as React from 'react'
-import {Button, MenuItem, Intent} from "@blueprintjs/core";
-import {Select, ItemPredicate, ItemRenderer} from "@blueprintjs/select";
-import {IconName} from '@blueprintjs/icons';
 
 interface ISelectProps<T> {
-    items: T[];
-    inputItem: T;
-    renderItem: ItemRenderer<T>;
-    filterItems: ItemPredicate<T>;
-    displayItem: (item: any) => string;
-    icon: IconName;
-    intent?: Intent;
-    onChange: any;
+    disabled: boolean;
     dispatch?: any;
+    displayItem: (item: any) => string;
+    filterItems: ItemPredicate<T>;
+    items: T[];
+    icon: IconName;
+    inputItem: T;
+    intent?: Intent;
+    loading?: boolean;
+    onChange: any;
+    renderItem: ItemRenderer<T>;
 };
 
 export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
@@ -31,22 +41,34 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
     }
 
     public render () {
-        const {items, inputItem, intent} = this.props;
+        const {
+            disabled,
+            displayItem,
+            filterItems,
+            icon,
+            inputItem,
+            intent,
+            items,
+            loading,
+            renderItem,
+        } = this.props
 
         return (
             <div>
                 <this.CustomSelect
                     items={items}
-                    itemPredicate={this.props.filterItems}
-                    itemRenderer={this.props.renderItem}
+                    itemPredicate={filterItems}
+                    itemRenderer={renderItem}
                     noResults={<MenuItem disabled={true} text="No results." />}
                     onItemSelect={this.handleValueChange}
                 >
                     <Button
-                        icon={this.props.icon}
-                        rightIcon="caret-down"
-                        text={this.props.displayItem(inputItem)}
+                        disabled={disabled}
+                        icon={icon}
                         intent={intent ? intent : null}
+                        loading={loading}
+                        rightIcon="caret-down"
+                        text={displayItem(inputItem)}
                     />
                 </this.CustomSelect>
             </div>

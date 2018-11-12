@@ -6,7 +6,8 @@ import {
 const initialState: IReduxNameLists = {
     loadingNameLists: false,
     databaseNames: {},
-    fhirResourceNameList: [],
+    fhirResources: {},
+    fhirDatatypes: {},
 }
 
 export const nameLists = (state = initialState, action: simpleAction): IReduxNameLists => {
@@ -35,10 +36,16 @@ export const nameLists = (state = initialState, action: simpleAction): IReduxNam
                 databaseNames: action.payload,
             }
 
-        case 'FETCH_FHIR_RESOURCE_NAME_LIST_SUCCESS':
+        case 'FETCH_FHIR_RESOURCES_SUCCESS':
             return {
                 ...state,
-                fhirResourceNameList: action.payload,
+                fhirResources: action.payload,
+            }
+
+        case 'FETCH_FHIR_DATATYPES_SUCCESS':
+            return {
+                ...state,
+                fhirDatatypes: action.payload,
             }
 
         default:

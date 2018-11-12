@@ -10,6 +10,8 @@ export const changeCurrentDatabase = (database: string): action => {
     return (dispatch: any, getState: any) => {
         const databaseFilename = getState().nameLists.databaseNames[database].name
 
+        dispatch(loadingDatabaseSchema())
+
         Promise.all([
             dispatch(fetchDatabaseSchema('https://api.live.arkhn.org', databaseFilename)),
         ])
@@ -31,6 +33,12 @@ export const fetchDatabaseSchema = (url: string, databaseFilename: string) : act
                 console.log(err)
                 dispatch(fetchDatabaseSchemaFailure(err))
             })
+    }
+}
+
+export const loadingDatabaseSchema = () : action => {
+    return {
+        type: 'LOADING_DATABASE_SCHEMA',
     }
 }
 

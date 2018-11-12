@@ -6,12 +6,14 @@ import {IconName} from '@blueprintjs/icons';
 import TSelect from './TSelect'
 
 interface ISelectProps {
-    items: string[];
-    inputItem: string;
-    icon: IconName;
-    intent?: Intent;
-    onChange: any;
+    disabled?: boolean;
     dispatch: any;
+    icon: IconName;
+    inputItem: string;
+    intent?: Intent;
+    items: string[];
+    loading?: boolean;
+    onChange: any;
 };
 
 export default class StringSelect extends React.Component<ISelectProps, any> {
@@ -34,20 +36,31 @@ export default class StringSelect extends React.Component<ISelectProps, any> {
     };
 
     public render () {
-        const {items, inputItem, icon, intent, onChange, dispatch} = this.props;
+        const {
+            disabled,
+            dispatch,
+            icon,
+            inputItem,
+            intent,
+            items,
+            loading,
+            onChange,
+        } = this.props;
 
         return (
             <div>
                 <TSelect<string>
-                    renderItem={this.renderItem}
-                    filterItems={this.filterByName}
-                    displayItem={this.displayItem}
-                    inputItem={inputItem}
-                    items={items}
-                    icon={icon}
-                    intent={intent}
+                    disabled={disabled}
                     dispatch={dispatch}
+                    displayItem={this.displayItem}
+                    filterItems={this.filterByName}
+                    loading={loading}
+                    icon={icon}
+                    inputItem={inputItem}
+                    intent={intent}
+                    items={items}
                     onChange={onChange}
+                    renderItem={this.renderItem}
                 />
             </div>
         )
