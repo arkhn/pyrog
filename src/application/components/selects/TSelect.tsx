@@ -12,6 +12,7 @@ import {
 import * as React from 'react'
 
 interface ISelectProps<T> {
+    disabled: boolean;
     dispatch?: any;
     displayItem: (item: any) => string;
     filterItems: ItemPredicate<T>;
@@ -41,6 +42,7 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
 
     public render () {
         const {
+            disabled,
             displayItem,
             filterItems,
             icon,
@@ -61,6 +63,7 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
                     onItemSelect={this.handleValueChange}
                 >
                     <Button
+                        disabled={disabled}
                         icon={icon}
                         intent={intent ? intent : null}
                         loading={loading}

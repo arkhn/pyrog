@@ -6,6 +6,7 @@ import {IconName} from '@blueprintjs/icons';
 import TSelect from './TSelect'
 
 interface ISelectProps {
+    disabled?: boolean;
     dispatch: any;
     icon: IconName;
     inputItem: string;
@@ -36,6 +37,7 @@ export default class StringSelect extends React.Component<ISelectProps, any> {
 
     public render () {
         const {
+            disabled,
             dispatch,
             icon,
             inputItem,
@@ -48,6 +50,7 @@ export default class StringSelect extends React.Component<ISelectProps, any> {
         return (
             <div>
                 <TSelect<string>
+                    disabled={disabled}
                     dispatch={dispatch}
                     displayItem={this.displayItem}
                     filterItems={this.filterByName}

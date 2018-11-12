@@ -59,6 +59,7 @@ export default class ColumnPicker extends React.Component<IColumnPickerProps, IC
                 onChange={onChangeOwner}
             />
             <StringSelect
+                disabled={!databaseColumn.owner}
                 dispatch={dispatch}
                 icon={'th'}
                 inputItem={databaseColumn ? databaseColumn.table : null}
@@ -66,6 +67,7 @@ export default class ColumnPicker extends React.Component<IColumnPickerProps, IC
                 onChange={onChangeTable}
             />
             <StringSelect
+                disabled={!databaseColumn.table}
                 dispatch={dispatch}
                 icon={'column-layout'}
                 inputItem={databaseColumn ? databaseColumn.column : null}
