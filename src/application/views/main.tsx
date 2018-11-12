@@ -104,7 +104,7 @@ export class MainView extends React.Component<reduxAppState, any> {
             <div id='application' className={'bp3-dark'}>
                 <Navbar>
                     {loadingNameLists ?
-                        <Navbar.Group align={Alignment.CENTER}>
+                        <Navbar.Group>
                             <Spinner size={25}/>
                         </Navbar.Group> :
                         <div>
@@ -141,21 +141,18 @@ export class MainView extends React.Component<reduxAppState, any> {
                                 </FormGroup>
                             </Navbar.Group>
                             <Navbar.Group align={Alignment.RIGHT}>
-                                <ControlGroup>
-                                    <Button
-                                        icon={'cloud-download'}
-                                    />
-                                    <Button
-                                        icon={'cloud-upload'}
-                                    />
-                                </ControlGroup>
-                                <FormGroup >
-                                </FormGroup>
-                                {/* <Dialog isOpen={true}>
-                                    <div className={Classes.DIALOG_BODY}>
-                                        <JsonViewer json={TEST_JSON}/>
-                                    </div>
-                                </Dialog> */}
+                                {mapping.content ?
+                                    <ColumnPicker
+                                        databaseSchema={currentDatabase.schema}
+                                        dispatch={dispatch}
+                                        label={'Path to Primary Key'}
+                                        onChangeOwner={updatePKOwner}
+                                        onChangeTable={updatePKTable}
+                                        onChangeColumn={updatePKColumn}
+                                        databaseColumn={mapping.content.primaryKeyColumn}
+                                    /> :
+                                    null
+                                }
                             </Navbar.Group>
                         </div>
                     }
@@ -179,17 +176,6 @@ export class MainView extends React.Component<reduxAppState, any> {
                                     {
                                         currentFhirAttribute.length > 0 ?
                                             <div id='input-columns-container'>
-                                                <div id='path-to-pk-viewer'>
-                                                    <ColumnPicker
-                                                        databaseSchema={currentDatabase.schema}
-                                                        dispatch={dispatch}
-                                                        label={'Path to Primary Key'}
-                                                        onChangeOwner={updatePKOwner}
-                                                        onChangeTable={updatePKTable}
-                                                        onChangeColumn={updatePKColumn}
-                                                        databaseColumn={mapping.content.primaryKeyColumn}
-                                                    />
-                                                </div>
                                                 <div id='input-columns-viewer'>
                                                     <InputColumnsTable
                                                         databaseSchema={schema}
