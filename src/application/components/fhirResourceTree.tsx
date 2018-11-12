@@ -39,71 +39,42 @@ export default class FhirResourceTree extends React.Component<IFhirResourceTreeP
         }
     }
 
-    static getId(): number {
-        this.id++;
-        return this.id;
+    static getId = (): number => {
+        FhirResourceTree.id++;
+        return FhirResourceTree.id;
     }
 
-    private static genNode(_key: string, _obj: any): ITreeNode {
-        const hasChildren = !isNullOrUndefined(_obj) && (_obj instanceof Array || _obj instanceof Object);
+    private static genObjNodes = (json: any): ITreeNode<nodeData>[] => {
+        return Object.keys(json).map((key: string) : ITreeNode<nodeData> => {
+            const hasChildren = !isNullOrUndefined(json[key]) && (json[key] instanceof Array || json[key] instanceof Object)
 
-        const regex = /(.*)<(.*)>/
-        const regexResult = regex.exec(_key)
-        // Compute is current node's fhir type is 'list'
-        const nodeIsTypeList = (regexResult && regexResult.length > 1) ? regexResult[2].startsWith('list') : false
+            const regex = /(.*)<(.*)>/
+            const regexResult = regex.exec(key)
+            // Compute if current node's fhir type is 'list'
+            const nodeIsTypeList = (regexResult && regexResult.length > 1) ? regexResult[2].startsWith('list') && json[key] && json[key].length > 0 : false
 
-        const result : ITreeNode<nodeData> = {
-            id: this.getId(),
-            hasCaret: hasChildren,
-            icon: hasChildren ? 'folder-open' : 'tag',
-            isExpanded: false,
-            nodeData: {
-                name: regexResult ? regexResult[1] : _key,
-            },
-            label: <div>
-                <div>{regexResult ? regexResult[1] : _key}</div>
-                <div>{regexResult ? regexResult[2] : ''}</div>
-            </div>,
-            isSelected: false,
-        }
-
-        if (hasChildren) {
-            return Object.assign(
-                result,
-                {
-                    // If current node's fhir type is list, skip the next node
-                    childNodes: FhirResourceTree.genNodes(nodeIsTypeList ? _obj[0] : _obj),
-                }
-            )
-        }
-
-        return result;
-    }
-
-    private static genNodes(_obj: any): ITreeNode[] {
-        let returnList = [];
-
-        for (let key of Object.keys(_obj)) {
-            returnList.push(FhirResourceTree.genNode(key, _obj[key]));
-        }
-
-        return returnList;
-    }
-
-    private static genObjNodes(json: any): ITreeNode[] {
-        let returnList = [];
-
-        for (let key of Object.keys(json)) {
-            returnList.push(this.genNode(key, json[key]));
-        }
-
-        return returnList;
+            return {
+                childNodes: hasChildren ? FhirResourceTree.genObjNodes(nodeIsTypeList ? json[key][0] : json[key]) : null,
+                hasCaret: hasChildren,
+                icon: hasChildren ? 'folder-open' : 'tag',
+                id: FhirResourceTree.getId(),
+                isExpanded: false,
+                isSelected: false,
+                label: <div>
+                    <div>{regexResult ? regexResult[1] : key}</div>
+                    <div>{regexResult ? regexResult[2] : ''}</div>
+                </div>,
+                nodeData: {
+                    name: key,
+                },
+            }
+        })
     }
 
     static getDerivedStateFromProps(props: IFhirResourceTreeProps, state: IFhirResourceTreeState) {
-        if(props.json !== state.renderJson) {
+        if (props.json !== state.renderJson) {
             try {
-                const nodes = FhirResourceTree.genObjNodes(props.json);
+                const nodes = FhirResourceTree.genObjNodes(props.json)
 
                 return {
                     nodes: nodes,
@@ -137,7 +108,7 @@ export default class FhirResourceTree extends React.Component<IFhirResourceTreeP
     private handleNodeClick = (nodeData: ITreeNode, _nodePath: number[], e: React.MouseEvent<HTMLElement>) => {
         // Can only select tree leaves
         if (!nodeData.hasCaret) {
-            const originallySelected = nodeData.isSelected;
+            const originallySelected = nodeData.isSelected
 
             if (!e.shiftKey) {
                 this.forEachNode(this.state.nodes, n => (n.isSelected = false));
