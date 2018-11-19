@@ -35,7 +35,18 @@ module.exports = {
             {
                 test: /\.svg$/,
                 loader: 'svg-inline-loader'
-            }
+            },
+            {
+                // This is, among others, for files present in ./node_modules/graphql
+                test: /\.mjs$/,
+                include: /node_modules/,
+                type: 'javascript/auto',
+            },
+            {
+                test: /\.(graphql|gql)$/,
+                exclude: /node_modules/,
+                loader: 'graphql-tag/loader',
+            },
         ],
     },
     // In this app, plugins are used to optimize emitted bundles and

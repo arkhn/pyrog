@@ -62,13 +62,15 @@ export interface IMapping {
 }
 
 export interface reduxAppState {
-    dispatch?: redux.Dispatch<any>,
     appData: IReduxAppData,
-    nameLists: IReduxNameLists,
     currentDatabase: IReduxCurrentDatabase,
     currentFhirResource: IReduxCurrentFhirResource,
     currentFhirAttribute: string[],
+    dispatch?: redux.Dispatch<any>,
+    graphqlData?: any,
+    graphqlSubscriptionData?: any,
     mapping: IReduxMapping,
+    nameLists: IReduxNameLists,
 }
 
 export interface IReduxAppData {

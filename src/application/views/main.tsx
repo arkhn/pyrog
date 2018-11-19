@@ -20,6 +20,10 @@ import {Route} from 'react-router'
 import {BrowserRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
 
+import { graphql } from 'react-apollo'
+import { gql } from 'apollo-boost'
+// import MatchSummary from './test.graphql'
+
 // Import custom actions
 import {
     changeCurrentDatabase,
@@ -57,11 +61,13 @@ import {
 
 const arkhnLogo = require("../img/arkhn_logo_only_white.svg") as string;
 
+// Redux's state mapping to react props
+
 const mapReduxStateToReactProps = (state : reduxAppState): reduxAppState => {
     return state
 }
 
-function reduxify(mapReduxStateToReactProps: any, mapDispatchToProps?: any, mergeProps?: any, options?: any) {
+const reduxify = (mapReduxStateToReactProps: any, mapDispatchToProps?: any, mergeProps?: any, options?: any) : any => {
      return (target: any) => (
          connect(
              mapReduxStateToReactProps,
@@ -72,10 +78,54 @@ function reduxify(mapReduxStateToReactProps: any, mapDispatchToProps?: any, merg
      )
 }
 
+// Apollo's query result to react props (within redux store)
+const mapQueriesToProps = ({data, ownProps} : any) : any => {
+    console.log('mapQueriesToProps')
+    return {
+        graphqlData: data,
+    }
+}
+
+const graphqlify = (query: any, mapQueriesToProps: any) : any => {
+    return (target: any) => (
+        graphql<any, any>(
+            query,
+            {
+                props: mapQueriesToProps,
+            }
+        )(target) as any
+    )
+}
+
+const MySubscription = gql`
+subscription {
+  resourceSubscription {
+    updatedFields
+    node {
+      name
+    }
+  }
+}
+`
+
+const MyQuery = gql`
+query {
+    mappings {
+        id
+        database
+        resources {
+            id name
+        }
+    }
+}
+`
+
 @reduxify(mapReduxStateToReactProps)
-export class MainView extends React.Component<reduxAppState, any> {
+@graphqlify(MyQuery, mapQueriesToProps)
+export default class MainView extends React.Component<reduxAppState, any> {
     public componentDidMount() {
         this.props.dispatch(fetchInfoNameList())
+        // this.subscribeToNewMessages()
 
         // Auto load state for testing purposes
         // this.props.dispatch(changeCurrentDatabase('CW'))
@@ -83,7 +133,36 @@ export class MainView extends React.Component<reduxAppState, any> {
         // this.props.dispatch(changeCurrentFhirAttribute(false, ['name']))
     }
 
+    private subscribeToNewMessages = () : any => {
+        this.props.graphqlData.subscribeToMore({
+            document: gql`
+                subscription {
+                  resourceSubscription {
+                    updatedFields
+                  }
+                }
+            `,
+
+            /*
+            *    Update query specifies how the new data should be merged
+            *    with our previous results. Note how the structure of the
+            *    object we return here directly matches the structure of
+            *    the GetPublicChannels query.
+            */
+            updateQuery: (prev: any, subscriptionData: any) => {
+                console.log('UPDATE QUERY')
+                console.log(prev)
+                console.log(subscriptionData)
+
+                return {
+                    graphqlSubscriptionData: null,
+                } as any
+            },
+        })
+    }
+
     public render () {
+        console.log(this.props)
         let {
             currentDatabase,
             currentFhirResource,
@@ -211,3 +290,6 @@ export class MainView extends React.Component<reduxAppState, any> {
         )
     }
 }
+
+// const MainViewWithData = graphqlify(MySubscription, mapQueriesToProps)(MainView)
+// export const MainViewWithDataWithState = reduxify(mapReduxStateToReactProps)(MainViewWithData)
