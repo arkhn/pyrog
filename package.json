@@ -7,7 +7,7 @@
         "build-prod": "webpack --mode production"
     },
     "dependencies": {
-        "@blueprintjs/core": "^3.7.0",
+        "@blueprintjs/core": "^3.9.0",
         "@blueprintjs/icons": "^3.2.0",
         "@blueprintjs/select": "^3.2.0",
         "@types/graphql": "^14.0.3",
@@ -42,7 +42,7 @@
         "react-addons-css-transition-group": "^15.6.0",
         "react-apollo": "^2.2.4",
         "react-dom": "^16.5.2",
-        "react-hot-loader": "^4.0.0",
+        "react-hot-loader": "^4.3.12",
         "react-json-pretty": "^1.7.9",
         "react-redux": "^5.0.7",
         "react-router": "^4.3.1",

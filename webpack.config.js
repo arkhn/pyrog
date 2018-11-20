@@ -69,4 +69,10 @@ module.exports = {
             chunks: 'all',
         }
     },
+    devServer: {
+        // Allows to handle routes with React instead of webpack
+        historyApiFallback: true,
+    },
+    // Prevents source map erros in development in Firefox
+    devtool: 'source-map',
 };

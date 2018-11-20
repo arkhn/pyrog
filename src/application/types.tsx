@@ -1,5 +1,25 @@
 import * as redux from 'redux'
 
+// Mimic types
+
+export interface MimicViewReduxState {
+    dispatch?: redux.Dispatch<any>,
+    mimic: IMimicState,
+}
+
+export interface IMimicState {
+    dataByAttribute: {
+        [attribute_flat: string]: {
+            suggested_columns?: any,
+            input_columns?: any,
+            type?: string,
+            mot_clef?: string,
+        },
+    },
+    question_index: number,
+    section_index: number,
+}
+
 // Redux types
 export interface simpleAction {
     type: string,

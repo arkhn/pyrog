@@ -6,6 +6,7 @@ import {currentFhirAttribute} from './currentFhirAttribute'
 import {currentFhirResource} from './currentFhirResource'
 import {mapping} from './mapping'
 import {nameLists} from './nameLists'
+import {mimic} from './mimic'
 
 const mainReducer = combineReducers({
     currentDatabase,
@@ -14,6 +15,7 @@ const mainReducer = combineReducers({
     mapping,
     appData,
     nameLists,
+    mimic,
 })
 
 export default mainReducer
