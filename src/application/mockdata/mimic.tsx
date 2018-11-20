@@ -34,29 +34,19 @@ export const questions : any = [
                         "fhir_attribute": "patient.gender"
                     },
                     {
-                        "title": "Numéro de téléphone",
-                        "text": "Où peut-on trouver le numéro de téléphone du patient ? Vous pouvez indiquer plusieurs colonnes si par exemple il y a une colonne pour les portables et une autres pour les téléphones fixes.",
-                        "fhir_attribute": "patient.telecom.value"
-                    },
-                    {
-                        "text": "Le type de numéro (portable, fixe, professionnel, fax) peut-il être précisé ? Vous pouvez renseigner un type en toutes lettres.",
-                        "fhir_attribute": "patient.telecom.system"
-                    },
-                    {
+                        "title": "Adresse",
                         "text": "Indiquez la ou les colonne(s) qui contiennent les informations d'immeuble, de numéro et de rue.",
                         "fhir_attribute": "patient.address.line"
                     },
                     {
+                        "title": "Code postal",
                         "text": "Ainsi que le code postal.",
                         "fhir_attribute": "patient.address.postalCode"
                     },
                     {
+                        "title": "Ville",
                         "text": "Et la ville.",
                         "fhir_attribute": "patient.address.city"
-                    },
-                    {
-                        "text": "Et le pays.",
-                        "fhir_attribute": "patient.address.country"
                     }
                 ]
             },
