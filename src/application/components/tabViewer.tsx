@@ -10,22 +10,14 @@ import {
 import * as React from 'react'
 
 // Import custom components
-import ClusterSearchInputs from './clusterSearchInputs'
 import ColumnPicker from './columnPicker'
 import ColumnViewer from './columnViewer'
-import TextSearchInputs from './textSearchInputs'
 
 // Import custom types
 import {
     IDatabaseColumn,
     IDatabaseSchema,
 } from '../types'
-
-// Import mock data
-import {
-    firstNameColumnsExample,
-    filePathColumnsExample
-} from '../mockdata/database'
 
 export interface IProps {
     databaseSchema: IDatabaseSchema,
@@ -149,9 +141,8 @@ export default class TabViewer extends React.Component<IProps, IState> {
         </div>
 
         const clusterTab = <div className={'vertical-flex'}>
-            <ClusterSearchInputs />
             <ColumnViewer
-                data={filePathColumnsExample}
+                data={null}
             />
         </div>
 
@@ -162,9 +153,8 @@ export default class TabViewer extends React.Component<IProps, IState> {
         </div>
 
         const textTab = <div className={'vertical-flex'}>
-            <TextSearchInputs />
             <ColumnViewer
-                data={firstNameColumnsExample}
+                data={null}
             />
         </div>
 

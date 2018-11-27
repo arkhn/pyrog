@@ -15,11 +15,6 @@ import {
     IFhirIntegrationSpec,
 } from '../types'
 
-// Import mock data
-import {
-    scriptList,
-} from '../mockdata/nameLists'
-
 export interface IProps {
     inputColumns: any;
     databaseSchema: IDatabaseSchema;
@@ -111,7 +106,7 @@ export default class InputColumnsTable extends React.Component<IProps, IState> {
                         <StringSelect
                             icon={'function'}
                             inputItem={column.script}
-                            items={scriptList}
+                            items={[]}
                             onChange={null}
                         />
                     </td>
@@ -123,7 +118,7 @@ export default class InputColumnsTable extends React.Component<IProps, IState> {
                                         <StringSelect
                                             icon={'function'}
                                             inputItem={inputColumns.mergingScript}
-                                            items={scriptList}
+                                            items={[]}
                                             onChange={null}
                                         />
                                     </td> :

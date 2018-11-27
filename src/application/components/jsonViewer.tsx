@@ -10,9 +10,7 @@ import {
     Tabs,
     Tree
     } from '@blueprintjs/core';
-import { isNullOrUndefined } from 'util';
-// import 'react-json-pretty/src/JSONPretty.monikai.css';
-
+import { isNullOrUndefined } from 'util'
 
 export interface IJsonViewerProps {
     json: string;
