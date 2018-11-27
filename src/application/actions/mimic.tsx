@@ -1,8 +1,8 @@
-import {action} from '../types'
+import {IAction} from '../types'
 
 import {availableTypes} from '../mockdata/mimic'
 
-export const fetchRecommendedColumns = (fhir_attribute: string, type: string) : action => {
+export const fetchRecommendedColumns = (fhir_attribute: string, type: string) : IAction => {
     return (dispatch: any, getState: any) => {
         const url = 'https://engine.arkhn.org/search/' + availableTypes[type]
 
@@ -18,7 +18,7 @@ export const fetchRecommendedColumns = (fhir_attribute: string, type: string) : 
     }
 }
 
-export const fetchBetaRecommendedColumns = (fhir_attribute: string, type: string, head_table: string, mot_clef: string) : action => {
+export const fetchBetaRecommendedColumns = (fhir_attribute: string, type: string, head_table: string, mot_clef: string) : IAction => {
     return (dispatch: any, getState: any) => {
         const url = mot_clef == '' || !mot_clef ? `https://engine.arkhn.org/beta/search/${availableTypes[type]}/${head_table}` : `https://engine.arkhn.org/beta/search/${type ? availableTypes[type] : 'all'}/${head_table}/${mot_clef}`
 
@@ -34,7 +34,7 @@ export const fetchBetaRecommendedColumns = (fhir_attribute: string, type: string
     }
 }
 
-export const fetchRecommendedColumnsSuccess = (fhir_attribute: string, columns: any): action => {
+export const fetchRecommendedColumnsSuccess = (fhir_attribute: string, columns: any): IAction => {
     return {
         type: 'FETCH_RECOMMENDED_COLUMNS_SUCCESS',
         payload: {
@@ -44,7 +44,7 @@ export const fetchRecommendedColumnsSuccess = (fhir_attribute: string, columns: 
     }
 }
 
-export const fetchRecommendedColumnsFailure = (error: any): action => {
+export const fetchRecommendedColumnsFailure = (error: any): IAction => {
     return {
         type: 'FETCH_RECOMMENDED_COLUMNS_FAILURE',
         payload: error,
@@ -61,7 +61,7 @@ export const addInputColumn = (fhir_attribute: string, input_column: string) => 
     }
 }
 
-export const changeTypeMimic = (fhir_attribute: string, type: string, head_table: string, mot_clef: string) : action => {
+export const changeTypeMimic = (fhir_attribute: string, type: string, head_table: string, mot_clef: string) : IAction => {
     return (dispatch: any, getState: any) => {
         Promise.all([
             dispatch(fetchBetaRecommendedColumns(fhir_attribute, type, head_table, mot_clef)),
@@ -71,7 +71,7 @@ export const changeTypeMimic = (fhir_attribute: string, type: string, head_table
     }
 }
 
-export const updateTypeMimic = (fhir_attribute: string, type: string) : action => {
+export const updateTypeMimic = (fhir_attribute: string, type: string) : IAction => {
     return {
         type: 'UPDATE_TYPE_MIMIC',
         payload: {
@@ -81,7 +81,7 @@ export const updateTypeMimic = (fhir_attribute: string, type: string) : action =
     }
 }
 
-export const changeMotClefMimic = (fhir_attribute: string, type: string, head_table: string, mot_clef: string) : action => {
+export const changeMotClefMimic = (fhir_attribute: string, type: string, head_table: string, mot_clef: string) : IAction => {
     return (dispatch: any, getState: any) => {
         Promise.all([
             dispatch(fetchBetaRecommendedColumns(fhir_attribute, type, head_table, mot_clef)),
@@ -91,7 +91,7 @@ export const changeMotClefMimic = (fhir_attribute: string, type: string, head_ta
     }
 }
 
-export const updateMotClefMimic = (fhir_attribute: string, mot_clef: string) : action => {
+export const updateMotClefMimic = (fhir_attribute: string, mot_clef: string) : IAction => {
     return {
         type: 'UPDATE_MOT_CLEF_MIMIC',
         payload: {

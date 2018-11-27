@@ -1,4 +1,4 @@
-import {action} from '../types'
+import {IAction} from '../types'
 
 function simulateFetch(successCallback: any, delay: number) {
     return new Promise((sucessCallback: any) => setTimeout(sucessCallback, delay))
@@ -21,19 +21,19 @@ export const fetchInfoNameList = (): any => {
     }
 }
 
-export const loadingNameLists = (): action => {
+export const loadingNameLists = (): IAction => {
     return {
         type: 'LOADING_NAME_LISTS',
     }
 }
 
-export const fetchInfoNameListSuccess = (): action => {
+export const fetchInfoNameListSuccess = (): IAction => {
     return {
         type: 'FETCH_INFO_NAME_LIST_SUCCESS',
     }
 }
 
-export const fetchInfoNameListFailure = (): action => {
+export const fetchInfoNameListFailure = (): IAction => {
     return {
         type: 'FETCH_INFO_NAME_LIST_FAILURE',
     }
@@ -41,7 +41,7 @@ export const fetchInfoNameListFailure = (): action => {
 
 // Fetch databaseNameList
 
-export const fetchDatabaseNames = (url: string) : action => {
+export const fetchDatabaseNames = (url: string) : IAction => {
     return (dispatch: any, getState: any) => {
         return fetch(url)
             .then((response: any) => {
@@ -55,14 +55,14 @@ export const fetchDatabaseNames = (url: string) : action => {
     }
 }
 
-export const fetchDatabaseNameListSuccess = (databaseNameList: string[]): action => {
+export const fetchDatabaseNameListSuccess = (databaseNameList: string[]): IAction => {
     return {
         type: 'FETCH_DATABASE_NAME_LIST_SUCCESS',
         payload: databaseNameList,
     }
 }
 
-export const fetchDatabaseNameListFailure = (error: any): action => {
+export const fetchDatabaseNameListFailure = (error: any): IAction => {
     return {
         type: 'FETCH_DATABASE_NAME_LIST_FAILURE',
         payload: error,
@@ -71,7 +71,7 @@ export const fetchDatabaseNameListFailure = (error: any): action => {
 
 // Fetch fhirResourceNameList
 
-export const fetchFhirResources = (url: string) : action => {
+export const fetchFhirResources = (url: string) : IAction => {
     return (dispatch: any, getState: any) => {
         return fetch(url)
             .then((response: any) => {
@@ -85,14 +85,14 @@ export const fetchFhirResources = (url: string) : action => {
     }
 }
 
-export const fetchFhirResourcesSuccess = (fhirResourceNameList: string[]): action => {
+export const fetchFhirResourcesSuccess = (fhirResourceNameList: string[]): IAction => {
     return {
         type: 'FETCH_FHIR_RESOURCES_SUCCESS',
         payload: fhirResourceNameList,
     }
 }
 
-export const fetchFhirResourcesFailure = (error: any): action => {
+export const fetchFhirResourcesFailure = (error: any): IAction => {
     return {
         type: 'FETCH_FHIR_RESOURCES_FAILURE',
         payload: error,
@@ -101,7 +101,7 @@ export const fetchFhirResourcesFailure = (error: any): action => {
 
 // Fetch fhirDatatypeNameList
 
-export const fetchFhirDatatypes = (url: string) : action => {
+export const fetchFhirDatatypes = (url: string) : IAction => {
     return (dispatch: any, getState: any) => {
         return fetch(url)
             .then((response: any) => {
@@ -115,14 +115,14 @@ export const fetchFhirDatatypes = (url: string) : action => {
     }
 }
 
-export const fetchFhirDatatypesSuccess = (fhirDatatypes: any): action => {
+export const fetchFhirDatatypesSuccess = (fhirDatatypes: any): IAction => {
     return {
         type: 'FETCH_FHIR_DATATYPES_SUCCESS',
         payload: fhirDatatypes,
     }
 }
 
-export const fetchFhirDatatypesFailure = (error: any): action => {
+export const fetchFhirDatatypesFailure = (error: any): IAction => {
     return {
         type: 'FETCH_FHIR_DATATYPES_FAILURE',
         payload: error,

@@ -8,14 +8,28 @@ import {mapping} from './mapping'
 import {nameLists} from './nameLists'
 import {mimic} from './mimic'
 
-const mainReducer = combineReducers({
-    currentDatabase,
-    currentFhirResource,
-    currentFhirAttribute,
+import mappingExplorer from '../views/mappingExplorer/reducer'
+
+const dataReducer = combineReducers({
     mapping,
-    appData,
-    nameLists,
-    mimic,
 })
+
+const viewReducer = combineReducers({
+    mappingExplorer,
+})
+const mainReducer = combineReducers({
+    data: dataReducer,
+    views: viewReducer,
+})
+
+// const mainReducer = combineReducers({
+//     currentDatabase,
+//     currentFhirResource,
+//     currentFhirAttribute,
+//     mapping,
+//     appData,
+//     nameLists,
+//     mimic,
+// })
 
 export default mainReducer

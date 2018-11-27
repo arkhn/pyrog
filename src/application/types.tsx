@@ -1,14 +1,14 @@
 import * as redux from 'redux'
 
 // Redux types
-export interface simpleAction {
+export interface ISimpleAction {
     type: string,
     payload?: any,
 }
 
-export type thunkAction = (dispatch: redux.Dispatch<any>, getState: any) => void
+export type IThunkAction = (dispatch: redux.Dispatch<any>, getState: any) => void
 
-export type action = simpleAction | thunkAction
+export type IAction = ISimpleAction | IThunkAction
 
 export interface IReduxStore {
     data: any,

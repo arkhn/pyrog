@@ -1,8 +1,8 @@
-import {action} from '../types'
+import {IAction} from '../types'
 import {patientJson} from '../mockdata/fhirJson'
 import {fetchMapping} from './mapping'
 
-export const changeCurrentFhirResource = (resource: string): any => {
+export const changeCurrentFhirResource = (resource: string): IAction => {
     return (dispatch: any, getState: any) => {
         dispatch(loadingFhirResource())
 
@@ -16,20 +16,20 @@ export const changeCurrentFhirResource = (resource: string): any => {
     }
 }
 
-export const updateStateCurrentFhirResource = (resource: string): action => {
+export const updateStateCurrentFhirResource = (resource: string): IAction => {
     return {
         type: 'UPDATE_STATE_CURRENT_FHIR_RESOURCE',
         payload: resource,
     }
 }
 
-export const loadingFhirResource = () : action => {
+export const loadingFhirResource = () : IAction => {
     return {
         type: 'LOADING_FHIR_RESOURCE',
     }
 }
 
-export const fetchFhirResourceJson = (url: string, resourceName: string) : action => {
+export const fetchFhirResourceJson = (url: string, resourceName: string) : IAction => {
     return (dispatch: any, getState: any) => {
         return fetch(`${url}/fhir_resource/${resourceName}`)
             .then((response: any) => {
@@ -43,14 +43,14 @@ export const fetchFhirResourceJson = (url: string, resourceName: string) : actio
     }
 }
 
-export const fetchFhirResourceJsonSuccess = (json: any): action => {
+export const fetchFhirResourceJsonSuccess = (json: any): IAction => {
     return {
         type: 'FETCH_FHIR_RESOURCE_JSON_SUCCESS',
         payload: json,
     }
 }
 
-export const fetchFhirResourceJsonFailure = (error: any): action => {
+export const fetchFhirResourceJsonFailure = (error: any): IAction => {
     return {
         type: 'FETCH_FHIR_RESOURCE_JSON_FAILURE',
         payload: error,

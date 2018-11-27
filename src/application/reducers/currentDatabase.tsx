@@ -1,5 +1,5 @@
 import {
-    simpleAction,
+    ISimpleAction,
     IReduxCurrentDatabase
 } from '../types'
 
@@ -13,7 +13,7 @@ const initialState: IReduxCurrentDatabase = {
     loadingSchema: false,
 }
 
-export const currentDatabase = (state = initialState, action: simpleAction): IReduxCurrentDatabase => {
+export const currentDatabase = (state = initialState, action: ISimpleAction): IReduxCurrentDatabase => {
     switch (action.type) {
         case 'LOADING_DATABASE_SCHEMA':
             return {

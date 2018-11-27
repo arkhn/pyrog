@@ -1,5 +1,5 @@
 import {
-    action,
+    IAction,
     IReduxCurrentFhirResource,
 } from '../types'
 
@@ -35,20 +35,20 @@ export const fetchMapping = (): any => {
     }
 }
 
-export const loadingMapping = (): action => {
+export const loadingMapping = (): IAction => {
     return {
         type: 'LOADING_MAPPING',
     }
 }
 
-export const fetchMappingSuccess = (mapping: any): action => {
+export const fetchMappingSuccess = (mapping: any): IAction => {
     return {
         type: 'FETCH_MAPPING_SUCCESS',
         payload: mapping,
     }
 }
 
-export const fetchMappingFailure = (error: any): action => {
+export const fetchMappingFailure = (error: any): IAction => {
     return {
         type: 'FETCH_MAPPING_FAILURE',
         payload: error,
@@ -61,7 +61,7 @@ export const clickAddInputColumn = (column: any): any => {
     }
 }
 
-export const addInputColumn = (column: any, currentFhirAttribute: any): action => {
+export const addInputColumn = (column: any, currentFhirAttribute: any): IAction => {
     return {
         type: 'ADD_INPUT_COLUMN',
         payload: {
@@ -77,7 +77,7 @@ export const clickRemoveInputColumn = (columnIndex: number): any => {
     }
 }
 
-export const removeInputColumn = (columnIndex: number, currentFhirAttribute: any): action => {
+export const removeInputColumn = (columnIndex: number, currentFhirAttribute: any): IAction => {
     return {
         type: 'REMOVE_INPUT_COLUMN',
         payload: {
@@ -87,21 +87,21 @@ export const removeInputColumn = (columnIndex: number, currentFhirAttribute: any
     }
 }
 
-export const updatePKOwner = (owner: string): action => {
+export const updatePKOwner = (owner: string): IAction => {
     return {
         type: 'UPDATE_PK_OWNER',
         payload: owner,
     }
 }
 
-export const updatePKTable = (table: string): action => {
+export const updatePKTable = (table: string): IAction => {
     return {
         type: 'UPDATE_PK_TABLE',
         payload: table,
     }
 }
 
-export const updatePKColumn = (column: string): action => {
+export const updatePKColumn = (column: string): IAction => {
     return {
         type: 'UPDATE_PK_COLUMN',
         payload: column,
@@ -114,7 +114,7 @@ export const clickRemoveJoin = (index: number) : any => {
     }
 }
 
-export const deleteJoin = (index: number, currentFhirAttribute: IReduxCurrentFhirResource) : action => {
+export const deleteJoin = (index: number, currentFhirAttribute: IReduxCurrentFhirResource) : IAction => {
     return {
         type: 'DELETE_JOIN',
         payload: {
@@ -130,7 +130,7 @@ export const clickAddJoin = (index: number) : any => {
     }
 }
 
-export const addJoin = (index: number, currentFhirAttribute: IReduxCurrentFhirResource) : action => {
+export const addJoin = (index: number, currentFhirAttribute: IReduxCurrentFhirResource) : IAction => {
     return {
         type: 'ADD_JOIN',
         payload: {
@@ -148,7 +148,7 @@ export const changeJoinSourceColumn = (index: number) : any => {
     }
 }
 
-export const updateJoinSourceColumn = (item: any, index: number, currentFhirAttribute: IReduxCurrentFhirResource) : action => {
+export const updateJoinSourceColumn = (item: any, index: number, currentFhirAttribute: IReduxCurrentFhirResource) : IAction => {
     return {
         type: 'UPDATE_JOIN_SOURCE_COLUMN',
         payload: {
@@ -167,7 +167,7 @@ export const changeJoinTargetColumnOwner = (index: number) : any => {
     }
 }
 
-export const updateJoinTargetColumnOwner = (item: any, index: number, currentFhirAttribute: IReduxCurrentFhirResource) : action => {
+export const updateJoinTargetColumnOwner = (item: any, index: number, currentFhirAttribute: IReduxCurrentFhirResource) : IAction => {
     return {
         type: 'UPDATE_JOIN_TARGET_COLUMN_OWNER',
         payload: {
@@ -186,7 +186,7 @@ export const changeJoinTargetColumnTable = (index: number) : any => {
     }
 }
 
-export const updateJoinTargetColumnTable = (item: any, index: number, currentFhirAttribute: IReduxCurrentFhirResource) : action => {
+export const updateJoinTargetColumnTable = (item: any, index: number, currentFhirAttribute: IReduxCurrentFhirResource) : IAction => {
     return {
         type: 'UPDATE_JOIN_TARGET_COLUMN_TABLE',
         payload: {
@@ -205,7 +205,7 @@ export const changeJoinTargetColumnColumn = (index: number) : any => {
     }
 }
 
-export const updateJoinTargetColumnColumn = (item: any, index: number, currentFhirAttribute: IReduxCurrentFhirResource) : action => {
+export const updateJoinTargetColumnColumn = (item: any, index: number, currentFhirAttribute: IReduxCurrentFhirResource) : IAction => {
     return {
         type: 'UPDATE_JOIN_TARGET_COLUMN_COLUMN',
         payload: {
@@ -224,7 +224,7 @@ export const changeInputColumnScript = (index: number) : any => {
     }
 }
 
-export const updateInputColumnScript = (item: any, index: number, currentFhirAttribute: IReduxCurrentFhirResource) : action => {
+export const updateInputColumnScript = (item: any, index: number, currentFhirAttribute: IReduxCurrentFhirResource) : IAction => {
     return {
         type: 'UPDATE_INPUT_COLUMN_SCRIPT',
         payload: {
@@ -241,7 +241,7 @@ export const changeMergingScript = (item: any) => {
     }
 }
 
-export const updateMergingScript = (item: any, currentFhirAttribute: IReduxCurrentFhirResource) : action => {
+export const updateMergingScript = (item: any, currentFhirAttribute: IReduxCurrentFhirResource) : IAction => {
     return {
         type: 'UPDATE_MERGING_SCRIPT',
         payload: {

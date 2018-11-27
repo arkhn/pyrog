@@ -1,5 +1,5 @@
 import {
-    simpleAction,
+    ISimpleAction,
     IReduxCurrentFhirResource
 } from '../types'
 
@@ -9,7 +9,7 @@ const initialState: IReduxCurrentFhirResource = {
     loadingResource: false,
 }
 
-export const currentFhirResource = (state = initialState, action: simpleAction): IReduxCurrentFhirResource => {
+export const currentFhirResource = (state = initialState, action: ISimpleAction): IReduxCurrentFhirResource => {
     switch (action.type) {
         case 'LOADING_FHIR_RESOURCE':
             return {

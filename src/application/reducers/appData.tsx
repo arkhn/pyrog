@@ -1,5 +1,5 @@
 import {
-    simpleAction,
+    ISimpleAction,
     IReduxAppData
 } from '../types'
 
@@ -9,7 +9,7 @@ const initialState: IReduxAppData = {
     dialogIsOpen: false,
 }
 
-export const appData = (state = initialState, action: simpleAction): IReduxAppData => {
+export const appData = (state = initialState, action: ISimpleAction): IReduxAppData => {
     switch (action.type) {
         default:
             return state

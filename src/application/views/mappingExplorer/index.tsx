@@ -7,8 +7,12 @@ import {
     Mutation,
     Query,
 } from 'react-apollo'
+import {connect} from 'react-redux'
 
 // Import actions
+import {
+    updateDatabase,
+} from './actions'
 
 // Import components
 
@@ -17,11 +21,29 @@ import {
 // Import types
 import {
     IMappingExplorerViewState,
+    IReduxStore,
 } from '../../types'
 
 import './style.less'
 
-import getMapping from './queries/a.graphql'
+const mapReduxStateToReactProps = (state : IReduxStore): IMappingExplorerViewState => {
+    return {
+        ...state.views.mappingExplorer,
+        data: state.data,
+        dispatch: state.dispatch,
+    }
+}
+
+const reduxify = (mapReduxStateToReactProps: any, mapDispatchToProps?: any, mergeProps?: any, options?: any) : any => {
+     return (target: any) => (
+         connect(
+             mapReduxStateToReactProps,
+             mapDispatchToProps,
+             mergeProps,
+             options
+         )(target) as any
+     )
+}
 
 const getMappings = gql`
 query Mapping($database: String!) {
@@ -48,51 +70,61 @@ mutation updateFunction($id: ID!, $primaryKey: String!) {
 `
 
 // @graphqlify(MyQuery, mapQueriesToProps)
+@reduxify(mapReduxStateToReactProps)
 export default class MappingExplorerView extends React.Component<IMappingExplorerViewState, any> {
     public componentDidMount() {
 
     }
 
     public render = () => {
-        return <Query
-            query={getMappings}
-            variables={{
-                database: "crossway",
-            }}
-        >
-            {({ loading, error, data }) => {
-                if (loading) {
-                    return <p>Loading...</p>;
-                }
-                if (error) {
-                    return <p>{error}</p>;
-                }
+        return <div>
+            <Button
+                onClick={() => {
+                    updateDatabase('crossway')
+                }}
+            >
+                Change Database
+            </Button>
+            <Query
+                query={getMappings}
+                variables={{
+                    database: this.props.selectedDatabase,
+                }}
+            >
+                {({ loading, error, data }) => {
+                    if (loading) {
+                        return <p>Loading...</p>;
+                    }
+                    if (error) {
+                        return <p>{error}</p>;
+                    }
 
-                return data.mapping.resources.map((resource: any) => {
-                    return <Mutation
-                        mutation={myMutation}
-                        key={resource.id}
-                    >
-                        {(updateFunction, { loading, error }) => (
-                            <div>
-                                {`${resource.name} - ${resource.primaryKey}`}
-                                <Button
-                                    onClick={() => {
-                                        updateFunction({
-                                            variables: {
-                                                id: resource.id,
-                                                primaryKey: "Salut Theo",
-                                            }
-                                        })
-                                    }}
-                                >
-                                    Click ffs
-                                </Button>
-                            </div>
-                        )}
-                    </Mutation>
-                })
-            }}
-        </Query>
+                    return data.mapping.resources.map((resource: any) => {
+                        return <Mutation
+                            mutation={myMutation}
+                            key={resource.id}
+                        >
+                            {(updateFunction, { loading, error }) => (
+                                <div>
+                                    {`${resource.name} - ${resource.primaryKey}`}
+                                    <Button
+                                        onClick={() => {
+                                            updateFunction({
+                                                variables: {
+                                                    id: resource.id,
+                                                    primaryKey: "Salut Theo",
+                                                }
+                                            })
+                                        }}
+                                    >
+                                        Click ffs
+                                    </Button>
+                                </div>
+                            )}
+                        </Mutation>
+                    })
+                }}
+            </Query>
+        </div>
     }
 }

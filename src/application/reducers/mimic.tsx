@@ -1,6 +1,6 @@
 import {
     IMimicState,
-    simpleAction,
+    ISimpleAction,
 } from '../types'
 
 import {questions} from '../mockdata/mimic'
@@ -18,7 +18,7 @@ questions[initialState.question_index].sections[initialState.section_index].mapp
     }
 })
 
-export const mimic = (state = initialState, action: simpleAction): any => {
+export const mimic = (state = initialState, action: ISimpleAction): any => {
     switch (action.type) {
         case 'FETCH_RECOMMENDED_COLUMNS_SUCCESS': {
             let dataByAttribute = state.dataByAttribute

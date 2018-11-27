@@ -1,5 +1,5 @@
 import {
-    simpleAction,
+    ISimpleAction,
     IReduxNameLists,
 } from '../types'
 
@@ -10,7 +10,7 @@ const initialState: IReduxNameLists = {
     fhirDatatypes: {},
 }
 
-export const nameLists = (state = initialState, action: simpleAction): IReduxNameLists => {
+export const nameLists = (state = initialState, action: ISimpleAction): IReduxNameLists => {
     switch (action.type) {
         case 'LOADING_NAME_LISTS':
             return {
