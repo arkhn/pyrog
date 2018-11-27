@@ -5,18 +5,16 @@ import StringSelect from './selects/stringSelect'
 
 import {clusterLabels} from '../mockdata/clusters'
 
-export interface IClusterSearchInputsProps {
-    dispatch: any;
-}
-
-export interface IClusterSearchInputsState {
+export interface IProps {
 
 }
 
-export default class ClusterSearchInputs extends React.Component<IClusterSearchInputsProps, IClusterSearchInputsState> {
+export interface IState {
+
+}
+
+export default class ClusterSearchInputs extends React.Component<IProps, IState> {
     public render() {
-        let {dispatch} = this.props
-
         return (
             <div id={'text-tab-search-group'}>
                 <div className={'row center-flex'}>
@@ -25,7 +23,6 @@ export default class ClusterSearchInputs extends React.Component<IClusterSearchI
                         items={clusterLabels}
                         icon={'layout-auto'}
                         onChange={null}
-                        dispatch={dispatch}
                     />
                 </div>
             </div>

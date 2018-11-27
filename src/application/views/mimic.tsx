@@ -132,7 +132,6 @@ export default class MainView extends React.Component<MimicViewReduxState, any> 
                             <div className={'column-selector'}>
                                 <ControlGroup>
                                     <StringSelect
-                                        dispatch={null}
                                         icon={'layout-hierarchy'}
                                         inputItem={dataByAttribute[item.fhir_attribute].type}
                                         intent={'primary'}

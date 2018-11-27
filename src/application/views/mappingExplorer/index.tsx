@@ -130,6 +130,10 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                     console.log(data.mappings[0].resources[0].attributes[0].inputColumns)
 
                     return <div>
+                        <InputColumnsTable
+                            inputColumns={data.mappings[0].resources[0].attributes[0].inputColumns}
+                            databaseSchema={null}
+                        />
                     </div>
 
                     {/* return data.mapping.resources.map((resource: any) => {

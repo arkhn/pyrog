@@ -194,7 +194,6 @@ export default class MainView extends React.Component<reduxAppState, any> {
                                     labelFor="text-input"
                                 >
                                     <StringSelect
-                                        dispatch={dispatch}
                                         icon={'database'}
                                         inputItem={currentDatabase.name}
                                         intent={'primary'}
@@ -210,7 +209,6 @@ export default class MainView extends React.Component<reduxAppState, any> {
                                     labelFor="text-input"
                                 >
                                     <StringSelect
-                                        dispatch={dispatch}
                                         icon={'layout-hierarchy'}
                                         inputItem={currentFhirResource.name}
                                         intent={'primary'}
@@ -224,7 +222,6 @@ export default class MainView extends React.Component<reduxAppState, any> {
                                 {mapping.content ?
                                     <ColumnPicker
                                         databaseSchema={currentDatabase.schema}
-                                        dispatch={dispatch}
                                         label={'Path to Primary Key'}
                                         onChangeOwner={updatePKOwner}
                                         onChangeTable={updatePKTable}
@@ -247,7 +244,6 @@ export default class MainView extends React.Component<reduxAppState, any> {
                             <div id='flex-container'>
                                 <div id='left-panel'>
                                     <FhirResourceTree
-                                        dispatch={dispatch}
                                         json={currentFhirResource.json}
                                     />
                                 </div>
@@ -259,14 +255,12 @@ export default class MainView extends React.Component<reduxAppState, any> {
                                                 <div id='input-columns-viewer'>
                                                     <InputColumnsTable
                                                         databaseSchema={schema}
-                                                        dispatch={dispatch}
-                                                        spec={mapping.content.fhirMapping[currentFhirAttribute.join('.')]}
+                                                        inputColumns={mapping.content.fhirMapping[currentFhirAttribute.join('.')]}
                                                     />
                                                 </div>
                                                 <div id='column-selector'>
                                                     <TabViewer
                                                         databaseSchema={currentDatabase.schema}
-                                                        dispatch={dispatch}
                                                     />
                                                 </div>
                                             </div>

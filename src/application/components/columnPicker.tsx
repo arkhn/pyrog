@@ -18,7 +18,6 @@ export interface IColumnPickerProps {
     onChangeColumn: any,
     databaseColumn: IDatabaseColumn,
     databaseSchema: IDatabaseSchema,
-    dispatch?: any,
     label?: string,
     vertical?: boolean,
 }
@@ -35,7 +34,6 @@ export default class ColumnPicker extends React.Component<IColumnPickerProps, IC
             onChangeColumn,
             databaseColumn,
             databaseSchema,
-            dispatch,
             label,
             vertical,
         } = this.props
@@ -52,7 +50,6 @@ export default class ColumnPicker extends React.Component<IColumnPickerProps, IC
 
         let controlGroup = <ControlGroup fill={false} vertical={vertical || false}>
             <StringSelect
-                dispatch={dispatch}
                 icon={'group-objects'}
                 inputItem={databaseColumn ? databaseColumn.owner : null}
                 items={owners}
@@ -60,7 +57,6 @@ export default class ColumnPicker extends React.Component<IColumnPickerProps, IC
             />
             <StringSelect
                 disabled={!databaseColumn.owner}
-                dispatch={dispatch}
                 icon={'th'}
                 inputItem={databaseColumn ? databaseColumn.table : null}
                 items={tables}
@@ -68,7 +64,6 @@ export default class ColumnPicker extends React.Component<IColumnPickerProps, IC
             />
             <StringSelect
                 disabled={!databaseColumn.table}
-                dispatch={dispatch}
                 icon={'column-layout'}
                 inputItem={databaseColumn ? databaseColumn.column : null}
                 items={columns}

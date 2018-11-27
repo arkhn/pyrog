@@ -7,7 +7,6 @@ import TSelect from './TSelect'
 
 interface ISelectProps {
     disabled?: boolean;
-    dispatch: any;
     icon: IconName;
     inputItem: string;
     intent?: Intent;
@@ -38,7 +37,6 @@ export default class StringSelect extends React.Component<ISelectProps, any> {
     public render () {
         const {
             disabled,
-            dispatch,
             icon,
             inputItem,
             intent,
@@ -51,7 +49,6 @@ export default class StringSelect extends React.Component<ISelectProps, any> {
             <div>
                 <TSelect<string>
                     disabled={disabled}
-                    dispatch={dispatch}
                     displayItem={this.displayItem}
                     filterItems={this.filterByName}
                     loading={loading}

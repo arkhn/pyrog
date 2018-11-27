@@ -4,17 +4,17 @@ import {ControlGroup, InputGroup, Switch} from '@blueprintjs/core';
 import StringSelect from './selects/stringSelect'
 import {ownerList, tableList} from '../mockdata/database'
 
-export interface ITextSearchInputsProps {
-    dispatch: any;
+export interface IProps {
+
 }
 
-export interface ITextSearchInputsState {
+export interface IState {
     filterValue: string;
     searchByEmbedding: boolean;
 }
 
-export default class TextSearchInputs extends React.Component<ITextSearchInputsProps, ITextSearchInputsState> {
-    public state: ITextSearchInputsState = {
+export default class TextSearchInputs extends React.Component<IProps, IState> {
+    public state: IState = {
         filterValue: '',
         searchByEmbedding: false
     };
@@ -32,21 +32,18 @@ export default class TextSearchInputs extends React.Component<ITextSearchInputsP
     }
 
     public render() {
-        let {dispatch} = this.props
         let {filterValue, searchByEmbedding} = this.state;
 
         return (
             <div id={'text-tab-search-group'}>
                 <div className={'row'}>
                     <StringSelect
-                        dispatch={dispatch}
                         icon={'group-objects'}
                         inputItem={''}
                         items={ownerList}
                         onChange={null}
                     />
                     <StringSelect
-                        dispatch={dispatch}
                         icon={'th'}
                         inputItem={''}
                         items={tableList}

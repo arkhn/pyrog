@@ -16,21 +16,20 @@ interface nodeData {
     name: string,
 }
 
-export interface IFhirResourceTreeProps {
+export interface IProps {
     json: any,
-    dispatch: any,
 }
 
-export interface IFhirResourceTreeState {
+export interface IState {
     nodes: ITreeNode<nodeData>[],
     renderJson: string,
     isBroken: boolean,
 }
 
-export default class FhirResourceTree extends React.Component<IFhirResourceTreeProps, IFhirResourceTreeState> {
+export default class FhirResourceTree extends React.Component<IProps, IState> {
     static id: number = 0;
 
-    constructor(props: IFhirResourceTreeProps) {
+    constructor(props: IProps) {
         super(props);
         this.state = {
             nodes: [],
@@ -71,7 +70,7 @@ export default class FhirResourceTree extends React.Component<IFhirResourceTreeP
         })
     }
 
-    static getDerivedStateFromProps(props: IFhirResourceTreeProps, state: IFhirResourceTreeState) {
+    static getDerivedStateFromProps(props: IProps, state: IState) {
         if (props.json !== state.renderJson) {
             try {
                 const nodes = FhirResourceTree.genObjNodes(props.json)
@@ -126,7 +125,7 @@ export default class FhirResourceTree extends React.Component<IFhirResourceTreeP
                 currentNodes = currentNodes[key].childNodes
             }
 
-            this.props.dispatch(changeCurrentFhirAttribute(originallySelected, nodePath))
+            // this.props.dispatch(changeCurrentFhirAttribute(originallySelected, nodePath))
         }
     };
 
