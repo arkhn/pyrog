@@ -245,6 +245,7 @@ export default class MainView extends React.Component<reduxAppState, any> {
                                 <div id='left-panel'>
                                     <FhirResourceTree
                                         json={currentFhirResource.json}
+                                        onClickCallback={null}
                                     />
                                 </div>
 

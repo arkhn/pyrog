@@ -12,16 +12,18 @@ import {isNullOrUndefined} from 'util';
 
 import {changeCurrentFhirAttribute} from '../actions/currentFhirAttribute'
 
-interface nodeData {
+interface INodeData {
     name: string,
+    type: string,
 }
 
 export interface IProps {
     json: any,
+    onClickCallback: any,
 }
 
 export interface IState {
-    nodes: ITreeNode<nodeData>[],
+    nodes: ITreeNode<INodeData>[],
     renderJson: string,
     isBroken: boolean,
 }
@@ -43,8 +45,8 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
         return FhirResourceTree.id;
     }
 
-    private static genObjNodes = (json: any): ITreeNode<nodeData>[] => {
-        return Object.keys(json).map((key: string) : ITreeNode<nodeData> => {
+    private static genObjNodes = (json: any): ITreeNode<INodeData>[] => {
+        return Object.keys(json).map((key: string) : ITreeNode<INodeData> => {
             const hasChildren = !isNullOrUndefined(json[key]) && (json[key] instanceof Array || json[key] instanceof Object)
 
             const regex = /(.*)<(.*)>/
@@ -64,7 +66,8 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
                     <div>{regexResult ? regexResult[2] : ''}</div>
                 </div>,
                 nodeData: {
-                    name: key,
+                    name: regexResult ? regexResult[1] : key,
+                    type: regexResult ? regexResult[2] : '',
                 },
             }
         })
@@ -92,52 +95,15 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
         }
     }
 
-    public render() {
-        return (
-            <Tree
-                contents={this.state.nodes}
-                onNodeClick={this.handleNodeClick}
-                onNodeCollapse={this.handleNodeCollapse}
-                onNodeExpand={this.handleNodeExpand}
-                className={Classes.ELEVATION_0}
-            />
-        );
-    }
-
-    private handleNodeClick = (nodeData: ITreeNode, _nodePath: number[], e: React.MouseEvent<HTMLElement>) => {
-        // Can only select tree leaves
-        if (!nodeData.hasCaret) {
-            const originallySelected = nodeData.isSelected
-
-            if (!e.shiftKey) {
-                this.forEachNode(this.state.nodes, n => (n.isSelected = false));
-            }
-
-            nodeData.isSelected = originallySelected == null ? true : !originallySelected;
-            this.setState(this.state);
-
-            // Building string path to clicked node.
-            let nodePath : string[] = []
-            let currentNodes : ITreeNode<nodeData>[] = this.state.nodes
-
-            for (var key of _nodePath) {
-                nodePath.push(currentNodes[key].nodeData.name as string)
-                currentNodes = currentNodes[key].childNodes
-            }
-
-            // this.props.dispatch(changeCurrentFhirAttribute(originallySelected, nodePath))
-        }
-    };
-
     private handleNodeCollapse = (nodeData: ITreeNode) => {
         nodeData.isExpanded = false;
         this.setState(this.state);
-    };
+    }
 
     private handleNodeExpand = (nodeData: ITreeNode) => {
         nodeData.isExpanded = true;
         this.setState(this.state);
-    };
+    }
 
     private forEachNode(nodes: ITreeNode[], callback: (node: ITreeNode) => void) {
         if (nodes == null) {
@@ -148,5 +114,42 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
             callback(node);
             this.forEachNode(node.childNodes, callback);
         }
+    }
+
+    private handleNodeClick = (node: ITreeNode<INodeData>, _nodePath: number[], e: React.MouseEvent<HTMLElement>) => {
+        // Can only select tree leaves
+        if (!node.hasCaret) {
+            const originallySelected = node.isSelected
+
+            if (!e.shiftKey) {
+                this.forEachNode(this.state.nodes, n => (n.isSelected = false));
+            }
+
+            node.isSelected = originallySelected == null ? true : !originallySelected;
+            this.setState(this.state);
+
+            // Building string path to clicked node.
+            let nodePath : string[] = []
+            let currentNodes : ITreeNode<INodeData>[] = this.state.nodes
+
+            for (var key of _nodePath) {
+                nodePath.push(currentNodes[key].nodeData.name as string)
+                currentNodes = currentNodes[key].childNodes
+            }
+
+            this.props.onClickCallback(nodePath.join('.'))
+        }
+    }
+
+    public render() {
+        return (
+            <Tree
+                contents={this.state.nodes}
+                onNodeClick={this.handleNodeClick}
+                onNodeCollapse={this.handleNodeCollapse}
+                onNodeExpand={this.handleNodeExpand}
+                className={Classes.ELEVATION_0}
+            />
+        );
     }
 }

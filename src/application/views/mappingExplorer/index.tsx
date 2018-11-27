@@ -178,6 +178,9 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                             data.fhirResources.jsonByResourceName[selectedFhirResource] :
                             null
                     }
+                    onClickCallback={(attributeFlatPath: any) => {
+                        dispatch(updateFhirAttribute(attributeFlatPath))
+                    }}
                 />
             </div>
         </div>
