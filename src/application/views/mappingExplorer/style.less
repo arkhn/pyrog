@@ -51,10 +51,12 @@ body {
         box-shadow: none;
     }
 
-    .bp3-tree-node:hover {
-        .bp3-tree-node-content {
-            background-color: @dark-gray3;
-        }
+    .bp3-tree-node-content:hover {
+        background-color: @dark-gray3;
+    }
+
+    .bp3-tree-node-selected .bp3-tree-node-content:hover {
+        background-color: @blue4;
     }
 
     .bp3-tree-node-content {
