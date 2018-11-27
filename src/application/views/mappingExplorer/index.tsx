@@ -11,12 +11,18 @@ import {connect} from 'react-redux'
 
 // Import actions
 import {
+    changeFhirResource,
     updateDatabase,
     updateFhirAttribute,
     updateFhirResource,
 } from './actions'
 
+import {
+    fetchFhirResourceNames,
+} from '../../actions/fhirResources'
+
 // Import components
+import FhirResourceTree from '../../components/fhirResourceTree'
 import InputColumnsTable from '../../components/inputColumnsTable'
 import StringSelect from '../../components/selects/stringSelect'
 
@@ -98,15 +104,19 @@ mutation updateFunction($id: ID!, $primaryKey: String!) {
 export default class MappingExplorerView extends React.Component<IMappingExplorerViewState, any> {
     public componentDidMount() {
         this.props.dispatch(updateDatabase('crossway'))
-        this.props.dispatch(updateFhirResource('Patient'))
+        this.props.dispatch(changeFhirResource('Patient'))
         this.props.dispatch(updateFhirAttribute('name.given'))
+
+        this.props.dispatch(fetchFhirResourceNames('https://api.live.arkhn.org/fhir_resources'))
     }
 
     public render = () => {
         const {
+            data,
+            dispatch,
             selectedDatabase,
             selectedFhirResource,
-            selectedFhirAttribute
+            selectedFhirAttribute,
         } = this.props
 
         return <div id='mapping-explorer-container'>
@@ -125,9 +135,9 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                 <Query
                     query={getInputColumns}
                     variables={{
-                        database: this.props.selectedDatabase,
-                        resource: this.props.selectedFhirResource,
-                        attribute: this.props.selectedFhirAttribute,
+                        database: selectedDatabase,
+                        resource: selectedFhirResource,
+                        attribute: selectedFhirAttribute,
                     }}
                 >
                     {({ loading, error, data }) => {
@@ -155,11 +165,20 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                         icon={'layout-hierarchy'}
                         inputItem={selectedFhirResource}
                         intent={'primary'}
-                        items={[]}
-                        loading={null}
-                        onChange={null}
+                        items={Object.keys(data.fhirResources.resourceNames)}
+                        loading={data.fhirResources.loadingFhirResourceNames}
+                        onChange={(resource: string) => {
+                            dispatch(changeFhirResource(resource))
+                        }}
                     />
                 </div>
+                <FhirResourceTree
+                    json={
+                        selectedFhirResource ?
+                            data.fhirResources.jsonByResourceName[selectedFhirResource] :
+                            null
+                    }
+                />
             </div>
         </div>
     }
