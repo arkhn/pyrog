@@ -4,19 +4,6 @@ import {
 } from '@blueprintjs/core'
 import * as React from 'react'
 
-// Import custom actions
-import {
-    changeInputColumnScript,
-    changeJoinSourceColumn,
-    changeJoinTargetColumnOwner,
-    changeJoinTargetColumnTable,
-    changeJoinTargetColumnColumn,
-    changeMergingScript,
-    clickRemoveInputColumn,
-    clickRemoveJoin,
-    clickAddJoin,
-} from '../actions/mapping'
-
 // Import custom components
 import ColumnPicker from './columnPicker'
 import StringSelect from './selects/stringSelect'
@@ -102,7 +89,7 @@ export default class InputColumnsTable extends React.Component<IProps, IState> {
                                     icon={'column-layout'}
                                     inputItem={column.join.sourceColumn}
                                     items={databaseSchema[column.owner][column.table]}
-                                    onChange={changeJoinSourceColumn(index)}
+                                    onChange={null}
                                 />
                             </td> :
                             null
@@ -113,9 +100,9 @@ export default class InputColumnsTable extends React.Component<IProps, IState> {
                                 <ColumnPicker
                                     databaseColumn={column.join.targetColumn}
                                     databaseSchema={databaseSchema}
-                                    onChangeOwner={changeJoinTargetColumnOwner(index)}
-                                    onChangeTable={changeJoinTargetColumnTable(index)}
-                                    onChangeColumn={changeJoinTargetColumnColumn(index)}
+                                    onChangeOwner={null}
+                                    onChangeTable={null}
+                                    onChangeColumn={null}
                                 />
                             </td> :
                             null
@@ -125,7 +112,7 @@ export default class InputColumnsTable extends React.Component<IProps, IState> {
                             icon={'function'}
                             inputItem={column.script}
                             items={scriptList}
-                            onChange={changeInputColumnScript(index)}
+                            onChange={null}
                         />
                     </td>
                     {
@@ -137,7 +124,7 @@ export default class InputColumnsTable extends React.Component<IProps, IState> {
                                             icon={'function'}
                                             inputItem={inputColumns.mergingScript}
                                             items={scriptList}
-                                            onChange={changeMergingScript}
+                                            onChange={null}
                                         />
                                     </td> :
                                     null

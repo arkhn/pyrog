@@ -74,6 +74,8 @@ query inputColumns($database: String!, $resource: String!, $attribute: String!) 
                 inputColumns {
                     id
                     owner
+                    table
+                    column
                 }
             }
         }
@@ -121,13 +123,13 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
             >
                 {({ loading, error, data }) => {
                     if (loading) {
-                        return <p>Loading...</p>;
+                        return <p>Loading...</p>
                     }
                     if (error) {
-                        return <p>{error}</p>;
+                        console.log('Went through an error...')
+                        console.log(error)
+                        return <p>Something went wrong</p>
                     }
-
-                    console.log(data.mappings[0].resources[0].attributes[0].inputColumns)
 
                     return <div>
                         <InputColumnsTable
@@ -135,31 +137,6 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                             databaseSchema={null}
                         />
                     </div>
-
-                    {/* return data.mapping.resources.map((resource: any) => {
-                        return <Mutation
-                            mutation={myMutation}
-                            key={resource.id}
-                        >
-                            {(updateFunction, { loading, error }) => (
-                                <div>
-                                    {`${resource.name} - ${resource.primaryKey}`}
-                                    <Button
-                                        onClick={() => {
-                                            updateFunction({
-                                                variables: {
-                                                    id: resource.id,
-                                                    primaryKey: "Salut Theo",
-                                                }
-                                            })
-                                        }}
-                                    >
-                                        Click ffs
-                                    </Button>
-                                </div>
-                            )}
-                        </Mutation>
-                    }) */}
                 }}
             </Query>
         </div>
