@@ -127,6 +127,54 @@ mutation inputColumnMutation($id: ID!, $data: InputColumnUpdateInput) {
 }
 `
 
+const deleteInputColumn = gql`
+mutation deleteInputColumn($attributeId: ID!, $inputColumnId: ID!) {
+    updateAttribute(
+        id: $attributeId,
+        data: {
+            inputColumns: {
+                delete: [
+                    {
+                        id: $inputColumnId
+                    }
+                ]
+            }
+        }
+    ) {
+        id
+        name
+        inputColumns {
+            id
+            owner
+            table
+            column
+            script
+            joinSourceColumn
+        }
+    }
+}
+`
+
+const attributeSubscription = gql`
+subscription attributeSubscription($id: ID!) {
+    attributeSubscription(id: $id) {
+        updatedFields
+        node {
+            id
+            name
+            inputColumns {
+                id
+                owner
+                table
+                column
+                script
+                joinSourceColumn
+            }
+        }
+    }
+}
+`
+
 @reduxify(mapReduxStateToReactProps)
 export default class MappingExplorerView extends React.Component<IMappingExplorerViewState, any> {
     public componentDidMount() {
@@ -180,100 +228,139 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                             return <p>Something went wrong</p>
                         }
 
-                        let inputColumns = []
+                        // TODO: handle cases where the query returns nothing
+                        let inputColumns: any = []
+                        let attributeId: any = null
 
                         try {
                             inputColumns = data.mappings[0].resources[0].attributes[0].inputColumns
+                            attributeId = data.mappings[0].resources[0].attributes[0].id
                         }
                         catch (ex) {
                             console.log(ex)
                         }
 
-                        return <div id='input-columns'>
-                            <div id='input-column-rows'>
-                                {inputColumns.map((inputColumn: any, index: number) => {
-                                    return <Subscription
-                                        key={index}
-                                        subscription={subscription}
-                                        variables={{
-                                            id: inputColumn.id,
-                                        }}
-                                    >
-                                        {({ data, loading }) => {
-                                            const c = data ? data.inputColumnSubscription.node : inputColumn
+                        return <Subscription
+                            subscription={attributeSubscription}
+                            variables={{
+                                id: attributeId,
+                            }}
+                        >
+                            {({ data, loading }) => {
+                                console.log('data subscription')
+                                console.log(data)
+                                try {
+                                    if (data.attributeSubscription.node) {
+                                        inputColumns = data.attributeSubscription.node.inputColumns
+                                    }
+                                }
+                                catch (ex) {
+                                    console.log(ex)
+                                }
 
-                                            return <div className='input-column'>
-                                                <Button
-                                                    icon={'trash'}
-                                                    minimal={true}
-                                                />
-                                                <div className='input-column-info'>
-                                                    <div className='input-column-name'>
-                                                        <Tag large={true}>{c.owner}</Tag>
-                                                        <Tag large={true}>{c.table}</Tag>
-                                                        <Tag large={true}>{c.column}</Tag>
-                                                    </div>
-                                                    <div className='input-column-join'>
-                                                        <Mutation
-                                                            mutation={inputColumnMutation}
-                                                        >
-                                                            {(changeInputColumnJoin, {data, loading}) => {
-                                                                return <StringSelect
-                                                                    inputItem={c.joinSourceColumn}
-                                                                    items={['toto', 'tutu']}
-                                                                    onChange={(e: string) => {
-                                                                        changeInputColumnJoin({
-                                                                            variables: {
-                                                                                id: c.id,
-                                                                                data: {
-                                                                                    joinSourceColumn: e,
+                                return <div id='input-columns'>
+                                <div id='input-column-rows'>
+                                    {inputColumns.map((inputColumn: any, index: number) => {
+                                        return <Subscription
+                                            key={index}
+                                            subscription={subscription}
+                                            variables={{
+                                                id: inputColumn.id,
+                                            }}
+                                        >
+                                            {({ data, loading }) => {
+                                                const c = (data && data.inputColumnSubscription.node) ? data.inputColumnSubscription.node : inputColumn
+
+                                                return c ? <div className='input-column'>
+                                                    <Mutation
+                                                        mutation={deleteInputColumn}
+                                                    >
+                                                        {(deleteInputColumnName, {data, loading}) => {
+                                                            return <Button
+                                                                icon={'trash'}
+                                                                minimal={true}
+                                                                onClick={() => {
+                                                                    console.log(attributeId)
+                                                                    console.log(c.id)
+                                                                    deleteInputColumnName({
+                                                                        variables: {
+                                                                            attributeId: attributeId,
+                                                                            inputColumnId: c.id,
+                                                                        }
+                                                                    })
+                                                                }}
+                                                            />
+                                                        }}
+                                                    </Mutation>
+                                                    <div className='input-column-info'>
+                                                        <div className='input-column-name'>
+                                                            <Tag large={true}>{c.owner}</Tag>
+                                                            <Tag large={true}>{c.table}</Tag>
+                                                            <Tag large={true}>{c.column}</Tag>
+                                                        </div>
+                                                        <div className='input-column-join'>
+                                                            <Mutation
+                                                                mutation={inputColumnMutation}
+                                                            >
+                                                                {(changeInputColumnJoin, {data, loading}) => {
+                                                                    return <StringSelect
+                                                                        inputItem={c.joinSourceColumn}
+                                                                        items={['toto', 'tutu']}
+                                                                        onChange={(e: string) => {
+                                                                            changeInputColumnJoin({
+                                                                                variables: {
+                                                                                    id: c.id,
+                                                                                    data: {
+                                                                                        joinSourceColumn: e,
+                                                                                    },
                                                                                 },
-                                                                            },
-                                                                        })
-                                                                    }}
-                                                                />
-                                                            }}
-                                                        </Mutation>
-                                                    </div>
-                                                    <div className='input-column-script'>
-                                                        <Mutation
-                                                            mutation={inputColumnMutation}
-                                                        >
-                                                            {(changeInputColumnScript, {data, loading}) => {
-                                                                return <StringSelect
-                                                                    inputItem={c.script}
-                                                                    items={['script1.py', 'script2.py']}
-                                                                    loading={loading}
-                                                                    onChange={(e: string) => {
-                                                                        changeInputColumnScript({
-                                                                            variables: {
-                                                                                id: c.id,
-                                                                                data: {
-                                                                                    script: e,
+                                                                            })
+                                                                        }}
+                                                                    />
+                                                                }}
+                                                            </Mutation>
+                                                        </div>
+                                                        <div className='input-column-script'>
+                                                            <Mutation
+                                                                mutation={inputColumnMutation}
+                                                            >
+                                                                {(changeInputColumnScript, {data, loading}) => {
+                                                                    return <StringSelect
+                                                                        inputItem={c.script}
+                                                                        items={['script1.py', 'script2.py']}
+                                                                        loading={loading}
+                                                                        onChange={(e: string) => {
+                                                                            changeInputColumnScript({
+                                                                                variables: {
+                                                                                    id: c.id,
+                                                                                    data: {
+                                                                                        script: e,
+                                                                                    },
                                                                                 },
-                                                                            },
-                                                                        })
-                                                                    }}
-                                                                />
-                                                            }}
-                                                        </Mutation>
+                                                                            })
+                                                                        }}
+                                                                    />
+                                                                }}
+                                                            </Mutation>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </div> : null
-                                        }}
-                                    </Subscription>
-                                })}
+                                                </div> : null
+                                            }}
+                                        </Subscription>
+                                    })}
+                                </div>
+                                <div id='input-column-merging-script'>
+                                    <StringSelect
+                                        icon={'layout-hierarchy'}
+                                        inputItem={'mergingScript.py'}
+                                        items={[]}
+                                        loading={false}
+                                        onChange={null}
+                                    />
+                                </div>
                             </div>
-                            <div id='input-column-merging-script'>
-                                <StringSelect
-                                    icon={'layout-hierarchy'}
-                                    inputItem={'mergingScript.py'}
-                                    items={[]}
-                                    loading={false}
-                                    onChange={null}
-                                />
-                            </div>
-                        </div>
+                        }}
+                    </Subscription>
                     }}
                 </Query>
             </div>
