@@ -6,6 +6,7 @@ import * as React from 'react'
 import {
     Mutation,
     Query,
+    Subscription,
 } from 'react-apollo'
 import {connect} from 'react-redux'
 
@@ -95,6 +96,20 @@ query inputColumns($database: String!, $resource: String!, $attribute: String!) 
 }
 `
 
+const subscription = gql`
+subscription subscribeToInputColumn($id: ID!) {
+    inputColumnSubscription(id: $id) {
+        updatedFields
+        node {
+            id
+            owner
+            column
+            table
+        }
+    }
+}
+`
+
 const myMutation = gql`
 mutation updateFunction($id: ID!, $primaryKey: String!) {
     updateResourcePrimaryKey(id: $id, primaryKey: $primaryKey) {
@@ -111,7 +126,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
         this.props.dispatch(fetchDatabaseNames('https://api.live.arkhn.org/schemas'))
         this.props.dispatch(fetchFhirResourceNames('https://api.live.arkhn.org/fhir_resources'))
 
-        // this.props.dispatch(updateDatabase('Crossway'))
+        this.props.dispatch(updateDatabase('Crossway'))
         this.props.dispatch(changeFhirResource('Patient'))
         this.props.dispatch(updateFhirAttribute('name.given'))
     }
@@ -168,11 +183,20 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                         }
 
                         return <div>
-
-                            <InputColumnsTable
-                                inputColumns={inputColumns}
-                                databaseSchema={null}
-                            />
+                            {inputColumns.map((inputColumn: any, index: number) => {
+                                return <Subscription
+                                    key={index}
+                                    subscription={subscription}
+                                    variables={{
+                                        id: inputColumn.id,
+                                    }}
+                                >
+                                    {({ data, loading }) => {
+                                        const c = data ? data.inputColumnSubscription.node : inputColumn
+                                        return <div>{`${c.owner} > ${c.table} > ${c.column}`}</div>
+                                    }}
+                                </Subscription>
+                            })}
                         </div>
                     }}
                 </Query>
