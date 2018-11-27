@@ -69,7 +69,6 @@ mutation updateFunction($id: ID!, $primaryKey: String!) {
 }
 `
 
-// @graphqlify(MyQuery, mapQueriesToProps)
 @reduxify(mapReduxStateToReactProps)
 export default class MappingExplorerView extends React.Component<IMappingExplorerViewState, any> {
     public componentDidMount() {
@@ -80,7 +79,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
         return <div>
             <Button
                 onClick={() => {
-                    updateDatabase('crossway')
+                    this.props.dispatch(updateDatabase('crossway'))
                 }}
             >
                 Change Database
@@ -96,7 +95,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                         return <p>Loading...</p>;
                     }
                     if (error) {
-                        return <p>{error}</p>;
+                        return <p>Salut</p>;
                     }
 
                     return data.mapping.resources.map((resource: any) => {

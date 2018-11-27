@@ -5,6 +5,6 @@ import {
 export const updateDatabase = (database: string): IAction => {
     return {
         type: 'UPDATE_DATABASE',
-        payload: database
+        payload: database,
     }
 }
