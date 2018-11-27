@@ -5,39 +5,46 @@ import {
     Icon,
     InputGroup,
 } from '@blueprintjs/core'
-
 import * as React from 'react'
 import {connect} from 'react-redux'
+
+import './style.less'
 
 // Import custom actions
 import {
     addInputColumn,
     changeMotClefMimic,
     changeTypeMimic,
+} from './actions'
+
+import {
     fetchBetaRecommendedColumns,
     fetchRecommendedColumns,
-} from '../actions/mimic'
+} from '../../actions/recommendedColumns'
 
 // Import custom components
-import StringSelect from '../components/selects/stringSelect'
+import StringSelect from '../../components/selects/stringSelect'
 
 // Import mockdata
 import {
     availableTypes,
     questions,
-} from '../mockdata/mimic'
+} from '../../mockdata/mimic'
 
 // Import custom types
 import {
-    MimicViewReduxState,
-} from '../types'
-
-const arkhnLogo = require("../img/arkhn_logo_only_white.svg") as string
+    IMimicViewState,
+    IReduxStore,
+} from '../../types'
 
 // Redux's state mapping to react props
 
-const mapReduxStateToReactProps = (state : MimicViewReduxState): MimicViewReduxState => {
-    return state
+const mapReduxStateToReactProps = (state : IReduxStore): IMimicViewState => {
+    return {
+        ...state.views.mimic,
+        data: state.data,
+        dispatch: state.dispatch,
+    }
 }
 
 const reduxify = (mapReduxStateToReactProps: any, mapDispatchToProps?: any, mergeProps?: any, options?: any) : any => {
@@ -52,12 +59,12 @@ const reduxify = (mapReduxStateToReactProps: any, mapDispatchToProps?: any, merg
 }
 
 @reduxify(mapReduxStateToReactProps)
-export default class MainView extends React.Component<MimicViewReduxState, any> {
+export default class MainView extends React.Component<IMimicViewState, any> {
     public componentDidMount() {
         const {
             question_index,
             section_index,
-        } = this.props.mimic
+        } = this.props
 
         questions[question_index].sections[section_index].mapping_items.forEach((item: any) => {
             if (item.type) {
@@ -73,18 +80,19 @@ export default class MainView extends React.Component<MimicViewReduxState, any> 
 
     public render () {
         const {
-            dataByAttribute,
+            data,
+            stateByAttribute,
             question_index,
             section_index,
-        } = this.props.mimic
+        } = this.props
 
         return (
             <div id='mimic-poc'>
                 <h1>{questions[question_index].chapter_name} - {questions[question_index].sections[section_index].resource}</h1>
 
                 {questions[question_index].sections[section_index].mapping_items.map((item: any, index: number) => {
-                    let suggested_columns = (dataByAttribute[item.fhir_attribute] && dataByAttribute[item.fhir_attribute].suggested_columns) ?
-                        dataByAttribute[item.fhir_attribute].suggested_columns.map((column: any, index: number) => {
+                    let suggested_columns = (data.recommendedColumns.columnsByAttribute[item.fhir_attribute]) ?
+                        data.recommendedColumns.columnsByAttribute[item.fhir_attribute].map((column: any, index: number) => {
                             return <div key={index}>
                                 <div
                                     className={'add-button'}
@@ -109,8 +117,8 @@ export default class MainView extends React.Component<MimicViewReduxState, any> 
                         }) :
                         null
 
-                    let input_columns = (dataByAttribute[item.fhir_attribute] && dataByAttribute[item.fhir_attribute].input_columns) ?
-                            dataByAttribute[item.fhir_attribute].input_columns.map((column: any, index: number) => {
+                    let input_columns = (stateByAttribute[item.fhir_attribute] && stateByAttribute[item.fhir_attribute].input_columns) ?
+                            stateByAttribute[item.fhir_attribute].input_columns.map((column: any, index: number) => {
                                 return <div key={index}>
                                     <Breadcrumbs
                                         items={column.split('.')}
@@ -133,17 +141,17 @@ export default class MainView extends React.Component<MimicViewReduxState, any> 
                                 <ControlGroup>
                                     <StringSelect
                                         icon={'layout-hierarchy'}
-                                        inputItem={dataByAttribute[item.fhir_attribute].type}
+                                        inputItem={stateByAttribute[item.fhir_attribute].type}
                                         intent={'primary'}
                                         items={Object.keys(availableTypes)}
-                                        onChange={(e: any) => this.props.dispatch(changeTypeMimic(item.fhir_attribute, e, questions[question_index].sections[section_index].head_table, dataByAttribute[item.fhir_attribute].mot_clef))}
+                                        onChange={(e: any) => this.props.dispatch(changeTypeMimic(item.fhir_attribute, e, questions[question_index].sections[section_index].head_table, stateByAttribute[item.fhir_attribute].mot_clef))}
                                     />
                                     <InputGroup
                                         leftIcon="search"
                                         onChange={(e: any) => {
-                                            this.props.dispatch(changeMotClefMimic(item.fhir_attribute, dataByAttribute[item.fhir_attribute].type, questions[question_index].sections[section_index].head_table, e.target.value))}}
+                                            this.props.dispatch(changeMotClefMimic(item.fhir_attribute, stateByAttribute[item.fhir_attribute].type, questions[question_index].sections[section_index].head_table, e.target.value))}}
                                         placeholder="Mot clef"
-                                        value={dataByAttribute[item.fhir_attribute].mot_clef}
+                                        value={stateByAttribute[item.fhir_attribute].mot_clef}
                                     />
                                 </ControlGroup>
                             </div>

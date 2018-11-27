@@ -1,6 +1,6 @@
 import * as redux from 'redux'
 
-// Redux types
+// REDUX
 export interface ISimpleAction {
     type: string,
     payload?: any,
@@ -34,15 +34,9 @@ export interface IMappingExplorerViewState extends IView, IMappingExplorerState 
 
 // Mimic types
 
-export interface MimicViewReduxState {
-    dispatch?: redux.Dispatch<any>,
-    mimic: IMimicState,
-}
-
 export interface IMimicState {
-    dataByAttribute: {
+    stateByAttribute: {
         [attribute_flat: string]: {
-            suggested_columns?: any,
             input_columns?: any,
             type?: string,
             mot_clef?: string,
@@ -52,7 +46,9 @@ export interface IMimicState {
     section_index: number,
 }
 
-// React types
+export interface IMimicViewState extends IView, IMimicState {}
+
+// REACT
 
 // TODO: Deprecate type
 export interface IFhirResource {
@@ -101,54 +97,4 @@ export interface IMapping {
     fhirMapping: {
         [fhirAttribute: string]: IFhirIntegrationSpec,
     }
-}
-
-export interface reduxAppState {
-    appData: IReduxAppData,
-    currentDatabase: IReduxCurrentDatabase,
-    currentFhirResource: IReduxCurrentFhirResource,
-    currentFhirAttribute: string[],
-    dispatch?: redux.Dispatch<any>,
-    graphqlData?: any,
-    graphqlSubscriptionData?: any,
-    mapping: IReduxMapping,
-    nameLists: IReduxNameLists,
-}
-
-export interface IReduxAppData {
-    dialogIsOpen: boolean,
-    distantServerUrl: string,
-    testState: boolean,
-}
-
-export interface IReduxNameLists {
-    loadingNameLists: boolean,
-    databaseNames: {
-        [database_name: string]: {
-            name: string,
-        }
-    },
-    fhirResources: {
-        [resource_name: string]: any,
-    },
-    fhirDatatypes: {
-        [datatype_name: string]: any,
-    },
-}
-
-export interface IReduxCurrentDatabase {
-    loadingSchema: boolean,
-    name: string,
-    schema: IDatabaseSchema,
-}
-
-export interface IReduxCurrentFhirResource {
-    name: string,
-    json: any,
-    loadingResource: boolean,
-}
-
-export interface IReduxMapping {
-    loading: boolean,
-    content: IMapping,
 }
