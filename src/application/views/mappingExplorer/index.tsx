@@ -91,6 +91,7 @@ query inputColumns($database: String!, $resource: String!, $attribute: String!) 
                     table
                     column
                     script
+                    joinSourceColumn
                 }
             }
         }
@@ -108,6 +109,7 @@ subscription subscribeToInputColumn($id: ID!) {
             column
             table
             script
+            joinSourceColumn
         }
     }
 }
@@ -212,19 +214,38 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                                         <Tag large={true}>{c.column}</Tag>
                                                     </div>
                                                     <div className='input-column-join'>
-                                                        Coucou
+                                                        <Mutation
+                                                            mutation={inputColumnMutation}
+                                                        >
+                                                            {(changeInputColumnJoin, {data, loading}) => {
+                                                                return <StringSelect
+                                                                    inputItem={c.joinSourceColumn}
+                                                                    items={['toto', 'tutu']}
+                                                                    onChange={(e: string) => {
+                                                                        changeInputColumnJoin({
+                                                                            variables: {
+                                                                                id: c.id,
+                                                                                data: {
+                                                                                    joinSourceColumn: e,
+                                                                                },
+                                                                            },
+                                                                        })
+                                                                    }}
+                                                                />
+                                                            }}
+                                                        </Mutation>
                                                     </div>
                                                     <div className='input-column-script'>
                                                         <Mutation
                                                             mutation={inputColumnMutation}
                                                         >
-                                                            {(mutationName, {data, loading}) => {
+                                                            {(changeInputColumnScript, {data, loading}) => {
                                                                 return <StringSelect
                                                                     inputItem={c.script}
                                                                     items={['script1.py', 'script2.py']}
                                                                     loading={loading}
                                                                     onChange={(e: string) => {
-                                                                        mutationName({
+                                                                        changeInputColumnScript({
                                                                             variables: {
                                                                                 id: c.id,
                                                                                 data: {
@@ -238,7 +259,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                                         </Mutation>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> : null
                                         }}
                                     </Subscription>
                                 })}
