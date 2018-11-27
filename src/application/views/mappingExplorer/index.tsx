@@ -1,6 +1,7 @@
 import {gql} from 'apollo-boost'
 import {
     Button,
+    Tag,
 } from '@blueprintjs/core'
 import * as React from 'react'
 import {
@@ -89,6 +90,7 @@ query inputColumns($database: String!, $resource: String!, $attribute: String!) 
                     owner
                     table
                     column
+                    script
                 }
             }
         }
@@ -105,17 +107,20 @@ subscription subscribeToInputColumn($id: ID!) {
             owner
             column
             table
+            script
         }
     }
 }
 `
 
-const myMutation = gql`
-mutation updateFunction($id: ID!, $primaryKey: String!) {
-    updateResourcePrimaryKey(id: $id, primaryKey: $primaryKey) {
+const inputColumnMutation = gql`
+mutation inputColumnMutation($id: ID!, $data: InputColumnUpdateInput) {
+    updateInputColumn(id: $id, data: $data) {
         id
-        name
-        primaryKey
+        owner
+        column
+        table
+        script
     }
 }
 `
@@ -182,21 +187,71 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                             console.log(ex)
                         }
 
-                        return <div>
-                            {inputColumns.map((inputColumn: any, index: number) => {
-                                return <Subscription
-                                    key={index}
-                                    subscription={subscription}
-                                    variables={{
-                                        id: inputColumn.id,
-                                    }}
-                                >
-                                    {({ data, loading }) => {
-                                        const c = data ? data.inputColumnSubscription.node : inputColumn
-                                        return <div>{`${c.owner} > ${c.table} > ${c.column}`}</div>
-                                    }}
-                                </Subscription>
-                            })}
+                        return <div id='input-columns'>
+                            <div id='input-column-rows'>
+                                {inputColumns.map((inputColumn: any, index: number) => {
+                                    return <Subscription
+                                        key={index}
+                                        subscription={subscription}
+                                        variables={{
+                                            id: inputColumn.id,
+                                        }}
+                                    >
+                                        {({ data, loading }) => {
+                                            const c = data ? data.inputColumnSubscription.node : inputColumn
+
+                                            return <div className='input-column'>
+                                                <Button
+                                                    icon={'trash'}
+                                                    minimal={true}
+                                                />
+                                                <div className='input-column-info'>
+                                                    <div className='input-column-name'>
+                                                        <Tag large={true}>{c.owner}</Tag>
+                                                        <Tag large={true}>{c.table}</Tag>
+                                                        <Tag large={true}>{c.column}</Tag>
+                                                    </div>
+                                                    <div className='input-column-join'>
+                                                        Coucou
+                                                    </div>
+                                                    <div className='input-column-script'>
+                                                        <Mutation
+                                                            mutation={inputColumnMutation}
+                                                        >
+                                                            {(mutationName, {data, loading}) => {
+                                                                return <StringSelect
+                                                                    inputItem={c.script}
+                                                                    items={['script1.py', 'script2.py']}
+                                                                    loading={loading}
+                                                                    onChange={(e: string) => {
+                                                                        mutationName({
+                                                                            variables: {
+                                                                                id: c.id,
+                                                                                data: {
+                                                                                    script: e,
+                                                                                },
+                                                                            },
+                                                                        })
+                                                                    }}
+                                                                />
+                                                            }}
+                                                        </Mutation>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }}
+                                    </Subscription>
+                                })}
+                            </div>
+                            <div id='input-column-merging-script'>
+                                <StringSelect
+                                    icon={'layout-hierarchy'}
+                                    inputItem={'mergingScript.py'}
+                                    items={[]}
+                                    loading={false}
+                                    onChange={null}
+                                />
+                            </div>
                         </div>
                     }}
                 </Query>

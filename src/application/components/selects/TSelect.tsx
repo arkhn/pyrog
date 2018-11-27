@@ -16,7 +16,7 @@ interface ISelectProps<T> {
     displayItem: (item: any) => string;
     filterItems: ItemPredicate<T>;
     items: T[];
-    icon: IconName;
+    icon?: IconName;
     inputItem: T;
     intent?: Intent;
     loading?: boolean;

@@ -7,7 +7,7 @@ import TSelect from './TSelect'
 
 interface ISelectProps {
     disabled?: boolean;
-    icon: IconName;
+    icon?: IconName;
     inputItem: string;
     intent?: Intent;
     items: string[];
