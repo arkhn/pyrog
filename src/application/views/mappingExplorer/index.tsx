@@ -18,6 +18,7 @@ import {
 
 // Import components
 import InputColumnsTable from '../../components/inputColumnsTable'
+import StringSelect from '../../components/selects/stringSelect'
 
 // Import types
 import {
@@ -108,37 +109,58 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
             selectedFhirAttribute
         } = this.props
 
-        return <div>
-            <div>{selectedDatabase}</div>
-            <div>{selectedFhirResource}</div>
-            <div>{selectedFhirAttribute}</div>
+        return <div id='mapping-explorer-container'>
+            <div id='left-part'>
+                <div className={'panel-header'}>
+                    <StringSelect
+                        icon={'database'}
+                        inputItem={selectedDatabase}
+                        intent={'primary'}
+                        items={[]}
+                        loading={null}
+                        onChange={null}
+                    />
+                </div>
 
-            <Query
-                query={getInputColumns}
-                variables={{
-                    database: this.props.selectedDatabase,
-                    resource: this.props.selectedFhirResource,
-                    attribute: this.props.selectedFhirAttribute,
-                }}
-            >
-                {({ loading, error, data }) => {
-                    if (loading) {
-                        return <p>Loading...</p>
-                    }
-                    if (error) {
-                        console.log('Went through an error...')
-                        console.log(error)
-                        return <p>Something went wrong</p>
-                    }
+                <Query
+                    query={getInputColumns}
+                    variables={{
+                        database: this.props.selectedDatabase,
+                        resource: this.props.selectedFhirResource,
+                        attribute: this.props.selectedFhirAttribute,
+                    }}
+                >
+                    {({ loading, error, data }) => {
+                        if (loading) {
+                            return <p>Loading...</p>
+                        }
+                        if (error) {
+                            console.log('Went through an error...')
+                            console.log(error)
+                            return <p>Something went wrong</p>
+                        }
 
-                    return <div>
-                        <InputColumnsTable
-                            inputColumns={data.mappings[0].resources[0].attributes[0].inputColumns}
-                            databaseSchema={null}
-                        />
-                    </div>
-                }}
-            </Query>
+                        return <div>
+                            <InputColumnsTable
+                                inputColumns={data.mappings[0].resources[0].attributes[0].inputColumns}
+                                databaseSchema={null}
+                            />
+                        </div>
+                    }}
+                </Query>
+            </div>
+            <div id='right-part'>
+                <div className={'panel-header'}>
+                    <StringSelect
+                        icon={'layout-hierarchy'}
+                        inputItem={selectedFhirResource}
+                        intent={'primary'}
+                        items={[]}
+                        loading={null}
+                        onChange={null}
+                    />
+                </div>
+            </div>
         </div>
     }
 }

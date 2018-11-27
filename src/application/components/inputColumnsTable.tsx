@@ -136,7 +136,7 @@ export default class InputColumnsTable extends React.Component<IProps, IState> {
 
         return (
             <div>
-                <table className={'bp3-dark'}>
+                <table>
                     <tbody>
                         <tr>
                             <th></th>

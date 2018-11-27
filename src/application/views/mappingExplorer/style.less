@@ -1,8 +1,48 @@
 @import "~@blueprintjs/core/lib/css/blueprint.css";
 @import "~@blueprintjs/core/lib/less/variables";
-@import "~react-json-pretty/src/JSONPretty.monikai.css";
+
+@window-padding: 20px;
 
 body {
     background-color: @black;
     color: @light-gray1;
+}
+
+#mapping-explorer-container {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    width: 100vw;
+    height: 100vh;
+
+    #left-part {
+        background-color: @light-gray5;
+        color: @black;
+        flex-grow: 1;
+
+        .panel-header {
+            background-color: @light-gray3;
+        }
+    }
+
+    #right-part {
+        background-color: @dark-gray1;
+        color: @light-gray1;
+        min-width: 300px;
+        flex-basis: 20%;
+        flex-grow: 0;
+
+        .panel-header {
+            background-color: @black;
+        }
+    }
+
+    .panel-header {
+        height: 50px;
+        padding: 0 @window-padding;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
 }
