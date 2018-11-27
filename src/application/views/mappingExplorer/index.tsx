@@ -1,6 +1,7 @@
 import {gql} from 'apollo-boost'
 import {
     Button,
+    NonIdealState,
     Tag,
 } from '@blueprintjs/core'
 import * as React from 'react'
@@ -40,6 +41,8 @@ import {
 } from '../../types'
 
 import './style.less'
+
+const arkhnLogo = require("../../img/arkhn_logo_only_white.svg") as string;
 
 const mapReduxStateToReactProps = (state : IReduxStore): IMappingExplorerViewState => {
     return {
@@ -186,6 +189,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
         this.props.dispatch(updateFhirAttribute('name.given'))
     }
 
+
     public render = () => {
         const {
             data,
@@ -194,6 +198,12 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
             selectedFhirResource,
             selectedFhirAttribute,
         } = this.props
+
+        const nonIdealState = <NonIdealState
+            description={'Select a FHIR resource attribute by clicking on a node in the left panel.'}
+            icon={<span dangerouslySetInnerHTML={{__html: arkhnLogo}}/>}
+            title={'No FHIR attribute selected'}
+        />
 
         return <div id='mapping-explorer-container'>
             <div id='left-part'>

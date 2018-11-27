@@ -6,10 +6,6 @@ import {
     Switch
 } from '@blueprintjs/core';
 
-import {
-    clickAddInputColumn,
-} from '../actions/mapping'
-
 export interface IProps {
     data: any;
 }

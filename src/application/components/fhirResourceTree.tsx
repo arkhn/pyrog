@@ -10,8 +10,6 @@ import * as React from 'react'
 
 import {isNullOrUndefined} from 'util';
 
-import {changeCurrentFhirAttribute} from '../actions/currentFhirAttribute'
-
 interface INodeData {
     name: string,
     type: string,

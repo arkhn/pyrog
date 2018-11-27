@@ -9,11 +9,6 @@ import {
 } from '@blueprintjs/core'
 import * as React from 'react'
 
-// Import custom actions
-import {
-    clickAddInputColumn,
-} from '../actions/mapping'
-
 // Import custom components
 import ClusterSearchInputs from './clusterSearchInputs'
 import ColumnPicker from './columnPicker'
