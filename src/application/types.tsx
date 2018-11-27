@@ -1,5 +1,37 @@
 import * as redux from 'redux'
 
+// Redux types
+export interface simpleAction {
+    type: string,
+    payload?: any,
+}
+
+export type thunkAction = (dispatch: redux.Dispatch<any>, getState: any) => void
+
+export type action = simpleAction | thunkAction
+
+export interface IReduxStore {
+    data: any,
+    dispatch?: any,
+    views: any,
+}
+
+// VIEWS
+
+export interface IView {
+    data: any,
+    dispatch?: any,
+}
+
+// MappingExplorer
+export interface IMappingExplorerState {
+    selectedDatabase: string,
+    selectedFhirAttribute: string,
+    selectedFhirResource: string,
+}
+
+export interface IMappingExplorerViewState extends IView, IMappingExplorerState {}
+
 // Mimic types
 
 export interface MimicViewReduxState {
@@ -19,16 +51,6 @@ export interface IMimicState {
     question_index: number,
     section_index: number,
 }
-
-// Redux types
-export interface simpleAction {
-    type: string,
-    payload?: any,
-}
-
-export type thunkAction = (dispatch: redux.Dispatch<any>, getState: any) => void
-
-export type action = simpleAction | thunkAction
 
 // React types
 
