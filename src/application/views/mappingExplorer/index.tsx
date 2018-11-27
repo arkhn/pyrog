@@ -11,11 +11,16 @@ import {connect} from 'react-redux'
 
 // Import actions
 import {
+    changeDatabase,
     changeFhirResource,
     updateDatabase,
     updateFhirAttribute,
     updateFhirResource,
 } from './actions'
+
+import {
+    fetchDatabaseNames,
+} from '../../actions/databases'
 
 import {
     fetchFhirResourceNames,
@@ -103,11 +108,12 @@ mutation updateFunction($id: ID!, $primaryKey: String!) {
 @reduxify(mapReduxStateToReactProps)
 export default class MappingExplorerView extends React.Component<IMappingExplorerViewState, any> {
     public componentDidMount() {
-        this.props.dispatch(updateDatabase('crossway'))
+        this.props.dispatch(fetchDatabaseNames('https://api.live.arkhn.org/schemas'))
+        this.props.dispatch(fetchFhirResourceNames('https://api.live.arkhn.org/fhir_resources'))
+
+        // this.props.dispatch(updateDatabase('Crossway'))
         this.props.dispatch(changeFhirResource('Patient'))
         this.props.dispatch(updateFhirAttribute('name.given'))
-
-        this.props.dispatch(fetchFhirResourceNames('https://api.live.arkhn.org/fhir_resources'))
     }
 
     public render = () => {
@@ -126,9 +132,11 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                         icon={'database'}
                         inputItem={selectedDatabase}
                         intent={'primary'}
-                        items={[]}
-                        loading={null}
-                        onChange={null}
+                        items={Object.keys(data.databases.databaseNames)}
+                        loading={data.databases.loadingDatabaseNames || data.databases.loadingDatabaseSchema}
+                        onChange={(databaseName: string) => {
+                            dispatch(changeDatabase(databaseName))
+                        }}
                     />
                 </div>
 
@@ -150,9 +158,19 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                             return <p>Something went wrong</p>
                         }
 
+                        let inputColumns = []
+
+                        try {
+                            inputColumns = data.mappings[0].resources[0].attributes[0].inputColumns
+                        }
+                        catch (ex) {
+                            console.log(ex)
+                        }
+
                         return <div>
+
                             <InputColumnsTable
-                                inputColumns={data.mappings[0].resources[0].attributes[0].inputColumns}
+                                inputColumns={inputColumns}
                                 databaseSchema={null}
                             />
                         </div>
@@ -166,22 +184,24 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                         inputItem={selectedFhirResource}
                         intent={'primary'}
                         items={Object.keys(data.fhirResources.resourceNames)}
-                        loading={data.fhirResources.loadingFhirResourceNames}
+                        loading={data.fhirResources.loadingFhirResourceNames || data.fhirResources.loadingFhirResourceJson}
                         onChange={(resource: string) => {
                             dispatch(changeFhirResource(resource))
                         }}
                     />
                 </div>
-                <FhirResourceTree
-                    json={
-                        selectedFhirResource ?
-                            data.fhirResources.jsonByResourceName[selectedFhirResource] :
-                            null
-                    }
-                    onClickCallback={(attributeFlatPath: any) => {
-                        dispatch(updateFhirAttribute(attributeFlatPath))
-                    }}
-                />
+                <div id='fhir-resource-tree'>
+                    <FhirResourceTree
+                        json={
+                            selectedFhirResource ?
+                                data.fhirResources.jsonByResourceName[selectedFhirResource] :
+                                null
+                        }
+                        onClickCallback={(attributeFlatPath: any) => {
+                            dispatch(updateFhirAttribute(attributeFlatPath))
+                        }}
+                    />
+                </div>
             </div>
         </div>
     }

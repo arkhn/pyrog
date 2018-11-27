@@ -18,7 +18,7 @@ body {
     #left-part {
         background-color: @light-gray5;
         color: @black;
-        flex-grow: 1;
+        flex-basis: 75%;
 
         .panel-header {
             background-color: @light-gray3;
@@ -29,8 +29,7 @@ body {
         background-color: @dark-gray1;
         color: @light-gray1;
         min-width: 300px;
-        flex-basis: 20%;
-        flex-grow: 0;
+        flex-basis: 25%;
 
         .panel-header {
             background-color: @black;
@@ -44,5 +43,32 @@ body {
         display: flex;
         flex-direction: row;
         align-items: center;
+    }
+}
+
+#fhir-resource-tree {
+    .bp3-tree {
+        box-shadow: none;
+    }
+
+    .bp3-tree-node-content {
+        padding-top: 2px;
+        padding-bottom: 2px;
+        height: 34px;
+    }
+
+    .bp3-tree-node-label {
+        & > div {
+        line-height: 1.1em;
+
+            & > div:nth-child(2) {
+                color: @gray2;
+                font-size: 0.8em;
+            }
+        }
+    }
+
+    .bp3-tree-node-selected .bp3-tree-node-label > div > div:nth-child(2) {
+        color: @gray5;
     }
 }

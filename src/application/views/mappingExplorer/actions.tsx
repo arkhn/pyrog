@@ -11,7 +11,17 @@ import {
     fetchFhirResourceJson,
 } from '../../actions/fhirResources'
 
+import {
+    fetchDatabaseSchema,
+} from '../../actions/databases'
+
 // STATE UPDATES
+export const changeDatabase = (databaseName: string): IAction => {
+    return (dispatch: any, getState: any) => {
+        dispatch(fetchDatabaseSchema('https://api.live.arkhn.org', databaseName, () => dispatch(updateDatabase(databaseName))))
+    }
+}
+
 export const updateDatabase = (database: string): IAction => {
     return {
         type: 'UPDATE_DATABASE',

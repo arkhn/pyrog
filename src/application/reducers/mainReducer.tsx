@@ -9,6 +9,7 @@ import {nameLists} from './nameLists'
 import {mimic} from './mimic'
 
 // Data fetching reducers
+import databases from './databases'
 import fhirResources from './fhirResources'
 
 // View reducers
@@ -16,6 +17,7 @@ import mappingExplorer from '../views/mappingExplorer/reducer'
 
 // Data reducer (also called canonical state)
 const dataReducer = combineReducers({
+    databases,
     fhirResources,
 })
 
