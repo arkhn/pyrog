@@ -18,6 +18,18 @@ const reducer = (state = initialState, action: ISimpleAction): IMappingExplorerS
                 selectedDatabase: action.payload,
             }
 
+        case 'UPDATE_FHIR_RESOURCE':
+            return {
+                ...state,
+                selectedFhirResource: action.payload,
+            }
+
+        case 'UPDATE_FHIR_ATTRIBUTE':
+            return {
+                ...state,
+                selectedFhirAttribute: action.payload,
+            }
+
         default:
             return state
     }

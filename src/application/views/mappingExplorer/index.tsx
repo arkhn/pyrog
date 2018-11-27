@@ -12,11 +12,12 @@ import {connect} from 'react-redux'
 // Import actions
 import {
     updateDatabase,
+    updateFhirAttribute,
+    updateFhirResource,
 } from './actions'
 
 // Import components
-
-// Import mock data
+import InputColumnsTable from '../../components/inputColumnsTable'
 
 // Import types
 import {
@@ -59,6 +60,27 @@ query Mapping($database: String!) {
 }
 `
 
+const getInputColumns = gql`
+query inputColumns($database: String!, $resource: String!, $attribute: String!) {
+    mappings (where: {database: $database}) {
+        id
+        database
+        resources (where: {name: $resource}) {
+            id
+            name
+            attributes (where: {name: $attribute}) {
+                id
+                name
+                inputColumns {
+                    id
+                    owner
+                }
+            }
+        }
+    }
+}
+`
+
 const myMutation = gql`
 mutation updateFunction($id: ID!, $primaryKey: String!) {
     updateResourcePrimaryKey(id: $id, primaryKey: $primaryKey) {
@@ -72,22 +94,29 @@ mutation updateFunction($id: ID!, $primaryKey: String!) {
 @reduxify(mapReduxStateToReactProps)
 export default class MappingExplorerView extends React.Component<IMappingExplorerViewState, any> {
     public componentDidMount() {
-
+        this.props.dispatch(updateDatabase('crossway'))
+        this.props.dispatch(updateFhirResource('Patient'))
+        this.props.dispatch(updateFhirAttribute('name.given'))
     }
 
     public render = () => {
+        const {
+            selectedDatabase,
+            selectedFhirResource,
+            selectedFhirAttribute
+        } = this.props
+
         return <div>
-            <Button
-                onClick={() => {
-                    this.props.dispatch(updateDatabase('crossway'))
-                }}
-            >
-                Change Database
-            </Button>
+            <div>{selectedDatabase}</div>
+            <div>{selectedFhirResource}</div>
+            <div>{selectedFhirAttribute}</div>
+
             <Query
-                query={getMappings}
+                query={getInputColumns}
                 variables={{
                     database: this.props.selectedDatabase,
+                    resource: this.props.selectedFhirResource,
+                    attribute: this.props.selectedFhirAttribute,
                 }}
             >
                 {({ loading, error, data }) => {
@@ -95,10 +124,15 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                         return <p>Loading...</p>;
                     }
                     if (error) {
-                        return <p>Salut</p>;
+                        return <p>{error}</p>;
                     }
 
-                    return data.mapping.resources.map((resource: any) => {
+                    console.log(data.mappings[0].resources[0].attributes[0].inputColumns)
+
+                    return <div>
+                    </div>
+
+                    {/* return data.mapping.resources.map((resource: any) => {
                         return <Mutation
                             mutation={myMutation}
                             key={resource.id}
@@ -121,7 +155,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                 </div>
                             )}
                         </Mutation>
-                    })
+                    }) */}
                 }}
             </Query>
         </div>
