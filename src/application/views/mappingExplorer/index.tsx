@@ -220,6 +220,8 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                     />
                 </div>
 
+                {/* Components below are fed with data coming from our GraphQL server.
+                Here, we mainly display the input columns of a given fhir attribute. */}
                 <Query
                     query={getInputColumns}
                     variables={{
@@ -250,6 +252,9 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                             console.log(ex)
                         }
 
+                        {/* Here, one subscribes to changes on the currently displayed
+                        fhir attribute. This is useful when an input column is added
+                        or deleted for instance. */}
                         return <Subscription
                             subscription={attributeSubscription}
                             variables={{
@@ -271,6 +276,9 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                 return <div id='input-columns'>
                                 <div id='input-column-rows'>
                                     {inputColumns.map((inputColumn: any, index: number) => {
+                                        {/* Each input column will generate a new subscription
+                                        to the server, so as to make sure the user is always
+                                        synchronised with information written in the backend. */}
                                         return <Subscription
                                             key={index}
                                             subscription={subscription}
@@ -282,6 +290,11 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                                 const c = (data && data.inputColumnSubscription.node) ? data.inputColumnSubscription.node : inputColumn
 
                                                 return c ? <div className='input-column'>
+                                                    {/* The following mutation allows one to
+                                                    update the fhir attribute under study
+                                                    by deleting one of it's input columns.
+                                                    This allows to re-render all input columns
+                                                    and re-generate subscriptions*/}
                                                     <Mutation
                                                         mutation={deleteInputColumn}
                                                     >
@@ -309,6 +322,9 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                                             <Tag large={true}>{c.column}</Tag>
                                                         </div>
                                                         <div className='input-column-join'>
+                                                            {/* Here is a simple mutation
+                                                            intended to modify input column's
+                                                            information. */}
                                                             <Mutation
                                                                 mutation={inputColumnMutation}
                                                             >
