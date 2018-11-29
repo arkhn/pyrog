@@ -1,0 +1,17 @@
+subscription attributeSubscription($id: ID!) {
+    attributeSubscription(id: $id) {
+        updatedFields
+        node {
+            id
+            name
+            inputColumns {
+                id
+                owner
+                table
+                column
+                script
+                joinSourceColumn
+            }
+        }
+    }
+}

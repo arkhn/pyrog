@@ -1,0 +1,13 @@
+subscription subscribeToInputColumn($id: ID!) {
+    inputColumnSubscription(id: $id) {
+        updatedFields
+        node {
+            id
+            owner
+            column
+            table
+            script
+            joinSourceColumn
+        }
+    }
+}
