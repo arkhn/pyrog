@@ -33,6 +33,7 @@ import {
 } from '../../actions/fhirResources'
 
 // Import components
+import ColumnPicker from '../../components/columnPicker'
 import FhirResourceTree from '../../components/fhirResourceTree'
 import InputColumnsTable from '../../components/inputColumnsTable'
 import StringSelect from '../../components/selects/stringSelect'
@@ -58,8 +59,8 @@ const arkhnLogo = require("../../img/arkhn_logo_only_white.svg") as string;
 
 export interface IMappingExplorerState {
     selectedDatabase: string,
-    selectedFhirAttribute: string,
     selectedFhirResource: string,
+    selectedFhirAttribute: string,
 }
 
 interface IMappingExplorerViewState extends IView, IMappingExplorerState {}
@@ -91,12 +92,11 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
 
         this.props.dispatch(updateDatabase('Crossway'))
         this.props.dispatch(changeFhirResource('Patient'))
-        this.props.dispatch(updateFhirAttribute('name.given'))
+        this.props.dispatch(updateFhirAttribute('link.other'))
     }
 
 
     public render = () => {
-        console.log(getInputColumns)
         const {
             data,
             dispatch,
@@ -152,7 +152,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                             return <p>Something went wrong</p>
                         }
                         if (!data || data.attributes.length == 0) {
-                            return null
+                            return <div>Does not exist yet</div>
                         }
 
                         const attribute = data.attributes[0]
@@ -314,6 +314,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                         onClickCallback={(attributeFlatPath: any) => {
                             dispatch(updateFhirAttribute(attributeFlatPath))
                         }}
+                        selectedNode={selectedFhirAttribute}
                     />
                 </div>
             </div>
