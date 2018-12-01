@@ -117,13 +117,13 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
         }
     }
 
-    private handleNodeCollapse = (nodeData: ITreeNode) => {
-        nodeData.isExpanded = false;
+    private handleNodeCollapse = (node: ITreeNode<INodeData>) => {
+        node.isExpanded = false;
         this.setState(this.state);
     }
 
-    private handleNodeExpand = (nodeData: ITreeNode) => {
-        nodeData.isExpanded = true;
+    private handleNodeExpand = (node: ITreeNode<INodeData>) => {
+        node.isExpanded = true;
         this.setState(this.state);
     }
 
@@ -149,6 +149,12 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
             }
 
             this.props.onClickCallback(nodePath.join('.'))
+        } else {
+            if (node.isExpanded) {
+                this.handleNodeCollapse(node)
+            } else {
+                this.handleNodeExpand(node)
+            }
         }
     }
 
