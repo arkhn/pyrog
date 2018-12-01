@@ -2,6 +2,7 @@ import {gql} from 'apollo-boost'
 import {
     Button,
     NonIdealState,
+    Spinner,
     Tag,
 } from '@blueprintjs/core'
 import * as React from 'react'
@@ -85,9 +86,34 @@ query Mapping($database: String!) {
 }
 `
 
+const getAttributes = gql`
+query Attribute($database: String!, $resource: String!, $attribute: String!) {
+    attributes (where: {
+        name: $attribute
+        resource: {
+            name: $resource
+            database: {
+                database: $database
+            }
+        }
+    }) {
+        id
+        name
+        inputColumns {
+            id
+            owner
+            table
+            column
+            script
+            joinSourceColumn
+        }
+    }
+}
+`
+
 const getInputColumns = gql`
 query inputColumns($database: String!, $resource: String!, $attribute: String!) {
-    mappings (where: {database: $database}) {
+    mapping (where: {database: $database}) {
         id
         database
         resources (where: {name: $resource}) {
@@ -231,34 +257,33 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                 {/* Components below are fed with data coming from our GraphQL server.
                 Here, we mainly display the input columns of a given fhir attribute. */}
                 <Query
-                    query={getInputColumns}
+                    query={getAttributes}
                     variables={{
                         database: selectedDatabase,
                         resource: selectedFhirResource,
                         attribute: selectedFhirAttribute,
                     }}
+                    skip={!selectedDatabase ||
+                        !selectedFhirResource ||
+                        !selectedFhirAttribute
+                    }
                 >
                     {({ loading, error, data }) => {
+                        {/* Before rendering this view, verify that all
+                        inconsistent usecases are sorted (is the query loading,
+                        did it trigger an error, did it return data?) */}
                         if (loading) {
-                            return <p>Loading...</p>
+                            return <Spinner />
                         }
                         if (error) {
-                            console.log('Went through an error...')
                             console.log(error)
                             return <p>Something went wrong</p>
                         }
-
-                        // TODO: handle cases where the query returns nothing
-                        let inputColumns: any = []
-                        let attributeId: any = null
-
-                        try {
-                            inputColumns = data.mappings[0].resources[0].attributes[0].inputColumns
-                            attributeId = data.mappings[0].resources[0].attributes[0].id
+                        if (!data || data.attributes.length == 0) {
+                            return null
                         }
-                        catch (ex) {
-                            console.log(ex)
-                        }
+
+                        const attribute = data.attributes[0]
 
                         {/* Here, one subscribes to changes on the currently displayed
                         fhir attribute. This is useful when an input column is added
@@ -266,20 +291,16 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                         return <Subscription
                             subscription={attributeSubscription}
                             variables={{
-                                id: attributeId,
+                                id: attribute.id,
                             }}
                         >
                             {({ data, loading }) => {
-                                console.log('data subscription')
-                                console.log(data)
-                                try {
-                                    if (data.attributeSubscription.node) {
-                                        inputColumns = data.attributeSubscription.node.inputColumns
-                                    }
-                                }
-                                catch (ex) {
-                                    console.log(ex)
-                                }
+                                {/* If data.attributeSubscription is available,
+                                then it is what we should display since it means
+                                an inputColumn was added or deleted. */}
+                                const inputColumns = (data && data.attributeSubscription) ?
+                                    data.attributeSubscription.node.inputColumns :
+                                    (attribute.inputColumns ? attribute.inputColumns : [])
 
                                 return <div id='input-columns'>
                                 <div id='input-column-rows'>
@@ -295,9 +316,11 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                             }}
                                         >
                                             {({ data, loading }) => {
-                                                const c = (data && data.inputColumnSubscription.node) ? data.inputColumnSubscription.node : inputColumn
+                                                const column = (data && data.inputColumnSubscription) ?
+                                                    data.inputColumnSubscription.node :
+                                                    inputColumn
 
-                                                return c ? <div className='input-column'>
+                                                return column ? <div className='input-column'>
                                                     {/* The following mutation allows one to
                                                     update the fhir attribute under study
                                                     by deleting one of it's input columns.
@@ -311,12 +334,10 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                                                 icon={'trash'}
                                                                 minimal={true}
                                                                 onClick={() => {
-                                                                    console.log(attributeId)
-                                                                    console.log(c.id)
                                                                     deleteInputColumnName({
                                                                         variables: {
-                                                                            attributeId: attributeId,
-                                                                            inputColumnId: c.id,
+                                                                            attributeId: attribute.id,
+                                                                            inputColumnId: column.id,
                                                                         }
                                                                     })
                                                                 }}
@@ -325,9 +346,9 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                                     </Mutation>
                                                     <div className='input-column-info'>
                                                         <div className='input-column-name'>
-                                                            <Tag large={true}>{c.owner}</Tag>
-                                                            <Tag large={true}>{c.table}</Tag>
-                                                            <Tag large={true}>{c.column}</Tag>
+                                                            <Tag large={true}>{column.owner}</Tag>
+                                                            <Tag large={true}>{column.table}</Tag>
+                                                            <Tag large={true}>{column.column}</Tag>
                                                         </div>
                                                         <div className='input-column-join'>
                                                             {/* Here is a simple mutation
@@ -338,12 +359,12 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                                             >
                                                                 {(changeInputColumnJoin, {data, loading}) => {
                                                                     return <StringSelect
-                                                                        inputItem={c.joinSourceColumn}
+                                                                        inputItem={column.joinSourceColumn}
                                                                         items={['toto', 'tutu']}
                                                                         onChange={(e: string) => {
                                                                             changeInputColumnJoin({
                                                                                 variables: {
-                                                                                    id: c.id,
+                                                                                    id: column.id,
                                                                                     data: {
                                                                                         joinSourceColumn: e,
                                                                                     },
@@ -360,13 +381,13 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                                             >
                                                                 {(changeInputColumnScript, {data, loading}) => {
                                                                     return <StringSelect
-                                                                        inputItem={c.script}
+                                                                        inputItem={column.script}
                                                                         items={['script1.py', 'script2.py']}
                                                                         loading={loading}
                                                                         onChange={(e: string) => {
                                                                             changeInputColumnScript({
                                                                                 variables: {
-                                                                                    id: c.id,
+                                                                                    id: column.id,
                                                                                     data: {
                                                                                         script: e,
                                                                                     },
