@@ -1,0 +1,24 @@
+query Attributes($database: String!, $resource: String!, $attribute: String!){
+  attributes (
+    where: {
+      name: $attribute
+      resource: {
+        name: $resource
+        database: {
+          database: $database
+        }
+      }
+  	}
+  ) {
+    id
+    name
+    inputColumns {
+        id
+        owner
+        table
+        column
+        script
+        joinSourceColumn
+    }
+  }
+}

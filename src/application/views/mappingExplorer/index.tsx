@@ -1,6 +1,8 @@
 import {gql} from 'apollo-boost'
 import {
     Button,
+    Card,
+    Elevation,
     NonIdealState,
     Spinner,
     Tag,
@@ -43,6 +45,15 @@ import {
 
 import './style.less'
 
+// Requests
+const getMappings = require('./queries/getMappings.graphql')
+const getAttributes = require('./queries/getAttributes.graphql')
+const subscription = require('./queries/subscription.graphql')
+const inputColumnMutation = require('./queries/inputColumnMutation.graphql')
+const deleteInputColumn = require('./queries/deleteInputColumn.graphql')
+const attributeSubscription = require('./queries/attributeSubscription.graphql')
+const getInputColumns = require('./queries/getInputColumns.graphql')
+
 const arkhnLogo = require("../../img/arkhn_logo_only_white.svg") as string;
 
 export interface IMappingExplorerState {
@@ -72,146 +83,6 @@ const reduxify = (mapReduxStateToReactProps: any, mapDispatchToProps?: any, merg
      )
 }
 
-const getMappings = gql`
-query Mapping($database: String!) {
-    mapping (database: $database) {
-        id
-        database
-        resources {
-            id
-            name
-            primaryKey
-        }
-    }
-}
-`
-
-const getAttributes = gql`
-query Attribute($database: String!, $resource: String!, $attribute: String!) {
-    attributes (where: {
-        name: $attribute
-        resource: {
-            name: $resource
-            database: {
-                database: $database
-            }
-        }
-    }) {
-        id
-        name
-        inputColumns {
-            id
-            owner
-            table
-            column
-            script
-            joinSourceColumn
-        }
-    }
-}
-`
-
-const getInputColumns = gql`
-query inputColumns($database: String!, $resource: String!, $attribute: String!) {
-    mapping (where: {database: $database}) {
-        id
-        database
-        resources (where: {name: $resource}) {
-            id
-            name
-            attributes (where: {name: $attribute}) {
-                id
-                name
-                inputColumns {
-                    id
-                    owner
-                    table
-                    column
-                    script
-                    joinSourceColumn
-                }
-            }
-        }
-    }
-}
-`
-
-const subscription = gql`
-subscription subscribeToInputColumn($id: ID!) {
-    inputColumnSubscription(id: $id) {
-        updatedFields
-        node {
-            id
-            owner
-            column
-            table
-            script
-            joinSourceColumn
-        }
-    }
-}
-`
-
-const inputColumnMutation = gql`
-mutation inputColumnMutation($id: ID!, $data: InputColumnUpdateInput) {
-    updateInputColumn(id: $id, data: $data) {
-        id
-        owner
-        column
-        table
-        script
-    }
-}
-`
-
-const deleteInputColumn = gql`
-mutation deleteInputColumn($attributeId: ID!, $inputColumnId: ID!) {
-    updateAttribute(
-        id: $attributeId,
-        data: {
-            inputColumns: {
-                delete: [
-                    {
-                        id: $inputColumnId
-                    }
-                ]
-            }
-        }
-    ) {
-        id
-        name
-        inputColumns {
-            id
-            owner
-            table
-            column
-            script
-            joinSourceColumn
-        }
-    }
-}
-`
-
-const attributeSubscription = gql`
-subscription attributeSubscription($id: ID!) {
-    attributeSubscription(id: $id) {
-        updatedFields
-        node {
-            id
-            name
-            inputColumns {
-                id
-                owner
-                table
-                column
-                script
-                joinSourceColumn
-            }
-        }
-    }
-}
-`
-
 @reduxify(mapReduxStateToReactProps)
 export default class MappingExplorerView extends React.Component<IMappingExplorerViewState, any> {
     public componentDidMount() {
@@ -225,6 +96,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
 
 
     public render = () => {
+        console.log(getInputColumns)
         const {
             data,
             dispatch,
@@ -344,7 +216,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                                             />
                                                         }}
                                                     </Mutation>
-                                                    <div className='input-column-info'>
+                                                    <Card elevation={Elevation.ONE} className='input-column-info'>
                                                         <div className='input-column-name'>
                                                             <Tag large={true}>{column.owner}</Tag>
                                                             <Tag large={true}>{column.table}</Tag>
@@ -398,7 +270,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                                                 }}
                                                             </Mutation>
                                                         </div>
-                                                    </div>
+                                                    </Card>
                                                 </div> : null
                                             }}
                                         </Subscription>

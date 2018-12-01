@@ -1,0 +1,22 @@
+query inputColumns($database: String!, $resource: String!, $attribute: String!) {
+    mappings (where: {database: $database}) {
+        id
+        database
+        resources (where: {name: $resource}) {
+            id
+            name
+            attributes (where: {name: $attribute}) {
+                id
+                name
+                inputColumns {
+                    id
+                    owner
+                    table
+                    column
+                    script
+                    joinSourceColumn
+                }
+            }
+        }
+    }
+}

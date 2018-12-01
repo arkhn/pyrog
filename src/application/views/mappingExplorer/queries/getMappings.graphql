@@ -1,0 +1,11 @@
+query Mapping($database: String!) {
+    mapping (database: $database) {
+        id
+        database
+        resources {
+            id
+            name
+            primaryKey
+        }
+    }
+}
