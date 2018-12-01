@@ -1,8 +1,6 @@
 // Import custom types
-import {
-    IMappingExplorerState,
-    ISimpleAction,
-} from '../../types'
+import { ISimpleAction } from '../../types'
+import { IMappingExplorerState } from './index'
 
 const initialState: IMappingExplorerState = {
     selectedDatabase: null,

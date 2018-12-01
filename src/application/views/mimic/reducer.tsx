@@ -1,7 +1,5 @@
-import {
-    IMimicState,
-    ISimpleAction,
-} from '../../types'
+import { ISimpleAction } from '../../types'
+import { IMimicState } from './index'
 
 import {questions} from '../../mockdata/mimic'
 

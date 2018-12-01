@@ -36,13 +36,21 @@ import StringSelect from '../../components/selects/stringSelect'
 
 // Import types
 import {
-    IMappingExplorerViewState,
     IReduxStore,
+    IView,
 } from '../../types'
 
 import './style.less'
 
 const arkhnLogo = require("../../img/arkhn_logo_only_white.svg") as string;
+
+export interface IMappingExplorerState {
+    selectedDatabase: string,
+    selectedFhirAttribute: string,
+    selectedFhirResource: string,
+}
+
+interface IMappingExplorerViewState extends IView, IMappingExplorerState {}
 
 const mapReduxStateToReactProps = (state : IReduxStore): IMappingExplorerViewState => {
     return {

@@ -1,9 +1,4 @@
-import {
-    IMimicState,
-    ISimpleAction,
-} from '../types'
-
-import {questions} from '../mockdata/mimic'
+import { ISimpleAction } from '../types'
 
 let initialState: any = {
     columnsByAttribute: {},

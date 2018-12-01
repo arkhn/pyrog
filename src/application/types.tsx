@@ -23,31 +23,6 @@ export interface IView {
     dispatch?: any,
 }
 
-// MappingExplorer
-export interface IMappingExplorerState {
-    selectedDatabase: string,
-    selectedFhirAttribute: string,
-    selectedFhirResource: string,
-}
-
-export interface IMappingExplorerViewState extends IView, IMappingExplorerState {}
-
-// Mimic types
-
-export interface IMimicState {
-    stateByAttribute: {
-        [attribute_flat: string]: {
-            input_columns?: any,
-            type?: string,
-            mot_clef?: string,
-        },
-    },
-    question_index: number,
-    section_index: number,
-}
-
-export interface IMimicViewState extends IView, IMimicState {}
-
 // REACT
 
 // TODO: Deprecate type

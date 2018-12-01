@@ -33,12 +33,27 @@ import {
 
 // Import custom types
 import {
-    IMimicViewState,
     IReduxStore,
+    IView,
 } from '../../types'
 
-// Redux's state mapping to react props
+// Mimic types
 
+export interface IMimicState {
+    stateByAttribute: {
+        [attribute_flat: string]: {
+            input_columns?: any,
+            type?: string,
+            mot_clef?: string,
+        },
+    },
+    question_index: number,
+    section_index: number,
+}
+
+export interface IMimicViewState extends IView, IMimicState {}
+
+// Redux's state mapping to react props
 const mapReduxStateToReactProps = (state : IReduxStore): IMimicViewState => {
     return {
         ...state.views.mimic,
