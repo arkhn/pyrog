@@ -9,7 +9,7 @@ import { ApolloLink, split } from 'apollo-link'
 import { WebSocketLink } from 'apollo-link-ws'
 import { ApolloProvider } from 'react-apollo'
 
-import './../style.less'
+import './style.less'
 import Routes from './routes'
 import middlewares from './middlewares/middlewares'
 import mainReducer from './reducers/mainReducer'
