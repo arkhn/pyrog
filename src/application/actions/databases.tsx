@@ -1,4 +1,5 @@
-import {IAction} from '../types'
+import { IAction } from '../types'
+import { INFO_URL } from '../app'
 
 // The following actions query a rest api so as to fetch
 // a string[] indicating database schemas available on the server side.
@@ -8,11 +9,11 @@ export const loadingDatabaseNames = () : IAction => {
     }
 }
 
-export const fetchDatabaseNames = (url: string) : IAction => {
+export const fetchDatabaseNames = () : IAction => {
     return (dispatch: any, getState: any) => {
         dispatch(loadingDatabaseNames())
 
-        return fetch(url)
+        return fetch(`${INFO_URL}/schemas`)
             .then((response: any) => {
                 return response.json()
             }).then((response: any) => {
@@ -45,13 +46,13 @@ export const loadingDatabaseSchema = () : IAction => {
     }
 }
 
-export const fetchDatabaseSchema = (url: string, databaseName: string, callback: any) : IAction => {
+export const fetchDatabaseSchema = (databaseName: string, callback: any) : IAction => {
     return (dispatch: any, getState: any) => {
         dispatch(loadingDatabaseSchema())
 
         const databaseFilename = getState().data.databases.databaseNames[databaseName].name
 
-        return fetch(`${url}/schema/${databaseFilename}/json`)
+        return fetch(`${INFO_URL}/schema/${databaseFilename}/json`)
             .then((response: any) => {
                 return response.json()
             }).then((response: any) => {

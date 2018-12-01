@@ -18,7 +18,7 @@ import {
 // STATE UPDATES
 export const changeDatabase = (databaseName: string): IAction => {
     return (dispatch: any, getState: any) => {
-        dispatch(fetchDatabaseSchema('https://api.live.arkhn.org', databaseName, () => dispatch(updateDatabase(databaseName))))
+        dispatch(fetchDatabaseSchema(databaseName, () => dispatch(updateDatabase(databaseName))))
     }
 }
 
@@ -31,7 +31,7 @@ export const updateDatabase = (database: string): IAction => {
 
 export const changeFhirResource = (resource: string): IAction => {
     return (dispatch: any, getState: any) => {
-        dispatch(fetchFhirResourceJson('https://api.live.arkhn.org', resource, () => dispatch(updateFhirResource(resource))))
+        dispatch(fetchFhirResourceJson(resource, () => dispatch(updateFhirResource(resource))))
     }
 }
 

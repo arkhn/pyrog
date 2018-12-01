@@ -14,6 +14,19 @@ import Routes from './routes'
 import middlewares from './middlewares/middlewares'
 import mainReducer from './reducers/mainReducer'
 
+// Define API urls
+export const ENGINE_URL = (process.env.NODE_ENV === 'development') ?
+    'https://engine.arkhn.org' :
+    'https://engine.arkhn.org'
+
+export const INFO_URL = (process.env.NODE_ENV === 'development') ?
+    'https://api.live.arkhn.org' :
+    'https://api.live.arkhn.org'
+
+export const GRAPHQL_URL = (process.env.NODE_ENV === 'development') ?
+    'ws://localhost:4000' :
+    'ws://localhost:4000'
+
 // Redux initialisation
 if (process.env.NODE_ENV === 'development') {
     // Log redux dispatch only in development
@@ -24,7 +37,7 @@ const store = finalCreateStore(mainReducer)
 
 // Apollo setup
 const wsLink = new WebSocketLink({
-    uri: `ws://localhost:4000`,
+    uri: GRAPHQL_URL,
     options: {
         reconnect: true,
     },

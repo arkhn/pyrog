@@ -1,4 +1,5 @@
-import {IAction} from '../types'
+import { IAction } from '../types'
+import { INFO_URL } from '../app'
 
 // The following actions query a rest api so as to fetch
 // a string[] indicating fhir resources available on the server side.
@@ -8,11 +9,11 @@ export const loadingFhirResourceNames = () : IAction => {
     }
 }
 
-export const fetchFhirResourceNames = (url: string) : IAction => {
+export const fetchFhirResourceNames = () : IAction => {
     return (dispatch: any, getState: any) => {
         dispatch(loadingFhirResourceNames())
 
-        return fetch(url)
+        return fetch(`${INFO_URL}/fhir_resources`)
             .then((response: any) => {
                 return response.json()
             }).then((response: any) => {
@@ -46,11 +47,11 @@ export const loadingFhirResourceJson = () : IAction => {
     }
 }
 
-export const fetchFhirResourceJson = (url: string, resourceName: string, callback: any) : IAction => {
+export const fetchFhirResourceJson = (resourceName: string, callback: any) : IAction => {
     return (dispatch: any, getState: any) => {
         dispatch(loadingFhirResourceJson())
 
-        return fetch(`${url}/fhir_resource/${resourceName}`)
+        return fetch(`${INFO_URL}/fhir_resource/${resourceName}`)
             .then((response: any) => {
                 return response.json()
             }).then((response: any) => {

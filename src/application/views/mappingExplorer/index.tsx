@@ -189,8 +189,8 @@ subscription attributeSubscription($id: ID!) {
 @reduxify(mapReduxStateToReactProps)
 export default class MappingExplorerView extends React.Component<IMappingExplorerViewState, any> {
     public componentDidMount() {
-        this.props.dispatch(fetchDatabaseNames('https://api.live.arkhn.org/schemas'))
-        this.props.dispatch(fetchFhirResourceNames('https://api.live.arkhn.org/fhir_resources'))
+        this.props.dispatch(fetchDatabaseNames())
+        this.props.dispatch(fetchFhirResourceNames())
 
         this.props.dispatch(updateDatabase('Crossway'))
         this.props.dispatch(changeFhirResource('Patient'))
