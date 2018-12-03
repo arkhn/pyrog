@@ -1,0 +1,34 @@
+type Mapping {
+    id: ID! @unique
+    database: String! @unique
+    resources: [Resource!]! @relation(name: "MappingToResources")
+}
+
+type Resource {
+    id: ID! @unique
+    database: Mapping! @relation(name: "MappingToResources")
+    name: String!
+    primaryKey: String!
+    attributes: [Attribute!]! @relation(name: "ResourceToAttributes")
+}
+
+type Attribute {
+    id: ID! @unique
+    resource: Resource! @relation(name: "ResourceToAttributes")
+    name: String!
+    inputColumns: [InputColumn!]! @relation(name: "AttributeToInputColumns")
+    mergingScript: String
+}
+
+type InputColumn implements Column {
+    id: ID! @unique
+    attribute: Attribute! @relation(name: "AttributeToInputColumns")
+    owner: String!
+    table: String!
+    column: String!
+    script: String
+    joinSourceColumn: String
+    joinTargetOwner: String
+    joinTargetTable: String
+    joinTargetColumn: String
+}

@@ -1,0 +1,61 @@
+mutation {
+    first: createMapping(data: {
+        database: "Crossway"
+        resources: {
+            create: [
+                {
+                    name: "Patient"
+                    primaryKey: "Test"
+                    attributes: {
+                        create: [
+                            {
+                                name: "name.given"
+                                inputColumns: {
+                                    create: [
+                                        {
+                                            owner: "ICSF"
+                                            table: "PATIENT"
+                                            column: "PREPAT"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    }) {
+        id
+    }
+
+    second: createMapping(data: {
+        database: "mimic"
+        resources: {
+            create: [
+                {
+                    name: "Patient"
+                    primaryKey: "Test"
+                    attributes: {
+                        create: [
+                            {
+                                name: "name.family"
+                                inputColumns: {
+                                    create: [
+                                        {
+                                            owner: "mimic"
+                                            table: "names"
+                                            column: "family"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    }) {
+        id
+    }
+}

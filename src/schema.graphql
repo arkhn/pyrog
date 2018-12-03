@@ -1,0 +1,27 @@
+# import Mapping, Resource, Attribute from "./generated/prisma.graphql"
+
+type Query {
+    mappings(where: MappingWhereInput): [Mapping!]!
+    resources(where: ResourceWhereInput): [Resource!]!
+    attributes(where: AttributeWhereInput): [Attribute!]!
+    inputColumns(where: InputColumnWhereInput): [InputColumn!]!
+    mapping(where: MappingWhereInput): Mapping!
+    resource(where: ResourceWhereInput): Resource!
+    attribute(where: AttributeWhereInput): Attribute!
+    inputColumn(where: InputColumnWhereInput): InputColumn!
+    customQuery(whereDatabase: MappingWhereInput, whereResource: ResourceWhereInput): Attribute
+}
+
+type Mutation {
+    updateResourcePrimaryKey(id: ID!, primaryKey: String!): Resource!
+    updateAttribute(id: ID!, data: AttributeUpdateInput): Attribute!
+    updateInputColumn(id: ID!, data: InputColumnUpdateInput): InputColumn!
+    deleteInputColumn(id: ID!): InputColumn!
+    addInputColumn(database: String!, resource: String!, attribute: String!)
+}
+
+type Subscription {
+    resourceSubscription(id: ID!): ResourceSubscriptionPayload
+    inputColumnSubscription(id: ID!): InputColumnSubscriptionPayload
+    attributeSubscription(id: ID!): AttributeSubscriptionPayload
+}
