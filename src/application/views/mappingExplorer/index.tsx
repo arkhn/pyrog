@@ -1,7 +1,9 @@
 import {gql} from 'apollo-boost'
 import {
+    Alignment,
     Button,
     Card,
+    ControlGroup,
     Elevation,
     NonIdealState,
     Spinner,
@@ -113,8 +115,8 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
         />
 
         return <div id='mapping-explorer-container'>
-            <div id='left-part'>
-                <div className={'panel-header'}>
+            <div id='navbar'>
+                <ControlGroup>
                     <StringSelect
                         icon={'database'}
                         inputItem={selectedDatabase}
@@ -125,192 +127,6 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                             dispatch(changeDatabase(databaseName))
                         }}
                     />
-                </div>
-
-                {/* Components below are fed with data coming from our GraphQL server.
-                Here, we mainly display the input columns of a given fhir attribute. */}
-                <Query
-                    query={getAttributes}
-                    variables={{
-                        database: selectedDatabase,
-                        resource: selectedFhirResource,
-                        attribute: selectedFhirAttribute,
-                    }}
-                    skip={!selectedDatabase ||
-                        !selectedFhirResource ||
-                        !selectedFhirAttribute
-                    }
-                >
-                    {({ loading, error, data }) => {
-                        {/* Before rendering this view, verify that all
-                        inconsistent usecases are sorted (is the query loading,
-                        did it trigger an error, did it return data?) */}
-                        if (loading) {
-                            return <Spinner />
-                        }
-                        if (error) {
-                            console.log(error)
-                            return <p>Something went wrong : {error.message}</p>
-                        }
-
-                        let attribute = data && data.attributes ? data.attributes[0] : null
-
-                        {/* Here, one subscribes to changes on the currently displayed
-                        fhir attribute. This is useful when an input column is added
-                        or deleted for instance. */}
-                        return <Subscription
-                            subscription={customAttributeSubscription}
-                            variables={{
-                                database: selectedDatabase,
-                                resource: selectedFhirResource,
-                                attribute: selectedFhirAttribute,
-                            }}
-                        >
-                            {({ data, loading, error }) => {
-
-                                {/* If data.attributeSubscription is available,
-                                then it is what we should display since it means
-                                an inputColumn was added or deleted. */}
-                                attribute = (data && data.customAttributeSubscription) ?
-                                    data.customAttributeSubscription.node :
-                                    attribute
-                                const inputColumns = (data && data.customAttributeSubscription) ?
-                                    data.customAttributeSubscription.node.inputColumns :
-                                    ((attribute && attribute.inputColumns) ? attribute.inputColumns : [])
-
-                                return <div id='input-columns'>
-                                <div id='input-column-rows'>
-                                    {inputColumns.map((inputColumn: any, index: number) => {
-                                        {/* Each input column will generate a new subscription
-                                        to the server, so as to make sure the user is always
-                                        synchronised with information written in the backend. */}
-                                        return <Subscription
-                                            key={index}
-                                            subscription={subscription}
-                                            variables={{
-                                                id: inputColumn.id,
-                                            }}
-                                        >
-                                            {({ data, loading }) => {
-                                                const column = (data && data.inputColumnSubscription) ?
-                                                    data.inputColumnSubscription.node :
-                                                    inputColumn
-
-                                                return column ? <div className='input-column'>
-                                                    {/* The following mutation allows one to
-                                                    update the fhir attribute under study
-                                                    by deleting one of it's input columns.
-                                                    This allows to re-render all input columns
-                                                    and re-generate subscriptions*/}
-                                                    <Mutation
-                                                        mutation={deleteInputColumn}
-                                                    >
-                                                        {(deleteInputColumnName, {data, loading}) => {
-                                                            return <Button
-                                                                icon={'trash'}
-                                                                minimal={true}
-                                                                onClick={() => {
-                                                                    deleteInputColumnName({
-                                                                        variables: {
-                                                                            attributeId: attribute.id,
-                                                                            inputColumnId: column.id,
-                                                                        }
-                                                                    })
-                                                                }}
-                                                            />
-                                                        }}
-                                                    </Mutation>
-                                                    <Card elevation={Elevation.ONE} className='input-column-info'>
-                                                        <div className='input-column-name'>
-                                                            <Tag large={true}>{column.owner}</Tag>
-                                                            <Tag large={true}>{column.table}</Tag>
-                                                            <Tag large={true}>{column.column}</Tag>
-                                                        </div>
-                                                        <div className='input-column-join'>
-                                                            {/* Here is a simple mutation
-                                                            intended to modify input column's
-                                                            information. */}
-                                                            <Mutation
-                                                                mutation={inputColumnMutation}
-                                                            >
-                                                                {(changeInputColumnJoin, {data, loading}) => {
-                                                                    return <StringSelect
-                                                                        inputItem={column.joinSourceColumn}
-                                                                        items={['toto', 'tutu']}
-                                                                        onChange={(e: string) => {
-                                                                            changeInputColumnJoin({
-                                                                                variables: {
-                                                                                    id: column.id,
-                                                                                    data: {
-                                                                                        joinSourceColumn: e,
-                                                                                    },
-                                                                                },
-                                                                            })
-                                                                        }}
-                                                                    />
-                                                                }}
-                                                            </Mutation>
-                                                        </div>
-                                                        <div className='input-column-script'>
-                                                            <Mutation
-                                                                mutation={inputColumnMutation}
-                                                            >
-                                                                {(changeInputColumnScript, {data, loading}) => {
-                                                                    return <StringSelect
-                                                                        inputItem={column.script}
-                                                                        items={['script1.py', 'script2.py']}
-                                                                        loading={loading}
-                                                                        onChange={(e: string) => {
-                                                                            changeInputColumnScript({
-                                                                                variables: {
-                                                                                    id: column.id,
-                                                                                    data: {
-                                                                                        script: e,
-                                                                                    },
-                                                                                },
-                                                                            })
-                                                                        }}
-                                                                    />
-                                                                }}
-                                                            </Mutation>
-                                                        </div>
-                                                    </Card>
-                                                </div> : null
-                                            }}
-                                        </Subscription>
-                                    })}
-                                </div>
-                                <div id='input-column-merging-script'>
-                                    <Mutation
-                                        mutation={updateAttribute}
-                                    >
-                                        {(updateAttributeF, {data, loading}) => {
-                                            return <StringSelect
-                                                inputItem={(attribute && attribute.mergingScript) ? attribute.mergingScript : ''}
-                                                items={['mergingScript.py']}
-                                                loading={loading}
-                                                onChange={(e: string) => {
-                                                    updateAttributeF({
-                                                        variables: {
-                                                            id: attribute.id,
-                                                            data: {
-                                                                mergingScript: e,
-                                                            },
-                                                        },
-                                                    })
-                                                }}
-                                            />
-                                        }}
-                                    </Mutation>
-                                </div>
-                            </div>
-                        }}
-                    </Subscription>
-                    }}
-                </Query>
-            </div>
-            <div id='right-part'>
-                <div className={'panel-header'}>
                     <StringSelect
                         icon={'layout-hierarchy'}
                         inputItem={selectedFhirResource}
@@ -321,19 +137,207 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                             dispatch(changeFhirResource(resource))
                         }}
                     />
-                </div>
-                <div id='fhir-resource-tree'>
-                    <FhirResourceTree
-                        json={
-                            selectedFhirResource ?
-                                data.fhirResources.jsonByResourceName[selectedFhirResource] :
-                                null
-                        }
-                        onClickCallback={(attributeFlatPath: any) => {
-                            dispatch(updateFhirAttribute(attributeFlatPath))
+                </ControlGroup>
+            </div>
+
+            <div id='main-container'>
+                <div id='left-part'>
+                    {/* Components below are fed with data coming from our GraphQL server.
+                    Here, we mainly display the input columns of a given fhir attribute. */}
+                    <Query
+                        query={getAttributes}
+                        variables={{
+                            database: selectedDatabase,
+                            resource: selectedFhirResource,
+                            attribute: selectedFhirAttribute,
                         }}
-                        selectedNode={selectedFhirAttribute}
-                    />
+                        skip={!selectedDatabase ||
+                            !selectedFhirResource ||
+                            !selectedFhirAttribute
+                        }
+                    >
+                        {({ loading, error, data }) => {
+                            {/* Before rendering this view, verify that all
+                            inconsistent usecases are sorted (is the query loading,
+                            did it trigger an error, did it return data?) */}
+                            if (loading) {
+                                return <Spinner />
+                            }
+                            if (error) {
+                                console.log(error)
+                                return <p>Something went wrong : {error.message}</p>
+                            }
+
+                            let attribute = data && data.attributes ? data.attributes[0] : null
+
+                            {/* Here, one subscribes to changes on the currently displayed
+                            fhir attribute. This is useful when an input column is added
+                            or deleted for instance. */}
+                            return <Subscription
+                                subscription={customAttributeSubscription}
+                                variables={{
+                                    database: selectedDatabase,
+                                    resource: selectedFhirResource,
+                                    attribute: selectedFhirAttribute,
+                                }}
+                            >
+                                {({ data, loading, error }) => {
+
+                                    {/* If data.attributeSubscription is available,
+                                    then it is what we should display since it means
+                                    an inputColumn was added or deleted. */}
+                                    attribute = (data && data.customAttributeSubscription) ?
+                                        data.customAttributeSubscription.node :
+                                        attribute
+                                    const inputColumns = (data && data.customAttributeSubscription) ?
+                                        data.customAttributeSubscription.node.inputColumns :
+                                        ((attribute && attribute.inputColumns) ? attribute.inputColumns : [])
+
+                                    return <div id='input-columns'>
+                                    <div id='input-column-rows'>
+                                        {inputColumns.map((inputColumn: any, index: number) => {
+                                            {/* Each input column will generate a new subscription
+                                            to the server, so as to make sure the user is always
+                                            synchronised with information written in the backend. */}
+                                            return <Subscription
+                                                key={index}
+                                                subscription={subscription}
+                                                variables={{
+                                                    id: inputColumn.id,
+                                                }}
+                                            >
+                                                {({ data, loading }) => {
+                                                    const column = (data && data.inputColumnSubscription) ?
+                                                        data.inputColumnSubscription.node :
+                                                        inputColumn
+
+                                                    return column ? <div className='input-column'>
+                                                        {/* The following mutation allows one to
+                                                        update the fhir attribute under study
+                                                        by deleting one of it's input columns.
+                                                        This allows to re-render all input columns
+                                                        and re-generate subscriptions*/}
+                                                        <Mutation
+                                                            mutation={deleteInputColumn}
+                                                        >
+                                                            {(deleteInputColumnName, {data, loading}) => {
+                                                                return <Button
+                                                                    icon={'trash'}
+                                                                    minimal={true}
+                                                                    onClick={() => {
+                                                                        deleteInputColumnName({
+                                                                            variables: {
+                                                                                attributeId: attribute.id,
+                                                                                inputColumnId: column.id,
+                                                                            }
+                                                                        })
+                                                                    }}
+                                                                />
+                                                            }}
+                                                        </Mutation>
+                                                        <Card elevation={Elevation.ONE} className='input-column-info'>
+                                                            <div className='input-column-name'>
+                                                                <Tag large={true}>{column.owner}</Tag>
+                                                                <Tag large={true}>{column.table}</Tag>
+                                                                <Tag large={true}>{column.column}</Tag>
+                                                            </div>
+                                                            <div className='input-column-join'>
+                                                                {/* Here is a simple mutation
+                                                                intended to modify input column's
+                                                                information. */}
+                                                                <Mutation
+                                                                    mutation={inputColumnMutation}
+                                                                >
+                                                                    {(changeInputColumnJoin, {data, loading}) => {
+                                                                        return <StringSelect
+                                                                            inputItem={column.joinSourceColumn}
+                                                                            items={['toto', 'tutu']}
+                                                                            onChange={(e: string) => {
+                                                                                changeInputColumnJoin({
+                                                                                    variables: {
+                                                                                        id: column.id,
+                                                                                        data: {
+                                                                                            joinSourceColumn: e,
+                                                                                        },
+                                                                                    },
+                                                                                })
+                                                                            }}
+                                                                        />
+                                                                    }}
+                                                                </Mutation>
+                                                            </div>
+                                                            <div className='input-column-script'>
+                                                                <Mutation
+                                                                    mutation={inputColumnMutation}
+                                                                >
+                                                                    {(changeInputColumnScript, {data, loading}) => {
+                                                                        return <StringSelect
+                                                                            inputItem={column.script}
+                                                                            items={['script1.py', 'script2.py']}
+                                                                            loading={loading}
+                                                                            onChange={(e: string) => {
+                                                                                changeInputColumnScript({
+                                                                                    variables: {
+                                                                                        id: column.id,
+                                                                                        data: {
+                                                                                            script: e,
+                                                                                        },
+                                                                                    },
+                                                                                })
+                                                                            }}
+                                                                        />
+                                                                    }}
+                                                                </Mutation>
+                                                            </div>
+                                                        </Card>
+                                                    </div> : null
+                                                }}
+                                            </Subscription>
+                                        })}
+                                    </div>
+                                    <div id='input-column-merging-script'>
+                                        <Mutation
+                                            mutation={updateAttribute}
+                                        >
+                                            {(updateAttributeF, {data, loading}) => {
+                                                return <StringSelect
+                                                    inputItem={(attribute && attribute.mergingScript) ? attribute.mergingScript : ''}
+                                                    items={['mergingScript.py']}
+                                                    loading={loading}
+                                                    onChange={(e: string) => {
+                                                        updateAttributeF({
+                                                            variables: {
+                                                                id: attribute.id,
+                                                                data: {
+                                                                    mergingScript: e,
+                                                                },
+                                                            },
+                                                        })
+                                                    }}
+                                                />
+                                            }}
+                                        </Mutation>
+                                    </div>
+                                </div>
+                            }}
+                        </Subscription>
+                        }}
+                    </Query>
+                </div>
+                <div id='right-part'>
+                    <div id='fhir-resource-tree'>
+                        <FhirResourceTree
+                            json={
+                                selectedFhirResource ?
+                                    data.fhirResources.jsonByResourceName[selectedFhirResource] :
+                                    null
+                            }
+                            onClickCallback={(attributeFlatPath: any) => {
+                                dispatch(updateFhirAttribute(attributeFlatPath))
+                            }}
+                            selectedNode={selectedFhirAttribute}
+                        />
+                    </div>
                 </div>
             </div>
         </div>

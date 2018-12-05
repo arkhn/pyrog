@@ -9,11 +9,22 @@ body {
 }
 
 #mapping-explorer-container {
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
     width: 100vw;
     height: 100vh;
+
+    #navbar {
+        background-color: @black;
+        padding: calc(@window-padding / 2);
+
+        display: flex;
+        justify-content: center;
+    }
+
+    #main-container {
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+    }
 
     #left-part {
         background-color: @light-gray5;
