@@ -5,20 +5,6 @@ import { Context } from './utils'
 
 const resolvers = {
     Query: {
-        customQuery(parent, args, context: Context, info) {
-            let r = context.db.query.mapping({
-                where: {
-                    ...args.whereDatabase,
-                }
-            }).then((response) => {
-                console.log(response)
-            })
-
-            console.log('here')
-            console.log(r)
-
-            return r
-        },
         mappings(parent, args, context: Context, info) {
             return context.db.query.mappings({
                 where: {

@@ -9,7 +9,6 @@ type Query {
     resource(where: ResourceWhereInput): Resource!
     attribute(where: AttributeWhereInput): Attribute!
     inputColumn(where: InputColumnWhereInput): InputColumn!
-    customQuery(whereDatabase: MappingWhereInput, whereResource: ResourceWhereInput): Attribute
 }
 
 type Mutation {
