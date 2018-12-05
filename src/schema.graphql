@@ -22,4 +22,5 @@ type Mutation {
 type Subscription {
     inputColumnSubscription(id: ID!): InputColumnSubscriptionPayload
     attributeSubscription(id: ID!): AttributeSubscriptionPayload
+    customAttributeSubscription(database: String!, resource: String!, attribute: String!): AttributeSubscriptionPayload
 }

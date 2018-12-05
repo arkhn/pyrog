@@ -3,6 +3,96 @@ import { importSchema } from 'graphql-import'
 import { Prisma } from './generated/prisma'
 import { Context } from './utils'
 
+const checkAttribute = async (parent, args, context: Context, info) => {
+    // Make sure database, resource and attribute exist
+    // before returning attribute
+    const databaseExists = await context.db.exists.Mapping({
+        database: args.database,
+    })
+
+    if (databaseExists) {
+        console.log('Database OK')
+
+        // This query is supposed to be injective
+        const resources = await context.db.query.resources({
+            where: {
+                name: args.resource,
+                database: {
+                    database: args.database,
+                }
+            }
+        })
+
+        console.log('Resource loaded')
+
+        if (resources.length > 0) {
+            console.log(`Resource OK (${resources.length})`)
+
+            const attributes = await context.db.query.attributes({
+                where: {
+                    name: args.attribute,
+                    resource: {
+                        id: resources[0].id,
+                    },
+                }
+            })
+
+            console.log(`Attribute loaded (${attributes.length})`)
+
+            if (attributes.length > 0) {
+                console.log(`Attribute OK (${attributes.length})`)
+                return attributes[0]
+            } else {
+                console.log('Attribute NO')
+                return context.db.mutation.createAttribute({
+                    data: {
+                        name: args.attribute,
+                        resource: {
+                            connect: {
+                                id: resources[0].id,
+                            }
+                        }
+                    }
+                })
+            }
+        } else {
+            console.log('Resource NO')
+            return context.db.mutation.createAttribute({
+                data: {
+                    name: args.attribute,
+                    resource: {
+                        create: {
+                            name: args.resource,
+                            database: {
+                                connect: {
+                                    database: args.database,
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+        }
+    } else {
+        console.log('Database NO')
+        return context.db.mutation.createAttribute({
+            data: {
+                name: args.attribute,
+                resource: {
+                    create: {
+                        name: args.resource,
+                        database: {
+                            create: {
+                                database: args.database,
+                            }
+                        }
+                    }
+                }
+            }
+        })
+    }
+}
+
 const resolvers = {
     Query: {
         mappings(parent, args, context: Context, info) {
@@ -64,105 +154,7 @@ const resolvers = {
     },
     Mutation: {
         async checkAttribute(parent, args, context: Context, info) {
-            // Make sure database, resource and attribute exist
-            // before returning attribute
-            const databaseExists = await context.db.exists.Mapping({
-                database: args.database,
-            })
-
-            if (databaseExists) {
-                console.log('Database OK')
-
-                // This query is supposed to be injective
-                const resources = await context.db.query.resources({
-                    where: {
-                        name: args.resource,
-                        database: {
-                            database: args.database,
-                        }
-                    }
-                })
-
-                if (resources.length > 1) {
-                    return {
-                        error: {
-                            message: 'Found too many resources; database is in an inconsistent state.'
-                        }
-                    }
-                }
-
-                if (resources.length > 0) {
-                    console.log(`Resource OK (${resources.length})`)
-
-                    const attributes = await context.db.query.attributes({
-                        where: {
-                            name: args.attribute,
-                            resource: {
-                                id: resources[0].id,
-                            },
-                        }
-                    }, info)
-
-                    if (attributes.length > 1) {
-                        return {
-                            error: {
-                                message: 'Found too many attributes; database is in an inconsistent state.'
-                            }
-                        }
-                    }
-
-                    if (attributes.length > 0) {
-                        console.log('Attribute OK')
-                        return attributes[0]
-                    } else {
-                        console.log('Attribute NO')
-                        return context.db.mutation.createAttribute({
-                            data: {
-                                name: args.attribute,
-                                resource: {
-                                    connect: {
-                                        id: resources[0].id,
-                                    }
-                                }
-                            }
-                        }, info)
-                    }
-                } else {
-                    console.log('Resource NO')
-                    return context.db.mutation.createAttribute({
-                        data: {
-                            name: args.attribute,
-                            resource: {
-                                create: {
-                                    name: args.resource,
-                                    database: {
-                                        connect: {
-                                            database: args.database,
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }, info)
-                }
-            } else {
-                console.log('Database NO')
-                return context.db.mutation.createAttribute({
-                    data: {
-                        name: args.attribute,
-                        resource: {
-                            create: {
-                                name: args.resource,
-                                database: {
-                                    create: {
-                                        database: args.database,
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }, info)
-            }
+            return checkAttribute(parent, args, context, info)
         },
         updateResourcePrimaryKey(parent, args, context: Context, info) {
             return context.db.mutation.updateResource({
@@ -203,9 +195,22 @@ const resolvers = {
         },
     },
     Subscription: {
+        customAttributeSubscription: {
+            subscribe: async (parent, args, context, info) => {
+                const attribute = await checkAttribute(parent, args, context, info)
+
+                return context.db.subscription.attribute({
+                    where: {
+                        node: {
+                            id: attribute.id,
+                        }
+                    }
+                }, info)
+            },
+        },
         attributeSubscription: {
-            subscribe: (parent, args, ctx, info) => {
-                return ctx.db.subscription.attribute({
+            subscribe: (parent, args, context, info) => {
+                return context.db.subscription.attribute({
                     where: {
                         node: {
                             id: args.id,
@@ -215,8 +220,8 @@ const resolvers = {
             },
         },
         inputColumnSubscription: {
-            subscribe: (parent, args, ctx, info) => {
-                return ctx.db.subscription.inputColumn({
+            subscribe: (parent, args, context, info) => {
+                return context.db.subscription.inputColumn({
                     where: {
                         node: {
                             id: args.id,
