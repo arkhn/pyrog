@@ -1,5 +1,5 @@
 # source: https://eu1.prisma.sh/public-neonswoop-398/graphql-typescript-boilerplate/dev
-# timestamp: Sat Dec 01 2018 16:42:49 GMT+0100 (CET)
+# timestamp: Mon Dec 03 2018 15:21:04 GMT+0100 (CET)
 
 type AggregateAttribute {
   count: Int!
@@ -1732,7 +1732,7 @@ type Resource implements Node {
   id: ID!
   database: Mapping!
   name: String!
-  primaryKey: String!
+  primaryKey: String
   attributes(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Attribute!]
 }
 
@@ -1748,7 +1748,7 @@ type ResourceConnection {
 
 input ResourceCreateInput {
   name: String!
-  primaryKey: String!
+  primaryKey: String
   database: MappingCreateOneWithoutResourcesInput!
   attributes: AttributeCreateManyWithoutResourceInput
 }
@@ -1765,13 +1765,13 @@ input ResourceCreateOneWithoutAttributesInput {
 
 input ResourceCreateWithoutAttributesInput {
   name: String!
-  primaryKey: String!
+  primaryKey: String
   database: MappingCreateOneWithoutResourcesInput!
 }
 
 input ResourceCreateWithoutDatabaseInput {
   name: String!
-  primaryKey: String!
+  primaryKey: String
   attributes: AttributeCreateManyWithoutResourceInput
 }
 
@@ -1800,7 +1800,7 @@ enum ResourceOrderByInput {
 type ResourcePreviousValues {
   id: ID!
   name: String!
-  primaryKey: String!
+  primaryKey: String
 }
 
 input ResourceScalarWhereInput {

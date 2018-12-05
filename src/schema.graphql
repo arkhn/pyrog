@@ -17,7 +17,7 @@ type Mutation {
     updateAttribute(id: ID!, data: AttributeUpdateInput): Attribute!
     updateInputColumn(id: ID!, data: InputColumnUpdateInput): InputColumn!
     deleteInputColumn(id: ID!): InputColumn!
-    addInputColumn(database: String!, resource: String!, attribute: String!)
+    checkAttribute(database: String!, resource: String!, attribute: String!): Attribute!
 }
 
 type Subscription {

@@ -16,7 +16,7 @@ export interface Query {
     resourcesConnection: <T = ResourceConnection>(args: { where?: ResourceWhereInput, orderBy?: ResourceOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     attributesConnection: <T = AttributeConnection>(args: { where?: AttributeWhereInput, orderBy?: AttributeOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     inputColumnsConnection: <T = InputColumnConnection>(args: { where?: InputColumnWhereInput, orderBy?: InputColumnOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    node: <T = Node | null>(args: { id: ID_Output }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> 
+    node: <T = Node | null>(args: { id: ID_Output }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T>
   }
 
 export interface Mutation {
@@ -43,14 +43,14 @@ export interface Mutation {
     deleteManyMappings: <T = BatchPayload>(args: { where?: MappingWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteManyResources: <T = BatchPayload>(args: { where?: ResourceWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteManyAttributes: <T = BatchPayload>(args: { where?: AttributeWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    deleteManyInputColumns: <T = BatchPayload>(args: { where?: InputColumnWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> 
+    deleteManyInputColumns: <T = BatchPayload>(args: { where?: InputColumnWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T>
   }
 
 export interface Subscription {
     mapping: <T = MappingSubscriptionPayload | null>(args: { where?: MappingSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
     resource: <T = ResourceSubscriptionPayload | null>(args: { where?: ResourceSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
     attribute: <T = AttributeSubscriptionPayload | null>(args: { where?: AttributeSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
-    inputColumn: <T = InputColumnSubscriptionPayload | null>(args: { where?: InputColumnSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> 
+    inputColumn: <T = InputColumnSubscriptionPayload | null>(args: { where?: InputColumnSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>>
   }
 
 export interface Exists {
@@ -1813,7 +1813,7 @@ type Resource implements Node {
   id: ID!
   database: Mapping!
   name: String!
-  primaryKey: String!
+  primaryKey: String
   attributes(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Attribute!]
 }
 
@@ -1829,7 +1829,7 @@ type ResourceConnection {
 
 input ResourceCreateInput {
   name: String!
-  primaryKey: String!
+  primaryKey: String
   database: MappingCreateOneWithoutResourcesInput!
   attributes: AttributeCreateManyWithoutResourceInput
 }
@@ -1846,13 +1846,13 @@ input ResourceCreateOneWithoutAttributesInput {
 
 input ResourceCreateWithoutAttributesInput {
   name: String!
-  primaryKey: String!
+  primaryKey: String
   database: MappingCreateOneWithoutResourcesInput!
 }
 
 input ResourceCreateWithoutDatabaseInput {
   name: String!
-  primaryKey: String!
+  primaryKey: String
   attributes: AttributeCreateManyWithoutResourceInput
 }
 
@@ -1881,7 +1881,7 @@ enum ResourceOrderByInput {
 type ResourcePreviousValues {
   id: ID!
   name: String!
-  primaryKey: String!
+  primaryKey: String
 }
 
 input ResourceScalarWhereInput {
@@ -2401,7 +2401,7 @@ export interface ResourceUpdateInput {
 
 export interface ResourceCreateInput {
   name: String
-  primaryKey: String
+  primaryKey?: String
   database: MappingCreateOneWithoutResourcesInput
   attributes?: AttributeCreateManyWithoutResourceInput
 }
@@ -2676,7 +2676,7 @@ export interface MappingWhereUniqueInput {
 
 export interface ResourceCreateWithoutAttributesInput {
   name: String
-  primaryKey: String
+  primaryKey?: String
   database: MappingCreateOneWithoutResourcesInput
 }
 
@@ -2803,7 +2803,7 @@ export interface MappingUpdateOneRequiredWithoutResourcesInput {
 
 export interface ResourceCreateWithoutDatabaseInput {
   name: String
-  primaryKey: String
+  primaryKey?: String
   attributes?: AttributeCreateManyWithoutResourceInput
 }
 
@@ -3282,7 +3282,7 @@ export interface Resource extends Node {
   id: ID_Output
   database: Mapping
   name: String
-  primaryKey: String
+  primaryKey?: String
   attributes?: Attribute[]
 }
 
@@ -3385,7 +3385,7 @@ export interface Attribute extends Node {
 export interface ResourcePreviousValues {
   id: ID_Output
   name: String
-  primaryKey: String
+  primaryKey?: String
 }
 
 export interface ResourceSubscriptionPayload {
@@ -3442,7 +3442,7 @@ The `Boolean` scalar type represents `true` or `false`.
 export type Boolean = boolean
 
 /*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
 */
 export type Int = number
 

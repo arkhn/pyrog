@@ -8,7 +8,7 @@ type Resource {
     id: ID! @unique
     database: Mapping! @relation(name: "MappingToResources")
     name: String!
-    primaryKey: String!
+    primaryKey: String
     attributes: [Attribute!]! @relation(name: "ResourceToAttributes")
 }
 
