@@ -1,0 +1,20 @@
+subscription customAttributeSubscription($database: String!, $resource: String!, $attribute: String!) {
+    customAttributeSubscription(
+        database: $database,
+        resource: $resource,
+        attribute: $attribute
+    ) {
+        updatedFields
+        node {
+            id
+            name
+            mergingScript
+            inputColumns {
+                id
+                owner
+                table
+                column
+            }
+        }
+    }
+}

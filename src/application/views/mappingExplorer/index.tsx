@@ -54,6 +54,7 @@ const inputColumnMutation = require('./queries/inputColumnMutation.graphql')
 const deleteInputColumn = require('./queries/deleteInputColumn.graphql')
 const attributeSubscription = require('./queries/attributeSubscription.graphql')
 const getInputColumns = require('./queries/getInputColumns.graphql')
+const customAttributeSubscription = require('./queries/customAttributeSubscription.graphql')
 
 const arkhnLogo = require("../../img/arkhn_logo_only_white.svg") as string;
 
@@ -94,7 +95,6 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
         this.props.dispatch(changeFhirResource('Patient'))
         this.props.dispatch(updateFhirAttribute('link.other'))
     }
-
 
     public render = () => {
         const {
@@ -151,28 +151,31 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                             console.log(error)
                             return <p>Something went wrong</p>
                         }
-                        if (!data || data.attributes.length == 0) {
-                            return <div>Does not exist yet</div>
-                        }
 
-                        const attribute = data.attributes[0]
+                        let attribute = data && data.attributes ? data.attributes[0] : null
 
                         {/* Here, one subscribes to changes on the currently displayed
                         fhir attribute. This is useful when an input column is added
                         or deleted for instance. */}
                         return <Subscription
-                            subscription={attributeSubscription}
+                            subscription={customAttributeSubscription}
                             variables={{
-                                id: attribute.id,
+                                database: selectedDatabase,
+                                resource: selectedFhirResource,
+                                attribute: selectedFhirAttribute,
                             }}
                         >
-                            {({ data, loading }) => {
+                            {({ data, loading, error }) => {
+
                                 {/* If data.attributeSubscription is available,
                                 then it is what we should display since it means
                                 an inputColumn was added or deleted. */}
-                                const inputColumns = (data && data.attributeSubscription) ?
-                                    data.attributeSubscription.node.inputColumns :
-                                    (attribute.inputColumns ? attribute.inputColumns : [])
+                                attribute = (data && data.customAttributeSubscription) ?
+                                    data.customAttributeSubscription.node :
+                                    attribute
+                                const inputColumns = (data && data.customAttributeSubscription) ?
+                                    data.customAttributeSubscription.node.inputColumns :
+                                    ((attribute && attribute.inputColumns) ? attribute.inputColumns : [])
 
                                 return <div id='input-columns'>
                                 <div id='input-column-rows'>
