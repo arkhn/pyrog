@@ -203,17 +203,6 @@ const resolvers = {
         },
     },
     Subscription: {
-        resourceSubscription: {
-            subscribe: (parent, args, ctx, info) => {
-                return ctx.db.subscription.resource({
-                    where: {
-                        node: {
-                            id: args.id,
-                        }
-                    }
-                }, info)
-            },
-        },
         attributeSubscription: {
             subscribe: (parent, args, ctx, info) => {
                 return ctx.db.subscription.attribute({

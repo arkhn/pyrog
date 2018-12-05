@@ -20,7 +20,6 @@ type Mutation {
 }
 
 type Subscription {
-    resourceSubscription(id: ID!): ResourceSubscriptionPayload
     inputColumnSubscription(id: ID!): InputColumnSubscriptionPayload
     attributeSubscription(id: ID!): AttributeSubscriptionPayload
 }
