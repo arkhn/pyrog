@@ -1,0 +1,13 @@
+mutation updateAttribute($id: ID!, $data: AttributeUpdateInput) {
+    updateAttribute(id: $id, data: $data) {
+        id
+        name
+        mergingScript
+        inputColumns {
+            id
+            owner
+            table
+            column
+        }
+    }
+}

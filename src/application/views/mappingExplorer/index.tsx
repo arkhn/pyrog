@@ -55,6 +55,7 @@ const deleteInputColumn = require('./queries/deleteInputColumn.graphql')
 const attributeSubscription = require('./queries/attributeSubscription.graphql')
 const getInputColumns = require('./queries/getInputColumns.graphql')
 const customAttributeSubscription = require('./queries/customAttributeSubscription.graphql')
+const updateAttribute = require('./queries/updateAttribute.graphql')
 
 const arkhnLogo = require("../../img/arkhn_logo_only_white.svg") as string;
 
@@ -149,7 +150,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                         }
                         if (error) {
                             console.log(error)
-                            return <p>Something went wrong</p>
+                            return <p>Something went wrong : {error.message}</p>
                         }
 
                         let attribute = data && data.attributes ? data.attributes[0] : null
@@ -280,13 +281,27 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                     })}
                                 </div>
                                 <div id='input-column-merging-script'>
-                                    <StringSelect
-                                        icon={'layout-hierarchy'}
-                                        inputItem={'mergingScript.py'}
-                                        items={[]}
-                                        loading={false}
-                                        onChange={null}
-                                    />
+                                    <Mutation
+                                        mutation={updateAttribute}
+                                    >
+                                        {(updateAttributeF, {data, loading}) => {
+                                            return <StringSelect
+                                                inputItem={(attribute && attribute.mergingScript) ? attribute.mergingScript : ''}
+                                                items={['mergingScript.py']}
+                                                loading={loading}
+                                                onChange={(e: string) => {
+                                                    updateAttributeF({
+                                                        variables: {
+                                                            id: attribute.id,
+                                                            data: {
+                                                                mergingScript: e,
+                                                            },
+                                                        },
+                                                    })
+                                                }}
+                                            />
+                                        }}
+                                    </Mutation>
                                 </div>
                             </div>
                         }}
