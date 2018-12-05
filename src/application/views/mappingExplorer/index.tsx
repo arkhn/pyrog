@@ -58,6 +58,8 @@ const attributeSubscription = require('./queries/attributeSubscription.graphql')
 const getInputColumns = require('./queries/getInputColumns.graphql')
 const customAttributeSubscription = require('./queries/customAttributeSubscription.graphql')
 const updateAttribute = require('./queries/updateAttribute.graphql')
+const getResource = require('./queries/getResource.graphql')
+const subscribeResource = require('./queries/subscribeResource.graphql')
 
 const arkhnLogo = require("../../img/arkhn_logo_only_white.svg") as string;
 
@@ -94,7 +96,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
         this.props.dispatch(fetchDatabaseNames())
         this.props.dispatch(fetchFhirResourceNames())
 
-        this.props.dispatch(updateDatabase('Crossway'))
+        // this.props.dispatch(updateDatabase('Crossway'))
         this.props.dispatch(changeFhirResource('Patient'))
         this.props.dispatch(updateFhirAttribute('link.other'))
     }
@@ -114,8 +116,46 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
             title={'No FHIR attribute selected'}
         />
 
+        const primaryKeyComponent = <Query
+            query={getResource}
+            variables={{
+                database: selectedDatabase,
+                resource: selectedFhirResource,
+            }}
+            skip={!selectedDatabase || !selectedFhirResource}
+        >
+            {({ loading, error, data }: any) => {
+                let resource = data && data.resources ? data.resources[0] : null
+                console.log(resource)
+
+                return resource ? <Subscription
+                    subscription={subscribeResource}
+                    variables={{
+                        id: resource.id,
+                    }}
+                >
+                    {({ data, loading }) => {
+                        resource = data && data.subscribeResource ?
+                            data.subscribeResource.node :
+                            resource
+                        console.log(resource)
+                        console.log(this.props.data)
+
+                        return <ControlGroup>
+                            <StringSelect
+                                inputItem={resource.primaryKey}
+                                items={selectedDatabase ? Object.keys(this.props.data.databases.schemaByDatabaseName[selectedDatabase]) : []}
+                                onChange={null}
+                            />
+                        </ControlGroup>
+                    }}
+                </Subscription> :
+                null
+            }}
+        </Query>
+
         return <div id='mapping-explorer-container'>
-            <div id='navbar'>
+            <div id='navbar' className={'bp3-dark'}>
                 <ControlGroup>
                     <StringSelect
                         icon={'database'}
@@ -138,6 +178,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                         }}
                     />
                 </ControlGroup>
+                {primaryKeyComponent}
             </div>
 
             <div id='main-container'>

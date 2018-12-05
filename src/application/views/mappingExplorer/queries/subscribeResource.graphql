@@ -1,0 +1,10 @@
+subscription subscribeResource($id: ID!) {
+    resourceSubscription (id: $id) {
+        updatedFields
+        node {
+            id
+            name
+            primaryKey
+        }
+    }
+}

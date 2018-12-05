@@ -1,0 +1,14 @@
+query getResource($database: String!, $resource: String) {
+    resources (
+        where: {
+            name: $resource,
+            database: {
+                database: $database,
+            }
+        }
+    ) {
+        id
+        name
+        primaryKey
+    }
+}
