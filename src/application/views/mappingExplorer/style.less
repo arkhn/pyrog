@@ -2,6 +2,7 @@
 @import "~@blueprintjs/core/lib/less/variables";
 
 @window-padding: 20px;
+@border-radius: 6px;
 
 body {
     background-color: @black;
@@ -11,6 +12,74 @@ body {
 .flex-row {
     display: flex;
     justify-content: center;
+}
+
+.bp3-tabs {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .bp3-tab-panel:not([aria-hidden="true"]) {
+        flex-grow: 1;
+        display: flex;
+        overflow: auto;
+        flex-direction: column;
+
+        .vertical-flex {
+            width: 100%;
+            flex-grow: 1;
+            display: flex;
+            overflow: auto;
+            flex-direction: column;
+
+            .column-viewer {
+                flex-grow: 1;
+                overflow: auto;
+
+                .column-flexbox {
+                    overflow: auto;
+                    min-height: -moz-min-content;
+                    min-height: -webkit-min-content;
+                    min-height: min-content;
+                    height: 100%;
+                    overflow-x: scroll;
+                }
+            }
+        }
+    }
+}
+
+.bp3-tab-list {
+    background-color: @light-gray1;
+    overflow: hidden;
+
+    & > * {
+        text-align: center;
+        flex-grow: 1;
+    }
+
+    .tab-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        & > *:first-child {
+            margin-right: 5px;
+        }
+    }
+}
+
+.bp3-tab {
+    padding: 5px 0px;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+.bp3-tab-indicator-wrapper .bp3-tab-indicator {
+    background-color: @light-gray3;
+    height: 100%;
 }
 
 #mapping-explorer-container {
@@ -47,8 +116,13 @@ body {
             background-color: @gray5;
         }
 
+        #column-picker {
+            display: flex;
+            justify-content: center;
+        }
+
         #column-selection {
-            background-color: @light-gray4;
+            background-color: @light-gray3;
             flex-grow: 1;
         }
     }

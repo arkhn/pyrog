@@ -122,7 +122,6 @@ export default class TabViewer extends React.Component<IProps, IState> {
                         onChangeOwner={this.changeOwner}
                         onChangeTable={this.changeTable}
                         onChangeColumn={this.changeColumn}
-                        databaseColumn={databaseColumn}
                         databaseSchema={databaseSchema}
                     />
                     <Button

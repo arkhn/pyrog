@@ -12,60 +12,75 @@ import {
     IDatabaseSchema,
 } from '../types'
 
-export interface IColumnPickerProps {
+export interface IProps {
     onChangeOwner: any,
     onChangeTable: any,
     onChangeColumn: any,
-    databaseColumn: IDatabaseColumn,
     databaseSchema: IDatabaseSchema,
     label?: string,
     vertical?: boolean,
 }
 
-export interface IColumnPickerState {
-
+export interface IState {
+    owner: string,
+    table: string,
+    column: string,
 }
 
-export default class ColumnPicker extends React.Component<IColumnPickerProps, IColumnPickerState> {
+export default class ColumnPicker extends React.Component<IProps, IState> {
+    constructor(props: IProps) {
+        super(props)
+        this.state = {
+            owner: null,
+            table: null,
+            column: null,
+        }
+    }
+
     public render() {
         let {
             onChangeOwner,
             onChangeTable,
             onChangeColumn,
-            databaseColumn,
             databaseSchema,
             label,
             vertical,
         } = this.props
 
+        let {
+            owner,
+            table,
+            column,
+        } = this.state
+
         let owners = Object.keys(databaseSchema)
 
-        let tables = (databaseColumn && databaseColumn.owner) ?
-            Object.keys(databaseSchema[databaseColumn.owner]) :
+        let tables = owner ?
+            Object.keys(databaseSchema[owner]) :
             []
 
-        let columns = (databaseColumn && databaseColumn.table) ?
-            databaseSchema[databaseColumn.owner][databaseColumn.table] :
+        let columns = table ?
+            databaseSchema[owner][table] :
             []
 
         let controlGroup = <ControlGroup fill={false} vertical={vertical || false}>
             <StringSelect
                 icon={'group-objects'}
-                inputItem={databaseColumn ? databaseColumn.owner : null}
+                inputItem={owner}
                 items={owners}
                 onChange={onChangeOwner}
             />
             <StringSelect
-                disabled={!databaseColumn.owner}
+                disabled={!owner}
                 icon={'th'}
-                inputItem={databaseColumn ? databaseColumn.table : null}
+                inputItem={table}
                 items={tables}
                 onChange={onChangeTable}
             />
             <StringSelect
-                disabled={!databaseColumn.table}
+                disabled={!table}
                 icon={'column-layout'}
-                inputItem={databaseColumn ? databaseColumn.column : null}
+                inputItem={column}
                 items={columns}
                 onChange={onChangeColumn}
             />

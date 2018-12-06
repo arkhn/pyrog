@@ -93,7 +93,6 @@ export default class InputColumnsTable extends React.Component<IProps, IState> {
                         column.join ?
                             <td>
                                 <ColumnPicker
-                                    databaseColumn={column.join.targetColumn}
                                     databaseSchema={databaseSchema}
                                     onChangeOwner={null}
                                     onChangeTable={null}
