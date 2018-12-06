@@ -60,6 +60,7 @@ const customAttributeSubscription = require('./queries/customAttributeSubscripti
 const updateAttribute = require('./queries/updateAttribute.graphql')
 const getResource = require('./queries/getResource.graphql')
 const subscribeResource = require('./queries/subscribeResource.graphql')
+const updateResource = require('./queries/updateResource.graphql')
 
 const arkhnLogo = require("../../img/arkhn_logo_only_white.svg") as string;
 
@@ -142,11 +143,26 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                         console.log(this.props.data)
 
                         return <ControlGroup>
-                            <StringSelect
-                                inputItem={resource.primaryKey}
-                                items={selectedDatabase ? Object.keys(this.props.data.databases.schemaByDatabaseName[selectedDatabase]) : []}
-                                onChange={null}
-                            />
+                            <Mutation
+                                mutation={updateResource}
+                            >
+                                {(updateResource, {data, loading}) => {
+                                    return <StringSelect
+                                        inputItem={resource.primaryKey}
+                                        items={selectedDatabase ? Object.keys(this.props.data.databases.schemaByDatabaseName[selectedDatabase]) : []}
+                                        onChange={(e: string) => {
+                                            updateResource({
+                                                variables: {
+                                                    id: resource.id,
+                                                    data: {
+                                                        primaryKey: e,
+                                                    },
+                                                }
+                                            })
+                                        }}
+                                    />
+                                }}
+                            </Mutation>
                         </ControlGroup>
                     }}
                 </Subscription> :
@@ -156,29 +172,40 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
 
         return <div id='mapping-explorer-container'>
             <div id='navbar' className={'bp3-dark'}>
-                <ControlGroup>
-                    <StringSelect
-                        icon={'database'}
-                        inputItem={selectedDatabase}
-                        intent={'primary'}
-                        items={Object.keys(data.databases.databaseNames)}
-                        loading={data.databases.loadingDatabaseNames || data.databases.loadingDatabaseSchema}
-                        onChange={(databaseName: string) => {
-                            dispatch(changeDatabase(databaseName))
-                        }}
-                    />
-                    <StringSelect
-                        icon={'layout-hierarchy'}
-                        inputItem={selectedFhirResource}
-                        intent={'primary'}
-                        items={Object.keys(data.fhirResources.resourceNames)}
-                        loading={data.fhirResources.loadingFhirResourceNames || data.fhirResources.loadingFhirResourceJson}
-                        onChange={(resource: string) => {
-                            dispatch(changeFhirResource(resource))
-                        }}
-                    />
-                </ControlGroup>
-                {primaryKeyComponent}
+                <div className='flex-row'>
+                    <ControlGroup>
+                        <StringSelect
+                            icon={'database'}
+                            inputItem={selectedDatabase}
+                            intent={'primary'}
+                            items={Object.keys(data.databases.databaseNames)}
+                            loading={data.databases.loadingDatabaseNames || data.databases.loadingDatabaseSchema}
+                            onChange={(databaseName: string) => {
+                                dispatch(changeDatabase(databaseName))
+                            }}
+                        />
+                        <StringSelect
+                            icon={'layout-hierarchy'}
+                            inputItem={selectedFhirResource}
+                            intent={'primary'}
+                            items={Object.keys(data.fhirResources.resourceNames)}
+                            loading={data.fhirResources.loadingFhirResourceNames || data.fhirResources.loadingFhirResourceJson}
+                            onChange={(resource: string) => {
+                                dispatch(changeFhirResource(resource))
+                            }}
+                        />
+                    </ControlGroup>
+                </div>
+                {
+                    selectedDatabase && selectedFhirResource ?
+                        <div className='flex-row'>
+                            <Card>
+                                <h4>Primary Key</h4>
+                                {primaryKeyComponent}
+                            </Card>
+                        </div> :
+                        null
+                }
             </div>
 
             <div id='main-container'>

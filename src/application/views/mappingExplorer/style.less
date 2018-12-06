@@ -8,6 +8,11 @@ body {
     color: @light-gray1;
 }
 
+.flex-row {
+    display: flex;
+    justify-content: center;
+}
+
 #mapping-explorer-container {
     width: 100vw;
     height: 100vh;
@@ -16,8 +21,13 @@ body {
         background-color: @black;
         padding: calc(@window-padding / 2);
 
-        display: flex;
-        justify-content: center;
+        & > div:not(:last-child) {
+            margin-bottom: calc(@window-padding / 2);
+        }
+
+        .bp3-card h4 {
+            margin-top: 0;
+        }
     }
 
     #main-container {
