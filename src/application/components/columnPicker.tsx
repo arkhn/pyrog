@@ -13,9 +13,12 @@ import {
 } from '../types'
 
 export interface IProps {
-    onChangeOwner: any,
-    onChangeTable: any,
-    onChangeColumn: any,
+    ownerChangeCallback?: any,
+    tableChangeCallback?: any,
+    columnChangeCallback?: any,
+    onChangeOwner?: any,
+    onChangeTable?: any,
+    onChangeColumn?: any,
     databaseSchema: IDatabaseSchema,
     label?: string,
     vertical?: boolean,
@@ -34,6 +37,36 @@ export default class ColumnPicker extends React.Component<IProps, IState> {
             owner: null,
             table: null,
             column: null,
+        }
+    }
+
+    private changeOwner = (e: string) => {
+        this.setState({
+            owner: e,
+        })
+
+        if (this.props.ownerChangeCallback) {
+            this.props.ownerChangeCallback(e)
+        }
+    }
+
+    private changeTable = (e: string) => {
+        this.setState({
+            table: e,
+        })
+
+        if (this.props.tableChangeCallback) {
+            this.props.tableChangeCallback(e)
+        }
+    }
+
+    private changeColumn = (e: string) => {
+        this.setState({
+            column: e,
+        })
+
+        if (this.props.columnChangeCallback) {
+            this.props.columnChangeCallback(e)
         }
     }
 
@@ -68,21 +101,21 @@ export default class ColumnPicker extends React.Component<IProps, IState> {
                 icon={'group-objects'}
                 inputItem={owner}
                 items={owners}
-                onChange={onChangeOwner}
+                onChange={this.changeOwner}
             />
             <StringSelect
                 disabled={!owner}
                 icon={'th'}
                 inputItem={table}
                 items={tables}
-                onChange={onChangeTable}
+                onChange={this.changeTable}
             />
             <StringSelect
                 disabled={!table}
                 icon={'column-layout'}
                 inputItem={column}
                 items={columns}
-                onChange={onChangeColumn}
+                onChange={this.changeColumn}
             />
         </ControlGroup>
 

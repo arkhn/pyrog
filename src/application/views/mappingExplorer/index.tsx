@@ -62,6 +62,7 @@ const attributeSubscription = require('./queries/attributeSubscription.graphql')
 const getInputColumns = require('./queries/getInputColumns.graphql')
 const customAttributeSubscription = require('./queries/customAttributeSubscription.graphql')
 const updateAttribute = require('./queries/updateAttribute.graphql')
+const updateAttributeNoId = require('./queries/updateAttributeNoId.graphql')
 const getResource = require('./queries/getResource.graphql')
 const subscribeResource = require('./queries/subscribeResource.graphql')
 const updateResource = require('./queries/updateResource.graphql')
@@ -75,6 +76,11 @@ export interface IMappingExplorerState {
 }
 
 interface IState {
+    columnPicker: {
+        owner: string,
+        table: string,
+        column: string,
+    },
     selectedTabId: TabId,
 }
 
@@ -105,6 +111,11 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
         super(props)
         this.state = {
             selectedTabId: 'picker',
+            columnPicker: {
+                owner: null,
+                table: null,
+                column: null,
+            }
         }
     }
 
@@ -127,7 +138,8 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
         } = this.props
 
         const {
-            selectedTabId
+            columnPicker,
+            selectedTabId,
         } = this.state
 
         const nonIdealState = <NonIdealState
@@ -344,13 +356,13 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                             <Mutation
                                 mutation={updateAttribute}
                             >
-                                {(updateAttributeF, {data, loading}) => {
+                                {(updateAttribute, {data, loading}) => {
                                     return <StringSelect
                                         inputItem={(attribute && attribute.mergingScript) ? attribute.mergingScript : ''}
                                         items={['mergingScript.py']}
                                         loading={loading}
                                         onChange={(e: string) => {
-                                            updateAttributeF({
+                                            updateAttribute({
                                                 variables: {
                                                     id: attribute.id,
                                                     data: {
@@ -377,21 +389,65 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
             >
                 <ControlGroup>
                     <ColumnPicker
-                        onChangeOwner={null}
-                        onChangeTable={null}
-                        onChangeColumn={null}
+                        ownerChangeCallback={(e: string) => {
+                            this.setState({
+                                columnPicker: {
+                                    ...this.state.columnPicker,
+                                    owner: e,
+                                }
+                            })
+                        }}
+                        tableChangeCallback={(e: string) => {
+                            this.setState({
+                                columnPicker: {
+                                    ...this.state.columnPicker,
+                                    table: e,
+                                }
+                            })
+                        }}
+                        columnChangeCallback={(e: string) => {
+                            this.setState({
+                                columnPicker: {
+                                    ...this.state.columnPicker,
+                                    column: e,
+                                }
+                            })
+                        }}
                         databaseSchema={selectedDatabase ? data.databases.schemaByDatabaseName[selectedDatabase] : {}}
                     />
-                    <Button
-                        disabled={false}
-                        icon={'add'}
-                        onClick={null}
-                    />
+                    <Mutation
+                        mutation={updateAttributeNoId}
+                    >
+                        {(updateAttribute, { data, loading }) => {
+                            return <Button
+                                disabled={false}
+                                icon={'add'}
+                                onClick={() => updateAttribute({
+                                    variables: {
+                                        database: selectedDatabase,
+                                        resource: selectedFhirResource,
+                                        attribute: selectedFhirAttribute,
+                                        data: {
+                                            inputColumns: {
+                                                create: [
+                                                    {
+                                                        owner: columnPicker.owner,
+                                                        table: columnPicker.table,
+                                                        column: columnPicker.column,
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                })}
+                            />
+                        }}
+                    </Mutation>
                 </ControlGroup>
             </FormGroup>
         </div>
 
-        const inputColumnTab2 = <div>Hey</div>
+        const columnSuggestionTab = <div>Suggestions</div>
 
         const columnSelectionComponent = <div id='column-selection'>
             <Tabs
@@ -403,7 +459,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                 selectedTabId={selectedTabId}
             >
                 <Tab id="picker" title="Simple Selection Tool" panel={columnPickingTab} />
-                <Tab id="mb" disabled title="Suggestion" panel={inputColumnTab2} />
+                <Tab id="mb" disabled title="Column Suggestion Tool" panel={columnSuggestionTab} />
             </Tabs>
         </div>
 
