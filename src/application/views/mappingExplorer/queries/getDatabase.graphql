@@ -1,0 +1,11 @@
+query Database($database: String!) {
+    database (database: $database) {
+        id
+        name
+        resources {
+            id
+            name
+            primaryKeyOwner
+        }
+    }
+}

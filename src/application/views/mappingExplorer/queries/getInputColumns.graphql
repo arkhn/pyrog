@@ -1,5 +1,5 @@
 query inputColumns($database: String!, $resource: String!, $attribute: String!) {
-    mappings (where: {database: $database}) {
+    mappings (where: {name: $database}) {
         id
         database
         resources (where: {name: $resource}) {

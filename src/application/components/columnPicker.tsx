@@ -16,6 +16,11 @@ export interface IProps {
     ownerChangeCallback?: any,
     tableChangeCallback?: any,
     columnChangeCallback?: any,
+    initialColumn?: {
+        owner: string,
+        table: string,
+        column: string,
+    }
     onChangeOwner?: any,
     onChangeTable?: any,
     onChangeColumn?: any,
@@ -68,6 +73,18 @@ export default class ColumnPicker extends React.Component<IProps, IState> {
         if (this.props.columnChangeCallback) {
             this.props.columnChangeCallback(e)
         }
+    }
+
+    private static getDerivedStateFromProps(props: IProps, state: IState) {
+        if (props.initialColumn) {
+            return {
+                owner: props.initialColumn.owner,
+                table: props.initialColumn.table,
+                column: props.initialColumn.column,
+            }
+        }
+
+        return state
     }
 
     public render() {

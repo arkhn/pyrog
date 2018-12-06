@@ -5,7 +5,7 @@ query Attributes($database: String!, $resource: String!, $attribute: String!){
       resource: {
         name: $resource
         database: {
-          database: $database
+          name: $database
         }
       }
   	}

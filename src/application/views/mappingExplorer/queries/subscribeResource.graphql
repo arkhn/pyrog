@@ -4,7 +4,9 @@ subscription subscribeResource($id: ID!) {
         node {
             id
             name
-            primaryKey
+            primaryKeyOwner
+            primaryKeyTable
+            primaryKeyColumn
         }
     }
 }

@@ -53,7 +53,7 @@ import {
 import './style.less'
 
 // Requests
-const getMappings = require('./queries/getMappings.graphql')
+const getDatabase = require('./queries/getDatabase.graphql')
 const getAttributes = require('./queries/getAttributes.graphql')
 const subscription = require('./queries/subscription.graphql')
 const inputColumnMutation = require('./queries/inputColumnMutation.graphql')
@@ -168,7 +168,6 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
         >
             {({ loading, error, data }: any) => {
                 let resource = data && data.resources ? data.resources[0] : null
-                console.log(resource)
 
                 return resource ? <Subscription
                     subscription={subscribeResource}
@@ -180,27 +179,50 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                         resource = data && data.subscribeResource ?
                             data.subscribeResource.node :
                             resource
-                        console.log(resource)
-                        console.log(this.props.data)
 
                         return <ControlGroup>
                             <Mutation
                                 mutation={updateResource}
                             >
                                 {(updateResource, {data, loading}) => {
-                                    return <StringSelect
-                                        inputItem={resource.primaryKey}
-                                        items={selectedDatabase ? Object.keys(this.props.data.databases.schemaByDatabaseName[selectedDatabase]) : []}
-                                        onChange={(e: string) => {
+                                    return <ColumnPicker
+                                        ownerChangeCallback={(e: string) => {
                                             updateResource({
                                                 variables: {
                                                     id: resource.id,
                                                     data: {
-                                                        primaryKey: e,
+                                                        primaryKeyOwner: e,
                                                     },
                                                 }
                                             })
                                         }}
+                                        tableChangeCallback={(e: string) => {
+                                            updateResource({
+                                                variables: {
+                                                    id: resource.id,
+                                                    data: {
+                                                        primaryKeyTable: e,
+                                                    },
+                                                }
+                                            })
+                                        }}
+                                        columnChangeCallback={(e: string) => {
+                                            updateResource({
+                                                variables: {
+                                                    id: resource.id,
+                                                    data: {
+                                                        primaryKeyColumn: e,
+                                                    },
+                                                }
+                                            })
+                                        }}
+                                        initialColumn={{
+                                            owner: resource.primaryKeyOwner,
+                                            table: resource.primaryKeyTable,
+                                            column: resource.primaryKeyColumn,
+                                        }}
+                                        databaseSchema={selectedDatabase ? this.props.data.databases.schemaByDatabaseName[selectedDatabase] : {}}
+                                        label={'Primary Key'}
                                     />
                                 }}
                             </Mutation>
@@ -402,8 +424,9 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                         ownerChangeCallback={(e: string) => {
                             this.setState({
                                 columnPicker: {
-                                    ...this.state.columnPicker,
                                     owner: e,
+                                    table: null,
+                                    column: null,
                                 }
                             })
                         }}
@@ -412,6 +435,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                 columnPicker: {
                                     ...this.state.columnPicker,
                                     table: e,
+                                    colum: null,
                                 }
                             })
                         }}
@@ -526,7 +550,6 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                     toggledNavBar && selectedDatabase && selectedFhirResource ?
                         <div className='flex-row'>
                             <Card>
-                                <h4>Primary Key</h4>
                                 {primaryKeyComponent}
                             </Card>
                         </div> :

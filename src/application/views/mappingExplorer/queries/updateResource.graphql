@@ -2,6 +2,8 @@ mutation updateResource($id: ID!, $data: ResourceUpdateInput) {
     updateResource(id: $id, data: $data) {
         id
         name
-        primaryKey
+        primaryKeyOwner
+        primaryKeyTable
+        primaryKeyColumn
     }
 }

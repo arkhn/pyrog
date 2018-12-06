@@ -3,12 +3,14 @@ query getResource($database: String!, $resource: String) {
         where: {
             name: $resource,
             database: {
-                database: $database,
+                name: $database,
             }
         }
     ) {
         id
         name
-        primaryKey
+        primaryKeyOwner
+        primaryKeyTable
+        primaryKeyColumn
     }
 }
