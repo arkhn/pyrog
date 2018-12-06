@@ -67,7 +67,8 @@ const getResource = require('./queries/getResource.graphql')
 const subscribeResource = require('./queries/subscribeResource.graphql')
 const updateResource = require('./queries/updateResource.graphql')
 
-const arkhnLogo = require("../../img/arkhn_logo_only_white.svg") as string;
+const arkhnLogoWhite = require("../../img/arkhn_logo_only_white.svg") as string;
+const arkhnLogoBlack = require("../../img/arkhn_logo_only_black.svg") as string;
 
 export interface IMappingExplorerState {
     selectedDatabase: string,
@@ -82,6 +83,7 @@ interface IState {
         column: string,
     },
     selectedTabId: TabId,
+    toggledNavBar: boolean,
 }
 
 interface IMappingExplorerViewState extends IView, IMappingExplorerState {}
@@ -110,12 +112,13 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
     constructor(props: IMappingExplorerViewState) {
         super(props)
         this.state = {
-            selectedTabId: 'picker',
             columnPicker: {
                 owner: null,
                 table: null,
                 column: null,
-            }
+            },
+            selectedTabId: 'picker',
+            toggledNavBar: false,
         }
     }
 
@@ -124,8 +127,8 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
         this.props.dispatch(fetchFhirResourceNames())
 
         // this.props.dispatch(updateDatabase('Crossway'))
-        this.props.dispatch(changeFhirResource('Patient'))
-        this.props.dispatch(updateFhirAttribute('link.other'))
+        // this.props.dispatch(changeFhirResource('Patient'))
+        // this.props.dispatch(updateFhirAttribute('link.other'))
     }
 
     public render = () => {
@@ -142,10 +145,16 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
             selectedTabId,
         } = this.state
 
-        const nonIdealState = <NonIdealState
-            description={'Select a FHIR resource attribute by clicking on a node in the left panel.'}
-            icon={<span dangerouslySetInnerHTML={{__html: arkhnLogo}}/>}
-            title={'No FHIR attribute selected'}
+        const initialMessage = <NonIdealState
+            description={'Please select a Database and Fhir Resource'}
+            icon={<span dangerouslySetInnerHTML={{__html: arkhnLogoBlack}}/>}
+            title={'Fhirball'}
+        />
+
+        const attributeMessage = <NonIdealState
+            description={'Please select a Fhir Attribute'}
+            icon={<span dangerouslySetInnerHTML={{__html: arkhnLogoBlack}}/>}
+            title={'Fhirball'}
         />
 
         const primaryKeyComponent = <Query
@@ -463,7 +472,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
             </Tabs>
         </div>
 
-        const fhirResourceTree = <FhirResourceTree
+        let fhirResourceTree = <FhirResourceTree
             json={
                 selectedFhirResource ?
                     data.fhirResources.jsonByResourceName[selectedFhirResource] :
@@ -513,17 +522,25 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                 }
             </div>
 
-            <div id='main-container'>
-                <div id='left-part'>
-                    {inputColumnsComponent}
-                    {columnSelectionComponent}
-                </div>
-                <div id='right-part'>
-                    <div id='fhir-resource-tree'>
-                        {fhirResourceTree}
-                    </div>
-                </div>
-            </div>
+            {
+                selectedDatabase && selectedFhirResource ?
+                    <div id='main-container'>
+                        {
+                            selectedFhirAttribute ?
+                                <div id='left-part'>
+                                    {inputColumnsComponent}
+                                    {columnSelectionComponent}
+                                </div> :
+                                attributeMessage
+                        }
+                        <div id='right-part'>
+                            <div id='fhir-resource-tree'>
+                                {fhirResourceTree}
+                            </div>
+                        </div>
+                    </div> :
+                    initialMessage
+            }
         </div>
     }
 }

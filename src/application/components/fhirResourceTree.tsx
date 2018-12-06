@@ -95,7 +95,9 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
 
                 FhirResourceTree.forEachNode(nodes, (node: ITreeNode<INodeData>) => {
                     node.isSelected = node.nodeData.flatPath == props.selectedNode
-                    node.isExpanded = props.selectedNode.startsWith(node.nodeData.flatPath)
+                    node.isExpanded = props.selectedNode ?
+                        props.selectedNode.startsWith(node.nodeData.flatPath) :
+                        false
                 })
 
                 console.log(nodes)
@@ -106,6 +108,7 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
                     isBroken: false,
                 }
             } catch(err) {
+                console.log(err)
                 return {
                     nodes: [],
                     renderJson: props.json,
