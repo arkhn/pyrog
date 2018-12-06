@@ -143,6 +143,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
         const {
             columnPicker,
             selectedTabId,
+            toggledNavBar,
         } = this.state
 
         const initialMessage = <NonIdealState
@@ -509,9 +510,20 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                             }}
                         />
                     </ControlGroup>
+                    {
+                        selectedDatabase && selectedFhirResource ?
+                            <Button
+                                icon={'cog'}
+                                minimal={!this.state.toggledNavBar}
+                                onClick={() => this.setState({
+                                    toggledNavBar: !this.state.toggledNavBar,
+                                })}
+                            /> :
+                            null
+                    }
                 </div>
                 {
-                    selectedDatabase && selectedFhirResource ?
+                    toggledNavBar && selectedDatabase && selectedFhirResource ?
                         <div className='flex-row'>
                             <Card>
                                 <h4>Primary Key</h4>
