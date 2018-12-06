@@ -4,57 +4,57 @@ import { Options } from 'graphql-binding'
 import { makePrismaBindingClass, BasePrismaOptions } from 'prisma-binding'
 
 export interface Query {
-    mappings: <T = Mapping[]>(args: { where?: MappingWhereInput, orderBy?: MappingOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    databases: <T = Database[]>(args: { where?: DatabaseWhereInput, orderBy?: DatabaseOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     resources: <T = Resource[]>(args: { where?: ResourceWhereInput, orderBy?: ResourceOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     attributes: <T = Attribute[]>(args: { where?: AttributeWhereInput, orderBy?: AttributeOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     inputColumns: <T = InputColumn[]>(args: { where?: InputColumnWhereInput, orderBy?: InputColumnOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    mapping: <T = Mapping | null>(args: { where: MappingWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    database: <T = Database | null>(args: { where: DatabaseWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     resource: <T = Resource | null>(args: { where: ResourceWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     attribute: <T = Attribute | null>(args: { where: AttributeWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     inputColumn: <T = InputColumn | null>(args: { where: InputColumnWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    mappingsConnection: <T = MappingConnection>(args: { where?: MappingWhereInput, orderBy?: MappingOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    databasesConnection: <T = DatabaseConnection>(args: { where?: DatabaseWhereInput, orderBy?: DatabaseOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     resourcesConnection: <T = ResourceConnection>(args: { where?: ResourceWhereInput, orderBy?: ResourceOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     attributesConnection: <T = AttributeConnection>(args: { where?: AttributeWhereInput, orderBy?: AttributeOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     inputColumnsConnection: <T = InputColumnConnection>(args: { where?: InputColumnWhereInput, orderBy?: InputColumnOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    node: <T = Node | null>(args: { id: ID_Output }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T>
+    node: <T = Node | null>(args: { id: ID_Output }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> 
   }
 
 export interface Mutation {
-    createMapping: <T = Mapping>(args: { data: MappingCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    createDatabase: <T = Database>(args: { data: DatabaseCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     createResource: <T = Resource>(args: { data: ResourceCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     createAttribute: <T = Attribute>(args: { data: AttributeCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     createInputColumn: <T = InputColumn>(args: { data: InputColumnCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    updateMapping: <T = Mapping | null>(args: { data: MappingUpdateInput, where: MappingWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateDatabase: <T = Database | null>(args: { data: DatabaseUpdateInput, where: DatabaseWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateResource: <T = Resource | null>(args: { data: ResourceUpdateInput, where: ResourceWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateAttribute: <T = Attribute | null>(args: { data: AttributeUpdateInput, where: AttributeWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateInputColumn: <T = InputColumn | null>(args: { data: InputColumnUpdateInput, where: InputColumnWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    deleteMapping: <T = Mapping | null>(args: { where: MappingWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteDatabase: <T = Database | null>(args: { where: DatabaseWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteResource: <T = Resource | null>(args: { where: ResourceWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteAttribute: <T = Attribute | null>(args: { where: AttributeWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteInputColumn: <T = InputColumn | null>(args: { where: InputColumnWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    upsertMapping: <T = Mapping>(args: { where: MappingWhereUniqueInput, create: MappingCreateInput, update: MappingUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    upsertDatabase: <T = Database>(args: { where: DatabaseWhereUniqueInput, create: DatabaseCreateInput, update: DatabaseUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     upsertResource: <T = Resource>(args: { where: ResourceWhereUniqueInput, create: ResourceCreateInput, update: ResourceUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     upsertAttribute: <T = Attribute>(args: { where: AttributeWhereUniqueInput, create: AttributeCreateInput, update: AttributeUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     upsertInputColumn: <T = InputColumn>(args: { where: InputColumnWhereUniqueInput, create: InputColumnCreateInput, update: InputColumnUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    updateManyMappings: <T = BatchPayload>(args: { data: MappingUpdateManyMutationInput, where?: MappingWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateManyDatabases: <T = BatchPayload>(args: { data: DatabaseUpdateManyMutationInput, where?: DatabaseWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateManyResources: <T = BatchPayload>(args: { data: ResourceUpdateManyMutationInput, where?: ResourceWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateManyAttributes: <T = BatchPayload>(args: { data: AttributeUpdateManyMutationInput, where?: AttributeWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateManyInputColumns: <T = BatchPayload>(args: { data: InputColumnUpdateManyMutationInput, where?: InputColumnWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    deleteManyMappings: <T = BatchPayload>(args: { where?: MappingWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteManyDatabases: <T = BatchPayload>(args: { where?: DatabaseWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteManyResources: <T = BatchPayload>(args: { where?: ResourceWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteManyAttributes: <T = BatchPayload>(args: { where?: AttributeWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    deleteManyInputColumns: <T = BatchPayload>(args: { where?: InputColumnWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T>
+    deleteManyInputColumns: <T = BatchPayload>(args: { where?: InputColumnWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> 
   }
 
 export interface Subscription {
-    mapping: <T = MappingSubscriptionPayload | null>(args: { where?: MappingSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
+    database: <T = DatabaseSubscriptionPayload | null>(args: { where?: DatabaseSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
     resource: <T = ResourceSubscriptionPayload | null>(args: { where?: ResourceSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
     attribute: <T = AttributeSubscriptionPayload | null>(args: { where?: AttributeSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
-    inputColumn: <T = InputColumnSubscriptionPayload | null>(args: { where?: InputColumnSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>>
+    inputColumn: <T = InputColumnSubscriptionPayload | null>(args: { where?: InputColumnSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> 
   }
 
 export interface Exists {
-  Mapping: (where?: MappingWhereInput) => Promise<boolean>
+  Database: (where?: DatabaseWhereInput) => Promise<boolean>
   Resource: (where?: ResourceWhereInput) => Promise<boolean>
   Attribute: (where?: AttributeWhereInput) => Promise<boolean>
   InputColumn: (where?: InputColumnWhereInput) => Promise<boolean>
@@ -86,11 +86,11 @@ const typeDefs = `type AggregateAttribute {
   count: Int!
 }
 
-type AggregateInputColumn {
+type AggregateDatabase {
   count: Int!
 }
 
-type AggregateMapping {
+type AggregateInputColumn {
   count: Int!
 }
 
@@ -553,6 +553,224 @@ input AttributeWhereUniqueInput {
 type BatchPayload {
   """The number of nodes that have been affected by the Batch operation."""
   count: Long!
+}
+
+type Database implements Node {
+  id: ID!
+  name: String!
+  resources(where: ResourceWhereInput, orderBy: ResourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Resource!]
+}
+
+"""A connection to a list of items."""
+type DatabaseConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [DatabaseEdge]!
+  aggregate: AggregateDatabase!
+}
+
+input DatabaseCreateInput {
+  name: String!
+  resources: ResourceCreateManyWithoutDatabaseInput
+}
+
+input DatabaseCreateOneWithoutResourcesInput {
+  create: DatabaseCreateWithoutResourcesInput
+  connect: DatabaseWhereUniqueInput
+}
+
+input DatabaseCreateWithoutResourcesInput {
+  name: String!
+}
+
+"""An edge in a connection."""
+type DatabaseEdge {
+  """The item at the end of the edge."""
+  node: Database!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum DatabaseOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type DatabasePreviousValues {
+  id: ID!
+  name: String!
+}
+
+type DatabaseSubscriptionPayload {
+  mutation: MutationType!
+  node: Database
+  updatedFields: [String!]
+  previousValues: DatabasePreviousValues
+}
+
+input DatabaseSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [DatabaseSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [DatabaseSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [DatabaseSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: DatabaseWhereInput
+}
+
+input DatabaseUpdateInput {
+  name: String
+  resources: ResourceUpdateManyWithoutDatabaseInput
+}
+
+input DatabaseUpdateManyMutationInput {
+  name: String
+}
+
+input DatabaseUpdateOneRequiredWithoutResourcesInput {
+  create: DatabaseCreateWithoutResourcesInput
+  connect: DatabaseWhereUniqueInput
+  update: DatabaseUpdateWithoutResourcesDataInput
+  upsert: DatabaseUpsertWithoutResourcesInput
+}
+
+input DatabaseUpdateWithoutResourcesDataInput {
+  name: String
+}
+
+input DatabaseUpsertWithoutResourcesInput {
+  update: DatabaseUpdateWithoutResourcesDataInput!
+  create: DatabaseCreateWithoutResourcesInput!
+}
+
+input DatabaseWhereInput {
+  """Logical AND on all given filters."""
+  AND: [DatabaseWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [DatabaseWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [DatabaseWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  resources_every: ResourceWhereInput
+  resources_some: ResourceWhereInput
+  resources_none: ResourceWhereInput
+}
+
+input DatabaseWhereUniqueInput {
+  id: ID
+  name: String
 }
 
 type InputColumn implements Node {
@@ -1516,246 +1734,28 @@ Long can represent values between -(2^63) and 2^63 - 1.
 """
 scalar Long
 
-type Mapping implements Node {
-  id: ID!
-  database: String!
-  resources(where: ResourceWhereInput, orderBy: ResourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Resource!]
-}
-
-"""A connection to a list of items."""
-type MappingConnection {
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """A list of edges."""
-  edges: [MappingEdge]!
-  aggregate: AggregateMapping!
-}
-
-input MappingCreateInput {
-  database: String!
-  resources: ResourceCreateManyWithoutDatabaseInput
-}
-
-input MappingCreateOneWithoutResourcesInput {
-  create: MappingCreateWithoutResourcesInput
-  connect: MappingWhereUniqueInput
-}
-
-input MappingCreateWithoutResourcesInput {
-  database: String!
-}
-
-"""An edge in a connection."""
-type MappingEdge {
-  """The item at the end of the edge."""
-  node: Mapping!
-
-  """A cursor for use in pagination."""
-  cursor: String!
-}
-
-enum MappingOrderByInput {
-  id_ASC
-  id_DESC
-  database_ASC
-  database_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
-}
-
-type MappingPreviousValues {
-  id: ID!
-  database: String!
-}
-
-type MappingSubscriptionPayload {
-  mutation: MutationType!
-  node: Mapping
-  updatedFields: [String!]
-  previousValues: MappingPreviousValues
-}
-
-input MappingSubscriptionWhereInput {
-  """Logical AND on all given filters."""
-  AND: [MappingSubscriptionWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [MappingSubscriptionWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [MappingSubscriptionWhereInput!]
-
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
-  mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
-  updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
-  updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
-  updatedFields_contains_some: [String!]
-  node: MappingWhereInput
-}
-
-input MappingUpdateInput {
-  database: String
-  resources: ResourceUpdateManyWithoutDatabaseInput
-}
-
-input MappingUpdateManyMutationInput {
-  database: String
-}
-
-input MappingUpdateOneRequiredWithoutResourcesInput {
-  create: MappingCreateWithoutResourcesInput
-  connect: MappingWhereUniqueInput
-  update: MappingUpdateWithoutResourcesDataInput
-  upsert: MappingUpsertWithoutResourcesInput
-}
-
-input MappingUpdateWithoutResourcesDataInput {
-  database: String
-}
-
-input MappingUpsertWithoutResourcesInput {
-  update: MappingUpdateWithoutResourcesDataInput!
-  create: MappingCreateWithoutResourcesInput!
-}
-
-input MappingWhereInput {
-  """Logical AND on all given filters."""
-  AND: [MappingWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [MappingWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [MappingWhereInput!]
-  id: ID
-
-  """All values that are not equal to given value."""
-  id_not: ID
-
-  """All values that are contained in given list."""
-  id_in: [ID!]
-
-  """All values that are not contained in given list."""
-  id_not_in: [ID!]
-
-  """All values less than the given value."""
-  id_lt: ID
-
-  """All values less than or equal the given value."""
-  id_lte: ID
-
-  """All values greater than the given value."""
-  id_gt: ID
-
-  """All values greater than or equal the given value."""
-  id_gte: ID
-
-  """All values containing the given string."""
-  id_contains: ID
-
-  """All values not containing the given string."""
-  id_not_contains: ID
-
-  """All values starting with the given string."""
-  id_starts_with: ID
-
-  """All values not starting with the given string."""
-  id_not_starts_with: ID
-
-  """All values ending with the given string."""
-  id_ends_with: ID
-
-  """All values not ending with the given string."""
-  id_not_ends_with: ID
-  database: String
-
-  """All values that are not equal to given value."""
-  database_not: String
-
-  """All values that are contained in given list."""
-  database_in: [String!]
-
-  """All values that are not contained in given list."""
-  database_not_in: [String!]
-
-  """All values less than the given value."""
-  database_lt: String
-
-  """All values less than or equal the given value."""
-  database_lte: String
-
-  """All values greater than the given value."""
-  database_gt: String
-
-  """All values greater than or equal the given value."""
-  database_gte: String
-
-  """All values containing the given string."""
-  database_contains: String
-
-  """All values not containing the given string."""
-  database_not_contains: String
-
-  """All values starting with the given string."""
-  database_starts_with: String
-
-  """All values not starting with the given string."""
-  database_not_starts_with: String
-
-  """All values ending with the given string."""
-  database_ends_with: String
-
-  """All values not ending with the given string."""
-  database_not_ends_with: String
-  resources_every: ResourceWhereInput
-  resources_some: ResourceWhereInput
-  resources_none: ResourceWhereInput
-}
-
-input MappingWhereUniqueInput {
-  id: ID
-  database: String
-}
-
 type Mutation {
-  createMapping(data: MappingCreateInput!): Mapping!
+  createDatabase(data: DatabaseCreateInput!): Database!
   createResource(data: ResourceCreateInput!): Resource!
   createAttribute(data: AttributeCreateInput!): Attribute!
   createInputColumn(data: InputColumnCreateInput!): InputColumn!
-  updateMapping(data: MappingUpdateInput!, where: MappingWhereUniqueInput!): Mapping
+  updateDatabase(data: DatabaseUpdateInput!, where: DatabaseWhereUniqueInput!): Database
   updateResource(data: ResourceUpdateInput!, where: ResourceWhereUniqueInput!): Resource
   updateAttribute(data: AttributeUpdateInput!, where: AttributeWhereUniqueInput!): Attribute
   updateInputColumn(data: InputColumnUpdateInput!, where: InputColumnWhereUniqueInput!): InputColumn
-  deleteMapping(where: MappingWhereUniqueInput!): Mapping
+  deleteDatabase(where: DatabaseWhereUniqueInput!): Database
   deleteResource(where: ResourceWhereUniqueInput!): Resource
   deleteAttribute(where: AttributeWhereUniqueInput!): Attribute
   deleteInputColumn(where: InputColumnWhereUniqueInput!): InputColumn
-  upsertMapping(where: MappingWhereUniqueInput!, create: MappingCreateInput!, update: MappingUpdateInput!): Mapping!
+  upsertDatabase(where: DatabaseWhereUniqueInput!, create: DatabaseCreateInput!, update: DatabaseUpdateInput!): Database!
   upsertResource(where: ResourceWhereUniqueInput!, create: ResourceCreateInput!, update: ResourceUpdateInput!): Resource!
   upsertAttribute(where: AttributeWhereUniqueInput!, create: AttributeCreateInput!, update: AttributeUpdateInput!): Attribute!
   upsertInputColumn(where: InputColumnWhereUniqueInput!, create: InputColumnCreateInput!, update: InputColumnUpdateInput!): InputColumn!
-  updateManyMappings(data: MappingUpdateManyMutationInput!, where: MappingWhereInput): BatchPayload!
+  updateManyDatabases(data: DatabaseUpdateManyMutationInput!, where: DatabaseWhereInput): BatchPayload!
   updateManyResources(data: ResourceUpdateManyMutationInput!, where: ResourceWhereInput): BatchPayload!
   updateManyAttributes(data: AttributeUpdateManyMutationInput!, where: AttributeWhereInput): BatchPayload!
   updateManyInputColumns(data: InputColumnUpdateManyMutationInput!, where: InputColumnWhereInput): BatchPayload!
-  deleteManyMappings(where: MappingWhereInput): BatchPayload!
+  deleteManyDatabases(where: DatabaseWhereInput): BatchPayload!
   deleteManyResources(where: ResourceWhereInput): BatchPayload!
   deleteManyAttributes(where: AttributeWhereInput): BatchPayload!
   deleteManyInputColumns(where: InputColumnWhereInput): BatchPayload!
@@ -1789,15 +1789,15 @@ type PageInfo {
 }
 
 type Query {
-  mappings(where: MappingWhereInput, orderBy: MappingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Mapping]!
+  databases(where: DatabaseWhereInput, orderBy: DatabaseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Database]!
   resources(where: ResourceWhereInput, orderBy: ResourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Resource]!
   attributes(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Attribute]!
   inputColumns(where: InputColumnWhereInput, orderBy: InputColumnOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [InputColumn]!
-  mapping(where: MappingWhereUniqueInput!): Mapping
+  database(where: DatabaseWhereUniqueInput!): Database
   resource(where: ResourceWhereUniqueInput!): Resource
   attribute(where: AttributeWhereUniqueInput!): Attribute
   inputColumn(where: InputColumnWhereUniqueInput!): InputColumn
-  mappingsConnection(where: MappingWhereInput, orderBy: MappingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MappingConnection!
+  databasesConnection(where: DatabaseWhereInput, orderBy: DatabaseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DatabaseConnection!
   resourcesConnection(where: ResourceWhereInput, orderBy: ResourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ResourceConnection!
   attributesConnection(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AttributeConnection!
   inputColumnsConnection(where: InputColumnWhereInput, orderBy: InputColumnOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): InputColumnConnection!
@@ -1811,9 +1811,11 @@ type Query {
 
 type Resource implements Node {
   id: ID!
-  database: Mapping!
+  database: Database!
   name: String!
-  primaryKey: String
+  primaryKeyOwner: String
+  primaryKeyTable: String
+  primaryKeyColumn: String
   attributes(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Attribute!]
 }
 
@@ -1829,8 +1831,10 @@ type ResourceConnection {
 
 input ResourceCreateInput {
   name: String!
-  primaryKey: String
-  database: MappingCreateOneWithoutResourcesInput!
+  primaryKeyOwner: String
+  primaryKeyTable: String
+  primaryKeyColumn: String
+  database: DatabaseCreateOneWithoutResourcesInput!
   attributes: AttributeCreateManyWithoutResourceInput
 }
 
@@ -1846,13 +1850,17 @@ input ResourceCreateOneWithoutAttributesInput {
 
 input ResourceCreateWithoutAttributesInput {
   name: String!
-  primaryKey: String
-  database: MappingCreateOneWithoutResourcesInput!
+  primaryKeyOwner: String
+  primaryKeyTable: String
+  primaryKeyColumn: String
+  database: DatabaseCreateOneWithoutResourcesInput!
 }
 
 input ResourceCreateWithoutDatabaseInput {
   name: String!
-  primaryKey: String
+  primaryKeyOwner: String
+  primaryKeyTable: String
+  primaryKeyColumn: String
   attributes: AttributeCreateManyWithoutResourceInput
 }
 
@@ -1870,8 +1878,12 @@ enum ResourceOrderByInput {
   id_DESC
   name_ASC
   name_DESC
-  primaryKey_ASC
-  primaryKey_DESC
+  primaryKeyOwner_ASC
+  primaryKeyOwner_DESC
+  primaryKeyTable_ASC
+  primaryKeyTable_DESC
+  primaryKeyColumn_ASC
+  primaryKeyColumn_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -1881,7 +1893,9 @@ enum ResourceOrderByInput {
 type ResourcePreviousValues {
   id: ID!
   name: String!
-  primaryKey: String
+  primaryKeyOwner: String
+  primaryKeyTable: String
+  primaryKeyColumn: String
 }
 
 input ResourceScalarWhereInput {
@@ -1973,46 +1987,126 @@ input ResourceScalarWhereInput {
 
   """All values not ending with the given string."""
   name_not_ends_with: String
-  primaryKey: String
+  primaryKeyOwner: String
 
   """All values that are not equal to given value."""
-  primaryKey_not: String
+  primaryKeyOwner_not: String
 
   """All values that are contained in given list."""
-  primaryKey_in: [String!]
+  primaryKeyOwner_in: [String!]
 
   """All values that are not contained in given list."""
-  primaryKey_not_in: [String!]
+  primaryKeyOwner_not_in: [String!]
 
   """All values less than the given value."""
-  primaryKey_lt: String
+  primaryKeyOwner_lt: String
 
   """All values less than or equal the given value."""
-  primaryKey_lte: String
+  primaryKeyOwner_lte: String
 
   """All values greater than the given value."""
-  primaryKey_gt: String
+  primaryKeyOwner_gt: String
 
   """All values greater than or equal the given value."""
-  primaryKey_gte: String
+  primaryKeyOwner_gte: String
 
   """All values containing the given string."""
-  primaryKey_contains: String
+  primaryKeyOwner_contains: String
 
   """All values not containing the given string."""
-  primaryKey_not_contains: String
+  primaryKeyOwner_not_contains: String
 
   """All values starting with the given string."""
-  primaryKey_starts_with: String
+  primaryKeyOwner_starts_with: String
 
   """All values not starting with the given string."""
-  primaryKey_not_starts_with: String
+  primaryKeyOwner_not_starts_with: String
 
   """All values ending with the given string."""
-  primaryKey_ends_with: String
+  primaryKeyOwner_ends_with: String
 
   """All values not ending with the given string."""
-  primaryKey_not_ends_with: String
+  primaryKeyOwner_not_ends_with: String
+  primaryKeyTable: String
+
+  """All values that are not equal to given value."""
+  primaryKeyTable_not: String
+
+  """All values that are contained in given list."""
+  primaryKeyTable_in: [String!]
+
+  """All values that are not contained in given list."""
+  primaryKeyTable_not_in: [String!]
+
+  """All values less than the given value."""
+  primaryKeyTable_lt: String
+
+  """All values less than or equal the given value."""
+  primaryKeyTable_lte: String
+
+  """All values greater than the given value."""
+  primaryKeyTable_gt: String
+
+  """All values greater than or equal the given value."""
+  primaryKeyTable_gte: String
+
+  """All values containing the given string."""
+  primaryKeyTable_contains: String
+
+  """All values not containing the given string."""
+  primaryKeyTable_not_contains: String
+
+  """All values starting with the given string."""
+  primaryKeyTable_starts_with: String
+
+  """All values not starting with the given string."""
+  primaryKeyTable_not_starts_with: String
+
+  """All values ending with the given string."""
+  primaryKeyTable_ends_with: String
+
+  """All values not ending with the given string."""
+  primaryKeyTable_not_ends_with: String
+  primaryKeyColumn: String
+
+  """All values that are not equal to given value."""
+  primaryKeyColumn_not: String
+
+  """All values that are contained in given list."""
+  primaryKeyColumn_in: [String!]
+
+  """All values that are not contained in given list."""
+  primaryKeyColumn_not_in: [String!]
+
+  """All values less than the given value."""
+  primaryKeyColumn_lt: String
+
+  """All values less than or equal the given value."""
+  primaryKeyColumn_lte: String
+
+  """All values greater than the given value."""
+  primaryKeyColumn_gt: String
+
+  """All values greater than or equal the given value."""
+  primaryKeyColumn_gte: String
+
+  """All values containing the given string."""
+  primaryKeyColumn_contains: String
+
+  """All values not containing the given string."""
+  primaryKeyColumn_not_contains: String
+
+  """All values starting with the given string."""
+  primaryKeyColumn_starts_with: String
+
+  """All values not starting with the given string."""
+  primaryKeyColumn_not_starts_with: String
+
+  """All values ending with the given string."""
+  primaryKeyColumn_ends_with: String
+
+  """All values not ending with the given string."""
+  primaryKeyColumn_not_ends_with: String
 }
 
 type ResourceSubscriptionPayload {
@@ -2056,19 +2150,25 @@ input ResourceSubscriptionWhereInput {
 
 input ResourceUpdateInput {
   name: String
-  primaryKey: String
-  database: MappingUpdateOneRequiredWithoutResourcesInput
+  primaryKeyOwner: String
+  primaryKeyTable: String
+  primaryKeyColumn: String
+  database: DatabaseUpdateOneRequiredWithoutResourcesInput
   attributes: AttributeUpdateManyWithoutResourceInput
 }
 
 input ResourceUpdateManyDataInput {
   name: String
-  primaryKey: String
+  primaryKeyOwner: String
+  primaryKeyTable: String
+  primaryKeyColumn: String
 }
 
 input ResourceUpdateManyMutationInput {
   name: String
-  primaryKey: String
+  primaryKeyOwner: String
+  primaryKeyTable: String
+  primaryKeyColumn: String
 }
 
 input ResourceUpdateManyWithoutDatabaseInput {
@@ -2096,13 +2196,17 @@ input ResourceUpdateOneRequiredWithoutAttributesInput {
 
 input ResourceUpdateWithoutAttributesDataInput {
   name: String
-  primaryKey: String
-  database: MappingUpdateOneRequiredWithoutResourcesInput
+  primaryKeyOwner: String
+  primaryKeyTable: String
+  primaryKeyColumn: String
+  database: DatabaseUpdateOneRequiredWithoutResourcesInput
 }
 
 input ResourceUpdateWithoutDatabaseDataInput {
   name: String
-  primaryKey: String
+  primaryKeyOwner: String
+  primaryKeyTable: String
+  primaryKeyColumn: String
   attributes: AttributeUpdateManyWithoutResourceInput
 }
 
@@ -2211,47 +2315,127 @@ input ResourceWhereInput {
 
   """All values not ending with the given string."""
   name_not_ends_with: String
-  primaryKey: String
+  primaryKeyOwner: String
 
   """All values that are not equal to given value."""
-  primaryKey_not: String
+  primaryKeyOwner_not: String
 
   """All values that are contained in given list."""
-  primaryKey_in: [String!]
+  primaryKeyOwner_in: [String!]
 
   """All values that are not contained in given list."""
-  primaryKey_not_in: [String!]
+  primaryKeyOwner_not_in: [String!]
 
   """All values less than the given value."""
-  primaryKey_lt: String
+  primaryKeyOwner_lt: String
 
   """All values less than or equal the given value."""
-  primaryKey_lte: String
+  primaryKeyOwner_lte: String
 
   """All values greater than the given value."""
-  primaryKey_gt: String
+  primaryKeyOwner_gt: String
 
   """All values greater than or equal the given value."""
-  primaryKey_gte: String
+  primaryKeyOwner_gte: String
 
   """All values containing the given string."""
-  primaryKey_contains: String
+  primaryKeyOwner_contains: String
 
   """All values not containing the given string."""
-  primaryKey_not_contains: String
+  primaryKeyOwner_not_contains: String
 
   """All values starting with the given string."""
-  primaryKey_starts_with: String
+  primaryKeyOwner_starts_with: String
 
   """All values not starting with the given string."""
-  primaryKey_not_starts_with: String
+  primaryKeyOwner_not_starts_with: String
 
   """All values ending with the given string."""
-  primaryKey_ends_with: String
+  primaryKeyOwner_ends_with: String
 
   """All values not ending with the given string."""
-  primaryKey_not_ends_with: String
-  database: MappingWhereInput
+  primaryKeyOwner_not_ends_with: String
+  primaryKeyTable: String
+
+  """All values that are not equal to given value."""
+  primaryKeyTable_not: String
+
+  """All values that are contained in given list."""
+  primaryKeyTable_in: [String!]
+
+  """All values that are not contained in given list."""
+  primaryKeyTable_not_in: [String!]
+
+  """All values less than the given value."""
+  primaryKeyTable_lt: String
+
+  """All values less than or equal the given value."""
+  primaryKeyTable_lte: String
+
+  """All values greater than the given value."""
+  primaryKeyTable_gt: String
+
+  """All values greater than or equal the given value."""
+  primaryKeyTable_gte: String
+
+  """All values containing the given string."""
+  primaryKeyTable_contains: String
+
+  """All values not containing the given string."""
+  primaryKeyTable_not_contains: String
+
+  """All values starting with the given string."""
+  primaryKeyTable_starts_with: String
+
+  """All values not starting with the given string."""
+  primaryKeyTable_not_starts_with: String
+
+  """All values ending with the given string."""
+  primaryKeyTable_ends_with: String
+
+  """All values not ending with the given string."""
+  primaryKeyTable_not_ends_with: String
+  primaryKeyColumn: String
+
+  """All values that are not equal to given value."""
+  primaryKeyColumn_not: String
+
+  """All values that are contained in given list."""
+  primaryKeyColumn_in: [String!]
+
+  """All values that are not contained in given list."""
+  primaryKeyColumn_not_in: [String!]
+
+  """All values less than the given value."""
+  primaryKeyColumn_lt: String
+
+  """All values less than or equal the given value."""
+  primaryKeyColumn_lte: String
+
+  """All values greater than the given value."""
+  primaryKeyColumn_gt: String
+
+  """All values greater than or equal the given value."""
+  primaryKeyColumn_gte: String
+
+  """All values containing the given string."""
+  primaryKeyColumn_contains: String
+
+  """All values not containing the given string."""
+  primaryKeyColumn_not_contains: String
+
+  """All values starting with the given string."""
+  primaryKeyColumn_starts_with: String
+
+  """All values not starting with the given string."""
+  primaryKeyColumn_not_starts_with: String
+
+  """All values ending with the given string."""
+  primaryKeyColumn_ends_with: String
+
+  """All values not ending with the given string."""
+  primaryKeyColumn_not_ends_with: String
+  database: DatabaseWhereInput
   attributes_every: AttributeWhereInput
   attributes_some: AttributeWhereInput
   attributes_none: AttributeWhereInput
@@ -2262,7 +2446,7 @@ input ResourceWhereUniqueInput {
 }
 
 type Subscription {
-  mapping(where: MappingSubscriptionWhereInput): MappingSubscriptionPayload
+  database(where: DatabaseSubscriptionWhereInput): DatabaseSubscriptionPayload
   resource(where: ResourceSubscriptionWhereInput): ResourceSubscriptionPayload
   attribute(where: AttributeSubscriptionWhereInput): AttributeSubscriptionPayload
   inputColumn(where: InputColumnSubscriptionWhereInput): InputColumnSubscriptionPayload
@@ -2275,10 +2459,10 @@ export const Prisma = makePrismaBindingClass<BindingConstructor<Prisma>>({typeDe
  * Types
 */
 
-export type MappingOrderByInput =   'id_ASC' |
+export type DatabaseOrderByInput =   'id_ASC' |
   'id_DESC' |
-  'database_ASC' |
-  'database_DESC' |
+  'name_ASC' |
+  'name_DESC' |
   'updatedAt_ASC' |
   'updatedAt_DESC' |
   'createdAt_ASC' |
@@ -2288,8 +2472,12 @@ export type ResourceOrderByInput =   'id_ASC' |
   'id_DESC' |
   'name_ASC' |
   'name_DESC' |
-  'primaryKey_ASC' |
-  'primaryKey_DESC' |
+  'primaryKeyOwner_ASC' |
+  'primaryKeyOwner_DESC' |
+  'primaryKeyTable_ASC' |
+  'primaryKeyTable_DESC' |
+  'primaryKeyColumn_ASC' |
+  'primaryKeyColumn_DESC' |
   'updatedAt_ASC' |
   'updatedAt_DESC' |
   'createdAt_ASC' |
@@ -2344,10 +2532,10 @@ export interface ResourceUpdateManyWithoutDatabaseInput {
   upsert?: ResourceUpsertWithWhereUniqueWithoutDatabaseInput[] | ResourceUpsertWithWhereUniqueWithoutDatabaseInput
 }
 
-export interface MappingWhereInput {
-  AND?: MappingWhereInput[] | MappingWhereInput
-  OR?: MappingWhereInput[] | MappingWhereInput
-  NOT?: MappingWhereInput[] | MappingWhereInput
+export interface DatabaseWhereInput {
+  AND?: DatabaseWhereInput[] | DatabaseWhereInput
+  OR?: DatabaseWhereInput[] | DatabaseWhereInput
+  NOT?: DatabaseWhereInput[] | DatabaseWhereInput
   id?: ID_Input
   id_not?: ID_Input
   id_in?: ID_Input[] | ID_Input
@@ -2362,20 +2550,20 @@ export interface MappingWhereInput {
   id_not_starts_with?: ID_Input
   id_ends_with?: ID_Input
   id_not_ends_with?: ID_Input
-  database?: String
-  database_not?: String
-  database_in?: String[] | String
-  database_not_in?: String[] | String
-  database_lt?: String
-  database_lte?: String
-  database_gt?: String
-  database_gte?: String
-  database_contains?: String
-  database_not_contains?: String
-  database_starts_with?: String
-  database_not_starts_with?: String
-  database_ends_with?: String
-  database_not_ends_with?: String
+  name?: String
+  name_not?: String
+  name_in?: String[] | String
+  name_not_in?: String[] | String
+  name_lt?: String
+  name_lte?: String
+  name_gt?: String
+  name_gte?: String
+  name_contains?: String
+  name_not_contains?: String
+  name_starts_with?: String
+  name_not_starts_with?: String
+  name_ends_with?: String
+  name_not_ends_with?: String
   resources_every?: ResourceWhereInput
   resources_some?: ResourceWhereInput
   resources_none?: ResourceWhereInput
@@ -2394,15 +2582,19 @@ export interface InputColumnCreateWithoutAttributeInput {
 
 export interface ResourceUpdateInput {
   name?: String
-  primaryKey?: String
-  database?: MappingUpdateOneRequiredWithoutResourcesInput
+  primaryKeyOwner?: String
+  primaryKeyTable?: String
+  primaryKeyColumn?: String
+  database?: DatabaseUpdateOneRequiredWithoutResourcesInput
   attributes?: AttributeUpdateManyWithoutResourceInput
 }
 
 export interface ResourceCreateInput {
   name: String
-  primaryKey?: String
-  database: MappingCreateOneWithoutResourcesInput
+  primaryKeyOwner?: String
+  primaryKeyTable?: String
+  primaryKeyColumn?: String
+  database: DatabaseCreateOneWithoutResourcesInput
   attributes?: AttributeCreateManyWithoutResourceInput
 }
 
@@ -2411,9 +2603,9 @@ export interface AttributeUpdateWithWhereUniqueWithoutResourceInput {
   data: AttributeUpdateWithoutResourceDataInput
 }
 
-export interface MappingCreateOneWithoutResourcesInput {
-  create?: MappingCreateWithoutResourcesInput
-  connect?: MappingWhereUniqueInput
+export interface DatabaseCreateOneWithoutResourcesInput {
+  create?: DatabaseCreateWithoutResourcesInput
+  connect?: DatabaseWhereUniqueInput
 }
 
 export interface InputColumnWhereInput {
@@ -2549,8 +2741,8 @@ export interface InputColumnWhereInput {
   attribute?: AttributeWhereInput
 }
 
-export interface MappingCreateWithoutResourcesInput {
-  database: String
+export interface DatabaseCreateWithoutResourcesInput {
+  name: String
 }
 
 export interface AttributeWhereInput {
@@ -2644,21 +2836,49 @@ export interface ResourceWhereInput {
   name_not_starts_with?: String
   name_ends_with?: String
   name_not_ends_with?: String
-  primaryKey?: String
-  primaryKey_not?: String
-  primaryKey_in?: String[] | String
-  primaryKey_not_in?: String[] | String
-  primaryKey_lt?: String
-  primaryKey_lte?: String
-  primaryKey_gt?: String
-  primaryKey_gte?: String
-  primaryKey_contains?: String
-  primaryKey_not_contains?: String
-  primaryKey_starts_with?: String
-  primaryKey_not_starts_with?: String
-  primaryKey_ends_with?: String
-  primaryKey_not_ends_with?: String
-  database?: MappingWhereInput
+  primaryKeyOwner?: String
+  primaryKeyOwner_not?: String
+  primaryKeyOwner_in?: String[] | String
+  primaryKeyOwner_not_in?: String[] | String
+  primaryKeyOwner_lt?: String
+  primaryKeyOwner_lte?: String
+  primaryKeyOwner_gt?: String
+  primaryKeyOwner_gte?: String
+  primaryKeyOwner_contains?: String
+  primaryKeyOwner_not_contains?: String
+  primaryKeyOwner_starts_with?: String
+  primaryKeyOwner_not_starts_with?: String
+  primaryKeyOwner_ends_with?: String
+  primaryKeyOwner_not_ends_with?: String
+  primaryKeyTable?: String
+  primaryKeyTable_not?: String
+  primaryKeyTable_in?: String[] | String
+  primaryKeyTable_not_in?: String[] | String
+  primaryKeyTable_lt?: String
+  primaryKeyTable_lte?: String
+  primaryKeyTable_gt?: String
+  primaryKeyTable_gte?: String
+  primaryKeyTable_contains?: String
+  primaryKeyTable_not_contains?: String
+  primaryKeyTable_starts_with?: String
+  primaryKeyTable_not_starts_with?: String
+  primaryKeyTable_ends_with?: String
+  primaryKeyTable_not_ends_with?: String
+  primaryKeyColumn?: String
+  primaryKeyColumn_not?: String
+  primaryKeyColumn_in?: String[] | String
+  primaryKeyColumn_not_in?: String[] | String
+  primaryKeyColumn_lt?: String
+  primaryKeyColumn_lte?: String
+  primaryKeyColumn_gt?: String
+  primaryKeyColumn_gte?: String
+  primaryKeyColumn_contains?: String
+  primaryKeyColumn_not_contains?: String
+  primaryKeyColumn_starts_with?: String
+  primaryKeyColumn_not_starts_with?: String
+  primaryKeyColumn_ends_with?: String
+  primaryKeyColumn_not_ends_with?: String
+  database?: DatabaseWhereInput
   attributes_every?: AttributeWhereInput
   attributes_some?: AttributeWhereInput
   attributes_none?: AttributeWhereInput
@@ -2669,15 +2889,17 @@ export interface ResourceCreateOneWithoutAttributesInput {
   connect?: ResourceWhereUniqueInput
 }
 
-export interface MappingWhereUniqueInput {
+export interface DatabaseWhereUniqueInput {
   id?: ID_Input
-  database?: String
+  name?: String
 }
 
 export interface ResourceCreateWithoutAttributesInput {
   name: String
-  primaryKey?: String
-  database: MappingCreateOneWithoutResourcesInput
+  primaryKeyOwner?: String
+  primaryKeyTable?: String
+  primaryKeyColumn?: String
+  database: DatabaseCreateOneWithoutResourcesInput
 }
 
 export interface AttributeWhereUniqueInput {
@@ -2696,15 +2918,15 @@ export interface InputColumnCreateInput {
   attribute: AttributeCreateOneWithoutInputColumnsInput
 }
 
-export interface MappingSubscriptionWhereInput {
-  AND?: MappingSubscriptionWhereInput[] | MappingSubscriptionWhereInput
-  OR?: MappingSubscriptionWhereInput[] | MappingSubscriptionWhereInput
-  NOT?: MappingSubscriptionWhereInput[] | MappingSubscriptionWhereInput
+export interface DatabaseSubscriptionWhereInput {
+  AND?: DatabaseSubscriptionWhereInput[] | DatabaseSubscriptionWhereInput
+  OR?: DatabaseSubscriptionWhereInput[] | DatabaseSubscriptionWhereInput
+  NOT?: DatabaseSubscriptionWhereInput[] | DatabaseSubscriptionWhereInput
   mutation_in?: MutationType[] | MutationType
   updatedFields_contains?: String
   updatedFields_contains_every?: String[] | String
   updatedFields_contains_some?: String[] | String
-  node?: MappingWhereInput
+  node?: DatabaseWhereInput
 }
 
 export interface AttributeCreateOneWithoutInputColumnsInput {
@@ -2723,12 +2945,12 @@ export interface AttributeCreateWithoutInputColumnsInput {
   resource: ResourceCreateOneWithoutAttributesInput
 }
 
-export interface MappingUpdateManyMutationInput {
-  database?: String
+export interface DatabaseUpdateManyMutationInput {
+  name?: String
 }
 
-export interface MappingUpdateInput {
-  database?: String
+export interface DatabaseUpdateInput {
+  name?: String
   resources?: ResourceUpdateManyWithoutDatabaseInput
 }
 
@@ -2738,8 +2960,8 @@ export interface AttributeUpdateWithoutInputColumnsDataInput {
   resource?: ResourceUpdateOneRequiredWithoutAttributesInput
 }
 
-export interface MappingUpdateWithoutResourcesDataInput {
-  database?: String
+export interface DatabaseUpdateWithoutResourcesDataInput {
+  name?: String
 }
 
 export interface InputColumnUpdateInput {
@@ -2761,13 +2983,17 @@ export interface ResourceUpdateWithWhereUniqueWithoutDatabaseInput {
 
 export interface ResourceUpdateWithoutAttributesDataInput {
   name?: String
-  primaryKey?: String
-  database?: MappingUpdateOneRequiredWithoutResourcesInput
+  primaryKeyOwner?: String
+  primaryKeyTable?: String
+  primaryKeyColumn?: String
+  database?: DatabaseUpdateOneRequiredWithoutResourcesInput
 }
 
 export interface ResourceUpdateWithoutDatabaseDataInput {
   name?: String
-  primaryKey?: String
+  primaryKeyOwner?: String
+  primaryKeyTable?: String
+  primaryKeyColumn?: String
   attributes?: AttributeUpdateManyWithoutResourceInput
 }
 
@@ -2789,21 +3015,23 @@ export interface AttributeUpdateManyWithoutResourceInput {
   upsert?: AttributeUpsertWithWhereUniqueWithoutResourceInput[] | AttributeUpsertWithWhereUniqueWithoutResourceInput
 }
 
-export interface MappingCreateInput {
-  database: String
+export interface DatabaseCreateInput {
+  name: String
   resources?: ResourceCreateManyWithoutDatabaseInput
 }
 
-export interface MappingUpdateOneRequiredWithoutResourcesInput {
-  create?: MappingCreateWithoutResourcesInput
-  connect?: MappingWhereUniqueInput
-  update?: MappingUpdateWithoutResourcesDataInput
-  upsert?: MappingUpsertWithoutResourcesInput
+export interface DatabaseUpdateOneRequiredWithoutResourcesInput {
+  create?: DatabaseCreateWithoutResourcesInput
+  connect?: DatabaseWhereUniqueInput
+  update?: DatabaseUpdateWithoutResourcesDataInput
+  upsert?: DatabaseUpsertWithoutResourcesInput
 }
 
 export interface ResourceCreateWithoutDatabaseInput {
   name: String
-  primaryKey?: String
+  primaryKeyOwner?: String
+  primaryKeyTable?: String
+  primaryKeyColumn?: String
   attributes?: AttributeCreateManyWithoutResourceInput
 }
 
@@ -3030,9 +3258,9 @@ export interface InputColumnUpdateManyDataInput {
   joinTargetColumn?: String
 }
 
-export interface MappingUpsertWithoutResourcesInput {
-  update: MappingUpdateWithoutResourcesDataInput
-  create: MappingCreateWithoutResourcesInput
+export interface DatabaseUpsertWithoutResourcesInput {
+  update: DatabaseUpdateWithoutResourcesDataInput
+  create: DatabaseCreateWithoutResourcesInput
 }
 
 export interface InputColumnUpsertWithWhereUniqueWithoutAttributeInput {
@@ -3145,7 +3373,9 @@ export interface ResourceUpsertWithWhereUniqueWithoutDatabaseInput {
 
 export interface ResourceUpdateManyDataInput {
   name?: String
-  primaryKey?: String
+  primaryKeyOwner?: String
+  primaryKeyTable?: String
+  primaryKeyColumn?: String
 }
 
 export interface ResourceScalarWhereInput {
@@ -3180,20 +3410,48 @@ export interface ResourceScalarWhereInput {
   name_not_starts_with?: String
   name_ends_with?: String
   name_not_ends_with?: String
-  primaryKey?: String
-  primaryKey_not?: String
-  primaryKey_in?: String[] | String
-  primaryKey_not_in?: String[] | String
-  primaryKey_lt?: String
-  primaryKey_lte?: String
-  primaryKey_gt?: String
-  primaryKey_gte?: String
-  primaryKey_contains?: String
-  primaryKey_not_contains?: String
-  primaryKey_starts_with?: String
-  primaryKey_not_starts_with?: String
-  primaryKey_ends_with?: String
-  primaryKey_not_ends_with?: String
+  primaryKeyOwner?: String
+  primaryKeyOwner_not?: String
+  primaryKeyOwner_in?: String[] | String
+  primaryKeyOwner_not_in?: String[] | String
+  primaryKeyOwner_lt?: String
+  primaryKeyOwner_lte?: String
+  primaryKeyOwner_gt?: String
+  primaryKeyOwner_gte?: String
+  primaryKeyOwner_contains?: String
+  primaryKeyOwner_not_contains?: String
+  primaryKeyOwner_starts_with?: String
+  primaryKeyOwner_not_starts_with?: String
+  primaryKeyOwner_ends_with?: String
+  primaryKeyOwner_not_ends_with?: String
+  primaryKeyTable?: String
+  primaryKeyTable_not?: String
+  primaryKeyTable_in?: String[] | String
+  primaryKeyTable_not_in?: String[] | String
+  primaryKeyTable_lt?: String
+  primaryKeyTable_lte?: String
+  primaryKeyTable_gt?: String
+  primaryKeyTable_gte?: String
+  primaryKeyTable_contains?: String
+  primaryKeyTable_not_contains?: String
+  primaryKeyTable_starts_with?: String
+  primaryKeyTable_not_starts_with?: String
+  primaryKeyTable_ends_with?: String
+  primaryKeyTable_not_ends_with?: String
+  primaryKeyColumn?: String
+  primaryKeyColumn_not?: String
+  primaryKeyColumn_in?: String[] | String
+  primaryKeyColumn_not_in?: String[] | String
+  primaryKeyColumn_lt?: String
+  primaryKeyColumn_lte?: String
+  primaryKeyColumn_gt?: String
+  primaryKeyColumn_gte?: String
+  primaryKeyColumn_contains?: String
+  primaryKeyColumn_not_contains?: String
+  primaryKeyColumn_starts_with?: String
+  primaryKeyColumn_not_starts_with?: String
+  primaryKeyColumn_ends_with?: String
+  primaryKeyColumn_not_ends_with?: String
 }
 
 export interface ResourceUpdateManyWithWhereNestedInput {
@@ -3215,7 +3473,9 @@ export interface ResourceUpdateOneRequiredWithoutAttributesInput {
 
 export interface ResourceUpdateManyMutationInput {
   name?: String
-  primaryKey?: String
+  primaryKeyOwner?: String
+  primaryKeyTable?: String
+  primaryKeyColumn?: String
 }
 
 export interface ResourceSubscriptionWhereInput {
@@ -3267,22 +3527,24 @@ export interface AttributeSubscriptionPayload {
  * An edge in a connection.
 
  */
-export interface MappingEdge {
-  node: Mapping
+export interface DatabaseEdge {
+  node: Database
   cursor: String
 }
 
-export interface Mapping extends Node {
+export interface Database extends Node {
   id: ID_Output
-  database: String
+  name: String
   resources?: Resource[]
 }
 
 export interface Resource extends Node {
   id: ID_Output
-  database: Mapping
+  database: Database
   name: String
-  primaryKey?: String
+  primaryKeyOwner?: String
+  primaryKeyTable?: String
+  primaryKeyColumn?: String
   attributes?: Attribute[]
 }
 
@@ -3314,10 +3576,10 @@ export interface AggregateAttribute {
  * A connection to a list of items.
 
  */
-export interface MappingConnection {
+export interface DatabaseConnection {
   pageInfo: PageInfo
-  edges: MappingEdge[]
-  aggregate: AggregateMapping
+  edges: DatabaseEdge[]
+  aggregate: AggregateDatabase
 }
 
 /*
@@ -3345,20 +3607,20 @@ export interface ResourceEdge {
   cursor: String
 }
 
-export interface MappingSubscriptionPayload {
+export interface DatabaseSubscriptionPayload {
   mutation: MutationType
-  node?: Mapping
+  node?: Database
   updatedFields?: String[]
-  previousValues?: MappingPreviousValues
+  previousValues?: DatabasePreviousValues
 }
 
-export interface AggregateMapping {
+export interface AggregateDatabase {
   count: Int
 }
 
-export interface MappingPreviousValues {
+export interface DatabasePreviousValues {
   id: ID_Output
-  database: String
+  name: String
 }
 
 export interface AggregateInputColumn {
@@ -3385,7 +3647,9 @@ export interface Attribute extends Node {
 export interface ResourcePreviousValues {
   id: ID_Output
   name: String
-  primaryKey?: String
+  primaryKeyOwner?: String
+  primaryKeyTable?: String
+  primaryKeyColumn?: String
 }
 
 export interface ResourceSubscriptionPayload {
@@ -3442,7 +3706,7 @@ The `Boolean` scalar type represents `true` or `false`.
 export type Boolean = boolean
 
 /*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
 */
 export type Int = number
 

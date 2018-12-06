@@ -1,11 +1,10 @@
 mutation {
-    first: createMapping(data: {
-        database: "Crossway"
+    first: createDatabase(data: {
+        name: "Crossway"
         resources: {
             create: [
                 {
                     name: "Patient"
-                    primaryKey: "Test"
                     attributes: {
                         create: [
                             {
@@ -29,13 +28,12 @@ mutation {
         id
     }
 
-    second: createMapping(data: {
-        database: "mimic"
+    second: createDatabase(data: {
+        name: "mimic"
         resources: {
             create: [
                 {
                     name: "Patient"
-                    primaryKey: "Test"
                     attributes: {
                         create: [
                             {
