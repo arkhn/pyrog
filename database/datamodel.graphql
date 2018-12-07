@@ -6,25 +6,24 @@ type Database {
 
 type Resource {
     id: ID! @unique
-    database: Database! @relation(name: "DatabaseToResource")
     name: String!
     primaryKeyOwner: String
     primaryKeyTable: String
     primaryKeyColumn: String
     attributes: [Attribute!]! @relation(name: "ResourceToAttributes")
+    database: Database! @relation(name: "DatabaseToResource")
 }
 
 type Attribute {
     id: ID! @unique
-    resource: Resource! @relation(name: "ResourceToAttributes")
     name: String!
-    inputColumns: [InputColumn!]! @relation(name: "AttributeToInputColumns")
     mergingScript: String
+    inputColumns: [InputColumn!]! @relation(name: "AttributeToInputColumns")
+    resource: Resource! @relation(name: "ResourceToAttributes")
 }
 
 type InputColumn implements Column {
     id: ID! @unique
-    attribute: Attribute! @relation(name: "AttributeToInputColumns")
     owner: String!
     table: String!
     column: String!
@@ -33,4 +32,5 @@ type InputColumn implements Column {
     joinTargetOwner: String
     joinTargetTable: String
     joinTargetColumn: String
+    attribute: Attribute! @relation(name: "AttributeToInputColumns")
 }
