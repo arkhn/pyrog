@@ -1,6 +1,7 @@
+#import "./fragmentEntireAttribute.graphql"
+
 mutation updateAttribute($database: String!, $resource: String!, $attribute: String!, $data: AttributeUpdateInput) {
     updateAttributeNoId(database: $database, resource: $resource, attribute: $attribute, data: $data) {
-        id
-        name
+        ...entireAttribute
     }
 }

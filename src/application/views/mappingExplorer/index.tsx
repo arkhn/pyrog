@@ -53,19 +53,16 @@ import {
 import './style.less'
 
 // Requests
-const getDatabase = require('./queries/getDatabase.graphql')
 const getAttributes = require('./queries/getAttributes.graphql')
-const subscription = require('./queries/subscription.graphql')
-const inputColumnMutation = require('./queries/inputColumnMutation.graphql')
-const deleteInputColumn = require('./queries/deleteInputColumn.graphql')
-const attributeSubscription = require('./queries/attributeSubscription.graphql')
-const getInputColumns = require('./queries/getInputColumns.graphql')
-const customAttributeSubscription = require('./queries/customAttributeSubscription.graphql')
-const updateAttribute = require('./queries/updateAttribute.graphql')
-const updateAttributeNoId = require('./queries/updateAttributeNoId.graphql')
 const getResource = require('./queries/getResource.graphql')
-const subscribeResource = require('./queries/subscribeResource.graphql')
-const updateResource = require('./queries/updateResource.graphql')
+const mutationAttribute = require('./queries/mutationAttribute.graphql')
+const mutationAttributeNoId = require('./queries/mutationAttributeNoId.graphql')
+const mutationDeleteInputColumn = require('./queries/mutationDeleteInputColumn.graphql')
+const mutationInputColumn = require('./queries/mutationInputColumn.graphql')
+const mutationResource = require('./queries/mutationResource.graphql')
+const subscriptionAttribute = require('./queries/subscriptionAttribute.graphql')
+const subscriptionInputColumn = require('./queries/subscriptionInputColumn.graphql')
+const subscriptionResource = require('./queries/subscriptionResource.graphql')
 
 const arkhnLogoWhite = require("../../img/arkhn_logo_only_white.svg") as string;
 const arkhnLogoBlack = require("../../img/arkhn_logo_only_black.svg") as string;
@@ -170,44 +167,47 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                 let resource = data && data.resources ? data.resources[0] : null
 
                 return resource ? <Subscription
-                    subscription={subscribeResource}
+                    subscription={subscriptionResource}
                     variables={{
                         id: resource.id,
                     }}
                 >
                     {({ data, loading }) => {
-                        resource = data && data.subscribeResource ?
-                            data.subscribeResource.node :
+                        resource = data && data.subscriptionResource ?
+                            data.subscriptionResource.node :
                             resource
 
                         return <ControlGroup>
                             <Mutation
-                                mutation={updateResource}
+                                mutation={mutationResource}
                             >
-                                {(updateResource, {data, loading}) => {
+                                {(mutationResource, {data, loading}) => {
                                     return <ColumnPicker
                                         ownerChangeCallback={(e: string) => {
-                                            updateResource({
+                                            mutationResource({
                                                 variables: {
                                                     id: resource.id,
                                                     data: {
                                                         primaryKeyOwner: e,
+                                                        primaryKeyTable: null,
+                                                        primaryKeyColumn: null,
                                                     },
                                                 }
                                             })
                                         }}
                                         tableChangeCallback={(e: string) => {
-                                            updateResource({
+                                            mutationResource({
                                                 variables: {
                                                     id: resource.id,
                                                     data: {
                                                         primaryKeyTable: e,
+                                                        primaryKeyColumn: null,
                                                     },
                                                 }
                                             })
                                         }}
                                         columnChangeCallback={(e: string) => {
-                                            updateResource({
+                                            mutationResource({
                                                 variables: {
                                                     id: resource.id,
                                                     data: {
@@ -263,7 +263,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                 fhir attribute. This is useful when an input column is added
                 or deleted for instance. */}
                 return <Subscription
-                    subscription={customAttributeSubscription}
+                    subscription={subscriptionAttribute}
                     variables={{
                         database: selectedDatabase,
                         resource: selectedFhirResource,
@@ -272,14 +272,14 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                 >
                     {({ data, loading, error }) => {
 
-                        {/* If data.attributeSubscription is available,
+                        {/* If data.subscriptionAttribute is available,
                         then it is what we should display since it means
                         an inputColumn was added or deleted. */}
-                        attribute = (data && data.customAttributeSubscription) ?
-                            data.customAttributeSubscription.node :
+                        attribute = (data && data.subscriptionAttribute) ?
+                            data.subscriptionAttribute.node :
                             attribute
-                        const inputColumns = (data && data.customAttributeSubscription) ?
-                            data.customAttributeSubscription.node.inputColumns :
+                        const inputColumns = (data && data.subscriptionAttribute) ?
+                            data.subscriptionAttribute.node.inputColumns :
                             ((attribute && attribute.inputColumns) ? attribute.inputColumns : [])
 
                         return <div id='input-columns'>
@@ -290,7 +290,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                 synchronised with information written in the backend. */}
                                 return <Subscription
                                     key={index}
-                                    subscription={subscription}
+                                    subscription={subscriptionInputColumn}
                                     variables={{
                                         id: inputColumn.id,
                                     }}
@@ -307,14 +307,14 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                             This allows to re-render all input columns
                                             and re-generate subscriptions*/}
                                             <Mutation
-                                                mutation={deleteInputColumn}
+                                                mutation={mutationDeleteInputColumn}
                                             >
-                                                {(deleteInputColumnName, {data, loading}) => {
+                                                {(deleteInputColumn, {data, loading}) => {
                                                     return <Button
                                                         icon={'trash'}
                                                         minimal={true}
                                                         onClick={() => {
-                                                            deleteInputColumnName({
+                                                            deleteInputColumn({
                                                                 variables: {
                                                                     attributeId: attribute.id,
                                                                     inputColumnId: column.id,
@@ -335,10 +335,10 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                                     intended to modify input column's
                                                     information. */}
                                                     <Mutation
-                                                        mutation={inputColumnMutation}
+                                                        mutation={mutationInputColumn}
                                                     >
                                                         {(changeInputColumnJoin, {data, loading}) => {
-                                                            return <span>
+                                                            return <div>
                                                                 <StringSelect
                                                                     inputItem={column.joinSourceColumn}
                                                                     items={selectedDatabase ?
@@ -361,6 +361,8 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                                                                 id: column.id,
                                                                                 data: {
                                                                                     joinTargetOwner: e,
+                                                                                    joinTargetTable: null,
+                                                                                    joinTargetColumn: null,
                                                                                 },
                                                                             }
                                                                         })
@@ -371,6 +373,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                                                                 id: column.id,
                                                                                 data: {
                                                                                     joinTargetTable: e,
+                                                                                    joinTargetColumn: null,
                                                                                 },
                                                                             }
                                                                         })
@@ -392,16 +395,17 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                                                     }}
                                                                     databaseSchema={selectedDatabase ? this.props.data.databases.schemaByDatabaseName[selectedDatabase] : {}}
                                                                 />
-                                                            </span>
+                                                            </div>
                                                         }}
                                                     </Mutation>
                                                 </div>
                                                 <div className='input-column-script'>
                                                     <Mutation
-                                                        mutation={inputColumnMutation}
+                                                        mutation={mutationInputColumn}
                                                     >
                                                         {(changeInputColumnScript, {data, loading}) => {
                                                             return <StringSelect
+                                                                disabled={true}
                                                                 inputItem={column.script}
                                                                 items={['script1.py', 'script2.py']}
                                                                 loading={loading}
@@ -427,15 +431,16 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                         </div>
                         <div id='input-column-merging-script'>
                             <Mutation
-                                mutation={updateAttribute}
+                                mutation={mutationAttribute}
                             >
-                                {(updateAttribute, {data, loading}) => {
+                                {(mutationAttribute, {data, loading}) => {
                                     return <StringSelect
+                                        disabled={true}
                                         inputItem={(attribute && attribute.mergingScript) ? attribute.mergingScript : ''}
                                         items={['mergingScript.py']}
                                         loading={loading}
                                         onChange={(e: string) => {
-                                            updateAttribute({
+                                            mutationAttribute({
                                                 variables: {
                                                     id: attribute.id,
                                                     data: {
@@ -491,13 +496,13 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                         databaseSchema={selectedDatabase ? data.databases.schemaByDatabaseName[selectedDatabase] : {}}
                     />
                     <Mutation
-                        mutation={updateAttributeNoId}
+                        mutation={mutationAttributeNoId}
                     >
-                        {(updateAttribute, { data, loading }) => {
+                        {(mutationAttribute, { data, loading }) => {
                             return <Button
                                 disabled={false}
                                 icon={'add'}
-                                onClick={() => updateAttribute({
+                                onClick={() => mutationAttribute({
                                     variables: {
                                         database: selectedDatabase,
                                         resource: selectedFhirResource,

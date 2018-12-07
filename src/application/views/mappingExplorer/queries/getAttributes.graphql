@@ -1,3 +1,6 @@
+#import "./fragmentEntireAttribute.graphql"
+#import "./fragmentEntireInputColumn.graphql"
+
 query Attributes($database: String!, $resource: String!, $attribute: String!){
   attributes (
     where: {
@@ -10,18 +13,9 @@ query Attributes($database: String!, $resource: String!, $attribute: String!){
       }
   	}
   ) {
-    id
-    name
+    ...entireAttribute
     inputColumns {
-        id
-        owner
-        table
-        column
-        script
-        joinSourceColumn
-        joinTargetOwner
-        joinTargetTable
-        joinTargetColumn
+        ...entireInputColumn
     }
   }
 }

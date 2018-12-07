@@ -1,3 +1,6 @@
+#import "./fragmentEntireAttribute.graphql"
+#import "./fragmentEntireInputColumn.graphql"
+
 mutation deleteInputColumn($attributeId: ID!, $inputColumnId: ID!) {
     updateAttribute(
         id: $attributeId,
@@ -11,18 +14,9 @@ mutation deleteInputColumn($attributeId: ID!, $inputColumnId: ID!) {
             }
         }
     ) {
-        id
-        name
+        ...entireAttribute
         inputColumns {
-            id
-            owner
-            table
-            column
-            script
-            joinSourceColumn
-            joinTargetOwner
-            joinTargetTable
-            joinTargetColumn
+            ...entireInputColumn
         }
     }
 }

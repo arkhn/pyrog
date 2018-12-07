@@ -1,0 +1,11 @@
+fragment entireInputColumn on InputColumn {
+    id
+    owner
+    table
+    column
+    script
+    joinSourceColumn
+    joinTargetOwner
+    joinTargetTable
+    joinTargetColumn
+}

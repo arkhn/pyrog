@@ -1,0 +1,5 @@
+fragment entireAttribute on Attribute {
+    id
+    name
+    mergingScript
+}

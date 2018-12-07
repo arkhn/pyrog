@@ -1,0 +1,18 @@
+#import "./fragmentEntireAttribute.graphql"
+#import "./fragmentEntireInputColumn.graphql"
+
+subscription subscriptionAttribute ($database: String!, $resource: String!, $attribute: String!) {
+    customAttributeSubscription(
+        database: $database,
+        resource: $resource,
+        attribute: $attribute
+    ) {
+        updatedFields
+        node {
+            ...entireAttribute
+            inputColumns {
+                ...entireInputColumn
+            }
+        }
+    }
+}
