@@ -8,13 +8,20 @@ mutation {
                     attributes: {
                         create: [
                             {
-                                name: "name.given"
-                                inputColumns: {
+                                name: "name"
+                                attributes: {
                                     create: [
                                         {
-                                            owner: "ICSF"
-                                            table: "PATIENT"
-                                            column: "PREPAT"
+                                            name: "given"
+                                            inputColumns: {
+                                                create: [
+                                                    {
+                                                        owner: "ICSF"
+                                                        table: "PATIENT"
+                                                        column: "PREPAT"
+                                                    }
+                                                ]
+                                            }
                                         }
                                     ]
                                 }
@@ -37,13 +44,20 @@ mutation {
                     attributes: {
                         create: [
                             {
-                                name: "name.family"
-                                inputColumns: {
+                                name: "name",
+                                attributes: {
                                     create: [
                                         {
-                                            owner: "mimic"
-                                            table: "names"
-                                            column: "family"
+                                            name: "given",
+                                            inputColumns: {
+                                                create: [
+                                                    {
+                                                        owner: "mimic"
+                                                        table: "names"
+                                                        column: "family"
+                                                    }
+                                                ]
+                                            }
                                         }
                                     ]
                                 }

@@ -9,20 +9,16 @@ type Query {
     resource(where: ResourceWhereInput): Resource!
     attribute(where: AttributeWhereInput): Attribute!
     inputColumn(where: InputColumnWhereInput): InputColumn!
+
+    getAttribute(database: String!, resource: String!, attributePath: [String!]!): Attribute!
 }
 
 type Mutation {
-    updateResource(id: ID!, data: ResourceUpdateInput): Resource!
     updateAttribute(id: ID!, data: AttributeUpdateInput): Attribute!
-    updateAttributeNoId(database: String!, resource: String!, attribute: String!, data: AttributeUpdateInput): Attribute!
-    updateInputColumn(id: ID!, data: InputColumnUpdateInput): InputColumn!
-    deleteInputColumn(id: ID!): InputColumn!
-    checkAttribute(database: String!, resource: String!, attribute: String!): Attribute!
+    updateResource(id: ID!, data: ResourceUpdateInput): Resource!
 }
 
 type Subscription {
-    inputColumnSubscription(id: ID!): InputColumnSubscriptionPayload
-    attributeSubscription(id: ID!): AttributeSubscriptionPayload
-    resourceSubscription(id: ID!): ResourceSubscriptionPayload
-    customAttributeSubscription(database: String!, resource: String!, attribute: String!): AttributeSubscriptionPayload
+    attribute(id: ID!): AttributeSubscriptionPayload
+    inputColumn(id: ID!): InputColumnSubscriptionPayload
 }

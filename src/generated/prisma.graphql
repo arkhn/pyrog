@@ -1,5 +1,5 @@
 # source: https://eu1.prisma.sh/public-neonswoop-398/graphql-typescript-boilerplate/dev
-# timestamp: Thu Dec 06 2018 19:47:15 GMT+0100 (CET)
+# timestamp: Fri Dec 07 2018 21:44:08 GMT+0100 (CET)
 
 type AggregateAttribute {
   count: Int!
@@ -13,16 +13,27 @@ type AggregateInputColumn {
   count: Int!
 }
 
+type AggregateJoin {
+  count: Int!
+}
+
+type AggregateProfile {
+  count: Int!
+}
+
 type AggregateResource {
   count: Int!
 }
 
 type Attribute implements Node {
   id: ID!
-  resource: Resource!
   name: String!
-  inputColumns(where: InputColumnWhereInput, orderBy: InputColumnOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [InputColumn!]
   mergingScript: String
+  resource: Resource
+  attributes(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Attribute!]
+  attribute: Attribute
+  inputColumns(where: InputColumnWhereInput, orderBy: InputColumnOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [InputColumn!]
+  profiles(where: ProfileWhereInput, orderBy: ProfileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Profile!]
 }
 
 """A connection to a list of items."""
@@ -38,8 +49,21 @@ type AttributeConnection {
 input AttributeCreateInput {
   name: String!
   mergingScript: String
-  resource: ResourceCreateOneWithoutAttributesInput!
+  resource: ResourceCreateOneWithoutAttributesInput
+  attributes: AttributeCreateManyWithoutAttributeInput
+  attribute: AttributeCreateOneWithoutAttributesInput
   inputColumns: InputColumnCreateManyWithoutAttributeInput
+  profiles: ProfileCreateManyWithoutAttributeInput
+}
+
+input AttributeCreateManyInput {
+  create: [AttributeCreateInput!]
+  connect: [AttributeWhereUniqueInput!]
+}
+
+input AttributeCreateManyWithoutAttributeInput {
+  create: [AttributeCreateWithoutAttributeInput!]
+  connect: [AttributeWhereUniqueInput!]
 }
 
 input AttributeCreateManyWithoutResourceInput {
@@ -47,21 +71,64 @@ input AttributeCreateManyWithoutResourceInput {
   connect: [AttributeWhereUniqueInput!]
 }
 
+input AttributeCreateOneWithoutAttributesInput {
+  create: AttributeCreateWithoutAttributesInput
+  connect: AttributeWhereUniqueInput
+}
+
 input AttributeCreateOneWithoutInputColumnsInput {
   create: AttributeCreateWithoutInputColumnsInput
   connect: AttributeWhereUniqueInput
 }
 
+input AttributeCreateOneWithoutProfilesInput {
+  create: AttributeCreateWithoutProfilesInput
+  connect: AttributeWhereUniqueInput
+}
+
+input AttributeCreateWithoutAttributeInput {
+  name: String!
+  mergingScript: String
+  resource: ResourceCreateOneWithoutAttributesInput
+  attributes: AttributeCreateManyWithoutAttributeInput
+  inputColumns: InputColumnCreateManyWithoutAttributeInput
+  profiles: ProfileCreateManyWithoutAttributeInput
+}
+
+input AttributeCreateWithoutAttributesInput {
+  name: String!
+  mergingScript: String
+  resource: ResourceCreateOneWithoutAttributesInput
+  attribute: AttributeCreateOneWithoutAttributesInput
+  inputColumns: InputColumnCreateManyWithoutAttributeInput
+  profiles: ProfileCreateManyWithoutAttributeInput
+}
+
 input AttributeCreateWithoutInputColumnsInput {
   name: String!
   mergingScript: String
-  resource: ResourceCreateOneWithoutAttributesInput!
+  resource: ResourceCreateOneWithoutAttributesInput
+  attributes: AttributeCreateManyWithoutAttributeInput
+  attribute: AttributeCreateOneWithoutAttributesInput
+  profiles: ProfileCreateManyWithoutAttributeInput
+}
+
+input AttributeCreateWithoutProfilesInput {
+  name: String!
+  mergingScript: String
+  resource: ResourceCreateOneWithoutAttributesInput
+  attributes: AttributeCreateManyWithoutAttributeInput
+  attribute: AttributeCreateOneWithoutAttributesInput
+  inputColumns: InputColumnCreateManyWithoutAttributeInput
 }
 
 input AttributeCreateWithoutResourceInput {
   name: String!
   mergingScript: String
+  attributes: AttributeCreateManyWithoutAttributeInput
+  attribute: AttributeCreateOneWithoutAttributesInput
   inputColumns: InputColumnCreateManyWithoutAttributeInput
+  profiles: ProfileCreateManyWithoutAttributeInput
 }
 
 """An edge in a connection."""
@@ -262,11 +329,24 @@ input AttributeSubscriptionWhereInput {
   node: AttributeWhereInput
 }
 
+input AttributeUpdateDataInput {
+  name: String
+  mergingScript: String
+  resource: ResourceUpdateOneWithoutAttributesInput
+  attributes: AttributeUpdateManyWithoutAttributeInput
+  attribute: AttributeUpdateOneWithoutAttributesInput
+  inputColumns: InputColumnUpdateManyWithoutAttributeInput
+  profiles: ProfileUpdateManyWithoutAttributeInput
+}
+
 input AttributeUpdateInput {
   name: String
   mergingScript: String
-  resource: ResourceUpdateOneRequiredWithoutAttributesInput
+  resource: ResourceUpdateOneWithoutAttributesInput
+  attributes: AttributeUpdateManyWithoutAttributeInput
+  attribute: AttributeUpdateOneWithoutAttributesInput
   inputColumns: InputColumnUpdateManyWithoutAttributeInput
+  profiles: ProfileUpdateManyWithoutAttributeInput
 }
 
 input AttributeUpdateManyDataInput {
@@ -274,9 +354,31 @@ input AttributeUpdateManyDataInput {
   mergingScript: String
 }
 
+input AttributeUpdateManyInput {
+  create: [AttributeCreateInput!]
+  connect: [AttributeWhereUniqueInput!]
+  disconnect: [AttributeWhereUniqueInput!]
+  delete: [AttributeWhereUniqueInput!]
+  update: [AttributeUpdateWithWhereUniqueNestedInput!]
+  updateMany: [AttributeUpdateManyWithWhereNestedInput!]
+  deleteMany: [AttributeScalarWhereInput!]
+  upsert: [AttributeUpsertWithWhereUniqueNestedInput!]
+}
+
 input AttributeUpdateManyMutationInput {
   name: String
   mergingScript: String
+}
+
+input AttributeUpdateManyWithoutAttributeInput {
+  create: [AttributeCreateWithoutAttributeInput!]
+  connect: [AttributeWhereUniqueInput!]
+  disconnect: [AttributeWhereUniqueInput!]
+  delete: [AttributeWhereUniqueInput!]
+  update: [AttributeUpdateWithWhereUniqueWithoutAttributeInput!]
+  updateMany: [AttributeUpdateManyWithWhereNestedInput!]
+  deleteMany: [AttributeScalarWhereInput!]
+  upsert: [AttributeUpsertWithWhereUniqueWithoutAttributeInput!]
 }
 
 input AttributeUpdateManyWithoutResourceInput {
@@ -302,16 +404,75 @@ input AttributeUpdateOneRequiredWithoutInputColumnsInput {
   upsert: AttributeUpsertWithoutInputColumnsInput
 }
 
+input AttributeUpdateOneRequiredWithoutProfilesInput {
+  create: AttributeCreateWithoutProfilesInput
+  connect: AttributeWhereUniqueInput
+  update: AttributeUpdateWithoutProfilesDataInput
+  upsert: AttributeUpsertWithoutProfilesInput
+}
+
+input AttributeUpdateOneWithoutAttributesInput {
+  create: AttributeCreateWithoutAttributesInput
+  connect: AttributeWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: AttributeUpdateWithoutAttributesDataInput
+  upsert: AttributeUpsertWithoutAttributesInput
+}
+
+input AttributeUpdateWithoutAttributeDataInput {
+  name: String
+  mergingScript: String
+  resource: ResourceUpdateOneWithoutAttributesInput
+  attributes: AttributeUpdateManyWithoutAttributeInput
+  inputColumns: InputColumnUpdateManyWithoutAttributeInput
+  profiles: ProfileUpdateManyWithoutAttributeInput
+}
+
+input AttributeUpdateWithoutAttributesDataInput {
+  name: String
+  mergingScript: String
+  resource: ResourceUpdateOneWithoutAttributesInput
+  attribute: AttributeUpdateOneWithoutAttributesInput
+  inputColumns: InputColumnUpdateManyWithoutAttributeInput
+  profiles: ProfileUpdateManyWithoutAttributeInput
+}
+
 input AttributeUpdateWithoutInputColumnsDataInput {
   name: String
   mergingScript: String
-  resource: ResourceUpdateOneRequiredWithoutAttributesInput
+  resource: ResourceUpdateOneWithoutAttributesInput
+  attributes: AttributeUpdateManyWithoutAttributeInput
+  attribute: AttributeUpdateOneWithoutAttributesInput
+  profiles: ProfileUpdateManyWithoutAttributeInput
+}
+
+input AttributeUpdateWithoutProfilesDataInput {
+  name: String
+  mergingScript: String
+  resource: ResourceUpdateOneWithoutAttributesInput
+  attributes: AttributeUpdateManyWithoutAttributeInput
+  attribute: AttributeUpdateOneWithoutAttributesInput
+  inputColumns: InputColumnUpdateManyWithoutAttributeInput
 }
 
 input AttributeUpdateWithoutResourceDataInput {
   name: String
   mergingScript: String
+  attributes: AttributeUpdateManyWithoutAttributeInput
+  attribute: AttributeUpdateOneWithoutAttributesInput
   inputColumns: InputColumnUpdateManyWithoutAttributeInput
+  profiles: ProfileUpdateManyWithoutAttributeInput
+}
+
+input AttributeUpdateWithWhereUniqueNestedInput {
+  where: AttributeWhereUniqueInput!
+  data: AttributeUpdateDataInput!
+}
+
+input AttributeUpdateWithWhereUniqueWithoutAttributeInput {
+  where: AttributeWhereUniqueInput!
+  data: AttributeUpdateWithoutAttributeDataInput!
 }
 
 input AttributeUpdateWithWhereUniqueWithoutResourceInput {
@@ -319,9 +480,31 @@ input AttributeUpdateWithWhereUniqueWithoutResourceInput {
   data: AttributeUpdateWithoutResourceDataInput!
 }
 
+input AttributeUpsertWithoutAttributesInput {
+  update: AttributeUpdateWithoutAttributesDataInput!
+  create: AttributeCreateWithoutAttributesInput!
+}
+
 input AttributeUpsertWithoutInputColumnsInput {
   update: AttributeUpdateWithoutInputColumnsDataInput!
   create: AttributeCreateWithoutInputColumnsInput!
+}
+
+input AttributeUpsertWithoutProfilesInput {
+  update: AttributeUpdateWithoutProfilesDataInput!
+  create: AttributeCreateWithoutProfilesInput!
+}
+
+input AttributeUpsertWithWhereUniqueNestedInput {
+  where: AttributeWhereUniqueInput!
+  update: AttributeUpdateDataInput!
+  create: AttributeCreateInput!
+}
+
+input AttributeUpsertWithWhereUniqueWithoutAttributeInput {
+  where: AttributeWhereUniqueInput!
+  update: AttributeUpdateWithoutAttributeDataInput!
+  create: AttributeCreateWithoutAttributeInput!
 }
 
 input AttributeUpsertWithWhereUniqueWithoutResourceInput {
@@ -460,9 +643,16 @@ input AttributeWhereInput {
   """All values not ending with the given string."""
   mergingScript_not_ends_with: String
   resource: ResourceWhereInput
+  attributes_every: AttributeWhereInput
+  attributes_some: AttributeWhereInput
+  attributes_none: AttributeWhereInput
+  attribute: AttributeWhereInput
   inputColumns_every: InputColumnWhereInput
   inputColumns_some: InputColumnWhereInput
   inputColumns_none: InputColumnWhereInput
+  profiles_every: ProfileWhereInput
+  profiles_some: ProfileWhereInput
+  profiles_none: ProfileWhereInput
 }
 
 input AttributeWhereUniqueInput {
@@ -694,15 +884,13 @@ input DatabaseWhereUniqueInput {
 
 type InputColumn implements Node {
   id: ID!
-  attribute: Attribute!
   owner: String!
   table: String!
   column: String!
   script: String
-  joinSourceColumn: String
-  joinTargetOwner: String
-  joinTargetTable: String
-  joinTargetColumn: String
+  staticValue: String
+  joins(where: JoinWhereInput, orderBy: JoinOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Join!]
+  attribute: Attribute!
 }
 
 """A connection to a list of items."""
@@ -720,10 +908,8 @@ input InputColumnCreateInput {
   table: String!
   column: String!
   script: String
-  joinSourceColumn: String
-  joinTargetOwner: String
-  joinTargetTable: String
-  joinTargetColumn: String
+  staticValue: String
+  joins: JoinCreateManyWithoutInputColumnInput
   attribute: AttributeCreateOneWithoutInputColumnsInput!
 }
 
@@ -732,15 +918,27 @@ input InputColumnCreateManyWithoutAttributeInput {
   connect: [InputColumnWhereUniqueInput!]
 }
 
+input InputColumnCreateOneWithoutJoinsInput {
+  create: InputColumnCreateWithoutJoinsInput
+  connect: InputColumnWhereUniqueInput
+}
+
 input InputColumnCreateWithoutAttributeInput {
   owner: String!
   table: String!
   column: String!
   script: String
-  joinSourceColumn: String
-  joinTargetOwner: String
-  joinTargetTable: String
-  joinTargetColumn: String
+  staticValue: String
+  joins: JoinCreateManyWithoutInputColumnInput
+}
+
+input InputColumnCreateWithoutJoinsInput {
+  owner: String!
+  table: String!
+  column: String!
+  script: String
+  staticValue: String
+  attribute: AttributeCreateOneWithoutInputColumnsInput!
 }
 
 """An edge in a connection."""
@@ -763,14 +961,8 @@ enum InputColumnOrderByInput {
   column_DESC
   script_ASC
   script_DESC
-  joinSourceColumn_ASC
-  joinSourceColumn_DESC
-  joinTargetOwner_ASC
-  joinTargetOwner_DESC
-  joinTargetTable_ASC
-  joinTargetTable_DESC
-  joinTargetColumn_ASC
-  joinTargetColumn_DESC
+  staticValue_ASC
+  staticValue_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -783,10 +975,7 @@ type InputColumnPreviousValues {
   table: String!
   column: String!
   script: String
-  joinSourceColumn: String
-  joinTargetOwner: String
-  joinTargetTable: String
-  joinTargetColumn: String
+  staticValue: String
 }
 
 input InputColumnScalarWhereInput {
@@ -998,166 +1187,46 @@ input InputColumnScalarWhereInput {
 
   """All values not ending with the given string."""
   script_not_ends_with: String
-  joinSourceColumn: String
+  staticValue: String
 
   """All values that are not equal to given value."""
-  joinSourceColumn_not: String
+  staticValue_not: String
 
   """All values that are contained in given list."""
-  joinSourceColumn_in: [String!]
+  staticValue_in: [String!]
 
   """All values that are not contained in given list."""
-  joinSourceColumn_not_in: [String!]
+  staticValue_not_in: [String!]
 
   """All values less than the given value."""
-  joinSourceColumn_lt: String
+  staticValue_lt: String
 
   """All values less than or equal the given value."""
-  joinSourceColumn_lte: String
+  staticValue_lte: String
 
   """All values greater than the given value."""
-  joinSourceColumn_gt: String
+  staticValue_gt: String
 
   """All values greater than or equal the given value."""
-  joinSourceColumn_gte: String
+  staticValue_gte: String
 
   """All values containing the given string."""
-  joinSourceColumn_contains: String
+  staticValue_contains: String
 
   """All values not containing the given string."""
-  joinSourceColumn_not_contains: String
+  staticValue_not_contains: String
 
   """All values starting with the given string."""
-  joinSourceColumn_starts_with: String
+  staticValue_starts_with: String
 
   """All values not starting with the given string."""
-  joinSourceColumn_not_starts_with: String
+  staticValue_not_starts_with: String
 
   """All values ending with the given string."""
-  joinSourceColumn_ends_with: String
+  staticValue_ends_with: String
 
   """All values not ending with the given string."""
-  joinSourceColumn_not_ends_with: String
-  joinTargetOwner: String
-
-  """All values that are not equal to given value."""
-  joinTargetOwner_not: String
-
-  """All values that are contained in given list."""
-  joinTargetOwner_in: [String!]
-
-  """All values that are not contained in given list."""
-  joinTargetOwner_not_in: [String!]
-
-  """All values less than the given value."""
-  joinTargetOwner_lt: String
-
-  """All values less than or equal the given value."""
-  joinTargetOwner_lte: String
-
-  """All values greater than the given value."""
-  joinTargetOwner_gt: String
-
-  """All values greater than or equal the given value."""
-  joinTargetOwner_gte: String
-
-  """All values containing the given string."""
-  joinTargetOwner_contains: String
-
-  """All values not containing the given string."""
-  joinTargetOwner_not_contains: String
-
-  """All values starting with the given string."""
-  joinTargetOwner_starts_with: String
-
-  """All values not starting with the given string."""
-  joinTargetOwner_not_starts_with: String
-
-  """All values ending with the given string."""
-  joinTargetOwner_ends_with: String
-
-  """All values not ending with the given string."""
-  joinTargetOwner_not_ends_with: String
-  joinTargetTable: String
-
-  """All values that are not equal to given value."""
-  joinTargetTable_not: String
-
-  """All values that are contained in given list."""
-  joinTargetTable_in: [String!]
-
-  """All values that are not contained in given list."""
-  joinTargetTable_not_in: [String!]
-
-  """All values less than the given value."""
-  joinTargetTable_lt: String
-
-  """All values less than or equal the given value."""
-  joinTargetTable_lte: String
-
-  """All values greater than the given value."""
-  joinTargetTable_gt: String
-
-  """All values greater than or equal the given value."""
-  joinTargetTable_gte: String
-
-  """All values containing the given string."""
-  joinTargetTable_contains: String
-
-  """All values not containing the given string."""
-  joinTargetTable_not_contains: String
-
-  """All values starting with the given string."""
-  joinTargetTable_starts_with: String
-
-  """All values not starting with the given string."""
-  joinTargetTable_not_starts_with: String
-
-  """All values ending with the given string."""
-  joinTargetTable_ends_with: String
-
-  """All values not ending with the given string."""
-  joinTargetTable_not_ends_with: String
-  joinTargetColumn: String
-
-  """All values that are not equal to given value."""
-  joinTargetColumn_not: String
-
-  """All values that are contained in given list."""
-  joinTargetColumn_in: [String!]
-
-  """All values that are not contained in given list."""
-  joinTargetColumn_not_in: [String!]
-
-  """All values less than the given value."""
-  joinTargetColumn_lt: String
-
-  """All values less than or equal the given value."""
-  joinTargetColumn_lte: String
-
-  """All values greater than the given value."""
-  joinTargetColumn_gt: String
-
-  """All values greater than or equal the given value."""
-  joinTargetColumn_gte: String
-
-  """All values containing the given string."""
-  joinTargetColumn_contains: String
-
-  """All values not containing the given string."""
-  joinTargetColumn_not_contains: String
-
-  """All values starting with the given string."""
-  joinTargetColumn_starts_with: String
-
-  """All values not starting with the given string."""
-  joinTargetColumn_not_starts_with: String
-
-  """All values ending with the given string."""
-  joinTargetColumn_ends_with: String
-
-  """All values not ending with the given string."""
-  joinTargetColumn_not_ends_with: String
+  staticValue_not_ends_with: String
 }
 
 type InputColumnSubscriptionPayload {
@@ -1204,10 +1273,8 @@ input InputColumnUpdateInput {
   table: String
   column: String
   script: String
-  joinSourceColumn: String
-  joinTargetOwner: String
-  joinTargetTable: String
-  joinTargetColumn: String
+  staticValue: String
+  joins: JoinUpdateManyWithoutInputColumnInput
   attribute: AttributeUpdateOneRequiredWithoutInputColumnsInput
 }
 
@@ -1216,10 +1283,7 @@ input InputColumnUpdateManyDataInput {
   table: String
   column: String
   script: String
-  joinSourceColumn: String
-  joinTargetOwner: String
-  joinTargetTable: String
-  joinTargetColumn: String
+  staticValue: String
 }
 
 input InputColumnUpdateManyMutationInput {
@@ -1227,10 +1291,7 @@ input InputColumnUpdateManyMutationInput {
   table: String
   column: String
   script: String
-  joinSourceColumn: String
-  joinTargetOwner: String
-  joinTargetTable: String
-  joinTargetColumn: String
+  staticValue: String
 }
 
 input InputColumnUpdateManyWithoutAttributeInput {
@@ -1249,20 +1310,39 @@ input InputColumnUpdateManyWithWhereNestedInput {
   data: InputColumnUpdateManyDataInput!
 }
 
+input InputColumnUpdateOneRequiredWithoutJoinsInput {
+  create: InputColumnCreateWithoutJoinsInput
+  connect: InputColumnWhereUniqueInput
+  update: InputColumnUpdateWithoutJoinsDataInput
+  upsert: InputColumnUpsertWithoutJoinsInput
+}
+
 input InputColumnUpdateWithoutAttributeDataInput {
   owner: String
   table: String
   column: String
   script: String
-  joinSourceColumn: String
-  joinTargetOwner: String
-  joinTargetTable: String
-  joinTargetColumn: String
+  staticValue: String
+  joins: JoinUpdateManyWithoutInputColumnInput
+}
+
+input InputColumnUpdateWithoutJoinsDataInput {
+  owner: String
+  table: String
+  column: String
+  script: String
+  staticValue: String
+  attribute: AttributeUpdateOneRequiredWithoutInputColumnsInput
 }
 
 input InputColumnUpdateWithWhereUniqueWithoutAttributeInput {
   where: InputColumnWhereUniqueInput!
   data: InputColumnUpdateWithoutAttributeDataInput!
+}
+
+input InputColumnUpsertWithoutJoinsInput {
+  update: InputColumnUpdateWithoutJoinsDataInput!
+  create: InputColumnCreateWithoutJoinsInput!
 }
 
 input InputColumnUpsertWithWhereUniqueWithoutAttributeInput {
@@ -1480,170 +1560,828 @@ input InputColumnWhereInput {
 
   """All values not ending with the given string."""
   script_not_ends_with: String
-  joinSourceColumn: String
+  staticValue: String
 
   """All values that are not equal to given value."""
-  joinSourceColumn_not: String
+  staticValue_not: String
 
   """All values that are contained in given list."""
-  joinSourceColumn_in: [String!]
+  staticValue_in: [String!]
 
   """All values that are not contained in given list."""
-  joinSourceColumn_not_in: [String!]
+  staticValue_not_in: [String!]
 
   """All values less than the given value."""
-  joinSourceColumn_lt: String
+  staticValue_lt: String
 
   """All values less than or equal the given value."""
-  joinSourceColumn_lte: String
+  staticValue_lte: String
 
   """All values greater than the given value."""
-  joinSourceColumn_gt: String
+  staticValue_gt: String
 
   """All values greater than or equal the given value."""
-  joinSourceColumn_gte: String
+  staticValue_gte: String
 
   """All values containing the given string."""
-  joinSourceColumn_contains: String
+  staticValue_contains: String
 
   """All values not containing the given string."""
-  joinSourceColumn_not_contains: String
+  staticValue_not_contains: String
 
   """All values starting with the given string."""
-  joinSourceColumn_starts_with: String
+  staticValue_starts_with: String
 
   """All values not starting with the given string."""
-  joinSourceColumn_not_starts_with: String
+  staticValue_not_starts_with: String
 
   """All values ending with the given string."""
-  joinSourceColumn_ends_with: String
+  staticValue_ends_with: String
 
   """All values not ending with the given string."""
-  joinSourceColumn_not_ends_with: String
-  joinTargetOwner: String
-
-  """All values that are not equal to given value."""
-  joinTargetOwner_not: String
-
-  """All values that are contained in given list."""
-  joinTargetOwner_in: [String!]
-
-  """All values that are not contained in given list."""
-  joinTargetOwner_not_in: [String!]
-
-  """All values less than the given value."""
-  joinTargetOwner_lt: String
-
-  """All values less than or equal the given value."""
-  joinTargetOwner_lte: String
-
-  """All values greater than the given value."""
-  joinTargetOwner_gt: String
-
-  """All values greater than or equal the given value."""
-  joinTargetOwner_gte: String
-
-  """All values containing the given string."""
-  joinTargetOwner_contains: String
-
-  """All values not containing the given string."""
-  joinTargetOwner_not_contains: String
-
-  """All values starting with the given string."""
-  joinTargetOwner_starts_with: String
-
-  """All values not starting with the given string."""
-  joinTargetOwner_not_starts_with: String
-
-  """All values ending with the given string."""
-  joinTargetOwner_ends_with: String
-
-  """All values not ending with the given string."""
-  joinTargetOwner_not_ends_with: String
-  joinTargetTable: String
-
-  """All values that are not equal to given value."""
-  joinTargetTable_not: String
-
-  """All values that are contained in given list."""
-  joinTargetTable_in: [String!]
-
-  """All values that are not contained in given list."""
-  joinTargetTable_not_in: [String!]
-
-  """All values less than the given value."""
-  joinTargetTable_lt: String
-
-  """All values less than or equal the given value."""
-  joinTargetTable_lte: String
-
-  """All values greater than the given value."""
-  joinTargetTable_gt: String
-
-  """All values greater than or equal the given value."""
-  joinTargetTable_gte: String
-
-  """All values containing the given string."""
-  joinTargetTable_contains: String
-
-  """All values not containing the given string."""
-  joinTargetTable_not_contains: String
-
-  """All values starting with the given string."""
-  joinTargetTable_starts_with: String
-
-  """All values not starting with the given string."""
-  joinTargetTable_not_starts_with: String
-
-  """All values ending with the given string."""
-  joinTargetTable_ends_with: String
-
-  """All values not ending with the given string."""
-  joinTargetTable_not_ends_with: String
-  joinTargetColumn: String
-
-  """All values that are not equal to given value."""
-  joinTargetColumn_not: String
-
-  """All values that are contained in given list."""
-  joinTargetColumn_in: [String!]
-
-  """All values that are not contained in given list."""
-  joinTargetColumn_not_in: [String!]
-
-  """All values less than the given value."""
-  joinTargetColumn_lt: String
-
-  """All values less than or equal the given value."""
-  joinTargetColumn_lte: String
-
-  """All values greater than the given value."""
-  joinTargetColumn_gt: String
-
-  """All values greater than or equal the given value."""
-  joinTargetColumn_gte: String
-
-  """All values containing the given string."""
-  joinTargetColumn_contains: String
-
-  """All values not containing the given string."""
-  joinTargetColumn_not_contains: String
-
-  """All values starting with the given string."""
-  joinTargetColumn_starts_with: String
-
-  """All values not starting with the given string."""
-  joinTargetColumn_not_starts_with: String
-
-  """All values ending with the given string."""
-  joinTargetColumn_ends_with: String
-
-  """All values not ending with the given string."""
-  joinTargetColumn_not_ends_with: String
+  staticValue_not_ends_with: String
+  joins_every: JoinWhereInput
+  joins_some: JoinWhereInput
+  joins_none: JoinWhereInput
   attribute: AttributeWhereInput
 }
 
 input InputColumnWhereUniqueInput {
+  id: ID
+}
+
+type Join implements Node {
+  id: ID!
+  sourceOwner: String
+  sourceTable: String
+  sourceColumn: String
+  targetOwner: String
+  targetTable: String
+  targetColumn: String
+  inputColumn: InputColumn!
+}
+
+"""A connection to a list of items."""
+type JoinConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [JoinEdge]!
+  aggregate: AggregateJoin!
+}
+
+input JoinCreateInput {
+  sourceOwner: String
+  sourceTable: String
+  sourceColumn: String
+  targetOwner: String
+  targetTable: String
+  targetColumn: String
+  inputColumn: InputColumnCreateOneWithoutJoinsInput!
+}
+
+input JoinCreateManyWithoutInputColumnInput {
+  create: [JoinCreateWithoutInputColumnInput!]
+  connect: [JoinWhereUniqueInput!]
+}
+
+input JoinCreateWithoutInputColumnInput {
+  sourceOwner: String
+  sourceTable: String
+  sourceColumn: String
+  targetOwner: String
+  targetTable: String
+  targetColumn: String
+}
+
+"""An edge in a connection."""
+type JoinEdge {
+  """The item at the end of the edge."""
+  node: Join!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum JoinOrderByInput {
+  id_ASC
+  id_DESC
+  sourceOwner_ASC
+  sourceOwner_DESC
+  sourceTable_ASC
+  sourceTable_DESC
+  sourceColumn_ASC
+  sourceColumn_DESC
+  targetOwner_ASC
+  targetOwner_DESC
+  targetTable_ASC
+  targetTable_DESC
+  targetColumn_ASC
+  targetColumn_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type JoinPreviousValues {
+  id: ID!
+  sourceOwner: String
+  sourceTable: String
+  sourceColumn: String
+  targetOwner: String
+  targetTable: String
+  targetColumn: String
+}
+
+input JoinScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [JoinScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [JoinScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [JoinScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  sourceOwner: String
+
+  """All values that are not equal to given value."""
+  sourceOwner_not: String
+
+  """All values that are contained in given list."""
+  sourceOwner_in: [String!]
+
+  """All values that are not contained in given list."""
+  sourceOwner_not_in: [String!]
+
+  """All values less than the given value."""
+  sourceOwner_lt: String
+
+  """All values less than or equal the given value."""
+  sourceOwner_lte: String
+
+  """All values greater than the given value."""
+  sourceOwner_gt: String
+
+  """All values greater than or equal the given value."""
+  sourceOwner_gte: String
+
+  """All values containing the given string."""
+  sourceOwner_contains: String
+
+  """All values not containing the given string."""
+  sourceOwner_not_contains: String
+
+  """All values starting with the given string."""
+  sourceOwner_starts_with: String
+
+  """All values not starting with the given string."""
+  sourceOwner_not_starts_with: String
+
+  """All values ending with the given string."""
+  sourceOwner_ends_with: String
+
+  """All values not ending with the given string."""
+  sourceOwner_not_ends_with: String
+  sourceTable: String
+
+  """All values that are not equal to given value."""
+  sourceTable_not: String
+
+  """All values that are contained in given list."""
+  sourceTable_in: [String!]
+
+  """All values that are not contained in given list."""
+  sourceTable_not_in: [String!]
+
+  """All values less than the given value."""
+  sourceTable_lt: String
+
+  """All values less than or equal the given value."""
+  sourceTable_lte: String
+
+  """All values greater than the given value."""
+  sourceTable_gt: String
+
+  """All values greater than or equal the given value."""
+  sourceTable_gte: String
+
+  """All values containing the given string."""
+  sourceTable_contains: String
+
+  """All values not containing the given string."""
+  sourceTable_not_contains: String
+
+  """All values starting with the given string."""
+  sourceTable_starts_with: String
+
+  """All values not starting with the given string."""
+  sourceTable_not_starts_with: String
+
+  """All values ending with the given string."""
+  sourceTable_ends_with: String
+
+  """All values not ending with the given string."""
+  sourceTable_not_ends_with: String
+  sourceColumn: String
+
+  """All values that are not equal to given value."""
+  sourceColumn_not: String
+
+  """All values that are contained in given list."""
+  sourceColumn_in: [String!]
+
+  """All values that are not contained in given list."""
+  sourceColumn_not_in: [String!]
+
+  """All values less than the given value."""
+  sourceColumn_lt: String
+
+  """All values less than or equal the given value."""
+  sourceColumn_lte: String
+
+  """All values greater than the given value."""
+  sourceColumn_gt: String
+
+  """All values greater than or equal the given value."""
+  sourceColumn_gte: String
+
+  """All values containing the given string."""
+  sourceColumn_contains: String
+
+  """All values not containing the given string."""
+  sourceColumn_not_contains: String
+
+  """All values starting with the given string."""
+  sourceColumn_starts_with: String
+
+  """All values not starting with the given string."""
+  sourceColumn_not_starts_with: String
+
+  """All values ending with the given string."""
+  sourceColumn_ends_with: String
+
+  """All values not ending with the given string."""
+  sourceColumn_not_ends_with: String
+  targetOwner: String
+
+  """All values that are not equal to given value."""
+  targetOwner_not: String
+
+  """All values that are contained in given list."""
+  targetOwner_in: [String!]
+
+  """All values that are not contained in given list."""
+  targetOwner_not_in: [String!]
+
+  """All values less than the given value."""
+  targetOwner_lt: String
+
+  """All values less than or equal the given value."""
+  targetOwner_lte: String
+
+  """All values greater than the given value."""
+  targetOwner_gt: String
+
+  """All values greater than or equal the given value."""
+  targetOwner_gte: String
+
+  """All values containing the given string."""
+  targetOwner_contains: String
+
+  """All values not containing the given string."""
+  targetOwner_not_contains: String
+
+  """All values starting with the given string."""
+  targetOwner_starts_with: String
+
+  """All values not starting with the given string."""
+  targetOwner_not_starts_with: String
+
+  """All values ending with the given string."""
+  targetOwner_ends_with: String
+
+  """All values not ending with the given string."""
+  targetOwner_not_ends_with: String
+  targetTable: String
+
+  """All values that are not equal to given value."""
+  targetTable_not: String
+
+  """All values that are contained in given list."""
+  targetTable_in: [String!]
+
+  """All values that are not contained in given list."""
+  targetTable_not_in: [String!]
+
+  """All values less than the given value."""
+  targetTable_lt: String
+
+  """All values less than or equal the given value."""
+  targetTable_lte: String
+
+  """All values greater than the given value."""
+  targetTable_gt: String
+
+  """All values greater than or equal the given value."""
+  targetTable_gte: String
+
+  """All values containing the given string."""
+  targetTable_contains: String
+
+  """All values not containing the given string."""
+  targetTable_not_contains: String
+
+  """All values starting with the given string."""
+  targetTable_starts_with: String
+
+  """All values not starting with the given string."""
+  targetTable_not_starts_with: String
+
+  """All values ending with the given string."""
+  targetTable_ends_with: String
+
+  """All values not ending with the given string."""
+  targetTable_not_ends_with: String
+  targetColumn: String
+
+  """All values that are not equal to given value."""
+  targetColumn_not: String
+
+  """All values that are contained in given list."""
+  targetColumn_in: [String!]
+
+  """All values that are not contained in given list."""
+  targetColumn_not_in: [String!]
+
+  """All values less than the given value."""
+  targetColumn_lt: String
+
+  """All values less than or equal the given value."""
+  targetColumn_lte: String
+
+  """All values greater than the given value."""
+  targetColumn_gt: String
+
+  """All values greater than or equal the given value."""
+  targetColumn_gte: String
+
+  """All values containing the given string."""
+  targetColumn_contains: String
+
+  """All values not containing the given string."""
+  targetColumn_not_contains: String
+
+  """All values starting with the given string."""
+  targetColumn_starts_with: String
+
+  """All values not starting with the given string."""
+  targetColumn_not_starts_with: String
+
+  """All values ending with the given string."""
+  targetColumn_ends_with: String
+
+  """All values not ending with the given string."""
+  targetColumn_not_ends_with: String
+}
+
+type JoinSubscriptionPayload {
+  mutation: MutationType!
+  node: Join
+  updatedFields: [String!]
+  previousValues: JoinPreviousValues
+}
+
+input JoinSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [JoinSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [JoinSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [JoinSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: JoinWhereInput
+}
+
+input JoinUpdateInput {
+  sourceOwner: String
+  sourceTable: String
+  sourceColumn: String
+  targetOwner: String
+  targetTable: String
+  targetColumn: String
+  inputColumn: InputColumnUpdateOneRequiredWithoutJoinsInput
+}
+
+input JoinUpdateManyDataInput {
+  sourceOwner: String
+  sourceTable: String
+  sourceColumn: String
+  targetOwner: String
+  targetTable: String
+  targetColumn: String
+}
+
+input JoinUpdateManyMutationInput {
+  sourceOwner: String
+  sourceTable: String
+  sourceColumn: String
+  targetOwner: String
+  targetTable: String
+  targetColumn: String
+}
+
+input JoinUpdateManyWithoutInputColumnInput {
+  create: [JoinCreateWithoutInputColumnInput!]
+  connect: [JoinWhereUniqueInput!]
+  disconnect: [JoinWhereUniqueInput!]
+  delete: [JoinWhereUniqueInput!]
+  update: [JoinUpdateWithWhereUniqueWithoutInputColumnInput!]
+  updateMany: [JoinUpdateManyWithWhereNestedInput!]
+  deleteMany: [JoinScalarWhereInput!]
+  upsert: [JoinUpsertWithWhereUniqueWithoutInputColumnInput!]
+}
+
+input JoinUpdateManyWithWhereNestedInput {
+  where: JoinScalarWhereInput!
+  data: JoinUpdateManyDataInput!
+}
+
+input JoinUpdateWithoutInputColumnDataInput {
+  sourceOwner: String
+  sourceTable: String
+  sourceColumn: String
+  targetOwner: String
+  targetTable: String
+  targetColumn: String
+}
+
+input JoinUpdateWithWhereUniqueWithoutInputColumnInput {
+  where: JoinWhereUniqueInput!
+  data: JoinUpdateWithoutInputColumnDataInput!
+}
+
+input JoinUpsertWithWhereUniqueWithoutInputColumnInput {
+  where: JoinWhereUniqueInput!
+  update: JoinUpdateWithoutInputColumnDataInput!
+  create: JoinCreateWithoutInputColumnInput!
+}
+
+input JoinWhereInput {
+  """Logical AND on all given filters."""
+  AND: [JoinWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [JoinWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [JoinWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  sourceOwner: String
+
+  """All values that are not equal to given value."""
+  sourceOwner_not: String
+
+  """All values that are contained in given list."""
+  sourceOwner_in: [String!]
+
+  """All values that are not contained in given list."""
+  sourceOwner_not_in: [String!]
+
+  """All values less than the given value."""
+  sourceOwner_lt: String
+
+  """All values less than or equal the given value."""
+  sourceOwner_lte: String
+
+  """All values greater than the given value."""
+  sourceOwner_gt: String
+
+  """All values greater than or equal the given value."""
+  sourceOwner_gte: String
+
+  """All values containing the given string."""
+  sourceOwner_contains: String
+
+  """All values not containing the given string."""
+  sourceOwner_not_contains: String
+
+  """All values starting with the given string."""
+  sourceOwner_starts_with: String
+
+  """All values not starting with the given string."""
+  sourceOwner_not_starts_with: String
+
+  """All values ending with the given string."""
+  sourceOwner_ends_with: String
+
+  """All values not ending with the given string."""
+  sourceOwner_not_ends_with: String
+  sourceTable: String
+
+  """All values that are not equal to given value."""
+  sourceTable_not: String
+
+  """All values that are contained in given list."""
+  sourceTable_in: [String!]
+
+  """All values that are not contained in given list."""
+  sourceTable_not_in: [String!]
+
+  """All values less than the given value."""
+  sourceTable_lt: String
+
+  """All values less than or equal the given value."""
+  sourceTable_lte: String
+
+  """All values greater than the given value."""
+  sourceTable_gt: String
+
+  """All values greater than or equal the given value."""
+  sourceTable_gte: String
+
+  """All values containing the given string."""
+  sourceTable_contains: String
+
+  """All values not containing the given string."""
+  sourceTable_not_contains: String
+
+  """All values starting with the given string."""
+  sourceTable_starts_with: String
+
+  """All values not starting with the given string."""
+  sourceTable_not_starts_with: String
+
+  """All values ending with the given string."""
+  sourceTable_ends_with: String
+
+  """All values not ending with the given string."""
+  sourceTable_not_ends_with: String
+  sourceColumn: String
+
+  """All values that are not equal to given value."""
+  sourceColumn_not: String
+
+  """All values that are contained in given list."""
+  sourceColumn_in: [String!]
+
+  """All values that are not contained in given list."""
+  sourceColumn_not_in: [String!]
+
+  """All values less than the given value."""
+  sourceColumn_lt: String
+
+  """All values less than or equal the given value."""
+  sourceColumn_lte: String
+
+  """All values greater than the given value."""
+  sourceColumn_gt: String
+
+  """All values greater than or equal the given value."""
+  sourceColumn_gte: String
+
+  """All values containing the given string."""
+  sourceColumn_contains: String
+
+  """All values not containing the given string."""
+  sourceColumn_not_contains: String
+
+  """All values starting with the given string."""
+  sourceColumn_starts_with: String
+
+  """All values not starting with the given string."""
+  sourceColumn_not_starts_with: String
+
+  """All values ending with the given string."""
+  sourceColumn_ends_with: String
+
+  """All values not ending with the given string."""
+  sourceColumn_not_ends_with: String
+  targetOwner: String
+
+  """All values that are not equal to given value."""
+  targetOwner_not: String
+
+  """All values that are contained in given list."""
+  targetOwner_in: [String!]
+
+  """All values that are not contained in given list."""
+  targetOwner_not_in: [String!]
+
+  """All values less than the given value."""
+  targetOwner_lt: String
+
+  """All values less than or equal the given value."""
+  targetOwner_lte: String
+
+  """All values greater than the given value."""
+  targetOwner_gt: String
+
+  """All values greater than or equal the given value."""
+  targetOwner_gte: String
+
+  """All values containing the given string."""
+  targetOwner_contains: String
+
+  """All values not containing the given string."""
+  targetOwner_not_contains: String
+
+  """All values starting with the given string."""
+  targetOwner_starts_with: String
+
+  """All values not starting with the given string."""
+  targetOwner_not_starts_with: String
+
+  """All values ending with the given string."""
+  targetOwner_ends_with: String
+
+  """All values not ending with the given string."""
+  targetOwner_not_ends_with: String
+  targetTable: String
+
+  """All values that are not equal to given value."""
+  targetTable_not: String
+
+  """All values that are contained in given list."""
+  targetTable_in: [String!]
+
+  """All values that are not contained in given list."""
+  targetTable_not_in: [String!]
+
+  """All values less than the given value."""
+  targetTable_lt: String
+
+  """All values less than or equal the given value."""
+  targetTable_lte: String
+
+  """All values greater than the given value."""
+  targetTable_gt: String
+
+  """All values greater than or equal the given value."""
+  targetTable_gte: String
+
+  """All values containing the given string."""
+  targetTable_contains: String
+
+  """All values not containing the given string."""
+  targetTable_not_contains: String
+
+  """All values starting with the given string."""
+  targetTable_starts_with: String
+
+  """All values not starting with the given string."""
+  targetTable_not_starts_with: String
+
+  """All values ending with the given string."""
+  targetTable_ends_with: String
+
+  """All values not ending with the given string."""
+  targetTable_not_ends_with: String
+  targetColumn: String
+
+  """All values that are not equal to given value."""
+  targetColumn_not: String
+
+  """All values that are contained in given list."""
+  targetColumn_in: [String!]
+
+  """All values that are not contained in given list."""
+  targetColumn_not_in: [String!]
+
+  """All values less than the given value."""
+  targetColumn_lt: String
+
+  """All values less than or equal the given value."""
+  targetColumn_lte: String
+
+  """All values greater than the given value."""
+  targetColumn_gt: String
+
+  """All values greater than or equal the given value."""
+  targetColumn_gte: String
+
+  """All values containing the given string."""
+  targetColumn_contains: String
+
+  """All values not containing the given string."""
+  targetColumn_not_contains: String
+
+  """All values starting with the given string."""
+  targetColumn_starts_with: String
+
+  """All values not starting with the given string."""
+  targetColumn_not_starts_with: String
+
+  """All values ending with the given string."""
+  targetColumn_ends_with: String
+
+  """All values not ending with the given string."""
+  targetColumn_not_ends_with: String
+  inputColumn: InputColumnWhereInput
+}
+
+input JoinWhereUniqueInput {
   id: ID
 }
 
@@ -1656,28 +2394,40 @@ scalar Long
 type Mutation {
   createDatabase(data: DatabaseCreateInput!): Database!
   createResource(data: ResourceCreateInput!): Resource!
-  createAttribute(data: AttributeCreateInput!): Attribute!
+  createProfile(data: ProfileCreateInput!): Profile!
   createInputColumn(data: InputColumnCreateInput!): InputColumn!
+  createJoin(data: JoinCreateInput!): Join!
+  createAttribute(data: AttributeCreateInput!): Attribute!
   updateDatabase(data: DatabaseUpdateInput!, where: DatabaseWhereUniqueInput!): Database
   updateResource(data: ResourceUpdateInput!, where: ResourceWhereUniqueInput!): Resource
-  updateAttribute(data: AttributeUpdateInput!, where: AttributeWhereUniqueInput!): Attribute
+  updateProfile(data: ProfileUpdateInput!, where: ProfileWhereUniqueInput!): Profile
   updateInputColumn(data: InputColumnUpdateInput!, where: InputColumnWhereUniqueInput!): InputColumn
+  updateJoin(data: JoinUpdateInput!, where: JoinWhereUniqueInput!): Join
+  updateAttribute(data: AttributeUpdateInput!, where: AttributeWhereUniqueInput!): Attribute
   deleteDatabase(where: DatabaseWhereUniqueInput!): Database
   deleteResource(where: ResourceWhereUniqueInput!): Resource
-  deleteAttribute(where: AttributeWhereUniqueInput!): Attribute
+  deleteProfile(where: ProfileWhereUniqueInput!): Profile
   deleteInputColumn(where: InputColumnWhereUniqueInput!): InputColumn
+  deleteJoin(where: JoinWhereUniqueInput!): Join
+  deleteAttribute(where: AttributeWhereUniqueInput!): Attribute
   upsertDatabase(where: DatabaseWhereUniqueInput!, create: DatabaseCreateInput!, update: DatabaseUpdateInput!): Database!
   upsertResource(where: ResourceWhereUniqueInput!, create: ResourceCreateInput!, update: ResourceUpdateInput!): Resource!
-  upsertAttribute(where: AttributeWhereUniqueInput!, create: AttributeCreateInput!, update: AttributeUpdateInput!): Attribute!
+  upsertProfile(where: ProfileWhereUniqueInput!, create: ProfileCreateInput!, update: ProfileUpdateInput!): Profile!
   upsertInputColumn(where: InputColumnWhereUniqueInput!, create: InputColumnCreateInput!, update: InputColumnUpdateInput!): InputColumn!
+  upsertJoin(where: JoinWhereUniqueInput!, create: JoinCreateInput!, update: JoinUpdateInput!): Join!
+  upsertAttribute(where: AttributeWhereUniqueInput!, create: AttributeCreateInput!, update: AttributeUpdateInput!): Attribute!
   updateManyDatabases(data: DatabaseUpdateManyMutationInput!, where: DatabaseWhereInput): BatchPayload!
   updateManyResources(data: ResourceUpdateManyMutationInput!, where: ResourceWhereInput): BatchPayload!
-  updateManyAttributes(data: AttributeUpdateManyMutationInput!, where: AttributeWhereInput): BatchPayload!
+  updateManyProfiles(data: ProfileUpdateManyMutationInput!, where: ProfileWhereInput): BatchPayload!
   updateManyInputColumns(data: InputColumnUpdateManyMutationInput!, where: InputColumnWhereInput): BatchPayload!
+  updateManyJoins(data: JoinUpdateManyMutationInput!, where: JoinWhereInput): BatchPayload!
+  updateManyAttributes(data: AttributeUpdateManyMutationInput!, where: AttributeWhereInput): BatchPayload!
   deleteManyDatabases(where: DatabaseWhereInput): BatchPayload!
   deleteManyResources(where: ResourceWhereInput): BatchPayload!
-  deleteManyAttributes(where: AttributeWhereInput): BatchPayload!
+  deleteManyProfiles(where: ProfileWhereInput): BatchPayload!
   deleteManyInputColumns(where: InputColumnWhereInput): BatchPayload!
+  deleteManyJoins(where: JoinWhereInput): BatchPayload!
+  deleteManyAttributes(where: AttributeWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -1707,19 +2457,358 @@ type PageInfo {
   endCursor: String
 }
 
+type Profile implements Node {
+  id: ID!
+  name: String
+  attribute: Attribute!
+  attributes(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Attribute!]
+}
+
+"""A connection to a list of items."""
+type ProfileConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [ProfileEdge]!
+  aggregate: AggregateProfile!
+}
+
+input ProfileCreateInput {
+  name: String
+  attribute: AttributeCreateOneWithoutProfilesInput!
+  attributes: AttributeCreateManyInput
+}
+
+input ProfileCreateManyWithoutAttributeInput {
+  create: [ProfileCreateWithoutAttributeInput!]
+  connect: [ProfileWhereUniqueInput!]
+}
+
+input ProfileCreateWithoutAttributeInput {
+  name: String
+  attributes: AttributeCreateManyInput
+}
+
+"""An edge in a connection."""
+type ProfileEdge {
+  """The item at the end of the edge."""
+  node: Profile!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum ProfileOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type ProfilePreviousValues {
+  id: ID!
+  name: String
+}
+
+input ProfileScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ProfileScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ProfileScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ProfileScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+}
+
+type ProfileSubscriptionPayload {
+  mutation: MutationType!
+  node: Profile
+  updatedFields: [String!]
+  previousValues: ProfilePreviousValues
+}
+
+input ProfileSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ProfileSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ProfileSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ProfileSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: ProfileWhereInput
+}
+
+input ProfileUpdateInput {
+  name: String
+  attribute: AttributeUpdateOneRequiredWithoutProfilesInput
+  attributes: AttributeUpdateManyInput
+}
+
+input ProfileUpdateManyDataInput {
+  name: String
+}
+
+input ProfileUpdateManyMutationInput {
+  name: String
+}
+
+input ProfileUpdateManyWithoutAttributeInput {
+  create: [ProfileCreateWithoutAttributeInput!]
+  connect: [ProfileWhereUniqueInput!]
+  disconnect: [ProfileWhereUniqueInput!]
+  delete: [ProfileWhereUniqueInput!]
+  update: [ProfileUpdateWithWhereUniqueWithoutAttributeInput!]
+  updateMany: [ProfileUpdateManyWithWhereNestedInput!]
+  deleteMany: [ProfileScalarWhereInput!]
+  upsert: [ProfileUpsertWithWhereUniqueWithoutAttributeInput!]
+}
+
+input ProfileUpdateManyWithWhereNestedInput {
+  where: ProfileScalarWhereInput!
+  data: ProfileUpdateManyDataInput!
+}
+
+input ProfileUpdateWithoutAttributeDataInput {
+  name: String
+  attributes: AttributeUpdateManyInput
+}
+
+input ProfileUpdateWithWhereUniqueWithoutAttributeInput {
+  where: ProfileWhereUniqueInput!
+  data: ProfileUpdateWithoutAttributeDataInput!
+}
+
+input ProfileUpsertWithWhereUniqueWithoutAttributeInput {
+  where: ProfileWhereUniqueInput!
+  update: ProfileUpdateWithoutAttributeDataInput!
+  create: ProfileCreateWithoutAttributeInput!
+}
+
+input ProfileWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ProfileWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ProfileWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ProfileWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  attribute: AttributeWhereInput
+  attributes_every: AttributeWhereInput
+  attributes_some: AttributeWhereInput
+  attributes_none: AttributeWhereInput
+}
+
+input ProfileWhereUniqueInput {
+  id: ID
+}
+
 type Query {
   databases(where: DatabaseWhereInput, orderBy: DatabaseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Database]!
   resources(where: ResourceWhereInput, orderBy: ResourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Resource]!
-  attributes(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Attribute]!
+  profiles(where: ProfileWhereInput, orderBy: ProfileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Profile]!
   inputColumns(where: InputColumnWhereInput, orderBy: InputColumnOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [InputColumn]!
+  joins(where: JoinWhereInput, orderBy: JoinOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Join]!
+  attributes(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Attribute]!
   database(where: DatabaseWhereUniqueInput!): Database
   resource(where: ResourceWhereUniqueInput!): Resource
-  attribute(where: AttributeWhereUniqueInput!): Attribute
+  profile(where: ProfileWhereUniqueInput!): Profile
   inputColumn(where: InputColumnWhereUniqueInput!): InputColumn
+  join(where: JoinWhereUniqueInput!): Join
+  attribute(where: AttributeWhereUniqueInput!): Attribute
   databasesConnection(where: DatabaseWhereInput, orderBy: DatabaseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DatabaseConnection!
   resourcesConnection(where: ResourceWhereInput, orderBy: ResourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ResourceConnection!
-  attributesConnection(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AttributeConnection!
+  profilesConnection(where: ProfileWhereInput, orderBy: ProfileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProfileConnection!
   inputColumnsConnection(where: InputColumnWhereInput, orderBy: InputColumnOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): InputColumnConnection!
+  joinsConnection(where: JoinWhereInput, orderBy: JoinOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): JoinConnection!
+  attributesConnection(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AttributeConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -1730,12 +2819,12 @@ type Query {
 
 type Resource implements Node {
   id: ID!
-  database: Database!
   name: String!
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
   attributes(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Attribute!]
+  database: Database!
 }
 
 """A connection to a list of items."""
@@ -1753,8 +2842,8 @@ input ResourceCreateInput {
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
-  database: DatabaseCreateOneWithoutResourcesInput!
   attributes: AttributeCreateManyWithoutResourceInput
+  database: DatabaseCreateOneWithoutResourcesInput!
 }
 
 input ResourceCreateManyWithoutDatabaseInput {
@@ -2072,8 +3161,8 @@ input ResourceUpdateInput {
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
-  database: DatabaseUpdateOneRequiredWithoutResourcesInput
   attributes: AttributeUpdateManyWithoutResourceInput
+  database: DatabaseUpdateOneRequiredWithoutResourcesInput
 }
 
 input ResourceUpdateManyDataInput {
@@ -2106,9 +3195,11 @@ input ResourceUpdateManyWithWhereNestedInput {
   data: ResourceUpdateManyDataInput!
 }
 
-input ResourceUpdateOneRequiredWithoutAttributesInput {
+input ResourceUpdateOneWithoutAttributesInput {
   create: ResourceCreateWithoutAttributesInput
   connect: ResourceWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
   update: ResourceUpdateWithoutAttributesDataInput
   upsert: ResourceUpsertWithoutAttributesInput
 }
@@ -2354,10 +3445,10 @@ input ResourceWhereInput {
 
   """All values not ending with the given string."""
   primaryKeyColumn_not_ends_with: String
-  database: DatabaseWhereInput
   attributes_every: AttributeWhereInput
   attributes_some: AttributeWhereInput
   attributes_none: AttributeWhereInput
+  database: DatabaseWhereInput
 }
 
 input ResourceWhereUniqueInput {
@@ -2367,6 +3458,8 @@ input ResourceWhereUniqueInput {
 type Subscription {
   database(where: DatabaseSubscriptionWhereInput): DatabaseSubscriptionPayload
   resource(where: ResourceSubscriptionWhereInput): ResourceSubscriptionPayload
-  attribute(where: AttributeSubscriptionWhereInput): AttributeSubscriptionPayload
+  profile(where: ProfileSubscriptionWhereInput): ProfileSubscriptionPayload
   inputColumn(where: InputColumnSubscriptionWhereInput): InputColumnSubscriptionPayload
+  join(where: JoinSubscriptionWhereInput): JoinSubscriptionPayload
+  attribute(where: AttributeSubscriptionWhereInput): AttributeSubscriptionPayload
 }

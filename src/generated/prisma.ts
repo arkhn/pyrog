@@ -6,58 +6,80 @@ import { makePrismaBindingClass, BasePrismaOptions } from 'prisma-binding'
 export interface Query {
     databases: <T = Database[]>(args: { where?: DatabaseWhereInput, orderBy?: DatabaseOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     resources: <T = Resource[]>(args: { where?: ResourceWhereInput, orderBy?: ResourceOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    attributes: <T = Attribute[]>(args: { where?: AttributeWhereInput, orderBy?: AttributeOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    profiles: <T = Profile[]>(args: { where?: ProfileWhereInput, orderBy?: ProfileOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     inputColumns: <T = InputColumn[]>(args: { where?: InputColumnWhereInput, orderBy?: InputColumnOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    joins: <T = Join[]>(args: { where?: JoinWhereInput, orderBy?: JoinOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    attributes: <T = Attribute[]>(args: { where?: AttributeWhereInput, orderBy?: AttributeOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     database: <T = Database | null>(args: { where: DatabaseWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     resource: <T = Resource | null>(args: { where: ResourceWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    attribute: <T = Attribute | null>(args: { where: AttributeWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    profile: <T = Profile | null>(args: { where: ProfileWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     inputColumn: <T = InputColumn | null>(args: { where: InputColumnWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    join: <T = Join | null>(args: { where: JoinWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    attribute: <T = Attribute | null>(args: { where: AttributeWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     databasesConnection: <T = DatabaseConnection>(args: { where?: DatabaseWhereInput, orderBy?: DatabaseOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     resourcesConnection: <T = ResourceConnection>(args: { where?: ResourceWhereInput, orderBy?: ResourceOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    attributesConnection: <T = AttributeConnection>(args: { where?: AttributeWhereInput, orderBy?: AttributeOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    profilesConnection: <T = ProfileConnection>(args: { where?: ProfileWhereInput, orderBy?: ProfileOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     inputColumnsConnection: <T = InputColumnConnection>(args: { where?: InputColumnWhereInput, orderBy?: InputColumnOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    joinsConnection: <T = JoinConnection>(args: { where?: JoinWhereInput, orderBy?: JoinOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    attributesConnection: <T = AttributeConnection>(args: { where?: AttributeWhereInput, orderBy?: AttributeOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     node: <T = Node | null>(args: { id: ID_Output }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> 
   }
 
 export interface Mutation {
     createDatabase: <T = Database>(args: { data: DatabaseCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     createResource: <T = Resource>(args: { data: ResourceCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    createAttribute: <T = Attribute>(args: { data: AttributeCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    createProfile: <T = Profile>(args: { data: ProfileCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     createInputColumn: <T = InputColumn>(args: { data: InputColumnCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    createJoin: <T = Join>(args: { data: JoinCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    createAttribute: <T = Attribute>(args: { data: AttributeCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateDatabase: <T = Database | null>(args: { data: DatabaseUpdateInput, where: DatabaseWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateResource: <T = Resource | null>(args: { data: ResourceUpdateInput, where: ResourceWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    updateAttribute: <T = Attribute | null>(args: { data: AttributeUpdateInput, where: AttributeWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateProfile: <T = Profile | null>(args: { data: ProfileUpdateInput, where: ProfileWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateInputColumn: <T = InputColumn | null>(args: { data: InputColumnUpdateInput, where: InputColumnWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateJoin: <T = Join | null>(args: { data: JoinUpdateInput, where: JoinWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateAttribute: <T = Attribute | null>(args: { data: AttributeUpdateInput, where: AttributeWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteDatabase: <T = Database | null>(args: { where: DatabaseWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteResource: <T = Resource | null>(args: { where: ResourceWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    deleteAttribute: <T = Attribute | null>(args: { where: AttributeWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteProfile: <T = Profile | null>(args: { where: ProfileWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteInputColumn: <T = InputColumn | null>(args: { where: InputColumnWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteJoin: <T = Join | null>(args: { where: JoinWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteAttribute: <T = Attribute | null>(args: { where: AttributeWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     upsertDatabase: <T = Database>(args: { where: DatabaseWhereUniqueInput, create: DatabaseCreateInput, update: DatabaseUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     upsertResource: <T = Resource>(args: { where: ResourceWhereUniqueInput, create: ResourceCreateInput, update: ResourceUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    upsertAttribute: <T = Attribute>(args: { where: AttributeWhereUniqueInput, create: AttributeCreateInput, update: AttributeUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    upsertProfile: <T = Profile>(args: { where: ProfileWhereUniqueInput, create: ProfileCreateInput, update: ProfileUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     upsertInputColumn: <T = InputColumn>(args: { where: InputColumnWhereUniqueInput, create: InputColumnCreateInput, update: InputColumnUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    upsertJoin: <T = Join>(args: { where: JoinWhereUniqueInput, create: JoinCreateInput, update: JoinUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    upsertAttribute: <T = Attribute>(args: { where: AttributeWhereUniqueInput, create: AttributeCreateInput, update: AttributeUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateManyDatabases: <T = BatchPayload>(args: { data: DatabaseUpdateManyMutationInput, where?: DatabaseWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateManyResources: <T = BatchPayload>(args: { data: ResourceUpdateManyMutationInput, where?: ResourceWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    updateManyAttributes: <T = BatchPayload>(args: { data: AttributeUpdateManyMutationInput, where?: AttributeWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateManyProfiles: <T = BatchPayload>(args: { data: ProfileUpdateManyMutationInput, where?: ProfileWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     updateManyInputColumns: <T = BatchPayload>(args: { data: InputColumnUpdateManyMutationInput, where?: InputColumnWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateManyJoins: <T = BatchPayload>(args: { data: JoinUpdateManyMutationInput, where?: JoinWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateManyAttributes: <T = BatchPayload>(args: { data: AttributeUpdateManyMutationInput, where?: AttributeWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteManyDatabases: <T = BatchPayload>(args: { where?: DatabaseWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteManyResources: <T = BatchPayload>(args: { where?: ResourceWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    deleteManyAttributes: <T = BatchPayload>(args: { where?: AttributeWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    deleteManyInputColumns: <T = BatchPayload>(args: { where?: InputColumnWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> 
+    deleteManyProfiles: <T = BatchPayload>(args: { where?: ProfileWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteManyInputColumns: <T = BatchPayload>(args: { where?: InputColumnWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteManyJoins: <T = BatchPayload>(args: { where?: JoinWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteManyAttributes: <T = BatchPayload>(args: { where?: AttributeWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> 
   }
 
 export interface Subscription {
     database: <T = DatabaseSubscriptionPayload | null>(args: { where?: DatabaseSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
     resource: <T = ResourceSubscriptionPayload | null>(args: { where?: ResourceSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
-    attribute: <T = AttributeSubscriptionPayload | null>(args: { where?: AttributeSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
-    inputColumn: <T = InputColumnSubscriptionPayload | null>(args: { where?: InputColumnSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> 
+    profile: <T = ProfileSubscriptionPayload | null>(args: { where?: ProfileSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
+    inputColumn: <T = InputColumnSubscriptionPayload | null>(args: { where?: InputColumnSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
+    join: <T = JoinSubscriptionPayload | null>(args: { where?: JoinSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
+    attribute: <T = AttributeSubscriptionPayload | null>(args: { where?: AttributeSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> 
   }
 
 export interface Exists {
   Database: (where?: DatabaseWhereInput) => Promise<boolean>
   Resource: (where?: ResourceWhereInput) => Promise<boolean>
-  Attribute: (where?: AttributeWhereInput) => Promise<boolean>
+  Profile: (where?: ProfileWhereInput) => Promise<boolean>
   InputColumn: (where?: InputColumnWhereInput) => Promise<boolean>
+  Join: (where?: JoinWhereInput) => Promise<boolean>
+  Attribute: (where?: AttributeWhereInput) => Promise<boolean>
 }
 
 export interface Prisma {
@@ -94,16 +116,27 @@ type AggregateInputColumn {
   count: Int!
 }
 
+type AggregateJoin {
+  count: Int!
+}
+
+type AggregateProfile {
+  count: Int!
+}
+
 type AggregateResource {
   count: Int!
 }
 
 type Attribute implements Node {
   id: ID!
-  resource: Resource!
   name: String!
-  inputColumns(where: InputColumnWhereInput, orderBy: InputColumnOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [InputColumn!]
   mergingScript: String
+  resource: Resource
+  attributes(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Attribute!]
+  attribute: Attribute
+  inputColumns(where: InputColumnWhereInput, orderBy: InputColumnOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [InputColumn!]
+  profiles(where: ProfileWhereInput, orderBy: ProfileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Profile!]
 }
 
 """A connection to a list of items."""
@@ -119,8 +152,21 @@ type AttributeConnection {
 input AttributeCreateInput {
   name: String!
   mergingScript: String
-  resource: ResourceCreateOneWithoutAttributesInput!
+  resource: ResourceCreateOneWithoutAttributesInput
+  attributes: AttributeCreateManyWithoutAttributeInput
+  attribute: AttributeCreateOneWithoutAttributesInput
   inputColumns: InputColumnCreateManyWithoutAttributeInput
+  profiles: ProfileCreateManyWithoutAttributeInput
+}
+
+input AttributeCreateManyInput {
+  create: [AttributeCreateInput!]
+  connect: [AttributeWhereUniqueInput!]
+}
+
+input AttributeCreateManyWithoutAttributeInput {
+  create: [AttributeCreateWithoutAttributeInput!]
+  connect: [AttributeWhereUniqueInput!]
 }
 
 input AttributeCreateManyWithoutResourceInput {
@@ -128,21 +174,64 @@ input AttributeCreateManyWithoutResourceInput {
   connect: [AttributeWhereUniqueInput!]
 }
 
+input AttributeCreateOneWithoutAttributesInput {
+  create: AttributeCreateWithoutAttributesInput
+  connect: AttributeWhereUniqueInput
+}
+
 input AttributeCreateOneWithoutInputColumnsInput {
   create: AttributeCreateWithoutInputColumnsInput
   connect: AttributeWhereUniqueInput
 }
 
+input AttributeCreateOneWithoutProfilesInput {
+  create: AttributeCreateWithoutProfilesInput
+  connect: AttributeWhereUniqueInput
+}
+
+input AttributeCreateWithoutAttributeInput {
+  name: String!
+  mergingScript: String
+  resource: ResourceCreateOneWithoutAttributesInput
+  attributes: AttributeCreateManyWithoutAttributeInput
+  inputColumns: InputColumnCreateManyWithoutAttributeInput
+  profiles: ProfileCreateManyWithoutAttributeInput
+}
+
+input AttributeCreateWithoutAttributesInput {
+  name: String!
+  mergingScript: String
+  resource: ResourceCreateOneWithoutAttributesInput
+  attribute: AttributeCreateOneWithoutAttributesInput
+  inputColumns: InputColumnCreateManyWithoutAttributeInput
+  profiles: ProfileCreateManyWithoutAttributeInput
+}
+
 input AttributeCreateWithoutInputColumnsInput {
   name: String!
   mergingScript: String
-  resource: ResourceCreateOneWithoutAttributesInput!
+  resource: ResourceCreateOneWithoutAttributesInput
+  attributes: AttributeCreateManyWithoutAttributeInput
+  attribute: AttributeCreateOneWithoutAttributesInput
+  profiles: ProfileCreateManyWithoutAttributeInput
+}
+
+input AttributeCreateWithoutProfilesInput {
+  name: String!
+  mergingScript: String
+  resource: ResourceCreateOneWithoutAttributesInput
+  attributes: AttributeCreateManyWithoutAttributeInput
+  attribute: AttributeCreateOneWithoutAttributesInput
+  inputColumns: InputColumnCreateManyWithoutAttributeInput
 }
 
 input AttributeCreateWithoutResourceInput {
   name: String!
   mergingScript: String
+  attributes: AttributeCreateManyWithoutAttributeInput
+  attribute: AttributeCreateOneWithoutAttributesInput
   inputColumns: InputColumnCreateManyWithoutAttributeInput
+  profiles: ProfileCreateManyWithoutAttributeInput
 }
 
 """An edge in a connection."""
@@ -343,11 +432,24 @@ input AttributeSubscriptionWhereInput {
   node: AttributeWhereInput
 }
 
+input AttributeUpdateDataInput {
+  name: String
+  mergingScript: String
+  resource: ResourceUpdateOneWithoutAttributesInput
+  attributes: AttributeUpdateManyWithoutAttributeInput
+  attribute: AttributeUpdateOneWithoutAttributesInput
+  inputColumns: InputColumnUpdateManyWithoutAttributeInput
+  profiles: ProfileUpdateManyWithoutAttributeInput
+}
+
 input AttributeUpdateInput {
   name: String
   mergingScript: String
-  resource: ResourceUpdateOneRequiredWithoutAttributesInput
+  resource: ResourceUpdateOneWithoutAttributesInput
+  attributes: AttributeUpdateManyWithoutAttributeInput
+  attribute: AttributeUpdateOneWithoutAttributesInput
   inputColumns: InputColumnUpdateManyWithoutAttributeInput
+  profiles: ProfileUpdateManyWithoutAttributeInput
 }
 
 input AttributeUpdateManyDataInput {
@@ -355,9 +457,31 @@ input AttributeUpdateManyDataInput {
   mergingScript: String
 }
 
+input AttributeUpdateManyInput {
+  create: [AttributeCreateInput!]
+  connect: [AttributeWhereUniqueInput!]
+  disconnect: [AttributeWhereUniqueInput!]
+  delete: [AttributeWhereUniqueInput!]
+  update: [AttributeUpdateWithWhereUniqueNestedInput!]
+  updateMany: [AttributeUpdateManyWithWhereNestedInput!]
+  deleteMany: [AttributeScalarWhereInput!]
+  upsert: [AttributeUpsertWithWhereUniqueNestedInput!]
+}
+
 input AttributeUpdateManyMutationInput {
   name: String
   mergingScript: String
+}
+
+input AttributeUpdateManyWithoutAttributeInput {
+  create: [AttributeCreateWithoutAttributeInput!]
+  connect: [AttributeWhereUniqueInput!]
+  disconnect: [AttributeWhereUniqueInput!]
+  delete: [AttributeWhereUniqueInput!]
+  update: [AttributeUpdateWithWhereUniqueWithoutAttributeInput!]
+  updateMany: [AttributeUpdateManyWithWhereNestedInput!]
+  deleteMany: [AttributeScalarWhereInput!]
+  upsert: [AttributeUpsertWithWhereUniqueWithoutAttributeInput!]
 }
 
 input AttributeUpdateManyWithoutResourceInput {
@@ -383,16 +507,75 @@ input AttributeUpdateOneRequiredWithoutInputColumnsInput {
   upsert: AttributeUpsertWithoutInputColumnsInput
 }
 
+input AttributeUpdateOneRequiredWithoutProfilesInput {
+  create: AttributeCreateWithoutProfilesInput
+  connect: AttributeWhereUniqueInput
+  update: AttributeUpdateWithoutProfilesDataInput
+  upsert: AttributeUpsertWithoutProfilesInput
+}
+
+input AttributeUpdateOneWithoutAttributesInput {
+  create: AttributeCreateWithoutAttributesInput
+  connect: AttributeWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: AttributeUpdateWithoutAttributesDataInput
+  upsert: AttributeUpsertWithoutAttributesInput
+}
+
+input AttributeUpdateWithoutAttributeDataInput {
+  name: String
+  mergingScript: String
+  resource: ResourceUpdateOneWithoutAttributesInput
+  attributes: AttributeUpdateManyWithoutAttributeInput
+  inputColumns: InputColumnUpdateManyWithoutAttributeInput
+  profiles: ProfileUpdateManyWithoutAttributeInput
+}
+
+input AttributeUpdateWithoutAttributesDataInput {
+  name: String
+  mergingScript: String
+  resource: ResourceUpdateOneWithoutAttributesInput
+  attribute: AttributeUpdateOneWithoutAttributesInput
+  inputColumns: InputColumnUpdateManyWithoutAttributeInput
+  profiles: ProfileUpdateManyWithoutAttributeInput
+}
+
 input AttributeUpdateWithoutInputColumnsDataInput {
   name: String
   mergingScript: String
-  resource: ResourceUpdateOneRequiredWithoutAttributesInput
+  resource: ResourceUpdateOneWithoutAttributesInput
+  attributes: AttributeUpdateManyWithoutAttributeInput
+  attribute: AttributeUpdateOneWithoutAttributesInput
+  profiles: ProfileUpdateManyWithoutAttributeInput
+}
+
+input AttributeUpdateWithoutProfilesDataInput {
+  name: String
+  mergingScript: String
+  resource: ResourceUpdateOneWithoutAttributesInput
+  attributes: AttributeUpdateManyWithoutAttributeInput
+  attribute: AttributeUpdateOneWithoutAttributesInput
+  inputColumns: InputColumnUpdateManyWithoutAttributeInput
 }
 
 input AttributeUpdateWithoutResourceDataInput {
   name: String
   mergingScript: String
+  attributes: AttributeUpdateManyWithoutAttributeInput
+  attribute: AttributeUpdateOneWithoutAttributesInput
   inputColumns: InputColumnUpdateManyWithoutAttributeInput
+  profiles: ProfileUpdateManyWithoutAttributeInput
+}
+
+input AttributeUpdateWithWhereUniqueNestedInput {
+  where: AttributeWhereUniqueInput!
+  data: AttributeUpdateDataInput!
+}
+
+input AttributeUpdateWithWhereUniqueWithoutAttributeInput {
+  where: AttributeWhereUniqueInput!
+  data: AttributeUpdateWithoutAttributeDataInput!
 }
 
 input AttributeUpdateWithWhereUniqueWithoutResourceInput {
@@ -400,9 +583,31 @@ input AttributeUpdateWithWhereUniqueWithoutResourceInput {
   data: AttributeUpdateWithoutResourceDataInput!
 }
 
+input AttributeUpsertWithoutAttributesInput {
+  update: AttributeUpdateWithoutAttributesDataInput!
+  create: AttributeCreateWithoutAttributesInput!
+}
+
 input AttributeUpsertWithoutInputColumnsInput {
   update: AttributeUpdateWithoutInputColumnsDataInput!
   create: AttributeCreateWithoutInputColumnsInput!
+}
+
+input AttributeUpsertWithoutProfilesInput {
+  update: AttributeUpdateWithoutProfilesDataInput!
+  create: AttributeCreateWithoutProfilesInput!
+}
+
+input AttributeUpsertWithWhereUniqueNestedInput {
+  where: AttributeWhereUniqueInput!
+  update: AttributeUpdateDataInput!
+  create: AttributeCreateInput!
+}
+
+input AttributeUpsertWithWhereUniqueWithoutAttributeInput {
+  where: AttributeWhereUniqueInput!
+  update: AttributeUpdateWithoutAttributeDataInput!
+  create: AttributeCreateWithoutAttributeInput!
 }
 
 input AttributeUpsertWithWhereUniqueWithoutResourceInput {
@@ -541,9 +746,16 @@ input AttributeWhereInput {
   """All values not ending with the given string."""
   mergingScript_not_ends_with: String
   resource: ResourceWhereInput
+  attributes_every: AttributeWhereInput
+  attributes_some: AttributeWhereInput
+  attributes_none: AttributeWhereInput
+  attribute: AttributeWhereInput
   inputColumns_every: InputColumnWhereInput
   inputColumns_some: InputColumnWhereInput
   inputColumns_none: InputColumnWhereInput
+  profiles_every: ProfileWhereInput
+  profiles_some: ProfileWhereInput
+  profiles_none: ProfileWhereInput
 }
 
 input AttributeWhereUniqueInput {
@@ -775,15 +987,13 @@ input DatabaseWhereUniqueInput {
 
 type InputColumn implements Node {
   id: ID!
-  attribute: Attribute!
   owner: String!
   table: String!
   column: String!
   script: String
-  joinSourceColumn: String
-  joinTargetOwner: String
-  joinTargetTable: String
-  joinTargetColumn: String
+  staticValue: String
+  joins(where: JoinWhereInput, orderBy: JoinOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Join!]
+  attribute: Attribute!
 }
 
 """A connection to a list of items."""
@@ -801,10 +1011,8 @@ input InputColumnCreateInput {
   table: String!
   column: String!
   script: String
-  joinSourceColumn: String
-  joinTargetOwner: String
-  joinTargetTable: String
-  joinTargetColumn: String
+  staticValue: String
+  joins: JoinCreateManyWithoutInputColumnInput
   attribute: AttributeCreateOneWithoutInputColumnsInput!
 }
 
@@ -813,15 +1021,27 @@ input InputColumnCreateManyWithoutAttributeInput {
   connect: [InputColumnWhereUniqueInput!]
 }
 
+input InputColumnCreateOneWithoutJoinsInput {
+  create: InputColumnCreateWithoutJoinsInput
+  connect: InputColumnWhereUniqueInput
+}
+
 input InputColumnCreateWithoutAttributeInput {
   owner: String!
   table: String!
   column: String!
   script: String
-  joinSourceColumn: String
-  joinTargetOwner: String
-  joinTargetTable: String
-  joinTargetColumn: String
+  staticValue: String
+  joins: JoinCreateManyWithoutInputColumnInput
+}
+
+input InputColumnCreateWithoutJoinsInput {
+  owner: String!
+  table: String!
+  column: String!
+  script: String
+  staticValue: String
+  attribute: AttributeCreateOneWithoutInputColumnsInput!
 }
 
 """An edge in a connection."""
@@ -844,14 +1064,8 @@ enum InputColumnOrderByInput {
   column_DESC
   script_ASC
   script_DESC
-  joinSourceColumn_ASC
-  joinSourceColumn_DESC
-  joinTargetOwner_ASC
-  joinTargetOwner_DESC
-  joinTargetTable_ASC
-  joinTargetTable_DESC
-  joinTargetColumn_ASC
-  joinTargetColumn_DESC
+  staticValue_ASC
+  staticValue_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -864,10 +1078,7 @@ type InputColumnPreviousValues {
   table: String!
   column: String!
   script: String
-  joinSourceColumn: String
-  joinTargetOwner: String
-  joinTargetTable: String
-  joinTargetColumn: String
+  staticValue: String
 }
 
 input InputColumnScalarWhereInput {
@@ -1079,166 +1290,46 @@ input InputColumnScalarWhereInput {
 
   """All values not ending with the given string."""
   script_not_ends_with: String
-  joinSourceColumn: String
+  staticValue: String
 
   """All values that are not equal to given value."""
-  joinSourceColumn_not: String
+  staticValue_not: String
 
   """All values that are contained in given list."""
-  joinSourceColumn_in: [String!]
+  staticValue_in: [String!]
 
   """All values that are not contained in given list."""
-  joinSourceColumn_not_in: [String!]
+  staticValue_not_in: [String!]
 
   """All values less than the given value."""
-  joinSourceColumn_lt: String
+  staticValue_lt: String
 
   """All values less than or equal the given value."""
-  joinSourceColumn_lte: String
+  staticValue_lte: String
 
   """All values greater than the given value."""
-  joinSourceColumn_gt: String
+  staticValue_gt: String
 
   """All values greater than or equal the given value."""
-  joinSourceColumn_gte: String
+  staticValue_gte: String
 
   """All values containing the given string."""
-  joinSourceColumn_contains: String
+  staticValue_contains: String
 
   """All values not containing the given string."""
-  joinSourceColumn_not_contains: String
+  staticValue_not_contains: String
 
   """All values starting with the given string."""
-  joinSourceColumn_starts_with: String
+  staticValue_starts_with: String
 
   """All values not starting with the given string."""
-  joinSourceColumn_not_starts_with: String
+  staticValue_not_starts_with: String
 
   """All values ending with the given string."""
-  joinSourceColumn_ends_with: String
+  staticValue_ends_with: String
 
   """All values not ending with the given string."""
-  joinSourceColumn_not_ends_with: String
-  joinTargetOwner: String
-
-  """All values that are not equal to given value."""
-  joinTargetOwner_not: String
-
-  """All values that are contained in given list."""
-  joinTargetOwner_in: [String!]
-
-  """All values that are not contained in given list."""
-  joinTargetOwner_not_in: [String!]
-
-  """All values less than the given value."""
-  joinTargetOwner_lt: String
-
-  """All values less than or equal the given value."""
-  joinTargetOwner_lte: String
-
-  """All values greater than the given value."""
-  joinTargetOwner_gt: String
-
-  """All values greater than or equal the given value."""
-  joinTargetOwner_gte: String
-
-  """All values containing the given string."""
-  joinTargetOwner_contains: String
-
-  """All values not containing the given string."""
-  joinTargetOwner_not_contains: String
-
-  """All values starting with the given string."""
-  joinTargetOwner_starts_with: String
-
-  """All values not starting with the given string."""
-  joinTargetOwner_not_starts_with: String
-
-  """All values ending with the given string."""
-  joinTargetOwner_ends_with: String
-
-  """All values not ending with the given string."""
-  joinTargetOwner_not_ends_with: String
-  joinTargetTable: String
-
-  """All values that are not equal to given value."""
-  joinTargetTable_not: String
-
-  """All values that are contained in given list."""
-  joinTargetTable_in: [String!]
-
-  """All values that are not contained in given list."""
-  joinTargetTable_not_in: [String!]
-
-  """All values less than the given value."""
-  joinTargetTable_lt: String
-
-  """All values less than or equal the given value."""
-  joinTargetTable_lte: String
-
-  """All values greater than the given value."""
-  joinTargetTable_gt: String
-
-  """All values greater than or equal the given value."""
-  joinTargetTable_gte: String
-
-  """All values containing the given string."""
-  joinTargetTable_contains: String
-
-  """All values not containing the given string."""
-  joinTargetTable_not_contains: String
-
-  """All values starting with the given string."""
-  joinTargetTable_starts_with: String
-
-  """All values not starting with the given string."""
-  joinTargetTable_not_starts_with: String
-
-  """All values ending with the given string."""
-  joinTargetTable_ends_with: String
-
-  """All values not ending with the given string."""
-  joinTargetTable_not_ends_with: String
-  joinTargetColumn: String
-
-  """All values that are not equal to given value."""
-  joinTargetColumn_not: String
-
-  """All values that are contained in given list."""
-  joinTargetColumn_in: [String!]
-
-  """All values that are not contained in given list."""
-  joinTargetColumn_not_in: [String!]
-
-  """All values less than the given value."""
-  joinTargetColumn_lt: String
-
-  """All values less than or equal the given value."""
-  joinTargetColumn_lte: String
-
-  """All values greater than the given value."""
-  joinTargetColumn_gt: String
-
-  """All values greater than or equal the given value."""
-  joinTargetColumn_gte: String
-
-  """All values containing the given string."""
-  joinTargetColumn_contains: String
-
-  """All values not containing the given string."""
-  joinTargetColumn_not_contains: String
-
-  """All values starting with the given string."""
-  joinTargetColumn_starts_with: String
-
-  """All values not starting with the given string."""
-  joinTargetColumn_not_starts_with: String
-
-  """All values ending with the given string."""
-  joinTargetColumn_ends_with: String
-
-  """All values not ending with the given string."""
-  joinTargetColumn_not_ends_with: String
+  staticValue_not_ends_with: String
 }
 
 type InputColumnSubscriptionPayload {
@@ -1285,10 +1376,8 @@ input InputColumnUpdateInput {
   table: String
   column: String
   script: String
-  joinSourceColumn: String
-  joinTargetOwner: String
-  joinTargetTable: String
-  joinTargetColumn: String
+  staticValue: String
+  joins: JoinUpdateManyWithoutInputColumnInput
   attribute: AttributeUpdateOneRequiredWithoutInputColumnsInput
 }
 
@@ -1297,10 +1386,7 @@ input InputColumnUpdateManyDataInput {
   table: String
   column: String
   script: String
-  joinSourceColumn: String
-  joinTargetOwner: String
-  joinTargetTable: String
-  joinTargetColumn: String
+  staticValue: String
 }
 
 input InputColumnUpdateManyMutationInput {
@@ -1308,10 +1394,7 @@ input InputColumnUpdateManyMutationInput {
   table: String
   column: String
   script: String
-  joinSourceColumn: String
-  joinTargetOwner: String
-  joinTargetTable: String
-  joinTargetColumn: String
+  staticValue: String
 }
 
 input InputColumnUpdateManyWithoutAttributeInput {
@@ -1330,20 +1413,39 @@ input InputColumnUpdateManyWithWhereNestedInput {
   data: InputColumnUpdateManyDataInput!
 }
 
+input InputColumnUpdateOneRequiredWithoutJoinsInput {
+  create: InputColumnCreateWithoutJoinsInput
+  connect: InputColumnWhereUniqueInput
+  update: InputColumnUpdateWithoutJoinsDataInput
+  upsert: InputColumnUpsertWithoutJoinsInput
+}
+
 input InputColumnUpdateWithoutAttributeDataInput {
   owner: String
   table: String
   column: String
   script: String
-  joinSourceColumn: String
-  joinTargetOwner: String
-  joinTargetTable: String
-  joinTargetColumn: String
+  staticValue: String
+  joins: JoinUpdateManyWithoutInputColumnInput
+}
+
+input InputColumnUpdateWithoutJoinsDataInput {
+  owner: String
+  table: String
+  column: String
+  script: String
+  staticValue: String
+  attribute: AttributeUpdateOneRequiredWithoutInputColumnsInput
 }
 
 input InputColumnUpdateWithWhereUniqueWithoutAttributeInput {
   where: InputColumnWhereUniqueInput!
   data: InputColumnUpdateWithoutAttributeDataInput!
+}
+
+input InputColumnUpsertWithoutJoinsInput {
+  update: InputColumnUpdateWithoutJoinsDataInput!
+  create: InputColumnCreateWithoutJoinsInput!
 }
 
 input InputColumnUpsertWithWhereUniqueWithoutAttributeInput {
@@ -1561,170 +1663,828 @@ input InputColumnWhereInput {
 
   """All values not ending with the given string."""
   script_not_ends_with: String
-  joinSourceColumn: String
+  staticValue: String
 
   """All values that are not equal to given value."""
-  joinSourceColumn_not: String
+  staticValue_not: String
 
   """All values that are contained in given list."""
-  joinSourceColumn_in: [String!]
+  staticValue_in: [String!]
 
   """All values that are not contained in given list."""
-  joinSourceColumn_not_in: [String!]
+  staticValue_not_in: [String!]
 
   """All values less than the given value."""
-  joinSourceColumn_lt: String
+  staticValue_lt: String
 
   """All values less than or equal the given value."""
-  joinSourceColumn_lte: String
+  staticValue_lte: String
 
   """All values greater than the given value."""
-  joinSourceColumn_gt: String
+  staticValue_gt: String
 
   """All values greater than or equal the given value."""
-  joinSourceColumn_gte: String
+  staticValue_gte: String
 
   """All values containing the given string."""
-  joinSourceColumn_contains: String
+  staticValue_contains: String
 
   """All values not containing the given string."""
-  joinSourceColumn_not_contains: String
+  staticValue_not_contains: String
 
   """All values starting with the given string."""
-  joinSourceColumn_starts_with: String
+  staticValue_starts_with: String
 
   """All values not starting with the given string."""
-  joinSourceColumn_not_starts_with: String
+  staticValue_not_starts_with: String
 
   """All values ending with the given string."""
-  joinSourceColumn_ends_with: String
+  staticValue_ends_with: String
 
   """All values not ending with the given string."""
-  joinSourceColumn_not_ends_with: String
-  joinTargetOwner: String
-
-  """All values that are not equal to given value."""
-  joinTargetOwner_not: String
-
-  """All values that are contained in given list."""
-  joinTargetOwner_in: [String!]
-
-  """All values that are not contained in given list."""
-  joinTargetOwner_not_in: [String!]
-
-  """All values less than the given value."""
-  joinTargetOwner_lt: String
-
-  """All values less than or equal the given value."""
-  joinTargetOwner_lte: String
-
-  """All values greater than the given value."""
-  joinTargetOwner_gt: String
-
-  """All values greater than or equal the given value."""
-  joinTargetOwner_gte: String
-
-  """All values containing the given string."""
-  joinTargetOwner_contains: String
-
-  """All values not containing the given string."""
-  joinTargetOwner_not_contains: String
-
-  """All values starting with the given string."""
-  joinTargetOwner_starts_with: String
-
-  """All values not starting with the given string."""
-  joinTargetOwner_not_starts_with: String
-
-  """All values ending with the given string."""
-  joinTargetOwner_ends_with: String
-
-  """All values not ending with the given string."""
-  joinTargetOwner_not_ends_with: String
-  joinTargetTable: String
-
-  """All values that are not equal to given value."""
-  joinTargetTable_not: String
-
-  """All values that are contained in given list."""
-  joinTargetTable_in: [String!]
-
-  """All values that are not contained in given list."""
-  joinTargetTable_not_in: [String!]
-
-  """All values less than the given value."""
-  joinTargetTable_lt: String
-
-  """All values less than or equal the given value."""
-  joinTargetTable_lte: String
-
-  """All values greater than the given value."""
-  joinTargetTable_gt: String
-
-  """All values greater than or equal the given value."""
-  joinTargetTable_gte: String
-
-  """All values containing the given string."""
-  joinTargetTable_contains: String
-
-  """All values not containing the given string."""
-  joinTargetTable_not_contains: String
-
-  """All values starting with the given string."""
-  joinTargetTable_starts_with: String
-
-  """All values not starting with the given string."""
-  joinTargetTable_not_starts_with: String
-
-  """All values ending with the given string."""
-  joinTargetTable_ends_with: String
-
-  """All values not ending with the given string."""
-  joinTargetTable_not_ends_with: String
-  joinTargetColumn: String
-
-  """All values that are not equal to given value."""
-  joinTargetColumn_not: String
-
-  """All values that are contained in given list."""
-  joinTargetColumn_in: [String!]
-
-  """All values that are not contained in given list."""
-  joinTargetColumn_not_in: [String!]
-
-  """All values less than the given value."""
-  joinTargetColumn_lt: String
-
-  """All values less than or equal the given value."""
-  joinTargetColumn_lte: String
-
-  """All values greater than the given value."""
-  joinTargetColumn_gt: String
-
-  """All values greater than or equal the given value."""
-  joinTargetColumn_gte: String
-
-  """All values containing the given string."""
-  joinTargetColumn_contains: String
-
-  """All values not containing the given string."""
-  joinTargetColumn_not_contains: String
-
-  """All values starting with the given string."""
-  joinTargetColumn_starts_with: String
-
-  """All values not starting with the given string."""
-  joinTargetColumn_not_starts_with: String
-
-  """All values ending with the given string."""
-  joinTargetColumn_ends_with: String
-
-  """All values not ending with the given string."""
-  joinTargetColumn_not_ends_with: String
+  staticValue_not_ends_with: String
+  joins_every: JoinWhereInput
+  joins_some: JoinWhereInput
+  joins_none: JoinWhereInput
   attribute: AttributeWhereInput
 }
 
 input InputColumnWhereUniqueInput {
+  id: ID
+}
+
+type Join implements Node {
+  id: ID!
+  sourceOwner: String
+  sourceTable: String
+  sourceColumn: String
+  targetOwner: String
+  targetTable: String
+  targetColumn: String
+  inputColumn: InputColumn!
+}
+
+"""A connection to a list of items."""
+type JoinConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [JoinEdge]!
+  aggregate: AggregateJoin!
+}
+
+input JoinCreateInput {
+  sourceOwner: String
+  sourceTable: String
+  sourceColumn: String
+  targetOwner: String
+  targetTable: String
+  targetColumn: String
+  inputColumn: InputColumnCreateOneWithoutJoinsInput!
+}
+
+input JoinCreateManyWithoutInputColumnInput {
+  create: [JoinCreateWithoutInputColumnInput!]
+  connect: [JoinWhereUniqueInput!]
+}
+
+input JoinCreateWithoutInputColumnInput {
+  sourceOwner: String
+  sourceTable: String
+  sourceColumn: String
+  targetOwner: String
+  targetTable: String
+  targetColumn: String
+}
+
+"""An edge in a connection."""
+type JoinEdge {
+  """The item at the end of the edge."""
+  node: Join!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum JoinOrderByInput {
+  id_ASC
+  id_DESC
+  sourceOwner_ASC
+  sourceOwner_DESC
+  sourceTable_ASC
+  sourceTable_DESC
+  sourceColumn_ASC
+  sourceColumn_DESC
+  targetOwner_ASC
+  targetOwner_DESC
+  targetTable_ASC
+  targetTable_DESC
+  targetColumn_ASC
+  targetColumn_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type JoinPreviousValues {
+  id: ID!
+  sourceOwner: String
+  sourceTable: String
+  sourceColumn: String
+  targetOwner: String
+  targetTable: String
+  targetColumn: String
+}
+
+input JoinScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [JoinScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [JoinScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [JoinScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  sourceOwner: String
+
+  """All values that are not equal to given value."""
+  sourceOwner_not: String
+
+  """All values that are contained in given list."""
+  sourceOwner_in: [String!]
+
+  """All values that are not contained in given list."""
+  sourceOwner_not_in: [String!]
+
+  """All values less than the given value."""
+  sourceOwner_lt: String
+
+  """All values less than or equal the given value."""
+  sourceOwner_lte: String
+
+  """All values greater than the given value."""
+  sourceOwner_gt: String
+
+  """All values greater than or equal the given value."""
+  sourceOwner_gte: String
+
+  """All values containing the given string."""
+  sourceOwner_contains: String
+
+  """All values not containing the given string."""
+  sourceOwner_not_contains: String
+
+  """All values starting with the given string."""
+  sourceOwner_starts_with: String
+
+  """All values not starting with the given string."""
+  sourceOwner_not_starts_with: String
+
+  """All values ending with the given string."""
+  sourceOwner_ends_with: String
+
+  """All values not ending with the given string."""
+  sourceOwner_not_ends_with: String
+  sourceTable: String
+
+  """All values that are not equal to given value."""
+  sourceTable_not: String
+
+  """All values that are contained in given list."""
+  sourceTable_in: [String!]
+
+  """All values that are not contained in given list."""
+  sourceTable_not_in: [String!]
+
+  """All values less than the given value."""
+  sourceTable_lt: String
+
+  """All values less than or equal the given value."""
+  sourceTable_lte: String
+
+  """All values greater than the given value."""
+  sourceTable_gt: String
+
+  """All values greater than or equal the given value."""
+  sourceTable_gte: String
+
+  """All values containing the given string."""
+  sourceTable_contains: String
+
+  """All values not containing the given string."""
+  sourceTable_not_contains: String
+
+  """All values starting with the given string."""
+  sourceTable_starts_with: String
+
+  """All values not starting with the given string."""
+  sourceTable_not_starts_with: String
+
+  """All values ending with the given string."""
+  sourceTable_ends_with: String
+
+  """All values not ending with the given string."""
+  sourceTable_not_ends_with: String
+  sourceColumn: String
+
+  """All values that are not equal to given value."""
+  sourceColumn_not: String
+
+  """All values that are contained in given list."""
+  sourceColumn_in: [String!]
+
+  """All values that are not contained in given list."""
+  sourceColumn_not_in: [String!]
+
+  """All values less than the given value."""
+  sourceColumn_lt: String
+
+  """All values less than or equal the given value."""
+  sourceColumn_lte: String
+
+  """All values greater than the given value."""
+  sourceColumn_gt: String
+
+  """All values greater than or equal the given value."""
+  sourceColumn_gte: String
+
+  """All values containing the given string."""
+  sourceColumn_contains: String
+
+  """All values not containing the given string."""
+  sourceColumn_not_contains: String
+
+  """All values starting with the given string."""
+  sourceColumn_starts_with: String
+
+  """All values not starting with the given string."""
+  sourceColumn_not_starts_with: String
+
+  """All values ending with the given string."""
+  sourceColumn_ends_with: String
+
+  """All values not ending with the given string."""
+  sourceColumn_not_ends_with: String
+  targetOwner: String
+
+  """All values that are not equal to given value."""
+  targetOwner_not: String
+
+  """All values that are contained in given list."""
+  targetOwner_in: [String!]
+
+  """All values that are not contained in given list."""
+  targetOwner_not_in: [String!]
+
+  """All values less than the given value."""
+  targetOwner_lt: String
+
+  """All values less than or equal the given value."""
+  targetOwner_lte: String
+
+  """All values greater than the given value."""
+  targetOwner_gt: String
+
+  """All values greater than or equal the given value."""
+  targetOwner_gte: String
+
+  """All values containing the given string."""
+  targetOwner_contains: String
+
+  """All values not containing the given string."""
+  targetOwner_not_contains: String
+
+  """All values starting with the given string."""
+  targetOwner_starts_with: String
+
+  """All values not starting with the given string."""
+  targetOwner_not_starts_with: String
+
+  """All values ending with the given string."""
+  targetOwner_ends_with: String
+
+  """All values not ending with the given string."""
+  targetOwner_not_ends_with: String
+  targetTable: String
+
+  """All values that are not equal to given value."""
+  targetTable_not: String
+
+  """All values that are contained in given list."""
+  targetTable_in: [String!]
+
+  """All values that are not contained in given list."""
+  targetTable_not_in: [String!]
+
+  """All values less than the given value."""
+  targetTable_lt: String
+
+  """All values less than or equal the given value."""
+  targetTable_lte: String
+
+  """All values greater than the given value."""
+  targetTable_gt: String
+
+  """All values greater than or equal the given value."""
+  targetTable_gte: String
+
+  """All values containing the given string."""
+  targetTable_contains: String
+
+  """All values not containing the given string."""
+  targetTable_not_contains: String
+
+  """All values starting with the given string."""
+  targetTable_starts_with: String
+
+  """All values not starting with the given string."""
+  targetTable_not_starts_with: String
+
+  """All values ending with the given string."""
+  targetTable_ends_with: String
+
+  """All values not ending with the given string."""
+  targetTable_not_ends_with: String
+  targetColumn: String
+
+  """All values that are not equal to given value."""
+  targetColumn_not: String
+
+  """All values that are contained in given list."""
+  targetColumn_in: [String!]
+
+  """All values that are not contained in given list."""
+  targetColumn_not_in: [String!]
+
+  """All values less than the given value."""
+  targetColumn_lt: String
+
+  """All values less than or equal the given value."""
+  targetColumn_lte: String
+
+  """All values greater than the given value."""
+  targetColumn_gt: String
+
+  """All values greater than or equal the given value."""
+  targetColumn_gte: String
+
+  """All values containing the given string."""
+  targetColumn_contains: String
+
+  """All values not containing the given string."""
+  targetColumn_not_contains: String
+
+  """All values starting with the given string."""
+  targetColumn_starts_with: String
+
+  """All values not starting with the given string."""
+  targetColumn_not_starts_with: String
+
+  """All values ending with the given string."""
+  targetColumn_ends_with: String
+
+  """All values not ending with the given string."""
+  targetColumn_not_ends_with: String
+}
+
+type JoinSubscriptionPayload {
+  mutation: MutationType!
+  node: Join
+  updatedFields: [String!]
+  previousValues: JoinPreviousValues
+}
+
+input JoinSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [JoinSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [JoinSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [JoinSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: JoinWhereInput
+}
+
+input JoinUpdateInput {
+  sourceOwner: String
+  sourceTable: String
+  sourceColumn: String
+  targetOwner: String
+  targetTable: String
+  targetColumn: String
+  inputColumn: InputColumnUpdateOneRequiredWithoutJoinsInput
+}
+
+input JoinUpdateManyDataInput {
+  sourceOwner: String
+  sourceTable: String
+  sourceColumn: String
+  targetOwner: String
+  targetTable: String
+  targetColumn: String
+}
+
+input JoinUpdateManyMutationInput {
+  sourceOwner: String
+  sourceTable: String
+  sourceColumn: String
+  targetOwner: String
+  targetTable: String
+  targetColumn: String
+}
+
+input JoinUpdateManyWithoutInputColumnInput {
+  create: [JoinCreateWithoutInputColumnInput!]
+  connect: [JoinWhereUniqueInput!]
+  disconnect: [JoinWhereUniqueInput!]
+  delete: [JoinWhereUniqueInput!]
+  update: [JoinUpdateWithWhereUniqueWithoutInputColumnInput!]
+  updateMany: [JoinUpdateManyWithWhereNestedInput!]
+  deleteMany: [JoinScalarWhereInput!]
+  upsert: [JoinUpsertWithWhereUniqueWithoutInputColumnInput!]
+}
+
+input JoinUpdateManyWithWhereNestedInput {
+  where: JoinScalarWhereInput!
+  data: JoinUpdateManyDataInput!
+}
+
+input JoinUpdateWithoutInputColumnDataInput {
+  sourceOwner: String
+  sourceTable: String
+  sourceColumn: String
+  targetOwner: String
+  targetTable: String
+  targetColumn: String
+}
+
+input JoinUpdateWithWhereUniqueWithoutInputColumnInput {
+  where: JoinWhereUniqueInput!
+  data: JoinUpdateWithoutInputColumnDataInput!
+}
+
+input JoinUpsertWithWhereUniqueWithoutInputColumnInput {
+  where: JoinWhereUniqueInput!
+  update: JoinUpdateWithoutInputColumnDataInput!
+  create: JoinCreateWithoutInputColumnInput!
+}
+
+input JoinWhereInput {
+  """Logical AND on all given filters."""
+  AND: [JoinWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [JoinWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [JoinWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  sourceOwner: String
+
+  """All values that are not equal to given value."""
+  sourceOwner_not: String
+
+  """All values that are contained in given list."""
+  sourceOwner_in: [String!]
+
+  """All values that are not contained in given list."""
+  sourceOwner_not_in: [String!]
+
+  """All values less than the given value."""
+  sourceOwner_lt: String
+
+  """All values less than or equal the given value."""
+  sourceOwner_lte: String
+
+  """All values greater than the given value."""
+  sourceOwner_gt: String
+
+  """All values greater than or equal the given value."""
+  sourceOwner_gte: String
+
+  """All values containing the given string."""
+  sourceOwner_contains: String
+
+  """All values not containing the given string."""
+  sourceOwner_not_contains: String
+
+  """All values starting with the given string."""
+  sourceOwner_starts_with: String
+
+  """All values not starting with the given string."""
+  sourceOwner_not_starts_with: String
+
+  """All values ending with the given string."""
+  sourceOwner_ends_with: String
+
+  """All values not ending with the given string."""
+  sourceOwner_not_ends_with: String
+  sourceTable: String
+
+  """All values that are not equal to given value."""
+  sourceTable_not: String
+
+  """All values that are contained in given list."""
+  sourceTable_in: [String!]
+
+  """All values that are not contained in given list."""
+  sourceTable_not_in: [String!]
+
+  """All values less than the given value."""
+  sourceTable_lt: String
+
+  """All values less than or equal the given value."""
+  sourceTable_lte: String
+
+  """All values greater than the given value."""
+  sourceTable_gt: String
+
+  """All values greater than or equal the given value."""
+  sourceTable_gte: String
+
+  """All values containing the given string."""
+  sourceTable_contains: String
+
+  """All values not containing the given string."""
+  sourceTable_not_contains: String
+
+  """All values starting with the given string."""
+  sourceTable_starts_with: String
+
+  """All values not starting with the given string."""
+  sourceTable_not_starts_with: String
+
+  """All values ending with the given string."""
+  sourceTable_ends_with: String
+
+  """All values not ending with the given string."""
+  sourceTable_not_ends_with: String
+  sourceColumn: String
+
+  """All values that are not equal to given value."""
+  sourceColumn_not: String
+
+  """All values that are contained in given list."""
+  sourceColumn_in: [String!]
+
+  """All values that are not contained in given list."""
+  sourceColumn_not_in: [String!]
+
+  """All values less than the given value."""
+  sourceColumn_lt: String
+
+  """All values less than or equal the given value."""
+  sourceColumn_lte: String
+
+  """All values greater than the given value."""
+  sourceColumn_gt: String
+
+  """All values greater than or equal the given value."""
+  sourceColumn_gte: String
+
+  """All values containing the given string."""
+  sourceColumn_contains: String
+
+  """All values not containing the given string."""
+  sourceColumn_not_contains: String
+
+  """All values starting with the given string."""
+  sourceColumn_starts_with: String
+
+  """All values not starting with the given string."""
+  sourceColumn_not_starts_with: String
+
+  """All values ending with the given string."""
+  sourceColumn_ends_with: String
+
+  """All values not ending with the given string."""
+  sourceColumn_not_ends_with: String
+  targetOwner: String
+
+  """All values that are not equal to given value."""
+  targetOwner_not: String
+
+  """All values that are contained in given list."""
+  targetOwner_in: [String!]
+
+  """All values that are not contained in given list."""
+  targetOwner_not_in: [String!]
+
+  """All values less than the given value."""
+  targetOwner_lt: String
+
+  """All values less than or equal the given value."""
+  targetOwner_lte: String
+
+  """All values greater than the given value."""
+  targetOwner_gt: String
+
+  """All values greater than or equal the given value."""
+  targetOwner_gte: String
+
+  """All values containing the given string."""
+  targetOwner_contains: String
+
+  """All values not containing the given string."""
+  targetOwner_not_contains: String
+
+  """All values starting with the given string."""
+  targetOwner_starts_with: String
+
+  """All values not starting with the given string."""
+  targetOwner_not_starts_with: String
+
+  """All values ending with the given string."""
+  targetOwner_ends_with: String
+
+  """All values not ending with the given string."""
+  targetOwner_not_ends_with: String
+  targetTable: String
+
+  """All values that are not equal to given value."""
+  targetTable_not: String
+
+  """All values that are contained in given list."""
+  targetTable_in: [String!]
+
+  """All values that are not contained in given list."""
+  targetTable_not_in: [String!]
+
+  """All values less than the given value."""
+  targetTable_lt: String
+
+  """All values less than or equal the given value."""
+  targetTable_lte: String
+
+  """All values greater than the given value."""
+  targetTable_gt: String
+
+  """All values greater than or equal the given value."""
+  targetTable_gte: String
+
+  """All values containing the given string."""
+  targetTable_contains: String
+
+  """All values not containing the given string."""
+  targetTable_not_contains: String
+
+  """All values starting with the given string."""
+  targetTable_starts_with: String
+
+  """All values not starting with the given string."""
+  targetTable_not_starts_with: String
+
+  """All values ending with the given string."""
+  targetTable_ends_with: String
+
+  """All values not ending with the given string."""
+  targetTable_not_ends_with: String
+  targetColumn: String
+
+  """All values that are not equal to given value."""
+  targetColumn_not: String
+
+  """All values that are contained in given list."""
+  targetColumn_in: [String!]
+
+  """All values that are not contained in given list."""
+  targetColumn_not_in: [String!]
+
+  """All values less than the given value."""
+  targetColumn_lt: String
+
+  """All values less than or equal the given value."""
+  targetColumn_lte: String
+
+  """All values greater than the given value."""
+  targetColumn_gt: String
+
+  """All values greater than or equal the given value."""
+  targetColumn_gte: String
+
+  """All values containing the given string."""
+  targetColumn_contains: String
+
+  """All values not containing the given string."""
+  targetColumn_not_contains: String
+
+  """All values starting with the given string."""
+  targetColumn_starts_with: String
+
+  """All values not starting with the given string."""
+  targetColumn_not_starts_with: String
+
+  """All values ending with the given string."""
+  targetColumn_ends_with: String
+
+  """All values not ending with the given string."""
+  targetColumn_not_ends_with: String
+  inputColumn: InputColumnWhereInput
+}
+
+input JoinWhereUniqueInput {
   id: ID
 }
 
@@ -1737,28 +2497,40 @@ scalar Long
 type Mutation {
   createDatabase(data: DatabaseCreateInput!): Database!
   createResource(data: ResourceCreateInput!): Resource!
-  createAttribute(data: AttributeCreateInput!): Attribute!
+  createProfile(data: ProfileCreateInput!): Profile!
   createInputColumn(data: InputColumnCreateInput!): InputColumn!
+  createJoin(data: JoinCreateInput!): Join!
+  createAttribute(data: AttributeCreateInput!): Attribute!
   updateDatabase(data: DatabaseUpdateInput!, where: DatabaseWhereUniqueInput!): Database
   updateResource(data: ResourceUpdateInput!, where: ResourceWhereUniqueInput!): Resource
-  updateAttribute(data: AttributeUpdateInput!, where: AttributeWhereUniqueInput!): Attribute
+  updateProfile(data: ProfileUpdateInput!, where: ProfileWhereUniqueInput!): Profile
   updateInputColumn(data: InputColumnUpdateInput!, where: InputColumnWhereUniqueInput!): InputColumn
+  updateJoin(data: JoinUpdateInput!, where: JoinWhereUniqueInput!): Join
+  updateAttribute(data: AttributeUpdateInput!, where: AttributeWhereUniqueInput!): Attribute
   deleteDatabase(where: DatabaseWhereUniqueInput!): Database
   deleteResource(where: ResourceWhereUniqueInput!): Resource
-  deleteAttribute(where: AttributeWhereUniqueInput!): Attribute
+  deleteProfile(where: ProfileWhereUniqueInput!): Profile
   deleteInputColumn(where: InputColumnWhereUniqueInput!): InputColumn
+  deleteJoin(where: JoinWhereUniqueInput!): Join
+  deleteAttribute(where: AttributeWhereUniqueInput!): Attribute
   upsertDatabase(where: DatabaseWhereUniqueInput!, create: DatabaseCreateInput!, update: DatabaseUpdateInput!): Database!
   upsertResource(where: ResourceWhereUniqueInput!, create: ResourceCreateInput!, update: ResourceUpdateInput!): Resource!
-  upsertAttribute(where: AttributeWhereUniqueInput!, create: AttributeCreateInput!, update: AttributeUpdateInput!): Attribute!
+  upsertProfile(where: ProfileWhereUniqueInput!, create: ProfileCreateInput!, update: ProfileUpdateInput!): Profile!
   upsertInputColumn(where: InputColumnWhereUniqueInput!, create: InputColumnCreateInput!, update: InputColumnUpdateInput!): InputColumn!
+  upsertJoin(where: JoinWhereUniqueInput!, create: JoinCreateInput!, update: JoinUpdateInput!): Join!
+  upsertAttribute(where: AttributeWhereUniqueInput!, create: AttributeCreateInput!, update: AttributeUpdateInput!): Attribute!
   updateManyDatabases(data: DatabaseUpdateManyMutationInput!, where: DatabaseWhereInput): BatchPayload!
   updateManyResources(data: ResourceUpdateManyMutationInput!, where: ResourceWhereInput): BatchPayload!
-  updateManyAttributes(data: AttributeUpdateManyMutationInput!, where: AttributeWhereInput): BatchPayload!
+  updateManyProfiles(data: ProfileUpdateManyMutationInput!, where: ProfileWhereInput): BatchPayload!
   updateManyInputColumns(data: InputColumnUpdateManyMutationInput!, where: InputColumnWhereInput): BatchPayload!
+  updateManyJoins(data: JoinUpdateManyMutationInput!, where: JoinWhereInput): BatchPayload!
+  updateManyAttributes(data: AttributeUpdateManyMutationInput!, where: AttributeWhereInput): BatchPayload!
   deleteManyDatabases(where: DatabaseWhereInput): BatchPayload!
   deleteManyResources(where: ResourceWhereInput): BatchPayload!
-  deleteManyAttributes(where: AttributeWhereInput): BatchPayload!
+  deleteManyProfiles(where: ProfileWhereInput): BatchPayload!
   deleteManyInputColumns(where: InputColumnWhereInput): BatchPayload!
+  deleteManyJoins(where: JoinWhereInput): BatchPayload!
+  deleteManyAttributes(where: AttributeWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -1788,19 +2560,358 @@ type PageInfo {
   endCursor: String
 }
 
+type Profile implements Node {
+  id: ID!
+  name: String
+  attribute: Attribute!
+  attributes(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Attribute!]
+}
+
+"""A connection to a list of items."""
+type ProfileConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [ProfileEdge]!
+  aggregate: AggregateProfile!
+}
+
+input ProfileCreateInput {
+  name: String
+  attribute: AttributeCreateOneWithoutProfilesInput!
+  attributes: AttributeCreateManyInput
+}
+
+input ProfileCreateManyWithoutAttributeInput {
+  create: [ProfileCreateWithoutAttributeInput!]
+  connect: [ProfileWhereUniqueInput!]
+}
+
+input ProfileCreateWithoutAttributeInput {
+  name: String
+  attributes: AttributeCreateManyInput
+}
+
+"""An edge in a connection."""
+type ProfileEdge {
+  """The item at the end of the edge."""
+  node: Profile!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum ProfileOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type ProfilePreviousValues {
+  id: ID!
+  name: String
+}
+
+input ProfileScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ProfileScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ProfileScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ProfileScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+}
+
+type ProfileSubscriptionPayload {
+  mutation: MutationType!
+  node: Profile
+  updatedFields: [String!]
+  previousValues: ProfilePreviousValues
+}
+
+input ProfileSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ProfileSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ProfileSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ProfileSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: ProfileWhereInput
+}
+
+input ProfileUpdateInput {
+  name: String
+  attribute: AttributeUpdateOneRequiredWithoutProfilesInput
+  attributes: AttributeUpdateManyInput
+}
+
+input ProfileUpdateManyDataInput {
+  name: String
+}
+
+input ProfileUpdateManyMutationInput {
+  name: String
+}
+
+input ProfileUpdateManyWithoutAttributeInput {
+  create: [ProfileCreateWithoutAttributeInput!]
+  connect: [ProfileWhereUniqueInput!]
+  disconnect: [ProfileWhereUniqueInput!]
+  delete: [ProfileWhereUniqueInput!]
+  update: [ProfileUpdateWithWhereUniqueWithoutAttributeInput!]
+  updateMany: [ProfileUpdateManyWithWhereNestedInput!]
+  deleteMany: [ProfileScalarWhereInput!]
+  upsert: [ProfileUpsertWithWhereUniqueWithoutAttributeInput!]
+}
+
+input ProfileUpdateManyWithWhereNestedInput {
+  where: ProfileScalarWhereInput!
+  data: ProfileUpdateManyDataInput!
+}
+
+input ProfileUpdateWithoutAttributeDataInput {
+  name: String
+  attributes: AttributeUpdateManyInput
+}
+
+input ProfileUpdateWithWhereUniqueWithoutAttributeInput {
+  where: ProfileWhereUniqueInput!
+  data: ProfileUpdateWithoutAttributeDataInput!
+}
+
+input ProfileUpsertWithWhereUniqueWithoutAttributeInput {
+  where: ProfileWhereUniqueInput!
+  update: ProfileUpdateWithoutAttributeDataInput!
+  create: ProfileCreateWithoutAttributeInput!
+}
+
+input ProfileWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ProfileWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ProfileWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ProfileWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  attribute: AttributeWhereInput
+  attributes_every: AttributeWhereInput
+  attributes_some: AttributeWhereInput
+  attributes_none: AttributeWhereInput
+}
+
+input ProfileWhereUniqueInput {
+  id: ID
+}
+
 type Query {
   databases(where: DatabaseWhereInput, orderBy: DatabaseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Database]!
   resources(where: ResourceWhereInput, orderBy: ResourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Resource]!
-  attributes(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Attribute]!
+  profiles(where: ProfileWhereInput, orderBy: ProfileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Profile]!
   inputColumns(where: InputColumnWhereInput, orderBy: InputColumnOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [InputColumn]!
+  joins(where: JoinWhereInput, orderBy: JoinOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Join]!
+  attributes(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Attribute]!
   database(where: DatabaseWhereUniqueInput!): Database
   resource(where: ResourceWhereUniqueInput!): Resource
-  attribute(where: AttributeWhereUniqueInput!): Attribute
+  profile(where: ProfileWhereUniqueInput!): Profile
   inputColumn(where: InputColumnWhereUniqueInput!): InputColumn
+  join(where: JoinWhereUniqueInput!): Join
+  attribute(where: AttributeWhereUniqueInput!): Attribute
   databasesConnection(where: DatabaseWhereInput, orderBy: DatabaseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DatabaseConnection!
   resourcesConnection(where: ResourceWhereInput, orderBy: ResourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ResourceConnection!
-  attributesConnection(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AttributeConnection!
+  profilesConnection(where: ProfileWhereInput, orderBy: ProfileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProfileConnection!
   inputColumnsConnection(where: InputColumnWhereInput, orderBy: InputColumnOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): InputColumnConnection!
+  joinsConnection(where: JoinWhereInput, orderBy: JoinOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): JoinConnection!
+  attributesConnection(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AttributeConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -1811,12 +2922,12 @@ type Query {
 
 type Resource implements Node {
   id: ID!
-  database: Database!
   name: String!
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
   attributes(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Attribute!]
+  database: Database!
 }
 
 """A connection to a list of items."""
@@ -1834,8 +2945,8 @@ input ResourceCreateInput {
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
-  database: DatabaseCreateOneWithoutResourcesInput!
   attributes: AttributeCreateManyWithoutResourceInput
+  database: DatabaseCreateOneWithoutResourcesInput!
 }
 
 input ResourceCreateManyWithoutDatabaseInput {
@@ -2153,8 +3264,8 @@ input ResourceUpdateInput {
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
-  database: DatabaseUpdateOneRequiredWithoutResourcesInput
   attributes: AttributeUpdateManyWithoutResourceInput
+  database: DatabaseUpdateOneRequiredWithoutResourcesInput
 }
 
 input ResourceUpdateManyDataInput {
@@ -2187,9 +3298,11 @@ input ResourceUpdateManyWithWhereNestedInput {
   data: ResourceUpdateManyDataInput!
 }
 
-input ResourceUpdateOneRequiredWithoutAttributesInput {
+input ResourceUpdateOneWithoutAttributesInput {
   create: ResourceCreateWithoutAttributesInput
   connect: ResourceWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
   update: ResourceUpdateWithoutAttributesDataInput
   upsert: ResourceUpsertWithoutAttributesInput
 }
@@ -2435,10 +3548,10 @@ input ResourceWhereInput {
 
   """All values not ending with the given string."""
   primaryKeyColumn_not_ends_with: String
-  database: DatabaseWhereInput
   attributes_every: AttributeWhereInput
   attributes_some: AttributeWhereInput
   attributes_none: AttributeWhereInput
+  database: DatabaseWhereInput
 }
 
 input ResourceWhereUniqueInput {
@@ -2448,8 +3561,10 @@ input ResourceWhereUniqueInput {
 type Subscription {
   database(where: DatabaseSubscriptionWhereInput): DatabaseSubscriptionPayload
   resource(where: ResourceSubscriptionWhereInput): ResourceSubscriptionPayload
-  attribute(where: AttributeSubscriptionWhereInput): AttributeSubscriptionPayload
+  profile(where: ProfileSubscriptionWhereInput): ProfileSubscriptionPayload
   inputColumn(where: InputColumnSubscriptionWhereInput): InputColumnSubscriptionPayload
+  join(where: JoinSubscriptionWhereInput): JoinSubscriptionPayload
+  attribute(where: AttributeSubscriptionWhereInput): AttributeSubscriptionPayload
 }
 `
 
@@ -2504,14 +3619,36 @@ export type InputColumnOrderByInput =   'id_ASC' |
   'column_DESC' |
   'script_ASC' |
   'script_DESC' |
-  'joinSourceColumn_ASC' |
-  'joinSourceColumn_DESC' |
-  'joinTargetOwner_ASC' |
-  'joinTargetOwner_DESC' |
-  'joinTargetTable_ASC' |
-  'joinTargetTable_DESC' |
-  'joinTargetColumn_ASC' |
-  'joinTargetColumn_DESC' |
+  'staticValue_ASC' |
+  'staticValue_DESC' |
+  'updatedAt_ASC' |
+  'updatedAt_DESC' |
+  'createdAt_ASC' |
+  'createdAt_DESC'
+
+export type JoinOrderByInput =   'id_ASC' |
+  'id_DESC' |
+  'sourceOwner_ASC' |
+  'sourceOwner_DESC' |
+  'sourceTable_ASC' |
+  'sourceTable_DESC' |
+  'sourceColumn_ASC' |
+  'sourceColumn_DESC' |
+  'targetOwner_ASC' |
+  'targetOwner_DESC' |
+  'targetTable_ASC' |
+  'targetTable_DESC' |
+  'targetColumn_ASC' |
+  'targetColumn_DESC' |
+  'updatedAt_ASC' |
+  'updatedAt_DESC' |
+  'createdAt_ASC' |
+  'createdAt_DESC'
+
+export type ProfileOrderByInput =   'id_ASC' |
+  'id_DESC' |
+  'name_ASC' |
+  'name_DESC' |
   'updatedAt_ASC' |
   'updatedAt_DESC' |
   'createdAt_ASC' |
@@ -2521,15 +3658,15 @@ export type MutationType =   'CREATED' |
   'UPDATED' |
   'DELETED'
 
-export interface ResourceUpdateManyWithoutDatabaseInput {
-  create?: ResourceCreateWithoutDatabaseInput[] | ResourceCreateWithoutDatabaseInput
-  connect?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput
-  disconnect?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput
-  delete?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput
-  update?: ResourceUpdateWithWhereUniqueWithoutDatabaseInput[] | ResourceUpdateWithWhereUniqueWithoutDatabaseInput
-  updateMany?: ResourceUpdateManyWithWhereNestedInput[] | ResourceUpdateManyWithWhereNestedInput
-  deleteMany?: ResourceScalarWhereInput[] | ResourceScalarWhereInput
-  upsert?: ResourceUpsertWithWhereUniqueWithoutDatabaseInput[] | ResourceUpsertWithWhereUniqueWithoutDatabaseInput
+export interface AttributeUpdateManyWithoutAttributeInput {
+  create?: AttributeCreateWithoutAttributeInput[] | AttributeCreateWithoutAttributeInput
+  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput
+  disconnect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput
+  delete?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput
+  update?: AttributeUpdateWithWhereUniqueWithoutAttributeInput[] | AttributeUpdateWithWhereUniqueWithoutAttributeInput
+  updateMany?: AttributeUpdateManyWithWhereNestedInput[] | AttributeUpdateManyWithWhereNestedInput
+  deleteMany?: AttributeScalarWhereInput[] | AttributeScalarWhereInput
+  upsert?: AttributeUpsertWithWhereUniqueWithoutAttributeInput[] | AttributeUpsertWithWhereUniqueWithoutAttributeInput
 }
 
 export interface DatabaseWhereInput {
@@ -2569,43 +3706,196 @@ export interface DatabaseWhereInput {
   resources_none?: ResourceWhereInput
 }
 
-export interface InputColumnCreateWithoutAttributeInput {
-  owner: String
-  table: String
-  column: String
-  script?: String
-  joinSourceColumn?: String
-  joinTargetOwner?: String
-  joinTargetTable?: String
-  joinTargetColumn?: String
+export interface ProfileCreateInput {
+  name?: String
+  attribute: AttributeCreateOneWithoutProfilesInput
+  attributes?: AttributeCreateManyInput
 }
 
-export interface ResourceUpdateInput {
+export interface ResourceUpdateManyDataInput {
   name?: String
   primaryKeyOwner?: String
   primaryKeyTable?: String
   primaryKeyColumn?: String
-  database?: DatabaseUpdateOneRequiredWithoutResourcesInput
-  attributes?: AttributeUpdateManyWithoutResourceInput
 }
 
-export interface ResourceCreateInput {
-  name: String
-  primaryKeyOwner?: String
-  primaryKeyTable?: String
-  primaryKeyColumn?: String
-  database: DatabaseCreateOneWithoutResourcesInput
-  attributes?: AttributeCreateManyWithoutResourceInput
+export interface AttributeCreateOneWithoutProfilesInput {
+  create?: AttributeCreateWithoutProfilesInput
+  connect?: AttributeWhereUniqueInput
 }
 
-export interface AttributeUpdateWithWhereUniqueWithoutResourceInput {
-  where: AttributeWhereUniqueInput
-  data: AttributeUpdateWithoutResourceDataInput
-}
-
-export interface DatabaseCreateOneWithoutResourcesInput {
+export interface DatabaseUpdateOneRequiredWithoutResourcesInput {
   create?: DatabaseCreateWithoutResourcesInput
   connect?: DatabaseWhereUniqueInput
+  update?: DatabaseUpdateWithoutResourcesDataInput
+  upsert?: DatabaseUpsertWithoutResourcesInput
+}
+
+export interface AttributeCreateWithoutProfilesInput {
+  name: String
+  mergingScript?: String
+  resource?: ResourceCreateOneWithoutAttributesInput
+  attributes?: AttributeCreateManyWithoutAttributeInput
+  attribute?: AttributeCreateOneWithoutAttributesInput
+  inputColumns?: InputColumnCreateManyWithoutAttributeInput
+}
+
+export interface ProfileWhereInput {
+  AND?: ProfileWhereInput[] | ProfileWhereInput
+  OR?: ProfileWhereInput[] | ProfileWhereInput
+  NOT?: ProfileWhereInput[] | ProfileWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  name?: String
+  name_not?: String
+  name_in?: String[] | String
+  name_not_in?: String[] | String
+  name_lt?: String
+  name_lte?: String
+  name_gt?: String
+  name_gte?: String
+  name_contains?: String
+  name_not_contains?: String
+  name_starts_with?: String
+  name_not_starts_with?: String
+  name_ends_with?: String
+  name_not_ends_with?: String
+  attribute?: AttributeWhereInput
+  attributes_every?: AttributeWhereInput
+  attributes_some?: AttributeWhereInput
+  attributes_none?: AttributeWhereInput
+}
+
+export interface InputColumnCreateInput {
+  owner: String
+  table: String
+  column: String
+  script?: String
+  staticValue?: String
+  joins?: JoinCreateManyWithoutInputColumnInput
+  attribute: AttributeCreateOneWithoutInputColumnsInput
+}
+
+export interface JoinWhereInput {
+  AND?: JoinWhereInput[] | JoinWhereInput
+  OR?: JoinWhereInput[] | JoinWhereInput
+  NOT?: JoinWhereInput[] | JoinWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  sourceOwner?: String
+  sourceOwner_not?: String
+  sourceOwner_in?: String[] | String
+  sourceOwner_not_in?: String[] | String
+  sourceOwner_lt?: String
+  sourceOwner_lte?: String
+  sourceOwner_gt?: String
+  sourceOwner_gte?: String
+  sourceOwner_contains?: String
+  sourceOwner_not_contains?: String
+  sourceOwner_starts_with?: String
+  sourceOwner_not_starts_with?: String
+  sourceOwner_ends_with?: String
+  sourceOwner_not_ends_with?: String
+  sourceTable?: String
+  sourceTable_not?: String
+  sourceTable_in?: String[] | String
+  sourceTable_not_in?: String[] | String
+  sourceTable_lt?: String
+  sourceTable_lte?: String
+  sourceTable_gt?: String
+  sourceTable_gte?: String
+  sourceTable_contains?: String
+  sourceTable_not_contains?: String
+  sourceTable_starts_with?: String
+  sourceTable_not_starts_with?: String
+  sourceTable_ends_with?: String
+  sourceTable_not_ends_with?: String
+  sourceColumn?: String
+  sourceColumn_not?: String
+  sourceColumn_in?: String[] | String
+  sourceColumn_not_in?: String[] | String
+  sourceColumn_lt?: String
+  sourceColumn_lte?: String
+  sourceColumn_gt?: String
+  sourceColumn_gte?: String
+  sourceColumn_contains?: String
+  sourceColumn_not_contains?: String
+  sourceColumn_starts_with?: String
+  sourceColumn_not_starts_with?: String
+  sourceColumn_ends_with?: String
+  sourceColumn_not_ends_with?: String
+  targetOwner?: String
+  targetOwner_not?: String
+  targetOwner_in?: String[] | String
+  targetOwner_not_in?: String[] | String
+  targetOwner_lt?: String
+  targetOwner_lte?: String
+  targetOwner_gt?: String
+  targetOwner_gte?: String
+  targetOwner_contains?: String
+  targetOwner_not_contains?: String
+  targetOwner_starts_with?: String
+  targetOwner_not_starts_with?: String
+  targetOwner_ends_with?: String
+  targetOwner_not_ends_with?: String
+  targetTable?: String
+  targetTable_not?: String
+  targetTable_in?: String[] | String
+  targetTable_not_in?: String[] | String
+  targetTable_lt?: String
+  targetTable_lte?: String
+  targetTable_gt?: String
+  targetTable_gte?: String
+  targetTable_contains?: String
+  targetTable_not_contains?: String
+  targetTable_starts_with?: String
+  targetTable_not_starts_with?: String
+  targetTable_ends_with?: String
+  targetTable_not_ends_with?: String
+  targetColumn?: String
+  targetColumn_not?: String
+  targetColumn_in?: String[] | String
+  targetColumn_not_in?: String[] | String
+  targetColumn_lt?: String
+  targetColumn_lte?: String
+  targetColumn_gt?: String
+  targetColumn_gte?: String
+  targetColumn_contains?: String
+  targetColumn_not_contains?: String
+  targetColumn_starts_with?: String
+  targetColumn_not_starts_with?: String
+  targetColumn_ends_with?: String
+  targetColumn_not_ends_with?: String
+  inputColumn?: InputColumnWhereInput
+}
+
+export interface AttributeCreateOneWithoutInputColumnsInput {
+  create?: AttributeCreateWithoutInputColumnsInput
+  connect?: AttributeWhereUniqueInput
 }
 
 export interface InputColumnWhereInput {
@@ -2682,67 +3972,33 @@ export interface InputColumnWhereInput {
   script_not_starts_with?: String
   script_ends_with?: String
   script_not_ends_with?: String
-  joinSourceColumn?: String
-  joinSourceColumn_not?: String
-  joinSourceColumn_in?: String[] | String
-  joinSourceColumn_not_in?: String[] | String
-  joinSourceColumn_lt?: String
-  joinSourceColumn_lte?: String
-  joinSourceColumn_gt?: String
-  joinSourceColumn_gte?: String
-  joinSourceColumn_contains?: String
-  joinSourceColumn_not_contains?: String
-  joinSourceColumn_starts_with?: String
-  joinSourceColumn_not_starts_with?: String
-  joinSourceColumn_ends_with?: String
-  joinSourceColumn_not_ends_with?: String
-  joinTargetOwner?: String
-  joinTargetOwner_not?: String
-  joinTargetOwner_in?: String[] | String
-  joinTargetOwner_not_in?: String[] | String
-  joinTargetOwner_lt?: String
-  joinTargetOwner_lte?: String
-  joinTargetOwner_gt?: String
-  joinTargetOwner_gte?: String
-  joinTargetOwner_contains?: String
-  joinTargetOwner_not_contains?: String
-  joinTargetOwner_starts_with?: String
-  joinTargetOwner_not_starts_with?: String
-  joinTargetOwner_ends_with?: String
-  joinTargetOwner_not_ends_with?: String
-  joinTargetTable?: String
-  joinTargetTable_not?: String
-  joinTargetTable_in?: String[] | String
-  joinTargetTable_not_in?: String[] | String
-  joinTargetTable_lt?: String
-  joinTargetTable_lte?: String
-  joinTargetTable_gt?: String
-  joinTargetTable_gte?: String
-  joinTargetTable_contains?: String
-  joinTargetTable_not_contains?: String
-  joinTargetTable_starts_with?: String
-  joinTargetTable_not_starts_with?: String
-  joinTargetTable_ends_with?: String
-  joinTargetTable_not_ends_with?: String
-  joinTargetColumn?: String
-  joinTargetColumn_not?: String
-  joinTargetColumn_in?: String[] | String
-  joinTargetColumn_not_in?: String[] | String
-  joinTargetColumn_lt?: String
-  joinTargetColumn_lte?: String
-  joinTargetColumn_gt?: String
-  joinTargetColumn_gte?: String
-  joinTargetColumn_contains?: String
-  joinTargetColumn_not_contains?: String
-  joinTargetColumn_starts_with?: String
-  joinTargetColumn_not_starts_with?: String
-  joinTargetColumn_ends_with?: String
-  joinTargetColumn_not_ends_with?: String
+  staticValue?: String
+  staticValue_not?: String
+  staticValue_in?: String[] | String
+  staticValue_not_in?: String[] | String
+  staticValue_lt?: String
+  staticValue_lte?: String
+  staticValue_gt?: String
+  staticValue_gte?: String
+  staticValue_contains?: String
+  staticValue_not_contains?: String
+  staticValue_starts_with?: String
+  staticValue_not_starts_with?: String
+  staticValue_ends_with?: String
+  staticValue_not_ends_with?: String
+  joins_every?: JoinWhereInput
+  joins_some?: JoinWhereInput
+  joins_none?: JoinWhereInput
   attribute?: AttributeWhereInput
 }
 
-export interface DatabaseCreateWithoutResourcesInput {
+export interface AttributeCreateWithoutInputColumnsInput {
   name: String
+  mergingScript?: String
+  resource?: ResourceCreateOneWithoutAttributesInput
+  attributes?: AttributeCreateManyWithoutAttributeInput
+  attribute?: AttributeCreateOneWithoutAttributesInput
+  profiles?: ProfileCreateManyWithoutAttributeInput
 }
 
 export interface AttributeWhereInput {
@@ -2792,16 +4048,26 @@ export interface AttributeWhereInput {
   mergingScript_ends_with?: String
   mergingScript_not_ends_with?: String
   resource?: ResourceWhereInput
+  attributes_every?: AttributeWhereInput
+  attributes_some?: AttributeWhereInput
+  attributes_none?: AttributeWhereInput
+  attribute?: AttributeWhereInput
   inputColumns_every?: InputColumnWhereInput
   inputColumns_some?: InputColumnWhereInput
   inputColumns_none?: InputColumnWhereInput
+  profiles_every?: ProfileWhereInput
+  profiles_some?: ProfileWhereInput
+  profiles_none?: ProfileWhereInput
 }
 
-export interface AttributeCreateInput {
-  name: String
-  mergingScript?: String
-  resource: ResourceCreateOneWithoutAttributesInput
-  inputColumns?: InputColumnCreateManyWithoutAttributeInput
+export interface JoinCreateInput {
+  sourceOwner?: String
+  sourceTable?: String
+  sourceColumn?: String
+  targetOwner?: String
+  targetTable?: String
+  targetColumn?: String
+  inputColumn: InputColumnCreateOneWithoutJoinsInput
 }
 
 export interface ResourceWhereInput {
@@ -2878,15 +4144,15 @@ export interface ResourceWhereInput {
   primaryKeyColumn_not_starts_with?: String
   primaryKeyColumn_ends_with?: String
   primaryKeyColumn_not_ends_with?: String
-  database?: DatabaseWhereInput
   attributes_every?: AttributeWhereInput
   attributes_some?: AttributeWhereInput
   attributes_none?: AttributeWhereInput
+  database?: DatabaseWhereInput
 }
 
-export interface ResourceCreateOneWithoutAttributesInput {
-  create?: ResourceCreateWithoutAttributesInput
-  connect?: ResourceWhereUniqueInput
+export interface InputColumnCreateOneWithoutJoinsInput {
+  create?: InputColumnCreateWithoutJoinsInput
+  connect?: InputColumnWhereUniqueInput
 }
 
 export interface DatabaseWhereUniqueInput {
@@ -2894,28 +4160,37 @@ export interface DatabaseWhereUniqueInput {
   name?: String
 }
 
-export interface ResourceCreateWithoutAttributesInput {
-  name: String
-  primaryKeyOwner?: String
-  primaryKeyTable?: String
-  primaryKeyColumn?: String
-  database: DatabaseCreateOneWithoutResourcesInput
-}
-
-export interface AttributeWhereUniqueInput {
-  id?: ID_Input
-}
-
-export interface InputColumnCreateInput {
+export interface InputColumnCreateWithoutJoinsInput {
   owner: String
   table: String
   column: String
   script?: String
-  joinSourceColumn?: String
-  joinTargetOwner?: String
-  joinTargetTable?: String
-  joinTargetColumn?: String
+  staticValue?: String
   attribute: AttributeCreateOneWithoutInputColumnsInput
+}
+
+export interface ProfileWhereUniqueInput {
+  id?: ID_Input
+}
+
+export interface DatabaseUpdateInput {
+  name?: String
+  resources?: ResourceUpdateManyWithoutDatabaseInput
+}
+
+export interface JoinWhereUniqueInput {
+  id?: ID_Input
+}
+
+export interface ResourceUpdateManyWithoutDatabaseInput {
+  create?: ResourceCreateWithoutDatabaseInput[] | ResourceCreateWithoutDatabaseInput
+  connect?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput
+  disconnect?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput
+  delete?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput
+  update?: ResourceUpdateWithWhereUniqueWithoutDatabaseInput[] | ResourceUpdateWithWhereUniqueWithoutDatabaseInput
+  updateMany?: ResourceUpdateManyWithWhereNestedInput[] | ResourceUpdateManyWithWhereNestedInput
+  deleteMany?: ResourceScalarWhereInput[] | ResourceScalarWhereInput
+  upsert?: ResourceUpsertWithWhereUniqueWithoutDatabaseInput[] | ResourceUpsertWithWhereUniqueWithoutDatabaseInput
 }
 
 export interface DatabaseSubscriptionWhereInput {
@@ -2929,64 +4204,18 @@ export interface DatabaseSubscriptionWhereInput {
   node?: DatabaseWhereInput
 }
 
-export interface AttributeCreateOneWithoutInputColumnsInput {
-  create?: AttributeCreateWithoutInputColumnsInput
-  connect?: AttributeWhereUniqueInput
-}
-
-export interface AttributeUpdateManyMutationInput {
-  name?: String
-  mergingScript?: String
-}
-
-export interface AttributeCreateWithoutInputColumnsInput {
-  name: String
-  mergingScript?: String
-  resource: ResourceCreateOneWithoutAttributesInput
-}
-
-export interface DatabaseUpdateManyMutationInput {
-  name?: String
-}
-
-export interface DatabaseUpdateInput {
-  name?: String
-  resources?: ResourceUpdateManyWithoutDatabaseInput
-}
-
-export interface AttributeUpdateWithoutInputColumnsDataInput {
-  name?: String
-  mergingScript?: String
-  resource?: ResourceUpdateOneRequiredWithoutAttributesInput
-}
-
-export interface DatabaseUpdateWithoutResourcesDataInput {
-  name?: String
-}
-
-export interface InputColumnUpdateInput {
-  owner?: String
-  table?: String
-  column?: String
-  script?: String
-  joinSourceColumn?: String
-  joinTargetOwner?: String
-  joinTargetTable?: String
-  joinTargetColumn?: String
-  attribute?: AttributeUpdateOneRequiredWithoutInputColumnsInput
-}
-
 export interface ResourceUpdateWithWhereUniqueWithoutDatabaseInput {
   where: ResourceWhereUniqueInput
   data: ResourceUpdateWithoutDatabaseDataInput
 }
 
-export interface ResourceUpdateWithoutAttributesDataInput {
-  name?: String
-  primaryKeyOwner?: String
-  primaryKeyTable?: String
-  primaryKeyColumn?: String
-  database?: DatabaseUpdateOneRequiredWithoutResourcesInput
+export interface JoinUpdateManyMutationInput {
+  sourceOwner?: String
+  sourceTable?: String
+  sourceColumn?: String
+  targetOwner?: String
+  targetTable?: String
+  targetColumn?: String
 }
 
 export interface ResourceUpdateWithoutDatabaseDataInput {
@@ -2997,11 +4226,8 @@ export interface ResourceUpdateWithoutDatabaseDataInput {
   attributes?: AttributeUpdateManyWithoutResourceInput
 }
 
-export interface AttributeUpdateInput {
+export interface ProfileUpdateManyMutationInput {
   name?: String
-  mergingScript?: String
-  resource?: ResourceUpdateOneRequiredWithoutAttributesInput
-  inputColumns?: InputColumnUpdateManyWithoutAttributeInput
 }
 
 export interface AttributeUpdateManyWithoutResourceInput {
@@ -3015,16 +4241,109 @@ export interface AttributeUpdateManyWithoutResourceInput {
   upsert?: AttributeUpsertWithWhereUniqueWithoutResourceInput[] | AttributeUpsertWithWhereUniqueWithoutResourceInput
 }
 
+export interface DatabaseUpdateManyMutationInput {
+  name?: String
+}
+
+export interface AttributeUpdateWithWhereUniqueWithoutResourceInput {
+  where: AttributeWhereUniqueInput
+  data: AttributeUpdateWithoutResourceDataInput
+}
+
+export interface InputColumnUpsertWithoutJoinsInput {
+  update: InputColumnUpdateWithoutJoinsDataInput
+  create: InputColumnCreateWithoutJoinsInput
+}
+
+export interface AttributeUpdateWithoutResourceDataInput {
+  name?: String
+  mergingScript?: String
+  attributes?: AttributeUpdateManyWithoutAttributeInput
+  attribute?: AttributeUpdateOneWithoutAttributesInput
+  inputColumns?: InputColumnUpdateManyWithoutAttributeInput
+  profiles?: ProfileUpdateManyWithoutAttributeInput
+}
+
+export interface InputColumnUpdateOneRequiredWithoutJoinsInput {
+  create?: InputColumnCreateWithoutJoinsInput
+  connect?: InputColumnWhereUniqueInput
+  update?: InputColumnUpdateWithoutJoinsDataInput
+  upsert?: InputColumnUpsertWithoutJoinsInput
+}
+
+export interface ResourceUpdateInput {
+  name?: String
+  primaryKeyOwner?: String
+  primaryKeyTable?: String
+  primaryKeyColumn?: String
+  attributes?: AttributeUpdateManyWithoutResourceInput
+  database?: DatabaseUpdateOneRequiredWithoutResourcesInput
+}
+
+export interface AttributeUpsertWithoutInputColumnsInput {
+  update: AttributeUpdateWithoutInputColumnsDataInput
+  create: AttributeCreateWithoutInputColumnsInput
+}
+
+export interface AttributeUpdateWithWhereUniqueWithoutAttributeInput {
+  where: AttributeWhereUniqueInput
+  data: AttributeUpdateWithoutAttributeDataInput
+}
+
+export interface AttributeUpdateOneRequiredWithoutInputColumnsInput {
+  create?: AttributeCreateWithoutInputColumnsInput
+  connect?: AttributeWhereUniqueInput
+  update?: AttributeUpdateWithoutInputColumnsDataInput
+  upsert?: AttributeUpsertWithoutInputColumnsInput
+}
+
+export interface AttributeUpdateWithoutAttributeDataInput {
+  name?: String
+  mergingScript?: String
+  resource?: ResourceUpdateOneWithoutAttributesInput
+  attributes?: AttributeUpdateManyWithoutAttributeInput
+  inputColumns?: InputColumnUpdateManyWithoutAttributeInput
+  profiles?: ProfileUpdateManyWithoutAttributeInput
+}
+
+export interface AttributeUpsertWithoutProfilesInput {
+  update: AttributeUpdateWithoutProfilesDataInput
+  create: AttributeCreateWithoutProfilesInput
+}
+
+export interface ResourceUpdateOneWithoutAttributesInput {
+  create?: ResourceCreateWithoutAttributesInput
+  connect?: ResourceWhereUniqueInput
+  disconnect?: Boolean
+  delete?: Boolean
+  update?: ResourceUpdateWithoutAttributesDataInput
+  upsert?: ResourceUpsertWithoutAttributesInput
+}
+
+export interface AttributeUpdateOneRequiredWithoutProfilesInput {
+  create?: AttributeCreateWithoutProfilesInput
+  connect?: AttributeWhereUniqueInput
+  update?: AttributeUpdateWithoutProfilesDataInput
+  upsert?: AttributeUpsertWithoutProfilesInput
+}
+
+export interface ResourceUpdateWithoutAttributesDataInput {
+  name?: String
+  primaryKeyOwner?: String
+  primaryKeyTable?: String
+  primaryKeyColumn?: String
+  database?: DatabaseUpdateOneRequiredWithoutResourcesInput
+}
+
 export interface DatabaseCreateInput {
   name: String
   resources?: ResourceCreateManyWithoutDatabaseInput
 }
 
-export interface DatabaseUpdateOneRequiredWithoutResourcesInput {
-  create?: DatabaseCreateWithoutResourcesInput
-  connect?: DatabaseWhereUniqueInput
-  update?: DatabaseUpdateWithoutResourcesDataInput
-  upsert?: DatabaseUpsertWithoutResourcesInput
+export interface ResourceUpsertWithWhereUniqueWithoutDatabaseInput {
+  where: ResourceWhereUniqueInput
+  update: ResourceUpdateWithoutDatabaseDataInput
+  create: ResourceCreateWithoutDatabaseInput
 }
 
 export interface ResourceCreateWithoutDatabaseInput {
@@ -3035,16 +4354,44 @@ export interface ResourceCreateWithoutDatabaseInput {
   attributes?: AttributeCreateManyWithoutResourceInput
 }
 
-export interface AttributeUpdateWithoutResourceDataInput {
+export interface DatabaseUpdateWithoutResourcesDataInput {
   name?: String
-  mergingScript?: String
-  inputColumns?: InputColumnUpdateManyWithoutAttributeInput
 }
 
 export interface AttributeCreateWithoutResourceInput {
   name: String
   mergingScript?: String
+  attributes?: AttributeCreateManyWithoutAttributeInput
+  attribute?: AttributeCreateOneWithoutAttributesInput
   inputColumns?: InputColumnCreateManyWithoutAttributeInput
+  profiles?: ProfileCreateManyWithoutAttributeInput
+}
+
+export interface DatabaseUpsertWithoutResourcesInput {
+  update: DatabaseUpdateWithoutResourcesDataInput
+  create: DatabaseCreateWithoutResourcesInput
+}
+
+export interface AttributeCreateWithoutAttributeInput {
+  name: String
+  mergingScript?: String
+  resource?: ResourceCreateOneWithoutAttributesInput
+  attributes?: AttributeCreateManyWithoutAttributeInput
+  inputColumns?: InputColumnCreateManyWithoutAttributeInput
+  profiles?: ProfileCreateManyWithoutAttributeInput
+}
+
+export interface ResourceUpsertWithoutAttributesInput {
+  update: ResourceUpdateWithoutAttributesDataInput
+  create: ResourceCreateWithoutAttributesInput
+}
+
+export interface ResourceCreateWithoutAttributesInput {
+  name: String
+  primaryKeyOwner?: String
+  primaryKeyTable?: String
+  primaryKeyColumn?: String
+  database: DatabaseCreateOneWithoutResourcesInput
 }
 
 export interface InputColumnUpdateManyWithoutAttributeInput {
@@ -3058,15 +4405,8 @@ export interface InputColumnUpdateManyWithoutAttributeInput {
   upsert?: InputColumnUpsertWithWhereUniqueWithoutAttributeInput[] | InputColumnUpsertWithWhereUniqueWithoutAttributeInput
 }
 
-export interface AttributeSubscriptionWhereInput {
-  AND?: AttributeSubscriptionWhereInput[] | AttributeSubscriptionWhereInput
-  OR?: AttributeSubscriptionWhereInput[] | AttributeSubscriptionWhereInput
-  NOT?: AttributeSubscriptionWhereInput[] | AttributeSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: AttributeWhereInput
+export interface DatabaseCreateWithoutResourcesInput {
+  name: String
 }
 
 export interface InputColumnUpdateWithWhereUniqueWithoutAttributeInput {
@@ -3074,8 +4414,13 @@ export interface InputColumnUpdateWithWhereUniqueWithoutAttributeInput {
   data: InputColumnUpdateWithoutAttributeDataInput
 }
 
-export interface ResourceWhereUniqueInput {
-  id?: ID_Input
+export interface InputColumnCreateWithoutAttributeInput {
+  owner: String
+  table: String
+  column: String
+  script?: String
+  staticValue?: String
+  joins?: JoinCreateManyWithoutInputColumnInput
 }
 
 export interface InputColumnUpdateWithoutAttributeDataInput {
@@ -3083,21 +4428,220 @@ export interface InputColumnUpdateWithoutAttributeDataInput {
   table?: String
   column?: String
   script?: String
-  joinSourceColumn?: String
-  joinTargetOwner?: String
-  joinTargetTable?: String
-  joinTargetColumn?: String
+  staticValue?: String
+  joins?: JoinUpdateManyWithoutInputColumnInput
 }
 
-export interface InputColumnUpdateManyMutationInput {
-  owner?: String
-  table?: String
-  column?: String
-  script?: String
-  joinSourceColumn?: String
-  joinTargetOwner?: String
-  joinTargetTable?: String
-  joinTargetColumn?: String
+export interface JoinCreateWithoutInputColumnInput {
+  sourceOwner?: String
+  sourceTable?: String
+  sourceColumn?: String
+  targetOwner?: String
+  targetTable?: String
+  targetColumn?: String
+}
+
+export interface JoinUpdateManyWithoutInputColumnInput {
+  create?: JoinCreateWithoutInputColumnInput[] | JoinCreateWithoutInputColumnInput
+  connect?: JoinWhereUniqueInput[] | JoinWhereUniqueInput
+  disconnect?: JoinWhereUniqueInput[] | JoinWhereUniqueInput
+  delete?: JoinWhereUniqueInput[] | JoinWhereUniqueInput
+  update?: JoinUpdateWithWhereUniqueWithoutInputColumnInput[] | JoinUpdateWithWhereUniqueWithoutInputColumnInput
+  updateMany?: JoinUpdateManyWithWhereNestedInput[] | JoinUpdateManyWithWhereNestedInput
+  deleteMany?: JoinScalarWhereInput[] | JoinScalarWhereInput
+  upsert?: JoinUpsertWithWhereUniqueWithoutInputColumnInput[] | JoinUpsertWithWhereUniqueWithoutInputColumnInput
+}
+
+export interface ProfileCreateWithoutAttributeInput {
+  name?: String
+  attributes?: AttributeCreateManyInput
+}
+
+export interface JoinUpdateWithWhereUniqueWithoutInputColumnInput {
+  where: JoinWhereUniqueInput
+  data: JoinUpdateWithoutInputColumnDataInput
+}
+
+export interface AttributeCreateInput {
+  name: String
+  mergingScript?: String
+  resource?: ResourceCreateOneWithoutAttributesInput
+  attributes?: AttributeCreateManyWithoutAttributeInput
+  attribute?: AttributeCreateOneWithoutAttributesInput
+  inputColumns?: InputColumnCreateManyWithoutAttributeInput
+  profiles?: ProfileCreateManyWithoutAttributeInput
+}
+
+export interface JoinUpdateWithoutInputColumnDataInput {
+  sourceOwner?: String
+  sourceTable?: String
+  sourceColumn?: String
+  targetOwner?: String
+  targetTable?: String
+  targetColumn?: String
+}
+
+export interface AttributeCreateWithoutAttributesInput {
+  name: String
+  mergingScript?: String
+  resource?: ResourceCreateOneWithoutAttributesInput
+  attribute?: AttributeCreateOneWithoutAttributesInput
+  inputColumns?: InputColumnCreateManyWithoutAttributeInput
+  profiles?: ProfileCreateManyWithoutAttributeInput
+}
+
+export interface JoinUpdateManyWithWhereNestedInput {
+  where: JoinScalarWhereInput
+  data: JoinUpdateManyDataInput
+}
+
+export interface JoinSubscriptionWhereInput {
+  AND?: JoinSubscriptionWhereInput[] | JoinSubscriptionWhereInput
+  OR?: JoinSubscriptionWhereInput[] | JoinSubscriptionWhereInput
+  NOT?: JoinSubscriptionWhereInput[] | JoinSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: JoinWhereInput
+}
+
+export interface JoinScalarWhereInput {
+  AND?: JoinScalarWhereInput[] | JoinScalarWhereInput
+  OR?: JoinScalarWhereInput[] | JoinScalarWhereInput
+  NOT?: JoinScalarWhereInput[] | JoinScalarWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  sourceOwner?: String
+  sourceOwner_not?: String
+  sourceOwner_in?: String[] | String
+  sourceOwner_not_in?: String[] | String
+  sourceOwner_lt?: String
+  sourceOwner_lte?: String
+  sourceOwner_gt?: String
+  sourceOwner_gte?: String
+  sourceOwner_contains?: String
+  sourceOwner_not_contains?: String
+  sourceOwner_starts_with?: String
+  sourceOwner_not_starts_with?: String
+  sourceOwner_ends_with?: String
+  sourceOwner_not_ends_with?: String
+  sourceTable?: String
+  sourceTable_not?: String
+  sourceTable_in?: String[] | String
+  sourceTable_not_in?: String[] | String
+  sourceTable_lt?: String
+  sourceTable_lte?: String
+  sourceTable_gt?: String
+  sourceTable_gte?: String
+  sourceTable_contains?: String
+  sourceTable_not_contains?: String
+  sourceTable_starts_with?: String
+  sourceTable_not_starts_with?: String
+  sourceTable_ends_with?: String
+  sourceTable_not_ends_with?: String
+  sourceColumn?: String
+  sourceColumn_not?: String
+  sourceColumn_in?: String[] | String
+  sourceColumn_not_in?: String[] | String
+  sourceColumn_lt?: String
+  sourceColumn_lte?: String
+  sourceColumn_gt?: String
+  sourceColumn_gte?: String
+  sourceColumn_contains?: String
+  sourceColumn_not_contains?: String
+  sourceColumn_starts_with?: String
+  sourceColumn_not_starts_with?: String
+  sourceColumn_ends_with?: String
+  sourceColumn_not_ends_with?: String
+  targetOwner?: String
+  targetOwner_not?: String
+  targetOwner_in?: String[] | String
+  targetOwner_not_in?: String[] | String
+  targetOwner_lt?: String
+  targetOwner_lte?: String
+  targetOwner_gt?: String
+  targetOwner_gte?: String
+  targetOwner_contains?: String
+  targetOwner_not_contains?: String
+  targetOwner_starts_with?: String
+  targetOwner_not_starts_with?: String
+  targetOwner_ends_with?: String
+  targetOwner_not_ends_with?: String
+  targetTable?: String
+  targetTable_not?: String
+  targetTable_in?: String[] | String
+  targetTable_not_in?: String[] | String
+  targetTable_lt?: String
+  targetTable_lte?: String
+  targetTable_gt?: String
+  targetTable_gte?: String
+  targetTable_contains?: String
+  targetTable_not_contains?: String
+  targetTable_starts_with?: String
+  targetTable_not_starts_with?: String
+  targetTable_ends_with?: String
+  targetTable_not_ends_with?: String
+  targetColumn?: String
+  targetColumn_not?: String
+  targetColumn_in?: String[] | String
+  targetColumn_not_in?: String[] | String
+  targetColumn_lt?: String
+  targetColumn_lte?: String
+  targetColumn_gt?: String
+  targetColumn_gte?: String
+  targetColumn_contains?: String
+  targetColumn_not_contains?: String
+  targetColumn_starts_with?: String
+  targetColumn_not_starts_with?: String
+  targetColumn_ends_with?: String
+  targetColumn_not_ends_with?: String
+}
+
+export interface ProfileSubscriptionWhereInput {
+  AND?: ProfileSubscriptionWhereInput[] | ProfileSubscriptionWhereInput
+  OR?: ProfileSubscriptionWhereInput[] | ProfileSubscriptionWhereInput
+  NOT?: ProfileSubscriptionWhereInput[] | ProfileSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: ProfileWhereInput
+}
+
+export interface JoinUpdateManyDataInput {
+  sourceOwner?: String
+  sourceTable?: String
+  sourceColumn?: String
+  targetOwner?: String
+  targetTable?: String
+  targetColumn?: String
+}
+
+export interface ResourceWhereUniqueInput {
+  id?: ID_Input
+}
+
+export interface JoinUpsertWithWhereUniqueWithoutInputColumnInput {
+  where: JoinWhereUniqueInput
+  update: JoinUpdateWithoutInputColumnDataInput
+  create: JoinCreateWithoutInputColumnInput
+}
+
+export interface AttributeWhereUniqueInput {
+  id?: ID_Input
 }
 
 export interface InputColumnUpdateManyWithWhereNestedInput {
@@ -3105,9 +4649,12 @@ export interface InputColumnUpdateManyWithWhereNestedInput {
   data: InputColumnUpdateManyDataInput
 }
 
-export interface AttributeUpsertWithoutInputColumnsInput {
-  update: AttributeUpdateWithoutInputColumnsDataInput
-  create: AttributeCreateWithoutInputColumnsInput
+export interface InputColumnUpdateManyMutationInput {
+  owner?: String
+  table?: String
+  column?: String
+  script?: String
+  staticValue?: String
 }
 
 export interface InputColumnScalarWhereInput {
@@ -3184,67 +4731,30 @@ export interface InputColumnScalarWhereInput {
   script_not_starts_with?: String
   script_ends_with?: String
   script_not_ends_with?: String
-  joinSourceColumn?: String
-  joinSourceColumn_not?: String
-  joinSourceColumn_in?: String[] | String
-  joinSourceColumn_not_in?: String[] | String
-  joinSourceColumn_lt?: String
-  joinSourceColumn_lte?: String
-  joinSourceColumn_gt?: String
-  joinSourceColumn_gte?: String
-  joinSourceColumn_contains?: String
-  joinSourceColumn_not_contains?: String
-  joinSourceColumn_starts_with?: String
-  joinSourceColumn_not_starts_with?: String
-  joinSourceColumn_ends_with?: String
-  joinSourceColumn_not_ends_with?: String
-  joinTargetOwner?: String
-  joinTargetOwner_not?: String
-  joinTargetOwner_in?: String[] | String
-  joinTargetOwner_not_in?: String[] | String
-  joinTargetOwner_lt?: String
-  joinTargetOwner_lte?: String
-  joinTargetOwner_gt?: String
-  joinTargetOwner_gte?: String
-  joinTargetOwner_contains?: String
-  joinTargetOwner_not_contains?: String
-  joinTargetOwner_starts_with?: String
-  joinTargetOwner_not_starts_with?: String
-  joinTargetOwner_ends_with?: String
-  joinTargetOwner_not_ends_with?: String
-  joinTargetTable?: String
-  joinTargetTable_not?: String
-  joinTargetTable_in?: String[] | String
-  joinTargetTable_not_in?: String[] | String
-  joinTargetTable_lt?: String
-  joinTargetTable_lte?: String
-  joinTargetTable_gt?: String
-  joinTargetTable_gte?: String
-  joinTargetTable_contains?: String
-  joinTargetTable_not_contains?: String
-  joinTargetTable_starts_with?: String
-  joinTargetTable_not_starts_with?: String
-  joinTargetTable_ends_with?: String
-  joinTargetTable_not_ends_with?: String
-  joinTargetColumn?: String
-  joinTargetColumn_not?: String
-  joinTargetColumn_in?: String[] | String
-  joinTargetColumn_not_in?: String[] | String
-  joinTargetColumn_lt?: String
-  joinTargetColumn_lte?: String
-  joinTargetColumn_gt?: String
-  joinTargetColumn_gte?: String
-  joinTargetColumn_contains?: String
-  joinTargetColumn_not_contains?: String
-  joinTargetColumn_starts_with?: String
-  joinTargetColumn_not_starts_with?: String
-  joinTargetColumn_ends_with?: String
-  joinTargetColumn_not_ends_with?: String
+  staticValue?: String
+  staticValue_not?: String
+  staticValue_in?: String[] | String
+  staticValue_not_in?: String[] | String
+  staticValue_lt?: String
+  staticValue_lte?: String
+  staticValue_gt?: String
+  staticValue_gte?: String
+  staticValue_contains?: String
+  staticValue_not_contains?: String
+  staticValue_starts_with?: String
+  staticValue_not_starts_with?: String
+  staticValue_ends_with?: String
+  staticValue_not_ends_with?: String
 }
 
-export interface ResourceUpsertWithoutAttributesInput {
-  update: ResourceUpdateWithoutAttributesDataInput
-  create: ResourceCreateWithoutAttributesInput
+export interface AttributeUpdateInput {
+  name?: String
+  mergingScript?: String
+  resource?: ResourceUpdateOneWithoutAttributesInput
+  attributes?: AttributeUpdateManyWithoutAttributeInput
+  attribute?: AttributeUpdateOneWithoutAttributesInput
+  inputColumns?: InputColumnUpdateManyWithoutAttributeInput
+  profiles?: ProfileUpdateManyWithoutAttributeInput
 }
 
 export interface InputColumnUpdateManyDataInput {
@@ -3252,15 +4762,17 @@ export interface InputColumnUpdateManyDataInput {
   table?: String
   column?: String
   script?: String
-  joinSourceColumn?: String
-  joinTargetOwner?: String
-  joinTargetTable?: String
-  joinTargetColumn?: String
+  staticValue?: String
 }
 
-export interface DatabaseUpsertWithoutResourcesInput {
-  update: DatabaseUpdateWithoutResourcesDataInput
-  create: DatabaseCreateWithoutResourcesInput
+export interface JoinUpdateInput {
+  sourceOwner?: String
+  sourceTable?: String
+  sourceColumn?: String
+  targetOwner?: String
+  targetTable?: String
+  targetColumn?: String
+  inputColumn?: InputColumnUpdateOneRequiredWithoutJoinsInput
 }
 
 export interface InputColumnUpsertWithWhereUniqueWithoutAttributeInput {
@@ -3269,9 +4781,142 @@ export interface InputColumnUpsertWithWhereUniqueWithoutAttributeInput {
   create: InputColumnCreateWithoutAttributeInput
 }
 
+export interface InputColumnUpdateInput {
+  owner?: String
+  table?: String
+  column?: String
+  script?: String
+  staticValue?: String
+  joins?: JoinUpdateManyWithoutInputColumnInput
+  attribute?: AttributeUpdateOneRequiredWithoutInputColumnsInput
+}
+
+export interface ProfileUpdateManyWithoutAttributeInput {
+  create?: ProfileCreateWithoutAttributeInput[] | ProfileCreateWithoutAttributeInput
+  connect?: ProfileWhereUniqueInput[] | ProfileWhereUniqueInput
+  disconnect?: ProfileWhereUniqueInput[] | ProfileWhereUniqueInput
+  delete?: ProfileWhereUniqueInput[] | ProfileWhereUniqueInput
+  update?: ProfileUpdateWithWhereUniqueWithoutAttributeInput[] | ProfileUpdateWithWhereUniqueWithoutAttributeInput
+  updateMany?: ProfileUpdateManyWithWhereNestedInput[] | ProfileUpdateManyWithWhereNestedInput
+  deleteMany?: ProfileScalarWhereInput[] | ProfileScalarWhereInput
+  upsert?: ProfileUpsertWithWhereUniqueWithoutAttributeInput[] | ProfileUpsertWithWhereUniqueWithoutAttributeInput
+}
+
+export interface ProfileUpdateInput {
+  name?: String
+  attribute?: AttributeUpdateOneRequiredWithoutProfilesInput
+  attributes?: AttributeUpdateManyInput
+}
+
+export interface ProfileUpdateWithWhereUniqueWithoutAttributeInput {
+  where: ProfileWhereUniqueInput
+  data: ProfileUpdateWithoutAttributeDataInput
+}
+
 export interface AttributeCreateManyWithoutResourceInput {
   create?: AttributeCreateWithoutResourceInput[] | AttributeCreateWithoutResourceInput
   connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput
+}
+
+export interface ProfileUpdateWithoutAttributeDataInput {
+  name?: String
+  attributes?: AttributeUpdateManyInput
+}
+
+export interface ResourceCreateOneWithoutAttributesInput {
+  create?: ResourceCreateWithoutAttributesInput
+  connect?: ResourceWhereUniqueInput
+}
+
+export interface AttributeUpdateManyInput {
+  create?: AttributeCreateInput[] | AttributeCreateInput
+  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput
+  disconnect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput
+  delete?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput
+  update?: AttributeUpdateWithWhereUniqueNestedInput[] | AttributeUpdateWithWhereUniqueNestedInput
+  updateMany?: AttributeUpdateManyWithWhereNestedInput[] | AttributeUpdateManyWithWhereNestedInput
+  deleteMany?: AttributeScalarWhereInput[] | AttributeScalarWhereInput
+  upsert?: AttributeUpsertWithWhereUniqueNestedInput[] | AttributeUpsertWithWhereUniqueNestedInput
+}
+
+export interface InputColumnCreateManyWithoutAttributeInput {
+  create?: InputColumnCreateWithoutAttributeInput[] | InputColumnCreateWithoutAttributeInput
+  connect?: InputColumnWhereUniqueInput[] | InputColumnWhereUniqueInput
+}
+
+export interface AttributeUpdateWithWhereUniqueNestedInput {
+  where: AttributeWhereUniqueInput
+  data: AttributeUpdateDataInput
+}
+
+export interface ProfileCreateManyWithoutAttributeInput {
+  create?: ProfileCreateWithoutAttributeInput[] | ProfileCreateWithoutAttributeInput
+  connect?: ProfileWhereUniqueInput[] | ProfileWhereUniqueInput
+}
+
+export interface AttributeUpdateDataInput {
+  name?: String
+  mergingScript?: String
+  resource?: ResourceUpdateOneWithoutAttributesInput
+  attributes?: AttributeUpdateManyWithoutAttributeInput
+  attribute?: AttributeUpdateOneWithoutAttributesInput
+  inputColumns?: InputColumnUpdateManyWithoutAttributeInput
+  profiles?: ProfileUpdateManyWithoutAttributeInput
+}
+
+export interface AttributeCreateOneWithoutAttributesInput {
+  create?: AttributeCreateWithoutAttributesInput
+  connect?: AttributeWhereUniqueInput
+}
+
+export interface AttributeUpdateOneWithoutAttributesInput {
+  create?: AttributeCreateWithoutAttributesInput
+  connect?: AttributeWhereUniqueInput
+  disconnect?: Boolean
+  delete?: Boolean
+  update?: AttributeUpdateWithoutAttributesDataInput
+  upsert?: AttributeUpsertWithoutAttributesInput
+}
+
+export interface AttributeSubscriptionWhereInput {
+  AND?: AttributeSubscriptionWhereInput[] | AttributeSubscriptionWhereInput
+  OR?: AttributeSubscriptionWhereInput[] | AttributeSubscriptionWhereInput
+  NOT?: AttributeSubscriptionWhereInput[] | AttributeSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: AttributeWhereInput
+}
+
+export interface AttributeUpdateWithoutAttributesDataInput {
+  name?: String
+  mergingScript?: String
+  resource?: ResourceUpdateOneWithoutAttributesInput
+  attribute?: AttributeUpdateOneWithoutAttributesInput
+  inputColumns?: InputColumnUpdateManyWithoutAttributeInput
+  profiles?: ProfileUpdateManyWithoutAttributeInput
+}
+
+export interface ResourceSubscriptionWhereInput {
+  AND?: ResourceSubscriptionWhereInput[] | ResourceSubscriptionWhereInput
+  OR?: ResourceSubscriptionWhereInput[] | ResourceSubscriptionWhereInput
+  NOT?: ResourceSubscriptionWhereInput[] | ResourceSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: ResourceWhereInput
+}
+
+export interface AttributeUpsertWithoutAttributesInput {
+  update: AttributeUpdateWithoutAttributesDataInput
+  create: AttributeCreateWithoutAttributesInput
+}
+
+export interface AttributeUpdateManyMutationInput {
+  name?: String
+  mergingScript?: String
 }
 
 export interface AttributeUpdateManyWithWhereNestedInput {
@@ -3279,15 +4924,13 @@ export interface AttributeUpdateManyWithWhereNestedInput {
   data: AttributeUpdateManyDataInput
 }
 
-export interface InputColumnSubscriptionWhereInput {
-  AND?: InputColumnSubscriptionWhereInput[] | InputColumnSubscriptionWhereInput
-  OR?: InputColumnSubscriptionWhereInput[] | InputColumnSubscriptionWhereInput
-  NOT?: InputColumnSubscriptionWhereInput[] | InputColumnSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: InputColumnWhereInput
+export interface InputColumnUpdateWithoutJoinsDataInput {
+  owner?: String
+  table?: String
+  column?: String
+  script?: String
+  staticValue?: String
+  attribute?: AttributeUpdateOneRequiredWithoutInputColumnsInput
 }
 
 export interface AttributeScalarWhereInput {
@@ -3338,8 +4981,13 @@ export interface AttributeScalarWhereInput {
   mergingScript_not_ends_with?: String
 }
 
-export interface InputColumnWhereUniqueInput {
-  id?: ID_Input
+export interface AttributeUpdateWithoutProfilesDataInput {
+  name?: String
+  mergingScript?: String
+  resource?: ResourceUpdateOneWithoutAttributesInput
+  attributes?: AttributeUpdateManyWithoutAttributeInput
+  attribute?: AttributeUpdateOneWithoutAttributesInput
+  inputColumns?: InputColumnUpdateManyWithoutAttributeInput
 }
 
 export interface AttributeUpdateManyDataInput {
@@ -3347,35 +4995,96 @@ export interface AttributeUpdateManyDataInput {
   mergingScript?: String
 }
 
-export interface AttributeUpdateOneRequiredWithoutInputColumnsInput {
-  create?: AttributeCreateWithoutInputColumnsInput
-  connect?: AttributeWhereUniqueInput
-  update?: AttributeUpdateWithoutInputColumnsDataInput
-  upsert?: AttributeUpsertWithoutInputColumnsInput
+export interface AttributeCreateManyWithoutAttributeInput {
+  create?: AttributeCreateWithoutAttributeInput[] | AttributeCreateWithoutAttributeInput
+  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput
 }
 
-export interface AttributeUpsertWithWhereUniqueWithoutResourceInput {
+export interface AttributeUpsertWithWhereUniqueNestedInput {
   where: AttributeWhereUniqueInput
-  update: AttributeUpdateWithoutResourceDataInput
-  create: AttributeCreateWithoutResourceInput
+  update: AttributeUpdateDataInput
+  create: AttributeCreateInput
 }
 
-export interface ResourceCreateManyWithoutDatabaseInput {
-  create?: ResourceCreateWithoutDatabaseInput[] | ResourceCreateWithoutDatabaseInput
-  connect?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput
+export interface JoinCreateManyWithoutInputColumnInput {
+  create?: JoinCreateWithoutInputColumnInput[] | JoinCreateWithoutInputColumnInput
+  connect?: JoinWhereUniqueInput[] | JoinWhereUniqueInput
 }
 
-export interface ResourceUpsertWithWhereUniqueWithoutDatabaseInput {
-  where: ResourceWhereUniqueInput
-  update: ResourceUpdateWithoutDatabaseDataInput
-  create: ResourceCreateWithoutDatabaseInput
+export interface ProfileUpdateManyWithWhereNestedInput {
+  where: ProfileScalarWhereInput
+  data: ProfileUpdateManyDataInput
 }
 
-export interface ResourceUpdateManyDataInput {
-  name?: String
+export interface ResourceCreateInput {
+  name: String
   primaryKeyOwner?: String
   primaryKeyTable?: String
   primaryKeyColumn?: String
+  attributes?: AttributeCreateManyWithoutResourceInput
+  database: DatabaseCreateOneWithoutResourcesInput
+}
+
+export interface ProfileScalarWhereInput {
+  AND?: ProfileScalarWhereInput[] | ProfileScalarWhereInput
+  OR?: ProfileScalarWhereInput[] | ProfileScalarWhereInput
+  NOT?: ProfileScalarWhereInput[] | ProfileScalarWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  name?: String
+  name_not?: String
+  name_in?: String[] | String
+  name_not_in?: String[] | String
+  name_lt?: String
+  name_lte?: String
+  name_gt?: String
+  name_gte?: String
+  name_contains?: String
+  name_not_contains?: String
+  name_starts_with?: String
+  name_not_starts_with?: String
+  name_ends_with?: String
+  name_not_ends_with?: String
+}
+
+export interface InputColumnWhereUniqueInput {
+  id?: ID_Input
+}
+
+export interface ProfileUpdateManyDataInput {
+  name?: String
+}
+
+export interface AttributeUpdateWithoutInputColumnsDataInput {
+  name?: String
+  mergingScript?: String
+  resource?: ResourceUpdateOneWithoutAttributesInput
+  attributes?: AttributeUpdateManyWithoutAttributeInput
+  attribute?: AttributeUpdateOneWithoutAttributesInput
+  profiles?: ProfileUpdateManyWithoutAttributeInput
+}
+
+export interface ProfileUpsertWithWhereUniqueWithoutAttributeInput {
+  where: ProfileWhereUniqueInput
+  update: ProfileUpdateWithoutAttributeDataInput
+  create: ProfileCreateWithoutAttributeInput
+}
+
+export interface DatabaseCreateOneWithoutResourcesInput {
+  create?: DatabaseCreateWithoutResourcesInput
+  connect?: DatabaseWhereUniqueInput
 }
 
 export interface ResourceScalarWhereInput {
@@ -3459,16 +5168,26 @@ export interface ResourceUpdateManyWithWhereNestedInput {
   data: ResourceUpdateManyDataInput
 }
 
-export interface InputColumnCreateManyWithoutAttributeInput {
-  create?: InputColumnCreateWithoutAttributeInput[] | InputColumnCreateWithoutAttributeInput
-  connect?: InputColumnWhereUniqueInput[] | InputColumnWhereUniqueInput
+export interface AttributeUpsertWithWhereUniqueWithoutResourceInput {
+  where: AttributeWhereUniqueInput
+  update: AttributeUpdateWithoutResourceDataInput
+  create: AttributeCreateWithoutResourceInput
 }
 
-export interface ResourceUpdateOneRequiredWithoutAttributesInput {
-  create?: ResourceCreateWithoutAttributesInput
-  connect?: ResourceWhereUniqueInput
-  update?: ResourceUpdateWithoutAttributesDataInput
-  upsert?: ResourceUpsertWithoutAttributesInput
+export interface AttributeUpsertWithWhereUniqueWithoutAttributeInput {
+  where: AttributeWhereUniqueInput
+  update: AttributeUpdateWithoutAttributeDataInput
+  create: AttributeCreateWithoutAttributeInput
+}
+
+export interface AttributeCreateManyInput {
+  create?: AttributeCreateInput[] | AttributeCreateInput
+  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput
+}
+
+export interface ResourceCreateManyWithoutDatabaseInput {
+  create?: ResourceCreateWithoutDatabaseInput[] | ResourceCreateWithoutDatabaseInput
+  connect?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput
 }
 
 export interface ResourceUpdateManyMutationInput {
@@ -3478,15 +5197,15 @@ export interface ResourceUpdateManyMutationInput {
   primaryKeyColumn?: String
 }
 
-export interface ResourceSubscriptionWhereInput {
-  AND?: ResourceSubscriptionWhereInput[] | ResourceSubscriptionWhereInput
-  OR?: ResourceSubscriptionWhereInput[] | ResourceSubscriptionWhereInput
-  NOT?: ResourceSubscriptionWhereInput[] | ResourceSubscriptionWhereInput
+export interface InputColumnSubscriptionWhereInput {
+  AND?: InputColumnSubscriptionWhereInput[] | InputColumnSubscriptionWhereInput
+  OR?: InputColumnSubscriptionWhereInput[] | InputColumnSubscriptionWhereInput
+  NOT?: InputColumnSubscriptionWhereInput[] | InputColumnSubscriptionWhereInput
   mutation_in?: MutationType[] | MutationType
   updatedFields_contains?: String
   updatedFields_contains_every?: String[] | String
   updatedFields_contains_some?: String[] | String
-  node?: ResourceWhereInput
+  node?: InputColumnWhereInput
 }
 
 /*
@@ -3497,30 +5216,21 @@ export interface Node {
   id: ID_Output
 }
 
-export interface InputColumnPreviousValues {
+export interface AttributePreviousValues {
   id: ID_Output
-  owner: String
-  table: String
-  column: String
-  script?: String
-  joinSourceColumn?: String
-  joinTargetOwner?: String
-  joinTargetTable?: String
-  joinTargetColumn?: String
+  name: String
+  mergingScript?: String
 }
 
-export interface InputColumnSubscriptionPayload {
-  mutation: MutationType
-  node?: InputColumn
-  updatedFields?: String[]
-  previousValues?: InputColumnPreviousValues
+export interface AggregateDatabase {
+  count: Int
 }
 
-export interface AttributeSubscriptionPayload {
+export interface JoinSubscriptionPayload {
   mutation: MutationType
-  node?: Attribute
+  node?: Join
   updatedFields?: String[]
-  previousValues?: AttributePreviousValues
+  previousValues?: JoinPreviousValues
 }
 
 /*
@@ -3540,20 +5250,20 @@ export interface Database extends Node {
 
 export interface Resource extends Node {
   id: ID_Output
-  database: Database
   name: String
   primaryKeyOwner?: String
   primaryKeyTable?: String
   primaryKeyColumn?: String
   attributes?: Attribute[]
+  database: Database
 }
 
 /*
  * An edge in a connection.
 
  */
-export interface InputColumnEdge {
-  node: InputColumn
+export interface AttributeEdge {
+  node: Attribute
   cursor: String
 }
 
@@ -3568,7 +5278,7 @@ export interface PageInfo {
   endCursor?: String
 }
 
-export interface AggregateAttribute {
+export interface AggregateJoin {
   count: Int
 }
 
@@ -3586,16 +5296,62 @@ export interface DatabaseConnection {
  * A connection to a list of items.
 
  */
-export interface AttributeConnection {
+export interface JoinConnection {
   pageInfo: PageInfo
-  edges: AttributeEdge[]
-  aggregate: AggregateAttribute
+  edges: JoinEdge[]
+  aggregate: AggregateJoin
 }
 
-export interface AttributePreviousValues {
+export interface JoinPreviousValues {
+  id: ID_Output
+  sourceOwner?: String
+  sourceTable?: String
+  sourceColumn?: String
+  targetOwner?: String
+  targetTable?: String
+  targetColumn?: String
+}
+
+/*
+ * An edge in a connection.
+
+ */
+export interface InputColumnEdge {
+  node: InputColumn
+  cursor: String
+}
+
+export interface DatabaseSubscriptionPayload {
+  mutation: MutationType
+  node?: Database
+  updatedFields?: String[]
+  previousValues?: DatabasePreviousValues
+}
+
+export interface AggregateProfile {
+  count: Int
+}
+
+export interface DatabasePreviousValues {
   id: ID_Output
   name: String
-  mergingScript?: String
+}
+
+/*
+ * A connection to a list of items.
+
+ */
+export interface ProfileConnection {
+  pageInfo: PageInfo
+  edges: ProfileEdge[]
+  aggregate: AggregateProfile
+}
+
+export interface Profile extends Node {
+  id: ID_Output
+  name?: String
+  attribute: Attribute
+  attributes?: Attribute[]
 }
 
 /*
@@ -3607,41 +5363,18 @@ export interface ResourceEdge {
   cursor: String
 }
 
-export interface DatabaseSubscriptionPayload {
+export interface ResourceSubscriptionPayload {
   mutation: MutationType
-  node?: Database
+  node?: Resource
   updatedFields?: String[]
-  previousValues?: DatabasePreviousValues
+  previousValues?: ResourcePreviousValues
 }
 
-export interface AggregateDatabase {
-  count: Int
-}
-
-export interface DatabasePreviousValues {
-  id: ID_Output
-  name: String
-}
-
-export interface AggregateInputColumn {
-  count: Int
-}
-
-/*
- * An edge in a connection.
-
- */
-export interface AttributeEdge {
-  node: Attribute
-  cursor: String
-}
-
-export interface Attribute extends Node {
-  id: ID_Output
-  resource: Resource
-  name: String
-  inputColumns?: InputColumn[]
-  mergingScript?: String
+export interface AttributeSubscriptionPayload {
+  mutation: MutationType
+  node?: Attribute
+  updatedFields?: String[]
+  previousValues?: AttributePreviousValues
 }
 
 export interface ResourcePreviousValues {
@@ -3652,28 +5385,35 @@ export interface ResourcePreviousValues {
   primaryKeyColumn?: String
 }
 
-export interface ResourceSubscriptionPayload {
-  mutation: MutationType
-  node?: Resource
-  updatedFields?: String[]
-  previousValues?: ResourcePreviousValues
-}
-
-export interface InputColumn extends Node {
-  id: ID_Output
-  attribute: Attribute
-  owner: String
-  table: String
-  column: String
-  script?: String
-  joinSourceColumn?: String
-  joinTargetOwner?: String
-  joinTargetTable?: String
-  joinTargetColumn?: String
-}
-
-export interface AggregateResource {
+export interface AggregateAttribute {
   count: Int
+}
+
+export interface Join extends Node {
+  id: ID_Output
+  sourceOwner?: String
+  sourceTable?: String
+  sourceColumn?: String
+  targetOwner?: String
+  targetTable?: String
+  targetColumn?: String
+  inputColumn: InputColumn
+}
+
+/*
+ * An edge in a connection.
+
+ */
+export interface JoinEdge {
+  node: Join
+  cursor: String
+}
+
+export interface ProfileSubscriptionPayload {
+  mutation: MutationType
+  node?: Profile
+  updatedFields?: String[]
+  previousValues?: ProfilePreviousValues
 }
 
 /*
@@ -3686,8 +5426,13 @@ export interface InputColumnConnection {
   aggregate: AggregateInputColumn
 }
 
-export interface BatchPayload {
-  count: Long
+export interface ProfilePreviousValues {
+  id: ID_Output
+  name?: String
+}
+
+export interface AggregateResource {
+  count: Int
 }
 
 /*
@@ -3698,6 +5443,71 @@ export interface ResourceConnection {
   pageInfo: PageInfo
   edges: ResourceEdge[]
   aggregate: AggregateResource
+}
+
+export interface Attribute extends Node {
+  id: ID_Output
+  name: String
+  mergingScript?: String
+  resource?: Resource
+  attributes?: Attribute[]
+  attribute?: Attribute
+  inputColumns?: InputColumn[]
+  profiles?: Profile[]
+}
+
+export interface InputColumnPreviousValues {
+  id: ID_Output
+  owner: String
+  table: String
+  column: String
+  script?: String
+  staticValue?: String
+}
+
+export interface InputColumnSubscriptionPayload {
+  mutation: MutationType
+  node?: InputColumn
+  updatedFields?: String[]
+  previousValues?: InputColumnPreviousValues
+}
+
+export interface InputColumn extends Node {
+  id: ID_Output
+  owner: String
+  table: String
+  column: String
+  script?: String
+  staticValue?: String
+  joins?: Join[]
+  attribute: Attribute
+}
+
+/*
+ * A connection to a list of items.
+
+ */
+export interface AttributeConnection {
+  pageInfo: PageInfo
+  edges: AttributeEdge[]
+  aggregate: AggregateAttribute
+}
+
+export interface BatchPayload {
+  count: Long
+}
+
+/*
+ * An edge in a connection.
+
+ */
+export interface ProfileEdge {
+  node: Profile
+  cursor: String
+}
+
+export interface AggregateInputColumn {
+  count: Int
 }
 
 /*
