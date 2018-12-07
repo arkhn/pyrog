@@ -5,5 +5,9 @@ mutation inputColumnMutation($id: ID!, $data: InputColumnUpdateInput) {
         column
         table
         script
+        joinSourceColumn
+        joinTargetOwner
+        joinTargetTable
+        joinTargetColumn
     }
 }

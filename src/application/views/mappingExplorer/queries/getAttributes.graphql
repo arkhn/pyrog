@@ -19,6 +19,9 @@ query Attributes($database: String!, $resource: String!, $attribute: String!){
         column
         script
         joinSourceColumn
+        joinTargetOwner
+        joinTargetTable
+        joinTargetColumn
     }
   }
 }

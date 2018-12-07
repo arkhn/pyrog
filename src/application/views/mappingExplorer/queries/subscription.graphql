@@ -8,6 +8,9 @@ subscription subscribeToInputColumn($id: ID!) {
             table
             script
             joinSourceColumn
+            joinTargetOwner
+            joinTargetTable
+            joinTargetColumn
         }
     }
 }

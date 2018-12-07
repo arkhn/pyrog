@@ -8,6 +8,11 @@ mutation updateAttribute($id: ID!, $data: AttributeUpdateInput) {
             owner
             table
             column
+            script
+            joinSourceColumn
+            joinTargetOwner
+            joinTargetTable
+            joinTargetColumn
         }
     }
 }

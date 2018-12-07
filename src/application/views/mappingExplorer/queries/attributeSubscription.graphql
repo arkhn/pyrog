@@ -11,6 +11,9 @@ subscription attributeSubscription($id: ID!) {
                 column
                 script
                 joinSourceColumn
+                joinTargetOwner
+                joinTargetTable
+                joinTargetColumn
             }
         }
     }

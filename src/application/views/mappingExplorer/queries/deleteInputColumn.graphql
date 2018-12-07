@@ -20,6 +20,9 @@ mutation deleteInputColumn($attributeId: ID!, $inputColumnId: ID!) {
             column
             script
             joinSourceColumn
+            joinTargetOwner
+            joinTargetTable
+            joinTargetColumn
         }
     }
 }
