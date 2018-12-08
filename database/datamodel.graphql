@@ -1,34 +1,65 @@
-type Mapping {
+type Database {
     id: ID! @unique
-    database: String! @unique
-    resources: [Resource!]! @relation(name: "MappingToResources")
+    name: String! @unique
+    resources: [Resource!]! @relation(name: "DatabaseToResource")
 }
 
 type Resource {
     id: ID! @unique
-    database: Mapping! @relation(name: "MappingToResources")
     name: String!
-    primaryKey: String!
+    primaryKeyOwner: String
+    primaryKeyTable: String
+    primaryKeyColumn: String
     attributes: [Attribute!]! @relation(name: "ResourceToAttributes")
+    database: Database! @relation(name: "DatabaseToResource")
 }
 
 type Attribute {
     id: ID! @unique
-    resource: Resource! @relation(name: "ResourceToAttributes")
     name: String!
-    inputColumns: [InputColumn!]! @relation(name: "AttributeToInputColumns")
     mergingScript: String
+    # Parent resource
+    resource: Resource @relation(name: "ResourceToAttributes")
+    # Children attributes
+    attributes: [Attribute!] @relation(name: "AttributeToAttributes")
+    # Parent attribute
+    attribute: Attribute @relation(name: "AttributeToAttributes")
+    # Children input columns
+    inputColumns: [InputColumn!] @relation(name: "AttributeToInputColumns")
+    # Children profiles
+    profiles: [Profile!] @relation(name: "AttributeToProfiles")
 }
 
-type InputColumn implements Column {
+type Profile {
     id: ID! @unique
-    attribute: Attribute! @relation(name: "AttributeToInputColumns")
+    name: String
+    # Parent attribute
+    attribute: Attribute! @relation(name: "AttributeToProfiles")
+    # Children attributes
+    attributes: [Attribute!]! @relation(name: "ProfileToAttributes")
+}
+
+type InputColumn {
+    id: ID! @unique
     owner: String!
     table: String!
     column: String!
     script: String
-    joinSourceColumn: String
-    joinTargetOwner: String
-    joinTargetTable: String
-    joinTargetColumn: String
+    staticValue: String
+    # Children joins
+    joins: [Join!] @relation(name: "InputColumnToJoins")
+    # Parent attribute
+    attribute: Attribute! @relation(name: "AttributeToInputColumns")
+}
+
+type Join {
+    id: ID! @unique
+    sourceOwner: String
+    sourceTable: String
+    sourceColumn: String
+    targetOwner: String
+    targetTable: String
+    targetColumn: String
+    # Parent input column
+    inputColumn: InputColumn! @relation(name: "InputColumnToJoins")
 }

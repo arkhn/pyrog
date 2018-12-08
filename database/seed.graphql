@@ -1,21 +1,27 @@
 mutation {
-    first: createMapping(data: {
-        database: "Crossway"
+    first: createDatabase(data: {
+        name: "Crossway"
         resources: {
             create: [
                 {
                     name: "Patient"
-                    primaryKey: "Test"
                     attributes: {
                         create: [
                             {
-                                name: "name.given"
-                                inputColumns: {
+                                name: "name"
+                                attributes: {
                                     create: [
                                         {
-                                            owner: "ICSF"
-                                            table: "PATIENT"
-                                            column: "PREPAT"
+                                            name: "given"
+                                            inputColumns: {
+                                                create: [
+                                                    {
+                                                        owner: "ICSF"
+                                                        table: "PATIENT"
+                                                        column: "PREPAT"
+                                                    }
+                                                ]
+                                            }
                                         }
                                     ]
                                 }
@@ -29,23 +35,29 @@ mutation {
         id
     }
 
-    second: createMapping(data: {
-        database: "mimic"
+    second: createDatabase(data: {
+        name: "mimic"
         resources: {
             create: [
                 {
                     name: "Patient"
-                    primaryKey: "Test"
                     attributes: {
                         create: [
                             {
-                                name: "name.family"
-                                inputColumns: {
+                                name: "name",
+                                attributes: {
                                     create: [
                                         {
-                                            owner: "mimic"
-                                            table: "names"
-                                            column: "family"
+                                            name: "given",
+                                            inputColumns: {
+                                                create: [
+                                                    {
+                                                        owner: "mimic"
+                                                        table: "names"
+                                                        column: "family"
+                                                    }
+                                                ]
+                                            }
                                         }
                                     ]
                                 }
