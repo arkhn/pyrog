@@ -42,9 +42,9 @@ export const updateFhirResource = (resource: string): IAction => {
     }
 }
 
-export const updateFhirAttribute = (attribute: string): IAction => {
+export const updateFhirAttribute = (attributePath: string[]): IAction => {
     return {
         type: 'UPDATE_FHIR_ATTRIBUTE',
-        payload: attribute,
+        payload: attributePath,
     }
 }

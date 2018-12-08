@@ -1,0 +1,19 @@
+#import "./fragmentEntireAttribute.graphql"
+#import "./fragmentEntireInputColumn.graphql"
+#import "./fragmentEntireJoin.graphql"
+
+query Attribute($database: String!, $resource: String!, $attributePath: [String!]!){
+    getAttribute (
+        database: $database,
+        resource: $resource,
+        attributePath: $attributePath
+    ) {
+        ...entireAttribute
+        inputColumns {
+            ...entireInputColumn
+            joins {
+                ...entireJoin
+            }
+        }
+    }
+}

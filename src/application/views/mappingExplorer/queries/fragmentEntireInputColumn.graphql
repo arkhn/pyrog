@@ -4,8 +4,4 @@ fragment entireInputColumn on InputColumn {
     table
     column
     script
-    joinSourceColumn
-    joinTargetOwner
-    joinTargetTable
-    joinTargetColumn
 }

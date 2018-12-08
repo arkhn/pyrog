@@ -1,13 +1,9 @@
 #import "./fragmentEntireResource.graphql"
 
-query getResource($database: String!, $resource: String) {
-    resources (
-        where: {
-            name: $resource,
-            database: {
-                name: $database,
-            }
-        }
+query getResource($database: String!, $resource: String!) {
+    getResource (
+        resource: $resource,
+        database: $database,
     ) {
         ...entireResource
     }

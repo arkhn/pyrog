@@ -4,8 +4,8 @@ import { IMappingExplorerState } from './index'
 
 const initialState: IMappingExplorerState = {
     selectedDatabase: null,
-    selectedFhirAttribute: null,
     selectedFhirResource: null,
+    selectedFhirAttribute: [],
 }
 
 const reducer = (state = initialState, action: ISimpleAction): IMappingExplorerState => {
