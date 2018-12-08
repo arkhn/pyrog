@@ -251,7 +251,8 @@ const resolvers = {
             }, info)
         },
         async getAttribute(parent, args, context: Context, info) {
-            let att = await checkAttribute(parent, JSON.parse(JSON.stringify(args)), context, info)
+            // Build attribute in database if doesn't already exist
+            const att = await checkAttribute(parent, JSON.parse(JSON.stringify(args)), context, info)
 
             return getAttribute(parent, args, context, info)
         },
@@ -299,7 +300,7 @@ const resolvers = {
                 where: {
                     id: args.id,
                 }
-            })
+            }, info)
         },
         updateInputColumn(parent, args, context: Context, info) {
             return context.db.mutation.updateInputColumn({
@@ -309,7 +310,7 @@ const resolvers = {
                 where: {
                     id: args.id,
                 }
-            })
+            }, info)
         },
         updateResource(parent, args, context: Context, info) {
             return context.db.mutation.updateResource({
