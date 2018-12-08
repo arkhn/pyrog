@@ -3,96 +3,6 @@ import { importSchema } from 'graphql-import'
 import { Prisma } from './generated/prisma'
 import { Context } from './utils'
 
-// const checkAttribute = async (parent, args, context: Context, info) => {
-//     // Make sure database, resource and attribute exist
-//     // before returning attribute
-//     const databaseExists = await context.db.exists.Database({
-//         name: args.database,
-//     })
-//
-//     if (databaseExists) {
-//         console.log('Database OK')
-//
-//         // This query is supposed to be injective
-//         const resources = await context.db.query.resources({
-//             where: {
-//                 name: args.resource,
-//                 database: {
-//                     name: args.database,
-//                 }
-//             }
-//         })
-//
-//         console.log('Resource loaded')
-//
-//         if (resources.length > 0) {
-//             console.log(`Resource OK (${resources.length})`)
-//
-//             const attributes = await context.db.query.attributes({
-//                 where: {
-//                     name: args.attribute,
-//                     resource: {
-//                         id: resources[0].id,
-//                     },
-//                 }
-//             })
-//
-//             console.log(`Attribute loaded (${attributes.length})`)
-//
-//             if (attributes.length > 0) {
-//                 console.log(`Attribute OK (${attributes.length})`)
-//                 return attributes[0]
-//             } else {
-//                 console.log('Attribute NO')
-//                 return context.db.mutation.createAttribute({
-//                     data: {
-//                         name: args.attribute,
-//                         resource: {
-//                             connect: {
-//                                 id: resources[0].id,
-//                             }
-//                         }
-//                     }
-//                 })
-//             }
-//         } else {
-//             console.log('Resource NO')
-//             return context.db.mutation.createAttribute({
-//                 data: {
-//                     name: args.attribute,
-//                     resource: {
-//                         create: {
-//                             name: args.resource,
-//                             database: {
-//                                 connect: {
-//                                     name: args.database,
-//                                 }
-//                             }
-//                         }
-//                     }
-//                 }
-//             })
-//         }
-//     } else {
-//         console.log('Database NO')
-//         return context.db.mutation.createAttribute({
-//             data: {
-//                 name: args.attribute,
-//                 resource: {
-//                     create: {
-//                         name: args.resource,
-//                         database: {
-//                             create: {
-//                                 name: args.database,
-//                             }
-//                         }
-//                     }
-//                 }
-//             }
-//         })
-//     }
-// }
-
 const recData = (attributePath: string[]) => {
     if (attributePath.length == 0) {
         return null
@@ -383,6 +293,16 @@ const resolvers = {
         },
         updateAttribute(parent, args, context: Context, info) {
             return context.db.mutation.updateAttribute({
+                data: {
+                    ...args.data,
+                },
+                where: {
+                    id: args.id,
+                }
+            })
+        },
+        updateInputColumn(parent, args, context: Context, info) {
+            return context.db.mutation.updateInputColumn({
                 data: {
                     ...args.data,
                 },
