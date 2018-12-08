@@ -194,20 +194,25 @@ const checkAttribute = async (parent, args, context: Context, info) => {
             await recAttributeCreation(context, info, attributePath, attributes[0].id)
         }
         else {
-            await context.db.mutation.createAttribute({
-                data: {
-                    resource: {
-                        connect: {
-                            id: resources[0].id,
-                        }
-                    },
-                    name: attributeName,
-                    attributes: {
-                        create: [
-                            recData(attributePath)
-                        ]
+            let data = {
+                resource: {
+                    connect: {
+                        id: resources[0].id,
                     }
+                },
+                name: attributeName,
+            }
+
+            if (attributePath.length > 0) {
+                data['attributes'] = {
+                    create: [
+                        recData(attributePath)
+                    ]
                 }
+            }
+
+            await context.db.mutation.createAttribute({
+                data: data
             })
         }
     }
@@ -228,6 +233,53 @@ const checkAttribute = async (parent, args, context: Context, info) => {
             }
         }, info)
     }
+}
+
+const getAttribute = async (parent, args, context: Context, info) => {
+    const initialAttributes = await context.db.query.attributes({
+        where: {
+            name: args.attributePath[0],
+            resource: {
+                name: args.resource,
+                database: {
+                    name: args.database,
+                }
+            }
+        }
+    })
+
+    if (initialAttributes.length > 1) {
+        //Problem
+    }
+
+    let attributes = initialAttributes
+
+    for (let i = 1; i < args.attributePath.length; i++) {
+        if (i != args.attributePath.length - 1) {
+            console.log(args.attributePath[i])
+            attributes = await context.db.query.attributes({
+                where: {
+                    name: args.attributePath[i],
+                    attribute: {
+                        id: attributes[0].id,
+                    }
+                }
+            })
+        } else {
+            // TODO: rendre info optionnel pour renvoyer tous
+            // les champs disponibles
+            attributes = await context.db.query.attributes({
+                where: {
+                    name: args.attributePath[i],
+                    attribute: {
+                        id: attributes[0].id,
+                    }
+                }
+            }, info)
+        }
+    }
+
+    return attributes[0]
 }
 
 const resolvers = {
@@ -291,54 +343,44 @@ const resolvers = {
         async getAttribute(parent, args, context: Context, info) {
             let att = await checkAttribute(parent, JSON.parse(JSON.stringify(args)), context, info)
 
-            const initialAttributes = await context.db.query.attributes({
+            return getAttribute(parent, args, context, info)
+        },
+        async getResource(parent, args, context: Context, info) {
+            const resources = await context.db.query.resources({
                 where: {
-                    name: args.attributePath[0],
-                    resource: {
-                        name: args.resource,
-                        database: {
-                            name: args.database,
-                        }
+                    name: args.resource,
+                    database: {
+                        name: args.database,
                     }
                 }
-            })
+            }, info)
 
-            if (initialAttributes.length > 1) {
-                //Problem
+            if (resources.length == 1) {
+                return resources[0]
             }
-
-            let attributes = initialAttributes
-
-            for (let i = 1; i < args.attributePath.length; i++) {
-                if (i != args.attributePath.length - 1) {
-                    console.log(args.attributePath[i])
-                    attributes = await context.db.query.attributes({
-                        where: {
-                            name: args.attributePath[i],
-                            attribute: {
-                                id: attributes[0].id,
-                            }
-                        }
-                    })
-                } else {
-                    attributes = await context.db.query.attributes({
-                        where: {
-                            name: args.attributePath[i],
-                            attribute: {
-                                id: attributes[0].id,
-                            }
-                        }
-                    }, info)
-                }
+            else {
+                // Problem
             }
-
-            return attributes[0]
-        },
+        }
     },
     Mutation: {
         // async checkAttribute(parent, args, context: Context, info) {
         //     return checkAttribute(parent, args, context, info)
         // },
+        async updateAttributeNoId(parent, args, context: Context, info) {
+            let attribute = await getAttribute(parent, {
+                database: args.database,
+                resource: args.resource,
+                attributePath: args.attributePath,
+            }, context, info)
+
+            return context.db.mutation.updateAttribute({
+                data: args.data,
+                where: {
+                    id: attribute.id,
+                }
+            }, info)
+        },
         updateAttribute(parent, args, context: Context, info) {
             return context.db.mutation.updateAttribute({
                 data: {
@@ -375,17 +417,17 @@ const resolvers = {
         //         }, info)
         //     },
         // },
-        // resourceSubscription: {
-        //     subscribe: (parent, args, context, info) => {
-        //         return context.db.subscription.resource({
-        //             where: {
-        //                 node: {
-        //                     id: args.id,
-        //                 }
-        //             }
-        //         }, info)
-        //     },
-        // },
+        resource: {
+            subscribe: (parent, args, context, info) => {
+                return context.db.subscription.resource({
+                    where: {
+                        node: {
+                            id: args.id,
+                        }
+                    }
+                }, info)
+            },
+        },
         attribute: {
             subscribe: (parent, args, context, info) => {
                 return context.db.subscription.attribute({

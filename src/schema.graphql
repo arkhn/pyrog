@@ -11,9 +11,11 @@ type Query {
     inputColumn(where: InputColumnWhereInput): InputColumn!
 
     getAttribute(database: String!, resource: String!, attributePath: [String!]!): Attribute!
+    getResource(database: String!, resource: String!): Resource!
 }
 
 type Mutation {
+    updateAttributeNoId(database: String!, resource: String!, attributePath: [String!]!, data: AttributeUpdateInput): Attribute!
     updateAttribute(id: ID!, data: AttributeUpdateInput): Attribute!
     updateResource(id: ID!, data: ResourceUpdateInput): Resource!
 }
@@ -21,4 +23,5 @@ type Mutation {
 type Subscription {
     attribute(id: ID!): AttributeSubscriptionPayload
     inputColumn(id: ID!): InputColumnSubscriptionPayload
+    resource(id: ID!): ResourceSubscriptionPayload
 }
