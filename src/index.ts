@@ -320,7 +320,17 @@ const resolvers = {
                 where: {
                     id: args.id,
                 }
-            })
+            }, info)
+        },
+        updateJoin(parent, args, context: Context, info) {
+            return context.db.mutation.updateJoin({
+                data: {
+                    ...args.data,
+                },
+                where: {
+                    id: args.id,
+                }
+            }, info)
         },
     },
     Subscription: {
@@ -363,6 +373,17 @@ const resolvers = {
         inputColumn: {
             subscribe: (parent, args, context, info) => {
                 return context.db.subscription.inputColumn({
+                    where: {
+                        node: {
+                            id: args.id,
+                        }
+                    }
+                }, info)
+            },
+        },
+        join: {
+            subscribe: (parent, args, context, info) => {
+                return context.db.subscription.join({
                     where: {
                         node: {
                             id: args.id,

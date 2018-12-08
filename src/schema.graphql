@@ -17,11 +17,14 @@ type Query {
 type Mutation {
     updateAttributeNoId(database: String!, resource: String!, attributePath: [String!]!, data: AttributeUpdateInput): Attribute!
     updateAttribute(id: ID!, data: AttributeUpdateInput): Attribute!
+    updateInputColumn(id: ID!, data: InputColumnUpdateInput): InputColumn!
     updateResource(id: ID!, data: ResourceUpdateInput): Resource!
+    updateJoin(id: ID!, data: JoinUpdateInput): Join!
 }
 
 type Subscription {
     attribute(id: ID!): AttributeSubscriptionPayload
     inputColumn(id: ID!): InputColumnSubscriptionPayload
     resource(id: ID!): ResourceSubscriptionPayload
+    join(id: ID!): JoinSubscriptionPayload
 }
