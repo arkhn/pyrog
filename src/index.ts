@@ -170,7 +170,6 @@ const getAttribute = async (parent, args, context: Context, info) => {
 
     for (let i = 1; i < args.attributePath.length; i++) {
         if (i != args.attributePath.length - 1) {
-            console.log(args.attributePath[i])
             attributes = await context.db.query.attributes({
                 where: {
                     name: args.attributePath[i],
@@ -256,9 +255,7 @@ const resolvers = {
         },
         async getAttribute(parent, args, context: Context, info) {
             // Build attribute in database if doesn't already exist
-            // const att = await checkAttribute(parent, JSON.parse(JSON.stringify(args)), context, info)
-            console.log({info})
-            console.log(info.fieldNodes)
+            const att = await checkAttribute(parent, JSON.parse(JSON.stringify(args)), context, info)
 
             return getAttribute(parent, args, context, info)
         },
