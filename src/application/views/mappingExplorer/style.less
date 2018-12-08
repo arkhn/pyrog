@@ -218,9 +218,13 @@ body {
             }
 
 
-            .input-column-join, .input-column-name {
+            .input-column-joins, .input-column-name {
                 flex-basis: 30%;
                 flex-grow: 1;
+            }
+
+            .input-column-joins > *:not(:last-child) {
+                margin-bottom: calc(@window-padding / 2);
             }
 
             .input-column-name > *:not(:last-child) {
