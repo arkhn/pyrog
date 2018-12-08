@@ -1,10 +1,14 @@
 #import "./fragmentEntireInputColumn.graphql"
+#import "./fragmentEntireJoin.graphql"
 
 subscription subscribeToInputColumn($id: ID!) {
     inputColumn(id: $id) {
         updatedFields
         node {
             ...entireInputColumn
+            joins {
+                ...entireJoin
+            }
         }
     }
 }
