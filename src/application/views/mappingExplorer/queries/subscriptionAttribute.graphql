@@ -1,0 +1,18 @@
+#import "./fragmentEntireAttribute.graphql"
+#import "./fragmentEntireInputColumn.graphql"
+#import "./fragmentEntireJoin.graphql"
+
+subscription subscriptionAttribute ($id: ID!) {
+    attribute(id: $id) {
+        updatedFields
+        node {
+            ...entireAttribute
+            inputColumns {
+                ...entireInputColumn
+                joins {
+                    ...entireJoin
+                }
+            }
+        }
+    }
+}

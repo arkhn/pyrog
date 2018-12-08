@@ -12,67 +12,127 @@ import {
     IDatabaseSchema,
 } from '../types'
 
-export interface IColumnPickerProps {
-    onChangeOwner: any,
-    onChangeTable: any,
-    onChangeColumn: any,
-    databaseColumn: IDatabaseColumn,
+export interface IProps {
+    ownerChangeCallback?: any,
+    tableChangeCallback?: any,
+    columnChangeCallback?: any,
+    initialColumn?: {
+        owner: string,
+        table: string,
+        column: string,
+    }
+    onChangeOwner?: any,
+    onChangeTable?: any,
+    onChangeColumn?: any,
     databaseSchema: IDatabaseSchema,
-    dispatch?: any,
     label?: string,
     vertical?: boolean,
 }
 
-export interface IColumnPickerState {
-
+export interface IState {
+    owner: string,
+    table: string,
+    column: string,
 }
 
-export default class ColumnPicker extends React.Component<IColumnPickerProps, IColumnPickerState> {
+export default class ColumnPicker extends React.Component<IProps, IState> {
+    constructor(props: IProps) {
+        super(props)
+        this.state = {
+            owner: null,
+            table: null,
+            column: null,
+        }
+    }
+
+    private changeOwner = (e: string) => {
+        this.setState({
+            owner: e,
+        })
+
+        if (this.props.ownerChangeCallback) {
+            this.props.ownerChangeCallback(e)
+        }
+    }
+
+    private changeTable = (e: string) => {
+        this.setState({
+            table: e,
+        })
+
+        if (this.props.tableChangeCallback) {
+            this.props.tableChangeCallback(e)
+        }
+    }
+
+    private changeColumn = (e: string) => {
+        this.setState({
+            column: e,
+        })
+
+        if (this.props.columnChangeCallback) {
+            this.props.columnChangeCallback(e)
+        }
+    }
+
+    private static getDerivedStateFromProps(props: IProps, state: IState) {
+        if (props.initialColumn) {
+            return {
+                owner: props.initialColumn.owner,
+                table: props.initialColumn.table,
+                column: props.initialColumn.column,
+            }
+        }
+
+        return state
+    }
+
     public render() {
         let {
             onChangeOwner,
             onChangeTable,
             onChangeColumn,
-            databaseColumn,
             databaseSchema,
-            dispatch,
             label,
             vertical,
         } = this.props
 
+        let {
+            owner,
+            table,
+            column,
+        } = this.state
+
         let owners = Object.keys(databaseSchema)
 
-        let tables = (databaseColumn && databaseColumn.owner) ?
-            Object.keys(databaseSchema[databaseColumn.owner]) :
+        let tables = owner ?
+            Object.keys(databaseSchema[owner]) :
             []
 
-        let columns = (databaseColumn && databaseColumn.table) ?
-            databaseSchema[databaseColumn.owner][databaseColumn.table] :
+        let columns = table ?
+            databaseSchema[owner][table] :
             []
 
         let controlGroup = <ControlGroup fill={false} vertical={vertical || false}>
             <StringSelect
-                dispatch={dispatch}
                 icon={'group-objects'}
-                inputItem={databaseColumn ? databaseColumn.owner : null}
+                inputItem={owner}
                 items={owners}
-                onChange={onChangeOwner}
+                onChange={this.changeOwner}
             />
             <StringSelect
-                disabled={!databaseColumn.owner}
-                dispatch={dispatch}
+                disabled={!owner}
                 icon={'th'}
-                inputItem={databaseColumn ? databaseColumn.table : null}
+                inputItem={table}
                 items={tables}
-                onChange={onChangeTable}
+                onChange={this.changeTable}
             />
             <StringSelect
-                disabled={!databaseColumn.table}
-                dispatch={dispatch}
+                disabled={!table}
                 icon={'column-layout'}
-                inputItem={databaseColumn ? databaseColumn.column : null}
+                inputItem={column}
                 items={columns}
-                onChange={onChangeColumn}
+                onChange={this.changeColumn}
             />
         </ControlGroup>
 

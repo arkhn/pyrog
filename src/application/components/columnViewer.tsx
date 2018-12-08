@@ -6,28 +6,23 @@ import {
     Switch
 } from '@blueprintjs/core';
 
-import {
-    clickAddInputColumn,
-} from '../actions/mapping'
-
-export interface IColumnViewerProps {
-    dispatch: any;
+export interface IProps {
     data: any;
 }
 
-export interface IColumnViewerState {
+export interface IState {
 
 }
 
-export default class ColumnViewer extends React.Component<IColumnViewerProps, IColumnViewerState> {
+export default class ColumnViewer extends React.Component<IProps, IState> {
     private handleClick = (column: any) => {
         return (event: any) => {
-            this.props.dispatch(clickAddInputColumn(column))
+            // this.props.dispatch(clickAddInputColumn(column))
         }
     }
 
     public render() {
-        let {data, dispatch} = this.props
+        let {data} = this.props
 
         let columns = data.map((column: any, index: number) =>
             <div key={index}>

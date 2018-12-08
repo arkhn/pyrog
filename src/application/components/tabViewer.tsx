@@ -9,16 +9,9 @@ import {
 } from '@blueprintjs/core'
 import * as React from 'react'
 
-// Import custom actions
-import {
-    clickAddInputColumn,
-} from '../actions/mapping'
-
 // Import custom components
-import ClusterSearchInputs from './clusterSearchInputs'
 import ColumnPicker from './columnPicker'
 import ColumnViewer from './columnViewer'
-import TextSearchInputs from './textSearchInputs'
 
 // Import custom types
 import {
@@ -26,24 +19,17 @@ import {
     IDatabaseSchema,
 } from '../types'
 
-// Import mock data
-import {
-    firstNameColumnsExample,
-    filePathColumnsExample
-} from '../mockdata/database'
-
-export interface ITabViewProps {
+export interface IProps {
     databaseSchema: IDatabaseSchema,
-    dispatch: any,
 }
 
-export interface ITabViewState {
+export interface IState {
     databaseColumn: IDatabaseColumn,
     navbarTabId: TabId,
 }
 
-export default class TabViewer extends React.Component<ITabViewProps, ITabViewState> {
-    public state: ITabViewState = {
+export default class TabViewer extends React.Component<IProps, IState> {
+    public state: IState = {
         databaseColumn: {
             owner: null,
             table: null,
@@ -61,7 +47,7 @@ export default class TabViewer extends React.Component<ITabViewProps, ITabViewSt
     private changeOwner = (owner: string) => {
         const change = (owner != this.state.databaseColumn.owner)
 
-        this.setState((state: ITabViewState) => {
+        this.setState((state: IState) => {
             return {
                 databaseColumn: {
                     owner: owner,
@@ -75,7 +61,7 @@ export default class TabViewer extends React.Component<ITabViewProps, ITabViewSt
     private changeTable = (table: string) => {
         const change = (table != this.state.databaseColumn.table)
 
-        this.setState((state: ITabViewState) => {
+        this.setState((state: IState) => {
             return {
                 databaseColumn: {
                     owner: state.databaseColumn.owner,
@@ -87,7 +73,7 @@ export default class TabViewer extends React.Component<ITabViewProps, ITabViewSt
     }
 
     private changeColumn = (column: string) => {
-        this.setState((state: ITabViewState) => {
+        this.setState((state: IState) => {
             return {
                 databaseColumn: {
                     owner: state.databaseColumn.owner,
@@ -99,7 +85,7 @@ export default class TabViewer extends React.Component<ITabViewProps, ITabViewSt
     }
 
     private handleClick = (column: any) => {
-        this.props.dispatch(clickAddInputColumn(this.state.databaseColumn))
+        // this.props.dispatch(clickAddInputColumn(this.state.databaseColumn))
         this.setState({
             databaseColumn: {
                 owner: null,
@@ -112,7 +98,6 @@ export default class TabViewer extends React.Component<ITabViewProps, ITabViewSt
     public render() {
         let {
             databaseSchema,
-            dispatch,
         } = this.props
 
         let {
@@ -137,7 +122,6 @@ export default class TabViewer extends React.Component<ITabViewProps, ITabViewSt
                         onChangeOwner={this.changeOwner}
                         onChangeTable={this.changeTable}
                         onChangeColumn={this.changeColumn}
-                        databaseColumn={databaseColumn}
                         databaseSchema={databaseSchema}
                     />
                     <Button
@@ -156,10 +140,8 @@ export default class TabViewer extends React.Component<ITabViewProps, ITabViewSt
         </div>
 
         const clusterTab = <div className={'vertical-flex'}>
-            <ClusterSearchInputs dispatch={dispatch} />
             <ColumnViewer
-                dispatch={dispatch}
-                data={filePathColumnsExample}
+                data={null}
             />
         </div>
 
@@ -170,10 +152,8 @@ export default class TabViewer extends React.Component<ITabViewProps, ITabViewSt
         </div>
 
         const textTab = <div className={'vertical-flex'}>
-            <TextSearchInputs dispatch={dispatch} />
             <ColumnViewer
-                dispatch={dispatch}
-                data={firstNameColumnsExample}
+                data={null}
             />
         </div>
 

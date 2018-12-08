@@ -1,12 +1,19 @@
 import * as React from 'react'
 import {Route} from 'react-router'
-import {BrowserRouter} from 'react-router-dom'
+import {
+    BrowserRouter,
+    Switch,
+} from 'react-router-dom'
 
-import {MainView} from './views/main'
+import MappingExplorer from './views/mappingExplorer'
+import MimicView from './views/mimic'
 
 const Routes = () => (
     <BrowserRouter>
-        <Route path='/' component={MainView}/>
+        <Switch>
+            <Route exact path='/' component={MappingExplorer} />
+            <Route path='/mimic' component={MimicView} />
+        </Switch>
     </BrowserRouter>
 )
 

@@ -1,0 +1,10 @@
+#import "./fragmentEntireInputColumn.graphql"
+
+subscription subscribeToInputColumn($id: ID!) {
+    inputColumn(id: $id) {
+        updatedFields
+        node {
+            ...entireInputColumn
+        }
+    }
+}

@@ -1,19 +1,30 @@
 import {combineReducers} from 'redux'
 
-import {appData} from './appData'
-import {currentDatabase} from './currentDatabase'
-import {currentFhirAttribute} from './currentFhirAttribute'
-import {currentFhirResource} from './currentFhirResource'
-import {mapping} from './mapping'
-import {nameLists} from './nameLists'
+// Data fetching reducers
+import databases from './databases'
+import fhirResources from './fhirResources'
+import recommendedColumns from './recommendedColumns'
+
+// View reducers
+import mappingExplorer from '../views/mappingExplorer/reducer'
+import mimic from '../views/mimic/reducer'
+
+// Data reducer (also called canonical state)
+const dataReducer = combineReducers({
+    databases,
+    fhirResources,
+    recommendedColumns,
+})
+
+// View reducer
+const viewReducer = combineReducers({
+    mappingExplorer,
+    mimic,
+})
 
 const mainReducer = combineReducers({
-    currentDatabase,
-    currentFhirResource,
-    currentFhirAttribute,
-    mapping,
-    appData,
-    nameLists,
+    data: dataReducer,
+    views: viewReducer,
 })
 
 export default mainReducer

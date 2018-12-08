@@ -1,0 +1,7 @@
+fragment entireResource on Resource {
+    id
+    name
+    primaryKeyOwner
+    primaryKeyTable
+    primaryKeyColumn
+}

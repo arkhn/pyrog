@@ -13,11 +13,10 @@ import * as React from 'react'
 
 interface ISelectProps<T> {
     disabled: boolean;
-    dispatch?: any;
     displayItem: (item: any) => string;
     filterItems: ItemPredicate<T>;
     items: T[];
-    icon: IconName;
+    icon?: IconName;
     inputItem: T;
     intent?: Intent;
     loading?: boolean;
@@ -33,11 +32,12 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
     private CustomSelect = Select.ofType<T>();
 
     private handleValueChange = (item: T) => {
-        if (this.props.dispatch) {
-            this.props.dispatch(this.props.onChange(item))
-        } else {
-            this.props.onChange(item)
-        }
+        // if (this.props.dispatch) {
+        //     this.props.dispatch(this.props.onChange(item))
+        // } else {
+        //     this.props.onChange(item)
+        // }
+        this.props.onChange(item)
     }
 
     public render () {

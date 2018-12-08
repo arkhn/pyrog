@@ -1,16 +1,29 @@
 import * as redux from 'redux'
 
-// Redux types
-export interface simpleAction {
+// REDUX
+export interface ISimpleAction {
     type: string,
     payload?: any,
 }
 
-export type thunkAction = (dispatch: redux.Dispatch<any>, getState: any) => void
+export type IThunkAction = (dispatch: redux.Dispatch<any>, getState: any) => void
 
-export type action = simpleAction | thunkAction
+export type IAction = ISimpleAction | IThunkAction
 
-// React types
+export interface IReduxStore {
+    data: any,
+    dispatch?: any,
+    views: any,
+}
+
+// VIEWS
+
+export interface IView {
+    data: any,
+    dispatch?: any,
+}
+
+// REACT
 
 // TODO: Deprecate type
 export interface IFhirResource {
@@ -59,52 +72,4 @@ export interface IMapping {
     fhirMapping: {
         [fhirAttribute: string]: IFhirIntegrationSpec,
     }
-}
-
-export interface reduxAppState {
-    dispatch?: redux.Dispatch<any>,
-    appData: IReduxAppData,
-    nameLists: IReduxNameLists,
-    currentDatabase: IReduxCurrentDatabase,
-    currentFhirResource: IReduxCurrentFhirResource,
-    currentFhirAttribute: string[],
-    mapping: IReduxMapping,
-}
-
-export interface IReduxAppData {
-    dialogIsOpen: boolean,
-    distantServerUrl: string,
-    testState: boolean,
-}
-
-export interface IReduxNameLists {
-    loadingNameLists: boolean,
-    databaseNames: {
-        [database_name: string]: {
-            name: string,
-        }
-    },
-    fhirResources: {
-        [resource_name: string]: any,
-    },
-    fhirDatatypes: {
-        [datatype_name: string]: any,
-    },
-}
-
-export interface IReduxCurrentDatabase {
-    loadingSchema: boolean,
-    name: string,
-    schema: IDatabaseSchema,
-}
-
-export interface IReduxCurrentFhirResource {
-    name: string,
-    json: any,
-    loadingResource: boolean,
-}
-
-export interface IReduxMapping {
-    loading: boolean,
-    content: IMapping,
 }

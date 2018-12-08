@@ -1,0 +1,10 @@
+#import "./fragmentEntireResource.graphql"
+
+subscription subscriptionResource($id: ID!) {
+    resource (id: $id) {
+        updatedFields
+        node {
+            ...entireResource
+        }
+    }
+}

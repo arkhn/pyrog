@@ -4,19 +4,6 @@ import {
 } from '@blueprintjs/core'
 import * as React from 'react'
 
-// Import custom actions
-import {
-    changeInputColumnScript,
-    changeJoinSourceColumn,
-    changeJoinTargetColumnOwner,
-    changeJoinTargetColumnTable,
-    changeJoinTargetColumnColumn,
-    changeMergingScript,
-    clickRemoveInputColumn,
-    clickRemoveJoin,
-    clickAddJoin,
-} from '../actions/mapping'
-
 // Import custom components
 import ColumnPicker from './columnPicker'
 import StringSelect from './selects/stringSelect'
@@ -28,49 +15,42 @@ import {
     IFhirIntegrationSpec,
 } from '../types'
 
-// Import mock data
-import {
-    scriptList,
-} from '../mockdata/nameLists'
-
-export interface IInputColumnsTableProps {
-    spec: IFhirIntegrationSpec;
+export interface IProps {
+    inputColumns: any;
     databaseSchema: IDatabaseSchema;
-    dispatch: any;
 }
 
-export interface IInputColumnsTableState {
+export interface IState {
 
 }
 
-export default class InputColumnsTable extends React.Component<IInputColumnsTableProps, IInputColumnsTableState> {
+export default class InputColumnsTable extends React.Component<IProps, IState> {
     private handleRemoveColumnClick = (columnIndex: number) => {
         return (event: any) => {
-            this.props.dispatch(clickRemoveInputColumn(columnIndex))
+            // this.props.dispatch(clickRemoveInputColumn(columnIndex))
         }
     }
 
     private handleRemoveJoinClick = (columnIndex: number) => {
         return (event: any) => {
-            this.props.dispatch(clickRemoveJoin(columnIndex))
+            // this.props.dispatch(clickRemoveJoin(columnIndex))
         }
     }
 
     private handleAddJoinClick = (columnIndex: number) => {
         return (event: any) => {
-            this.props.dispatch(clickAddJoin(columnIndex))
+            // this.props.dispatch(clickAddJoin(columnIndex))
         }
     }
 
     public render() {
         let {
-            spec,
+            inputColumns,
             databaseSchema,
-            dispatch,
-        } = this.props;
+        } = this.props
 
-        let rows = (spec && spec.inputColumns) ?
-            spec.inputColumns.map((column: IInputColumn, index: number) =>
+        let rows = (inputColumns) ?
+            inputColumns.map((column: IInputColumn, index: number) =>
                 <tr key={index}>
                     <td>
                         <Button
@@ -101,11 +81,10 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
                         column.join ?
                             <td>
                                 <StringSelect
-                                    dispatch={dispatch}
                                     icon={'column-layout'}
                                     inputItem={column.join.sourceColumn}
                                     items={databaseSchema[column.owner][column.table]}
-                                    onChange={changeJoinSourceColumn(index)}
+                                    onChange={null}
                                 />
                             </td> :
                             null
@@ -114,36 +93,32 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
                         column.join ?
                             <td>
                                 <ColumnPicker
-                                    databaseColumn={column.join.targetColumn}
                                     databaseSchema={databaseSchema}
-                                    dispatch={dispatch}
-                                    onChangeOwner={changeJoinTargetColumnOwner(index)}
-                                    onChangeTable={changeJoinTargetColumnTable(index)}
-                                    onChangeColumn={changeJoinTargetColumnColumn(index)}
+                                    onChangeOwner={null}
+                                    onChangeTable={null}
+                                    onChangeColumn={null}
                                 />
                             </td> :
                             null
                     }
                     <td>
                         <StringSelect
-                            dispatch={dispatch}
                             icon={'function'}
                             inputItem={column.script}
-                            items={scriptList}
-                            onChange={changeInputColumnScript(index)}
+                            items={[]}
+                            onChange={null}
                         />
                     </td>
                     {
-                        spec.inputColumns.length > 1 ?
+                        inputColumns.length > 1 ?
                             (
                                 index == 0 ?
-                                    <td rowSpan={spec.inputColumns.length}>
+                                    <td rowSpan={inputColumns.length}>
                                         <StringSelect
-                                            dispatch={dispatch}
                                             icon={'function'}
-                                            inputItem={spec.mergingScript}
-                                            items={scriptList}
-                                            onChange={changeMergingScript}
+                                            inputItem={inputColumns.mergingScript}
+                                            items={[]}
+                                            onChange={null}
                                         />
                                     </td> :
                                     null
@@ -155,14 +130,14 @@ export default class InputColumnsTable extends React.Component<IInputColumnsTabl
 
         return (
             <div>
-                <table className={'bp3-dark'}>
+                <table>
                     <tbody>
                         <tr>
                             <th></th>
                             <th>Column Path</th>
                             <th colSpan={3}>Join</th>
                             <th>Column Script</th>
-                            {(spec && spec.inputColumns.length> 1) ? <th>Final Script</th> : null}
+                            {(inputColumns.length> 1) ? <th>Final Script</th> : null}
                         </tr>
                         {rows}
                     </tbody>

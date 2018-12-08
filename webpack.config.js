@@ -19,7 +19,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.tsx?$/,
+                test: /\.(tsx|ts)?$/,
                 use: [
                     'awesome-typescript-loader'
                 ],
@@ -35,7 +35,18 @@ module.exports = {
             {
                 test: /\.svg$/,
                 loader: 'svg-inline-loader'
-            }
+            },
+            {
+                // This is, among others, for files present in ./node_modules/graphql
+                test: /\.mjs$/,
+                include: /node_modules/,
+                type: 'javascript/auto',
+            },
+            {
+                test: /\.(graphql|gql)$/,
+                exclude: /node_modules/,
+                loader: 'graphql-tag/loader',
+            },
         ],
     },
     // In this app, plugins are used to optimize emitted bundles and
@@ -58,4 +69,10 @@ module.exports = {
             chunks: 'all',
         }
     },
+    devServer: {
+        // Allows to handle routes with React instead of webpack
+        historyApiFallback: true,
+    },
+    // Prevents source map erros in development in Firefox
+    devtool: 'source-map',
 };

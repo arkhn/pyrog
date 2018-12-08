@@ -1,0 +1,10 @@
+#import "./fragmentEntireResource.graphql"
+
+query getResource($database: String!, $resource: String!) {
+    getResource (
+        resource: $resource,
+        database: $database,
+    ) {
+        ...entireResource
+    }
+}

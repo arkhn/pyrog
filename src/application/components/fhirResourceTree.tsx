@@ -10,27 +10,28 @@ import * as React from 'react'
 
 import {isNullOrUndefined} from 'util';
 
-import {changeCurrentFhirAttribute} from '../actions/currentFhirAttribute'
-
-interface nodeData {
+interface INodeData {
     name: string,
+    type: string,
+    path: string[],
 }
 
-export interface IFhirResourceTreeProps {
+export interface IProps {
     json: any,
-    dispatch: any,
+    onClickCallback: any,
+    selectedNode: string[],
 }
 
-export interface IFhirResourceTreeState {
-    nodes: ITreeNode<nodeData>[],
+export interface IState {
+    nodes: ITreeNode<INodeData>[],
     renderJson: string,
     isBroken: boolean,
 }
 
-export default class FhirResourceTree extends React.Component<IFhirResourceTreeProps, IFhirResourceTreeState> {
+export default class FhirResourceTree extends React.Component<IProps, IState> {
     static id: number = 0;
 
-    constructor(props: IFhirResourceTreeProps) {
+    constructor(props: IProps) {
         super(props);
         this.state = {
             nodes: [],
@@ -44,8 +45,8 @@ export default class FhirResourceTree extends React.Component<IFhirResourceTreeP
         return FhirResourceTree.id;
     }
 
-    private static genObjNodes = (json: any): ITreeNode<nodeData>[] => {
-        return Object.keys(json).map((key: string) : ITreeNode<nodeData> => {
+    private static genObjNodes = (json: any, pathAcc: string[]): ITreeNode<INodeData>[] => {
+        return Object.keys(json).map((key: string) : ITreeNode<INodeData> => {
             const hasChildren = !isNullOrUndefined(json[key]) && (json[key] instanceof Array || json[key] instanceof Object)
 
             const regex = /(.*)<(.*)>/
@@ -53,8 +54,10 @@ export default class FhirResourceTree extends React.Component<IFhirResourceTreeP
             // Compute if current node's fhir type is 'list'
             const nodeIsTypeList = (regexResult && regexResult.length > 1) ? regexResult[2].startsWith('list') && json[key] && json[key].length > 0 : false
 
+            const nodePath = [...pathAcc, regexResult ? regexResult[1] : key]
+
             return {
-                childNodes: hasChildren ? FhirResourceTree.genObjNodes(nodeIsTypeList ? json[key][0] : json[key]) : null,
+                childNodes: hasChildren ? FhirResourceTree.genObjNodes(nodeIsTypeList ? json[key][0] : json[key], nodePath) : null,
                 hasCaret: hasChildren,
                 icon: hasChildren ? 'folder-open' : 'tag',
                 id: FhirResourceTree.getId(),
@@ -65,16 +68,36 @@ export default class FhirResourceTree extends React.Component<IFhirResourceTreeP
                     <div>{regexResult ? regexResult[2] : ''}</div>
                 </div>,
                 nodeData: {
-                    name: key,
+                    name: regexResult ? regexResult[1] : key,
+                    type: regexResult ? regexResult[2] : '',
+                    path: nodePath,
                 },
             }
         })
     }
 
-    static getDerivedStateFromProps(props: IFhirResourceTreeProps, state: IFhirResourceTreeState) {
+    private static forEachNode(nodes: ITreeNode[], callback: (node: ITreeNode) => void) {
+        if (nodes == null) {
+            return;
+        }
+
+        for (const node of nodes) {
+            callback(node);
+            FhirResourceTree.forEachNode(node.childNodes, callback);
+        }
+    }
+
+    static getDerivedStateFromProps(props: IProps, state: IState) {
         if (props.json !== state.renderJson) {
             try {
-                const nodes = FhirResourceTree.genObjNodes(props.json)
+                let nodes = FhirResourceTree.genObjNodes(props.json, [])
+
+                FhirResourceTree.forEachNode(nodes, (node: ITreeNode<INodeData>) => {
+                    node.isSelected = node.nodeData.path == props.selectedNode
+                    node.isExpanded = props.selectedNode ?
+                        props.selectedNode.join('.').startsWith(node.nodeData.path.join('.')) :
+                        false
+                })
 
                 return {
                     nodes: nodes,
@@ -82,6 +105,7 @@ export default class FhirResourceTree extends React.Component<IFhirResourceTreeP
                     isBroken: false,
                 }
             } catch(err) {
+                console.log(err)
                 return {
                     nodes: [],
                     renderJson: props.json,
@@ -90,6 +114,38 @@ export default class FhirResourceTree extends React.Component<IFhirResourceTreeP
             }
         } else {
             return state
+        }
+    }
+
+    private handleNodeCollapse = (node: ITreeNode<INodeData>) => {
+        node.isExpanded = false;
+        this.setState(this.state);
+    }
+
+    private handleNodeExpand = (node: ITreeNode<INodeData>) => {
+        node.isExpanded = true;
+        this.setState(this.state);
+    }
+
+    private handleNodeClick = (node: ITreeNode<INodeData>, _nodePath: number[], e: React.MouseEvent<HTMLElement>) => {
+        // Can only select tree leaves
+        if (!node.hasCaret) {
+            const originallySelected = node.isSelected
+
+            if (!e.shiftKey) {
+                FhirResourceTree.forEachNode(this.state.nodes, (node: ITreeNode<INodeData>) => (node.isSelected = false));
+            }
+
+            node.isSelected = originallySelected == null ? true : !originallySelected;
+            this.setState(this.state);
+
+            this.props.onClickCallback(node.nodeData.path)
+        } else {
+            if (node.isExpanded) {
+                this.handleNodeCollapse(node)
+            } else {
+                this.handleNodeExpand(node)
+            }
         }
     }
 
@@ -103,51 +159,5 @@ export default class FhirResourceTree extends React.Component<IFhirResourceTreeP
                 className={Classes.ELEVATION_0}
             />
         );
-    }
-
-    private handleNodeClick = (nodeData: ITreeNode, _nodePath: number[], e: React.MouseEvent<HTMLElement>) => {
-        // Can only select tree leaves
-        if (!nodeData.hasCaret) {
-            const originallySelected = nodeData.isSelected
-
-            if (!e.shiftKey) {
-                this.forEachNode(this.state.nodes, n => (n.isSelected = false));
-            }
-
-            nodeData.isSelected = originallySelected == null ? true : !originallySelected;
-            this.setState(this.state);
-
-            // Building string path to clicked node.
-            let nodePath : string[] = []
-            let currentNodes : ITreeNode<nodeData>[] = this.state.nodes
-
-            for (var key of _nodePath) {
-                nodePath.push(currentNodes[key].nodeData.name as string)
-                currentNodes = currentNodes[key].childNodes
-            }
-
-            this.props.dispatch(changeCurrentFhirAttribute(originallySelected, nodePath))
-        }
-    };
-
-    private handleNodeCollapse = (nodeData: ITreeNode) => {
-        nodeData.isExpanded = false;
-        this.setState(this.state);
-    };
-
-    private handleNodeExpand = (nodeData: ITreeNode) => {
-        nodeData.isExpanded = true;
-        this.setState(this.state);
-    };
-
-    private forEachNode(nodes: ITreeNode[], callback: (node: ITreeNode) => void) {
-        if (nodes == null) {
-            return;
-        }
-
-        for (const node of nodes) {
-            callback(node);
-            this.forEachNode(node.childNodes, callback);
-        }
     }
 }
