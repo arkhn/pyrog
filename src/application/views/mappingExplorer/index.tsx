@@ -56,6 +56,8 @@ import './style.less'
 const getAttribute = require('./queries/getAttribute.graphql')
 const getResource = require('./queries/getResource.graphql')
 const mutationJoin = require('./queries/mutationJoin.graphql')
+const mutationDeleteInputColumn = require('./queries/mutationDeleteInputColumn.graphql')
+const mutationDeleteJoin = require('./queries/mutationDeleteJoin.graphql')
 const subscriptionAttribute = require('./queries/subscriptionAttribute.graphql')
 const subscriptionInputColumn = require('./queries/subscriptionInputColumn.graphql')
 const subscriptionResource = require('./queries/subscriptionResource.graphql')
@@ -63,7 +65,6 @@ const subscriptionJoin = require('./queries/subscriptionJoin.graphql')
 
 const mutationAttribute = require('./queries/mutationAttribute.graphql')
 const mutationAttributeNoId = require('./queries/mutationAttributeNoId.graphql')
-const mutationDeleteInputColumn = require('./queries/mutationDeleteInputColumn.graphql')
 const mutationInputColumn = require('./queries/mutationInputColumn.graphql')
 const mutationResource = require('./queries/mutationResource.graphql')
 
@@ -264,6 +265,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                     return <p>Something went wrong : {error.message}</p>
                 }
 
+                console.log(`getAttribute ${selectedFhirAttribute}`)
                 console.log(data)
 
                 let attribute = (data && data.getAttribute) ? data.getAttribute : null
@@ -337,6 +339,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                                             {(changeInputColumnJoin, {data, loading}) => {
                                                                 return <Button
                                                                     icon={'add'}
+                                                                    minimal={true}
                                                                     onClick={() => {
                                                                         changeInputColumnJoin({
                                                                             variables: {
@@ -371,96 +374,116 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                                                                 joinData
 
                                                                             return join ?
-                                                                                <Mutation
-                                                                                    mutation={mutationJoin}
-                                                                                >
-                                                                                    {(updateJoin, {data, loading}) => {
-                                                                                        return <div>
-                                                                                            <ColumnPicker
-                                                                                                ownerChangeCallback={(e: string) => {
-                                                                                                    updateJoin({
+                                                                                <div className={'join'}>
+                                                                                    <Mutation
+                                                                                        mutation={mutationDeleteJoin}
+                                                                                    >
+                                                                                        {(deleteJoin, {data, loading}) => {
+                                                                                            return <Button
+                                                                                                icon={'trash'}
+                                                                                                minimal={true}
+                                                                                                onClick={() => {
+                                                                                                    deleteJoin({
                                                                                                         variables: {
-                                                                                                            id: join.id,
-                                                                                                            data: {
-                                                                                                                sourceOwner: e,
-                                                                                                                sourceTable: null,
-                                                                                                                sourceColumn: null,
-                                                                                                            },
+                                                                                                            inputColumnId: column.id,
+                                                                                                            joinId: join.id,
                                                                                                         }
                                                                                                     })
                                                                                                 }}
-                                                                                                tableChangeCallback={(e: string) => {
-                                                                                                    updateJoin({
-                                                                                                        variables: {
-                                                                                                            id: join.id,
-                                                                                                            data: {
-                                                                                                                sourceTable: e,
-                                                                                                                sourceColumn: null,
-                                                                                                            },
-                                                                                                        }
-                                                                                                    })
-                                                                                                }}
-                                                                                                columnChangeCallback={(e: string) => {
-                                                                                                    updateJoin({
-                                                                                                        variables: {
-                                                                                                            id: join.id,
-                                                                                                            data: {
-                                                                                                                sourceColumn: e,
-                                                                                                            },
-                                                                                                        }
-                                                                                                    })
-                                                                                                }}
-                                                                                                initialColumn={{
-                                                                                                    owner: join.sourceOwner,
-                                                                                                    table: join.sourceTable,
-                                                                                                    column: join.sourceColumn,
-                                                                                                }}
-                                                                                                databaseSchema={selectedDatabase ? this.props.data.databases.schemaByDatabaseName[selectedDatabase] : {}}
                                                                                             />
-                                                                                            <ColumnPicker
-                                                                                                ownerChangeCallback={(e: string) => {
-                                                                                                    updateJoin({
-                                                                                                        variables: {
-                                                                                                            id: join.id,
-                                                                                                            data: {
-                                                                                                                targetOwner: e,
-                                                                                                                targetTable: null,
-                                                                                                                targetColumn: null,
-                                                                                                            },
-                                                                                                        }
-                                                                                                    })
-                                                                                                }}
-                                                                                                tableChangeCallback={(e: string) => {
-                                                                                                    updateJoin({
-                                                                                                        variables: {
-                                                                                                            id: join.id,
-                                                                                                            data: {
-                                                                                                                targetTable: e,
-                                                                                                                targetColumn: null,
-                                                                                                            },
-                                                                                                        }
-                                                                                                    })
-                                                                                                }}
-                                                                                                columnChangeCallback={(e: string) => {
-                                                                                                    updateJoin({
-                                                                                                        variables: {
-                                                                                                            id: join.id,
-                                                                                                            data: {
-                                                                                                                targetColumn: e,
-                                                                                                            },
-                                                                                                        }
-                                                                                                    })
-                                                                                                }}
-                                                                                                initialColumn={{
-                                                                                                    owner: join.targetOwner,
-                                                                                                    table: join.targetTable,
-                                                                                                    column: join.targetColumn,
-                                                                                                }}
-                                                                                                databaseSchema={selectedDatabase ? this.props.data.databases.schemaByDatabaseName[selectedDatabase] : {}}
-                                                                                            />
-                                                                                        </div>
-                                                                                    }}
-                                                                                </Mutation> :
+                                                                                        }}
+                                                                                    </Mutation>
+                                                                                    <Mutation
+                                                                                        mutation={mutationJoin}
+                                                                                    >
+                                                                                        {(updateJoin, {data, loading}) => {
+                                                                                            return <div className='join-columns'>
+                                                                                                <ColumnPicker
+                                                                                                    ownerChangeCallback={(e: string) => {
+                                                                                                        updateJoin({
+                                                                                                            variables: {
+                                                                                                                id: join.id,
+                                                                                                                data: {
+                                                                                                                    sourceOwner: e,
+                                                                                                                    sourceTable: null,
+                                                                                                                    sourceColumn: null,
+                                                                                                                },
+                                                                                                            }
+                                                                                                        })
+                                                                                                    }}
+                                                                                                    tableChangeCallback={(e: string) => {
+                                                                                                        updateJoin({
+                                                                                                            variables: {
+                                                                                                                id: join.id,
+                                                                                                                data: {
+                                                                                                                    sourceTable: e,
+                                                                                                                    sourceColumn: null,
+                                                                                                                },
+                                                                                                            }
+                                                                                                        })
+                                                                                                    }}
+                                                                                                    columnChangeCallback={(e: string) => {
+                                                                                                        updateJoin({
+                                                                                                            variables: {
+                                                                                                                id: join.id,
+                                                                                                                data: {
+                                                                                                                    sourceColumn: e,
+                                                                                                                },
+                                                                                                            }
+                                                                                                        })
+                                                                                                    }}
+                                                                                                    initialColumn={{
+                                                                                                        owner: join.sourceOwner,
+                                                                                                        table: join.sourceTable,
+                                                                                                        column: join.sourceColumn,
+                                                                                                    }}
+                                                                                                    databaseSchema={selectedDatabase ? this.props.data.databases.schemaByDatabaseName[selectedDatabase] : {}}
+                                                                                                />
+                                                                                                <ColumnPicker
+                                                                                                    ownerChangeCallback={(e: string) => {
+                                                                                                        updateJoin({
+                                                                                                            variables: {
+                                                                                                                id: join.id,
+                                                                                                                data: {
+                                                                                                                    targetOwner: e,
+                                                                                                                    targetTable: null,
+                                                                                                                    targetColumn: null,
+                                                                                                                },
+                                                                                                            }
+                                                                                                        })
+                                                                                                    }}
+                                                                                                    tableChangeCallback={(e: string) => {
+                                                                                                        updateJoin({
+                                                                                                            variables: {
+                                                                                                                id: join.id,
+                                                                                                                data: {
+                                                                                                                    targetTable: e,
+                                                                                                                    targetColumn: null,
+                                                                                                                },
+                                                                                                            }
+                                                                                                        })
+                                                                                                    }}
+                                                                                                    columnChangeCallback={(e: string) => {
+                                                                                                        updateJoin({
+                                                                                                            variables: {
+                                                                                                                id: join.id,
+                                                                                                                data: {
+                                                                                                                    targetColumn: e,
+                                                                                                                },
+                                                                                                            }
+                                                                                                        })
+                                                                                                    }}
+                                                                                                    initialColumn={{
+                                                                                                        owner: join.targetOwner,
+                                                                                                        table: join.targetTable,
+                                                                                                        column: join.targetColumn,
+                                                                                                    }}
+                                                                                                    databaseSchema={selectedDatabase ? this.props.data.databases.schemaByDatabaseName[selectedDatabase] : {}}
+                                                                                                />
+                                                                                            </div>
+                                                                                        }}
+                                                                                    </Mutation>
+                                                                                </div> :
                                                                                 null
                                                                         }}
                                                                     </Subscription>

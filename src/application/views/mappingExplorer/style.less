@@ -223,8 +223,19 @@ body {
                 flex-grow: 1;
             }
 
-            .input-column-joins > *:not(:last-child) {
-                margin-bottom: calc(@window-padding / 2);
+            .input-column-joins {
+                & > *:not(:last-child) {
+                    margin-bottom: calc(@window-padding / 2);
+                }
+
+                .join {
+                    display: flex;
+                    align-items: center;
+
+                    & > *:not(:last-child) {
+                        margin-right: calc(@window-padding / 2);
+                    }
+                }
             }
 
             .input-column-name > *:not(:last-child) {
