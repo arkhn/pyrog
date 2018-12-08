@@ -146,6 +146,10 @@ const checkAttribute = async (parent, args, context: Context, info) => {
 }
 
 const getAttribute = async (parent, args, context: Context, info) => {
+    // TODO: info should not be passed to this query;
+    // here, we do it because it can happen that attributePath
+    // is of size 1, therefore this is the only query that is ran
+    // by this function.
     const initialAttributes = await context.db.query.attributes({
         where: {
             name: args.attributePath[0],
@@ -156,7 +160,7 @@ const getAttribute = async (parent, args, context: Context, info) => {
                 }
             }
         }
-    })
+    }, info)
 
     if (initialAttributes.length > 1) {
         //Problem
@@ -252,7 +256,9 @@ const resolvers = {
         },
         async getAttribute(parent, args, context: Context, info) {
             // Build attribute in database if doesn't already exist
-            const att = await checkAttribute(parent, JSON.parse(JSON.stringify(args)), context, info)
+            // const att = await checkAttribute(parent, JSON.parse(JSON.stringify(args)), context, info)
+            console.log({info})
+            console.log(info.fieldNodes)
 
             return getAttribute(parent, args, context, info)
         },

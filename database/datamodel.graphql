@@ -47,7 +47,7 @@ type InputColumn {
     script: String
     staticValue: String
     # Children joins
-    joins: [Join!] @relation(name: "InputColumnToJoins")
+    joins: [Join!] @relation(name: "InputColumnToJoins", onDelete: CASCADE)
     # Parent attribute
     attribute: Attribute! @relation(name: "AttributeToInputColumns")
 }
