@@ -25,7 +25,7 @@ export const INFO_URL = (process.env.NODE_ENV === 'development') ?
 
 export const GRAPHQL_URL = (process.env.NODE_ENV === 'development') ?
     'ws://localhost:4000' :
-    'ws://localhost:4000'
+    'ws://graphql.live.arkh.org'
 
 // Redux initialisation
 if (process.env.NODE_ENV === 'development') {
