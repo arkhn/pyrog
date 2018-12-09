@@ -57,7 +57,7 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
             const nodePath = [...pathAcc, regexResult ? regexResult[1] : key]
 
             return {
-                childNodes: hasChildren ? FhirResourceTree.genObjNodes(nodeIsTypeList ? json[key][0] : json[key], nodePath) : null,
+                childNodes: hasChildren ? FhirResourceTree.genObjNodes(json[key], nodePath) : null,
                 hasCaret: hasChildren,
                 icon: hasChildren ? 'folder-open' : 'tag',
                 id: FhirResourceTree.getId(),
