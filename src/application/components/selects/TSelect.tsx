@@ -56,6 +56,7 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
         return (
             <div>
                 <this.CustomSelect
+                    disabled={disabled}
                     items={items}
                     itemPredicate={filterItems}
                     itemRenderer={renderItem}
