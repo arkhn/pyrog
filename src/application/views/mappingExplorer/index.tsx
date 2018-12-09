@@ -1,6 +1,8 @@
 import {gql} from 'apollo-boost'
 import {
     Alignment,
+    Breadcrumbs,
+    IBreadcrumbProps,
     Button,
     Card,
     Code,
@@ -9,6 +11,7 @@ import {
     FormGroup,
     InputGroup,
     NonIdealState,
+    OverflowList,
     Spinner,
     Tab,
     Tabs,
@@ -244,6 +247,256 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
             }}
         </Query>
 
+        const inputColumnComponent = (attribute: any, column: any) => <div className='input-column'>
+            <Mutation
+                mutation={mutationDeleteInputColumn}
+            >
+                {(deleteInputColumn, {data, loading}) => {
+                    return <Button
+                        icon={'trash'}
+                        minimal={true}
+                        onClick={() => {
+                            deleteInputColumn({
+                                variables: {
+                                    attributeId: attribute.id,
+                                    inputColumnId: column.id,
+                                }
+                            })
+                        }}
+                    />
+                }}
+            </Mutation>
+            <Card elevation={Elevation.ONE} className='input-column-info'>
+                {
+                    column.staticValue ?
+                        <div className='input-column-name'>
+                            <Tag large={true}>Static</Tag>
+                            <Tag intent={'success'} large={true} minimal={true}>{column.staticValue}</Tag>
+                        </div> :
+                        <div>
+                            <div className='input-column-name'>
+                                <Breadcrumbs
+                                    breadcrumbRenderer={(item: IBreadcrumbProps) => {
+                                        return <div>
+                                            {item.text}
+                                        </div>
+                                    }}
+                                    items={[
+                                        {
+                                            text: <div className='stacked-tags'>
+                                                <Tag minimal={true}>OWNER</Tag>
+                                                <Tag intent={'success'} large={true}>{column.owner}</Tag>
+                                            </div>
+                                        },
+                                        {
+                                            text: <div className='stacked-tags'>
+                                                <Tag minimal={true}>TABLE</Tag>
+                                                <Tag intent={'success'} large={true}>{column.table}</Tag>
+                                            </div>
+                                        },
+                                        {
+                                            text: <div className='stacked-tags'>
+                                                <Tag minimal={true}>COLUMN</Tag>
+                                                <Tag intent={'success'} large={true}>{column.column}</Tag>
+                                            </div>
+                                        }
+                                    ]}
+                                />
+                                <Mutation
+                                    mutation={mutationInputColumn}
+                                >
+                                    {(changeInputColumnScript, {data, loading}) => {
+                                        return <div className='stacked-tags'>
+                                            <Tag>SCRIPT</Tag>
+                                            <StringSelect
+                                                disabled={true}
+                                                inputItem={column.script}
+                                                items={['script1.py', 'script2.py']}
+                                                loading={loading}
+                                                onChange={(e: string) => {
+                                                    changeInputColumnScript({
+                                                        variables: {
+                                                            id: column.id,
+                                                            data: {
+                                                                script: e,
+                                                            },
+                                                        },
+                                                    })
+                                                }}
+                                            />
+                                        </div>
+                                    }}
+                                </Mutation>
+                            </div>
+                            <div className='input-column-joins'>
+                                <Mutation
+                                    mutation={mutationInputColumn}
+                                >
+                                    {(changeInputColumnJoin, {data, loading}) => {
+                                        return <Button
+                                            icon={'add'}
+                                            onClick={() => {
+                                                changeInputColumnJoin({
+                                                    variables: {
+                                                        id: column.id,
+                                                        data: {
+                                                            joins: {
+                                                                create: [
+                                                                    {}
+                                                                ]
+                                                            }
+                                                        },
+                                                    },
+                                                })
+                                            }}
+                                        >
+                                            Add Join
+                                        </Button>
+                                    }}
+                                </Mutation>
+                                {
+                                    column.joins ?
+                                        column.joins.map((join: any, index: number) => {
+                                            let joinData = join
+                                            return <Subscription
+                                                key={index}
+                                                subscription={subscriptionJoin}
+                                                variables={{
+                                                    id: join.id,
+                                                }}
+                                            >
+                                                {({ data, loading }) => {
+                                                    joinData = (data && data.subscribeToJoin) ?
+                                                        data.subscribeToJoin.node :
+                                                        joinData
+
+                                                    return joinData ?
+                                                        joinComponent(joinData, column) :
+                                                        null
+                                                }}
+                                            </Subscription>
+                                        }) :
+                                        null
+                                }
+                            </div>
+                        </div>
+                }
+            </Card>
+        </div>
+
+        const joinColumnsComponent = (join: any, updateJoin: any) => <div className='join-columns'>
+            <ColumnPicker
+                ownerChangeCallback={(e: string) => {
+                    updateJoin({
+                        variables: {
+                            id: join.id,
+                            data: {
+                                sourceOwner: e,
+                                sourceTable: null,
+                                sourceColumn: null,
+                            },
+                        }
+                    })
+                }}
+                tableChangeCallback={(e: string) => {
+                    updateJoin({
+                        variables: {
+                            id: join.id,
+                            data: {
+                                sourceTable: e,
+                                sourceColumn: null,
+                            },
+                        }
+                    })
+                }}
+                columnChangeCallback={(e: string) => {
+                    updateJoin({
+                        variables: {
+                            id: join.id,
+                            data: {
+                                sourceColumn: e,
+                            },
+                        }
+                    })
+                }}
+                initialColumn={{
+                    owner: join.sourceOwner,
+                    table: join.sourceTable,
+                    column: join.sourceColumn,
+                }}
+                databaseSchema={selectedDatabase ? this.props.data.databases.schemaByDatabaseName[selectedDatabase] : {}}
+            />
+            <ColumnPicker
+                ownerChangeCallback={(e: string) => {
+                    updateJoin({
+                        variables: {
+                            id: join.id,
+                            data: {
+                                targetOwner: e,
+                                targetTable: null,
+                                targetColumn: null,
+                            },
+                        }
+                    })
+                }}
+                tableChangeCallback={(e: string) => {
+                    updateJoin({
+                        variables: {
+                            id: join.id,
+                            data: {
+                                targetTable: e,
+                                targetColumn: null,
+                            },
+                        }
+                    })
+                }}
+                columnChangeCallback={(e: string) => {
+                    updateJoin({
+                        variables: {
+                            id: join.id,
+                            data: {
+                                targetColumn: e,
+                            },
+                        }
+                    })
+                }}
+                initialColumn={{
+                    owner: join.targetOwner,
+                    table: join.targetTable,
+                    column: join.targetColumn,
+                }}
+                databaseSchema={selectedDatabase ? this.props.data.databases.schemaByDatabaseName[selectedDatabase] : {}}
+            />
+        </div>
+
+        const joinComponent = (joinData: any, column: any) => <div className={'join'}>
+            <Mutation
+                mutation={mutationDeleteJoin}
+            >
+                {(deleteJoin, {data, loading}) => {
+                    return <Button
+                        icon={'trash'}
+                        minimal={true}
+                        onClick={() => {
+                            deleteJoin({
+                                variables: {
+                                    inputColumnId: column.id,
+                                    joinId: joinData.id,
+                                }
+                            })
+                        }}
+                    />
+                }}
+            </Mutation>
+            <Mutation
+                mutation={mutationJoin}
+            >
+                {(updateJoin, {data, loading}) => {
+                    return joinColumnsComponent(joinData, updateJoin)
+                }}
+            </Mutation>
+        </div>
+
         const inputColumnsComponent = <Query
             query={getAttribute}
             variables={{
@@ -310,253 +563,44 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                                 data.inputColumnSubscription.node :
                                                 inputColumn
 
-                                            return column ? <div className='input-column'>
-                                                <Mutation
-                                                    mutation={mutationDeleteInputColumn}
-                                                >
-                                                    {(deleteInputColumn, {data, loading}) => {
-                                                        return <Button
-                                                            icon={'trash'}
-                                                            minimal={true}
-                                                            onClick={() => {
-                                                                deleteInputColumn({
-                                                                    variables: {
-                                                                        attributeId: attribute.id,
-                                                                        inputColumnId: column.id,
-                                                                    }
-                                                                })
-                                                            }}
-                                                        />
-                                                    }}
-                                                </Mutation>
-                                                <Card elevation={Elevation.ONE} className='input-column-info'>
-                                                    {
-                                                        column.staticValue ?
-                                                            <div className='input-column-name'>
-                                                                <Tag large={true}>Static</Tag>
-                                                                <Tag intent={'success'} large={true} minimal={true}>{column.staticValue}</Tag>
-                                                            </div> :
-                                                            <div>
-                                                                <div className='input-column-name'>
-                                                                    <Tag large={true} intent={'success'} >{column.owner}</Tag>
-                                                                    <Tag large={true} intent={'success'} >{column.table}</Tag>
-                                                                    <Tag large={true} intent={'success'} >{column.column}</Tag>
-                                                                </div>
-                                                                <div className='input-column-joins'>
-                                                                    <Mutation
-                                                                        mutation={mutationInputColumn}
-                                                                    >
-                                                                        {(changeInputColumnJoin, {data, loading}) => {
-                                                                            return <Button
-                                                                                icon={'add'}
-                                                                                minimal={true}
-                                                                                onClick={() => {
-                                                                                    changeInputColumnJoin({
-                                                                                        variables: {
-                                                                                            id: column.id,
-                                                                                            data: {
-                                                                                                joins: {
-                                                                                                    create: [
-                                                                                                        {}
-                                                                                                    ]
-                                                                                                }
-                                                                                            },
-                                                                                        },
-                                                                                    })
-                                                                                }}
-                                                                            />
-                                                                        }}
-                                                                    </Mutation>
-                                                                    {
-                                                                        column.joins ?
-                                                                            column.joins.map((join: any, index: number) => {
-                                                                                let joinData = join
-                                                                                return <Subscription
-                                                                                    key={index}
-                                                                                    subscription={subscriptionJoin}
-                                                                                    variables={{
-                                                                                        id: join.id,
-                                                                                    }}
-                                                                                >
-                                                                                    {({ data, loading }) => {
-                                                                                        joinData = (data && data.subscribeToJoin) ?
-                                                                                            data.subscribeToJoin.node :
-                                                                                            joinData
-
-                                                                                        return join ?
-                                                                                            <div className={'join'}>
-                                                                                                <Mutation
-                                                                                                    mutation={mutationDeleteJoin}
-                                                                                                >
-                                                                                                    {(deleteJoin, {data, loading}) => {
-                                                                                                        return <Button
-                                                                                                            icon={'trash'}
-                                                                                                            minimal={true}
-                                                                                                            onClick={() => {
-                                                                                                                deleteJoin({
-                                                                                                                    variables: {
-                                                                                                                        inputColumnId: column.id,
-                                                                                                                        joinId: join.id,
-                                                                                                                    }
-                                                                                                                })
-                                                                                                            }}
-                                                                                                        />
-                                                                                                    }}
-                                                                                                </Mutation>
-                                                                                                <Mutation
-                                                                                                    mutation={mutationJoin}
-                                                                                                >
-                                                                                                    {(updateJoin, {data, loading}) => {
-                                                                                                        return <div className='join-columns'>
-                                                                                                            <ColumnPicker
-                                                                                                                ownerChangeCallback={(e: string) => {
-                                                                                                                    updateJoin({
-                                                                                                                        variables: {
-                                                                                                                            id: join.id,
-                                                                                                                            data: {
-                                                                                                                                sourceOwner: e,
-                                                                                                                                sourceTable: null,
-                                                                                                                                sourceColumn: null,
-                                                                                                                            },
-                                                                                                                        }
-                                                                                                                    })
-                                                                                                                }}
-                                                                                                                tableChangeCallback={(e: string) => {
-                                                                                                                    updateJoin({
-                                                                                                                        variables: {
-                                                                                                                            id: join.id,
-                                                                                                                            data: {
-                                                                                                                                sourceTable: e,
-                                                                                                                                sourceColumn: null,
-                                                                                                                            },
-                                                                                                                        }
-                                                                                                                    })
-                                                                                                                }}
-                                                                                                                columnChangeCallback={(e: string) => {
-                                                                                                                    updateJoin({
-                                                                                                                        variables: {
-                                                                                                                            id: join.id,
-                                                                                                                            data: {
-                                                                                                                                sourceColumn: e,
-                                                                                                                            },
-                                                                                                                        }
-                                                                                                                    })
-                                                                                                                }}
-                                                                                                                initialColumn={{
-                                                                                                                    owner: join.sourceOwner,
-                                                                                                                    table: join.sourceTable,
-                                                                                                                    column: join.sourceColumn,
-                                                                                                                }}
-                                                                                                                databaseSchema={selectedDatabase ? this.props.data.databases.schemaByDatabaseName[selectedDatabase] : {}}
-                                                                                                            />
-                                                                                                            <ColumnPicker
-                                                                                                                ownerChangeCallback={(e: string) => {
-                                                                                                                    updateJoin({
-                                                                                                                        variables: {
-                                                                                                                            id: join.id,
-                                                                                                                            data: {
-                                                                                                                                targetOwner: e,
-                                                                                                                                targetTable: null,
-                                                                                                                                targetColumn: null,
-                                                                                                                            },
-                                                                                                                        }
-                                                                                                                    })
-                                                                                                                }}
-                                                                                                                tableChangeCallback={(e: string) => {
-                                                                                                                    updateJoin({
-                                                                                                                        variables: {
-                                                                                                                            id: join.id,
-                                                                                                                            data: {
-                                                                                                                                targetTable: e,
-                                                                                                                                targetColumn: null,
-                                                                                                                            },
-                                                                                                                        }
-                                                                                                                    })
-                                                                                                                }}
-                                                                                                                columnChangeCallback={(e: string) => {
-                                                                                                                    updateJoin({
-                                                                                                                        variables: {
-                                                                                                                            id: join.id,
-                                                                                                                            data: {
-                                                                                                                                targetColumn: e,
-                                                                                                                            },
-                                                                                                                        }
-                                                                                                                    })
-                                                                                                                }}
-                                                                                                                initialColumn={{
-                                                                                                                    owner: join.targetOwner,
-                                                                                                                    table: join.targetTable,
-                                                                                                                    column: join.targetColumn,
-                                                                                                                }}
-                                                                                                                databaseSchema={selectedDatabase ? this.props.data.databases.schemaByDatabaseName[selectedDatabase] : {}}
-                                                                                                            />
-                                                                                                        </div>
-                                                                                                    }}
-                                                                                                </Mutation>
-                                                                                            </div> :
-                                                                                            null
-                                                                                    }}
-                                                                                </Subscription>
-                                                                            }) :
-                                                                            null
-                                                                    }
-                                                                </div>
-                                                                <div className='input-column-script'>
-                                                                    <Mutation
-                                                                        mutation={mutationInputColumn}
-                                                                    >
-                                                                        {(changeInputColumnScript, {data, loading}) => {
-                                                                            return <StringSelect
-                                                                                disabled={true}
-                                                                                inputItem={column.script}
-                                                                                items={['script1.py', 'script2.py']}
-                                                                                loading={loading}
-                                                                                onChange={(e: string) => {
-                                                                                    changeInputColumnScript({
-                                                                                        variables: {
-                                                                                            id: column.id,
-                                                                                            data: {
-                                                                                                script: e,
-                                                                                            },
-                                                                                        },
-                                                                                    })
-                                                                                }}
-                                                                            />
-                                                                        }}
-                                                                    </Mutation>
-                                                                </div>
-                                                            </div>
-                                                    }
-                                                </Card>
-                                            </div> : null
+                                            return column ?
+                                                inputColumnComponent(attribute, column) :
+                                                null
                                         }}
                                     </Subscription>
                                 })}
                             </div>
-                            <div id='input-column-merging-script'>
-                                <Mutation
-                                    mutation={mutationAttribute}
-                                >
-                                    {(mutationAttribute, {data, loading}) => {
-                                        return <StringSelect
-                                            disabled={true}
-                                            inputItem={(attribute && attribute.mergingScript) ? attribute.mergingScript : ''}
-                                            items={['mergingScript.py']}
-                                            loading={loading}
-                                            onChange={(e: string) => {
-                                                mutationAttribute({
-                                                    variables: {
-                                                        id: attribute.id,
-                                                        data: {
-                                                            mergingScript: e,
-                                                        },
-                                                    },
-                                                })
+                            {
+                                attribute.inputColumns && attribute.inputColumns.length > 1 ?
+                                    <div id='input-column-merging-script'>
+                                        <Mutation
+                                            mutation={mutationAttribute}
+                                        >
+                                            {(mutationAttribute, {data, loading}) => {
+                                                return <div className='stacked-tags'>
+                                                    <Tag>SCRIPT</Tag>
+                                                    <StringSelect
+                                                        disabled={true}
+                                                        inputItem={(attribute && attribute.mergingScript) ? attribute.mergingScript : ''}
+                                                        items={['mergingScript.py']}
+                                                        loading={loading}
+                                                        onChange={(e: string) => {
+                                                            mutationAttribute({
+                                                                variables: {
+                                                                    id: attribute.id,
+                                                                    data: {
+                                                                        mergingScript: e,
+                                                                    },
+                                                                },
+                                                            })
+                                                        }}
+                                                    />
+                                                </div>
                                             }}
-                                        />
-                                    }}
-                                </Mutation>
-                            </div>
+                                        </Mutation>
+                                    </div> :
+                                    null
+                            }
                         </div>
                     }}
                 </Subscription> :
@@ -567,7 +611,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
         const columnPickingTab = <div id={'column-picker'}>
             <Card elevation={Elevation.ONE}>
                 <FormGroup
-                    label='Choose column'
+                    label={<h3>Simple Column Picker</h3>}
                     labelFor='text-input'
                     inline={true}
                 >
@@ -588,7 +632,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                     columnPicker: {
                                         ...this.state.columnPicker,
                                         table: e,
-                                        colum: null,
+                                        column: null,
                                     }
                                 })
                             }}
@@ -607,7 +651,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                         >
                             {(mutationAttribute, { data, loading }) => {
                                 return <Button
-                                    disabled={false}
+                                    disabled={!columnPicker.column || !selectedFhirAttribute}
                                     icon={'add'}
                                     onClick={() => mutationAttribute({
                                         variables: {
@@ -635,7 +679,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
             </Card>
             <Card elevation={Elevation.ONE}>
                 <FormGroup
-                    label='Static value'
+                    label={<h3>Column With Static Value</h3>}
                     labelFor='text-input'
                     inline={true}
                 >
@@ -660,7 +704,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                         >
                             {(mutationAttribute, { data, loading }) => {
                                 return <Button
-                                    disabled={false}
+                                    disabled={columnPicker.staticValue.length == 0}
                                     icon={'add'}
                                     onClick={() => mutationAttribute({
                                         variables: {

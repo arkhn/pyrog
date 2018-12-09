@@ -126,6 +126,14 @@ body {
             & > *:not(:last-child) {
                 margin-bottom: @window-padding;
             }
+
+            .bp3-card h3 {
+                margin: 0;
+            }
+
+            .bp3-label {
+                min-width: 250px;
+            }
         }
 
         #column-selection {
@@ -199,22 +207,35 @@ body {
     #input-column-rows {
         flex-grow: 1;
         margin-right: calc(@window-padding / 2);
+
+        & > *:not(:last-child) {
+            margin-bottom: calc(@window-padding / 2);
+        }
     }
 
     #input-column-merging-script {
         display: flex;
         align-items: center;
+
+        border-left: 1px solid @gray4;
+        padding: calc(@window-padding / 2);
+        margin-left: calc(@window-padding / 2);
+    }
+
+    .stacked-tags {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+
+        .bp3-tag {
+            text-align: center;
+        }
     }
 
     .input-column {
         display: flex;
         flex-direction: row;
         align-items: center;
-        margin-bottom: calc(@window-padding / 2);
-
-        & > *:not(:last-child) {
-            margin-right: calc(@window-padding / 2);
-        }
 
         .input-column-info {
             width: 100%;
@@ -226,20 +247,30 @@ body {
 
             display: flex;
             flex-direction: row;
-            align-items: center;
+            align-items: flex-start;
 
-            .input-column-script {
-                // flex-basis: 10%;
-                flex-grow: 0;
+            & > *:not(:last-child) {
+                margin-right: @window-padding;
             }
 
-
-            .input-column-joins, .input-column-name {
-                flex-basis: 30%;
+            .input-column-name  {
+                display: flex;
+                flex-basis: 50%;
                 flex-grow: 1;
+                align-items: center;
+
+                & > *:not(:last-child) {
+                    margin-right: calc(@window-padding / 2);
+                }
             }
 
             .input-column-joins {
+                display: flex;
+                flex-basis: 50%;
+                flex-grow: 1;
+                flex-direction: column;
+                align-items: stretch;
+
                 & > *:not(:last-child) {
                     margin-bottom: calc(@window-padding / 2);
                 }
@@ -252,10 +283,6 @@ body {
                         margin-right: calc(@window-padding / 2);
                     }
                 }
-            }
-
-            .input-column-name > *:not(:last-child) {
-                margin-right: calc(@window-padding / 2);
             }
         }
     }
