@@ -48,6 +48,8 @@ export default class ColumnPicker extends React.Component<IProps, IState> {
     private changeOwner = (e: string) => {
         this.setState({
             owner: e,
+            table: null,
+            column: null,
         })
 
         if (this.props.ownerChangeCallback) {
@@ -58,6 +60,7 @@ export default class ColumnPicker extends React.Component<IProps, IState> {
     private changeTable = (e: string) => {
         this.setState({
             table: e,
+            column: null,
         })
 
         if (this.props.tableChangeCallback) {
