@@ -1,5 +1,5 @@
 # source: https://eu1.prisma.sh/public-neonswoop-398/graphql-typescript-boilerplate/dev
-# timestamp: Fri Dec 07 2018 21:44:08 GMT+0100 (CET)
+# timestamp: Sun Dec 09 2018 15:46:54 GMT+0100 (CET)
 
 type AggregateAttribute {
   count: Int!
@@ -884,9 +884,9 @@ input DatabaseWhereUniqueInput {
 
 type InputColumn implements Node {
   id: ID!
-  owner: String!
-  table: String!
-  column: String!
+  owner: String
+  table: String
+  column: String
   script: String
   staticValue: String
   joins(where: JoinWhereInput, orderBy: JoinOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Join!]
@@ -904,9 +904,9 @@ type InputColumnConnection {
 }
 
 input InputColumnCreateInput {
-  owner: String!
-  table: String!
-  column: String!
+  owner: String
+  table: String
+  column: String
   script: String
   staticValue: String
   joins: JoinCreateManyWithoutInputColumnInput
@@ -924,18 +924,18 @@ input InputColumnCreateOneWithoutJoinsInput {
 }
 
 input InputColumnCreateWithoutAttributeInput {
-  owner: String!
-  table: String!
-  column: String!
+  owner: String
+  table: String
+  column: String
   script: String
   staticValue: String
   joins: JoinCreateManyWithoutInputColumnInput
 }
 
 input InputColumnCreateWithoutJoinsInput {
-  owner: String!
-  table: String!
-  column: String!
+  owner: String
+  table: String
+  column: String
   script: String
   staticValue: String
   attribute: AttributeCreateOneWithoutInputColumnsInput!
@@ -971,9 +971,9 @@ enum InputColumnOrderByInput {
 
 type InputColumnPreviousValues {
   id: ID!
-  owner: String!
-  table: String!
-  column: String!
+  owner: String
+  table: String
+  column: String
   script: String
   staticValue: String
 }

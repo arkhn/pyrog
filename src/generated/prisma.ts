@@ -987,9 +987,9 @@ input DatabaseWhereUniqueInput {
 
 type InputColumn implements Node {
   id: ID!
-  owner: String!
-  table: String!
-  column: String!
+  owner: String
+  table: String
+  column: String
   script: String
   staticValue: String
   joins(where: JoinWhereInput, orderBy: JoinOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Join!]
@@ -1007,9 +1007,9 @@ type InputColumnConnection {
 }
 
 input InputColumnCreateInput {
-  owner: String!
-  table: String!
-  column: String!
+  owner: String
+  table: String
+  column: String
   script: String
   staticValue: String
   joins: JoinCreateManyWithoutInputColumnInput
@@ -1027,18 +1027,18 @@ input InputColumnCreateOneWithoutJoinsInput {
 }
 
 input InputColumnCreateWithoutAttributeInput {
-  owner: String!
-  table: String!
-  column: String!
+  owner: String
+  table: String
+  column: String
   script: String
   staticValue: String
   joins: JoinCreateManyWithoutInputColumnInput
 }
 
 input InputColumnCreateWithoutJoinsInput {
-  owner: String!
-  table: String!
-  column: String!
+  owner: String
+  table: String
+  column: String
   script: String
   staticValue: String
   attribute: AttributeCreateOneWithoutInputColumnsInput!
@@ -1074,9 +1074,9 @@ enum InputColumnOrderByInput {
 
 type InputColumnPreviousValues {
   id: ID!
-  owner: String!
-  table: String!
-  column: String!
+  owner: String
+  table: String
+  column: String
   script: String
   staticValue: String
 }
@@ -3779,9 +3779,9 @@ export interface ProfileWhereInput {
 }
 
 export interface InputColumnCreateInput {
-  owner: String
-  table: String
-  column: String
+  owner?: String
+  table?: String
+  column?: String
   script?: String
   staticValue?: String
   joins?: JoinCreateManyWithoutInputColumnInput
@@ -4161,9 +4161,9 @@ export interface DatabaseWhereUniqueInput {
 }
 
 export interface InputColumnCreateWithoutJoinsInput {
-  owner: String
-  table: String
-  column: String
+  owner?: String
+  table?: String
+  column?: String
   script?: String
   staticValue?: String
   attribute: AttributeCreateOneWithoutInputColumnsInput
@@ -4415,9 +4415,9 @@ export interface InputColumnUpdateWithWhereUniqueWithoutAttributeInput {
 }
 
 export interface InputColumnCreateWithoutAttributeInput {
-  owner: String
-  table: String
-  column: String
+  owner?: String
+  table?: String
+  column?: String
   script?: String
   staticValue?: String
   joins?: JoinCreateManyWithoutInputColumnInput
@@ -5458,9 +5458,9 @@ export interface Attribute extends Node {
 
 export interface InputColumnPreviousValues {
   id: ID_Output
-  owner: String
-  table: String
-  column: String
+  owner?: String
+  table?: String
+  column?: String
   script?: String
   staticValue?: String
 }
@@ -5474,9 +5474,9 @@ export interface InputColumnSubscriptionPayload {
 
 export interface InputColumn extends Node {
   id: ID_Output
-  owner: String
-  table: String
-  column: String
+  owner?: String
+  table?: String
+  column?: String
   script?: String
   staticValue?: String
   joins?: Join[]

@@ -18,6 +18,7 @@ type Attribute {
     id: ID! @unique
     name: String!
     mergingScript: String
+    isProfile: Boolean
     # Parent resource
     resource: Resource @relation(name: "ResourceToAttributes")
     # Children attributes
@@ -26,24 +27,13 @@ type Attribute {
     attribute: Attribute @relation(name: "AttributeToAttributes")
     # Children input columns
     inputColumns: [InputColumn!] @relation(name: "AttributeToInputColumns")
-    # Children profiles
-    profiles: [Profile!] @relation(name: "AttributeToProfiles")
-}
-
-type Profile {
-    id: ID! @unique
-    name: String
-    # Parent attribute
-    attribute: Attribute! @relation(name: "AttributeToProfiles")
-    # Children attributes
-    attributes: [Attribute!]! @relation(name: "ProfileToAttributes")
 }
 
 type InputColumn {
     id: ID! @unique
-    owner: String!
-    table: String!
-    column: String!
+    owner: String
+    table: String
+    column: String
     script: String
     staticValue: String
     # Children joins
