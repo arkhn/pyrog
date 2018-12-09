@@ -118,7 +118,14 @@ body {
 
         #column-picker {
             display: flex;
+            flex-direction: column;
             justify-content: center;
+
+            padding: @window-padding;
+
+            & > *:not(:last-child) {
+                margin-bottom: @window-padding;
+            }
         }
 
         #column-selection {
@@ -194,6 +201,11 @@ body {
         margin-right: calc(@window-padding / 2);
     }
 
+    #input-column-merging-script {
+        display: flex;
+        align-items: center;
+    }
+
     .input-column {
         display: flex;
         flex-direction: row;
@@ -206,15 +218,19 @@ body {
 
         .input-column-info {
             width: 100%;
+            padding: 10px @window-padding;
+        }
+
+        .input-column-info > * {
+            width: 100%;
 
             display: flex;
             flex-direction: row;
-            align-items: stretch;
-            padding: 10px @window-padding;
+            align-items: center;
 
             .input-column-script {
-                flex-basis: 20%;
-                // flex-grow: 0;
+                // flex-basis: 10%;
+                flex-grow: 0;
             }
 
 
