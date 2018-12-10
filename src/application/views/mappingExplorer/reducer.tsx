@@ -14,12 +14,14 @@ const reducer = (state = initialState, action: ISimpleAction): IMappingExplorerS
             return {
                 ...state,
                 selectedDatabase: action.payload,
+                selectedFhirAttribute: [],
             }
 
         case 'UPDATE_FHIR_RESOURCE':
             return {
                 ...state,
                 selectedFhirResource: action.payload,
+                selectedFhirAttribute: [],
             }
 
         case 'UPDATE_FHIR_ATTRIBUTE':

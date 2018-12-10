@@ -60,6 +60,7 @@ import './style.less'
 // Requests
 const getAttribute = require('./queries/getAttribute.graphql')
 const getResource = require('./queries/getResource.graphql')
+const getTree = require('./queries/getTree.graphql')
 const mutationJoin = require('./queries/mutationJoin.graphql')
 const mutationDeleteInputColumn = require('./queries/mutationDeleteInputColumn.graphql')
 const mutationDeleteJoin = require('./queries/mutationDeleteJoin.graphql')
@@ -746,17 +747,28 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
             </Tabs>
         </div>
 
-        let fhirResourceTree = <FhirResourceTree
-            json={
-                selectedFhirResource ?
-                    data.fhirResources.jsonByResourceName[selectedFhirResource] :
-                    null
-            }
-            onClickCallback={(attributeFlatPath: any) => {
-                dispatch(updateFhirAttribute(attributeFlatPath))
+        const fhirResourceTree = <Query
+            query={getTree}
+            variables={{
+                database: selectedDatabase,
+                resource: selectedFhirResource,
             }}
-            selectedNode={selectedFhirAttribute}
-        />
+            skip={!selectedDatabase || !selectedFhirResource}
+        >
+            {({data, loading}) => {
+                return loading ?
+                    <Spinner /> :
+                    <FhirResourceTree
+                        json={
+                            data.getResource
+                        }
+                        onClickCallback={(attributeFlatPath: any) => {
+                            dispatch(updateFhirAttribute(attributeFlatPath))
+                        }}
+                        selectedNode={selectedFhirAttribute}
+                    />
+            }}
+        </Query>
 
         return <div id='mapping-explorer-container'>
             <div id='navbar' className={'bp3-dark'}>
