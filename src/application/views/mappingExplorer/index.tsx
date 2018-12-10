@@ -134,8 +134,8 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
     }
 
     public componentDidMount() {
-        this.props.dispatch(fetchDatabaseNames())
-        this.props.dispatch(fetchFhirResourceNames())
+        // this.props.dispatch(fetchDatabaseNames())
+        // this.props.dispatch(fetchFhirResourceNames())
 
         // this.props.dispatch(updateDatabase('Crossway'))
         // this.props.dispatch(changeFhirResource('Patient'))
@@ -812,7 +812,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                             }) : []}
                                             loading={loading || this.props.data.fhirResources.loadingFhirResourceNames || this.props.data.fhirResources.loadingFhirResourceJson}
                                             onChange={(resource: string) => {
-                                                dispatch(changeFhirResource(resource))
+                                                dispatch(updateFhirResource(resource))
                                             }}
                                         />
                                     }}
