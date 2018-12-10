@@ -1,5 +1,5 @@
 # source: https://eu1.prisma.sh/public-neonswoop-398/graphql-typescript-boilerplate/dev
-# timestamp: Sun Dec 09 2018 15:46:54 GMT+0100 (CET)
+# timestamp: Mon Dec 10 2018 14:16:44 GMT+0100 (CET)
 
 type AggregateAttribute {
   count: Int!
@@ -17,10 +17,6 @@ type AggregateJoin {
   count: Int!
 }
 
-type AggregateProfile {
-  count: Int!
-}
-
 type AggregateResource {
   count: Int!
 }
@@ -29,11 +25,14 @@ type Attribute implements Node {
   id: ID!
   name: String!
   mergingScript: String
+  isProfile: Boolean
+  type: String
+  comment: String
+  depth: Int
   resource: Resource
   attributes(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Attribute!]
   attribute: Attribute
   inputColumns(where: InputColumnWhereInput, orderBy: InputColumnOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [InputColumn!]
-  profiles(where: ProfileWhereInput, orderBy: ProfileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Profile!]
 }
 
 """A connection to a list of items."""
@@ -49,16 +48,14 @@ type AttributeConnection {
 input AttributeCreateInput {
   name: String!
   mergingScript: String
+  isProfile: Boolean
+  type: String
+  comment: String
+  depth: Int
   resource: ResourceCreateOneWithoutAttributesInput
   attributes: AttributeCreateManyWithoutAttributeInput
   attribute: AttributeCreateOneWithoutAttributesInput
   inputColumns: InputColumnCreateManyWithoutAttributeInput
-  profiles: ProfileCreateManyWithoutAttributeInput
-}
-
-input AttributeCreateManyInput {
-  create: [AttributeCreateInput!]
-  connect: [AttributeWhereUniqueInput!]
 }
 
 input AttributeCreateManyWithoutAttributeInput {
@@ -81,54 +78,52 @@ input AttributeCreateOneWithoutInputColumnsInput {
   connect: AttributeWhereUniqueInput
 }
 
-input AttributeCreateOneWithoutProfilesInput {
-  create: AttributeCreateWithoutProfilesInput
-  connect: AttributeWhereUniqueInput
-}
-
 input AttributeCreateWithoutAttributeInput {
   name: String!
   mergingScript: String
+  isProfile: Boolean
+  type: String
+  comment: String
+  depth: Int
   resource: ResourceCreateOneWithoutAttributesInput
   attributes: AttributeCreateManyWithoutAttributeInput
   inputColumns: InputColumnCreateManyWithoutAttributeInput
-  profiles: ProfileCreateManyWithoutAttributeInput
 }
 
 input AttributeCreateWithoutAttributesInput {
   name: String!
   mergingScript: String
+  isProfile: Boolean
+  type: String
+  comment: String
+  depth: Int
   resource: ResourceCreateOneWithoutAttributesInput
   attribute: AttributeCreateOneWithoutAttributesInput
   inputColumns: InputColumnCreateManyWithoutAttributeInput
-  profiles: ProfileCreateManyWithoutAttributeInput
 }
 
 input AttributeCreateWithoutInputColumnsInput {
   name: String!
   mergingScript: String
+  isProfile: Boolean
+  type: String
+  comment: String
+  depth: Int
   resource: ResourceCreateOneWithoutAttributesInput
   attributes: AttributeCreateManyWithoutAttributeInput
   attribute: AttributeCreateOneWithoutAttributesInput
-  profiles: ProfileCreateManyWithoutAttributeInput
-}
-
-input AttributeCreateWithoutProfilesInput {
-  name: String!
-  mergingScript: String
-  resource: ResourceCreateOneWithoutAttributesInput
-  attributes: AttributeCreateManyWithoutAttributeInput
-  attribute: AttributeCreateOneWithoutAttributesInput
-  inputColumns: InputColumnCreateManyWithoutAttributeInput
 }
 
 input AttributeCreateWithoutResourceInput {
   name: String!
   mergingScript: String
+  isProfile: Boolean
+  type: String
+  comment: String
+  depth: Int
   attributes: AttributeCreateManyWithoutAttributeInput
   attribute: AttributeCreateOneWithoutAttributesInput
   inputColumns: InputColumnCreateManyWithoutAttributeInput
-  profiles: ProfileCreateManyWithoutAttributeInput
 }
 
 """An edge in a connection."""
@@ -147,6 +142,14 @@ enum AttributeOrderByInput {
   name_DESC
   mergingScript_ASC
   mergingScript_DESC
+  isProfile_ASC
+  isProfile_DESC
+  type_ASC
+  type_DESC
+  comment_ASC
+  comment_DESC
+  depth_ASC
+  depth_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -157,6 +160,10 @@ type AttributePreviousValues {
   id: ID!
   name: String!
   mergingScript: String
+  isProfile: Boolean
+  type: String
+  comment: String
+  depth: Int
 }
 
 input AttributeScalarWhereInput {
@@ -288,6 +295,112 @@ input AttributeScalarWhereInput {
 
   """All values not ending with the given string."""
   mergingScript_not_ends_with: String
+  isProfile: Boolean
+
+  """All values that are not equal to given value."""
+  isProfile_not: Boolean
+  type: String
+
+  """All values that are not equal to given value."""
+  type_not: String
+
+  """All values that are contained in given list."""
+  type_in: [String!]
+
+  """All values that are not contained in given list."""
+  type_not_in: [String!]
+
+  """All values less than the given value."""
+  type_lt: String
+
+  """All values less than or equal the given value."""
+  type_lte: String
+
+  """All values greater than the given value."""
+  type_gt: String
+
+  """All values greater than or equal the given value."""
+  type_gte: String
+
+  """All values containing the given string."""
+  type_contains: String
+
+  """All values not containing the given string."""
+  type_not_contains: String
+
+  """All values starting with the given string."""
+  type_starts_with: String
+
+  """All values not starting with the given string."""
+  type_not_starts_with: String
+
+  """All values ending with the given string."""
+  type_ends_with: String
+
+  """All values not ending with the given string."""
+  type_not_ends_with: String
+  comment: String
+
+  """All values that are not equal to given value."""
+  comment_not: String
+
+  """All values that are contained in given list."""
+  comment_in: [String!]
+
+  """All values that are not contained in given list."""
+  comment_not_in: [String!]
+
+  """All values less than the given value."""
+  comment_lt: String
+
+  """All values less than or equal the given value."""
+  comment_lte: String
+
+  """All values greater than the given value."""
+  comment_gt: String
+
+  """All values greater than or equal the given value."""
+  comment_gte: String
+
+  """All values containing the given string."""
+  comment_contains: String
+
+  """All values not containing the given string."""
+  comment_not_contains: String
+
+  """All values starting with the given string."""
+  comment_starts_with: String
+
+  """All values not starting with the given string."""
+  comment_not_starts_with: String
+
+  """All values ending with the given string."""
+  comment_ends_with: String
+
+  """All values not ending with the given string."""
+  comment_not_ends_with: String
+  depth: Int
+
+  """All values that are not equal to given value."""
+  depth_not: Int
+
+  """All values that are contained in given list."""
+  depth_in: [Int!]
+
+  """All values that are not contained in given list."""
+  depth_not_in: [Int!]
+
+  """All values less than the given value."""
+  depth_lt: Int
+
+  """All values less than or equal the given value."""
+  depth_lte: Int
+
+  """All values greater than the given value."""
+  depth_gt: Int
+
+  """All values greater than or equal the given value."""
+  depth_gte: Int
 }
 
 type AttributeSubscriptionPayload {
@@ -329,45 +442,35 @@ input AttributeSubscriptionWhereInput {
   node: AttributeWhereInput
 }
 
-input AttributeUpdateDataInput {
-  name: String
-  mergingScript: String
-  resource: ResourceUpdateOneWithoutAttributesInput
-  attributes: AttributeUpdateManyWithoutAttributeInput
-  attribute: AttributeUpdateOneWithoutAttributesInput
-  inputColumns: InputColumnUpdateManyWithoutAttributeInput
-  profiles: ProfileUpdateManyWithoutAttributeInput
-}
-
 input AttributeUpdateInput {
   name: String
   mergingScript: String
+  isProfile: Boolean
+  type: String
+  comment: String
+  depth: Int
   resource: ResourceUpdateOneWithoutAttributesInput
   attributes: AttributeUpdateManyWithoutAttributeInput
   attribute: AttributeUpdateOneWithoutAttributesInput
   inputColumns: InputColumnUpdateManyWithoutAttributeInput
-  profiles: ProfileUpdateManyWithoutAttributeInput
 }
 
 input AttributeUpdateManyDataInput {
   name: String
   mergingScript: String
-}
-
-input AttributeUpdateManyInput {
-  create: [AttributeCreateInput!]
-  connect: [AttributeWhereUniqueInput!]
-  disconnect: [AttributeWhereUniqueInput!]
-  delete: [AttributeWhereUniqueInput!]
-  update: [AttributeUpdateWithWhereUniqueNestedInput!]
-  updateMany: [AttributeUpdateManyWithWhereNestedInput!]
-  deleteMany: [AttributeScalarWhereInput!]
-  upsert: [AttributeUpsertWithWhereUniqueNestedInput!]
+  isProfile: Boolean
+  type: String
+  comment: String
+  depth: Int
 }
 
 input AttributeUpdateManyMutationInput {
   name: String
   mergingScript: String
+  isProfile: Boolean
+  type: String
+  comment: String
+  depth: Int
 }
 
 input AttributeUpdateManyWithoutAttributeInput {
@@ -404,13 +507,6 @@ input AttributeUpdateOneRequiredWithoutInputColumnsInput {
   upsert: AttributeUpsertWithoutInputColumnsInput
 }
 
-input AttributeUpdateOneRequiredWithoutProfilesInput {
-  create: AttributeCreateWithoutProfilesInput
-  connect: AttributeWhereUniqueInput
-  update: AttributeUpdateWithoutProfilesDataInput
-  upsert: AttributeUpsertWithoutProfilesInput
-}
-
 input AttributeUpdateOneWithoutAttributesInput {
   create: AttributeCreateWithoutAttributesInput
   connect: AttributeWhereUniqueInput
@@ -423,51 +519,49 @@ input AttributeUpdateOneWithoutAttributesInput {
 input AttributeUpdateWithoutAttributeDataInput {
   name: String
   mergingScript: String
+  isProfile: Boolean
+  type: String
+  comment: String
+  depth: Int
   resource: ResourceUpdateOneWithoutAttributesInput
   attributes: AttributeUpdateManyWithoutAttributeInput
   inputColumns: InputColumnUpdateManyWithoutAttributeInput
-  profiles: ProfileUpdateManyWithoutAttributeInput
 }
 
 input AttributeUpdateWithoutAttributesDataInput {
   name: String
   mergingScript: String
+  isProfile: Boolean
+  type: String
+  comment: String
+  depth: Int
   resource: ResourceUpdateOneWithoutAttributesInput
   attribute: AttributeUpdateOneWithoutAttributesInput
   inputColumns: InputColumnUpdateManyWithoutAttributeInput
-  profiles: ProfileUpdateManyWithoutAttributeInput
 }
 
 input AttributeUpdateWithoutInputColumnsDataInput {
   name: String
   mergingScript: String
+  isProfile: Boolean
+  type: String
+  comment: String
+  depth: Int
   resource: ResourceUpdateOneWithoutAttributesInput
   attributes: AttributeUpdateManyWithoutAttributeInput
   attribute: AttributeUpdateOneWithoutAttributesInput
-  profiles: ProfileUpdateManyWithoutAttributeInput
-}
-
-input AttributeUpdateWithoutProfilesDataInput {
-  name: String
-  mergingScript: String
-  resource: ResourceUpdateOneWithoutAttributesInput
-  attributes: AttributeUpdateManyWithoutAttributeInput
-  attribute: AttributeUpdateOneWithoutAttributesInput
-  inputColumns: InputColumnUpdateManyWithoutAttributeInput
 }
 
 input AttributeUpdateWithoutResourceDataInput {
   name: String
   mergingScript: String
+  isProfile: Boolean
+  type: String
+  comment: String
+  depth: Int
   attributes: AttributeUpdateManyWithoutAttributeInput
   attribute: AttributeUpdateOneWithoutAttributesInput
   inputColumns: InputColumnUpdateManyWithoutAttributeInput
-  profiles: ProfileUpdateManyWithoutAttributeInput
-}
-
-input AttributeUpdateWithWhereUniqueNestedInput {
-  where: AttributeWhereUniqueInput!
-  data: AttributeUpdateDataInput!
 }
 
 input AttributeUpdateWithWhereUniqueWithoutAttributeInput {
@@ -488,17 +582,6 @@ input AttributeUpsertWithoutAttributesInput {
 input AttributeUpsertWithoutInputColumnsInput {
   update: AttributeUpdateWithoutInputColumnsDataInput!
   create: AttributeCreateWithoutInputColumnsInput!
-}
-
-input AttributeUpsertWithoutProfilesInput {
-  update: AttributeUpdateWithoutProfilesDataInput!
-  create: AttributeCreateWithoutProfilesInput!
-}
-
-input AttributeUpsertWithWhereUniqueNestedInput {
-  where: AttributeWhereUniqueInput!
-  update: AttributeUpdateDataInput!
-  create: AttributeCreateInput!
 }
 
 input AttributeUpsertWithWhereUniqueWithoutAttributeInput {
@@ -642,6 +725,112 @@ input AttributeWhereInput {
 
   """All values not ending with the given string."""
   mergingScript_not_ends_with: String
+  isProfile: Boolean
+
+  """All values that are not equal to given value."""
+  isProfile_not: Boolean
+  type: String
+
+  """All values that are not equal to given value."""
+  type_not: String
+
+  """All values that are contained in given list."""
+  type_in: [String!]
+
+  """All values that are not contained in given list."""
+  type_not_in: [String!]
+
+  """All values less than the given value."""
+  type_lt: String
+
+  """All values less than or equal the given value."""
+  type_lte: String
+
+  """All values greater than the given value."""
+  type_gt: String
+
+  """All values greater than or equal the given value."""
+  type_gte: String
+
+  """All values containing the given string."""
+  type_contains: String
+
+  """All values not containing the given string."""
+  type_not_contains: String
+
+  """All values starting with the given string."""
+  type_starts_with: String
+
+  """All values not starting with the given string."""
+  type_not_starts_with: String
+
+  """All values ending with the given string."""
+  type_ends_with: String
+
+  """All values not ending with the given string."""
+  type_not_ends_with: String
+  comment: String
+
+  """All values that are not equal to given value."""
+  comment_not: String
+
+  """All values that are contained in given list."""
+  comment_in: [String!]
+
+  """All values that are not contained in given list."""
+  comment_not_in: [String!]
+
+  """All values less than the given value."""
+  comment_lt: String
+
+  """All values less than or equal the given value."""
+  comment_lte: String
+
+  """All values greater than the given value."""
+  comment_gt: String
+
+  """All values greater than or equal the given value."""
+  comment_gte: String
+
+  """All values containing the given string."""
+  comment_contains: String
+
+  """All values not containing the given string."""
+  comment_not_contains: String
+
+  """All values starting with the given string."""
+  comment_starts_with: String
+
+  """All values not starting with the given string."""
+  comment_not_starts_with: String
+
+  """All values ending with the given string."""
+  comment_ends_with: String
+
+  """All values not ending with the given string."""
+  comment_not_ends_with: String
+  depth: Int
+
+  """All values that are not equal to given value."""
+  depth_not: Int
+
+  """All values that are contained in given list."""
+  depth_in: [Int!]
+
+  """All values that are not contained in given list."""
+  depth_not_in: [Int!]
+
+  """All values less than the given value."""
+  depth_lt: Int
+
+  """All values less than or equal the given value."""
+  depth_lte: Int
+
+  """All values greater than the given value."""
+  depth_gt: Int
+
+  """All values greater than or equal the given value."""
+  depth_gte: Int
   resource: ResourceWhereInput
   attributes_every: AttributeWhereInput
   attributes_some: AttributeWhereInput
@@ -650,9 +839,6 @@ input AttributeWhereInput {
   inputColumns_every: InputColumnWhereInput
   inputColumns_some: InputColumnWhereInput
   inputColumns_none: InputColumnWhereInput
-  profiles_every: ProfileWhereInput
-  profiles_some: ProfileWhereInput
-  profiles_none: ProfileWhereInput
 }
 
 input AttributeWhereUniqueInput {
@@ -2394,40 +2580,34 @@ scalar Long
 type Mutation {
   createDatabase(data: DatabaseCreateInput!): Database!
   createResource(data: ResourceCreateInput!): Resource!
-  createProfile(data: ProfileCreateInput!): Profile!
+  createAttribute(data: AttributeCreateInput!): Attribute!
   createInputColumn(data: InputColumnCreateInput!): InputColumn!
   createJoin(data: JoinCreateInput!): Join!
-  createAttribute(data: AttributeCreateInput!): Attribute!
   updateDatabase(data: DatabaseUpdateInput!, where: DatabaseWhereUniqueInput!): Database
   updateResource(data: ResourceUpdateInput!, where: ResourceWhereUniqueInput!): Resource
-  updateProfile(data: ProfileUpdateInput!, where: ProfileWhereUniqueInput!): Profile
+  updateAttribute(data: AttributeUpdateInput!, where: AttributeWhereUniqueInput!): Attribute
   updateInputColumn(data: InputColumnUpdateInput!, where: InputColumnWhereUniqueInput!): InputColumn
   updateJoin(data: JoinUpdateInput!, where: JoinWhereUniqueInput!): Join
-  updateAttribute(data: AttributeUpdateInput!, where: AttributeWhereUniqueInput!): Attribute
   deleteDatabase(where: DatabaseWhereUniqueInput!): Database
   deleteResource(where: ResourceWhereUniqueInput!): Resource
-  deleteProfile(where: ProfileWhereUniqueInput!): Profile
+  deleteAttribute(where: AttributeWhereUniqueInput!): Attribute
   deleteInputColumn(where: InputColumnWhereUniqueInput!): InputColumn
   deleteJoin(where: JoinWhereUniqueInput!): Join
-  deleteAttribute(where: AttributeWhereUniqueInput!): Attribute
   upsertDatabase(where: DatabaseWhereUniqueInput!, create: DatabaseCreateInput!, update: DatabaseUpdateInput!): Database!
   upsertResource(where: ResourceWhereUniqueInput!, create: ResourceCreateInput!, update: ResourceUpdateInput!): Resource!
-  upsertProfile(where: ProfileWhereUniqueInput!, create: ProfileCreateInput!, update: ProfileUpdateInput!): Profile!
+  upsertAttribute(where: AttributeWhereUniqueInput!, create: AttributeCreateInput!, update: AttributeUpdateInput!): Attribute!
   upsertInputColumn(where: InputColumnWhereUniqueInput!, create: InputColumnCreateInput!, update: InputColumnUpdateInput!): InputColumn!
   upsertJoin(where: JoinWhereUniqueInput!, create: JoinCreateInput!, update: JoinUpdateInput!): Join!
-  upsertAttribute(where: AttributeWhereUniqueInput!, create: AttributeCreateInput!, update: AttributeUpdateInput!): Attribute!
   updateManyDatabases(data: DatabaseUpdateManyMutationInput!, where: DatabaseWhereInput): BatchPayload!
   updateManyResources(data: ResourceUpdateManyMutationInput!, where: ResourceWhereInput): BatchPayload!
-  updateManyProfiles(data: ProfileUpdateManyMutationInput!, where: ProfileWhereInput): BatchPayload!
+  updateManyAttributes(data: AttributeUpdateManyMutationInput!, where: AttributeWhereInput): BatchPayload!
   updateManyInputColumns(data: InputColumnUpdateManyMutationInput!, where: InputColumnWhereInput): BatchPayload!
   updateManyJoins(data: JoinUpdateManyMutationInput!, where: JoinWhereInput): BatchPayload!
-  updateManyAttributes(data: AttributeUpdateManyMutationInput!, where: AttributeWhereInput): BatchPayload!
   deleteManyDatabases(where: DatabaseWhereInput): BatchPayload!
   deleteManyResources(where: ResourceWhereInput): BatchPayload!
-  deleteManyProfiles(where: ProfileWhereInput): BatchPayload!
+  deleteManyAttributes(where: AttributeWhereInput): BatchPayload!
   deleteManyInputColumns(where: InputColumnWhereInput): BatchPayload!
   deleteManyJoins(where: JoinWhereInput): BatchPayload!
-  deleteManyAttributes(where: AttributeWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -2457,358 +2637,22 @@ type PageInfo {
   endCursor: String
 }
 
-type Profile implements Node {
-  id: ID!
-  name: String
-  attribute: Attribute!
-  attributes(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Attribute!]
-}
-
-"""A connection to a list of items."""
-type ProfileConnection {
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """A list of edges."""
-  edges: [ProfileEdge]!
-  aggregate: AggregateProfile!
-}
-
-input ProfileCreateInput {
-  name: String
-  attribute: AttributeCreateOneWithoutProfilesInput!
-  attributes: AttributeCreateManyInput
-}
-
-input ProfileCreateManyWithoutAttributeInput {
-  create: [ProfileCreateWithoutAttributeInput!]
-  connect: [ProfileWhereUniqueInput!]
-}
-
-input ProfileCreateWithoutAttributeInput {
-  name: String
-  attributes: AttributeCreateManyInput
-}
-
-"""An edge in a connection."""
-type ProfileEdge {
-  """The item at the end of the edge."""
-  node: Profile!
-
-  """A cursor for use in pagination."""
-  cursor: String!
-}
-
-enum ProfileOrderByInput {
-  id_ASC
-  id_DESC
-  name_ASC
-  name_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
-}
-
-type ProfilePreviousValues {
-  id: ID!
-  name: String
-}
-
-input ProfileScalarWhereInput {
-  """Logical AND on all given filters."""
-  AND: [ProfileScalarWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [ProfileScalarWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [ProfileScalarWhereInput!]
-  id: ID
-
-  """All values that are not equal to given value."""
-  id_not: ID
-
-  """All values that are contained in given list."""
-  id_in: [ID!]
-
-  """All values that are not contained in given list."""
-  id_not_in: [ID!]
-
-  """All values less than the given value."""
-  id_lt: ID
-
-  """All values less than or equal the given value."""
-  id_lte: ID
-
-  """All values greater than the given value."""
-  id_gt: ID
-
-  """All values greater than or equal the given value."""
-  id_gte: ID
-
-  """All values containing the given string."""
-  id_contains: ID
-
-  """All values not containing the given string."""
-  id_not_contains: ID
-
-  """All values starting with the given string."""
-  id_starts_with: ID
-
-  """All values not starting with the given string."""
-  id_not_starts_with: ID
-
-  """All values ending with the given string."""
-  id_ends_with: ID
-
-  """All values not ending with the given string."""
-  id_not_ends_with: ID
-  name: String
-
-  """All values that are not equal to given value."""
-  name_not: String
-
-  """All values that are contained in given list."""
-  name_in: [String!]
-
-  """All values that are not contained in given list."""
-  name_not_in: [String!]
-
-  """All values less than the given value."""
-  name_lt: String
-
-  """All values less than or equal the given value."""
-  name_lte: String
-
-  """All values greater than the given value."""
-  name_gt: String
-
-  """All values greater than or equal the given value."""
-  name_gte: String
-
-  """All values containing the given string."""
-  name_contains: String
-
-  """All values not containing the given string."""
-  name_not_contains: String
-
-  """All values starting with the given string."""
-  name_starts_with: String
-
-  """All values not starting with the given string."""
-  name_not_starts_with: String
-
-  """All values ending with the given string."""
-  name_ends_with: String
-
-  """All values not ending with the given string."""
-  name_not_ends_with: String
-}
-
-type ProfileSubscriptionPayload {
-  mutation: MutationType!
-  node: Profile
-  updatedFields: [String!]
-  previousValues: ProfilePreviousValues
-}
-
-input ProfileSubscriptionWhereInput {
-  """Logical AND on all given filters."""
-  AND: [ProfileSubscriptionWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [ProfileSubscriptionWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [ProfileSubscriptionWhereInput!]
-
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
-  mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
-  updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
-  updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
-  updatedFields_contains_some: [String!]
-  node: ProfileWhereInput
-}
-
-input ProfileUpdateInput {
-  name: String
-  attribute: AttributeUpdateOneRequiredWithoutProfilesInput
-  attributes: AttributeUpdateManyInput
-}
-
-input ProfileUpdateManyDataInput {
-  name: String
-}
-
-input ProfileUpdateManyMutationInput {
-  name: String
-}
-
-input ProfileUpdateManyWithoutAttributeInput {
-  create: [ProfileCreateWithoutAttributeInput!]
-  connect: [ProfileWhereUniqueInput!]
-  disconnect: [ProfileWhereUniqueInput!]
-  delete: [ProfileWhereUniqueInput!]
-  update: [ProfileUpdateWithWhereUniqueWithoutAttributeInput!]
-  updateMany: [ProfileUpdateManyWithWhereNestedInput!]
-  deleteMany: [ProfileScalarWhereInput!]
-  upsert: [ProfileUpsertWithWhereUniqueWithoutAttributeInput!]
-}
-
-input ProfileUpdateManyWithWhereNestedInput {
-  where: ProfileScalarWhereInput!
-  data: ProfileUpdateManyDataInput!
-}
-
-input ProfileUpdateWithoutAttributeDataInput {
-  name: String
-  attributes: AttributeUpdateManyInput
-}
-
-input ProfileUpdateWithWhereUniqueWithoutAttributeInput {
-  where: ProfileWhereUniqueInput!
-  data: ProfileUpdateWithoutAttributeDataInput!
-}
-
-input ProfileUpsertWithWhereUniqueWithoutAttributeInput {
-  where: ProfileWhereUniqueInput!
-  update: ProfileUpdateWithoutAttributeDataInput!
-  create: ProfileCreateWithoutAttributeInput!
-}
-
-input ProfileWhereInput {
-  """Logical AND on all given filters."""
-  AND: [ProfileWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [ProfileWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [ProfileWhereInput!]
-  id: ID
-
-  """All values that are not equal to given value."""
-  id_not: ID
-
-  """All values that are contained in given list."""
-  id_in: [ID!]
-
-  """All values that are not contained in given list."""
-  id_not_in: [ID!]
-
-  """All values less than the given value."""
-  id_lt: ID
-
-  """All values less than or equal the given value."""
-  id_lte: ID
-
-  """All values greater than the given value."""
-  id_gt: ID
-
-  """All values greater than or equal the given value."""
-  id_gte: ID
-
-  """All values containing the given string."""
-  id_contains: ID
-
-  """All values not containing the given string."""
-  id_not_contains: ID
-
-  """All values starting with the given string."""
-  id_starts_with: ID
-
-  """All values not starting with the given string."""
-  id_not_starts_with: ID
-
-  """All values ending with the given string."""
-  id_ends_with: ID
-
-  """All values not ending with the given string."""
-  id_not_ends_with: ID
-  name: String
-
-  """All values that are not equal to given value."""
-  name_not: String
-
-  """All values that are contained in given list."""
-  name_in: [String!]
-
-  """All values that are not contained in given list."""
-  name_not_in: [String!]
-
-  """All values less than the given value."""
-  name_lt: String
-
-  """All values less than or equal the given value."""
-  name_lte: String
-
-  """All values greater than the given value."""
-  name_gt: String
-
-  """All values greater than or equal the given value."""
-  name_gte: String
-
-  """All values containing the given string."""
-  name_contains: String
-
-  """All values not containing the given string."""
-  name_not_contains: String
-
-  """All values starting with the given string."""
-  name_starts_with: String
-
-  """All values not starting with the given string."""
-  name_not_starts_with: String
-
-  """All values ending with the given string."""
-  name_ends_with: String
-
-  """All values not ending with the given string."""
-  name_not_ends_with: String
-  attribute: AttributeWhereInput
-  attributes_every: AttributeWhereInput
-  attributes_some: AttributeWhereInput
-  attributes_none: AttributeWhereInput
-}
-
-input ProfileWhereUniqueInput {
-  id: ID
-}
-
 type Query {
   databases(where: DatabaseWhereInput, orderBy: DatabaseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Database]!
   resources(where: ResourceWhereInput, orderBy: ResourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Resource]!
-  profiles(where: ProfileWhereInput, orderBy: ProfileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Profile]!
+  attributes(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Attribute]!
   inputColumns(where: InputColumnWhereInput, orderBy: InputColumnOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [InputColumn]!
   joins(where: JoinWhereInput, orderBy: JoinOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Join]!
-  attributes(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Attribute]!
   database(where: DatabaseWhereUniqueInput!): Database
   resource(where: ResourceWhereUniqueInput!): Resource
-  profile(where: ProfileWhereUniqueInput!): Profile
+  attribute(where: AttributeWhereUniqueInput!): Attribute
   inputColumn(where: InputColumnWhereUniqueInput!): InputColumn
   join(where: JoinWhereUniqueInput!): Join
-  attribute(where: AttributeWhereUniqueInput!): Attribute
   databasesConnection(where: DatabaseWhereInput, orderBy: DatabaseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DatabaseConnection!
   resourcesConnection(where: ResourceWhereInput, orderBy: ResourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ResourceConnection!
-  profilesConnection(where: ProfileWhereInput, orderBy: ProfileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProfileConnection!
+  attributesConnection(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AttributeConnection!
   inputColumnsConnection(where: InputColumnWhereInput, orderBy: InputColumnOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): InputColumnConnection!
   joinsConnection(where: JoinWhereInput, orderBy: JoinOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): JoinConnection!
-  attributesConnection(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AttributeConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -3458,8 +3302,7 @@ input ResourceWhereUniqueInput {
 type Subscription {
   database(where: DatabaseSubscriptionWhereInput): DatabaseSubscriptionPayload
   resource(where: ResourceSubscriptionWhereInput): ResourceSubscriptionPayload
-  profile(where: ProfileSubscriptionWhereInput): ProfileSubscriptionPayload
+  attribute(where: AttributeSubscriptionWhereInput): AttributeSubscriptionPayload
   inputColumn(where: InputColumnSubscriptionWhereInput): InputColumnSubscriptionPayload
   join(where: JoinSubscriptionWhereInput): JoinSubscriptionPayload
-  attribute(where: AttributeSubscriptionWhereInput): AttributeSubscriptionPayload
 }

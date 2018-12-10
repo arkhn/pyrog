@@ -1,7 +1,7 @@
 type Database {
     id: ID! @unique
     name: String! @unique
-    resources: [Resource!]! @relation(name: "DatabaseToResource")
+    resources: [Resource!]! @relation(name: "DatabaseToResource", onDelete: CASCADE)
 }
 
 type Resource {
@@ -10,7 +10,7 @@ type Resource {
     primaryKeyOwner: String
     primaryKeyTable: String
     primaryKeyColumn: String
-    attributes: [Attribute!]! @relation(name: "ResourceToAttributes")
+    attributes: [Attribute!]! @relation(name: "ResourceToAttributes", onDelete: CASCADE)
     database: Database! @relation(name: "DatabaseToResource")
 }
 
@@ -19,14 +19,17 @@ type Attribute {
     name: String!
     mergingScript: String
     isProfile: Boolean
+    type: String
+    comment: String
+    depth: Int
     # Parent resource
     resource: Resource @relation(name: "ResourceToAttributes")
     # Children attributes
-    attributes: [Attribute!] @relation(name: "AttributeToAttributes")
+    attributes: [Attribute!] @relation(name: "AttributeToAttributes", onDelete: CASCADE)
     # Parent attribute
     attribute: Attribute @relation(name: "AttributeToAttributes")
     # Children input columns
-    inputColumns: [InputColumn!] @relation(name: "AttributeToInputColumns")
+    inputColumns: [InputColumn!] @relation(name: "AttributeToInputColumns", onDelete: CASCADE)
 }
 
 type InputColumn {

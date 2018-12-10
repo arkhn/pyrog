@@ -3,6 +3,8 @@ import { importSchema } from 'graphql-import'
 import { Prisma } from './generated/prisma'
 import { Context } from './utils'
 
+import * as json_query from '../../fhir-store/graphql/Practitioner.json'
+
 const recData = (attributePath: string[]) => {
     if (attributePath.length == 0) {
         return null
@@ -195,6 +197,51 @@ const getAttribute = async (parent, args, context: Context, info) => {
     return attributes[0]
 }
 
+const recAttributes = async (context: Context, parentIsResource: boolean, parentId: string, acc: string[]) => {
+    console.log(`recAttributes ${parentIsResource} ${acc}`)
+
+    let attributes
+    if (parentIsResource) {
+        attributes = await context.db.query.attributes({
+            where: {
+                resource: {
+                    id: parentId,
+                }
+            }
+        })
+
+        console.log(`${attributes.length} children for ${acc}`)
+
+        return attributes.map(async (attribute: any) => {
+            let a = await recAttributes(context, false, attribute.id, [...acc, attribute.name])
+
+            return {
+                ...attribute,
+                attributes: a,
+            }
+        })
+    } else {
+        attributes = await context.db.query.attributes({
+            where: {
+                attribute: {
+                    id: parentId,
+                }
+            }
+        })
+
+        console.log(`${attributes.length} children for ${acc}`)
+
+        return attributes.map(async (attribute: any) => {
+            let a = await recAttributes(context, false, attribute.id, [...acc, attribute.name])
+
+            return {
+                ...attribute,
+                attributes: a,
+            }
+        })
+    }
+}
+
 const resolvers = {
     Query: {
         databases(parent, args, context: Context, info) {
@@ -275,12 +322,49 @@ const resolvers = {
             else {
                 // Problem
             }
+        },
+        async getRecResource(parent, args, context: Context, info) {
+            const resources = await context.db.query.resources({
+                where: {
+                    name: args.resource,
+                    database: {
+                        name: args.database,
+                    }
+                }
+            })
+
+            if (resources.length == 1) {
+                const resourceId = resources[0].id
+
+                let attributes = await recAttributes(context, true, resources[0].id, [resources[0].name])
+
+                return {
+                    ...resources[0],
+                    attributes,
+                }
+            }
+            else {
+                // Problem
+            }
         }
     },
     Mutation: {
         // async checkAttribute(parent, args, context: Context, info) {
         //     return checkAttribute(parent, args, context, info)
         // },
+        createResourceYeah(parent, args, context: Context, info) {
+            return context.db.mutation.createResource({
+                data: {
+                    database: {
+                        connect: {
+                            name: args.database
+                        }
+                    },
+                    name: (<any>json_query).name,
+                    attributes: (<any>json_query).attributes,
+                }
+            })
+        },
         async updateAttributeNoId(parent, args, context: Context, info) {
             let attribute = await getAttribute(parent, {
                 database: args.database,
@@ -337,20 +421,6 @@ const resolvers = {
         },
     },
     Subscription: {
-        // customAttributeSubscription: {
-        //     subscribe: async (parent, args, context, info) => {
-        //         const attribute = await checkAttribute(parent, args, context, info)
-        //         console.log(attribute.id)
-        //
-        //         return context.db.subscription.attribute({
-        //             where: {
-        //                 node: {
-        //                     id: attribute.id,
-        //                 }
-        //             }
-        //         }, info)
-        //     },
-        // },
         resource: {
             subscribe: (parent, args, context, info) => {
                 return context.db.subscription.resource({

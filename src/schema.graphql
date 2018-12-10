@@ -12,6 +12,7 @@ type Query {
 
     getAttribute(database: String!, resource: String!, attributePath: [String!]!): Attribute!
     getResource(database: String!, resource: String!): Resource!
+    getRecResource(database: String!, resource: String!): Resource!
 }
 
 type Mutation {
@@ -20,6 +21,7 @@ type Mutation {
     updateInputColumn(id: ID!, data: InputColumnUpdateInput): InputColumn!
     updateResource(id: ID!, data: ResourceUpdateInput): Resource!
     updateJoin(id: ID!, data: JoinUpdateInput): Join!
+    createResourceYeah(database: String!): Resource!
 }
 
 type Subscription {
