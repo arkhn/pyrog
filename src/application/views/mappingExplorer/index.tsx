@@ -29,19 +29,10 @@ import {connect} from 'react-redux'
 // Import actions
 import {
     changeDatabase,
-    changeFhirResource,
     updateDatabase,
     updateFhirAttribute,
     updateFhirResource,
 } from './actions'
-
-import {
-    fetchDatabaseNames,
-} from '../../actions/databases'
-
-import {
-    fetchFhirResourceNames,
-} from '../../actions/fhirResources'
 
 // Import components
 import ColumnPicker from '../../components/columnPicker'
@@ -134,9 +125,6 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
     }
 
     public componentDidMount() {
-        // this.props.dispatch(fetchDatabaseNames())
-        // this.props.dispatch(fetchFhirResourceNames())
-
         // this.props.dispatch(updateDatabase('Crossway'))
         // this.props.dispatch(changeFhirResource('Patient'))
         // this.props.dispatch(updateFhirAttribute('link.other'))
@@ -810,7 +798,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                             items={data && data.resources ? data.resources.map((resource: any) => {
                                                 return resource.name
                                             }) : []}
-                                            loading={loading || this.props.data.fhirResources.loadingFhirResourceNames || this.props.data.fhirResources.loadingFhirResourceJson}
+                                            loading={loading}
                                             onChange={(resource: string) => {
                                                 dispatch(updateFhirResource(resource))
                                             }}

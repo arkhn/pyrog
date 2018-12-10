@@ -2,7 +2,6 @@ import {combineReducers} from 'redux'
 
 // Data fetching reducers
 import databases from './databases'
-import fhirResources from './fhirResources'
 import recommendedColumns from './recommendedColumns'
 
 // View reducers
@@ -12,7 +11,6 @@ import mimic from '../views/mimic/reducer'
 // Data reducer (also called canonical state)
 const dataReducer = combineReducers({
     databases,
-    fhirResources,
     recommendedColumns,
 })
 
