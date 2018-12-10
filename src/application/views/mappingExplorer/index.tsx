@@ -157,13 +157,13 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
 
         const initialMessage = <NonIdealState
             description={'Please select a Database and Fhir Resource'}
-            icon={<span dangerouslySetInnerHTML={{__html: arkhnLogoBlack}}/>}
+            icon={<div dangerouslySetInnerHTML={{__html: arkhnLogoBlack}}/>}
             title={'Fhirball'}
         />
 
         const attributeMessage = <NonIdealState
             description={'Please select a Fhir Attribute'}
-            icon={<span dangerouslySetInnerHTML={{__html: arkhnLogoBlack}}/>}
+            icon={<div dangerouslySetInnerHTML={{__html: arkhnLogoBlack}}/>}
             title={'Fhirball'}
         />
 
@@ -612,7 +612,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
         const columnPickingTab = <div id={'column-picker'}>
             <Card elevation={Elevation.ONE}>
                 <FormGroup
-                    label={<h3>Simple Column Picker</h3>}
+                    label={<h3>Column Picker</h3>}
                     labelFor='text-input'
                     inline={true}
                 >
