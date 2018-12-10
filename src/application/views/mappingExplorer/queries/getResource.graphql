@@ -5,6 +5,10 @@ query getResource($database: String!, $resource: String!) {
         resource: $resource,
         database: $database,
     ) {
-        ...entireResource
+        id
+        name
+        primaryKeyOwner
+        primaryKeyTable
+        primaryKeyColumn
     }
 }

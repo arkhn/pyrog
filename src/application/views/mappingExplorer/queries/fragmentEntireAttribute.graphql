@@ -1,5 +1,11 @@
+#import "./fragmentEntireInputColumn.graphql"
+
 fragment entireAttribute on Attribute {
     id
     name
     mergingScript
+    isProfile
+    inputColumns {
+        ...entireInputColumn
+    }
 }

@@ -1,15 +1,7 @@
 #import "./fragmentEntireAttribute.graphql"
-#import "./fragmentEntireInputColumn.graphql"
-#import "./fragmentEntireJoin.graphql"
 
 mutation updateAttribute($database: String!, $resource: String!, $attributePath: [String!]!, $data: AttributeUpdateInput) {
     updateAttributeNoId(database: $database, resource: $resource, attributePath: $attributePath, data: $data) {
         ...entireAttribute
-        inputColumns {
-            ...entireInputColumn
-            joins {
-                ...entireJoin
-            }
-        }
     }
 }

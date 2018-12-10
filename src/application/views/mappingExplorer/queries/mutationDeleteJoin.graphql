@@ -1,5 +1,4 @@
 #import "./fragmentEntireInputColumn.graphql"
-#import "./fragmentEntireJoin.graphql"
 
 mutation deleteInputColumn($inputColumnId: ID!, $joinId: ID!) {
     updateInputColumn(
@@ -15,8 +14,5 @@ mutation deleteInputColumn($inputColumnId: ID!, $joinId: ID!) {
         }
     ) {
         ...entireInputColumn
-        joins {
-            ...entireJoin
-        }
     }
 }
