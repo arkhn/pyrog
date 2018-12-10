@@ -47,39 +47,56 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
         return FhirResourceTree.id;
     }
 
-    private static genObjNodes = (json: any, pathAcc: string[]): ITreeNode<INodeData> => {
-        const hasChildren = json.attributes && json.attributes.length > 0 ? true : false
+    private static breadFirstSearchInputColumn = (node: any) => {
+        if (node.inputColumns && node.inputColumns.length > 0) {
+            return true
+        } else if (node.attributes && node.attributes.length > 0) {
+            return node.attributes.some((attribute: any) => {
+                return FhirResourceTree.breadFirstSearchInputColumn(attribute)
+            })
+        } else {
+            return false
+        }
+    }
 
-        // const regex = /(.*)<(.*)>/
-        // const regexResult = regex.exec(key)
-        // // Compute if current node's fhir type is 'list'
-        // const nodeIsTypeList = (regexResult && regexResult.length > 1) ? regexResult[2].startsWith('list') && json[key] && json[key].length > 0 : false
+    private static genObjNodes = (node: any, pathAcc: string[]): ITreeNode<INodeData> => {
+        const hasChildren = (node.attributes && node.attributes.length > 0)
+        const hasInputColumns = (node.inputColumns && node.inputColumns.length > 0)
+        const nodePath = [...pathAcc, node.name]
 
-        const nodePath = [...pathAcc, json.name]
+        const secondaryLabel = hasInputColumns ?
+            <Icon icon='tick' /> :
+            (
+                hasChildren ?
+                    (
+                        FhirResourceTree.breadFirstSearchInputColumn(node) ?
+                            <Icon icon='dot' /> :
+                            null
+                    ) :
+                    null
+            )
 
         return {
-            childNodes: hasChildren ? json.attributes.map((attribute: any) => {
+            childNodes: hasChildren ? node.attributes.map((attribute: any) => {
                 return FhirResourceTree.genObjNodes(attribute, nodePath)
             }) : null,
             hasCaret: hasChildren,
-            icon: json.isProfile ? 'fork' : (hasChildren ? 'folder-open' : 'tag'),
+            icon: node.isProfile ? 'fork' : (hasChildren ? 'folder-open' : 'tag'),
             id: FhirResourceTree.getId(),
             isExpanded: false,
             isSelected: false,
             label: <div>
-                <div>{json.name}</div>
-                <div>{json.type}</div>
+                <div>{node.name}</div>
+                <div>{node.type}</div>
             </div>,
             nodeData: {
-                comment: json.comment,
-                isProfile: json.isProfile,
-                name: json.name,
+                comment: node.comment,
+                isProfile: node.isProfile,
+                name: node.name,
                 path: nodePath,
-                type: json.type,
+                type: node.type,
             },
-            secondaryLabel: (json.inputColumns && json.inputColumns.length > 0) ?
-                <Icon icon={'dot'} intent={'success'}/> :
-                null,
+            secondaryLabel: secondaryLabel,
         }
     }
 
