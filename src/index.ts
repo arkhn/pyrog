@@ -3,7 +3,7 @@ import { importSchema } from 'graphql-import'
 import { Prisma } from './generated/prisma'
 import { Context } from './utils'
 
-import * as json_query from '../../fhir-store/graphql/Practitioner.json'
+// import * as json_query from '../../fhir-store/graphql/Practitioner.json'
 
 const recData = (attributePath: string[]) => {
     if (attributePath.length == 0) {
@@ -352,19 +352,19 @@ const resolvers = {
         // async checkAttribute(parent, args, context: Context, info) {
         //     return checkAttribute(parent, args, context, info)
         // },
-        createResourceYeah(parent, args, context: Context, info) {
-            return context.db.mutation.createResource({
-                data: {
-                    database: {
-                        connect: {
-                            name: args.database
-                        }
-                    },
-                    name: (<any>json_query).name,
-                    attributes: (<any>json_query).attributes,
-                }
-            })
-        },
+        // createResourceYeah(parent, args, context: Context, info) {
+        //     return context.db.mutation.createResource({
+        //         data: {
+        //             database: {
+        //                 connect: {
+        //                     name: args.database
+        //                 }
+        //             },
+        //             name: (<any>json_query).name,
+        //             attributes: (<any>json_query).attributes,
+        //         }
+        //     })
+        // },
         async updateAttributeNoId(parent, args, context: Context, info) {
             let attribute = await getAttribute(parent, {
                 database: args.database,
