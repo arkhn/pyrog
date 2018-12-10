@@ -50,9 +50,7 @@ export const fetchDatabaseSchema = (databaseName: string, callback: any) : IActi
     return (dispatch: any, getState: any) => {
         dispatch(loadingDatabaseSchema())
 
-        const databaseFilename = getState().data.databases.databaseNames[databaseName].name
-
-        return fetch(`${INFO_URL}/schema/${databaseFilename}/json`)
+        return fetch(`${INFO_URL}/schema/${databaseName}/json`)
             .then((response: any) => {
                 return response.json()
             }).then((response: any) => {

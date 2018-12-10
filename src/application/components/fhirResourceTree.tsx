@@ -11,8 +11,11 @@ import * as React from 'react'
 import {isNullOrUndefined} from 'util';
 
 interface INodeData {
+    comment: string,
+    isProfile: boolean,
     name: string,
     path: string[],
+    type: string,
 }
 
 export interface IProps {
@@ -59,17 +62,20 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
                 return FhirResourceTree.genObjNodes(attribute, nodePath)
             }) : null,
             hasCaret: hasChildren,
-            icon: hasChildren ? 'folder-open' : 'tag',
+            icon: json.isProfile ? 'fork' : (hasChildren ? 'folder-open' : 'tag'),
             id: FhirResourceTree.getId(),
             isExpanded: false,
             isSelected: false,
             label: <div>
                 <div>{json.name}</div>
-                <div>Type</div>
+                <div>{json.type}</div>
             </div>,
             nodeData: {
+                comment: json.comment,
+                isProfile: json.isProfile,
                 name: json.name,
                 path: nodePath,
+                type: json.type,
             },
             secondaryLabel: (json.inputColumns && json.inputColumns.length > 0) ?
                 <Icon icon={'dot'} intent={'success'}/> :

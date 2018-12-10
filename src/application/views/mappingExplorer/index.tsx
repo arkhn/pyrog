@@ -59,7 +59,9 @@ import './style.less'
 
 // Requests
 const getAttribute = require('./queries/getAttribute.graphql')
+const getDatabaseNames = require('./queries/getDatabaseNames.graphql')
 const getResource = require('./queries/getResource.graphql')
+const getResourceNames = require('./queries/getResourceNames.graphql')
 const getTree = require('./queries/getTree.graphql')
 const mutationJoin = require('./queries/mutationJoin.graphql')
 const mutationDeleteInputColumn = require('./queries/mutationDeleteInputColumn.graphql')
@@ -770,73 +772,96 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
             }}
         </Query>
 
-        return <div id='mapping-explorer-container'>
-            <div id='navbar' className={'bp3-dark'}>
-                <div className='flex-row'>
-                    <ControlGroup>
-                        <StringSelect
-                            icon={'database'}
-                            inputItem={selectedDatabase}
-                            intent={'primary'}
-                            items={Object.keys(data.databases.databaseNames)}
-                            loading={data.databases.loadingDatabaseNames || data.databases.loadingDatabaseSchema}
-                            onChange={(databaseName: string) => {
-                                dispatch(changeDatabase(databaseName))
-                            }}
-                        />
-                        <StringSelect
-                            icon={'layout-hierarchy'}
-                            inputItem={selectedFhirResource}
-                            intent={'primary'}
-                            items={Object.keys(data.fhirResources.resourceNames)}
-                            loading={data.fhirResources.loadingFhirResourceNames || data.fhirResources.loadingFhirResourceJson}
-                            onChange={(resource: string) => {
-                                dispatch(changeFhirResource(resource))
-                            }}
-                        />
-                    </ControlGroup>
+        return <Query
+            query={getDatabaseNames}
+        >
+            {({ data, loading }) => {
+                console.log(data)
+                return <div id='mapping-explorer-container'>
+                    <div id='navbar' className={'bp3-dark'}>
+                        <div className='flex-row'>
+                            <ControlGroup>
+                                <StringSelect
+                                    icon={'database'}
+                                    inputItem={selectedDatabase}
+                                    intent={'primary'}
+                                    items={data.databases ? data.databases.map((database: any) => {
+                                        return database.name
+                                    }) : []}
+                                    loading={loading || this.props.data.databases.loadingDatabaseSchema}
+                                    onChange={(databaseName: string) => {
+                                        dispatch(changeDatabase(databaseName))
+                                    }}
+                                />
+                                <Query
+                                    query={getResourceNames}
+                                    variables={{
+                                        database: selectedDatabase
+                                    }}
+                                    skip={!selectedDatabase}
+                                >
+                                    {({ data, loading }) => {
+                                        console.log(data)
+                                        return <StringSelect
+                                            disabled={!selectedDatabase}
+                                            icon={'layout-hierarchy'}
+                                            inputItem={selectedFhirResource}
+                                            intent={'primary'}
+                                            items={data && data.resources ? data.resources.map((resource: any) => {
+                                                return resource.name
+                                            }) : []}
+                                            loading={loading || this.props.data.fhirResources.loadingFhirResourceNames || this.props.data.fhirResources.loadingFhirResourceJson}
+                                            onChange={(resource: string) => {
+                                                dispatch(changeFhirResource(resource))
+                                            }}
+                                        />
+                                    }}
+                                </Query>
+                            </ControlGroup>
+                            {
+                                selectedDatabase && selectedFhirResource ?
+                                    <Button
+                                        icon={'cog'}
+                                        minimal={!this.state.toggledNavBar}
+                                        onClick={() => this.setState({
+                                            toggledNavBar: !this.state.toggledNavBar,
+                                        })}
+                                    /> :
+                                    null
+                            }
+                        </div>
+                        {
+                            toggledNavBar && selectedDatabase && selectedFhirResource ?
+                                <div className='flex-row'>
+                                    <Card>
+                                        {primaryKeyComponent}
+                                    </Card>
+                                </div> :
+                                null
+                        }
+                    </div>
+
                     {
                         selectedDatabase && selectedFhirResource ?
-                            <Button
-                                icon={'cog'}
-                                minimal={!this.state.toggledNavBar}
-                                onClick={() => this.setState({
-                                    toggledNavBar: !this.state.toggledNavBar,
-                                })}
-                            /> :
-                            null
+                            <div id='main-container'>
+                                {
+                                    selectedFhirAttribute ?
+                                        <div id='left-part'>
+                                            {inputColumnsComponent}
+                                            {columnSelectionComponent}
+                                        </div> :
+                                        attributeMessage
+                                }
+                                <div id='right-part'>
+                                    <div id='fhir-resource-tree'>
+                                        {fhirResourceTree}
+                                    </div>
+                                </div>
+                            </div> :
+                            initialMessage
                     }
                 </div>
-                {
-                    toggledNavBar && selectedDatabase && selectedFhirResource ?
-                        <div className='flex-row'>
-                            <Card>
-                                {primaryKeyComponent}
-                            </Card>
-                        </div> :
-                        null
-                }
-            </div>
-
-            {
-                selectedDatabase && selectedFhirResource ?
-                    <div id='main-container'>
-                        {
-                            selectedFhirAttribute ?
-                                <div id='left-part'>
-                                    {inputColumnsComponent}
-                                    {columnSelectionComponent}
-                                </div> :
-                                attributeMessage
-                        }
-                        <div id='right-part'>
-                            <div id='fhir-resource-tree'>
-                                {fhirResourceTree}
-                            </div>
-                        </div>
-                    </div> :
-                    initialMessage
-            }
-        </div>
+            }}
+        </Query>
     }
 }

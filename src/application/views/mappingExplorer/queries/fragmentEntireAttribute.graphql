@@ -2,9 +2,11 @@
 
 fragment entireAttribute on Attribute {
     id
+    comment
     name
     mergingScript
     isProfile
+    type
     inputColumns {
         ...entireInputColumn
     }
