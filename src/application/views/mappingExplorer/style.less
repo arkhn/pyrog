@@ -147,6 +147,7 @@ body {
         color: @light-gray1;
         min-width: 300px;
         flex-basis: 25%;
+        overflow-y: scroll;
 
         .panel-header {
             background-color: @black;
@@ -166,6 +167,10 @@ body {
 #fhir-resource-tree {
     .bp3-tree {
         box-shadow: none;
+
+        .bp3-icon.bp3-intent-success {
+            color: @green5;
+        }
     }
 
     .bp3-tree-node-content:hover {
@@ -183,10 +188,10 @@ body {
     }
 
     .bp3-tree-node-label {
-        & > div {
+        .node-label {
         line-height: 1.1em;
 
-            & > div:nth-child(2) {
+            .node-type {
                 color: @gray2;
                 font-size: 0.8em;
             }

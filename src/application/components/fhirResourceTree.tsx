@@ -65,7 +65,7 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
         const nodePath = [...pathAcc, node.name]
 
         const secondaryLabel = hasInputColumns ?
-            <Icon icon='tick' /> :
+            <Icon icon='small-tick' intent={'success'}/> :
             (
                 hasChildren ?
                     (
@@ -81,14 +81,16 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
                 return FhirResourceTree.genObjNodes(attribute, nodePath)
             }) : null,
             hasCaret: hasChildren,
-            icon: node.isProfile ? 'fork' : (hasChildren ? 'folder-open' : 'tag'),
+            icon: node.isProfile ? 'multi-select' : (hasChildren ? 'folder-open' : 'tag'),
             id: FhirResourceTree.getId(),
             isExpanded: false,
             isSelected: false,
-            label: <div>
-                <div>{node.name}</div>
-                <div>{node.type}</div>
-            </div>,
+            label: <Tooltip content={node.comment}>
+                <div className={'node-label'}>
+                    <div>{node.name}</div>
+                    <div className={'node-type'}>{node.type}</div>
+                </div>
+            </Tooltip>,
             nodeData: {
                 comment: node.comment,
                 isProfile: node.isProfile,
@@ -180,11 +182,11 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
     public render() {
         return (
             <Tree
+                className={Classes.ELEVATION_0}
                 contents={this.state.nodes}
                 onNodeClick={this.handleNodeClick}
                 onNodeCollapse={this.handleNodeCollapse}
                 onNodeExpand={this.handleNodeExpand}
-                className={Classes.ELEVATION_0}
             />
         );
     }
