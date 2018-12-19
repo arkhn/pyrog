@@ -3,95 +3,7 @@ import { importSchema } from 'graphql-import'
 import { Prisma } from './generated/prisma'
 import { Context } from './utils'
 
-// const checkAttribute = async (parent, args, context: Context, info) => {
-//     // Make sure database, resource and attribute exist
-//     // before returning attribute
-//     const databaseExists = await context.db.exists.Database({
-//         name: args.database,
-//     })
-//
-//     if (databaseExists) {
-//         console.log('Database OK')
-//
-//         // This query is supposed to be injective
-//         const resources = await context.db.query.resources({
-//             where: {
-//                 name: args.resource,
-//                 database: {
-//                     name: args.database,
-//                 }
-//             }
-//         })
-//
-//         console.log('Resource loaded')
-//
-//         if (resources.length > 0) {
-//             console.log(`Resource OK (${resources.length})`)
-//
-//             const attributes = await context.db.query.attributes({
-//                 where: {
-//                     name: args.attribute,
-//                     resource: {
-//                         id: resources[0].id,
-//                     },
-//                 }
-//             })
-//
-//             console.log(`Attribute loaded (${attributes.length})`)
-//
-//             if (attributes.length > 0) {
-//                 console.log(`Attribute OK (${attributes.length})`)
-//                 return attributes[0]
-//             } else {
-//                 console.log('Attribute NO')
-//                 return context.db.mutation.createAttribute({
-//                     data: {
-//                         name: args.attribute,
-//                         resource: {
-//                             connect: {
-//                                 id: resources[0].id,
-//                             }
-//                         }
-//                     }
-//                 })
-//             }
-//         } else {
-//             console.log('Resource NO')
-//             return context.db.mutation.createAttribute({
-//                 data: {
-//                     name: args.attribute,
-//                     resource: {
-//                         create: {
-//                             name: args.resource,
-//                             database: {
-//                                 connect: {
-//                                     name: args.database,
-//                                 }
-//                             }
-//                         }
-//                     }
-//                 }
-//             })
-//         }
-//     } else {
-//         console.log('Database NO')
-//         return context.db.mutation.createAttribute({
-//             data: {
-//                 name: args.attribute,
-//                 resource: {
-//                     create: {
-//                         name: args.resource,
-//                         database: {
-//                             create: {
-//                                 name: args.database,
-//                             }
-//                         }
-//                     }
-//                 }
-//             }
-//         })
-//     }
-// }
+// import * as json_query from '../../fhir-store/graphql/Practitioner.json'
 
 const recData = (attributePath: string[]) => {
     if (attributePath.length == 0) {
@@ -236,6 +148,10 @@ const checkAttribute = async (parent, args, context: Context, info) => {
 }
 
 const getAttribute = async (parent, args, context: Context, info) => {
+    // TODO: info should not be passed to this query;
+    // here, we do it because it can happen that attributePath
+    // is of size 1, therefore this is the only query that is ran
+    // by this function.
     const initialAttributes = await context.db.query.attributes({
         where: {
             name: args.attributePath[0],
@@ -246,7 +162,7 @@ const getAttribute = async (parent, args, context: Context, info) => {
                 }
             }
         }
-    })
+    }, info)
 
     if (initialAttributes.length > 1) {
         //Problem
@@ -256,7 +172,6 @@ const getAttribute = async (parent, args, context: Context, info) => {
 
     for (let i = 1; i < args.attributePath.length; i++) {
         if (i != args.attributePath.length - 1) {
-            console.log(args.attributePath[i])
             attributes = await context.db.query.attributes({
                 where: {
                     name: args.attributePath[i],
@@ -280,6 +195,51 @@ const getAttribute = async (parent, args, context: Context, info) => {
     }
 
     return attributes[0]
+}
+
+const recAttributes = async (context: Context, parentIsResource: boolean, parentId: string, acc: string[]) => {
+    console.log(`recAttributes ${parentIsResource} ${acc}`)
+
+    let attributes
+    if (parentIsResource) {
+        attributes = await context.db.query.attributes({
+            where: {
+                resource: {
+                    id: parentId,
+                }
+            }
+        })
+
+        console.log(`${attributes.length} children for ${acc}`)
+
+        return attributes.map(async (attribute: any) => {
+            let a = await recAttributes(context, false, attribute.id, [...acc, attribute.name])
+
+            return {
+                ...attribute,
+                attributes: a,
+            }
+        })
+    } else {
+        attributes = await context.db.query.attributes({
+            where: {
+                attribute: {
+                    id: parentId,
+                }
+            }
+        })
+
+        console.log(`${attributes.length} children for ${acc}`)
+
+        return attributes.map(async (attribute: any) => {
+            let a = await recAttributes(context, false, attribute.id, [...acc, attribute.name])
+
+            return {
+                ...attribute,
+                attributes: a,
+            }
+        })
+    }
 }
 
 const resolvers = {
@@ -341,7 +301,8 @@ const resolvers = {
             }, info)
         },
         async getAttribute(parent, args, context: Context, info) {
-            let att = await checkAttribute(parent, JSON.parse(JSON.stringify(args)), context, info)
+            // Build attribute in database if doesn't already exist
+            const att = await checkAttribute(parent, JSON.parse(JSON.stringify(args)), context, info)
 
             return getAttribute(parent, args, context, info)
         },
@@ -361,11 +322,48 @@ const resolvers = {
             else {
                 // Problem
             }
+        },
+        async getRecResource(parent, args, context: Context, info) {
+            const resources = await context.db.query.resources({
+                where: {
+                    name: args.resource,
+                    database: {
+                        name: args.database,
+                    }
+                }
+            })
+
+            if (resources.length == 1) {
+                const resourceId = resources[0].id
+
+                let attributes = await recAttributes(context, true, resources[0].id, [resources[0].name])
+
+                return {
+                    ...resources[0],
+                    attributes,
+                }
+            }
+            else {
+                // Problem
+            }
         }
     },
     Mutation: {
         // async checkAttribute(parent, args, context: Context, info) {
         //     return checkAttribute(parent, args, context, info)
+        // },
+        // createResourceYeah(parent, args, context: Context, info) {
+        //     return context.db.mutation.createResource({
+        //         data: {
+        //             database: {
+        //                 connect: {
+        //                     name: args.database
+        //                 }
+        //             },
+        //             name: (<any>json_query).name,
+        //             attributes: (<any>json_query).attributes,
+        //         }
+        //     })
         // },
         async updateAttributeNoId(parent, args, context: Context, info) {
             let attribute = await getAttribute(parent, {
@@ -389,7 +387,17 @@ const resolvers = {
                 where: {
                     id: args.id,
                 }
-            })
+            }, info)
+        },
+        updateInputColumn(parent, args, context: Context, info) {
+            return context.db.mutation.updateInputColumn({
+                data: {
+                    ...args.data,
+                },
+                where: {
+                    id: args.id,
+                }
+            }, info)
         },
         updateResource(parent, args, context: Context, info) {
             return context.db.mutation.updateResource({
@@ -399,24 +407,20 @@ const resolvers = {
                 where: {
                     id: args.id,
                 }
-            })
+            }, info)
+        },
+        updateJoin(parent, args, context: Context, info) {
+            return context.db.mutation.updateJoin({
+                data: {
+                    ...args.data,
+                },
+                where: {
+                    id: args.id,
+                }
+            }, info)
         },
     },
     Subscription: {
-        // customAttributeSubscription: {
-        //     subscribe: async (parent, args, context, info) => {
-        //         const attribute = await checkAttribute(parent, args, context, info)
-        //         console.log(attribute.id)
-        //
-        //         return context.db.subscription.attribute({
-        //             where: {
-        //                 node: {
-        //                     id: attribute.id,
-        //                 }
-        //             }
-        //         }, info)
-        //     },
-        // },
         resource: {
             subscribe: (parent, args, context, info) => {
                 return context.db.subscription.resource({
@@ -442,6 +446,17 @@ const resolvers = {
         inputColumn: {
             subscribe: (parent, args, context, info) => {
                 return context.db.subscription.inputColumn({
+                    where: {
+                        node: {
+                            id: args.id,
+                        }
+                    }
+                }, info)
+            },
+        },
+        join: {
+            subscribe: (parent, args, context, info) => {
+                return context.db.subscription.join({
                     where: {
                         node: {
                             id: args.id,

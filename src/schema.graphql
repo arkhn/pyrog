@@ -12,16 +12,21 @@ type Query {
 
     getAttribute(database: String!, resource: String!, attributePath: [String!]!): Attribute!
     getResource(database: String!, resource: String!): Resource!
+    getRecResource(database: String!, resource: String!): Resource!
 }
 
 type Mutation {
     updateAttributeNoId(database: String!, resource: String!, attributePath: [String!]!, data: AttributeUpdateInput): Attribute!
     updateAttribute(id: ID!, data: AttributeUpdateInput): Attribute!
+    updateInputColumn(id: ID!, data: InputColumnUpdateInput): InputColumn!
     updateResource(id: ID!, data: ResourceUpdateInput): Resource!
+    updateJoin(id: ID!, data: JoinUpdateInput): Join!
+    # createResourceYeah(database: String!): Resource!
 }
 
 type Subscription {
     attribute(id: ID!): AttributeSubscriptionPayload
     inputColumn(id: ID!): InputColumnSubscriptionPayload
     resource(id: ID!): ResourceSubscriptionPayload
+    join(id: ID!): JoinSubscriptionPayload
 }
