@@ -1,7 +1,12 @@
+#import "./fragmentEntireAttribute.graphql"
+
 fragment entireResource on Resource {
     id
     name
     primaryKeyOwner
     primaryKeyTable
     primaryKeyColumn
+    attributes {
+        ...entireAttribute
+    }
 }

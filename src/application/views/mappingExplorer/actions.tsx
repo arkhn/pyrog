@@ -8,10 +8,6 @@ import {
 // and expect to be caught by reducers located under `state.data`.
 // It should be possible to give callback actions to these data-feching actions.
 import {
-    fetchFhirResourceJson,
-} from '../../actions/fhirResources'
-
-import {
     fetchDatabaseSchema,
 } from '../../actions/databases'
 
@@ -26,12 +22,6 @@ export const updateDatabase = (database: string): IAction => {
     return {
         type: 'UPDATE_DATABASE',
         payload: database,
-    }
-}
-
-export const changeFhirResource = (resource: string): IAction => {
-    return (dispatch: any, getState: any) => {
-        dispatch(fetchFhirResourceJson(resource, () => dispatch(updateFhirResource(resource))))
     }
 }
 

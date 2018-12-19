@@ -11,9 +11,11 @@ import * as React from 'react'
 import {isNullOrUndefined} from 'util';
 
 interface INodeData {
+    comment: string,
+    isProfile: boolean,
     name: string,
-    type: string,
     path: string[],
+    type: string,
 }
 
 export interface IProps {
@@ -45,35 +47,59 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
         return FhirResourceTree.id;
     }
 
-    private static genObjNodes = (json: any, pathAcc: string[]): ITreeNode<INodeData>[] => {
-        return Object.keys(json).map((key: string) : ITreeNode<INodeData> => {
-            const hasChildren = !isNullOrUndefined(json[key]) && (json[key] instanceof Array || json[key] instanceof Object)
+    private static breadFirstSearchInputColumn = (node: any) => {
+        if (node.inputColumns && node.inputColumns.length > 0) {
+            return true
+        } else if (node.attributes && node.attributes.length > 0) {
+            return node.attributes.some((attribute: any) => {
+                return FhirResourceTree.breadFirstSearchInputColumn(attribute)
+            })
+        } else {
+            return false
+        }
+    }
 
-            const regex = /(.*)<(.*)>/
-            const regexResult = regex.exec(key)
-            // Compute if current node's fhir type is 'list'
-            const nodeIsTypeList = (regexResult && regexResult.length > 1) ? regexResult[2].startsWith('list') && json[key] && json[key].length > 0 : false
+    private static genObjNodes = (node: any, pathAcc: string[]): ITreeNode<INodeData> => {
+        const hasChildren = (node.attributes && node.attributes.length > 0)
+        const hasInputColumns = (node.inputColumns && node.inputColumns.length > 0)
+        const nodePath = [...pathAcc, node.name]
 
-            const nodePath = [...pathAcc, regexResult ? regexResult[1] : key]
+        const secondaryLabel = hasInputColumns ?
+            <Icon icon='small-tick' intent={'success'}/> :
+            (
+                hasChildren ?
+                    (
+                        FhirResourceTree.breadFirstSearchInputColumn(node) ?
+                            <Icon icon='dot' /> :
+                            null
+                    ) :
+                    null
+            )
 
-            return {
-                childNodes: hasChildren ? FhirResourceTree.genObjNodes(nodeIsTypeList ? json[key][0] : json[key], nodePath) : null,
-                hasCaret: hasChildren,
-                icon: hasChildren ? 'folder-open' : 'tag',
-                id: FhirResourceTree.getId(),
-                isExpanded: false,
-                isSelected: false,
-                label: <div>
-                    <div>{regexResult ? regexResult[1] : key}</div>
-                    <div>{regexResult ? regexResult[2] : ''}</div>
-                </div>,
-                nodeData: {
-                    name: regexResult ? regexResult[1] : key,
-                    type: regexResult ? regexResult[2] : '',
-                    path: nodePath,
-                },
-            }
-        })
+        return {
+            childNodes: hasChildren ? node.attributes.map((attribute: any) => {
+                return FhirResourceTree.genObjNodes(attribute, nodePath)
+            }) : null,
+            hasCaret: hasChildren,
+            icon: node.isProfile ? 'multi-select' : (hasChildren ? 'folder-open' : 'tag'),
+            id: FhirResourceTree.getId(),
+            isExpanded: false,
+            isSelected: false,
+            label: <Tooltip content={node.comment}>
+                <div className={'node-label'}>
+                    <div>{node.name}</div>
+                    <div className={'node-type'}>{node.type}</div>
+                </div>
+            </Tooltip>,
+            nodeData: {
+                comment: node.comment,
+                isProfile: node.isProfile,
+                name: node.name,
+                path: nodePath,
+                type: node.type,
+            },
+            secondaryLabel: secondaryLabel,
+        }
     }
 
     private static forEachNode(nodes: ITreeNode[], callback: (node: ITreeNode) => void) {
@@ -90,7 +116,11 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
     static getDerivedStateFromProps(props: IProps, state: IState) {
         if (props.json !== state.renderJson) {
             try {
-                let nodes = FhirResourceTree.genObjNodes(props.json, [])
+                let nodes = props.json.attributes.map((attribute: any) => {
+                    return FhirResourceTree.genObjNodes(attribute, [])
+                })
+
+                console.log(nodes)
 
                 FhirResourceTree.forEachNode(nodes, (node: ITreeNode<INodeData>) => {
                     node.isSelected = node.nodeData.path == props.selectedNode
@@ -152,11 +182,11 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
     public render() {
         return (
             <Tree
+                className={Classes.ELEVATION_0}
                 contents={this.state.nodes}
                 onNodeClick={this.handleNodeClick}
                 onNodeCollapse={this.handleNodeCollapse}
                 onNodeExpand={this.handleNodeExpand}
-                className={Classes.ELEVATION_0}
             />
         );
     }

@@ -1,6 +1,4 @@
 #import "./fragmentEntireAttribute.graphql"
-#import "./fragmentEntireInputColumn.graphql"
-#import "./fragmentEntireJoin.graphql"
 
 query Attribute($database: String!, $resource: String!, $attributePath: [String!]!){
     getAttribute (
@@ -9,11 +7,5 @@ query Attribute($database: String!, $resource: String!, $attributePath: [String!
         attributePath: $attributePath
     ) {
         ...entireAttribute
-        inputColumns {
-            ...entireInputColumn
-            joins {
-                ...entireJoin
-            }
-        }
     }
 }

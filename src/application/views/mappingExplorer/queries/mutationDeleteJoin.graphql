@@ -1,0 +1,18 @@
+#import "./fragmentEntireInputColumn.graphql"
+
+mutation deleteInputColumn($inputColumnId: ID!, $joinId: ID!) {
+    updateInputColumn(
+        id: $inputColumnId,
+        data: {
+            joins: {
+                delete: [
+                    {
+                        id: $joinId
+                    }
+                ]
+            }
+        }
+    ) {
+        ...entireInputColumn
+    }
+}

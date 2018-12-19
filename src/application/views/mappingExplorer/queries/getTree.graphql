@@ -1,0 +1,35 @@
+#import "./fragmentEntireAttribute.graphql"
+
+query getTree($database: String!, $resource: String!) {
+    getResource(database: $database, resource: $resource) {
+        id
+        name
+        attributes {
+            ...entireAttribute
+            attributes {
+                ...entireAttribute
+                attributes {
+                    ...entireAttribute
+                    attributes {
+                        ...entireAttribute
+                        attributes {
+                            ...entireAttribute
+                            attributes {
+                                ...entireAttribute
+                                attributes {
+                                    ...entireAttribute
+                                    attributes {
+                                        ...entireAttribute
+                                        attributes {
+                                            ...entireAttribute
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

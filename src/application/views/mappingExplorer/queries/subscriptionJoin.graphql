@@ -1,0 +1,10 @@
+#import "./fragmentEntireJoin.graphql"
+
+subscription subscribeToJoin($id: ID!) {
+    join(id: $id) {
+        updatedFields
+        node {
+            ...entireJoin
+        }
+    }
+}

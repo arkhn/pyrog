@@ -1,11 +1,7 @@
 #import "./fragmentEntireAttribute.graphql"
-#import "./fragmentEntireInputColumn.graphql"
 
 mutation updateAttribute($id: ID!, $data: AttributeUpdateInput) {
     updateAttribute(id: $id, data: $data) {
         ...entireAttribute
-        inputColumns {
-            ...entireInputColumn
-        }
     }
 }

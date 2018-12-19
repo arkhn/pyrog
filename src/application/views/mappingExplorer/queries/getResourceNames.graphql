@@ -1,0 +1,10 @@
+query getResourceNames($database: String!) {
+    resources (where: {
+        database: {
+            name: $database
+        }
+    }) {
+        id
+        name
+    }
+}

@@ -165,81 +165,8 @@ body {
 #column-selector {
     flex-grow: 1;
     overflow: auto;
-
     background-color: @dark-gray1;
-
     border-radius: @border-radius;
-
-    .bp3-tabs {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-
-        .bp3-tab-panel:not([aria-hidden="true"]) {
-            flex-grow: 1;
-            display: flex;
-            overflow: auto;
-            flex-direction: column;
-
-            .vertical-flex {
-                width: 100%;
-                flex-grow: 1;
-                display: flex;
-                overflow: auto;
-                flex-direction: column;
-
-                .column-viewer {
-                    flex-grow: 1;
-                    overflow: auto;
-
-                    .column-flexbox {
-                        overflow: auto;
-                        min-height: -moz-min-content;
-                        min-height: -webkit-min-content;
-                        min-height: min-content;
-                        height: 100%;
-                        overflow-x: scroll;
-                    }
-                }
-            }
-        }
-    }
-
-    .bp3-tab-list {
-        background-color: @black;
-        border-radius: @border-radius @border-radius 0px 0px;
-        overflow: hidden;
-
-        & > * {
-            flex-grow: 1;
-
-            color: @white;
-            text-align: center;
-        }
-
-        .tab-title {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            & > *:first-child {
-                margin-right: 5px;
-            }
-        }
-    }
-
-    .bp3-tab {
-        padding: 5px 0px;
-
-        &:focus {
-            outline: none;
-        }
-    }
-
-    .bp3-tab-indicator {
-        background-color: @dark-gray1;
-        height: 100%;
-    }
 }
 
 .bp3-form-group {
