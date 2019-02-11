@@ -3,8 +3,6 @@ import { importSchema } from 'graphql-import'
 import { Prisma } from './generated/prisma'
 import { Context } from './utils'
 
-// import * as json_query from '../../fhir-store/graphql/Practitioner.json'
-
 const recData = (attributePath: string[]) => {
     if (attributePath.length == 0) {
         return null
@@ -344,27 +342,31 @@ const resolvers = {
                 }
             }
             else {
-                // Problem
+                // TODO: Problem
             }
         }
     },
     Mutation: {
-        // async checkAttribute(parent, args, context: Context, info) {
-        //     return checkAttribute(parent, args, context, info)
-        // },
-        // createResourceYeah(parent, args, context: Context, info) {
-        //     return context.db.mutation.createResource({
-        //         data: {
-        //             database: {
-        //                 connect: {
-        //                     name: args.database
-        //                 }
-        //             },
-        //             name: (<any>json_query).name,
-        //             attributes: (<any>json_query).attributes,
-        //         }
-        //     })
-        // },
+        createResourceTreeInDatabase(parent, args, context: Context, info) {
+            try {
+                let json_query = require('../../fhir-store/graphql/' + args.resource + '.json')
+
+                return context.db.mutation.createResource({
+                    data: {
+                        database: {
+                            connect: {
+                                name: args.database
+                            }
+                        },
+                        name: (<any>json_query).name,
+                        attributes: (<any>json_query).attributes,
+                    }
+                })
+            } catch (error) {
+                // TODO: return something consistent
+                console.log('Problem boy')
+            }
+        },
         async updateAttributeNoId(parent, args, context: Context, info) {
             let attribute = await getAttribute(parent, {
                 database: args.database,

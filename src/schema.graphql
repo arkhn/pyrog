@@ -21,7 +21,7 @@ type Mutation {
     updateInputColumn(id: ID!, data: InputColumnUpdateInput): InputColumn!
     updateResource(id: ID!, data: ResourceUpdateInput): Resource!
     updateJoin(id: ID!, data: JoinUpdateInput): Join!
-    # createResourceYeah(database: String!): Resource!
+    createResourceTreeInDatabase(database: String!, resource: String!): Resource!
 }
 
 type Subscription {
