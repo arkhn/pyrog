@@ -1,5 +1,5 @@
 {
-  "name": "graphql-typescript-boilerplate",
+  "name": "fhirball-graphql-server",
   "scripts": {
     "start": "ts-node src/index.ts",
     "dev": "npm-run-all --parallel start playground",
