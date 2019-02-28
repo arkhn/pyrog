@@ -1,5 +1,6 @@
 # The endpoint of your Prisma API (deployed to a Prisma Sandbox).
-endpoint: https://eu1.prisma.sh/public-neonswoop-398/graphql-typescript-boilerplate/dev
+# endpoint: https://eu1.prisma.sh/public-neonswoop-398/graphql-typescript-boilerplate/dev
+endpoint: http://0.0.0.0:4466/dev
 
 # The file containing the definition of your data model.
 datamodel: datamodel.graphql
@@ -22,3 +23,4 @@ hooks:
 # to the `Authorization` header of HTTP requests made against the Prisma API.
 # Info: https://www.prisma.io/docs/reference/prisma-api/concepts-utee3eiquo#authentication
 # secret: mysecret123
+secret: mysecret42

@@ -2,6 +2,7 @@ import { GraphQLServer } from 'graphql-yoga'
 import { Prisma } from './generated/prisma'
 import { resolvers } from './resolvers'
 
+const endPoint = (process.env.NODE_ENV === "docker") ? "http://prisma:4466" : "https://eu1.prisma.sh/public-neonswoop-398/graphql-typescript-boilerplate/dev"
 
 const server = new GraphQLServer({
     typeDefs: './src/schema.graphql',
@@ -9,9 +10,9 @@ const server = new GraphQLServer({
     context: req => ({
         ...req,
         db: new Prisma({
-            endpoint: 'https://eu1.prisma.sh/public-neonswoop-398/graphql-typescript-boilerplate/dev', // the endpoint of the Prisma API
+            endpoint: endPoint, // the endpoint of the Prisma API
             debug: true, // log all GraphQL queries & mutations sent to the Prisma API
-            // secret: 'mysecret123', // only needed if specified in `database/prisma.yml`
+            secret: 'mysecret42', // only needed if specified in `database/prisma.yml`
         }),
     }),
 })

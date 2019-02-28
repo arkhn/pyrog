@@ -3489,17 +3489,6 @@ export type MutationType =   'CREATED' |
   'UPDATED' |
   'DELETED'
 
-export interface AttributeUpdateManyWithoutResourceInput {
-  create?: AttributeCreateWithoutResourceInput[] | AttributeCreateWithoutResourceInput
-  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput
-  disconnect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput
-  delete?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput
-  update?: AttributeUpdateWithWhereUniqueWithoutResourceInput[] | AttributeUpdateWithWhereUniqueWithoutResourceInput
-  updateMany?: AttributeUpdateManyWithWhereNestedInput[] | AttributeUpdateManyWithWhereNestedInput
-  deleteMany?: AttributeScalarWhereInput[] | AttributeScalarWhereInput
-  upsert?: AttributeUpsertWithWhereUniqueWithoutResourceInput[] | AttributeUpsertWithWhereUniqueWithoutResourceInput
-}
-
 export interface DatabaseWhereInput {
   AND?: DatabaseWhereInput[] | DatabaseWhereInput
   OR?: DatabaseWhereInput[] | DatabaseWhereInput
@@ -3537,9 +3526,272 @@ export interface DatabaseWhereInput {
   resources_none?: ResourceWhereInput
 }
 
-export interface AttributeUpdateWithWhereUniqueWithoutAttributeInput {
-  where: AttributeWhereUniqueInput
-  data: AttributeUpdateWithoutAttributeDataInput
+export interface ResourceWhereInput {
+  AND?: ResourceWhereInput[] | ResourceWhereInput
+  OR?: ResourceWhereInput[] | ResourceWhereInput
+  NOT?: ResourceWhereInput[] | ResourceWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  name?: String
+  name_not?: String
+  name_in?: String[] | String
+  name_not_in?: String[] | String
+  name_lt?: String
+  name_lte?: String
+  name_gt?: String
+  name_gte?: String
+  name_contains?: String
+  name_not_contains?: String
+  name_starts_with?: String
+  name_not_starts_with?: String
+  name_ends_with?: String
+  name_not_ends_with?: String
+  primaryKeyOwner?: String
+  primaryKeyOwner_not?: String
+  primaryKeyOwner_in?: String[] | String
+  primaryKeyOwner_not_in?: String[] | String
+  primaryKeyOwner_lt?: String
+  primaryKeyOwner_lte?: String
+  primaryKeyOwner_gt?: String
+  primaryKeyOwner_gte?: String
+  primaryKeyOwner_contains?: String
+  primaryKeyOwner_not_contains?: String
+  primaryKeyOwner_starts_with?: String
+  primaryKeyOwner_not_starts_with?: String
+  primaryKeyOwner_ends_with?: String
+  primaryKeyOwner_not_ends_with?: String
+  primaryKeyTable?: String
+  primaryKeyTable_not?: String
+  primaryKeyTable_in?: String[] | String
+  primaryKeyTable_not_in?: String[] | String
+  primaryKeyTable_lt?: String
+  primaryKeyTable_lte?: String
+  primaryKeyTable_gt?: String
+  primaryKeyTable_gte?: String
+  primaryKeyTable_contains?: String
+  primaryKeyTable_not_contains?: String
+  primaryKeyTable_starts_with?: String
+  primaryKeyTable_not_starts_with?: String
+  primaryKeyTable_ends_with?: String
+  primaryKeyTable_not_ends_with?: String
+  primaryKeyColumn?: String
+  primaryKeyColumn_not?: String
+  primaryKeyColumn_in?: String[] | String
+  primaryKeyColumn_not_in?: String[] | String
+  primaryKeyColumn_lt?: String
+  primaryKeyColumn_lte?: String
+  primaryKeyColumn_gt?: String
+  primaryKeyColumn_gte?: String
+  primaryKeyColumn_contains?: String
+  primaryKeyColumn_not_contains?: String
+  primaryKeyColumn_starts_with?: String
+  primaryKeyColumn_not_starts_with?: String
+  primaryKeyColumn_ends_with?: String
+  primaryKeyColumn_not_ends_with?: String
+  attributes_every?: AttributeWhereInput
+  attributes_some?: AttributeWhereInput
+  attributes_none?: AttributeWhereInput
+  database?: DatabaseWhereInput
+}
+
+export interface AttributeWhereInput {
+  AND?: AttributeWhereInput[] | AttributeWhereInput
+  OR?: AttributeWhereInput[] | AttributeWhereInput
+  NOT?: AttributeWhereInput[] | AttributeWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  name?: String
+  name_not?: String
+  name_in?: String[] | String
+  name_not_in?: String[] | String
+  name_lt?: String
+  name_lte?: String
+  name_gt?: String
+  name_gte?: String
+  name_contains?: String
+  name_not_contains?: String
+  name_starts_with?: String
+  name_not_starts_with?: String
+  name_ends_with?: String
+  name_not_ends_with?: String
+  mergingScript?: String
+  mergingScript_not?: String
+  mergingScript_in?: String[] | String
+  mergingScript_not_in?: String[] | String
+  mergingScript_lt?: String
+  mergingScript_lte?: String
+  mergingScript_gt?: String
+  mergingScript_gte?: String
+  mergingScript_contains?: String
+  mergingScript_not_contains?: String
+  mergingScript_starts_with?: String
+  mergingScript_not_starts_with?: String
+  mergingScript_ends_with?: String
+  mergingScript_not_ends_with?: String
+  isProfile?: Boolean
+  isProfile_not?: Boolean
+  type?: String
+  type_not?: String
+  type_in?: String[] | String
+  type_not_in?: String[] | String
+  type_lt?: String
+  type_lte?: String
+  type_gt?: String
+  type_gte?: String
+  type_contains?: String
+  type_not_contains?: String
+  type_starts_with?: String
+  type_not_starts_with?: String
+  type_ends_with?: String
+  type_not_ends_with?: String
+  comment?: String
+  comment_not?: String
+  comment_in?: String[] | String
+  comment_not_in?: String[] | String
+  comment_lt?: String
+  comment_lte?: String
+  comment_gt?: String
+  comment_gte?: String
+  comment_contains?: String
+  comment_not_contains?: String
+  comment_starts_with?: String
+  comment_not_starts_with?: String
+  comment_ends_with?: String
+  comment_not_ends_with?: String
+  depth?: Int
+  depth_not?: Int
+  depth_in?: Int[] | Int
+  depth_not_in?: Int[] | Int
+  depth_lt?: Int
+  depth_lte?: Int
+  depth_gt?: Int
+  depth_gte?: Int
+  resource?: ResourceWhereInput
+  attributes_every?: AttributeWhereInput
+  attributes_some?: AttributeWhereInput
+  attributes_none?: AttributeWhereInput
+  attribute?: AttributeWhereInput
+  inputColumns_every?: InputColumnWhereInput
+  inputColumns_some?: InputColumnWhereInput
+  inputColumns_none?: InputColumnWhereInput
+}
+
+export interface InputColumnWhereInput {
+  AND?: InputColumnWhereInput[] | InputColumnWhereInput
+  OR?: InputColumnWhereInput[] | InputColumnWhereInput
+  NOT?: InputColumnWhereInput[] | InputColumnWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  owner?: String
+  owner_not?: String
+  owner_in?: String[] | String
+  owner_not_in?: String[] | String
+  owner_lt?: String
+  owner_lte?: String
+  owner_gt?: String
+  owner_gte?: String
+  owner_contains?: String
+  owner_not_contains?: String
+  owner_starts_with?: String
+  owner_not_starts_with?: String
+  owner_ends_with?: String
+  owner_not_ends_with?: String
+  table?: String
+  table_not?: String
+  table_in?: String[] | String
+  table_not_in?: String[] | String
+  table_lt?: String
+  table_lte?: String
+  table_gt?: String
+  table_gte?: String
+  table_contains?: String
+  table_not_contains?: String
+  table_starts_with?: String
+  table_not_starts_with?: String
+  table_ends_with?: String
+  table_not_ends_with?: String
+  column?: String
+  column_not?: String
+  column_in?: String[] | String
+  column_not_in?: String[] | String
+  column_lt?: String
+  column_lte?: String
+  column_gt?: String
+  column_gte?: String
+  column_contains?: String
+  column_not_contains?: String
+  column_starts_with?: String
+  column_not_starts_with?: String
+  column_ends_with?: String
+  column_not_ends_with?: String
+  script?: String
+  script_not?: String
+  script_in?: String[] | String
+  script_not_in?: String[] | String
+  script_lt?: String
+  script_lte?: String
+  script_gt?: String
+  script_gte?: String
+  script_contains?: String
+  script_not_contains?: String
+  script_starts_with?: String
+  script_not_starts_with?: String
+  script_ends_with?: String
+  script_not_ends_with?: String
+  staticValue?: String
+  staticValue_not?: String
+  staticValue_in?: String[] | String
+  staticValue_not_in?: String[] | String
+  staticValue_lt?: String
+  staticValue_lte?: String
+  staticValue_gt?: String
+  staticValue_gte?: String
+  staticValue_contains?: String
+  staticValue_not_contains?: String
+  staticValue_starts_with?: String
+  staticValue_not_starts_with?: String
+  staticValue_ends_with?: String
+  staticValue_not_ends_with?: String
+  joins_every?: JoinWhereInput
+  joins_some?: JoinWhereInput
+  joins_none?: JoinWhereInput
+  attribute?: AttributeWhereInput
 }
 
 export interface JoinWhereInput {
@@ -3647,6 +3899,146 @@ export interface JoinWhereInput {
   inputColumn?: InputColumnWhereInput
 }
 
+export interface DatabaseWhereUniqueInput {
+  id?: ID_Input
+  name?: String
+}
+
+export interface ResourceWhereUniqueInput {
+  id?: ID_Input
+}
+
+export interface AttributeWhereUniqueInput {
+  id?: ID_Input
+}
+
+export interface InputColumnWhereUniqueInput {
+  id?: ID_Input
+}
+
+export interface JoinWhereUniqueInput {
+  id?: ID_Input
+}
+
+export interface DatabaseCreateInput {
+  name: String
+  resources?: ResourceCreateManyWithoutDatabaseInput
+}
+
+export interface ResourceCreateManyWithoutDatabaseInput {
+  create?: ResourceCreateWithoutDatabaseInput[] | ResourceCreateWithoutDatabaseInput
+  connect?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput
+}
+
+export interface ResourceCreateWithoutDatabaseInput {
+  name: String
+  primaryKeyOwner?: String
+  primaryKeyTable?: String
+  primaryKeyColumn?: String
+  attributes?: AttributeCreateManyWithoutResourceInput
+}
+
+export interface AttributeCreateManyWithoutResourceInput {
+  create?: AttributeCreateWithoutResourceInput[] | AttributeCreateWithoutResourceInput
+  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput
+}
+
+export interface AttributeCreateWithoutResourceInput {
+  name: String
+  mergingScript?: String
+  isProfile?: Boolean
+  type?: String
+  comment?: String
+  depth?: Int
+  attributes?: AttributeCreateManyWithoutAttributeInput
+  attribute?: AttributeCreateOneWithoutAttributesInput
+  inputColumns?: InputColumnCreateManyWithoutAttributeInput
+}
+
+export interface AttributeCreateManyWithoutAttributeInput {
+  create?: AttributeCreateWithoutAttributeInput[] | AttributeCreateWithoutAttributeInput
+  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput
+}
+
+export interface AttributeCreateWithoutAttributeInput {
+  name: String
+  mergingScript?: String
+  isProfile?: Boolean
+  type?: String
+  comment?: String
+  depth?: Int
+  resource?: ResourceCreateOneWithoutAttributesInput
+  attributes?: AttributeCreateManyWithoutAttributeInput
+  inputColumns?: InputColumnCreateManyWithoutAttributeInput
+}
+
+export interface ResourceCreateOneWithoutAttributesInput {
+  create?: ResourceCreateWithoutAttributesInput
+  connect?: ResourceWhereUniqueInput
+}
+
+export interface ResourceCreateWithoutAttributesInput {
+  name: String
+  primaryKeyOwner?: String
+  primaryKeyTable?: String
+  primaryKeyColumn?: String
+  database: DatabaseCreateOneWithoutResourcesInput
+}
+
+export interface DatabaseCreateOneWithoutResourcesInput {
+  create?: DatabaseCreateWithoutResourcesInput
+  connect?: DatabaseWhereUniqueInput
+}
+
+export interface DatabaseCreateWithoutResourcesInput {
+  name: String
+}
+
+export interface InputColumnCreateManyWithoutAttributeInput {
+  create?: InputColumnCreateWithoutAttributeInput[] | InputColumnCreateWithoutAttributeInput
+  connect?: InputColumnWhereUniqueInput[] | InputColumnWhereUniqueInput
+}
+
+export interface InputColumnCreateWithoutAttributeInput {
+  owner?: String
+  table?: String
+  column?: String
+  script?: String
+  staticValue?: String
+  joins?: JoinCreateManyWithoutInputColumnInput
+}
+
+export interface JoinCreateManyWithoutInputColumnInput {
+  create?: JoinCreateWithoutInputColumnInput[] | JoinCreateWithoutInputColumnInput
+  connect?: JoinWhereUniqueInput[] | JoinWhereUniqueInput
+}
+
+export interface JoinCreateWithoutInputColumnInput {
+  sourceOwner?: String
+  sourceTable?: String
+  sourceColumn?: String
+  targetOwner?: String
+  targetTable?: String
+  targetColumn?: String
+}
+
+export interface AttributeCreateOneWithoutAttributesInput {
+  create?: AttributeCreateWithoutAttributesInput
+  connect?: AttributeWhereUniqueInput
+}
+
+export interface AttributeCreateWithoutAttributesInput {
+  name: String
+  mergingScript?: String
+  isProfile?: Boolean
+  type?: String
+  comment?: String
+  depth?: Int
+  resource?: ResourceCreateOneWithoutAttributesInput
+  attribute?: AttributeCreateOneWithoutAttributesInput
+  inputColumns?: InputColumnCreateManyWithoutAttributeInput
+}
+
 export interface ResourceCreateInput {
   name: String
   primaryKeyOwner?: String
@@ -3654,11 +4046,6 @@ export interface ResourceCreateInput {
   primaryKeyColumn?: String
   attributes?: AttributeCreateManyWithoutResourceInput
   database: DatabaseCreateOneWithoutResourcesInput
-}
-
-export interface ResourceUpdateManyWithWhereNestedInput {
-  where: ResourceScalarWhereInput
-  data: ResourceUpdateManyDataInput
 }
 
 export interface AttributeCreateInput {
@@ -3674,18 +4061,6 @@ export interface AttributeCreateInput {
   inputColumns?: InputColumnCreateManyWithoutAttributeInput
 }
 
-export interface AttributeUpdateWithoutAttributeDataInput {
-  name?: String
-  mergingScript?: String
-  isProfile?: Boolean
-  type?: String
-  comment?: String
-  depth?: Int
-  resource?: ResourceUpdateOneWithoutAttributesInput
-  attributes?: AttributeUpdateManyWithoutAttributeInput
-  inputColumns?: InputColumnUpdateManyWithoutAttributeInput
-}
-
 export interface InputColumnCreateInput {
   owner?: String
   table?: String
@@ -3696,31 +4071,9 @@ export interface InputColumnCreateInput {
   attribute: AttributeCreateOneWithoutInputColumnsInput
 }
 
-export interface InputColumnSubscriptionWhereInput {
-  AND?: InputColumnSubscriptionWhereInput[] | InputColumnSubscriptionWhereInput
-  OR?: InputColumnSubscriptionWhereInput[] | InputColumnSubscriptionWhereInput
-  NOT?: InputColumnSubscriptionWhereInput[] | InputColumnSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: InputColumnWhereInput
-}
-
 export interface AttributeCreateOneWithoutInputColumnsInput {
   create?: AttributeCreateWithoutInputColumnsInput
   connect?: AttributeWhereUniqueInput
-}
-
-export interface ResourceSubscriptionWhereInput {
-  AND?: ResourceSubscriptionWhereInput[] | ResourceSubscriptionWhereInput
-  OR?: ResourceSubscriptionWhereInput[] | ResourceSubscriptionWhereInput
-  NOT?: ResourceSubscriptionWhereInput[] | ResourceSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: ResourceWhereInput
 }
 
 export interface AttributeCreateWithoutInputColumnsInput {
@@ -3735,17 +4088,6 @@ export interface AttributeCreateWithoutInputColumnsInput {
   attribute?: AttributeCreateOneWithoutAttributesInput
 }
 
-export interface DatabaseSubscriptionWhereInput {
-  AND?: DatabaseSubscriptionWhereInput[] | DatabaseSubscriptionWhereInput
-  OR?: DatabaseSubscriptionWhereInput[] | DatabaseSubscriptionWhereInput
-  NOT?: DatabaseSubscriptionWhereInput[] | DatabaseSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: DatabaseWhereInput
-}
-
 export interface JoinCreateInput {
   sourceOwner?: String
   sourceTable?: String
@@ -3756,22 +4098,9 @@ export interface JoinCreateInput {
   inputColumn: InputColumnCreateOneWithoutJoinsInput
 }
 
-export interface JoinUpdateManyMutationInput {
-  sourceOwner?: String
-  sourceTable?: String
-  sourceColumn?: String
-  targetOwner?: String
-  targetTable?: String
-  targetColumn?: String
-}
-
 export interface InputColumnCreateOneWithoutJoinsInput {
   create?: InputColumnCreateWithoutJoinsInput
   connect?: InputColumnWhereUniqueInput
-}
-
-export interface ResourceWhereUniqueInput {
-  id?: ID_Input
 }
 
 export interface InputColumnCreateWithoutJoinsInput {
@@ -3783,21 +4112,9 @@ export interface InputColumnCreateWithoutJoinsInput {
   attribute: AttributeCreateOneWithoutInputColumnsInput
 }
 
-export interface InputColumnWhereUniqueInput {
-  id?: ID_Input
-}
-
 export interface DatabaseUpdateInput {
   name?: String
   resources?: ResourceUpdateManyWithoutDatabaseInput
-}
-
-export interface InputColumnUpdateManyMutationInput {
-  owner?: String
-  table?: String
-  column?: String
-  script?: String
-  staticValue?: String
 }
 
 export interface ResourceUpdateManyWithoutDatabaseInput {
@@ -3811,21 +4128,9 @@ export interface ResourceUpdateManyWithoutDatabaseInput {
   upsert?: ResourceUpsertWithWhereUniqueWithoutDatabaseInput[] | ResourceUpsertWithWhereUniqueWithoutDatabaseInput
 }
 
-export interface ResourceUpdateManyMutationInput {
-  name?: String
-  primaryKeyOwner?: String
-  primaryKeyTable?: String
-  primaryKeyColumn?: String
-}
-
 export interface ResourceUpdateWithWhereUniqueWithoutDatabaseInput {
   where: ResourceWhereUniqueInput
   data: ResourceUpdateWithoutDatabaseDataInput
-}
-
-export interface InputColumnUpsertWithoutJoinsInput {
-  update: InputColumnUpdateWithoutJoinsDataInput
-  create: InputColumnCreateWithoutJoinsInput
 }
 
 export interface ResourceUpdateWithoutDatabaseDataInput {
@@ -3836,104 +4141,20 @@ export interface ResourceUpdateWithoutDatabaseDataInput {
   attributes?: AttributeUpdateManyWithoutResourceInput
 }
 
-export interface InputColumnUpdateOneRequiredWithoutJoinsInput {
-  create?: InputColumnCreateWithoutJoinsInput
-  connect?: InputColumnWhereUniqueInput
-  update?: InputColumnUpdateWithoutJoinsDataInput
-  upsert?: InputColumnUpsertWithoutJoinsInput
-}
-
-export interface ResourceScalarWhereInput {
-  AND?: ResourceScalarWhereInput[] | ResourceScalarWhereInput
-  OR?: ResourceScalarWhereInput[] | ResourceScalarWhereInput
-  NOT?: ResourceScalarWhereInput[] | ResourceScalarWhereInput
-  id?: ID_Input
-  id_not?: ID_Input
-  id_in?: ID_Input[] | ID_Input
-  id_not_in?: ID_Input[] | ID_Input
-  id_lt?: ID_Input
-  id_lte?: ID_Input
-  id_gt?: ID_Input
-  id_gte?: ID_Input
-  id_contains?: ID_Input
-  id_not_contains?: ID_Input
-  id_starts_with?: ID_Input
-  id_not_starts_with?: ID_Input
-  id_ends_with?: ID_Input
-  id_not_ends_with?: ID_Input
-  name?: String
-  name_not?: String
-  name_in?: String[] | String
-  name_not_in?: String[] | String
-  name_lt?: String
-  name_lte?: String
-  name_gt?: String
-  name_gte?: String
-  name_contains?: String
-  name_not_contains?: String
-  name_starts_with?: String
-  name_not_starts_with?: String
-  name_ends_with?: String
-  name_not_ends_with?: String
-  primaryKeyOwner?: String
-  primaryKeyOwner_not?: String
-  primaryKeyOwner_in?: String[] | String
-  primaryKeyOwner_not_in?: String[] | String
-  primaryKeyOwner_lt?: String
-  primaryKeyOwner_lte?: String
-  primaryKeyOwner_gt?: String
-  primaryKeyOwner_gte?: String
-  primaryKeyOwner_contains?: String
-  primaryKeyOwner_not_contains?: String
-  primaryKeyOwner_starts_with?: String
-  primaryKeyOwner_not_starts_with?: String
-  primaryKeyOwner_ends_with?: String
-  primaryKeyOwner_not_ends_with?: String
-  primaryKeyTable?: String
-  primaryKeyTable_not?: String
-  primaryKeyTable_in?: String[] | String
-  primaryKeyTable_not_in?: String[] | String
-  primaryKeyTable_lt?: String
-  primaryKeyTable_lte?: String
-  primaryKeyTable_gt?: String
-  primaryKeyTable_gte?: String
-  primaryKeyTable_contains?: String
-  primaryKeyTable_not_contains?: String
-  primaryKeyTable_starts_with?: String
-  primaryKeyTable_not_starts_with?: String
-  primaryKeyTable_ends_with?: String
-  primaryKeyTable_not_ends_with?: String
-  primaryKeyColumn?: String
-  primaryKeyColumn_not?: String
-  primaryKeyColumn_in?: String[] | String
-  primaryKeyColumn_not_in?: String[] | String
-  primaryKeyColumn_lt?: String
-  primaryKeyColumn_lte?: String
-  primaryKeyColumn_gt?: String
-  primaryKeyColumn_gte?: String
-  primaryKeyColumn_contains?: String
-  primaryKeyColumn_not_contains?: String
-  primaryKeyColumn_starts_with?: String
-  primaryKeyColumn_not_starts_with?: String
-  primaryKeyColumn_ends_with?: String
-  primaryKeyColumn_not_ends_with?: String
-}
-
-export interface AttributeUpsertWithoutInputColumnsInput {
-  update: AttributeUpdateWithoutInputColumnsDataInput
-  create: AttributeCreateWithoutInputColumnsInput
+export interface AttributeUpdateManyWithoutResourceInput {
+  create?: AttributeCreateWithoutResourceInput[] | AttributeCreateWithoutResourceInput
+  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput
+  disconnect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput
+  delete?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput
+  update?: AttributeUpdateWithWhereUniqueWithoutResourceInput[] | AttributeUpdateWithWhereUniqueWithoutResourceInput
+  updateMany?: AttributeUpdateManyWithWhereNestedInput[] | AttributeUpdateManyWithWhereNestedInput
+  deleteMany?: AttributeScalarWhereInput[] | AttributeScalarWhereInput
+  upsert?: AttributeUpsertWithWhereUniqueWithoutResourceInput[] | AttributeUpsertWithWhereUniqueWithoutResourceInput
 }
 
 export interface AttributeUpdateWithWhereUniqueWithoutResourceInput {
   where: AttributeWhereUniqueInput
   data: AttributeUpdateWithoutResourceDataInput
-}
-
-export interface AttributeUpdateOneRequiredWithoutInputColumnsInput {
-  create?: AttributeCreateWithoutInputColumnsInput
-  connect?: AttributeWhereUniqueInput
-  update?: AttributeUpdateWithoutInputColumnsDataInput
-  upsert?: AttributeUpsertWithoutInputColumnsInput
 }
 
 export interface AttributeUpdateWithoutResourceDataInput {
@@ -3943,19 +4164,6 @@ export interface AttributeUpdateWithoutResourceDataInput {
   type?: String
   comment?: String
   depth?: Int
-  attributes?: AttributeUpdateManyWithoutAttributeInput
-  attribute?: AttributeUpdateOneWithoutAttributesInput
-  inputColumns?: InputColumnUpdateManyWithoutAttributeInput
-}
-
-export interface AttributeUpdateInput {
-  name?: String
-  mergingScript?: String
-  isProfile?: Boolean
-  type?: String
-  comment?: String
-  depth?: Int
-  resource?: ResourceUpdateOneWithoutAttributesInput
   attributes?: AttributeUpdateManyWithoutAttributeInput
   attribute?: AttributeUpdateOneWithoutAttributesInput
   inputColumns?: InputColumnUpdateManyWithoutAttributeInput
@@ -3972,129 +4180,21 @@ export interface AttributeUpdateManyWithoutAttributeInput {
   upsert?: AttributeUpsertWithWhereUniqueWithoutAttributeInput[] | AttributeUpsertWithWhereUniqueWithoutAttributeInput
 }
 
-export interface ResourceUpsertWithWhereUniqueWithoutDatabaseInput {
-  where: ResourceWhereUniqueInput
-  update: ResourceUpdateWithoutDatabaseDataInput
-  create: ResourceCreateWithoutDatabaseInput
+export interface AttributeUpdateWithWhereUniqueWithoutAttributeInput {
+  where: AttributeWhereUniqueInput
+  data: AttributeUpdateWithoutAttributeDataInput
 }
 
-export interface InputColumnWhereInput {
-  AND?: InputColumnWhereInput[] | InputColumnWhereInput
-  OR?: InputColumnWhereInput[] | InputColumnWhereInput
-  NOT?: InputColumnWhereInput[] | InputColumnWhereInput
-  id?: ID_Input
-  id_not?: ID_Input
-  id_in?: ID_Input[] | ID_Input
-  id_not_in?: ID_Input[] | ID_Input
-  id_lt?: ID_Input
-  id_lte?: ID_Input
-  id_gt?: ID_Input
-  id_gte?: ID_Input
-  id_contains?: ID_Input
-  id_not_contains?: ID_Input
-  id_starts_with?: ID_Input
-  id_not_starts_with?: ID_Input
-  id_ends_with?: ID_Input
-  id_not_ends_with?: ID_Input
-  owner?: String
-  owner_not?: String
-  owner_in?: String[] | String
-  owner_not_in?: String[] | String
-  owner_lt?: String
-  owner_lte?: String
-  owner_gt?: String
-  owner_gte?: String
-  owner_contains?: String
-  owner_not_contains?: String
-  owner_starts_with?: String
-  owner_not_starts_with?: String
-  owner_ends_with?: String
-  owner_not_ends_with?: String
-  table?: String
-  table_not?: String
-  table_in?: String[] | String
-  table_not_in?: String[] | String
-  table_lt?: String
-  table_lte?: String
-  table_gt?: String
-  table_gte?: String
-  table_contains?: String
-  table_not_contains?: String
-  table_starts_with?: String
-  table_not_starts_with?: String
-  table_ends_with?: String
-  table_not_ends_with?: String
-  column?: String
-  column_not?: String
-  column_in?: String[] | String
-  column_not_in?: String[] | String
-  column_lt?: String
-  column_lte?: String
-  column_gt?: String
-  column_gte?: String
-  column_contains?: String
-  column_not_contains?: String
-  column_starts_with?: String
-  column_not_starts_with?: String
-  column_ends_with?: String
-  column_not_ends_with?: String
-  script?: String
-  script_not?: String
-  script_in?: String[] | String
-  script_not_in?: String[] | String
-  script_lt?: String
-  script_lte?: String
-  script_gt?: String
-  script_gte?: String
-  script_contains?: String
-  script_not_contains?: String
-  script_starts_with?: String
-  script_not_starts_with?: String
-  script_ends_with?: String
-  script_not_ends_with?: String
-  staticValue?: String
-  staticValue_not?: String
-  staticValue_in?: String[] | String
-  staticValue_not_in?: String[] | String
-  staticValue_lt?: String
-  staticValue_lte?: String
-  staticValue_gt?: String
-  staticValue_gte?: String
-  staticValue_contains?: String
-  staticValue_not_contains?: String
-  staticValue_starts_with?: String
-  staticValue_not_starts_with?: String
-  staticValue_ends_with?: String
-  staticValue_not_ends_with?: String
-  joins_every?: JoinWhereInput
-  joins_some?: JoinWhereInput
-  joins_none?: JoinWhereInput
-  attribute?: AttributeWhereInput
-}
-
-export interface DatabaseCreateInput {
-  name: String
-  resources?: ResourceCreateManyWithoutDatabaseInput
-}
-
-export interface ResourceCreateWithoutDatabaseInput {
-  name: String
-  primaryKeyOwner?: String
-  primaryKeyTable?: String
-  primaryKeyColumn?: String
-  attributes?: AttributeCreateManyWithoutResourceInput
-}
-
-export interface AttributeCreateWithoutResourceInput {
-  name: String
+export interface AttributeUpdateWithoutAttributeDataInput {
+  name?: String
   mergingScript?: String
   isProfile?: Boolean
   type?: String
   comment?: String
   depth?: Int
-  attributes?: AttributeCreateManyWithoutAttributeInput
-  attribute?: AttributeCreateOneWithoutAttributesInput
-  inputColumns?: InputColumnCreateManyWithoutAttributeInput
+  resource?: ResourceUpdateOneWithoutAttributesInput
+  attributes?: AttributeUpdateManyWithoutAttributeInput
+  inputColumns?: InputColumnUpdateManyWithoutAttributeInput
 }
 
 export interface ResourceUpdateOneWithoutAttributesInput {
@@ -4106,32 +4206,12 @@ export interface ResourceUpdateOneWithoutAttributesInput {
   upsert?: ResourceUpsertWithoutAttributesInput
 }
 
-export interface AttributeCreateWithoutAttributeInput {
-  name: String
-  mergingScript?: String
-  isProfile?: Boolean
-  type?: String
-  comment?: String
-  depth?: Int
-  resource?: ResourceCreateOneWithoutAttributesInput
-  attributes?: AttributeCreateManyWithoutAttributeInput
-  inputColumns?: InputColumnCreateManyWithoutAttributeInput
-}
-
 export interface ResourceUpdateWithoutAttributesDataInput {
   name?: String
   primaryKeyOwner?: String
   primaryKeyTable?: String
   primaryKeyColumn?: String
   database?: DatabaseUpdateOneRequiredWithoutResourcesInput
-}
-
-export interface ResourceCreateWithoutAttributesInput {
-  name: String
-  primaryKeyOwner?: String
-  primaryKeyTable?: String
-  primaryKeyColumn?: String
-  database: DatabaseCreateOneWithoutResourcesInput
 }
 
 export interface DatabaseUpdateOneRequiredWithoutResourcesInput {
@@ -4141,21 +4221,8 @@ export interface DatabaseUpdateOneRequiredWithoutResourcesInput {
   upsert?: DatabaseUpsertWithoutResourcesInput
 }
 
-export interface DatabaseCreateWithoutResourcesInput {
-  name: String
-}
-
 export interface DatabaseUpdateWithoutResourcesDataInput {
   name?: String
-}
-
-export interface InputColumnCreateWithoutAttributeInput {
-  owner?: String
-  table?: String
-  column?: String
-  script?: String
-  staticValue?: String
-  joins?: JoinCreateManyWithoutInputColumnInput
 }
 
 export interface DatabaseUpsertWithoutResourcesInput {
@@ -4163,30 +4230,9 @@ export interface DatabaseUpsertWithoutResourcesInput {
   create: DatabaseCreateWithoutResourcesInput
 }
 
-export interface JoinCreateWithoutInputColumnInput {
-  sourceOwner?: String
-  sourceTable?: String
-  sourceColumn?: String
-  targetOwner?: String
-  targetTable?: String
-  targetColumn?: String
-}
-
 export interface ResourceUpsertWithoutAttributesInput {
   update: ResourceUpdateWithoutAttributesDataInput
   create: ResourceCreateWithoutAttributesInput
-}
-
-export interface AttributeCreateWithoutAttributesInput {
-  name: String
-  mergingScript?: String
-  isProfile?: Boolean
-  type?: String
-  comment?: String
-  depth?: Int
-  resource?: ResourceCreateOneWithoutAttributesInput
-  attribute?: AttributeCreateOneWithoutAttributesInput
-  inputColumns?: InputColumnCreateManyWithoutAttributeInput
 }
 
 export interface InputColumnUpdateManyWithoutAttributeInput {
@@ -4200,100 +4246,9 @@ export interface InputColumnUpdateManyWithoutAttributeInput {
   upsert?: InputColumnUpsertWithWhereUniqueWithoutAttributeInput[] | InputColumnUpsertWithWhereUniqueWithoutAttributeInput
 }
 
-export interface AttributeSubscriptionWhereInput {
-  AND?: AttributeSubscriptionWhereInput[] | AttributeSubscriptionWhereInput
-  OR?: AttributeSubscriptionWhereInput[] | AttributeSubscriptionWhereInput
-  NOT?: AttributeSubscriptionWhereInput[] | AttributeSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: AttributeWhereInput
-}
-
 export interface InputColumnUpdateWithWhereUniqueWithoutAttributeInput {
   where: InputColumnWhereUniqueInput
   data: InputColumnUpdateWithoutAttributeDataInput
-}
-
-export interface ResourceWhereInput {
-  AND?: ResourceWhereInput[] | ResourceWhereInput
-  OR?: ResourceWhereInput[] | ResourceWhereInput
-  NOT?: ResourceWhereInput[] | ResourceWhereInput
-  id?: ID_Input
-  id_not?: ID_Input
-  id_in?: ID_Input[] | ID_Input
-  id_not_in?: ID_Input[] | ID_Input
-  id_lt?: ID_Input
-  id_lte?: ID_Input
-  id_gt?: ID_Input
-  id_gte?: ID_Input
-  id_contains?: ID_Input
-  id_not_contains?: ID_Input
-  id_starts_with?: ID_Input
-  id_not_starts_with?: ID_Input
-  id_ends_with?: ID_Input
-  id_not_ends_with?: ID_Input
-  name?: String
-  name_not?: String
-  name_in?: String[] | String
-  name_not_in?: String[] | String
-  name_lt?: String
-  name_lte?: String
-  name_gt?: String
-  name_gte?: String
-  name_contains?: String
-  name_not_contains?: String
-  name_starts_with?: String
-  name_not_starts_with?: String
-  name_ends_with?: String
-  name_not_ends_with?: String
-  primaryKeyOwner?: String
-  primaryKeyOwner_not?: String
-  primaryKeyOwner_in?: String[] | String
-  primaryKeyOwner_not_in?: String[] | String
-  primaryKeyOwner_lt?: String
-  primaryKeyOwner_lte?: String
-  primaryKeyOwner_gt?: String
-  primaryKeyOwner_gte?: String
-  primaryKeyOwner_contains?: String
-  primaryKeyOwner_not_contains?: String
-  primaryKeyOwner_starts_with?: String
-  primaryKeyOwner_not_starts_with?: String
-  primaryKeyOwner_ends_with?: String
-  primaryKeyOwner_not_ends_with?: String
-  primaryKeyTable?: String
-  primaryKeyTable_not?: String
-  primaryKeyTable_in?: String[] | String
-  primaryKeyTable_not_in?: String[] | String
-  primaryKeyTable_lt?: String
-  primaryKeyTable_lte?: String
-  primaryKeyTable_gt?: String
-  primaryKeyTable_gte?: String
-  primaryKeyTable_contains?: String
-  primaryKeyTable_not_contains?: String
-  primaryKeyTable_starts_with?: String
-  primaryKeyTable_not_starts_with?: String
-  primaryKeyTable_ends_with?: String
-  primaryKeyTable_not_ends_with?: String
-  primaryKeyColumn?: String
-  primaryKeyColumn_not?: String
-  primaryKeyColumn_in?: String[] | String
-  primaryKeyColumn_not_in?: String[] | String
-  primaryKeyColumn_lt?: String
-  primaryKeyColumn_lte?: String
-  primaryKeyColumn_gt?: String
-  primaryKeyColumn_gte?: String
-  primaryKeyColumn_contains?: String
-  primaryKeyColumn_not_contains?: String
-  primaryKeyColumn_starts_with?: String
-  primaryKeyColumn_not_starts_with?: String
-  primaryKeyColumn_ends_with?: String
-  primaryKeyColumn_not_ends_with?: String
-  attributes_every?: AttributeWhereInput
-  attributes_some?: AttributeWhereInput
-  attributes_none?: AttributeWhereInput
-  database?: DatabaseWhereInput
 }
 
 export interface InputColumnUpdateWithoutAttributeDataInput {
@@ -4303,10 +4258,6 @@ export interface InputColumnUpdateWithoutAttributeDataInput {
   script?: String
   staticValue?: String
   joins?: JoinUpdateManyWithoutInputColumnInput
-}
-
-export interface AttributeWhereUniqueInput {
-  id?: ID_Input
 }
 
 export interface JoinUpdateManyWithoutInputColumnInput {
@@ -4320,27 +4271,9 @@ export interface JoinUpdateManyWithoutInputColumnInput {
   upsert?: JoinUpsertWithWhereUniqueWithoutInputColumnInput[] | JoinUpsertWithWhereUniqueWithoutInputColumnInput
 }
 
-export interface AttributeUpdateManyMutationInput {
-  name?: String
-  mergingScript?: String
-  isProfile?: Boolean
-  type?: String
-  comment?: String
-  depth?: Int
-}
-
 export interface JoinUpdateWithWhereUniqueWithoutInputColumnInput {
   where: JoinWhereUniqueInput
   data: JoinUpdateWithoutInputColumnDataInput
-}
-
-export interface InputColumnUpdateWithoutJoinsDataInput {
-  owner?: String
-  table?: String
-  column?: String
-  script?: String
-  staticValue?: String
-  attribute?: AttributeUpdateOneRequiredWithoutInputColumnsInput
 }
 
 export interface JoinUpdateWithoutInputColumnDataInput {
@@ -4352,30 +4285,9 @@ export interface JoinUpdateWithoutInputColumnDataInput {
   targetColumn?: String
 }
 
-export interface AttributeUpdateWithoutInputColumnsDataInput {
-  name?: String
-  mergingScript?: String
-  isProfile?: Boolean
-  type?: String
-  comment?: String
-  depth?: Int
-  resource?: ResourceUpdateOneWithoutAttributesInput
-  attributes?: AttributeUpdateManyWithoutAttributeInput
-  attribute?: AttributeUpdateOneWithoutAttributesInput
-}
-
 export interface JoinUpdateManyWithWhereNestedInput {
   where: JoinScalarWhereInput
   data: JoinUpdateManyDataInput
-}
-
-export interface ResourceUpdateInput {
-  name?: String
-  primaryKeyOwner?: String
-  primaryKeyTable?: String
-  primaryKeyColumn?: String
-  attributes?: AttributeUpdateManyWithoutResourceInput
-  database?: DatabaseUpdateOneRequiredWithoutResourcesInput
 }
 
 export interface JoinScalarWhereInput {
@@ -4482,11 +4394,6 @@ export interface JoinScalarWhereInput {
   targetColumn_not_ends_with?: String
 }
 
-export interface ResourceCreateManyWithoutDatabaseInput {
-  create?: ResourceCreateWithoutDatabaseInput[] | ResourceCreateWithoutDatabaseInput
-  connect?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput
-}
-
 export interface JoinUpdateManyDataInput {
   sourceOwner?: String
   sourceTable?: String
@@ -4496,30 +4403,15 @@ export interface JoinUpdateManyDataInput {
   targetColumn?: String
 }
 
-export interface AttributeCreateManyWithoutAttributeInput {
-  create?: AttributeCreateWithoutAttributeInput[] | AttributeCreateWithoutAttributeInput
-  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput
-}
-
 export interface JoinUpsertWithWhereUniqueWithoutInputColumnInput {
   where: JoinWhereUniqueInput
   update: JoinUpdateWithoutInputColumnDataInput
   create: JoinCreateWithoutInputColumnInput
 }
 
-export interface DatabaseCreateOneWithoutResourcesInput {
-  create?: DatabaseCreateWithoutResourcesInput
-  connect?: DatabaseWhereUniqueInput
-}
-
 export interface InputColumnUpdateManyWithWhereNestedInput {
   where: InputColumnScalarWhereInput
   data: InputColumnUpdateManyDataInput
-}
-
-export interface JoinCreateManyWithoutInputColumnInput {
-  create?: JoinCreateWithoutInputColumnInput[] | JoinCreateWithoutInputColumnInput
-  connect?: JoinWhereUniqueInput[] | JoinWhereUniqueInput
 }
 
 export interface InputColumnScalarWhereInput {
@@ -4612,17 +4504,6 @@ export interface InputColumnScalarWhereInput {
   staticValue_not_ends_with?: String
 }
 
-export interface JoinSubscriptionWhereInput {
-  AND?: JoinSubscriptionWhereInput[] | JoinSubscriptionWhereInput
-  OR?: JoinSubscriptionWhereInput[] | JoinSubscriptionWhereInput
-  NOT?: JoinSubscriptionWhereInput[] | JoinSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: JoinWhereInput
-}
-
 export interface InputColumnUpdateManyDataInput {
   owner?: String
   table?: String
@@ -4631,34 +4512,15 @@ export interface InputColumnUpdateManyDataInput {
   staticValue?: String
 }
 
-export interface DatabaseWhereUniqueInput {
-  id?: ID_Input
-  name?: String
-}
-
 export interface InputColumnUpsertWithWhereUniqueWithoutAttributeInput {
   where: InputColumnWhereUniqueInput
   update: InputColumnUpdateWithoutAttributeDataInput
   create: InputColumnCreateWithoutAttributeInput
 }
 
-export interface DatabaseUpdateManyMutationInput {
-  name?: String
-}
-
 export interface AttributeUpdateManyWithWhereNestedInput {
   where: AttributeScalarWhereInput
   data: AttributeUpdateManyDataInput
-}
-
-export interface InputColumnUpdateInput {
-  owner?: String
-  table?: String
-  column?: String
-  script?: String
-  staticValue?: String
-  joins?: JoinUpdateManyWithoutInputColumnInput
-  attribute?: AttributeUpdateOneRequiredWithoutInputColumnsInput
 }
 
 export interface AttributeScalarWhereInput {
@@ -4747,11 +4609,6 @@ export interface AttributeScalarWhereInput {
   depth_gte?: Int
 }
 
-export interface AttributeCreateManyWithoutResourceInput {
-  create?: AttributeCreateWithoutResourceInput[] | AttributeCreateWithoutResourceInput
-  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput
-}
-
 export interface AttributeUpdateManyDataInput {
   name?: String
   mergingScript?: String
@@ -4761,21 +4618,53 @@ export interface AttributeUpdateManyDataInput {
   depth?: Int
 }
 
-export interface InputColumnCreateManyWithoutAttributeInput {
-  create?: InputColumnCreateWithoutAttributeInput[] | InputColumnCreateWithoutAttributeInput
-  connect?: InputColumnWhereUniqueInput[] | InputColumnWhereUniqueInput
-}
-
 export interface AttributeUpsertWithWhereUniqueWithoutAttributeInput {
   where: AttributeWhereUniqueInput
   update: AttributeUpdateWithoutAttributeDataInput
   create: AttributeCreateWithoutAttributeInput
 }
 
-export interface AttributeWhereInput {
-  AND?: AttributeWhereInput[] | AttributeWhereInput
-  OR?: AttributeWhereInput[] | AttributeWhereInput
-  NOT?: AttributeWhereInput[] | AttributeWhereInput
+export interface AttributeUpdateOneWithoutAttributesInput {
+  create?: AttributeCreateWithoutAttributesInput
+  connect?: AttributeWhereUniqueInput
+  disconnect?: Boolean
+  delete?: Boolean
+  update?: AttributeUpdateWithoutAttributesDataInput
+  upsert?: AttributeUpsertWithoutAttributesInput
+}
+
+export interface AttributeUpdateWithoutAttributesDataInput {
+  name?: String
+  mergingScript?: String
+  isProfile?: Boolean
+  type?: String
+  comment?: String
+  depth?: Int
+  resource?: ResourceUpdateOneWithoutAttributesInput
+  attribute?: AttributeUpdateOneWithoutAttributesInput
+  inputColumns?: InputColumnUpdateManyWithoutAttributeInput
+}
+
+export interface AttributeUpsertWithoutAttributesInput {
+  update: AttributeUpdateWithoutAttributesDataInput
+  create: AttributeCreateWithoutAttributesInput
+}
+
+export interface AttributeUpsertWithWhereUniqueWithoutResourceInput {
+  where: AttributeWhereUniqueInput
+  update: AttributeUpdateWithoutResourceDataInput
+  create: AttributeCreateWithoutResourceInput
+}
+
+export interface ResourceUpdateManyWithWhereNestedInput {
+  where: ResourceScalarWhereInput
+  data: ResourceUpdateManyDataInput
+}
+
+export interface ResourceScalarWhereInput {
+  AND?: ResourceScalarWhereInput[] | ResourceScalarWhereInput
+  OR?: ResourceScalarWhereInput[] | ResourceScalarWhereInput
+  NOT?: ResourceScalarWhereInput[] | ResourceScalarWhereInput
   id?: ID_Input
   id_not?: ID_Input
   id_in?: ID_Input[] | ID_Input
@@ -4804,112 +4693,48 @@ export interface AttributeWhereInput {
   name_not_starts_with?: String
   name_ends_with?: String
   name_not_ends_with?: String
-  mergingScript?: String
-  mergingScript_not?: String
-  mergingScript_in?: String[] | String
-  mergingScript_not_in?: String[] | String
-  mergingScript_lt?: String
-  mergingScript_lte?: String
-  mergingScript_gt?: String
-  mergingScript_gte?: String
-  mergingScript_contains?: String
-  mergingScript_not_contains?: String
-  mergingScript_starts_with?: String
-  mergingScript_not_starts_with?: String
-  mergingScript_ends_with?: String
-  mergingScript_not_ends_with?: String
-  isProfile?: Boolean
-  isProfile_not?: Boolean
-  type?: String
-  type_not?: String
-  type_in?: String[] | String
-  type_not_in?: String[] | String
-  type_lt?: String
-  type_lte?: String
-  type_gt?: String
-  type_gte?: String
-  type_contains?: String
-  type_not_contains?: String
-  type_starts_with?: String
-  type_not_starts_with?: String
-  type_ends_with?: String
-  type_not_ends_with?: String
-  comment?: String
-  comment_not?: String
-  comment_in?: String[] | String
-  comment_not_in?: String[] | String
-  comment_lt?: String
-  comment_lte?: String
-  comment_gt?: String
-  comment_gte?: String
-  comment_contains?: String
-  comment_not_contains?: String
-  comment_starts_with?: String
-  comment_not_starts_with?: String
-  comment_ends_with?: String
-  comment_not_ends_with?: String
-  depth?: Int
-  depth_not?: Int
-  depth_in?: Int[] | Int
-  depth_not_in?: Int[] | Int
-  depth_lt?: Int
-  depth_lte?: Int
-  depth_gt?: Int
-  depth_gte?: Int
-  resource?: ResourceWhereInput
-  attributes_every?: AttributeWhereInput
-  attributes_some?: AttributeWhereInput
-  attributes_none?: AttributeWhereInput
-  attribute?: AttributeWhereInput
-  inputColumns_every?: InputColumnWhereInput
-  inputColumns_some?: InputColumnWhereInput
-  inputColumns_none?: InputColumnWhereInput
-}
-
-export interface AttributeUpsertWithWhereUniqueWithoutResourceInput {
-  where: AttributeWhereUniqueInput
-  update: AttributeUpdateWithoutResourceDataInput
-  create: AttributeCreateWithoutResourceInput
-}
-
-export interface AttributeUpsertWithoutAttributesInput {
-  update: AttributeUpdateWithoutAttributesDataInput
-  create: AttributeCreateWithoutAttributesInput
-}
-
-export interface AttributeUpdateWithoutAttributesDataInput {
-  name?: String
-  mergingScript?: String
-  isProfile?: Boolean
-  type?: String
-  comment?: String
-  depth?: Int
-  resource?: ResourceUpdateOneWithoutAttributesInput
-  attribute?: AttributeUpdateOneWithoutAttributesInput
-  inputColumns?: InputColumnUpdateManyWithoutAttributeInput
-}
-
-export interface AttributeUpdateOneWithoutAttributesInput {
-  create?: AttributeCreateWithoutAttributesInput
-  connect?: AttributeWhereUniqueInput
-  disconnect?: Boolean
-  delete?: Boolean
-  update?: AttributeUpdateWithoutAttributesDataInput
-  upsert?: AttributeUpsertWithoutAttributesInput
-}
-
-export interface JoinWhereUniqueInput {
-  id?: ID_Input
-}
-
-export interface AttributeCreateOneWithoutAttributesInput {
-  create?: AttributeCreateWithoutAttributesInput
-  connect?: AttributeWhereUniqueInput
-}
-
-export interface ResourceCreateOneWithoutAttributesInput {
-  create?: ResourceCreateWithoutAttributesInput
-  connect?: ResourceWhereUniqueInput
+  primaryKeyOwner?: String
+  primaryKeyOwner_not?: String
+  primaryKeyOwner_in?: String[] | String
+  primaryKeyOwner_not_in?: String[] | String
+  primaryKeyOwner_lt?: String
+  primaryKeyOwner_lte?: String
+  primaryKeyOwner_gt?: String
+  primaryKeyOwner_gte?: String
+  primaryKeyOwner_contains?: String
+  primaryKeyOwner_not_contains?: String
+  primaryKeyOwner_starts_with?: String
+  primaryKeyOwner_not_starts_with?: String
+  primaryKeyOwner_ends_with?: String
+  primaryKeyOwner_not_ends_with?: String
+  primaryKeyTable?: String
+  primaryKeyTable_not?: String
+  primaryKeyTable_in?: String[] | String
+  primaryKeyTable_not_in?: String[] | String
+  primaryKeyTable_lt?: String
+  primaryKeyTable_lte?: String
+  primaryKeyTable_gt?: String
+  primaryKeyTable_gte?: String
+  primaryKeyTable_contains?: String
+  primaryKeyTable_not_contains?: String
+  primaryKeyTable_starts_with?: String
+  primaryKeyTable_not_starts_with?: String
+  primaryKeyTable_ends_with?: String
+  primaryKeyTable_not_ends_with?: String
+  primaryKeyColumn?: String
+  primaryKeyColumn_not?: String
+  primaryKeyColumn_in?: String[] | String
+  primaryKeyColumn_not_in?: String[] | String
+  primaryKeyColumn_lt?: String
+  primaryKeyColumn_lte?: String
+  primaryKeyColumn_gt?: String
+  primaryKeyColumn_gte?: String
+  primaryKeyColumn_contains?: String
+  primaryKeyColumn_not_contains?: String
+  primaryKeyColumn_starts_with?: String
+  primaryKeyColumn_not_starts_with?: String
+  primaryKeyColumn_ends_with?: String
+  primaryKeyColumn_not_ends_with?: String
 }
 
 export interface ResourceUpdateManyDataInput {
@@ -4917,6 +4742,68 @@ export interface ResourceUpdateManyDataInput {
   primaryKeyOwner?: String
   primaryKeyTable?: String
   primaryKeyColumn?: String
+}
+
+export interface ResourceUpsertWithWhereUniqueWithoutDatabaseInput {
+  where: ResourceWhereUniqueInput
+  update: ResourceUpdateWithoutDatabaseDataInput
+  create: ResourceCreateWithoutDatabaseInput
+}
+
+export interface ResourceUpdateInput {
+  name?: String
+  primaryKeyOwner?: String
+  primaryKeyTable?: String
+  primaryKeyColumn?: String
+  attributes?: AttributeUpdateManyWithoutResourceInput
+  database?: DatabaseUpdateOneRequiredWithoutResourcesInput
+}
+
+export interface AttributeUpdateInput {
+  name?: String
+  mergingScript?: String
+  isProfile?: Boolean
+  type?: String
+  comment?: String
+  depth?: Int
+  resource?: ResourceUpdateOneWithoutAttributesInput
+  attributes?: AttributeUpdateManyWithoutAttributeInput
+  attribute?: AttributeUpdateOneWithoutAttributesInput
+  inputColumns?: InputColumnUpdateManyWithoutAttributeInput
+}
+
+export interface InputColumnUpdateInput {
+  owner?: String
+  table?: String
+  column?: String
+  script?: String
+  staticValue?: String
+  joins?: JoinUpdateManyWithoutInputColumnInput
+  attribute?: AttributeUpdateOneRequiredWithoutInputColumnsInput
+}
+
+export interface AttributeUpdateOneRequiredWithoutInputColumnsInput {
+  create?: AttributeCreateWithoutInputColumnsInput
+  connect?: AttributeWhereUniqueInput
+  update?: AttributeUpdateWithoutInputColumnsDataInput
+  upsert?: AttributeUpsertWithoutInputColumnsInput
+}
+
+export interface AttributeUpdateWithoutInputColumnsDataInput {
+  name?: String
+  mergingScript?: String
+  isProfile?: Boolean
+  type?: String
+  comment?: String
+  depth?: Int
+  resource?: ResourceUpdateOneWithoutAttributesInput
+  attributes?: AttributeUpdateManyWithoutAttributeInput
+  attribute?: AttributeUpdateOneWithoutAttributesInput
+}
+
+export interface AttributeUpsertWithoutInputColumnsInput {
+  update: AttributeUpdateWithoutInputColumnsDataInput
+  create: AttributeCreateWithoutInputColumnsInput
 }
 
 export interface JoinUpdateInput {
@@ -4929,6 +4816,119 @@ export interface JoinUpdateInput {
   inputColumn?: InputColumnUpdateOneRequiredWithoutJoinsInput
 }
 
+export interface InputColumnUpdateOneRequiredWithoutJoinsInput {
+  create?: InputColumnCreateWithoutJoinsInput
+  connect?: InputColumnWhereUniqueInput
+  update?: InputColumnUpdateWithoutJoinsDataInput
+  upsert?: InputColumnUpsertWithoutJoinsInput
+}
+
+export interface InputColumnUpdateWithoutJoinsDataInput {
+  owner?: String
+  table?: String
+  column?: String
+  script?: String
+  staticValue?: String
+  attribute?: AttributeUpdateOneRequiredWithoutInputColumnsInput
+}
+
+export interface InputColumnUpsertWithoutJoinsInput {
+  update: InputColumnUpdateWithoutJoinsDataInput
+  create: InputColumnCreateWithoutJoinsInput
+}
+
+export interface DatabaseUpdateManyMutationInput {
+  name?: String
+}
+
+export interface ResourceUpdateManyMutationInput {
+  name?: String
+  primaryKeyOwner?: String
+  primaryKeyTable?: String
+  primaryKeyColumn?: String
+}
+
+export interface AttributeUpdateManyMutationInput {
+  name?: String
+  mergingScript?: String
+  isProfile?: Boolean
+  type?: String
+  comment?: String
+  depth?: Int
+}
+
+export interface InputColumnUpdateManyMutationInput {
+  owner?: String
+  table?: String
+  column?: String
+  script?: String
+  staticValue?: String
+}
+
+export interface JoinUpdateManyMutationInput {
+  sourceOwner?: String
+  sourceTable?: String
+  sourceColumn?: String
+  targetOwner?: String
+  targetTable?: String
+  targetColumn?: String
+}
+
+export interface DatabaseSubscriptionWhereInput {
+  AND?: DatabaseSubscriptionWhereInput[] | DatabaseSubscriptionWhereInput
+  OR?: DatabaseSubscriptionWhereInput[] | DatabaseSubscriptionWhereInput
+  NOT?: DatabaseSubscriptionWhereInput[] | DatabaseSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: DatabaseWhereInput
+}
+
+export interface ResourceSubscriptionWhereInput {
+  AND?: ResourceSubscriptionWhereInput[] | ResourceSubscriptionWhereInput
+  OR?: ResourceSubscriptionWhereInput[] | ResourceSubscriptionWhereInput
+  NOT?: ResourceSubscriptionWhereInput[] | ResourceSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: ResourceWhereInput
+}
+
+export interface AttributeSubscriptionWhereInput {
+  AND?: AttributeSubscriptionWhereInput[] | AttributeSubscriptionWhereInput
+  OR?: AttributeSubscriptionWhereInput[] | AttributeSubscriptionWhereInput
+  NOT?: AttributeSubscriptionWhereInput[] | AttributeSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: AttributeWhereInput
+}
+
+export interface InputColumnSubscriptionWhereInput {
+  AND?: InputColumnSubscriptionWhereInput[] | InputColumnSubscriptionWhereInput
+  OR?: InputColumnSubscriptionWhereInput[] | InputColumnSubscriptionWhereInput
+  NOT?: InputColumnSubscriptionWhereInput[] | InputColumnSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: InputColumnWhereInput
+}
+
+export interface JoinSubscriptionWhereInput {
+  AND?: JoinSubscriptionWhereInput[] | JoinSubscriptionWhereInput
+  OR?: JoinSubscriptionWhereInput[] | JoinSubscriptionWhereInput
+  NOT?: JoinSubscriptionWhereInput[] | JoinSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: JoinWhereInput
+}
+
 /*
  * An object with an ID
 
@@ -4937,140 +4937,20 @@ export interface Node {
   id: ID_Output
 }
 
-export interface JoinPreviousValues {
-  id: ID_Output
-  sourceOwner?: String
-  sourceTable?: String
-  sourceColumn?: String
-  targetOwner?: String
-  targetTable?: String
-  targetColumn?: String
-}
-
-/*
- * A connection to a list of items.
-
- */
-export interface DatabaseConnection {
-  pageInfo: PageInfo
-  edges: DatabaseEdge[]
-  aggregate: AggregateDatabase
-}
-
 export interface Database extends Node {
   id: ID_Output
   name: String
   resources?: Resource[]
 }
 
-export interface Join extends Node {
-  id: ID_Output
-  sourceOwner?: String
-  sourceTable?: String
-  sourceColumn?: String
-  targetOwner?: String
-  targetTable?: String
-  targetColumn?: String
-  inputColumn: InputColumn
-}
-
-/*
- * An edge in a connection.
-
- */
-export interface JoinEdge {
-  node: Join
-  cursor: String
-}
-
-export interface InputColumn extends Node {
-  id: ID_Output
-  owner?: String
-  table?: String
-  column?: String
-  script?: String
-  staticValue?: String
-  joins?: Join[]
-  attribute: Attribute
-}
-
-export interface AggregateInputColumn {
-  count: Int
-}
-
-/*
- * A connection to a list of items.
-
- */
-export interface JoinConnection {
-  pageInfo: PageInfo
-  edges: JoinEdge[]
-  aggregate: AggregateJoin
-}
-
-export interface InputColumnSubscriptionPayload {
-  mutation: MutationType
-  node?: InputColumn
-  updatedFields?: String[]
-  previousValues?: InputColumnPreviousValues
-}
-
-/*
- * An edge in a connection.
-
- */
-export interface InputColumnEdge {
-  node: InputColumn
-  cursor: String
-}
-
-/*
- * A connection to a list of items.
-
- */
-export interface InputColumnConnection {
-  pageInfo: PageInfo
-  edges: InputColumnEdge[]
-  aggregate: AggregateInputColumn
-}
-
-export interface AggregateAttribute {
-  count: Int
-}
-
-/*
- * A connection to a list of items.
-
- */
-export interface AttributeConnection {
-  pageInfo: PageInfo
-  edges: AttributeEdge[]
-  aggregate: AggregateAttribute
-}
-
-export interface DatabaseSubscriptionPayload {
-  mutation: MutationType
-  node?: Database
-  updatedFields?: String[]
-  previousValues?: DatabasePreviousValues
-}
-
-/*
- * An edge in a connection.
-
- */
-export interface ResourceEdge {
-  node: Resource
-  cursor: String
-}
-
-export interface DatabasePreviousValues {
+export interface Resource extends Node {
   id: ID_Output
   name: String
-}
-
-export interface AggregateDatabase {
-  count: Int
+  primaryKeyOwner?: String
+  primaryKeyTable?: String
+  primaryKeyColumn?: String
+  attributes?: Attribute[]
+  database: Database
 }
 
 export interface Attribute extends Node {
@@ -5087,18 +4967,36 @@ export interface Attribute extends Node {
   inputColumns?: InputColumn[]
 }
 
-export interface JoinSubscriptionPayload {
-  mutation: MutationType
-  node?: Join
-  updatedFields?: String[]
-  previousValues?: JoinPreviousValues
+export interface InputColumn extends Node {
+  id: ID_Output
+  owner?: String
+  table?: String
+  column?: String
+  script?: String
+  staticValue?: String
+  joins?: Join[]
+  attribute: Attribute
 }
 
-export interface ResourceSubscriptionPayload {
-  mutation: MutationType
-  node?: Resource
-  updatedFields?: String[]
-  previousValues?: ResourcePreviousValues
+export interface Join extends Node {
+  id: ID_Output
+  sourceOwner?: String
+  sourceTable?: String
+  sourceColumn?: String
+  targetOwner?: String
+  targetTable?: String
+  targetColumn?: String
+  inputColumn: InputColumn
+}
+
+/*
+ * A connection to a list of items.
+
+ */
+export interface DatabaseConnection {
+  pageInfo: PageInfo
+  edges: DatabaseEdge[]
+  aggregate: AggregateDatabase
 }
 
 /*
@@ -5112,21 +5010,17 @@ export interface PageInfo {
   endCursor?: String
 }
 
-export interface ResourcePreviousValues {
-  id: ID_Output
-  name: String
-  primaryKeyOwner?: String
-  primaryKeyTable?: String
-  primaryKeyColumn?: String
-}
-
 /*
  * An edge in a connection.
 
  */
-export interface AttributeEdge {
-  node: Attribute
+export interface DatabaseEdge {
+  node: Database
   cursor: String
+}
+
+export interface AggregateDatabase {
+  count: Int
 }
 
 /*
@@ -5139,14 +5033,124 @@ export interface ResourceConnection {
   aggregate: AggregateResource
 }
 
-export interface Resource extends Node {
+/*
+ * An edge in a connection.
+
+ */
+export interface ResourceEdge {
+  node: Resource
+  cursor: String
+}
+
+export interface AggregateResource {
+  count: Int
+}
+
+/*
+ * A connection to a list of items.
+
+ */
+export interface AttributeConnection {
+  pageInfo: PageInfo
+  edges: AttributeEdge[]
+  aggregate: AggregateAttribute
+}
+
+/*
+ * An edge in a connection.
+
+ */
+export interface AttributeEdge {
+  node: Attribute
+  cursor: String
+}
+
+export interface AggregateAttribute {
+  count: Int
+}
+
+/*
+ * A connection to a list of items.
+
+ */
+export interface InputColumnConnection {
+  pageInfo: PageInfo
+  edges: InputColumnEdge[]
+  aggregate: AggregateInputColumn
+}
+
+/*
+ * An edge in a connection.
+
+ */
+export interface InputColumnEdge {
+  node: InputColumn
+  cursor: String
+}
+
+export interface AggregateInputColumn {
+  count: Int
+}
+
+/*
+ * A connection to a list of items.
+
+ */
+export interface JoinConnection {
+  pageInfo: PageInfo
+  edges: JoinEdge[]
+  aggregate: AggregateJoin
+}
+
+/*
+ * An edge in a connection.
+
+ */
+export interface JoinEdge {
+  node: Join
+  cursor: String
+}
+
+export interface AggregateJoin {
+  count: Int
+}
+
+export interface BatchPayload {
+  count: Long
+}
+
+export interface DatabaseSubscriptionPayload {
+  mutation: MutationType
+  node?: Database
+  updatedFields?: String[]
+  previousValues?: DatabasePreviousValues
+}
+
+export interface DatabasePreviousValues {
+  id: ID_Output
+  name: String
+}
+
+export interface ResourceSubscriptionPayload {
+  mutation: MutationType
+  node?: Resource
+  updatedFields?: String[]
+  previousValues?: ResourcePreviousValues
+}
+
+export interface ResourcePreviousValues {
   id: ID_Output
   name: String
   primaryKeyOwner?: String
   primaryKeyTable?: String
   primaryKeyColumn?: String
-  attributes?: Attribute[]
-  database: Database
+}
+
+export interface AttributeSubscriptionPayload {
+  mutation: MutationType
+  node?: Attribute
+  updatedFields?: String[]
+  previousValues?: AttributePreviousValues
 }
 
 export interface AttributePreviousValues {
@@ -5159,11 +5163,11 @@ export interface AttributePreviousValues {
   depth?: Int
 }
 
-export interface AttributeSubscriptionPayload {
+export interface InputColumnSubscriptionPayload {
   mutation: MutationType
-  node?: Attribute
+  node?: InputColumn
   updatedFields?: String[]
-  previousValues?: AttributePreviousValues
+  previousValues?: InputColumnPreviousValues
 }
 
 export interface InputColumnPreviousValues {
@@ -5175,31 +5179,22 @@ export interface InputColumnPreviousValues {
   staticValue?: String
 }
 
-export interface BatchPayload {
-  count: Long
+export interface JoinSubscriptionPayload {
+  mutation: MutationType
+  node?: Join
+  updatedFields?: String[]
+  previousValues?: JoinPreviousValues
 }
 
-export interface AggregateResource {
-  count: Int
+export interface JoinPreviousValues {
+  id: ID_Output
+  sourceOwner?: String
+  sourceTable?: String
+  sourceColumn?: String
+  targetOwner?: String
+  targetTable?: String
+  targetColumn?: String
 }
-
-export interface AggregateJoin {
-  count: Int
-}
-
-/*
- * An edge in a connection.
-
- */
-export interface DatabaseEdge {
-  node: Database
-  cursor: String
-}
-
-/*
-The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
-*/
-export type String = string
 
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
@@ -5208,10 +5203,14 @@ export type ID_Input = string | number
 export type ID_Output = string
 
 /*
-The `Long` scalar type represents non-fractional signed whole numeric values.
-Long can represent values between -(2^63) and 2^63 - 1.
+The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
-export type Long = string
+export type String = string
+
+/*
+The `Boolean` scalar type represents `true` or `false`.
+*/
+export type Boolean = boolean
 
 /*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
@@ -5219,6 +5218,7 @@ The `Int` scalar type represents non-fractional signed whole numeric values. Int
 export type Int = number
 
 /*
-The `Boolean` scalar type represents `true` or `false`.
+The `Long` scalar type represents non-fractional signed whole numeric values.
+Long can represent values between -(2^63) and 2^63 - 1.
 */
-export type Boolean = boolean
+export type Long = string
