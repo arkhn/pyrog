@@ -25,6 +25,7 @@ export class AuthError extends Error {
     }
 }
 
+// Recursively queries all nested attributes of a given attribute.
 export const getRecAttribute = async (attribute, context: Context) => {
     const directAttributes = await context.client.attribute({
         id: attribute.id,

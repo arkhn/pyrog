@@ -4,6 +4,44 @@ import {
 } from '../../utils'
 
 export const arkhn = {
+    // createInputColumnViaAttribute et deleteInputColumnViaAttribute
+    // sont construite de sorte à créer ou supprimer une inputColumn
+    // à travers son attribut parent directement.
+    // Cela permet que ce genre d'évènement (création, suppression)
+    // soit pris en compte lors d'une subscription à l'attribut parent.
+    // Une issue parle de ça ici : https://github.com/prisma/prisma/issues/146
+    createInputColumnViaAttribute(parent, { id, data }, context: Context) {
+        return context.client.updateAttribute({
+            data: {
+                inputColumns: {
+                    create: [{
+                        ...data,
+                    }]
+                }
+            },
+            where: { id }
+        })
+    },
+    deleteInputColumnViaAttribute(parent, { attributeId, inputColumnId }, context: Context) {
+        return context.client.updateAttribute({
+            data: {
+                inputColumns: {
+                    delete: {
+                        id: inputColumnId,
+                    }
+                }
+            },
+            where: {
+                id: attributeId,
+            }
+        })
+    },
+    updateInputColumn(parent, { id, data }, context: Context) {
+        return context.client.updateInputColumn({
+            data,
+            where: { id }
+        })
+    },
     // createResourceTreeInDatabase(parent, args, context: Context, info) {
     //     try {
     //         // TODO : most horrible code line ever, change it

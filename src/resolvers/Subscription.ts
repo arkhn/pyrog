@@ -2,23 +2,52 @@ import { Context } from '../utils'
 
 export const Subscription = {
     resource: {
-        subscribe: (parent, { id }, context: Context) => {
-            return context.client.$subscribe.resource({ node: { id } })
+        subscribe: async (parent, { id }, context: Context) => {
+            return context.client.$subscribe
+                .resource({
+                    mutation_in: ['CREATED', 'UPDATED'],
+                    node: { id },
+                })
+                .node()
+        },
+        resolve: payload => {
+            return payload
         },
     },
     attribute: {
-        subscribe: (parent, { id }, context: Context) => {
-            return context.client.$subscribe.attribute({ node: { id } })
+        subscribe: async (parent, { id }, context: Context) => {
+            return context.client.$subscribe
+                .attribute({
+                    mutation_in: ['CREATED', 'UPDATED'],
+                    node: { id }
+                })
+                .node()
+                .inputColumns()
+        },
+        resolve: payload => {
+            return payload
         },
     },
     inputColumn: {
-        subscribe: (parent, { id }, context: Context) => {
-            return context.client.$subscribe.inputColumn({ node: { id } })
+        subscribe: async (parent, { id }, context: Context) => {
+            return context.client.$subscribe.inputColumn({
+                mutation_in: ['CREATED', 'UPDATED'],
+                node: { id }
+            }).node()
+        },
+        resolve: payload => {
+            return payload
         },
     },
     join: {
-        subscribe: (parent, { id }, context: Context) => {
-            return context.client.$subscribe.join({ node: { id } })
+        subscribe: async (parent, { id }, context: Context) => {
+            return context.client.$subscribe.join({
+                mutation_in: ['CREATED', 'UPDATED'],
+                node: { id }
+            }).node()
+        },
+        resolve: payload => {
+            return payload
         },
     },
 }
