@@ -1,5 +1,5 @@
-# source: https://eu1.prisma.sh/public-neonswoop-398/graphql-typescript-boilerplate/dev
-# timestamp: Mon Dec 10 2018 14:16:44 GMT+0100 (CET)
+# source: http://0.0.0.0:4466
+# timestamp: Thu Mar 07 2019 09:44:51 GMT+0100 (Central European Standard Time)
 
 type AggregateAttribute {
   count: Int!
@@ -18,6 +18,10 @@ type AggregateJoin {
 }
 
 type AggregateResource {
+  count: Int!
+}
+
+type AggregateUser {
   count: Int!
 }
 
@@ -476,6 +480,7 @@ input AttributeUpdateManyMutationInput {
 input AttributeUpdateManyWithoutAttributeInput {
   create: [AttributeCreateWithoutAttributeInput!]
   connect: [AttributeWhereUniqueInput!]
+  set: [AttributeWhereUniqueInput!]
   disconnect: [AttributeWhereUniqueInput!]
   delete: [AttributeWhereUniqueInput!]
   update: [AttributeUpdateWithWhereUniqueWithoutAttributeInput!]
@@ -487,6 +492,7 @@ input AttributeUpdateManyWithoutAttributeInput {
 input AttributeUpdateManyWithoutResourceInput {
   create: [AttributeCreateWithoutResourceInput!]
   connect: [AttributeWhereUniqueInput!]
+  set: [AttributeWhereUniqueInput!]
   disconnect: [AttributeWhereUniqueInput!]
   delete: [AttributeWhereUniqueInput!]
   update: [AttributeUpdateWithWhereUniqueWithoutResourceInput!]
@@ -1483,6 +1489,7 @@ input InputColumnUpdateManyMutationInput {
 input InputColumnUpdateManyWithoutAttributeInput {
   create: [InputColumnCreateWithoutAttributeInput!]
   connect: [InputColumnWhereUniqueInput!]
+  set: [InputColumnWhereUniqueInput!]
   disconnect: [InputColumnWhereUniqueInput!]
   delete: [InputColumnWhereUniqueInput!]
   update: [InputColumnUpdateWithWhereUniqueWithoutAttributeInput!]
@@ -2242,6 +2249,7 @@ input JoinUpdateManyMutationInput {
 input JoinUpdateManyWithoutInputColumnInput {
   create: [JoinCreateWithoutInputColumnInput!]
   connect: [JoinWhereUniqueInput!]
+  set: [JoinWhereUniqueInput!]
   disconnect: [JoinWhereUniqueInput!]
   delete: [JoinWhereUniqueInput!]
   update: [JoinUpdateWithWhereUniqueWithoutInputColumnInput!]
@@ -2583,31 +2591,37 @@ type Mutation {
   createAttribute(data: AttributeCreateInput!): Attribute!
   createInputColumn(data: InputColumnCreateInput!): InputColumn!
   createJoin(data: JoinCreateInput!): Join!
+  createUser(data: UserCreateInput!): User!
   updateDatabase(data: DatabaseUpdateInput!, where: DatabaseWhereUniqueInput!): Database
   updateResource(data: ResourceUpdateInput!, where: ResourceWhereUniqueInput!): Resource
   updateAttribute(data: AttributeUpdateInput!, where: AttributeWhereUniqueInput!): Attribute
   updateInputColumn(data: InputColumnUpdateInput!, where: InputColumnWhereUniqueInput!): InputColumn
   updateJoin(data: JoinUpdateInput!, where: JoinWhereUniqueInput!): Join
+  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   deleteDatabase(where: DatabaseWhereUniqueInput!): Database
   deleteResource(where: ResourceWhereUniqueInput!): Resource
   deleteAttribute(where: AttributeWhereUniqueInput!): Attribute
   deleteInputColumn(where: InputColumnWhereUniqueInput!): InputColumn
   deleteJoin(where: JoinWhereUniqueInput!): Join
+  deleteUser(where: UserWhereUniqueInput!): User
   upsertDatabase(where: DatabaseWhereUniqueInput!, create: DatabaseCreateInput!, update: DatabaseUpdateInput!): Database!
   upsertResource(where: ResourceWhereUniqueInput!, create: ResourceCreateInput!, update: ResourceUpdateInput!): Resource!
   upsertAttribute(where: AttributeWhereUniqueInput!, create: AttributeCreateInput!, update: AttributeUpdateInput!): Attribute!
   upsertInputColumn(where: InputColumnWhereUniqueInput!, create: InputColumnCreateInput!, update: InputColumnUpdateInput!): InputColumn!
   upsertJoin(where: JoinWhereUniqueInput!, create: JoinCreateInput!, update: JoinUpdateInput!): Join!
+  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   updateManyDatabases(data: DatabaseUpdateManyMutationInput!, where: DatabaseWhereInput): BatchPayload!
   updateManyResources(data: ResourceUpdateManyMutationInput!, where: ResourceWhereInput): BatchPayload!
   updateManyAttributes(data: AttributeUpdateManyMutationInput!, where: AttributeWhereInput): BatchPayload!
   updateManyInputColumns(data: InputColumnUpdateManyMutationInput!, where: InputColumnWhereInput): BatchPayload!
   updateManyJoins(data: JoinUpdateManyMutationInput!, where: JoinWhereInput): BatchPayload!
+  updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   deleteManyDatabases(where: DatabaseWhereInput): BatchPayload!
   deleteManyResources(where: ResourceWhereInput): BatchPayload!
   deleteManyAttributes(where: AttributeWhereInput): BatchPayload!
   deleteManyInputColumns(where: InputColumnWhereInput): BatchPayload!
   deleteManyJoins(where: JoinWhereInput): BatchPayload!
+  deleteManyUsers(where: UserWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -2643,16 +2657,19 @@ type Query {
   attributes(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Attribute]!
   inputColumns(where: InputColumnWhereInput, orderBy: InputColumnOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [InputColumn]!
   joins(where: JoinWhereInput, orderBy: JoinOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Join]!
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   database(where: DatabaseWhereUniqueInput!): Database
   resource(where: ResourceWhereUniqueInput!): Resource
   attribute(where: AttributeWhereUniqueInput!): Attribute
   inputColumn(where: InputColumnWhereUniqueInput!): InputColumn
   join(where: JoinWhereUniqueInput!): Join
+  user(where: UserWhereUniqueInput!): User
   databasesConnection(where: DatabaseWhereInput, orderBy: DatabaseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DatabaseConnection!
   resourcesConnection(where: ResourceWhereInput, orderBy: ResourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ResourceConnection!
   attributesConnection(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AttributeConnection!
   inputColumnsConnection(where: InputColumnWhereInput, orderBy: InputColumnOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): InputColumnConnection!
   joinsConnection(where: JoinWhereInput, orderBy: JoinOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): JoinConnection!
+  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -3026,6 +3043,7 @@ input ResourceUpdateManyMutationInput {
 input ResourceUpdateManyWithoutDatabaseInput {
   create: [ResourceCreateWithoutDatabaseInput!]
   connect: [ResourceWhereUniqueInput!]
+  set: [ResourceWhereUniqueInput!]
   disconnect: [ResourceWhereUniqueInput!]
   delete: [ResourceWhereUniqueInput!]
   update: [ResourceUpdateWithWhereUniqueWithoutDatabaseInput!]
@@ -3305,4 +3323,286 @@ type Subscription {
   attribute(where: AttributeSubscriptionWhereInput): AttributeSubscriptionPayload
   inputColumn(where: InputColumnSubscriptionWhereInput): InputColumnSubscriptionPayload
   join(where: JoinSubscriptionWhereInput): JoinSubscriptionPayload
+  user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+}
+
+type User implements Node {
+  id: ID!
+  email: String!
+  password: String!
+  name: String!
+}
+
+"""A connection to a list of items."""
+type UserConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [UserEdge]!
+  aggregate: AggregateUser!
+}
+
+input UserCreateInput {
+  email: String!
+  password: String!
+  name: String!
+}
+
+"""An edge in a connection."""
+type UserEdge {
+  """The item at the end of the edge."""
+  node: User!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum UserOrderByInput {
+  id_ASC
+  id_DESC
+  email_ASC
+  email_DESC
+  password_ASC
+  password_DESC
+  name_ASC
+  name_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type UserPreviousValues {
+  id: ID!
+  email: String!
+  password: String!
+  name: String!
+}
+
+type UserSubscriptionPayload {
+  mutation: MutationType!
+  node: User
+  updatedFields: [String!]
+  previousValues: UserPreviousValues
+}
+
+input UserSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [UserSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [UserSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [UserSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: UserWhereInput
+}
+
+input UserUpdateInput {
+  email: String
+  password: String
+  name: String
+}
+
+input UserUpdateManyMutationInput {
+  email: String
+  password: String
+  name: String
+}
+
+input UserWhereInput {
+  """Logical AND on all given filters."""
+  AND: [UserWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [UserWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [UserWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  email: String
+
+  """All values that are not equal to given value."""
+  email_not: String
+
+  """All values that are contained in given list."""
+  email_in: [String!]
+
+  """All values that are not contained in given list."""
+  email_not_in: [String!]
+
+  """All values less than the given value."""
+  email_lt: String
+
+  """All values less than or equal the given value."""
+  email_lte: String
+
+  """All values greater than the given value."""
+  email_gt: String
+
+  """All values greater than or equal the given value."""
+  email_gte: String
+
+  """All values containing the given string."""
+  email_contains: String
+
+  """All values not containing the given string."""
+  email_not_contains: String
+
+  """All values starting with the given string."""
+  email_starts_with: String
+
+  """All values not starting with the given string."""
+  email_not_starts_with: String
+
+  """All values ending with the given string."""
+  email_ends_with: String
+
+  """All values not ending with the given string."""
+  email_not_ends_with: String
+  password: String
+
+  """All values that are not equal to given value."""
+  password_not: String
+
+  """All values that are contained in given list."""
+  password_in: [String!]
+
+  """All values that are not contained in given list."""
+  password_not_in: [String!]
+
+  """All values less than the given value."""
+  password_lt: String
+
+  """All values less than or equal the given value."""
+  password_lte: String
+
+  """All values greater than the given value."""
+  password_gt: String
+
+  """All values greater than or equal the given value."""
+  password_gte: String
+
+  """All values containing the given string."""
+  password_contains: String
+
+  """All values not containing the given string."""
+  password_not_contains: String
+
+  """All values starting with the given string."""
+  password_starts_with: String
+
+  """All values not starting with the given string."""
+  password_not_starts_with: String
+
+  """All values ending with the given string."""
+  password_ends_with: String
+
+  """All values not ending with the given string."""
+  password_not_ends_with: String
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+}
+
+input UserWhereUniqueInput {
+  id: ID
+  email: String
 }

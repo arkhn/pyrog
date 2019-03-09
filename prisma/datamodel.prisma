@@ -56,3 +56,10 @@ type Join {
     # Parent input column
     inputColumn: InputColumn! @relation(name: "InputColumnToJoins")
 }
+
+type User {
+    id: ID! @unique
+    email: String! @unique
+    password: String!
+    name: String!
+}

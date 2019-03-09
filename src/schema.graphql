@@ -1,27 +1,42 @@
-# import Database, Resource, Attribute from "./generated/prisma.graphql"
+# import Database, Resource, Attribute from "./generated/prisma-binding/prisma.graphql"
 
 type Query {
-    databases(where: DatabaseWhereInput): [Database!]!
-    resources(where: ResourceWhereInput): [Resource!]!
-    attributes(where: AttributeWhereInput): [Attribute!]!
-    inputColumns(where: InputColumnWhereInput): [InputColumn!]!
-    database(where: DatabaseWhereInput): Database!
-    resource(where: ResourceWhereInput): Resource!
-    attribute(where: AttributeWhereInput): Attribute!
-    inputColumn(where: InputColumnWhereInput): InputColumn!
+    allDatabases: [Database!]!
+    # allDatabases(where: DatabaseWhereInput): [Database!]!
+    databases: [Database!]!
+    # resources(where: ResourceWhereInput): [Resource!]!
+    # attributes(where: AttributeWhereInput): [Attribute!]!
+    # inputColumns(where: InputColumnWhereInput): [InputColumn!]!
+    # database(where: DatabaseWhereInput): Database!
+    # resource(where: ResourceWhereInput): Resource!
+    # attribute(where: AttributeWhereInput): Attribute!
+    # inputColumn(where: InputColumnWhereInput): InputColumn!
+    availableResources(database: String!, where: ResourceWhereInput): [Resource!]
+    availableAttributes(id: ID!): [Attribute!]
 
-    getAttribute(database: String!, resource: String!, attributePath: [String!]!): Attribute!
-    getResource(database: String!, resource: String!): Resource!
-    getRecResource(database: String!, resource: String!): Resource!
+    # getAttribute(database: String!, resource: String!, attributePath: [String!]!): Attribute!
+    # getResource(database: String!, resource: String!): Resource!
+    # getRecResource(database: String!, resource: String!): Resource!
+
+    # feed: [Post!]!
+    # drafts: [Post!]!
+    # post(id: ID!): Post
+    me: User
 }
 
 type Mutation {
-    updateAttributeNoId(database: String!, resource: String!, attributePath: [String!]!, data: AttributeUpdateInput): Attribute!
-    updateAttribute(id: ID!, data: AttributeUpdateInput): Attribute!
-    updateInputColumn(id: ID!, data: InputColumnUpdateInput): InputColumn!
-    updateResource(id: ID!, data: ResourceUpdateInput): Resource!
-    updateJoin(id: ID!, data: JoinUpdateInput): Join!
-    createResourceTreeInDatabase(database: String!, resource: String!): Resource!
+    # updateAttributeNoId(database: String!, resource: String!, attributePath: [String!]!, data: AttributeUpdateInput): Attribute!
+    # updateAttribute(id: ID!, data: AttributeUpdateInput): Attribute!
+    # updateInputColumn(id: ID!, data: InputColumnUpdateInput): InputColumn!
+    # updateResource(id: ID!, data: ResourceUpdateInput): Resource!
+    # updateJoin(id: ID!, data: JoinUpdateInput): Join!
+    # createResourceTreeInDatabase(database: String!, resource: String!): Resource!
+
+    signup(email: String!, password: String!, name: String!): AuthPayload!
+    login(email: String!, password: String!): AuthPayload!
+    # createDraft(title: String!, content: String!): Post!
+    # publish(id: ID!): Post!
+    # deletePost(id: ID!): Post!
 }
 
 type Subscription {
@@ -29,4 +44,24 @@ type Subscription {
     inputColumn(id: ID!): InputColumnSubscriptionPayload
     resource(id: ID!): ResourceSubscriptionPayload
     join(id: ID!): JoinSubscriptionPayload
+    # feedSubscription: Post
 }
+
+type AuthPayload {
+    token: String!
+    user: User!
+}
+
+# type User {
+#     id: ID!
+#     email: String!
+#     name: String!
+# }
+
+# type Post {
+#     id: ID!
+#     published: Boolean!
+#     title: String!
+#     content: String!
+#     author: User!
+# }
