@@ -1,3 +1,6 @@
+import { graphql } from 'graphql'
+import { importSchema } from 'graphql-import'
+import { makeExecutableSchema } from 'graphql-tools'
 import { GraphQLServer } from 'graphql-yoga'
 
 import { Prisma as PrismaClient } from '../src/generated/prisma-client'
@@ -5,35 +8,6 @@ import { Prisma as PrismaBinding } from '../src/generated/prisma-binding'
 import resolvers from '../src/resolvers'
 
 const endpoint = 'http://localhost:4466'
-
-describe('Graphql server', () => {
-    test('Graphql-yoga server can start & stop', async () => {
-        const serverInstance = new GraphQLServer({
-            typeDefs: './src/schema.graphql',
-            resolvers,
-            context: request => ({
-                ...request,
-                binding: new PrismaBinding({
-                    endpoint,
-                    debug: true,
-                }),
-                client: new PrismaClient({
-                    endpoint,
-                    debug: true,
-                }),
-            }),
-            resolverValidationOptions: {
-                requireResolversForResolveType: false,
-            },
-        })
-
-        // Start server without callback
-        const server = await serverInstance.start()
-
-        // Close server
-        expect(server.close()).toHaveProperty("_connections", 0);
-    })
-})
 
 const prismaBindingInstance = () => {
     return new PrismaBinding({
@@ -79,13 +53,64 @@ const prismaClientInstance = new PrismaClient({
 })
 
 describe('Prisma client', () => {
-    test('Query - databases', async () => {
-        expect(
-            await prismaClientInstance.database({ name: "Crossway" })
-        ).toEqual(expect.objectContaining(
-            {
-                name: "Crossway"
-            }
-        ))
+    describe('Queries', () => {
+        test('database', async () => {
+            expect(
+                await prismaClientInstance.database({ name: "Crossway" })
+            ).toEqual(expect.objectContaining({ name: "Crossway" }))
+        })
+
+        test('databases', async () => {
+            expect(
+                await prismaClientInstance.databases()
+            ).toEqual(expect.arrayContaining([
+                expect.objectContaining({ name: "Crossway" })
+            ]))
+        })
     })
 });
+
+const serverInstance = new GraphQLServer({
+    typeDefs: './src/schema.graphql',
+    resolvers,
+    context: request => ({
+        ...request,
+        binding: new PrismaBinding({
+            endpoint,
+            debug: true,
+        }),
+        client: new PrismaClient({
+            endpoint,
+            debug: true,
+        }),
+    }),
+    resolverValidationOptions: {
+        requireResolversForResolveType: false,
+    },
+})
+
+describe.skip('Graphql server', () => {
+    let server
+    let executableSchema
+
+    beforeAll(async () => {
+        // console.log(serverInstance)
+        const typeDefs = importSchema('./src/schema.graphql')
+        executableSchema = makeExecutableSchema({ typeDefs })
+        server = await serverInstance.start()
+    })
+
+    test('Query allDatabases', async () => {
+        expect(
+            await graphql(serverInstance.executableSchema, `query {allDatabases { id }}`)
+            // await graphql(executableSchema, `query {allDatabases { id }}`)
+            // await server.post(`query {allDatabases { id }}`)
+        ).toEqual(expect.arrayContaining([{
+            name: "Crossway"
+        }]))
+    })
+
+    afterAll(() => {
+        server.close()
+    })
+})
