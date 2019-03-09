@@ -3,6 +3,12 @@ import { importSchema } from 'graphql-import'
 import { Prisma } from './generated/prisma'
 import { Context } from './utils'
 
+// import * as jwt from "jsonwebtoken";
+// import { AuthenticationError } from "apollo-server-core";
+
+// const session = require('express-session');
+// const ms = require('ms');
+
 const recData = (attributePath: string[]) => {
     if (attributePath.length == 0) {
         return null
@@ -470,7 +476,18 @@ const resolvers = {
     }
 }
 
-const endPoint = (process.env.NODE_ENV === "docker") ? "http://prisma:4466" : "https://eu1.prisma.sh/public-neonswoop-398/graphql-typescript-boilerplate/dev"
+const endPoint = (process.env.NODE_ENV === "docker") ? "http://localhost:4466" : "https://eu1.prisma.sh/public-neonswoop-398/graphql-typescript-boilerplate/dev"
+
+// const authenticate = async (resolve, root, args, context, info) => {
+//     let token;
+//     try {
+//         token = jwt.verify(context.request.get("Authorization"), "mysecret42");
+//     } catch (e) {
+//         return new AuthenticationError("Not authorised");
+//     }
+//     const result = await resolve(root, args, context, info);
+//     return result;
+// };
 
 const server = new GraphQLServer({
     typeDefs: './src/schema.graphql',
@@ -485,4 +502,34 @@ const server = new GraphQLServer({
     }),
 })
 
-server.start(() => console.log('Server is running on http://localhost:4000'))
+// server.express.use((req, res, next) => {
+//     const { authorization } = req.headers;
+//     jwt.verify(authorization, "mysecret42", (err, decodedToken) => {
+//         if (err || !decodedToken) {
+//             res.status(401).send("not authorized");
+//             return;
+//         }
+//         next();
+//     });
+// });
+
+// server.express.use(session({
+//   name: 'qid',
+//   secret: `mysecret42`,
+//   resave: true,
+//   saveUninitialized: true,
+//   cookie: {
+//     secure: process.env.NODE_ENV === 'docker',
+//     maxAge: ms('1d'),
+//   },
+// }))
+
+const opts = {
+  port: 4000,
+  cors: {
+    credentials: true,
+    origin: ['http://localhost:3000'] // your frontend url.
+  }
+};
+
+server.start(opts, () => console.log('Server is running on http://localhost:4000'))

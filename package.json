@@ -1,13 +1,19 @@
 {
-  "name": "graphql-typescript-boilerplate",
+  "name": "arkhn-graphql-server",
   "scripts": {
     "start": "ts-node src/index.ts",
     "dev": "npm-run-all --parallel start playground",
     "playground": "graphql playground"
   },
   "dependencies": {
+    "@types/graphql": "^14.0.7",
+    "apollo-server-errors": "^2.2.1",
+    "bcryptjs": "^2.4.3",
+    "express-session": "^1.15.6",
     "graphql-import": "0.7.1",
     "graphql-yoga": "1.16.7",
+    "jsonwebtoken": "^8.5.0",
+    "ms": "^2.1.1",
     "prisma-binding": "2.1.6"
   },
   "devDependencies": {

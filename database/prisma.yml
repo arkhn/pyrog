@@ -1,6 +1,6 @@
 # The endpoint of your Prisma API (deployed to a Prisma Sandbox).
 # endpoint: https://eu1.prisma.sh/public-neonswoop-398/graphql-typescript-boilerplate/dev
-endpoint: http://0.0.0.0:4466/dev
+endpoint: http://0.0.0.0:4466
 
 # The file containing the definition of your data model.
 datamodel: datamodel.graphql
