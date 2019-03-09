@@ -3,7 +3,9 @@
     "scripts": {
         "start": "dotenv -- nodemon -e ts,graphql -x ts-node src/index.ts",
         "debug": "dotenv -- nodemon -e ts,graphql -x ts-node --inspect src/index.ts",
-        "build": "rimraf dist && tsc"
+        "build": "rimraf dist && tsc",
+        "playground": "graphql playground",
+        "test": "jest"
     },
     "dependencies": {
         "bcryptjs": "2.4.3",
@@ -13,12 +15,18 @@
         "prisma-binding": "^2.3.3"
     },
     "devDependencies": {
+        "@babel/preset-env": "^7.3.4",
         "@types/bcryptjs": "2.4.2",
         "@types/node": "10.12.27",
+        "babel-jest": "^24.3.1",
+        "babel-plugin-transform-runtime": "^6.23.0",
+        "babel-polyfill": "^6.26.0",
         "dotenv-cli": "1.4.0",
+        "jest": "^24.3.1",
         "nodemon": "1.18.10",
         "prisma": "1.27.3",
         "rimraf": "2.6.3",
+        "ts-jest": "^24.0.0",
         "ts-node": "7.0.1",
         "typescript": "3.2.2"
     }

@@ -1,9 +1,10 @@
+import { forwardTo } from 'prisma-binding'
+
 import {
     Context,
     getUserId,
     getRecAttribute,
 } from '../utils'
-import { forwardTo } from 'prisma-binding'
 
 export const Query = {
     // BINDING END POINTS
