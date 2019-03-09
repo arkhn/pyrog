@@ -1,4 +1,5 @@
 # Specifies the HTTP endpoint of your Prisma API (deployed to a Prisma Demo server).
+# endpoint: https://eu1.prisma.sh/public-neonswoop-398/graphql-typescript-boilerplate/dev
 endpoint: http://0.0.0.0:4466
 
 # Defines your models, each model is mapped to the database as a table.
@@ -8,12 +9,6 @@ datamodel: datamodel.prisma
 generate:
     - generator: typescript-client
       output: ../src/generated/prisma-client
-    # - generator: graphql-schema
-    #   output: ../src/generated/prisma-binding
-    # - generator: prisma-binding
-    #   langage: typescript
-    #   output:
-    #       binding: "../src/generated/prisma.ts"
 
 # Seed your service with initial data based on `seed.graphql`.
 seed:
