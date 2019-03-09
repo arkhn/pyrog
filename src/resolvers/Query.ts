@@ -25,6 +25,9 @@ export const Query = {
             }
         })
     },
+    inputColumns(parent, { id }, context: Context) {
+        return context.client.attribute({ id }).inputColumns()
+    },
     databases: forwardTo('binding'),
     me (parent, args, context: Context) {
         const id = getUserId(context)

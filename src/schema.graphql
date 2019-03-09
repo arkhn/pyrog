@@ -2,25 +2,10 @@
 
 type Query {
     allDatabases: [Database!]!
-    # allDatabases(where: DatabaseWhereInput): [Database!]!
     databases: [Database!]!
-    # resources(where: ResourceWhereInput): [Resource!]!
-    # attributes(where: AttributeWhereInput): [Attribute!]!
-    # inputColumns(where: InputColumnWhereInput): [InputColumn!]!
-    # database(where: DatabaseWhereInput): Database!
-    # resource(where: ResourceWhereInput): Resource!
-    # attribute(where: AttributeWhereInput): Attribute!
-    # inputColumn(where: InputColumnWhereInput): InputColumn!
     availableResources(database: String!, where: ResourceWhereInput): [Resource!]
     availableAttributes(id: ID!): [Attribute!]
-
-    # getAttribute(database: String!, resource: String!, attributePath: [String!]!): Attribute!
-    # getResource(database: String!, resource: String!): Resource!
-    # getRecResource(database: String!, resource: String!): Resource!
-
-    # feed: [Post!]!
-    # drafts: [Post!]!
-    # post(id: ID!): Post
+    inputColumns(id: ID!): [InputColumn!]
     me: User
 }
 
