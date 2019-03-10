@@ -1,5 +1,5 @@
 query {
-    databases {
+    allDatabases {
         id
         name
     }
