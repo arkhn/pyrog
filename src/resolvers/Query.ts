@@ -14,15 +14,21 @@ export const Query = {
 
     // CLIENT QUERIES
     allDatabases(parent, args, context: Context) {
+        getUserId(context)
+
         return context.client.databases()
     },
     availableResources(parent, { database }, context: Context) {
+        getUserId(context)
+
         return context.client.database({
             name: database,
         })
         .resources()
     },
     async availableAttributes(parent, { resourceId }, context: Context) {
+        getUserId(context)
+
         const directAttributes = await context.client
             .resource({
                 id: resourceId,
@@ -37,6 +43,8 @@ export const Query = {
         })
     },
     inputColumns(parent, { attributeId }, context: Context) {
+        getUserId(context)
+
         return context.client
             .attribute({
                 id: attributeId,
