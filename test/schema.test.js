@@ -2,6 +2,7 @@ import { graphql } from 'graphql'
 import { importSchema } from 'graphql-import'
 import { makeExecutableSchema, mockServer } from 'graphql-tools'
 import { GraphQLServer } from 'graphql-yoga'
+const stringifyObject = require('stringify-object');
 
 import { Prisma as PrismaClient } from '../src/generated/prisma-client'
 import { Prisma as PrismaBinding } from '../src/generated/prisma-binding'
@@ -99,12 +100,45 @@ const sendPostRequest = async (query, variables) => {
 
 describe('Graphql server', () => {
     let server
+    // Définition de différents cas à tester.
+    // On rentre d'abord le nom du endpoint, puis les
+    // attributs et enfin les variables.
+    const useCases = [
+        [
+            'allDatabases',
+            null,
+            null,
+        ],
+        [
+            'availableResources',
+            {
+                database: "Crossway"
+            },
+            null,
+        ]
+    ]
 
     beforeAll(async () => {
         server = await serverInstance.start()
     })
 
-    describe('Queries', () => {
+    describe.each(useCases)('Should request authentication', (queryName, queryAttr, queryVar) => {
+        test(queryName, async () => {
+            // Création d'un string représentant les requêtes à tester.
+            const queryAttributes = stringifyObject(queryAttr, { singleQuotes: false, })
+            const query = `query { ${queryName} ${queryAttr ? `(${queryAttributes.slice(1, queryAttributes.length -1)})` : ""} { id }}`
+
+            expect(
+                await sendPostRequest(query, {})
+            ).toEqual(expect.objectContaining({
+                errors: expect.arrayContaining([
+                    expect.objectContaining({ message: "Not authorized" })
+                ])
+            }))
+        })
+    })
+
+    describe.skip('Queries', () => {
         test('allDatabases', async () => {
             expect(
                 await sendPostRequest(`query { allDatabases { id name }}`, {})
