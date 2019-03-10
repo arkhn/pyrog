@@ -18,6 +18,7 @@ seed:
 hooks:
     post-deploy:
         - prisma generate
+        - graphql codegen
         - graphql get-schema --project database
 
 # If specified, the `secret` must be used to generate a JWT which is attached
