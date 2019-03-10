@@ -20,21 +20,12 @@ const prismaBindingInstance = () => {
 describe('Prisma binding', () => {
     test('Send direct request', async () => {
         expect(
-            await prismaBindingInstance().request(
-                `query {
-                    databases {
-                        name
-                    }
-                }`,
-                {}
-            )
+            await prismaBindingInstance().request(`query { databases { name } }`, {})
         ).toEqual({
             data: {
-                databases: [
-                    {
-                        name: "Crossway"
-                    }
-                ]
+                databases: expect.arrayContaining([
+                    expect.objectContaining({ name: "Crossway" })
+                ])
             }
         })
     })
@@ -42,11 +33,9 @@ describe('Prisma binding', () => {
     test('Use `query` method', async () => {
         expect(
             await prismaBindingInstance().query.databases({}, `{name}`)
-        ).toEqual([
-            {
-                name: "Crossway"
-            }
-        ])
+        ).toEqual(expect.arrayContaining([
+            expect.objectContaining({ name: "Crossway" })
+        ]))
     })
 })
 
