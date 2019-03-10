@@ -81,7 +81,7 @@ const serverInstance = new GraphQLServer({
     },
 })
 
-const sendQuery = async (query, variables) => {
+const sendPostRequest = async (query, variables) => {
     return await fetch('http://0.0.0.0:4000', {
         method: 'POST',
         headers: {
@@ -107,7 +107,7 @@ describe('Graphql server', () => {
     describe('Queries', () => {
         test('allDatabases', async () => {
             expect(
-                await sendQuery(`query { allDatabases { id name }}`, {})
+                await sendPostRequest(`query { allDatabases { id name }}`, {})
             ).toEqual({
                 data: {
                     allDatabases: expect.arrayContaining([
