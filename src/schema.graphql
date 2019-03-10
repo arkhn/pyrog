@@ -15,7 +15,7 @@ type Query {
 }
 
 type Mutation {
-    createInputColumnViaAttribute(id: ID!, data: InputColumnCreateInput): Attribute!
+    createInputColumnViaAttribute(attributeId: ID!, data: InputColumnCreateInput): InputColumn!
     deleteInputColumnViaAttribute(attributeId: ID!, inputColumnId: ID!): Attribute!
     updateInputColumn(id: ID!, data: InputColumnUpdateInput): InputColumn!
     # updateAttributeNoId(database: String!, resource: String!, attributePath: [String!]!, data: AttributeUpdateInput): Attribute!
@@ -32,7 +32,7 @@ type Mutation {
 }
 
 type Subscription {
-    attribute(id: ID!): [InputColumn!]
+    attributeInputColumns(id: ID!): [InputColumn!]
     inputColumn(id: ID!): InputColumn
     resource(id: ID!): Resource
     join(id: ID!): Join

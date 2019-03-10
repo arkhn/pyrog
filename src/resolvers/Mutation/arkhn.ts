@@ -1,6 +1,7 @@
 import {
     Context,
     getAttribute,
+    getUserId,
 } from '../../utils'
 
 export const arkhn = {
@@ -10,8 +11,11 @@ export const arkhn = {
     // Cela permet que ce genre d'évènement (création, suppression)
     // soit pris en compte lors d'une subscription à l'attribut parent.
     // Une issue parle de ça ici : https://github.com/prisma/prisma/issues/146
-    createInputColumnViaAttribute(parent, { id, data }, context: Context) {
-        return context.client.updateAttribute({
+    async createInputColumnViaAttribute(parent, { attributeId, data }, context: Context) {
+        getUserId(context)
+
+        // On crée une InputColumn et on récupère la dernière en date
+        const inputColumns = await context.client.updateAttribute({
             data: {
                 inputColumns: {
                     create: [{
@@ -19,10 +23,17 @@ export const arkhn = {
                     }]
                 }
             },
-            where: { id }
+            where: { id: attributeId }
+        }).inputColumns({
+            last: 1
         })
+
+        // On ne renvoie qu'une InputColumn
+        return inputColumns[0]
     },
     deleteInputColumnViaAttribute(parent, { attributeId, inputColumnId }, context: Context) {
+        getUserId(context)
+
         return context.client.updateAttribute({
             data: {
                 inputColumns: {
@@ -37,6 +48,8 @@ export const arkhn = {
         })
     },
     updateInputColumn(parent, { id, data }, context: Context) {
+        getUserId(context)
+
         return context.client.updateInputColumn({
             data,
             where: { id }

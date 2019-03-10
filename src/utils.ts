@@ -5,11 +5,17 @@ import { Prisma as PrismaBinding } from './generated/prisma-binding'
 export interface Context {
     binding: PrismaBinding
     client: PrismaClient
-    request: any
+    request?: any
+    response?: any
+    connection?: any
 }
 
 export function getUserId(context: Context) {
-    const Authorization = context.request.get('Authorization')
+    // Token appears in different places depending
+    // on whether the request is HTTP or WS
+    const Authorization = context.request ?
+        context.request.get('Authorization') :
+        (context.connection.context.Authorization || null)
 
     if (Authorization) {
         const token = Authorization.replace('Bearer ', '')

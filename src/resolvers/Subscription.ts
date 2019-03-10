@@ -1,8 +1,13 @@
-import { Context } from '../utils'
+import {
+    Context,
+    getUserId,
+} from '../utils'
 
 export const Subscription = {
     resource: {
         subscribe: async (parent, { id }, context: Context) => {
+            getUserId(context)
+
             return context.client.$subscribe
                 .resource({
                     mutation_in: ['CREATED', 'UPDATED'],
@@ -14,8 +19,10 @@ export const Subscription = {
             return payload
         },
     },
-    attribute: {
+    attributeInputColumns: {
         subscribe: async (parent, { id }, context: Context) => {
+            getUserId(context)
+
             return context.client.$subscribe
                 .attribute({
                     mutation_in: ['CREATED', 'UPDATED'],
@@ -30,6 +37,8 @@ export const Subscription = {
     },
     inputColumn: {
         subscribe: async (parent, { id }, context: Context) => {
+            getUserId(context)
+
             return context.client.$subscribe.inputColumn({
                 mutation_in: ['CREATED', 'UPDATED'],
                 node: { id }
@@ -41,6 +50,8 @@ export const Subscription = {
     },
     join: {
         subscribe: async (parent, { id }, context: Context) => {
+            getUserId(context)
+
             return context.client.$subscribe.join({
                 mutation_in: ['CREATED', 'UPDATED'],
                 node: { id }
