@@ -1,9 +1,13 @@
 # import Database, Resource, Attribute from "./generated/prisma-binding/prisma.graphql"
 
 type Query {
+    # BINDING QUERIES
+    # attribute(where: AttributeWhereUniqueInput): Attribute!
+    # attributes: [Attribute!]
+    # databases: [Database!]!
+
+    # CLIENT QUERIES
     allDatabases: [Database!]!
-    databases: [Database!]!
-    attribute: Attribute!
     availableResources(database: String!): [Resource!]
     availableAttributes(resourceId: ID!): [Attribute!]
     inputColumns(attributeId: ID!): [InputColumn!]

@@ -7,10 +7,12 @@ import {
 } from '../utils'
 
 export const Query = {
-    // BINDING END POINTS
-    attribute: forwardTo('binding'),
-    databases: forwardTo('binding'),
-    // CLIENT END POINTS
+    // BINDING QUERIES
+    // attribute: forwardTo('binding'),
+    // attributes: forwardTo('binding'),
+    // databases: forwardTo('binding'),
+
+    // CLIENT QUERIES
     allDatabases(parent, args, context: Context) {
         return context.client.databases()
     },
