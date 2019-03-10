@@ -1,5 +1,5 @@
 {
-    "name": "graphql-boilerplate",
+    "name": "fhirball-graphql",
     "scripts": {
         "start": "dotenv -- nodemon -e ts,graphql -x ts-node src/index.ts",
         "debug": "dotenv -- nodemon -e ts,graphql -x ts-node --inspect src/index.ts",
