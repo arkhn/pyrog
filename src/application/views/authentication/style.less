@@ -1,0 +1,28 @@
+@import "~@blueprintjs/core/lib/css/blueprint.css";
+@import "~@blueprintjs/core/lib/less/variables";
+
+.formulaires {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    & > * {
+        padding: 20px;
+        border-radius: 4px;
+        margin: 0 10px;
+        max-width: 300px;
+
+        & > *:not(h2) {
+            margin: 15px 0px;
+        }
+    }
+
+    .signup-form {
+        background-color: @dark-gray3;
+        color: @light-gray5;
+    }
+
+    .login-form {
+        background-color: @light-gray2;
+    }
+}
