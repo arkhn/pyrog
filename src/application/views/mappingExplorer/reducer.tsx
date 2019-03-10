@@ -4,7 +4,10 @@ import { IMappingExplorerState } from './index'
 
 const initialState: IMappingExplorerState = {
     selectedDatabase: null,
-    selectedFhirResource: null,
+    selectedFhirResource: {
+        name: null,
+        id: null,
+    },
     selectedFhirAttribute: [],
 }
 
@@ -20,7 +23,10 @@ const reducer = (state = initialState, action: ISimpleAction): IMappingExplorerS
         case 'UPDATE_FHIR_RESOURCE':
             return {
                 ...state,
-                selectedFhirResource: action.payload,
+                selectedFhirResource: {
+                    name: action.payload.resourceName,
+                    id: action.payload.resourceId,
+                },
                 selectedFhirAttribute: [],
             }
 

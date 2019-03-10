@@ -116,11 +116,9 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
     static getDerivedStateFromProps(props: IProps, state: IState) {
         if (props.json !== state.renderJson) {
             try {
-                let nodes = props.json.attributes.map((attribute: any) => {
+                let nodes = props.json.map((attribute: any) => {
                     return FhirResourceTree.genObjNodes(attribute, [])
                 })
-
-                console.log(nodes)
 
                 FhirResourceTree.forEachNode(nodes, (node: ITreeNode<INodeData>) => {
                     node.isSelected = node.nodeData.path == props.selectedNode

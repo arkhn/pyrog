@@ -10,6 +10,7 @@ import {
     Elevation,
     FormGroup,
     InputGroup,
+    MenuItem,
     NonIdealState,
     OverflowList,
     Spinner,
@@ -39,6 +40,8 @@ import ColumnPicker from '../../components/columnPicker'
 import FhirResourceTree from '../../components/fhirResourceTree'
 import InputColumnsTable from '../../components/inputColumnsTable'
 import StringSelect from '../../components/selects/stringSelect'
+import TSelect from '../../components/selects/TSelect'
+import ResourceSelect from '../../components/selects/resourceSelect'
 
 // Import types
 import {
@@ -49,30 +52,35 @@ import {
 import './style.less'
 
 // Requests
-const getAttribute = require('./queries/getAttribute.graphql')
-const getDatabaseNames = require('./queries/getDatabaseNames.graphql')
-const getResource = require('./queries/getResource.graphql')
-const getResourceNames = require('./queries/getResourceNames.graphql')
-const getTree = require('./queries/getTree.graphql')
-const mutationJoin = require('./queries/mutationJoin.graphql')
-const mutationDeleteInputColumn = require('./queries/mutationDeleteInputColumn.graphql')
-const mutationDeleteJoin = require('./queries/mutationDeleteJoin.graphql')
-const subscriptionAttribute = require('./queries/subscriptionAttribute.graphql')
-const subscriptionInputColumn = require('./queries/subscriptionInputColumn.graphql')
-const subscriptionResource = require('./queries/subscriptionResource.graphql')
-const subscriptionJoin = require('./queries/subscriptionJoin.graphql')
+const allDatabases = require('./graphql/queries/allDatabases.graphql')
+const availableResources = require('./graphql/queries/availableResources.graphql')
+const recAvailableAttributes = require('./graphql/queries/recAvailableAttributes.graphql')
 
-const mutationAttribute = require('./queries/mutationAttribute.graphql')
-const mutationAttributeNoId = require('./queries/mutationAttributeNoId.graphql')
-const mutationInputColumn = require('./queries/mutationInputColumn.graphql')
-const mutationResource = require('./queries/mutationResource.graphql')
+const getAttribute = require('./graphql/getAttribute.graphql')
+const getResource = require('./graphql/getResource.graphql')
+const getTree = require('./graphql/getTree.graphql')
+const mutationJoin = require('./graphql/mutationJoin.graphql')
+const mutationDeleteInputColumn = require('./graphql/mutationDeleteInputColumn.graphql')
+const mutationDeleteJoin = require('./graphql/mutationDeleteJoin.graphql')
+const subscriptionAttribute = require('./graphql/subscriptionAttribute.graphql')
+const subscriptionInputColumn = require('./graphql/subscriptionInputColumn.graphql')
+const subscriptionResource = require('./graphql/subscriptionResource.graphql')
+const subscriptionJoin = require('./graphql/subscriptionJoin.graphql')
+
+const mutationAttribute = require('./graphql/mutationAttribute.graphql')
+const mutationAttributeNoId = require('./graphql/mutationAttributeNoId.graphql')
+const mutationInputColumn = require('./graphql/mutationInputColumn.graphql')
+const mutationResource = require('./graphql/mutationResource.graphql')
 
 const arkhnLogoWhite = require("../../img/arkhn_logo_only_white.svg") as string;
 const arkhnLogoBlack = require("../../img/arkhn_logo_only_black.svg") as string;
 
 export interface IMappingExplorerState {
     selectedDatabase: string,
-    selectedFhirResource: string,
+    selectedFhirResource: {
+        name: string,
+        id: string,
+    },
     selectedFhirAttribute: string[],
 }
 
@@ -161,9 +169,9 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
             query={getResource}
             variables={{
                 database: selectedDatabase,
-                resource: selectedFhirResource,
+                resource: selectedFhirResource.name,
             }}
-            skip={!selectedDatabase || !selectedFhirResource}
+            skip={!selectedDatabase || !selectedFhirResource.name}
         >
             {({ loading, error, data }) => {
                 console.log(data)
@@ -492,11 +500,11 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
             query={getAttribute}
             variables={{
                 database: selectedDatabase,
-                resource: selectedFhirResource,
+                resource: selectedFhirResource.name,
                 attributePath: selectedFhirAttribute,
             }}
             skip={!selectedDatabase ||
-                !selectedFhirResource ||
+                !selectedFhirResource.name ||
                 !selectedFhirAttribute ||
                 selectedFhirAttribute.length == 0
             }
@@ -647,7 +655,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                     onClick={() => mutationAttribute({
                                         variables: {
                                             database: selectedDatabase,
-                                            resource: selectedFhirResource,
+                                            resource: selectedFhirResource.name,
                                             attributePath: selectedFhirAttribute,
                                             data: {
                                                 inputColumns: {
@@ -700,7 +708,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                     onClick={() => mutationAttribute({
                                         variables: {
                                             database: selectedDatabase,
-                                            resource: selectedFhirResource,
+                                            resource: selectedFhirResource.name,
                                             attributePath: selectedFhirAttribute,
                                             data: {
                                                 inputColumns: {
@@ -738,19 +746,18 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
         </div>
 
         const fhirResourceTree = <Query
-            query={getTree}
+            query={recAvailableAttributes}
             variables={{
-                database: selectedDatabase,
-                resource: selectedFhirResource,
+                resourceId: selectedFhirResource.id,
             }}
-            skip={!selectedDatabase || !selectedFhirResource}
+            skip={!selectedDatabase || !selectedFhirResource.id}
         >
-            {({data, loading}) => {
+            {({ data, loading }) => {
                 return loading ?
                     <Spinner /> :
                     <FhirResourceTree
                         json={
-                            data.getResource
+                            data.recAvailableAttributes
                         }
                         onClickCallback={(attributeFlatPath: any) => {
                             dispatch(updateFhirAttribute(attributeFlatPath))
@@ -761,10 +768,9 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
         </Query>
 
         return <Query
-            query={getDatabaseNames}
+            query={allDatabases}
         >
             {({ data, loading }) => {
-                console.log(data)
                 return <div id='mapping-explorer-container'>
                     <div id='navbar' className={'bp3-dark'}>
                         <div className='flex-row'>
@@ -773,7 +779,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                     icon={'database'}
                                     inputItem={selectedDatabase}
                                     intent={'primary'}
-                                    items={data.databases ? data.databases.map((database: any) => {
+                                    items={data.allDatabases ? data.allDatabases.map((database: any) => {
                                         return database.name
                                     }) : []}
                                     loading={loading || this.props.data.databases.loadingDatabaseSchema}
@@ -782,32 +788,29 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                     }}
                                 />
                                 <Query
-                                    query={getResourceNames}
+                                    query={availableResources}
                                     variables={{
                                         database: selectedDatabase
                                     }}
                                     skip={!selectedDatabase}
                                 >
                                     {({ data, loading }) => {
-                                        console.log(data)
-                                        return <StringSelect
+                                        return <ResourceSelect
                                             disabled={!selectedDatabase}
                                             icon={'layout-hierarchy'}
                                             inputItem={selectedFhirResource}
                                             intent={'primary'}
-                                            items={data && data.resources ? data.resources.map((resource: any) => {
-                                                return resource.name
-                                            }) : []}
+                                            items={data && data.availableResources ? data.availableResources : []}
                                             loading={loading}
-                                            onChange={(resource: string) => {
-                                                dispatch(updateFhirResource(resource))
+                                            onChange={(resource: any) => {
+                                                dispatch(updateFhirResource(resource.name, resource.id))
                                             }}
                                         />
                                     }}
                                 </Query>
                             </ControlGroup>
                             {
-                                selectedDatabase && selectedFhirResource ?
+                                selectedDatabase && selectedFhirResource.name ?
                                     <Button
                                         icon={'cog'}
                                         minimal={!this.state.toggledNavBar}
@@ -819,7 +822,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                             }
                         </div>
                         {
-                            toggledNavBar && selectedDatabase && selectedFhirResource ?
+                            toggledNavBar && selectedDatabase && selectedFhirResource.name ?
                                 <div className='flex-row'>
                                     <Card>
                                         {primaryKeyComponent}
@@ -830,7 +833,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                     </div>
 
                     {
-                        selectedDatabase && selectedFhirResource ?
+                        selectedDatabase && selectedFhirResource.name ?
                             <div id='main-container'>
                                 {
                                     selectedFhirAttribute ?

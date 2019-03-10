@@ -25,10 +25,13 @@ export const updateDatabase = (database: string): IAction => {
     }
 }
 
-export const updateFhirResource = (resource: string): IAction => {
+export const updateFhirResource = (resourceName: string, resourceId: string): IAction => {
     return {
         type: 'UPDATE_FHIR_RESOURCE',
-        payload: resource,
+        payload: {
+            resourceName,
+            resourceId,
+        }
     }
 }
 
