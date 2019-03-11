@@ -1,10 +1,9 @@
-#import "../fragments/resourceRecAttributes.graphql"
+#import "../fragments/recAttributes.graphql"
 
-subscription subscriptionAttribute ($id: ID!) {
-    attribute(id: $id) {
-        updatedFields
+subscription attributeSubscription ($id: ID!) {
+    attribute(where: {node: {id: $id}}) {
         node {
-            ...resourceRecAttributes
+            ...recAttributes
         }
     }
 }

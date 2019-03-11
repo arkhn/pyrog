@@ -59,7 +59,10 @@ const inputColumns = require('./graphql/queries/inputColumns.graphql')
 const resourceAttributeTree = require('./graphql/queries/resourceAttributeTree.graphql')
 // const recAvailableAttributes = require('./graphql/queries/recAvailableAttributes.graphql')
 
-const createInputColumnViaAttribute = require('./graphql/mutations/createInputColumnViaAttribute.graphql')
+const createInputColumnAndUpdateAttribute = require('./graphql/mutations/createInputColumnAndUpdateAttribute.graphql')
+const deleteInputColumnAndUpdateAttribute = require('./graphql/mutations/deleteInputColumnAndUpdateAttribute.graphql')
+
+const attributeSubscription = require('./graphql/subscriptions/attribute.graphql')
 
 const getAttribute = require('./graphql/getAttribute.graphql')
 const getResource = require('./graphql/getResource.graphql')
@@ -185,10 +188,11 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
             skip={!selectedDatabase || !selectedFhirResource.name}
         >
             {({ loading, error, data }) => {
-                console.log(data)
-                let resource = data ? data.getResource : null
+                if (error) {
+                    console.log(error)
+                }
 
-                console.log(resource)
+                let resource = data ? data.getResource : null
 
                 return resource ? <Subscription
                     subscription={subscriptionResource}
@@ -259,11 +263,16 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
 
         const inputColumnComponent = (attribute: any, column: any) => <div className='input-column'>
             <Mutation
-                mutation={mutationDeleteInputColumn}
+                mutation={deleteInputColumnAndUpdateAttribute}
             >
-                {(deleteInputColumn, {data, loading}) => {
+                {(deleteInputColumn, {data, loading, error}) => {
+                    if (error) {
+                        console.log(error)
+                    }
+
                     return <Button
                         icon={'trash'}
+                        loading={loading}
                         minimal={true}
                         onClick={() => {
                             deleteInputColumn({
@@ -523,87 +532,87 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                 }
                 if (error) {
                     console.log(error)
-                    return <p>Something went wrong : {error.message}</p>
                 }
 
                 let inputColumns = (data && data.inputColumns) ? data.inputColumns : []
 
-                return <Subscription
-                    subscription={subscriptionAttribute}
-                    variables={{
-                        id: selectedFhirAttribute.id,
-                    }}
-                >
-                    {({ data, loading, error }) => {
-                        console.log(`Attribute subscription ${selectedFhirAttribute.id}`)
-                        console.log(data)
+                return selectedFhirAttribute.id ?
+                    <Subscription
+                        subscription={attributeSubscription}
+                        variables={{
+                            id: selectedFhirAttribute.id,
+                        }}
+                    >
+                        {({ data, loading, error }) => {
+                            if (error) {
+                                console.log(error)
+                            }
 
-                        const attribute = (data && data.subscriptionAttribute) ?
-                            data.subscriptionAttribute.node :
-                            null
-
-                        inputColumns = attribute && attribute.inputColumns ?
-                            attribute.inputColumns :
-                            inputColumns
-
-                        return <div id='input-columns'>
-                        <div id='input-column-rows'>
-                            {inputColumns.map((inputColumn: any, index: number) => {
-                                return <Subscription
-                                    key={index}
-                                    subscription={subscriptionInputColumn}
-                                    variables={{
-                                        id: inputColumn.id,
-                                    }}
-                                >
-                                    {({ data, loading }) => {
-                                        console.log(`Input subscription ${inputColumn.id}`)
-                                        console.log(data)
-                                        const column = (data && data.inputColumnSubscription) ?
-                                            data.inputColumnSubscription.node :
-                                            inputColumn
-
-                                        return column ?
-                                            inputColumnComponent(attribute, column) :
-                                            null
-                                    }}
-                                </Subscription>
-                            })}
-                        </div>
-                        {
-                            attribute && attribute.inputColumns && attribute.inputColumns.length > 1 ?
-                                <div id='input-column-merging-script'>
-                                    <Mutation
-                                        mutation={mutationAttribute}
-                                    >
-                                        {(mutationAttribute, {data, loading}) => {
-                                            return <div className='stacked-tags'>
-                                                <Tag>SCRIPT</Tag>
-                                                <StringSelect
-                                                    disabled={true}
-                                                    inputItem={(attribute && attribute.mergingScript) ? attribute.mergingScript : ''}
-                                                    items={['mergingScript.py']}
-                                                    loading={loading}
-                                                    onChange={(e: string) => {
-                                                        mutationAttribute({
-                                                            variables: {
-                                                                id: attribute.id,
-                                                                data: {
-                                                                    mergingScript: e,
-                                                                },
-                                                            },
-                                                        })
-                                                    }}
-                                                />
-                                            </div>
-                                        }}
-                                    </Mutation>
-                                </div> :
+                            const attribute = (data && data.attribute && data.attribute.node) ?
+                                data.attribute.node :
                                 null
-                        }
-                    </div>
-                }}
-            </Subscription>
+
+                            inputColumns = attribute && attribute.inputColumns ?
+                                attribute.inputColumns :
+                                inputColumns
+
+                            return <div id='input-columns'>
+                            <div id='input-column-rows'>
+                                {inputColumns.map((inputColumn: any, index: number) => {
+                                    return <Subscription
+                                        key={index}
+                                        subscription={subscriptionInputColumn}
+                                        variables={{
+                                            id: inputColumn.id,
+                                        }}
+                                    >
+                                        {({ data, loading }) => {
+                                            const column = (data && data.inputColumnSubscription) ?
+                                                data.inputColumnSubscription.node :
+                                                inputColumn
+
+                                            return column ?
+                                                inputColumnComponent(selectedFhirAttribute, column) :
+                                                null
+                                        }}
+                                    </Subscription>
+                                })}
+                            </div>
+                            {
+                                inputColumns.length > 1 ?
+                                    <div id='input-column-merging-script'>
+                                        <Mutation
+                                            mutation={mutationAttribute}
+                                        >
+                                            {(mutationAttribute, {data, loading}) => {
+                                                return <div className='stacked-tags'>
+                                                    <Tag>SCRIPT</Tag>
+                                                    <StringSelect
+                                                        disabled={true}
+                                                        inputItem={(attribute && attribute.mergingScript) ? attribute.mergingScript : ''}
+                                                        items={['mergingScript.py']}
+                                                        loading={loading}
+                                                        onChange={(e: string) => {
+                                                            mutationAttribute({
+                                                                variables: {
+                                                                    id: attribute.id,
+                                                                    data: {
+                                                                        mergingScript: e,
+                                                                    },
+                                                                },
+                                                            })
+                                                        }}
+                                                    />
+                                                </div>
+                                            }}
+                                        </Mutation>
+                                    </div> :
+                                    null
+                            }
+                        </div>
+                    }}
+                </Subscription> :
+                null
             }}
         </Query>
 
@@ -646,27 +655,20 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                             databaseSchema={selectedDatabase.name ? data.databases.schemaByDatabaseName[selectedDatabase.name] : {}}
                         />
                         <Mutation
-                            mutation={mutationAttributeNoId}
+                            mutation={createInputColumnAndUpdateAttribute}
                         >
-                            {(mutationAttribute, { data, loading }) => {
+                            {(createInputColumnAndUpdateAttribute, { data, loading }) => {
                                 return <Button
                                     disabled={!columnPicker.column || !selectedFhirAttribute}
                                     icon={'add'}
-                                    onClick={() => mutationAttribute({
+                                    loading={loading}
+                                    onClick={() => createInputColumnAndUpdateAttribute({
                                         variables: {
-                                            database: selectedDatabase,
-                                            resource: selectedFhirResource.name,
-                                            attributePath: selectedFhirAttribute,
+                                            attributeId: selectedFhirAttribute.id,
                                             data: {
-                                                inputColumns: {
-                                                    create: [
-                                                        {
-                                                            owner: columnPicker.owner,
-                                                            table: columnPicker.table,
-                                                            column: columnPicker.column,
-                                                        }
-                                                    ]
-                                                }
+                                                owner: columnPicker.owner,
+                                                table: columnPicker.table,
+                                                column: columnPicker.column,
                                             }
                                         }
                                     })}
@@ -753,7 +755,6 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
             skip={!selectedDatabase || !selectedFhirResource.id}
         >
             {({ data, loading }) => {
-                console.log(data)
                 return loading ?
                     <Spinner /> :
                     <FhirResourceTree

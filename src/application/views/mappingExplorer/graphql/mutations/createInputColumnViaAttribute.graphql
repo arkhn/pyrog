@@ -1,7 +1,0 @@
-#import "../fragments/entireInputColumn.graphql"
-
-mutation createInputColumnViaAttribute($attributeId: ID!, $data: InputColumnCreateInput) {
-    createInputColumnViaAttribute(attributeId: $attributeId, data: $data) {
-        ...entireInputColumn
-    }
-}
