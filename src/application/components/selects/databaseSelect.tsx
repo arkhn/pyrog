@@ -5,7 +5,7 @@ import {IconName} from '@blueprintjs/icons';
 
 import TSelect from './TSelect'
 
-interface IResource {
+interface IDatabase {
     id: string,
     name: string,
 }
@@ -13,15 +13,15 @@ interface IResource {
 interface ISelectProps {
     disabled?: boolean;
     icon?: IconName;
-    inputItem: IResource;
+    inputItem: IDatabase;
     intent?: Intent;
-    items: IResource[];
+    items: IDatabase[];
     loading?: boolean;
     onChange: any;
 }
 
-export default class ResourceSelect extends React.Component<ISelectProps, any> {
-    private renderItem: ItemRenderer<IResource> = (resource: IResource, {handleClick, modifiers, query}) => {
+export default class DatabaseSelect extends React.Component<ISelectProps, any> {
+    private renderItem: ItemRenderer<IDatabase> = (resource: IDatabase, {handleClick, modifiers, query}) => {
         return (
             <MenuItem
                 key={resource.id}
@@ -31,11 +31,11 @@ export default class ResourceSelect extends React.Component<ISelectProps, any> {
         );
     };
 
-    private filterByName: ItemPredicate<IResource> = (query, resource: IResource) => {
+    private filterByName: ItemPredicate<IDatabase> = (query, resource: IDatabase) => {
         return `${resource.name.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0;
     };
 
-    private displayItem = function(resource: IResource): string {
+    private displayItem = function(resource: IDatabase): string {
         return (resource.name ? resource.name : "None");
     };
 
@@ -52,7 +52,7 @@ export default class ResourceSelect extends React.Component<ISelectProps, any> {
 
         return (
             <div>
-                <TSelect<IResource>
+                <TSelect<IDatabase>
                     disabled={disabled}
                     displayItem={this.displayItem}
                     filterItems={this.filterByName}

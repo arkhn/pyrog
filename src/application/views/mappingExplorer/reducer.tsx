@@ -3,12 +3,18 @@ import { ISimpleAction } from '../../types'
 import { IMappingExplorerState } from './index'
 
 const initialState: IMappingExplorerState = {
-    selectedDatabase: null,
-    selectedFhirResource: {
-        name: null,
+    selectedDatabase: {
         id: null,
+        name: null,
     },
-    selectedFhirAttribute: [],
+    selectedFhirResource: {
+        id: null,
+        name: null,
+    },
+    selectedFhirAttribute: {
+        id: null,
+        name: null,
+    },
 }
 
 const reducer = (state = initialState, action: ISimpleAction): IMappingExplorerState => {
@@ -16,24 +22,40 @@ const reducer = (state = initialState, action: ISimpleAction): IMappingExplorerS
         case 'UPDATE_DATABASE':
             return {
                 ...state,
-                selectedDatabase: action.payload,
-                selectedFhirAttribute: [],
+                selectedDatabase: {
+                    id: action.payload.databaseId,
+                    name: action.payload.databaseName,
+                },
+                selectedFhirResource: {
+                    id: null,
+                    name: null,
+                },
+                selectedFhirAttribute: {
+                    id: null,
+                    name: null,
+                }
             }
 
         case 'UPDATE_FHIR_RESOURCE':
             return {
                 ...state,
                 selectedFhirResource: {
-                    name: action.payload.resourceName,
                     id: action.payload.resourceId,
+                    name: action.payload.resourceName,
                 },
-                selectedFhirAttribute: [],
+                selectedFhirAttribute: {
+                    id: null,
+                    name: null,
+                }
             }
 
         case 'UPDATE_FHIR_ATTRIBUTE':
             return {
                 ...state,
-                selectedFhirAttribute: action.payload,
+                selectedFhirAttribute: {
+                    id: action.payload.attributeId,
+                    name: action.payload.attributeName,
+                }
             }
 
         default:

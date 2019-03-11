@@ -41,6 +41,7 @@ import FhirResourceTree from '../../components/fhirResourceTree'
 import InputColumnsTable from '../../components/inputColumnsTable'
 import StringSelect from '../../components/selects/stringSelect'
 import TSelect from '../../components/selects/TSelect'
+import DatabaseSelect from '../../components/selects/databaseSelect'
 import ResourceSelect from '../../components/selects/resourceSelect'
 
 // Import types
@@ -54,7 +55,11 @@ import './style.less'
 // Requests
 const allDatabases = require('./graphql/queries/allDatabases.graphql')
 const availableResources = require('./graphql/queries/availableResources.graphql')
-const recAvailableAttributes = require('./graphql/queries/recAvailableAttributes.graphql')
+const inputColumns = require('./graphql/queries/inputColumns.graphql')
+const resourceAttributeTree = require('./graphql/queries/resourceAttributeTree.graphql')
+// const recAvailableAttributes = require('./graphql/queries/recAvailableAttributes.graphql')
+
+const createInputColumnViaAttribute = require('./graphql/mutations/createInputColumnViaAttribute.graphql')
 
 const getAttribute = require('./graphql/getAttribute.graphql')
 const getResource = require('./graphql/getResource.graphql')
@@ -76,12 +81,18 @@ const arkhnLogoWhite = require("../../img/arkhn_logo_only_white.svg") as string;
 const arkhnLogoBlack = require("../../img/arkhn_logo_only_black.svg") as string;
 
 export interface IMappingExplorerState {
-    selectedDatabase: string,
-    selectedFhirResource: {
-        name: string,
+    selectedDatabase: {
         id: string,
+        name: string,
     },
-    selectedFhirAttribute: string[],
+    selectedFhirResource: {
+        id: string,
+        name: string,
+    },
+    selectedFhirAttribute: {
+        id: string,
+        name: string,
+    },
 }
 
 interface IState {
@@ -133,8 +144,8 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
     }
 
     public componentDidMount() {
-        // this.props.dispatch(updateDatabase('Crossway'))
-        // this.props.dispatch(changeFhirResource('Patient'))
+        // this.props.dispatch(updateDatabase('cjpiarhzxmfmu0a611t9zwqgm', 'Crossway'))
+        // this.props.dispatch(updateFhirResource('cjpicvbkxusn60a57glvgvc90', 'Patient'))
         // this.props.dispatch(updateFhirAttribute('link.other'))
     }
 
@@ -234,7 +245,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                             table: resource.primaryKeyTable,
                                             column: resource.primaryKeyColumn,
                                         }}
-                                        databaseSchema={selectedDatabase ? this.props.data.databases.schemaByDatabaseName[selectedDatabase] : {}}
+                                        databaseSchema={selectedDatabase.name ? this.props.data.databases.schemaByDatabaseName[selectedDatabase.name] : {}}
                                         label={'Primary Key'}
                                     />
                                 }}
@@ -423,7 +434,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                     table: join.sourceTable,
                     column: join.sourceColumn,
                 }}
-                databaseSchema={selectedDatabase ? this.props.data.databases.schemaByDatabaseName[selectedDatabase] : {}}
+                databaseSchema={selectedDatabase.name ? this.props.data.databases.schemaByDatabaseName[selectedDatabase.name] : {}}
             />
             <ColumnPicker
                 ownerChangeCallback={(e: string) => {
@@ -464,7 +475,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                     table: join.targetTable,
                     column: join.targetColumn,
                 }}
-                databaseSchema={selectedDatabase ? this.props.data.databases.schemaByDatabaseName[selectedDatabase] : {}}
+                databaseSchema={selectedDatabase.name ? this.props.data.databases.schemaByDatabaseName[selectedDatabase.name] : {}}
             />
         </div>
 
@@ -497,19 +508,13 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
         </div>
 
         const inputColumnsComponent = <Query
-            query={getAttribute}
+            query={inputColumns}
             variables={{
-                database: selectedDatabase,
-                resource: selectedFhirResource.name,
-                attributePath: selectedFhirAttribute,
+                attributeId: selectedFhirAttribute.id,
             }}
-            skip={!selectedDatabase ||
-                !selectedFhirResource.name ||
-                !selectedFhirAttribute ||
-                selectedFhirAttribute.length == 0
-            }
+            skip={!selectedFhirAttribute.id}
         >
-            {({ loading, error, data }) => {
+            {({ data, error, loading }) => {
                 {/* Before rendering this view, verify that all
                 inconsistent usecases are sorted (is the query loading,
                 did it trigger an error, did it return data?) */}
@@ -521,89 +526,84 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                     return <p>Something went wrong : {error.message}</p>
                 }
 
-                console.log(`getAttribute ${selectedFhirAttribute}`)
-                console.log(data)
+                let inputColumns = (data && data.inputColumns) ? data.inputColumns : []
 
-                let attribute = (data && data.getAttribute) ? data.getAttribute : null
-
-                return attribute ?
-                    <Subscription
-                        subscription={subscriptionAttribute}
-                        variables={{
-                            id: attribute.id
-                        }}
-                    >
-                        {({ data, loading, error }) => {
-                            console.log(`Attribute subscription ${attribute.id}`)
-                            console.log(data)
-
-                            attribute = (data && data.subscriptionAttribute) ?
-                                data.subscriptionAttribute.node :
-                                attribute
-
-                            const inputColumns = attribute.inputColumns ?
-                                attribute.inputColumns :
-                                []
-
-                            return <div id='input-columns'>
-                            <div id='input-column-rows'>
-                                {inputColumns.map((inputColumn: any, index: number) => {
-                                    return <Subscription
-                                        key={index}
-                                        subscription={subscriptionInputColumn}
-                                        variables={{
-                                            id: inputColumn.id,
-                                        }}
-                                    >
-                                        {({ data, loading }) => {
-                                            console.log(`Input subscription ${inputColumn.id}`)
-                                            console.log(data)
-                                            const column = (data && data.inputColumnSubscription) ?
-                                                data.inputColumnSubscription.node :
-                                                inputColumn
-
-                                            return column ?
-                                                inputColumnComponent(attribute, column) :
-                                                null
-                                        }}
-                                    </Subscription>
-                                })}
-                            </div>
-                            {
-                                attribute.inputColumns && attribute.inputColumns.length > 1 ?
-                                    <div id='input-column-merging-script'>
-                                        <Mutation
-                                            mutation={mutationAttribute}
-                                        >
-                                            {(mutationAttribute, {data, loading}) => {
-                                                return <div className='stacked-tags'>
-                                                    <Tag>SCRIPT</Tag>
-                                                    <StringSelect
-                                                        disabled={true}
-                                                        inputItem={(attribute && attribute.mergingScript) ? attribute.mergingScript : ''}
-                                                        items={['mergingScript.py']}
-                                                        loading={loading}
-                                                        onChange={(e: string) => {
-                                                            mutationAttribute({
-                                                                variables: {
-                                                                    id: attribute.id,
-                                                                    data: {
-                                                                        mergingScript: e,
-                                                                    },
-                                                                },
-                                                            })
-                                                        }}
-                                                    />
-                                                </div>
-                                            }}
-                                        </Mutation>
-                                    </div> :
-                                    null
-                            }
-                        </div>
+                return <Subscription
+                    subscription={subscriptionAttribute}
+                    variables={{
+                        id: selectedFhirAttribute.id,
                     }}
-                </Subscription> :
-                null
+                >
+                    {({ data, loading, error }) => {
+                        console.log(`Attribute subscription ${selectedFhirAttribute.id}`)
+                        console.log(data)
+
+                        const attribute = (data && data.subscriptionAttribute) ?
+                            data.subscriptionAttribute.node :
+                            null
+
+                        inputColumns = attribute && attribute.inputColumns ?
+                            attribute.inputColumns :
+                            inputColumns
+
+                        return <div id='input-columns'>
+                        <div id='input-column-rows'>
+                            {inputColumns.map((inputColumn: any, index: number) => {
+                                return <Subscription
+                                    key={index}
+                                    subscription={subscriptionInputColumn}
+                                    variables={{
+                                        id: inputColumn.id,
+                                    }}
+                                >
+                                    {({ data, loading }) => {
+                                        console.log(`Input subscription ${inputColumn.id}`)
+                                        console.log(data)
+                                        const column = (data && data.inputColumnSubscription) ?
+                                            data.inputColumnSubscription.node :
+                                            inputColumn
+
+                                        return column ?
+                                            inputColumnComponent(attribute, column) :
+                                            null
+                                    }}
+                                </Subscription>
+                            })}
+                        </div>
+                        {
+                            attribute && attribute.inputColumns && attribute.inputColumns.length > 1 ?
+                                <div id='input-column-merging-script'>
+                                    <Mutation
+                                        mutation={mutationAttribute}
+                                    >
+                                        {(mutationAttribute, {data, loading}) => {
+                                            return <div className='stacked-tags'>
+                                                <Tag>SCRIPT</Tag>
+                                                <StringSelect
+                                                    disabled={true}
+                                                    inputItem={(attribute && attribute.mergingScript) ? attribute.mergingScript : ''}
+                                                    items={['mergingScript.py']}
+                                                    loading={loading}
+                                                    onChange={(e: string) => {
+                                                        mutationAttribute({
+                                                            variables: {
+                                                                id: attribute.id,
+                                                                data: {
+                                                                    mergingScript: e,
+                                                                },
+                                                            },
+                                                        })
+                                                    }}
+                                                />
+                                            </div>
+                                        }}
+                                    </Mutation>
+                                </div> :
+                                null
+                        }
+                    </div>
+                }}
+            </Subscription>
             }}
         </Query>
 
@@ -643,7 +643,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                     }
                                 })
                             }}
-                            databaseSchema={selectedDatabase ? data.databases.schemaByDatabaseName[selectedDatabase] : {}}
+                            databaseSchema={selectedDatabase.name ? data.databases.schemaByDatabaseName[selectedDatabase.name] : {}}
                         />
                         <Mutation
                             mutation={mutationAttributeNoId}
@@ -746,23 +746,24 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
         </div>
 
         const fhirResourceTree = <Query
-            query={recAvailableAttributes}
+            query={resourceAttributeTree}
             variables={{
                 resourceId: selectedFhirResource.id,
             }}
             skip={!selectedDatabase || !selectedFhirResource.id}
         >
             {({ data, loading }) => {
+                console.log(data)
                 return loading ?
                     <Spinner /> :
                     <FhirResourceTree
                         json={
-                            data.recAvailableAttributes
+                            data.resource.attributes
                         }
-                        onClickCallback={(attributeFlatPath: any) => {
-                            dispatch(updateFhirAttribute(attributeFlatPath))
+                        onClickCallback={(nodeData: any) => {
+                            dispatch(updateFhirAttribute(nodeData.id, nodeData.name))
                         }}
-                        selectedNode={selectedFhirAttribute}
+                        selectedNodeId={selectedFhirAttribute.id}
                     />
             }}
         </Query>
@@ -775,24 +776,22 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                     <div id='navbar' className={'bp3-dark'}>
                         <div className='flex-row'>
                             <ControlGroup>
-                                <StringSelect
+                                <DatabaseSelect
                                     icon={'database'}
                                     inputItem={selectedDatabase}
                                     intent={'primary'}
-                                    items={data.allDatabases ? data.allDatabases.map((database: any) => {
-                                        return database.name
-                                    }) : []}
+                                    items={data.allDatabases ? data.allDatabases : []}
                                     loading={loading || this.props.data.databases.loadingDatabaseSchema}
-                                    onChange={(databaseName: string) => {
-                                        dispatch(changeDatabase(databaseName))
+                                    onChange={(database: any) => {
+                                        dispatch(changeDatabase(database.id, database.name))
                                     }}
                                 />
                                 <Query
                                     query={availableResources}
                                     variables={{
-                                        database: selectedDatabase
+                                        database: selectedDatabase.name
                                     }}
-                                    skip={!selectedDatabase}
+                                    skip={!selectedDatabase.name}
                                 >
                                     {({ data, loading }) => {
                                         return <ResourceSelect
@@ -803,7 +802,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                             items={data && data.availableResources ? data.availableResources : []}
                                             loading={loading}
                                             onChange={(resource: any) => {
-                                                dispatch(updateFhirResource(resource.name, resource.id))
+                                                dispatch(updateFhirResource(resource.id, resource.name))
                                             }}
                                         />
                                     }}

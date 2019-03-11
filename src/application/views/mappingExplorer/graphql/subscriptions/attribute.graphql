@@ -1,0 +1,10 @@
+#import "../fragments/resourceRecAttributes.graphql"
+
+subscription subscriptionAttribute ($id: ID!) {
+    attribute(id: $id) {
+        updatedFields
+        node {
+            ...resourceRecAttributes
+        }
+    }
+}

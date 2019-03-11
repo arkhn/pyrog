@@ -12,20 +12,23 @@ import {
 } from '../../actions/databases'
 
 // STATE UPDATES
-export const changeDatabase = (databaseName: string): IAction => {
+export const changeDatabase = (databaseId: string, databaseName: string): IAction => {
     return (dispatch: any, getState: any) => {
-        dispatch(fetchDatabaseSchema(databaseName, () => dispatch(updateDatabase(databaseName))))
+        dispatch(fetchDatabaseSchema(databaseName, () => dispatch(updateDatabase(databaseId, databaseName))))
     }
 }
 
-export const updateDatabase = (database: string): IAction => {
+export const updateDatabase = (databaseId: string, databaseName: string): IAction => {
     return {
         type: 'UPDATE_DATABASE',
-        payload: database,
+        payload: {
+            databaseId,
+            databaseName,
+        },
     }
 }
 
-export const updateFhirResource = (resourceName: string, resourceId: string): IAction => {
+export const updateFhirResource = (resourceId: string, resourceName: string): IAction => {
     return {
         type: 'UPDATE_FHIR_RESOURCE',
         payload: {
@@ -35,9 +38,12 @@ export const updateFhirResource = (resourceName: string, resourceId: string): IA
     }
 }
 
-export const updateFhirAttribute = (attributePath: string[]): IAction => {
+export const updateFhirAttribute = (attributeId: string, attributeName: string): IAction => {
     return {
         type: 'UPDATE_FHIR_ATTRIBUTE',
-        payload: attributePath,
+        payload: {
+            attributeId,
+            attributeName,
+        }
     }
 }
