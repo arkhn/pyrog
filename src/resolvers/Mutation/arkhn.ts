@@ -11,41 +11,43 @@ export const arkhn = {
     // Cela permet que ce genre d'évènement (création, suppression)
     // soit pris en compte lors d'une subscription à l'attribut parent.
     // Une issue parle de ça ici : https://github.com/prisma/prisma/issues/146
-    async createInputColumnViaAttribute(parent, { attributeId, data }, context: Context) {
+    async createInputColumnAndUpdateAttribute(parent, { attributeId, data }, context: Context) {
         getUserId(context)
 
-        // On crée une InputColumn et on récupère la dernière en date
-        const inputColumns = await context.client.updateAttribute({
-            data: {
-                inputColumns: {
-                    create: [{
-                        ...data,
-                    }]
+        // Création de la nouvelle inputColumn
+        const inputColumn = await context.client.createInputColumn({
+            ...data,
+            attribute: {
+                connect: {
+                    id: attributeId,
                 }
-            },
-            where: { id: attributeId }
-        }).inputColumns({
-            last: 1
-        })
-
-        // On ne renvoie qu'une InputColumn
-        return inputColumns[0]
-    },
-    deleteInputColumnViaAttribute(parent, { attributeId, inputColumnId }, context: Context) {
-        getUserId(context)
-
-        return context.client.updateAttribute({
-            data: {
-                inputColumns: {
-                    delete: {
-                        id: inputColumnId,
-                    }
-                }
-            },
-            where: {
-                id: attributeId,
             }
         })
+
+        // On update manuellement l'Attribut, sans rien modifier
+        // ce qui permet de déclencher un évènement
+        // pour les souscripteurs.
+        const attribute = await context.client.updateAttribute({
+            data: {},
+            where: { id: attributeId }
+        })
+
+        return inputColumn
+    },
+    async deleteInputColumnAndUpdateAttribute(parent, { attributeId, inputColumnId }, context: Context) {
+        getUserId(context)
+
+        // Suppression d'une inputColumn
+        const inputColumn = await context.client.deleteInputColumn({
+            id: inputColumnId,
+        })
+
+        const attribute = await context.client.updateAttribute({
+            data: {},
+            where: { id: attributeId }
+        })
+
+        return inputColumn
     },
     updateInputColumn(parent, { id, data }, context: Context) {
         getUserId(context)

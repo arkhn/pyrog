@@ -13,8 +13,8 @@ type Query {
 }
 
 type Mutation {
-    createInputColumnViaAttribute(attributeId: ID!, data: InputColumnCreateInput): InputColumn!
-    deleteInputColumnViaAttribute(attributeId: ID!, inputColumnId: ID!): Attribute!
+    createInputColumnAndUpdateAttribute(attributeId: ID!, data: InputColumnCreateWithoutAttributeInput): InputColumn!
+    deleteInputColumnAndUpdateAttribute(attributeId: ID!, inputColumnId: ID!): InputColumn!
     updateInputColumn(id: ID!, data: InputColumnUpdateInput): InputColumn!
     # updateAttributeNoId(database: String!, resource: String!, attributePath: [String!]!, data: AttributeUpdateInput): Attribute!
     # updateAttribute(id: ID!, data: AttributeUpdateInput): Attribute!
