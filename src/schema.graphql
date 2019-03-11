@@ -2,10 +2,8 @@
 
 type Query {
     # BINDING QUERIES
-    # attribute(where: AttributeWhereUniqueInput): Attribute!
-    # attributes: [Attribute!]
-    # databases: [Database!]!
     inputColumns(where: InputColumnWhereInput): [InputColumn!]
+    resource(where: ResourceWhereUniqueInput): Resource!
 
     # CLIENT QUERIES
     allDatabases: [Database!]!
@@ -32,6 +30,7 @@ type Mutation {
 }
 
 type Subscription {
+    attribute(where: AttributeWhereUniqueInput): Attribute!
     attributeInputColumns(id: ID!): [InputColumn!]
     inputColumn(id: ID!): InputColumn
     resource(id: ID!): Resource

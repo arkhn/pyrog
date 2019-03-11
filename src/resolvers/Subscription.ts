@@ -1,9 +1,13 @@
+import { forwardTo } from 'prisma-binding'
+
 import {
+    checkAuth,
     Context,
     getUserId,
 } from '../utils'
 
 export const Subscription = {
+    attribute: checkAuth(forwardTo('binding')),
     resource: {
         subscribe: async (parent, { id }, context: Context) => {
             getUserId(context)

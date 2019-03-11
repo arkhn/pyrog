@@ -9,10 +9,8 @@ import {
 
 export const Query = {
     // BINDING QUERIES
-    // attribute: forwardTo('binding'),
-    // attributes: forwardTo('binding'),
-    // databases: forwardTo('binding'),
     inputColumns: checkAuth(forwardTo('binding')),
+    resource: checkAuth(forwardTo('binding')),
 
     // CLIENT QUERIES
     allDatabases(parent, args, context: Context) {

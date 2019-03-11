@@ -18,7 +18,7 @@ export interface Context {
 // https://github.com/graphql-binding/graphql-binding/issues/40
 // Cette fonction est un simple wrapper qui appelle la fonction getUserId
 // avant de faire suivre la requête au callback.
-export const checkAuth = (callback: any) => {
+export const checkAuth = (callback: (parent, args, context: Context, info: GraphQLResolveInfo) => any) => {
     return <PARENT, ARGS>(
         parent: PARENT,
         args: ARGS,
