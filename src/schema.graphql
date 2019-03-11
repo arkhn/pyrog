@@ -30,7 +30,7 @@ type Mutation {
 }
 
 type Subscription {
-    attribute(where: AttributeWhereUniqueInput): Attribute!
+    attribute(where: AttributeSubscriptionWhereInput): AttributeSubscriptionPayload
     attributeInputColumns(id: ID!): [InputColumn!]
     inputColumn(id: ID!): InputColumn
     resource(id: ID!): Resource

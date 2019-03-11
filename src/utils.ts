@@ -31,7 +31,7 @@ export const checkAuth = (callback: (parent, args, context: Context, info: Graph
     }
 }
 
-export function getUserId(context: Context) {
+export const getUserId = (context: Context) => {
     // Token appears in different places depending
     // on whether the request is HTTP or WS
     const Authorization = context.request ?

@@ -7,7 +7,9 @@ import {
 } from '../utils'
 
 export const Subscription = {
-    attribute: checkAuth(forwardTo('binding')),
+    attribute: {
+        subscribe: forwardTo('binding'),
+    },
     resource: {
         subscribe: async (parent, { id }, context: Context) => {
             getUserId(context)
