@@ -1,6 +1,7 @@
 import { forwardTo } from 'prisma-binding'
 
 import {
+    checkAuth,
     Context,
     getUserId,
     getRecAttribute,
@@ -11,6 +12,7 @@ export const Query = {
     // attribute: forwardTo('binding'),
     // attributes: forwardTo('binding'),
     // databases: forwardTo('binding'),
+    inputColumns: checkAuth(forwardTo('binding')),
 
     // CLIENT QUERIES
     allDatabases(parent, args, context: Context) {
@@ -26,7 +28,7 @@ export const Query = {
         })
         .resources()
     },
-    async availableAttributes(parent, { resourceId }, context: Context) {
+    async recAvailableAttributes(parent, { resourceId }, context: Context) {
         getUserId(context)
 
         const directAttributes = await context.client
@@ -41,15 +43,6 @@ export const Query = {
                 attributes: await getRecAttribute(attribute, context),
             }
         })
-    },
-    inputColumns(parent, { attributeId }, context: Context) {
-        getUserId(context)
-
-        return context.client
-            .attribute({
-                id: attributeId,
-            })
-            .inputColumns()
     },
     me (parent, args, context: Context) {
         const id = getUserId(context)

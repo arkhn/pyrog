@@ -5,12 +5,12 @@ type Query {
     # attribute(where: AttributeWhereUniqueInput): Attribute!
     # attributes: [Attribute!]
     # databases: [Database!]!
+    inputColumns(where: InputColumnWhereInput): [InputColumn!]
 
     # CLIENT QUERIES
     allDatabases: [Database!]!
     availableResources(database: String!): [Resource!]
-    availableAttributes(resourceId: ID!): [Attribute!]
-    inputColumns(attributeId: ID!): [InputColumn!]
+    recAvailableAttributes(resourceId: ID!): [Attribute!]
     me: User
 }
 

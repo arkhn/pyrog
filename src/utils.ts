@@ -1,4 +1,6 @@
+import { GraphQLResolveInfo } from 'graphql'
 import * as jwt from 'jsonwebtoken'
+
 import { Prisma as PrismaClient } from './generated/prisma-client'
 import { Prisma as PrismaBinding } from './generated/prisma-binding'
 
@@ -8,6 +10,25 @@ export interface Context {
     request?: any
     response?: any
     connection?: any
+}
+
+// Inspiré du code de forwardTo de prisma-binding
+// https://github.com/graphql-binding/graphql-binding/blob/master/src/utils/index.ts#L73
+// sur une recommandation de nilan
+// https://github.com/graphql-binding/graphql-binding/issues/40
+// Cette fonction est un simple wrapper qui appelle la fonction getUserId
+// avant de faire suivre la requête au callback.
+export const checkAuth = (callback: any) => {
+    return <PARENT, ARGS>(
+        parent: PARENT,
+        args: ARGS,
+        context: Context,
+        info: GraphQLResolveInfo,
+    ) => {
+        getUserId(context)
+
+        return callback(parent, args, context, info)
+    }
 }
 
 export function getUserId(context: Context) {
