@@ -1,4 +1,7 @@
+import { forwardTo } from 'prisma-binding'
+
 import {
+    checkAuth,
     Context,
     getAttribute,
     getUserId,
@@ -49,10 +52,53 @@ export const arkhn = {
 
         return inputColumn
     },
+    async createJoinAndUpdateInputColumn(parent, { inputColumnId, data }, context: Context) {
+        getUserId(context)
+
+        const join = await context.client.createJoin({
+            ...data,
+            inputColumn: {
+                connect: {
+                    id: inputColumnId,
+                }
+            }
+        })
+
+        const inputColumn = await context.client.updateInputColumn({
+            data: {},
+            where: { id: inputColumnId }
+        })
+
+        return join
+    },
+    async deleteJoinAndUpdateInputColumn(parent, { inputColumnId, joinId }, context: Context) {
+        getUserId(context)
+
+        // Suppression d'une inputColumn
+        const join = await context.client.deleteJoin({
+            id: joinId,
+        })
+
+        const inputColumn = await context.client.updateInputColumn({
+            data: {},
+            where: { id: inputColumnId }
+        })
+
+        return join
+    },
+    updateAttribute: checkAuth(forwardTo('binding')),
     updateInputColumn(parent, { id, data }, context: Context) {
         getUserId(context)
 
         return context.client.updateInputColumn({
+            data,
+            where: { id }
+        })
+    },
+    updateJoin(parent, { id, data }, context: Context) {
+        getUserId(context)
+
+        return context.client.updateJoin({
             data,
             where: { id }
         })
