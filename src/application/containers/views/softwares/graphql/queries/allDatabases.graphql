@@ -1,0 +1,6 @@
+query allDatabases {
+    allDatabases {
+        id
+        name
+    }
+}

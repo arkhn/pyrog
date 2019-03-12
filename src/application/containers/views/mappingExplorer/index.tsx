@@ -1,4 +1,3 @@
-import {gql} from 'apollo-boost'
 import {
     Alignment,
     Breadcrumbs,
@@ -36,23 +35,24 @@ import {
 } from './actions'
 
 // Import components
-import ColumnPicker from '../../components/columnPicker'
-import FhirResourceTree from '../../components/fhirResourceTree'
-import InputColumnsTable from '../../components/inputColumnsTable'
-import StringSelect from '../../components/selects/stringSelect'
-import TSelect from '../../components/selects/TSelect'
-import DatabaseSelect from '../../components/selects/databaseSelect'
-import ResourceSelect from '../../components/selects/resourceSelect'
+import ColumnPicker from '../../../components/columnPicker'
+import FhirResourceTree from '../../../components/fhirResourceTree'
+import InputColumnsTable from '../../../components/inputColumnsTable'
+import StringSelect from '../../../components/selects/stringSelect'
+import TSelect from '../../../components/selects/TSelect'
+import DatabaseSelect from '../../../components/selects/databaseSelect'
+import ResourceSelect from '../../../components/selects/resourceSelect'
+import Navbar from '../../utils/navbar'
 
 // Import types
 import {
     IReduxStore,
     IView,
-} from '../../types'
+} from '../../../types'
 
 import './style.less'
 
-// GRAPHQL
+// GRAPHQL OPERATIONS
 
 // Queries
 const allDatabases = require('./graphql/queries/allDatabases.graphql')
@@ -77,8 +77,8 @@ const subscribeInputColumn = require('./graphql/subscriptions/inputColumn.graphq
 const subscribeJoin = require('./graphql/subscriptions/join.graphql')
 
 // LOGO
-const arkhnLogoWhite = require("../../img/arkhn_logo_only_white.svg") as string;
-const arkhnLogoBlack = require("../../img/arkhn_logo_only_black.svg") as string;
+const arkhnLogoWhite = require("../../../img/arkhn_logo_only_white.svg") as string;
+const arkhnLogoBlack = require("../../../img/arkhn_logo_only_black.svg") as string;
 
 export interface IMappingExplorerState {
     selectedDatabase: {
@@ -658,90 +658,96 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
             }}
         </Query>
 
-        return <Query
-            query={allDatabases}
-        >
-            {({ data, loading }) => {
-                return <div id='mapping-explorer-container'>
-                    <div id='navbar' className={'bp3-dark'}>
-                        <div className='flex-row'>
-                            <ControlGroup>
-                                <DatabaseSelect
-                                    icon={'database'}
-                                    inputItem={selectedDatabase}
-                                    intent={'primary'}
-                                    items={data.allDatabases ? data.allDatabases : []}
-                                    loading={loading || this.props.data.databases.loadingDatabaseSchema}
-                                    onChange={(database: any) => {
-                                        dispatch(changeDatabase(database.id, database.name))
-                                    }}
-                                />
-                                <Query
-                                    query={availableResources}
-                                    variables={{
-                                        database: selectedDatabase.name
-                                    }}
-                                    skip={!selectedDatabase.name}
-                                >
-                                    {({ data, loading }) => {
-                                        return <ResourceSelect
-                                            disabled={!selectedDatabase}
-                                            icon={'layout-hierarchy'}
-                                            inputItem={selectedFhirResource}
-                                            intent={'primary'}
-                                            items={data && data.availableResources ? data.availableResources : []}
-                                            loading={loading}
-                                            onChange={(resource: any) => {
-                                                dispatch(updateFhirResource(resource.id, resource.name))
-                                            }}
-                                        />
-                                    }}
-                                </Query>
-                            </ControlGroup>
+        return <div>
+            <Navbar />
+            <Query
+                query={allDatabases}
+            >
+                {({ data, loading }) => {
+                    return <div id='mapping-explorer-container'>
+                        {/* <div id='navbar' className={'bp3-dark'}>
+                            <div className='flex-row'>
+                                <ControlGroup>
+                                    <DatabaseSelect
+                                        icon={'database'}
+                                        inputItem={selectedDatabase}
+                                        intent={'primary'}
+                                        items={data.allDatabases ? data.allDatabases : []}
+                                        loading={loading || this.props.data.databases.loadingDatabaseSchema}
+                                        onChange={(database: any) => {
+                                            dispatch(changeDatabase(database.id, database.name))
+                                        }}
+                                    />
+                                </ControlGroup>
+                                {
+                                    selectedDatabase && selectedFhirResource.name ?
+                                        <Button
+                                            icon={'cog'}
+                                            minimal={!this.state.toggledNavBar}
+                                            onClick={() => this.setState({
+                                                toggledNavBar: !this.state.toggledNavBar,
+                                            })}
+                                        /> :
+                                        null
+                                }
+                            </div>
                             {
-                                selectedDatabase && selectedFhirResource.name ?
-                                    <Button
-                                        icon={'cog'}
-                                        minimal={!this.state.toggledNavBar}
-                                        onClick={() => this.setState({
-                                            toggledNavBar: !this.state.toggledNavBar,
-                                        })}
-                                    /> :
+                                toggledNavBar && selectedDatabase && selectedFhirResource.name ?
+                                    <div className='flex-row'>
+                                        <Card>
+                                            Should allow PrimaryKey changes.
+                                        </Card>
+                                    </div> :
                                     null
                             }
-                        </div>
+                        </div> */}
+
                         {
-                            toggledNavBar && selectedDatabase && selectedFhirResource.name ?
-                                <div className='flex-row'>
-                                    <Card>
-                                        Should allow PrimaryKey changes.
-                                    </Card>
+                            selectedDatabase ?
+                                <div id='main-container'>
+                                    <div id='right-part'>
+                                        <Query
+                                            query={availableResources}
+                                            variables={{
+                                                database: selectedDatabase.name
+                                            }}
+                                            skip={!selectedDatabase.name}
+                                        >
+                                            {({ data, loading }) => {
+                                                return <ResourceSelect
+                                                    disabled={!selectedDatabase}
+                                                    icon={'layout-hierarchy'}
+                                                    inputItem={selectedFhirResource}
+                                                    intent={'primary'}
+                                                    items={data && data.availableResources ? data.availableResources : []}
+                                                    loading={loading}
+                                                    onChange={(resource: any) => {
+                                                        dispatch(updateFhirResource(resource.id, resource.name))
+                                                    }}
+                                                />
+                                            }}
+                                        </Query>
+                                        <div id='fhir-resource-tree'>
+                                            {selectedFhirResource.name ?
+                                                fhirResourceTree :
+                                                null
+                                            }
+                                        </div>
+                                    </div>
+                                    {
+                                        selectedFhirAttribute ?
+                                            <div id='left-part'>
+                                                {inputColumnsComponent}
+                                                {columnSelectionComponent}
+                                            </div> :
+                                            attributeMessage
+                                    }
                                 </div> :
-                                null
+                                initialMessage
                         }
                     </div>
-
-                    {
-                        selectedDatabase && selectedFhirResource.name ?
-                            <div id='main-container'>
-                                <div id='right-part'>
-                                    <div id='fhir-resource-tree'>
-                                        {fhirResourceTree}
-                                    </div>
-                                </div>
-                                {
-                                    selectedFhirAttribute ?
-                                        <div id='left-part'>
-                                            {inputColumnsComponent}
-                                            {columnSelectionComponent}
-                                        </div> :
-                                        attributeMessage
-                                }
-                            </div> :
-                            initialMessage
-                    }
-                </div>
-            }}
-        </Query>
+                }}
+            </Query>
+        </div>
     }
 }

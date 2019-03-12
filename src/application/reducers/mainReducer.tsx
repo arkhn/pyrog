@@ -3,10 +3,11 @@ import {combineReducers} from 'redux'
 // Data fetching reducers
 import databases from './databases'
 import recommendedColumns from './recommendedColumns'
+import userReducer from './user'
 
 // View reducers
-import mappingExplorer from '../views/mappingExplorer/reducer'
-import mimic from '../views/mimic/reducer'
+import mappingExplorer from '../containers/views/mappingExplorer/reducer'
+import mimic from '../containers/views/mimic/reducer'
 
 // Data reducer (also called canonical state)
 const dataReducer = combineReducers({
@@ -23,6 +24,7 @@ const viewReducer = combineReducers({
 const mainReducer = combineReducers({
     data: dataReducer,
     views: viewReducer,
+    user: userReducer,
 })
 
 export default mainReducer

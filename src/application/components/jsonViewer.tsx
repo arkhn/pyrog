@@ -8,8 +8,8 @@ import {
     Tab,
     TabId,
     Tabs,
-    Tree
-    } from '@blueprintjs/core';
+    Tree,
+} from '@blueprintjs/core';
 import { isNullOrUndefined } from 'util'
 
 export interface IJsonViewerProps {

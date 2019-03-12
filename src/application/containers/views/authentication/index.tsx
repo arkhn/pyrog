@@ -1,4 +1,3 @@
-import { gql } from 'apollo-boost'
 import {
     Button,
     ControlGroup,
@@ -15,26 +14,21 @@ import {
 } from 'react-apollo'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router'
+import { withRouter } from 'react-router-dom'
 
-import { AUTH_TOKEN } from '../../constant'
+import { AUTH_TOKEN } from '../../../constant'
 
-// Import actions
-// import {
-//     changeDatabase,
-//     updateDatabase,
-//     updateFhirAttribute,
-//     updateFhirResource,
-// } from './actions'
+import Navbar from '../../utils/navbar'
 
 // Import types
 import {
     IReduxStore,
     IView,
-} from '../../types'
+} from '../../../types'
 
 import './style.less'
 
-// Graphql operations
+// GRAPHQL OPERATIONS
 
 // Queries
 const isAuthenticated = require('./graphql/queries/isAuthenticated.graphql')
@@ -44,11 +38,11 @@ const mutationLogin = require('./graphql/mutations/login.graphql')
 const mutationSignup = require('./graphql/mutations/signup.graphql')
 
 // LOGOS
-const arkhnLogoWhite = require("../../img/arkhn_logo_only_white.svg") as string;
-const arkhnLogoBlack = require("../../img/arkhn_logo_only_black.svg") as string;
+const arkhnLogoWhite = require("../../../img/arkhn_logo_only_white.svg") as string;
+const arkhnLogoBlack = require("../../../img/arkhn_logo_only_black.svg") as string;
 
 export interface IAuthenticationState {
-
+    history?: any,
 }
 
 interface IState {
@@ -68,7 +62,6 @@ interface IAuthenticationViewState extends IView, IAuthenticationState {}
 
 const mapReduxStateToReactProps = (state : IReduxStore): IAuthenticationViewState => {
     return {
-        ...state.views.mappingExplorer,
         data: state.data,
         dispatch: state.dispatch,
     }
@@ -85,8 +78,8 @@ const reduxify = (mapReduxStateToReactProps: any, mapDispatchToProps?: any, merg
      )
 }
 
-@reduxify(mapReduxStateToReactProps)
-export default class AuthenticationView extends React.Component<IAuthenticationViewState, IState> {
+// @reduxify(mapReduxStateToReactProps)
+class AuthenticationView extends React.Component<IAuthenticationViewState, IState> {
     constructor(props: IAuthenticationViewState) {
         super(props)
         this.state = {
@@ -101,12 +94,6 @@ export default class AuthenticationView extends React.Component<IAuthenticationV
                 confirmPassword: ""
             },
         }
-    }
-
-    public componentDidMount() {
-        // this.props.dispatch(updateDatabase('Crossway'))
-        // this.props.dispatch(changeFhirResource('Patient'))
-        // this.props.dispatch(updateFhirAttribute('link.other'))
     }
 
     public render = () => {
@@ -213,11 +200,8 @@ export default class AuthenticationView extends React.Component<IAuthenticationV
 
                         if (authenticated) {
                             const token = data.signup.token
-
                             localStorage.setItem(AUTH_TOKEN, token)
-
-                            {/* this.props.history.replace('/') */}
-                            window.location.reload()
+                            this.props.history.push('/softwares')
                         }
 
                         return <div>
@@ -295,13 +279,10 @@ export default class AuthenticationView extends React.Component<IAuthenticationV
 
                         if (authenticated) {
                             const token = data.login.token
-
                             localStorage.setItem(AUTH_TOKEN, token)
 
-                            {/* this.props.history.replace('/') */}
-                            {/* window.location.reload() */}
                             console.log(token)
-                            return <Redirect to="/mapping" />
+                            this.props.history.push('/softwares')
                         }
 
                         return <div>
@@ -330,19 +311,23 @@ export default class AuthenticationView extends React.Component<IAuthenticationV
         </div>
 
         return <div>
-            <Query
+            {/* <Query
                 query={isAuthenticated}
             >
                 {({ data, loading }) => {
                     if (data && data.isAuthenticated) {
-                        return <Redirect to="/mapping" />
+                        return <Redirect to="/softwares" />
                     }
 
                     return loading ?
                         <Spinner /> :
                         formulaires
                 }}
-            </Query>
+            </Query> */}
+            <Navbar />
+            {formulaires}
         </div>
     }
 }
+
+export default withRouter(connect(mapReduxStateToReactProps)(AuthenticationView) as any)

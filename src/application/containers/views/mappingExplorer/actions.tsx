@@ -1,6 +1,6 @@
 import {
     IAction,
-} from '../../types'
+} from '../../../types'
 
 // DATA FETCHING
 // All data fetching actions are meant to be shared between
@@ -9,7 +9,7 @@ import {
 // It should be possible to give callback actions to these data-feching actions.
 import {
     fetchDatabaseSchema,
-} from '../../actions/databases'
+} from '../../../actions/databases'
 
 // STATE UPDATES
 export const changeDatabase = (databaseId: string, databaseName: string): IAction => {

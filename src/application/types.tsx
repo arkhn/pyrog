@@ -10,17 +10,28 @@ export type IThunkAction = (dispatch: redux.Dispatch<any>, getState: any) => voi
 
 export type IAction = ISimpleAction | IThunkAction
 
+export interface IUser {
+    isAuthenticated: boolean,
+    info: {
+        id: string,
+        name: string,
+        email: string,
+    }
+}
+
 export interface IReduxStore {
     data: any,
     dispatch?: any,
     views: any,
+    user: IUser,
 }
 
 // VIEWS
 
 export interface IView {
-    data: any,
+    data?: any,
     dispatch?: any,
+    user?: IUser,
 }
 
 // REACT
