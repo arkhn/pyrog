@@ -724,6 +724,11 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                     {
                         selectedDatabase && selectedFhirResource.name ?
                             <div id='main-container'>
+                                <div id='right-part'>
+                                    <div id='fhir-resource-tree'>
+                                        {fhirResourceTree}
+                                    </div>
+                                </div>
                                 {
                                     selectedFhirAttribute ?
                                         <div id='left-part'>
@@ -732,11 +737,6 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                         </div> :
                                         attributeMessage
                                 }
-                                <div id='right-part'>
-                                    <div id='fhir-resource-tree'>
-                                        {fhirResourceTree}
-                                    </div>
-                                </div>
                             </div> :
                             initialMessage
                     }

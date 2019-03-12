@@ -12,8 +12,8 @@ import MimicView from './views/mimic'
 const Routes = () => (
     <BrowserRouter>
         <Switch>
-            <Route exact path='/' component={MappingExplorer} />
-            <Route path='/authentication' component={Authentication} />
+            <Route exact path='/' component={Authentication} />
+            <Route path='/mapping' component={MappingExplorer} />
             <Route path='/mimic' component={MimicView} />
         </Switch>
     </BrowserRouter>
