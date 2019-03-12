@@ -1,3 +1,4 @@
+import * as jwt from 'jsonwebtoken'
 import { forwardTo } from 'prisma-binding'
 
 import {
@@ -42,9 +43,29 @@ export const Query = {
             }
         })
     },
-    me (parent, args, context: Context) {
+    me(parent, args, context: Context) {
         const id = getUserId(context)
 
         return context.client.user({ id })
+    },
+    isAuthenticated(parent, args, context: Context) {
+        console.log('isAuthenticated')
+        const Authorization = context.request ?
+            context.request.get('Authorization') :
+            (context.connection.context.Authorization || null)
+
+        if (Authorization) {
+            const token = Authorization.replace('Bearer ', '')
+
+            try {
+                const { userId } = jwt.verify(token, process.env.APP_SECRET) as { userId: string }
+            } catch (e) {
+                return false
+            }
+
+            return true
+        }
+
+        return false
     },
 }
