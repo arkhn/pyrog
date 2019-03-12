@@ -68,4 +68,40 @@ export const Query = {
 
         return false
     },
+    async countMappedAttributes(parent, { databaseId }, context: Context) {
+        const id = getUserId(context)
+
+        const resources =  await context.client.database({
+            id: databaseId
+        })
+        .resources()
+
+        const recFunction = async (attribute) => {
+            const inputColumns = await context.client.attribute({id: attribute.id}).inputColumns()
+
+            if (inputColumns.length > 0) {
+                return 1
+            } else {
+                const attributes = await context.client.attribute({id: attribute.id}).attributes()
+
+                let a = 0
+                for (let childAttribute of attributes) {
+                    a += await recFunction(childAttribute)
+                }
+
+                return a
+            }
+        }
+
+        let r = 0
+        for (let resource of resources) {
+            const attributes = await context.client.resource({id: resource.id}).attributes()
+
+            for (let attribute of attributes) {
+                r += await recFunction(attribute)
+            }
+        }
+
+        return r
+    }
 }

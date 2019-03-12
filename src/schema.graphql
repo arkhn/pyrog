@@ -5,12 +5,14 @@ type Query {
     inputColumns(where: InputColumnWhereInput): [InputColumn!]
     resource(where: ResourceWhereUniqueInput): Resource!
 
+
     # CLIENT QUERIES
     allDatabases: [Database!]!
     availableResources(database: String!): [Resource!]
     recAvailableAttributes(resourceId: ID!): [Attribute!]
     me: User
     isAuthenticated: Boolean!
+    countMappedAttributes(databaseId: ID!): Int
 }
 
 type Mutation {
