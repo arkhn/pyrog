@@ -6,6 +6,7 @@ import {createLogger} from 'redux-logger'
 
 import { HttpLink, InMemoryCache, ApolloClient } from 'apollo-client-preset'
 import { ApolloLink, split } from 'apollo-link'
+import { onError } from 'apollo-link-error'
 import { getMainDefinition } from 'apollo-utilities'
 import { WebSocketLink } from 'apollo-link-ws'
 import { ApolloProvider } from 'react-apollo'
@@ -73,6 +74,17 @@ const wsLink = new WebSocketLink({
     },
 })
 
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+    if (graphQLErrors)
+        graphQLErrors.map(({ message, locations, path }) =>
+        console.log(
+            `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+        ),
+    )
+
+    if (networkError) console.log(`[Network error]: ${networkError}`)
+})
+
 const link = split(
     // Split based on operation type
     ({ query }) => {
@@ -85,8 +97,10 @@ const link = split(
 
 // Client
 const client = new ApolloClient({
-    // link: wsLink,
-    link: ApolloLink.from([link]),
+    link: ApolloLink.from(process.env.NODE_ENV === 'development' ?
+        [errorLink, link] :
+        [link]
+    ),
     cache: new InMemoryCache(),
     connectToDevTools: true,
 })

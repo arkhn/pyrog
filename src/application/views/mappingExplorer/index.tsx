@@ -181,10 +181,6 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                 mutation={deleteInputColumnAndUpdateAttribute}
             >
                 {(deleteInputColumn, {data, loading, error}) => {
-                    if (error) {
-                        console.log(error)
-                    }
-
                     return <Button
                         icon={'trash'}
                         loading={loading}
@@ -239,11 +235,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                 <Mutation
                                     mutation={updateInputColumn}
                                 >
-                                    {(updateInputColumn, {data, error, loading}) => {
-                                        if (error) {
-                                            console.log(error)
-                                        }
-
+                                    {(updateInputColumn, {data, loading}) => {
                                         return <div className='stacked-tags'>
                                             <Tag>SCRIPT</Tag>
                                             <StringSelect
@@ -270,11 +262,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                 <Mutation
                                     mutation={createJoinAndUpdateInputColumn}
                                 >
-                                    {(createJoin, {data, error, loading}) => {
-                                        if (error) {
-                                            console.log(error)
-                                        }
-
+                                    {(createJoin, {data, loading}) => {
                                         return <Button
                                             icon={'add'}
                                             loading={loading}
@@ -302,11 +290,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                                     id: join.id,
                                                 }}
                                             >
-                                                {({ data, error, loading }) => {
-                                                    if (error) {
-                                                        console.log(error)
-                                                    }
-
+                                                {({ data, loading }) => {
                                                     joinData = (data && data.join && data.join.node) ?
                                                         data.join.node :
                                                         joinData
@@ -414,11 +398,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
             <Mutation
                 mutation={deleteJoinAndUpdateInputColumn}
             >
-                {(deleteJoin, {data, error, loading}) => {
-                    if (error) {
-                        console.log(error)
-                    }
-
+                {(deleteJoin, {data, loading}) => {
                     return <Button
                         icon={'trash'}
                         minimal={true}
@@ -437,11 +417,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
             <Mutation
                 mutation={updateJoin}
             >
-                {(updateJoin, {data, error, loading}) => {
-                    if (error) {
-                        console.log(error)
-                    }
-
+                {(updateJoin, {data, loading}) => {
                     return joinColumnsComponent(joinData, updateJoin)
                 }}
             </Mutation>
@@ -454,17 +430,10 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
             }}
             skip={!selectedFhirAttribute.id}
         >
-            {({ data, error, loading }) => {
-                {/* Before rendering this view, verify that all
-                inconsistent usecases are sorted (is the query loading,
-                did it trigger an error, did it return data?) */}
+            {({ data, loading }) => {
                 if (loading) {
                     return <Spinner />
                 }
-                if (error) {
-                    console.log(error)
-                }
-
                 let inputColumns = (data && data.inputColumns) ? data.inputColumns : []
 
                 return selectedFhirAttribute.id ?
@@ -475,10 +444,6 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                         }}
                     >
                         {({ data, loading, error }) => {
-                            if (error) {
-                                console.log(error)
-                            }
-
                             const attribute = (data && data.attribute && data.attribute.node) ?
                                 data.attribute.node :
                                 null
@@ -497,11 +462,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                             id: inputColumn.id,
                                         }}
                                     >
-                                        {({ data, error, loading }) => {
-                                            if (error) {
-                                                console.log(error)
-                                            }
-
+                                        {({ data, loading }) => {
                                             const column = (data && data.inputColumn && data.inputColumn.node) ?
                                                 data.inputColumn.node :
                                                 inputColumn
