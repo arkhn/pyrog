@@ -52,34 +52,31 @@ import {
 
 import './style.less'
 
-// Requests
+// GRAPHQL
+
+// Queries
 const allDatabases = require('./graphql/queries/allDatabases.graphql')
 const availableResources = require('./graphql/queries/availableResources.graphql')
 const inputColumns = require('./graphql/queries/inputColumns.graphql')
 const resourceAttributeTree = require('./graphql/queries/resourceAttributeTree.graphql')
-// const recAvailableAttributes = require('./graphql/queries/recAvailableAttributes.graphql')
 
+// Mutations
 const createInputColumnAndUpdateAttribute = require('./graphql/mutations/createInputColumnAndUpdateAttribute.graphql')
 const deleteInputColumnAndUpdateAttribute = require('./graphql/mutations/deleteInputColumnAndUpdateAttribute.graphql')
+const updateInputColumn = require('./graphql/mutations/updateInputColumn.graphql')
 
-const attributeSubscription = require('./graphql/subscriptions/attribute.graphql')
+const createJoinAndUpdateInputColumn = require('./graphql/mutations/createJoinAndUpdateInputColumn.graphql')
+const deleteJoinAndUpdateInputColumn = require('./graphql/mutations/deleteJoinAndUpdateInputColumn.graphql')
+const updateJoin = require('./graphql/mutations/updateJoin.graphql')
 
-const getAttribute = require('./graphql/getAttribute.graphql')
-const getResource = require('./graphql/getResource.graphql')
-const getTree = require('./graphql/getTree.graphql')
-const mutationJoin = require('./graphql/mutationJoin.graphql')
-const mutationDeleteInputColumn = require('./graphql/mutationDeleteInputColumn.graphql')
-const mutationDeleteJoin = require('./graphql/mutationDeleteJoin.graphql')
-const subscriptionAttribute = require('./graphql/subscriptionAttribute.graphql')
-const subscriptionInputColumn = require('./graphql/subscriptionInputColumn.graphql')
-const subscriptionResource = require('./graphql/subscriptionResource.graphql')
-const subscriptionJoin = require('./graphql/subscriptionJoin.graphql')
+const updateAttribute = require('./graphql/mutations/updateAttribute.graphql')
 
-const mutationAttribute = require('./graphql/mutationAttribute.graphql')
-const mutationAttributeNoId = require('./graphql/mutationAttributeNoId.graphql')
-const mutationInputColumn = require('./graphql/mutationInputColumn.graphql')
-const mutationResource = require('./graphql/mutationResource.graphql')
+// Subscriptions
+const subscribeAttribute = require('./graphql/subscriptions/attribute.graphql')
+const subscribeInputColumn = require('./graphql/subscriptions/inputColumn.graphql')
+const subscribeJoin = require('./graphql/subscriptions/join.graphql')
 
+// LOGO
 const arkhnLogoWhite = require("../../img/arkhn_logo_only_white.svg") as string;
 const arkhnLogoBlack = require("../../img/arkhn_logo_only_black.svg") as string;
 
@@ -179,88 +176,6 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
             title={'Fhirball'}
         />
 
-        const primaryKeyComponent = <Query
-            query={getResource}
-            variables={{
-                database: selectedDatabase,
-                resource: selectedFhirResource.name,
-            }}
-            skip={!selectedDatabase || !selectedFhirResource.name}
-        >
-            {({ loading, error, data }) => {
-                if (error) {
-                    console.log(error)
-                }
-
-                let resource = data ? data.getResource : null
-
-                return resource ? <Subscription
-                    subscription={subscriptionResource}
-                    variables={{
-                        id: resource.id,
-                    }}
-                >
-                    {({ data, loading }) => {
-                        resource = data && data.subscriptionResource ?
-                            data.subscriptionResource.node :
-                            resource
-
-                        return <ControlGroup>
-                            <Mutation
-                                mutation={mutationResource}
-                            >
-                                {(mutationResource, {data, loading}) => {
-                                    return <ColumnPicker
-                                        ownerChangeCallback={(e: string) => {
-                                            mutationResource({
-                                                variables: {
-                                                    id: resource.id,
-                                                    data: {
-                                                        primaryKeyOwner: e,
-                                                        primaryKeyTable: null,
-                                                        primaryKeyColumn: null,
-                                                    },
-                                                }
-                                            })
-                                        }}
-                                        tableChangeCallback={(e: string) => {
-                                            mutationResource({
-                                                variables: {
-                                                    id: resource.id,
-                                                    data: {
-                                                        primaryKeyTable: e,
-                                                        primaryKeyColumn: null,
-                                                    },
-                                                }
-                                            })
-                                        }}
-                                        columnChangeCallback={(e: string) => {
-                                            mutationResource({
-                                                variables: {
-                                                    id: resource.id,
-                                                    data: {
-                                                        primaryKeyColumn: e,
-                                                    },
-                                                }
-                                            })
-                                        }}
-                                        initialColumn={{
-                                            owner: resource.primaryKeyOwner,
-                                            table: resource.primaryKeyTable,
-                                            column: resource.primaryKeyColumn,
-                                        }}
-                                        databaseSchema={selectedDatabase.name ? this.props.data.databases.schemaByDatabaseName[selectedDatabase.name] : {}}
-                                        label={'Primary Key'}
-                                    />
-                                }}
-                            </Mutation>
-                        </ControlGroup>
-                    }}
-                </Subscription> :
-                null
-            }}
-        </Query>
-
         const inputColumnComponent = (attribute: any, column: any) => <div className='input-column'>
             <Mutation
                 mutation={deleteInputColumnAndUpdateAttribute}
@@ -277,7 +192,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                         onClick={() => {
                             deleteInputColumn({
                                 variables: {
-                                    attributeId: attribute.id,
+                                    attributeId: selectedFhirAttribute.id,
                                     inputColumnId: column.id,
                                 }
                             })
@@ -322,9 +237,13 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                     ]}
                                 />
                                 <Mutation
-                                    mutation={mutationInputColumn}
+                                    mutation={updateInputColumn}
                                 >
-                                    {(changeInputColumnScript, {data, loading}) => {
+                                    {(updateInputColumn, {data, error, loading}) => {
+                                        if (error) {
+                                            console.log(error)
+                                        }
+
                                         return <div className='stacked-tags'>
                                             <Tag>SCRIPT</Tag>
                                             <StringSelect
@@ -333,7 +252,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                                 items={['script1.py', 'script2.py']}
                                                 loading={loading}
                                                 onChange={(e: string) => {
-                                                    changeInputColumnScript({
+                                                    updateInputColumn({
                                                         variables: {
                                                             id: column.id,
                                                             data: {
@@ -349,22 +268,21 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                             </div>
                             <div className='input-column-joins'>
                                 <Mutation
-                                    mutation={mutationInputColumn}
+                                    mutation={createJoinAndUpdateInputColumn}
                                 >
-                                    {(changeInputColumnJoin, {data, loading}) => {
+                                    {(createJoin, {data, error, loading}) => {
+                                        if (error) {
+                                            console.log(error)
+                                        }
+
                                         return <Button
                                             icon={'add'}
+                                            loading={loading}
                                             onClick={() => {
-                                                changeInputColumnJoin({
+                                                createJoin({
                                                     variables: {
-                                                        id: column.id,
-                                                        data: {
-                                                            joins: {
-                                                                create: [
-                                                                    {}
-                                                                ]
-                                                            }
-                                                        },
+                                                        inputColumnId: column.id,
+                                                        data: {},
                                                     },
                                                 })
                                             }}
@@ -379,14 +297,18 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                             let joinData = join
                                             return <Subscription
                                                 key={index}
-                                                subscription={subscriptionJoin}
+                                                subscription={subscribeJoin}
                                                 variables={{
                                                     id: join.id,
                                                 }}
                                             >
-                                                {({ data, loading }) => {
-                                                    joinData = (data && data.subscribeToJoin) ?
-                                                        data.subscribeToJoin.node :
+                                                {({ data, error, loading }) => {
+                                                    if (error) {
+                                                        console.log(error)
+                                                    }
+
+                                                    joinData = (data && data.join && data.join.node) ?
+                                                        data.join.node :
                                                         joinData
 
                                                     return joinData ?
@@ -490,12 +412,17 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
 
         const joinComponent = (joinData: any, column: any) => <div className={'join'}>
             <Mutation
-                mutation={mutationDeleteJoin}
+                mutation={deleteJoinAndUpdateInputColumn}
             >
-                {(deleteJoin, {data, loading}) => {
+                {(deleteJoin, {data, error, loading}) => {
+                    if (error) {
+                        console.log(error)
+                    }
+
                     return <Button
                         icon={'trash'}
                         minimal={true}
+                        loading={loading}
                         onClick={() => {
                             deleteJoin({
                                 variables: {
@@ -508,9 +435,13 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                 }}
             </Mutation>
             <Mutation
-                mutation={mutationJoin}
+                mutation={updateJoin}
             >
-                {(updateJoin, {data, loading}) => {
+                {(updateJoin, {data, error, loading}) => {
+                    if (error) {
+                        console.log(error)
+                    }
+
                     return joinColumnsComponent(joinData, updateJoin)
                 }}
             </Mutation>
@@ -538,7 +469,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
 
                 return selectedFhirAttribute.id ?
                     <Subscription
-                        subscription={attributeSubscription}
+                        subscription={subscribeAttribute}
                         variables={{
                             id: selectedFhirAttribute.id,
                         }}
@@ -561,14 +492,18 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                 {inputColumns.map((inputColumn: any, index: number) => {
                                     return <Subscription
                                         key={index}
-                                        subscription={subscriptionInputColumn}
+                                        subscription={subscribeInputColumn}
                                         variables={{
                                             id: inputColumn.id,
                                         }}
                                     >
-                                        {({ data, loading }) => {
-                                            const column = (data && data.inputColumnSubscription) ?
-                                                data.inputColumnSubscription.node :
+                                        {({ data, error, loading }) => {
+                                            if (error) {
+                                                console.log(error)
+                                            }
+
+                                            const column = (data && data.inputColumn && data.inputColumn.node) ?
+                                                data.inputColumn.node :
                                                 inputColumn
 
                                             return column ?
@@ -582,9 +517,9 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                 inputColumns.length > 1 ?
                                     <div id='input-column-merging-script'>
                                         <Mutation
-                                            mutation={mutationAttribute}
+                                            mutation={updateAttribute}
                                         >
-                                            {(mutationAttribute, {data, loading}) => {
+                                            {(updateAttribute, {data, loading}) => {
                                                 return <div className='stacked-tags'>
                                                     <Tag>SCRIPT</Tag>
                                                     <StringSelect
@@ -593,7 +528,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                                         items={['mergingScript.py']}
                                                         loading={loading}
                                                         onChange={(e: string) => {
-                                                            mutationAttribute({
+                                                            updateAttribute({
                                                                 variables: {
                                                                     id: attribute.id,
                                                                     data: {
@@ -701,25 +636,18 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                             value={columnPicker.staticValue}
                         />
                         <Mutation
-                            mutation={mutationAttributeNoId}
+                            mutation={createInputColumnAndUpdateAttribute}
                         >
-                            {(mutationAttribute, { data, loading }) => {
+                            {(createInputColumn, { data, loading }) => {
                                 return <Button
                                     disabled={columnPicker.staticValue.length == 0}
                                     icon={'add'}
-                                    onClick={() => mutationAttribute({
+                                    loading={loading}
+                                    onClick={() => createInputColumn({
                                         variables: {
-                                            database: selectedDatabase,
-                                            resource: selectedFhirResource.name,
-                                            attributePath: selectedFhirAttribute,
+                                            attributeId: selectedFhirAttribute.id,
                                             data: {
-                                                inputColumns: {
-                                                    create: [
-                                                        {
-                                                            staticValue: columnPicker.staticValue,
-                                                        }
-                                                    ]
-                                                }
+                                                staticValue: columnPicker.staticValue,
                                             }
                                         }
                                     })}
@@ -825,7 +753,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                             toggledNavBar && selectedDatabase && selectedFhirResource.name ?
                                 <div className='flex-row'>
                                     <Card>
-                                        {primaryKeyComponent}
+                                        Should allow PrimaryKey changes.
                                     </Card>
                                 </div> :
                                 null

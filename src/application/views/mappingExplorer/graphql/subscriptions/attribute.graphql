@@ -1,6 +1,6 @@
 #import "../fragments/recAttributes.graphql"
 
-subscription attributeSubscription ($id: ID!) {
+subscription subscribeAttribute ($id: ID!) {
     attribute(where: {node: {id: $id}}) {
         node {
             ...recAttributes

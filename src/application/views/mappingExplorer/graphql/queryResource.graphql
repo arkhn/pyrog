@@ -1,7 +1,0 @@
-#import "./fragmentEntireResource.graphql"
-
-query resource($id: ID!) {
-    resource(where: {id: $id}) {
-        ...entireResource
-    }
-}
