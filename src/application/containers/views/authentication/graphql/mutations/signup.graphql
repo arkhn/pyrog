@@ -4,6 +4,7 @@ mutation signup($email: String!, $password: String!, $name: String!) {
         user {
             id
             name
+            email
         }
     }
 }

@@ -17,9 +17,13 @@ h2 {
         max-width: 400px;
         min-width: 300px;
 
-        & > p {
-            text-align: justify;
+        .tags {
+            display: flex;
             margin-bottom: @window-padding;
+
+            & > .bp3-tag {
+                margin-right: @window-padding / 2;
+            }
         }
     }
 

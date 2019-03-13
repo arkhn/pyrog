@@ -3,6 +3,7 @@ import {
     Elevation,
     Icon,
     Spinner,
+    Tag,
 } from '@blueprintjs/core'
 import * as React from 'react'
 import {
@@ -96,11 +97,15 @@ class SoftwaresView extends React.Component<ISoftwaresViewState, IState> {
                                     }}
                                 >
                                     <h2>{database.name}</h2>
-                                    <p>Dossier Patient Informatisé présent dans 30% des hôpitaux français.</p>
+                                    <div className='tags'>
+                                        <Tag>DPI</Tag>
+                                        <Tag>Généraliste</Tag>
+                                        <Tag>Prescription</Tag>
+                                    </div>
 
                                     <div className='flexbox'>
                                         <span><Icon icon='layout-hierarchy' color='#5C7080'/><span>6 Ressources</span></span>
-                                        <span><Icon icon='tag' color='#5C7080'/><span>39 Attributs</span></span>
+                                        <span><Icon icon='tag' color='#5C7080'/><span>94 Attributs</span></span>
                                     </div>
                                 </Card>
                             })}

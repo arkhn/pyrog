@@ -16,6 +16,8 @@ import { withRouter } from 'react-router-dom'
 
 import { AUTH_TOKEN } from '../../../constant'
 
+import { login, logout } from '../../../actions/user'
+
 // Import types
 import {
     IReduxStore,
@@ -57,7 +59,6 @@ const reduxify = (mapReduxStateToReactProps: any, mapDispatchToProps?: any, merg
      )
 }
 
-// @reduxify(mapReduxStateToReactProps)
 class Navbar extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
@@ -65,6 +66,7 @@ class Navbar extends React.Component<IProps, IState> {
 
     public render = () => {
         const {
+            dispatch,
             user,
         } = this.props
 
@@ -75,21 +77,33 @@ class Navbar extends React.Component<IProps, IState> {
             skip={user.info.name !== null}
         >
             {({ data, loading }) => {
+                if (data && data.me) {
+                    const {id, name, email} = data.me
+                    dispatch(login(id, name, email))
+                    this.props.history.push('/softwares')
+                }
+
                 return loading ?
-                    <Spinner /> :
                     <BPNavbar.Group align={Alignment.RIGHT}>
-                        {data.me.name}
-                        <BPNavbar.Divider />
-                        <Button
-                            className="bp3-minimal"
-                            icon="log-out"
-                            onClick={() => {
-                                localStorage.removeItem(AUTH_TOKEN)
-                                this.props.history.push('/')
-                            }}
-                            text="Se déconnecter"
-                        />
-                    </BPNavbar.Group>
+                        <Spinner size={15} />
+                    </BPNavbar.Group> :
+                    user.isAuthenticated ?
+                        <BPNavbar.Group align={Alignment.RIGHT}>
+                            {user.info.name}
+                            <BPNavbar.Divider />
+                            <Button
+                                className="bp3-minimal"
+                                icon="log-out"
+                                onClick={() => {
+                                    localStorage.removeItem(AUTH_TOKEN)
+                                    dispatch(logout())
+                                    this.props.history.push('/')
+                                }}
+                                text="Se déconnecter"
+                            />
+                        </BPNavbar.Group> :
+                        null
+
             }}
         </Query>
 
@@ -103,8 +117,10 @@ class Navbar extends React.Component<IProps, IState> {
             >
                 {({ data, loading }) => {
                     return loading ?
-                        <Spinner /> :
-                        data && data.isAuthenticated ?
+                        <BPNavbar.Group align={Alignment.RIGHT}>
+                            <Spinner size={15} />
+                        </BPNavbar.Group> :
+                        data && data.isAuthenticated || user.isAuthenticated ?
                             userInformation :
                             null
                 }}

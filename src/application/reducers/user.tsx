@@ -14,6 +14,19 @@ export const user = (state = initialState, action: ISimpleAction): any => {
         case 'LOGIN': {
             return {
                 ...state,
+                isAuthenticated: true,
+                info: {
+                    id: action.payload.id,
+                    email: action.payload.email,
+                    name: action.payload.name,
+                }
+            }
+        }
+
+        case 'LOGOUT': {
+            return {
+                ...state,
+                ...initialState,
             }
         }
 

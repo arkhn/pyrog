@@ -20,6 +20,8 @@ import { AUTH_TOKEN } from '../../../constant'
 
 import Navbar from '../../utils/navbar'
 
+import { login as loginAction } from '../../../actions/user'
+
 // Import types
 import {
     IReduxStore,
@@ -64,6 +66,7 @@ const mapReduxStateToReactProps = (state : IReduxStore): IAuthenticationViewStat
     return {
         data: state.data,
         dispatch: state.dispatch,
+        user: state.dispatch,
     }
 }
 
@@ -200,7 +203,9 @@ class AuthenticationView extends React.Component<IAuthenticationViewState, IStat
 
                         if (authenticated) {
                             const token = data.signup.token
+                            const {id, name, email} = data.signup.user
                             localStorage.setItem(AUTH_TOKEN, token)
+                            dispatch(loginAction(id, name, email))
                             this.props.history.push('/softwares')
                         }
 
@@ -279,9 +284,9 @@ class AuthenticationView extends React.Component<IAuthenticationViewState, IStat
 
                         if (authenticated) {
                             const token = data.login.token
+                            const {id, name, email} = data.login.user
                             localStorage.setItem(AUTH_TOKEN, token)
-
-                            console.log(token)
+                            dispatch(loginAction(id, name, email))
                             this.props.history.push('/softwares')
                         }
 
