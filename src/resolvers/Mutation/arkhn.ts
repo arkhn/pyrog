@@ -103,25 +103,55 @@ export const arkhn = {
             where: { id }
         })
     },
-    // createResourceTreeInDatabase(parent, args, context: Context, info) {
-    //     try {
-    //         // TODO : most horrible code line ever, change it
-    //         let json_query = require('../../fhir-store/graphql/' + args.resource + '.json')
-    //
-    //         return context.client.createResource({
-    //             database: {
-    //                 connect: {
-    //                     name: args.database
-    //                 }
-    //             },
-    //             name: (<any>json_query).name,
-    //             attributes: (<any>json_query).attributes,
-    //         })
-    //     } catch (error) {
-    //         // TODO: return something consistent
-    //         console.log('Problem boy')
-    //     }
-    // },
+    createResourceTreeInDatabase(parent, args, context: Context, info) {
+        getUserId(context)
+
+        try {
+            // TODO : most horrible code line ever, change it
+            let json_query = require('../../../../fhir-store/graphql/' + args.resource + '.json')
+
+            return context.client.createResource({
+                database: {
+                    connect: {
+                        name: args.database
+                    }
+                },
+                name: (<any>json_query).name,
+                attributes: (<any>json_query).attributes,
+            })
+        } catch (error) {
+            // TODO: return something consistent
+            console.log('Problem boy')
+        }
+    },
+    createAttributeProfileInAttribute(parent, args, context: Context, info) {
+        getUserId(context)
+
+        try {
+            // TODO : most horrible code line ever, change it
+            let json_query = require('../../../../fhir-store/graphql/' + args.child_attribute_type + '.json')
+
+            return context.client.createAttribute({
+                attribute: {
+                        connect: {
+                            id: args.parent_attribute_id
+                        }
+                    },
+                    name: args.child_attribute_name,
+                    attributes: (<any>json_query).attributes,
+            })
+        } catch (error) {
+            // TODO: return something consistent
+            console.log('Problem boy')
+        }
+    },
+    deleteAttribute(parent, args, context: Context, info) {
+        getUserId(context)
+        
+        return context.client.deleteAttribute({
+            id: args.id,
+        })
+    },
     // async updateAttributeNoId(parent, args, context: Context, info) {
     //     let attribute = await getAttribute(parent, {
     //         database: args.database,

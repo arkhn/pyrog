@@ -25,7 +25,9 @@ type Mutation {
     updateInputColumn(id: ID!, data: InputColumnUpdateInput): InputColumn!
     updateJoin(id: ID!, data: JoinUpdateInput): Join!
 
-    # createResourceTreeInDatabase(database: String!, resource: String!): Resource!
+    createResourceTreeInDatabase(database: String!, resource: String!): Resource!
+    createAttributeProfileInAttribute(parent_attribute_id: ID!, child_attribute_name: String!, child_attribute_type: String!): Attribute!
+    deleteAttribute(id: ID!): Attribute!
 
     signup(email: String!, password: String!, name: String!): AuthPayload!
     login(email: String!, password: String!): AuthPayload!
