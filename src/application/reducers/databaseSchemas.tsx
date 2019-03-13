@@ -1,13 +1,14 @@
 import {
+    IDatabaseSchemas,
     ISimpleAction,
 } from '../types'
 
-const initialState: any = {
+const initialState: IDatabaseSchemas = {
     loadingDatabaseSchema: false,
     schemaByDatabaseName: {},
 }
 
-const databases = (state = initialState, action: ISimpleAction): any => {
+const databaseSchemas = (state = initialState, action: ISimpleAction): any => {
     switch (action.type) {
         // Cases handling fhir resource json fetching
         case 'LOADING_DATABASE_SCHEMA':
@@ -39,4 +40,4 @@ const databases = (state = initialState, action: ISimpleAction): any => {
     }
 }
 
-export default databases
+export default databaseSchemas

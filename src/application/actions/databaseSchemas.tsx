@@ -12,7 +12,7 @@ export const fetchDatabaseSchema = (databaseName: string, callback: any) : IActi
     return (dispatch: any, getState: any) => {
         dispatch(loadingDatabaseSchema())
 
-        return fetch(`${INFO_URL}/schema/${databaseName}/json`)
+        return fetch(`${INFO_URL}/${databaseName}.json`)
             .then((response: any) => {
                 return response.json()
             }).then((response: any) => {

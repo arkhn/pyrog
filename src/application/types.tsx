@@ -8,8 +8,9 @@ export interface ISimpleAction {
 
 export type IThunkAction = (dispatch: redux.Dispatch<any>, getState: any) => void
 
-export type IAction = ISimpleAction | IThunkAction
+export type IAction = ISimpleAction | IThunkAction | Promise<any>
 
+// Reducers
 export interface IUser {
     isAuthenticated: boolean,
     info: {
@@ -19,18 +20,44 @@ export interface IUser {
     }
 }
 
+export interface ISelectedDatabase {
+    id: string,
+    name: string,
+}
+
+export interface IDatabaseSchemas {
+    loadingDatabaseSchema: boolean,
+    schemaByDatabaseName: {
+        [databaseName: string]: any,
+    }
+}
+
+export interface IRecommendedColumns {
+    columnsByAttribute: {
+        [fhirAttribute: string]: any,
+    }
+}
+
+export interface IData {
+    databaseSchemas: IDatabaseSchemas,
+    recommendedColumns: IRecommendedColumns,
+}
+
+// Store
 export interface IReduxStore {
-    data: any,
+    data: IData,
     dispatch?: any,
-    views: any,
+    selectedDatabase: ISelectedDatabase,
     user: IUser,
+    views: any,
 }
 
 // VIEWS
 
 export interface IView {
-    data?: any,
+    data?: IData,
     dispatch?: any,
+    selectedDatabase?: ISelectedDatabase,
     user?: IUser,
 }
 

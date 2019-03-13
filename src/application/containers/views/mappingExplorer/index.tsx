@@ -28,8 +28,6 @@ import {connect} from 'react-redux'
 
 // Import actions
 import {
-    changeDatabase,
-    updateDatabase,
     updateFhirAttribute,
     updateFhirResource,
 } from './actions'
@@ -81,10 +79,6 @@ const arkhnLogoWhite = require("../../../img/arkhn_logo_only_white.svg") as stri
 const arkhnLogoBlack = require("../../../img/arkhn_logo_only_black.svg") as string;
 
 export interface IMappingExplorerState {
-    selectedDatabase: {
-        id: string,
-        name: string,
-    },
     selectedFhirResource: {
         id: string,
         name: string,
@@ -113,6 +107,7 @@ const mapReduxStateToReactProps = (state : IReduxStore): IMappingExplorerViewSta
         ...state.views.mappingExplorer,
         data: state.data,
         dispatch: state.dispatch,
+        selectedDatabase: state.selectedDatabase,
     }
 }
 
@@ -349,7 +344,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                     table: join.sourceTable,
                     column: join.sourceColumn,
                 }}
-                databaseSchema={selectedDatabase.name ? this.props.data.databases.schemaByDatabaseName[selectedDatabase.name] : {}}
+                databaseSchema={selectedDatabase.name ? this.props.data.databaseSchemas.schemaByDatabaseName[selectedDatabase.name] : {}}
             />
             <ColumnPicker
                 ownerChangeCallback={(e: string) => {
@@ -390,7 +385,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                     table: join.targetTable,
                     column: join.targetColumn,
                 }}
-                databaseSchema={selectedDatabase.name ? this.props.data.databases.schemaByDatabaseName[selectedDatabase.name] : {}}
+                databaseSchema={selectedDatabase.name ? this.props.data.databaseSchemas.schemaByDatabaseName[selectedDatabase.name] : {}}
             />
         </div>
 
@@ -548,7 +543,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                     }
                                 })
                             }}
-                            databaseSchema={selectedDatabase.name ? data.databases.schemaByDatabaseName[selectedDatabase.name] : {}}
+                            databaseSchema={selectedDatabase.name ? data.databaseSchemas.schemaByDatabaseName[selectedDatabase.name] : {}}
                         />
                         <Mutation
                             mutation={createInputColumnAndUpdateAttribute}
@@ -665,43 +660,6 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
             >
                 {({ data, loading }) => {
                     return <div id='mapping-explorer-container'>
-                        {/* <div id='navbar' className={'bp3-dark'}>
-                            <div className='flex-row'>
-                                <ControlGroup>
-                                    <DatabaseSelect
-                                        icon={'database'}
-                                        inputItem={selectedDatabase}
-                                        intent={'primary'}
-                                        items={data.allDatabases ? data.allDatabases : []}
-                                        loading={loading || this.props.data.databases.loadingDatabaseSchema}
-                                        onChange={(database: any) => {
-                                            dispatch(changeDatabase(database.id, database.name))
-                                        }}
-                                    />
-                                </ControlGroup>
-                                {
-                                    selectedDatabase && selectedFhirResource.name ?
-                                        <Button
-                                            icon={'cog'}
-                                            minimal={!this.state.toggledNavBar}
-                                            onClick={() => this.setState({
-                                                toggledNavBar: !this.state.toggledNavBar,
-                                            })}
-                                        /> :
-                                        null
-                                }
-                            </div>
-                            {
-                                toggledNavBar && selectedDatabase && selectedFhirResource.name ?
-                                    <div className='flex-row'>
-                                        <Card>
-                                            Should allow PrimaryKey changes.
-                                        </Card>
-                                    </div> :
-                                    null
-                            }
-                        </div> */}
-
                         {
                             selectedDatabase ?
                                 <div id='main-container'>

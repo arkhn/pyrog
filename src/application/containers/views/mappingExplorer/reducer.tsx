@@ -3,10 +3,6 @@ import { ISimpleAction } from '../../../types'
 import { IMappingExplorerState } from './index'
 
 const initialState: IMappingExplorerState = {
-    selectedDatabase: {
-        id: null,
-        name: null,
-    },
     selectedFhirResource: {
         id: null,
         name: null,
@@ -19,23 +15,6 @@ const initialState: IMappingExplorerState = {
 
 const reducer = (state = initialState, action: ISimpleAction): IMappingExplorerState => {
     switch (action.type) {
-        case 'UPDATE_DATABASE':
-            return {
-                ...state,
-                selectedDatabase: {
-                    id: action.payload.databaseId,
-                    name: action.payload.databaseName,
-                },
-                selectedFhirResource: {
-                    id: null,
-                    name: null,
-                },
-                selectedFhirAttribute: {
-                    id: null,
-                    name: null,
-                }
-            }
-
         case 'UPDATE_FHIR_RESOURCE':
             return {
                 ...state,

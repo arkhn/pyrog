@@ -19,11 +19,11 @@ import { AUTH_TOKEN } from './constant'
 
 // API urls
 export const ENGINE_URL = (process.env.NODE_ENV === 'development') ?
-    'https://engine.arkhn.org' :
+    'http://127.0.0.1:5000' :
     'https://engine.arkhn.org'
 
 export const INFO_URL = (process.env.NODE_ENV === 'development') ?
-    'https://api.live.arkhn.org' :
+    'http://127.0.0.1:8080' :
     'https://api.live.arkhn.org'
 
 export const GRAPHQL_WS_URL = (process.env.NODE_ENV === 'development') ?

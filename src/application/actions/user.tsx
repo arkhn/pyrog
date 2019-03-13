@@ -3,12 +3,12 @@ import { INFO_URL } from '../app'
 
 export const login = (id: string, name: string, email: string): IAction => {
     return {
-        type: 'LOGIN',
+        type:'LOGIN',
         payload: {
             id,
             name,
             email,
-        },
+        }
     }
 }
 

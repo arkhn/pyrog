@@ -13,7 +13,6 @@ import {
     Subscription,
 } from 'react-apollo'
 import { connect } from 'react-redux'
-import { Redirect } from 'react-router'
 import { withRouter } from 'react-router-dom'
 
 import { AUTH_TOKEN } from '../../../constant'
@@ -205,8 +204,10 @@ class AuthenticationView extends React.Component<IAuthenticationViewState, IStat
                             const token = data.signup.token
                             const {id, name, email} = data.signup.user
                             localStorage.setItem(AUTH_TOKEN, token)
-                            dispatch(loginAction(id, name, email))
-                            this.props.history.push('/softwares')
+                            dispatch(loginAction(id, name, email), () => {
+                                console.log('callback')
+                                this.props.history.push('/softwares')
+                            })
                         }
 
                         return <div>
@@ -287,6 +288,7 @@ class AuthenticationView extends React.Component<IAuthenticationViewState, IStat
                             const {id, name, email} = data.login.user
                             localStorage.setItem(AUTH_TOKEN, token)
                             dispatch(loginAction(id, name, email))
+                            console.log('callback')
                             this.props.history.push('/softwares')
                         }
 
@@ -316,19 +318,6 @@ class AuthenticationView extends React.Component<IAuthenticationViewState, IStat
         </div>
 
         return <div>
-            {/* <Query
-                query={isAuthenticated}
-            >
-                {({ data, loading }) => {
-                    if (data && data.isAuthenticated) {
-                        return <Redirect to="/softwares" />
-                    }
-
-                    return loading ?
-                        <Spinner /> :
-                        formulaires
-                }}
-            </Query> */}
             <Navbar />
             {formulaires}
         </div>

@@ -12,14 +12,13 @@ import {
     Subscription,
 } from 'react-apollo'
 import { connect } from 'react-redux'
-import { Redirect } from 'react-router'
 import { withRouter } from 'react-router-dom'
 
 import { AUTH_TOKEN } from '../../../constant'
 
 import Navbar from '../../utils/navbar'
 
-import { changeDatabase } from '../mappingExplorer/actions'
+import { changeSelectedDatabase } from '../../../actions/selectedDatabase'
 
 // Import types
 import {
@@ -92,7 +91,8 @@ class SoftwaresView extends React.Component<ISoftwaresViewState, IState> {
                                     interactive={true}
                                     key={index}
                                     onClick={() => {
-                                        dispatch(changeDatabase(database.id, database.name))
+                                        dispatch(changeSelectedDatabase(database.id, database.name))
+                                        console.log('callback schema')
                                         this.props.history.push('/mapping')
                                     }}
                                 >

@@ -11,7 +11,6 @@ import {
     Subscription,
 } from 'react-apollo'
 import { connect } from 'react-redux'
-import { Redirect } from 'react-router'
 import { withRouter } from 'react-router-dom'
 
 import { AUTH_TOKEN } from '../../../constant'
@@ -70,8 +69,6 @@ class Navbar extends React.Component<IProps, IState> {
             user,
         } = this.props
 
-        console.log(this.props)
-
         const userInformation = <Query
             query={me}
             skip={user.info.name !== null}
@@ -80,6 +77,7 @@ class Navbar extends React.Component<IProps, IState> {
                 if (data && data.me) {
                     const {id, name, email} = data.me
                     dispatch(login(id, name, email))
+                    console.log('callback')
                     this.props.history.push('/softwares')
                 }
 
@@ -97,6 +95,7 @@ class Navbar extends React.Component<IProps, IState> {
                                 onClick={() => {
                                     localStorage.removeItem(AUTH_TOKEN)
                                     dispatch(logout())
+                                    console.log('callback')
                                     this.props.history.push('/')
                                 }}
                                 text="Se déconnecter"
