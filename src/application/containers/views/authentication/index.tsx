@@ -38,10 +38,6 @@ const isAuthenticated = require('./graphql/queries/isAuthenticated.graphql')
 const mutationLogin = require('./graphql/mutations/login.graphql')
 const mutationSignup = require('./graphql/mutations/signup.graphql')
 
-// LOGOS
-const arkhnLogoWhite = require("../../../img/arkhn_logo_only_white.svg") as string;
-const arkhnLogoBlack = require("../../../img/arkhn_logo_only_black.svg") as string;
-
 export interface IAuthenticationState {
     history?: any,
 }

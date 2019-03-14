@@ -17,6 +17,12 @@ const selectedDatabaseReducer = (state = initialState, action: ISimpleAction): a
                 name: action.payload.name,
             }
 
+        case 'DESELECTED_DATABASE':
+            return {
+                ...state,
+                ...initialState,
+            }
+
         default:
             return state
     }

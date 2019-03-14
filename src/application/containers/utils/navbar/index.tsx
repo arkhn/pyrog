@@ -16,6 +16,7 @@ import { withRouter } from 'react-router-dom'
 import { AUTH_TOKEN } from '../../../constant'
 
 import { login, logout } from '../../../actions/user'
+import { deselectDatabase } from '../../../actions/selectedDatabase'
 
 // Import types
 import {
@@ -24,6 +25,9 @@ import {
 } from '../../../types'
 
 import './style.less'
+
+// LOGO
+const arkhnLogoWhite = require("../../../../assets/img/arkhn_logo_only_white.svg")
 
 // GRAPHQL OPERATIONS
 
@@ -43,6 +47,7 @@ const mapReduxStateToReactProps = (state : IReduxStore): IProps => {
     return {
         data: state.data,
         dispatch: state.dispatch,
+        selectedDatabase: state.selectedDatabase,
         user: state.user,
     }
 }
@@ -66,6 +71,7 @@ class Navbar extends React.Component<IProps, IState> {
     public render = () => {
         const {
             dispatch,
+            selectedDatabase,
             user,
         } = this.props
 
@@ -106,10 +112,33 @@ class Navbar extends React.Component<IProps, IState> {
             }}
         </Query>
 
-        return <BPNavbar id="navbar" className="bp3-dark">
+        const logo = <BPNavbar.Heading>
+            <span dangerouslySetInnerHTML={{__html: arkhnLogoWhite}} />
+        </BPNavbar.Heading>
+
+        const heading = selectedDatabase.name !== null ?
             <BPNavbar.Group align={Alignment.LEFT}>
-                <BPNavbar.Heading>Fhirball</BPNavbar.Heading>
+                {logo}
+                <Button
+                    icon={'chevron-left'}
+                    intent={'primary'}
+                    minimal={true}
+                    onClick={() => {
+                        dispatch(deselectDatabase())
+                        this.props.history.push('/softwares')
+                    }}
+                >
+                    Logiciels
+                </Button>
+                <BPNavbar.Divider />
+                {selectedDatabase.name}
+            </BPNavbar.Group> :
+            <BPNavbar.Group align={Alignment.LEFT}>
+                {logo}
             </BPNavbar.Group>
+
+        return <BPNavbar id="navbar" className="bp3-dark">
+            {heading}
             <Query
                 query={isAuthenticated}
                 skip={user.isAuthenticated}

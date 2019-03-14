@@ -75,8 +75,8 @@ const subscribeInputColumn = require('./graphql/subscriptions/inputColumn.graphq
 const subscribeJoin = require('./graphql/subscriptions/join.graphql')
 
 // LOGO
-const arkhnLogoWhite = require("../../../img/arkhn_logo_only_white.svg") as string;
-const arkhnLogoBlack = require("../../../img/arkhn_logo_only_black.svg") as string;
+const arkhnLogoWhite = require("../../../../assets/img/arkhn_logo_only_white.svg") as string;
+const arkhnLogoBlack = require("../../../../assets/img/arkhn_logo_only_black.svg") as string;
 
 export interface IMappingExplorerState {
     selectedFhirResource: {
@@ -663,7 +663,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                         {
                             selectedDatabase ?
                                 <div id='main-container'>
-                                    <div id='right-part'>
+                                    <div id='left-part'>
                                         <Query
                                             query={availableResources}
                                             variables={{
@@ -672,17 +672,19 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                             skip={!selectedDatabase.name}
                                         >
                                             {({ data, loading }) => {
-                                                return <ResourceSelect
-                                                    disabled={!selectedDatabase}
-                                                    icon={'layout-hierarchy'}
-                                                    inputItem={selectedFhirResource}
-                                                    intent={'primary'}
-                                                    items={data && data.availableResources ? data.availableResources : []}
-                                                    loading={loading}
-                                                    onChange={(resource: any) => {
-                                                        dispatch(updateFhirResource(resource.id, resource.name))
-                                                    }}
-                                                />
+                                                return <div id='resource-selector'>
+                                                    <ResourceSelect
+                                                        disabled={!selectedDatabase}
+                                                        icon={'layout-hierarchy'}
+                                                        inputItem={selectedFhirResource}
+                                                        intent={'primary'}
+                                                        items={data && data.availableResources ? data.availableResources : []}
+                                                        loading={loading}
+                                                        onChange={(resource: any) => {
+                                                            dispatch(updateFhirResource(resource.id, resource.name))
+                                                        }}
+                                                    />
+                                                </div>
                                             }}
                                         </Query>
                                         <div id='fhir-resource-tree'>
@@ -694,7 +696,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                     </div>
                                     {
                                         selectedFhirAttribute ?
-                                            <div id='left-part'>
+                                            <div id='right-part'>
                                                 {inputColumnsComponent}
                                                 {columnSelectionComponent}
                                             </div> :

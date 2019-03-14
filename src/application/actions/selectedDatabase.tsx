@@ -20,3 +20,9 @@ export const updateSelectedDatabase = (id: string, name: string): IAction => {
         },
     }
 }
+
+export const deselectDatabase = (): IAction => {
+    return {
+        type: 'DESELECTED_DATABASE',
+    }
+}

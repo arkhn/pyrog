@@ -92,6 +92,32 @@ body {
     }
 
     #left-part {
+        background-color: @dark-gray1;
+        color: @light-gray1;
+        min-width: 300px;
+        flex-basis: 25%;
+        overflow-y: scroll;
+
+        #resource-selector {
+            margin: @window-padding / 2;
+            text-align: center;
+        }
+
+        .panel-header {
+            background-color: @black;
+        }
+    }
+
+    .panel-header {
+        height: 50px;
+        padding: 0 @window-padding;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    #right-part {
         background-color: @light-gray5;
         color: @black;
         flex-basis: 75%;
@@ -126,27 +152,6 @@ body {
             background-color: @light-gray3;
             flex-grow: 1;
         }
-    }
-
-    #right-part {
-        background-color: @dark-gray1;
-        color: @light-gray1;
-        min-width: 300px;
-        flex-basis: 25%;
-        overflow-y: scroll;
-
-        .panel-header {
-            background-color: @black;
-        }
-    }
-
-    .panel-header {
-        height: 50px;
-        padding: 0 @window-padding;
-
-        display: flex;
-        flex-direction: row;
-        align-items: center;
     }
 }
 

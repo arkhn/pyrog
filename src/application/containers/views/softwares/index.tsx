@@ -33,10 +33,6 @@ import './style.less'
 // Queries
 const allDatabases = require('./graphql/queries/allDatabases.graphql')
 
-// LOGOS
-const arkhnLogoWhite = require("../../../img/arkhn_logo_only_white.svg") as string;
-const arkhnLogoBlack = require("../../../img/arkhn_logo_only_black.svg") as string;
-
 export interface ISoftwaresState {
     history?: any,
 }
@@ -104,8 +100,14 @@ class SoftwaresView extends React.Component<ISoftwaresViewState, IState> {
                                     </div>
 
                                     <div className='flexbox'>
-                                        <span><Icon icon='layout-hierarchy' color='#5C7080'/><span>6 Ressources</span></span>
-                                        <span><Icon icon='tag' color='#5C7080'/><span>94 Attributs</span></span>
+                                        <span>
+                                            <Icon icon='layout-hierarchy' color='#5C7080'/>
+                                            <span>6 Ressources</span>
+                                        </span>
+                                        <span>
+                                            <Icon icon='tag' color='#5C7080'/>
+                                            <span>94 Attributs</span>
+                                        </span>
                                     </div>
                                 </Card>
                             })}
