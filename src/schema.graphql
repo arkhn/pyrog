@@ -12,7 +12,8 @@ type Query {
     recAvailableAttributes(resourceId: ID!): [Attribute!]
     me: User
     isAuthenticated: Boolean!
-    countMappedAttributes(databaseId: ID!): Int
+    # countMappedAttributes(databaseId: ID!): Int
+    computeDatabaseMappingProgress(databaseId: ID!): [Int!]
 }
 
 type Mutation {

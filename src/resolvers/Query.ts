@@ -68,40 +68,75 @@ export const Query = {
 
         return false
     },
-    async countMappedAttributes(parent, { databaseId }, context: Context) {
-        const id = getUserId(context)
+    async computeDatabaseMappingProgress(parent, { databaseId }, context: Context) {
+        // need to catch all graph, has to be long enough
+        const mydatabase =  await context.binding.request("query { database( where: {id: \""+databaseId+"\"})  { id name resources{ id name attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } } } } } } } } } } } } } } } } } } } } }")
 
-        const resources =  await context.client.database({
-            id: databaseId
-        })
-        .resources()
+        const resources = mydatabase["data"]["database"]["resources"]
 
-        const recFunction = async (attribute) => {
-            const inputColumns = await context.client.attribute({id: attribute.id}).inputColumns()
+        const numberMappedRessources = resources.length
+
+        const recFunction = (attribute) => {
+            const inputColumns = attribute["inputColumns"]
 
             if (inputColumns.length > 0) {
                 return 1
             } else {
-                const attributes = await context.client.attribute({id: attribute.id}).attributes()
+                const attributes = attribute["attributes"]
 
-                let a = 0
-                for (let childAttribute of attributes) {
-                    a += await recFunction(childAttribute)
-                }
+                return attributes.reduce(
+                    (accumulator, attribute) => accumulator + recFunction(attribute),
+                    0
+                )
 
-                return a
             }
         }
 
-        let r = 0
-        for (let resource of resources) {
-            const attributes = await context.client.resource({id: resource.id}).attributes()
+        // loop over all ressources and all attributes within. Apply recFunction and sum all.
+        const numberMappedAttributes = resources.reduce(
+            (accumulator, resource) => accumulator + resource["attributes"].reduce(
+                (accumulator, attribute) => accumulator + recFunction(attribute),
+                0
+            ),
+            0
+        )
 
-            for (let attribute of attributes) {
-                r += await recFunction(attribute)
-            }
-        }
-
-        return r
-    }
+        return [numberMappedRessources, numberMappedAttributes]
+    },
+    // async countMappedAttributes(parent, { databaseId }, context: Context) {
+    //     const id = getUserId(context)
+    //
+    //     const resources =  await context.client.database({
+    //         id: databaseId
+    //     })
+    //     .resources()
+    //
+    //     const recFunction = async (attribute) => {
+    //         const inputColumns = await context.client.attribute({id: attribute.id}).inputColumns()
+    //
+    //         if (inputColumns.length > 0) {
+    //             return 1
+    //         } else {
+    //             const attributes = await context.client.attribute({id: attribute.id}).attributes()
+    //
+    //             let a = 0
+    //             for (let childAttribute of attributes) {
+    //                 a += await recFunction(childAttribute)
+    //             }
+    //
+    //             return a
+    //         }
+    //     }
+    //
+    //     let r = 0
+    //     for (let resource of resources) {
+    //         const attributes = await context.client.resource({id: resource.id}).attributes()
+    //
+    //         for (let attribute of attributes) {
+    //             r += await recFunction(attribute)
+    //         }
+    //     }
+    //
+    //     return r
+    // }
 }
