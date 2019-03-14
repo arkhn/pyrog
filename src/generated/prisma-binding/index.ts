@@ -3434,6 +3434,7 @@ type User implements Node {
   email: String!
   password: String!
   name: String!
+  type: String
 }
 
 """A connection to a list of items."""
@@ -3450,6 +3451,7 @@ input UserCreateInput {
   email: String!
   password: String!
   name: String!
+  type: String
 }
 
 """An edge in a connection."""
@@ -3470,6 +3472,8 @@ enum UserOrderByInput {
   password_DESC
   name_ASC
   name_DESC
+  type_ASC
+  type_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -3481,6 +3485,7 @@ type UserPreviousValues {
   email: String!
   password: String!
   name: String!
+  type: String
 }
 
 type UserSubscriptionPayload {
@@ -3526,12 +3531,14 @@ input UserUpdateInput {
   email: String
   password: String
   name: String
+  type: String
 }
 
 input UserUpdateManyMutationInput {
   email: String
   password: String
   name: String
+  type: String
 }
 
 input UserWhereInput {
@@ -3703,6 +3710,46 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   name_not_ends_with: String
+  type: String
+
+  """All values that are not equal to given value."""
+  type_not: String
+
+  """All values that are contained in given list."""
+  type_in: [String!]
+
+  """All values that are not contained in given list."""
+  type_not_in: [String!]
+
+  """All values less than the given value."""
+  type_lt: String
+
+  """All values less than or equal the given value."""
+  type_lte: String
+
+  """All values greater than the given value."""
+  type_gt: String
+
+  """All values greater than or equal the given value."""
+  type_gte: String
+
+  """All values containing the given string."""
+  type_contains: String
+
+  """All values not containing the given string."""
+  type_not_contains: String
+
+  """All values starting with the given string."""
+  type_starts_with: String
+
+  """All values not starting with the given string."""
+  type_not_starts_with: String
+
+  """All values ending with the given string."""
+  type_ends_with: String
+
+  """All values not ending with the given string."""
+  type_not_ends_with: String
 }
 
 input UserWhereUniqueInput {
@@ -3808,6 +3855,8 @@ export type UserOrderByInput =   'id_ASC' |
   'password_DESC' |
   'name_ASC' |
   'name_DESC' |
+  'type_ASC' |
+  'type_DESC' |
   'updatedAt_ASC' |
   'updatedAt_DESC' |
   'createdAt_ASC' |
@@ -5262,6 +5311,7 @@ export interface UserCreateInput {
   email: String
   password: String
   name: String
+  type?: String | null
 }
 
 export interface UserSubscriptionWhereInput {
@@ -5279,12 +5329,14 @@ export interface UserUpdateInput {
   email?: String | null
   password?: String | null
   name?: String | null
+  type?: String | null
 }
 
 export interface UserUpdateManyMutationInput {
   email?: String | null
   password?: String | null
   name?: String | null
+  type?: String | null
 }
 
 export interface UserWhereInput {
@@ -5347,6 +5399,20 @@ export interface UserWhereInput {
   name_not_starts_with?: String | null
   name_ends_with?: String | null
   name_not_ends_with?: String | null
+  type?: String | null
+  type_not?: String | null
+  type_in?: String[] | String | null
+  type_not_in?: String[] | String | null
+  type_lt?: String | null
+  type_lte?: String | null
+  type_gt?: String | null
+  type_gte?: String | null
+  type_contains?: String | null
+  type_not_contains?: String | null
+  type_starts_with?: String | null
+  type_not_starts_with?: String | null
+  type_ends_with?: String | null
+  type_not_ends_with?: String | null
 }
 
 export interface UserWhereUniqueInput {
@@ -5630,6 +5696,7 @@ export interface User extends Node {
   email: String
   password: String
   name: String
+  type?: String | null
 }
 
 /*
@@ -5656,6 +5723,7 @@ export interface UserPreviousValues {
   email: String
   password: String
   name: String
+  type?: String | null
 }
 
 export interface UserSubscriptionPayload {
