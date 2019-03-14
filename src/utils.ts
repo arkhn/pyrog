@@ -47,6 +47,22 @@ export const getUserId = (context: Context) => {
     throw new AuthError()
 }
 
+export const getUserType = (context: Context) => {
+    // Token appears in different places depending
+    // on whether the request is HTTP or WS
+    const Authorization = context.request ?
+        context.request.get('Authorization') :
+        (context.connection.context.Authorization || null)
+
+    if (Authorization) {
+        const token = Authorization.replace('Bearer ', '')
+        const { userType } = jwt.verify(token, process.env.APP_SECRET) as { userType: string }
+        return userType
+    }
+
+    throw new AuthError()
+}
+
 export class AuthError extends Error {
     constructor() {
         super('Not authorized')

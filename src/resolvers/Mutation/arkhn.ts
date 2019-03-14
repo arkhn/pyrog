@@ -5,6 +5,7 @@ import {
     Context,
     getAttribute,
     getUserId,
+    getUserType
 } from '../../utils'
 
 export const arkhn = {
@@ -147,10 +148,14 @@ export const arkhn = {
     },
     deleteAttribute(parent, args, context: Context, info) {
         getUserId(context)
-        
-        return context.client.deleteAttribute({
-            id: args.id,
-        })
+
+        if (getUserType(context) == "dev") {
+            return context.client.deleteAttribute({
+                id: args.id,
+            })}
+        else {
+            console.log('u wish u were a dev boy')
+        }
     },
     // async updateAttributeNoId(parent, args, context: Context, info) {
     //     let attribute = await getAttribute(parent, {

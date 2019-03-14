@@ -29,7 +29,7 @@ type Mutation {
     createAttributeProfileInAttribute(parent_attribute_id: ID!, child_attribute_name: String!, child_attribute_type: String!): Attribute!
     deleteAttribute(id: ID!): Attribute!
 
-    signup(email: String!, password: String!, name: String!): AuthPayload!
+    signup(email: String!, password: String!, name: String!, type: String!): AuthPayload!
     login(email: String!, password: String!): AuthPayload!
 }
 

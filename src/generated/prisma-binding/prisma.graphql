@@ -1,5 +1,5 @@
 # source: http://0.0.0.0:4466
-# timestamp: Sun Mar 10 2019 01:50:34 GMT+0100 (Central European Standard Time)
+# timestamp: Thu Mar 14 2019 20:31:08 GMT+0100 (CET)
 
 type AggregateAttribute {
   count: Int!
@@ -3331,6 +3331,7 @@ type User implements Node {
   email: String!
   password: String!
   name: String!
+  type: String
 }
 
 """A connection to a list of items."""
@@ -3347,6 +3348,7 @@ input UserCreateInput {
   email: String!
   password: String!
   name: String!
+  type: String
 }
 
 """An edge in a connection."""
@@ -3367,6 +3369,8 @@ enum UserOrderByInput {
   password_DESC
   name_ASC
   name_DESC
+  type_ASC
+  type_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -3378,6 +3382,7 @@ type UserPreviousValues {
   email: String!
   password: String!
   name: String!
+  type: String
 }
 
 type UserSubscriptionPayload {
@@ -3423,12 +3428,14 @@ input UserUpdateInput {
   email: String
   password: String
   name: String
+  type: String
 }
 
 input UserUpdateManyMutationInput {
   email: String
   password: String
   name: String
+  type: String
 }
 
 input UserWhereInput {
@@ -3600,6 +3607,46 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   name_not_ends_with: String
+  type: String
+
+  """All values that are not equal to given value."""
+  type_not: String
+
+  """All values that are contained in given list."""
+  type_in: [String!]
+
+  """All values that are not contained in given list."""
+  type_not_in: [String!]
+
+  """All values less than the given value."""
+  type_lt: String
+
+  """All values less than or equal the given value."""
+  type_lte: String
+
+  """All values greater than the given value."""
+  type_gt: String
+
+  """All values greater than or equal the given value."""
+  type_gte: String
+
+  """All values containing the given string."""
+  type_contains: String
+
+  """All values not containing the given string."""
+  type_not_contains: String
+
+  """All values starting with the given string."""
+  type_starts_with: String
+
+  """All values not starting with the given string."""
+  type_not_starts_with: String
+
+  """All values ending with the given string."""
+  type_ends_with: String
+
+  """All values not ending with the given string."""
+  type_not_ends_with: String
 }
 
 input UserWhereUniqueInput {
