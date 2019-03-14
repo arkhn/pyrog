@@ -5,7 +5,6 @@ type Query {
     inputColumns(where: InputColumnWhereInput): [InputColumn!]
     resource(where: ResourceWhereUniqueInput): Resource!
 
-
     # CLIENT QUERIES
     allDatabases: [Database!]!
     availableResources(database: String!): [Resource!]
