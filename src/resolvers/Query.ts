@@ -69,6 +69,9 @@ export const Query = {
         return false
     },
     async computeDatabaseMappingProgress(parent, { databaseId }, context: Context) {
+
+        getUserId(context)
+
         // need to catch all graph, has to be long enough
         const mydatabase =  await context.binding.request("query { database( where: {id: \""+databaseId+"\"})  { id name resources{ id name attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } } } } } } } } } } } } } } } } } } } } }")
 
