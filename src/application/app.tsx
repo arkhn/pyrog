@@ -15,24 +15,13 @@ import './style.less'
 import Routes from './routes'
 import middlewares from './middlewares/middlewares'
 import mainReducer from './reducers/mainReducer'
-import { AUTH_TOKEN } from './constant'
-
-// API urls
-export const ENGINE_URL = (process.env.NODE_ENV === 'development') ?
-    'http://127.0.0.1:5000' :
-    'https://engine.arkhn.org'
-
-export const INFO_URL = (process.env.NODE_ENV === 'development') ?
-    'http://127.0.0.1:8080' :
-    'https://api.live.arkhn.org'
-
-export const GRAPHQL_WS_URL = (process.env.NODE_ENV === 'development') ?
-    'ws://localhost:4000' :
-    'wss://graphql.live.arkhn.org'
-
-export const GRAPHQL_HTTP_URL = (process.env.NODE_ENV === 'development') ?
-    'http://localhost:4000' :
-    'https://graphql.live.arkhn.org'
+import {
+    AUTH_TOKEN,
+    ENGINE_URL,
+    INFO_URL,
+    GRAPHQL_WS_URL,
+    GRAPHQL_HTTP_URL,
+} from './constants'
 
 // Redux initialisation
 if (process.env.NODE_ENV === 'development') {

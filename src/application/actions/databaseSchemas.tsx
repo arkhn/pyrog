@@ -1,5 +1,5 @@
 import { IAction } from '../types'
-import { INFO_URL } from '../app'
+import { INFO_URL } from '../constants'
 
 // These actions handle database schema fetching.
 export const loadingDatabaseSchema = () : IAction => {

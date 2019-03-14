@@ -1,8 +1,11 @@
 import {
     Alignment,
     Button,
+    IToastProps,
     Navbar as BPNavbar,
     Spinner,
+    Toast,
+    Toaster,
 } from '@blueprintjs/core'
 import * as React from 'react'
 import {
@@ -13,7 +16,7 @@ import {
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
-import { AUTH_TOKEN } from '../../../constant'
+import { AUTH_TOKEN } from '../../../constants'
 
 import { login, logout } from '../../../actions/user'
 import { deselectDatabase } from '../../../actions/selectedDatabase'
@@ -48,6 +51,7 @@ const mapReduxStateToReactProps = (state : IReduxStore): IProps => {
         data: state.data,
         dispatch: state.dispatch,
         selectedDatabase: state.selectedDatabase,
+        toastsProps: state.toastsProps,
         user: state.user,
     }
 }
@@ -83,8 +87,9 @@ class Navbar extends React.Component<IProps, IState> {
                 if (data && data.me) {
                     const {id, name, email} = data.me
                     dispatch(login(id, name, email))
-                    console.log('callback')
-                    this.props.history.push('/softwares')
+                    if (this.props.location.pathname == '/') {
+                        this.props.history.push('/sources')
+                    }
                 }
 
                 return loading ?
@@ -101,7 +106,7 @@ class Navbar extends React.Component<IProps, IState> {
                                 onClick={() => {
                                     localStorage.removeItem(AUTH_TOKEN)
                                     dispatch(logout())
-                                    console.log('callback')
+                                    console.log('callback logout')
                                     this.props.history.push('/')
                                 }}
                                 text="Se déconnecter"
@@ -116,29 +121,61 @@ class Navbar extends React.Component<IProps, IState> {
             <span dangerouslySetInnerHTML={{__html: arkhnLogoWhite}} />
         </BPNavbar.Heading>
 
-        const heading = selectedDatabase.name !== null ?
-            <BPNavbar.Group align={Alignment.LEFT}>
-                {logo}
-                <Button
-                    icon={'chevron-left'}
-                    intent={'primary'}
-                    minimal={true}
-                    onClick={() => {
-                        dispatch(deselectDatabase())
-                        this.props.history.push('/softwares')
-                    }}
-                >
-                    Logiciels
-                </Button>
-                <BPNavbar.Divider />
-                {selectedDatabase.name}
-            </BPNavbar.Group> :
-            <BPNavbar.Group align={Alignment.LEFT}>
-                {logo}
-            </BPNavbar.Group>
+        const header = () => {
+            switch (this.props.location.pathname) {
+                case '/newSource': {
+                    return <BPNavbar.Group align={Alignment.LEFT}>
+                        {logo}
+                        <Button
+                            icon={'chevron-left'}
+                            intent={'primary'}
+                            minimal={true}
+                            onClick={() => {
+                                this.props.history.push('/sources')
+                            }}
+                        >
+                            Logiciels
+                        </Button>
+                    </BPNavbar.Group>
+                }
+
+                case '/mapping': {
+                    return selectedDatabase.name !== null ?
+                        <BPNavbar.Group align={Alignment.LEFT}>
+                            {logo}
+                            <Button
+                                icon={'chevron-left'}
+                                intent={'primary'}
+                                minimal={true}
+                                onClick={() => {
+                                    dispatch(deselectDatabase())
+                                    this.props.history.push('/sources')
+                                }}
+                            >
+                                Logiciels
+                            </Button>
+                            <BPNavbar.Divider />
+                            {selectedDatabase.name}
+                        </BPNavbar.Group> :
+                        <BPNavbar.Group align={Alignment.LEFT}>
+                            {logo}
+                        </BPNavbar.Group>
+                }
+
+                default:
+                    return <BPNavbar.Group align={Alignment.LEFT}>
+                        {logo}
+                    </BPNavbar.Group>
+            }
+        }
 
         return <BPNavbar id="navbar" className="bp3-dark">
-            {heading}
+            <Toaster>
+                {this.props.toastsProps.map((toastProps: IToastProps, index: number) =>
+                    <Toast key={index} {...toastProps} />
+                )}
+            </Toaster>
+            {header()}
             <Query
                 query={isAuthenticated}
                 skip={user.isAuthenticated}

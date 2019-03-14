@@ -1,5 +1,5 @@
 import { IAction } from '../types'
-import { ENGINE_URL } from '../app'
+import { ENGINE_URL } from '../constants'
 import { availableTypes } from '../mockdata/mimic'
 
 export const fetchRecommendedColumns = (fhirAttribute: string, type: string) : IAction => {

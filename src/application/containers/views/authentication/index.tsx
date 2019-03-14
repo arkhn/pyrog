@@ -15,7 +15,7 @@ import {
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
-import { AUTH_TOKEN } from '../../../constant'
+import { AUTH_TOKEN } from '../../../constants'
 
 import Navbar from '../../utils/navbar'
 
@@ -39,7 +39,7 @@ const mutationLogin = require('./graphql/mutations/login.graphql')
 const mutationSignup = require('./graphql/mutations/signup.graphql')
 
 export interface IAuthenticationState {
-    history?: any,
+
 }
 
 interface IState {
@@ -76,7 +76,6 @@ const reduxify = (mapReduxStateToReactProps: any, mapDispatchToProps?: any, merg
      )
 }
 
-// @reduxify(mapReduxStateToReactProps)
 class AuthenticationView extends React.Component<IAuthenticationViewState, IState> {
     constructor(props: IAuthenticationViewState) {
         super(props)
@@ -202,7 +201,7 @@ class AuthenticationView extends React.Component<IAuthenticationViewState, IStat
                             localStorage.setItem(AUTH_TOKEN, token)
                             dispatch(loginAction(id, name, email), () => {
                                 console.log('callback')
-                                this.props.history.push('/softwares')
+                                this.props.history.push('/sources')
                             })
                         }
 
@@ -285,7 +284,7 @@ class AuthenticationView extends React.Component<IAuthenticationViewState, IStat
                             localStorage.setItem(AUTH_TOKEN, token)
                             dispatch(loginAction(id, name, email))
                             console.log('callback')
-                            this.props.history.push('/softwares')
+                            this.props.history.push('/sources')
                         }
 
                         return <div>

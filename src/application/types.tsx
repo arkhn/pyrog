@@ -1,3 +1,4 @@
+import { IToastProps } from '@blueprintjs/core'
 import * as redux from 'redux'
 
 // REDUX
@@ -48,6 +49,7 @@ export interface IReduxStore {
     data: IData,
     dispatch?: any,
     selectedDatabase: ISelectedDatabase,
+    toastsProps: IToastProps[],
     user: IUser,
     views: any,
 }
@@ -57,7 +59,10 @@ export interface IReduxStore {
 export interface IView {
     data?: IData,
     dispatch?: any,
+    history?: any,
+    location?: any,
     selectedDatabase?: ISelectedDatabase,
+    toastsProps?: IToastProps[],
     user?: IUser,
 }
 
