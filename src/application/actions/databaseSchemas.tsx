@@ -1,5 +1,5 @@
 import { IAction } from '../types'
-import { INFO_URL } from '../constants'
+import { SCHEMA_URL } from '../constants'
 
 // These actions handle database schema fetching.
 export const loadingDatabaseSchema = () : IAction => {
@@ -12,7 +12,7 @@ export const fetchDatabaseSchema = (databaseName: string, callback: any) : IActi
     return (dispatch: any, getState: any) => {
         dispatch(loadingDatabaseSchema())
 
-        return fetch(`${INFO_URL}/${databaseName}.json`)
+        return fetch(`${SCHEMA_URL}/schemas/${databaseName}.json`)
             .then((response: any) => {
                 return response.json()
             }).then((response: any) => {

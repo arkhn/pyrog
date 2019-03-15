@@ -1,5 +1,4 @@
 import { IAction } from '../types'
-import { INFO_URL } from '../constants'
 
 import { fetchDatabaseSchema } from './databaseSchemas'
 

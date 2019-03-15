@@ -17,8 +17,6 @@ import middlewares from './middlewares/middlewares'
 import mainReducer from './reducers/mainReducer'
 import {
     AUTH_TOKEN,
-    ENGINE_URL,
-    INFO_URL,
     GRAPHQL_WS_URL,
     GRAPHQL_HTTP_URL,
 } from './constants'

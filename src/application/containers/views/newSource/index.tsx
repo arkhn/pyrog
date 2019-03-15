@@ -81,7 +81,7 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
         const formData = new FormData()
         formData.append('schema', file, this.state.sourceName)
 
-        return fetch(SCHEMA_URL, {
+        return fetch(`${SCHEMA_URL}/upload`, {
             headers: {},
             method: 'POST',
             body: formData,
