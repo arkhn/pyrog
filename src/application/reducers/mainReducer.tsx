@@ -4,7 +4,7 @@ import {combineReducers} from 'redux'
 import databaseSchemas from './databaseSchemas'
 import recommendedColumns from './recommendedColumns'
 import selectedDatabaseReducer from './selectedDatabase'
-import toastsPropsReducer from './toastsProps'
+import toasterReducer from './toaster'
 import userReducer from './user'
 
 // View reducers
@@ -26,7 +26,7 @@ const viewReducer = combineReducers({
 const mainReducer = combineReducers({
     data: dataReducer,
     selectedDatabase: selectedDatabaseReducer,
-    toastsProps: toastsPropsReducer,
+    toaster: toasterReducer,
     views: viewReducer,
     user: userReducer,
 })

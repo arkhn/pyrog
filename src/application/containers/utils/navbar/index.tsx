@@ -51,7 +51,7 @@ const mapReduxStateToReactProps = (state : IReduxStore): IProps => {
         data: state.data,
         dispatch: state.dispatch,
         selectedDatabase: state.selectedDatabase,
-        toastsProps: state.toastsProps,
+        toaster: state.toaster,
         user: state.user,
     }
 }
@@ -170,11 +170,6 @@ class Navbar extends React.Component<IProps, IState> {
         }
 
         return <BPNavbar id="navbar" className="bp3-dark">
-            <Toaster>
-                {this.props.toastsProps.map((toastProps: IToastProps, index: number) =>
-                    <Toast key={index} {...toastProps} />
-                )}
-            </Toaster>
             {header()}
             <Query
                 query={isAuthenticated}

@@ -47,6 +47,7 @@ const mapReduxStateToReactProps = (state : IReduxStore): INewSourceViewState => 
     return {
         data: state.data,
         dispatch: state.dispatch,
+        toaster: state.toaster,
         user: state.dispatch,
     }
 }
@@ -88,15 +89,14 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
         .then((response: any) => {
             return response.json()
         }).then((response: any) => {
-            this.props.dispatch(addToast({
+            this.props.toaster.show({
                 icon: response.success ? 'upload' : 'cross',
                 message: response.message,
                 intent: response.success ? 'success' : 'danger',
-                timeout: 2000,
-            }))
+                timeout: 4000,
+            })
 
             if (response.success) {
-                // console.log('should redirect')
                 this.props.history.push('/sources')
             }
         })
