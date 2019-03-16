@@ -33,6 +33,7 @@
         "apollo-link-ws": "^1.0.9",
         "apollo-utilities": "^1.2.1",
         "awesome-typescript-loader": "^5.2.1",
+        "axios": "^0.18.0",
         "css-loader": "^1.0.0",
         "file-loader": "^2.0.0",
         "graphql": "^14.0.2",
