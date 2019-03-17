@@ -1,79 +1,158 @@
 import { graphql } from 'graphql'
 import { importSchema } from 'graphql-import'
-import {
-    makeExecutableSchema,
-    addMockFunctionsToSchema,
-    mockServer,
-} from 'graphql-tools'
+import { makeExecutableSchema, mockServer } from 'graphql-tools'
 import { GraphQLServer } from 'graphql-yoga'
-import { Prisma } from 'prisma-binding'
+const stringifyObject = require('stringify-object');
 
-import { resolvers } from '../src/resolvers'
+import { Prisma as PrismaClient } from '../src/generated/prisma-client'
+import { Prisma as PrismaBinding } from '../src/generated/prisma-binding'
+import resolvers from '../src/resolvers'
 
+const endpoint = 'http://localhost:4466'
+const debug = false
 
-const typeDefs = importSchema('./src/schema.graphql')
-
-const testInstance = () => {
-    return new Prisma({
-        typeDefs,
-        endpoint: 'https://eu1.prisma.sh/public-neonswoop-398/graphql-typescript-boilerplate/dev',
+const prismaBindingInstance = () => {
+    return new PrismaBinding({
+        endpoint,
+        debug,
     })
 }
 
-describe('Server', () => {
-    test('Graphql-yoga server can start & stop', async () => {
-        const serverInstance = new GraphQLServer({
-            typeDefs: './src/schema.graphql',
-            resolvers,
-            context: req => ({
-                ...req,
-                db: new Prisma({
-                    endpoint: 'https://eu1.prisma.sh/public-neonswoop-398/graphql-typescript-boilerplate/dev',
-                    debug: true,
-                }),
-            }),
-            resolverValidationOptions: {
-                requireResolversForResolveType: false,
-            },
-        })
-
-        // Start server without callback
-        const server = await serverInstance.start()
-
-        // Close server
-        expect(server.close()).toHaveProperty("_connections", 0);
-    })
-
-    test('Can query Prisma instance directly', async () => {
+describe('Prisma binding', () => {
+    test('Send direct request', async () => {
         expect(
-            await testInstance().request(
-                `query {
-                    databases {
-                        name
-                    }
-                }`,
-                {}
-            )
+            await prismaBindingInstance().request(`query { databases { name } }`, {})
         ).toEqual({
             data: {
-                databases: [
-                    {
-                        name: "Crossway"
-                    }
-                ]
+                databases: expect.arrayContaining([
+                    expect.objectContaining({ name: "Crossway" })
+                ])
             }
         })
+    })
+
+    test('Use `query` method', async () => {
+        expect(
+            await prismaBindingInstance().query.databases({}, `{name}`)
+        ).toEqual(expect.arrayContaining([
+            expect.objectContaining({ name: "Crossway" })
+        ]))
     })
 })
 
-describe('Resolver (Queries & Mutations)', () => {
-    test('Query - databases', async () => {
-        expect(
-            await resolvers.Query.databases({}, {}, {db: testInstance()}, `{name}`)
-        ).toEqual([
-            {
-                name: "Crossway"
-            }
-        ])
+const prismaClientInstance = new PrismaClient({
+    endpoint,
+    debug,
+})
+
+describe('Prisma client', () => {
+    describe('Queries', () => {
+        test('database', async () => {
+            expect(
+                await prismaClientInstance.database({ name: "Crossway" })
+            ).toEqual(expect.objectContaining({ name: "Crossway" }))
+        })
+
+        test('databases', async () => {
+            expect(
+                await prismaClientInstance.databases()
+            ).toEqual(expect.arrayContaining([
+                expect.objectContaining({ name: "Crossway" })
+            ]))
+        })
     })
 });
+
+const serverInstance = new GraphQLServer({
+    typeDefs: './src/schema.graphql',
+    resolvers,
+    context: request => ({
+        ...request,
+        binding: new PrismaBinding({
+            endpoint,
+            debug,
+        }),
+        client: new PrismaClient({
+            endpoint,
+            debug,
+        }),
+    }),
+    resolverValidationOptions: {
+        requireResolversForResolveType: false,
+    },
+})
+
+const sendPostRequest = async (query, variables) => {
+    return await fetch('http://0.0.0.0:4000', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+            query,
+            variables,
+        })
+    }).then(response => {
+        return response.json()
+    })
+}
+
+describe('Graphql server', () => {
+    let server
+    // Définition de différents cas à tester.
+    // On rentre d'abord le nom du endpoint, puis les
+    // attributs et enfin les variables.
+    const useCases = [
+        [
+            'allDatabases',
+            null,
+            null,
+        ],
+        [
+            'availableResources',
+            {
+                database: "Crossway"
+            },
+            null,
+        ]
+    ]
+
+    beforeAll(async () => {
+        server = await serverInstance.start()
+    })
+
+    describe.each(useCases)('Should request authentication', (queryName, queryAttr, queryVar) => {
+        test(queryName, async () => {
+            // Création d'un string représentant les requêtes à tester.
+            const queryAttributes = stringifyObject(queryAttr, { singleQuotes: false, })
+            const query = `query { ${queryName} ${queryAttr ? `(${queryAttributes.slice(1, queryAttributes.length -1)})` : ""} { id }}`
+
+            expect(
+                await sendPostRequest(query, {})
+            ).toEqual(expect.objectContaining({
+                errors: expect.arrayContaining([
+                    expect.objectContaining({ message: "Not authorized" })
+                ])
+            }))
+        })
+    })
+
+    describe.skip('Queries', () => {
+        test('allDatabases', async () => {
+            expect(
+                await sendPostRequest(`query { allDatabases { id name }}`, {})
+            ).toEqual({
+                data: {
+                    allDatabases: expect.arrayContaining([
+                        expect.objectContaining({ name: "Crossway" })
+                    ])
+                }
+            })
+        })
+    })
+
+    afterAll(() => {
+        server.close()
+    })
+})

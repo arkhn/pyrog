@@ -1,18 +1,23 @@
 import { GraphQLServer } from 'graphql-yoga'
-import { Prisma } from './generated/prisma'
-import { resolvers } from './resolvers'
 
-const endPoint = (process.env.NODE_ENV === "docker") ? "http://prisma:4466" : "https://eu1.prisma.sh/public-neonswoop-398/graphql-typescript-boilerplate/dev"
+import { Prisma as PrismaClient } from './generated/prisma-client'
+import { Prisma as PrismaBinding } from './generated/prisma-binding'
+import resolvers from './resolvers'
+
+const endpoint = 'http://localhost:4466'
 
 const server = new GraphQLServer({
     typeDefs: './src/schema.graphql',
     resolvers,
-    context: req => ({
-        ...req,
-        db: new Prisma({
-            endpoint: endPoint, // the endpoint of the Prisma API
-            debug: true, // log all GraphQL queries & mutations sent to the Prisma API
-            secret: 'mysecret42', // only needed if specified in `database/prisma.yml`
+    context: request => ({
+        ...request,
+        binding: new PrismaBinding({
+            endpoint,
+            debug: true,
+        }),
+        client: new PrismaClient({
+            endpoint,
+            debug: true,
         }),
     }),
 })
