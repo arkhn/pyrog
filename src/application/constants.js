@@ -2,7 +2,7 @@ export const AUTH_TOKEN = 'ARKHN_TOKEN'
 
 // API urls
 export const ENGINE_URL = (process.env.NODE_ENV === 'development') ?
-    'http://127.0.0.1:5000' :
+    'https://engine.arkhn.org' :
     'https://engine.arkhn.org'
 
 export const SCHEMA_URL = (process.env.NODE_ENV === 'development') ?

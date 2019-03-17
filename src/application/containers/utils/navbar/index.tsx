@@ -85,6 +85,9 @@ class Navbar extends React.Component<IProps, IState> {
             })
             .then((response: any) => {
                 if (response.data.isAuthenticated) {
+                    if (this.props.location.pathname == "/mapping" && !this.props.selectedDatabase.name) {
+                        this.props.history.push('/sources')
+                    }
                     if (["/", "/signin"].indexOf(this.props.location.pathname) >= 0) {
                         this.props.history.push('/sources')
                     }
