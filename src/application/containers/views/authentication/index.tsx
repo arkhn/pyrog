@@ -238,6 +238,7 @@ class AuthenticationView extends React.Component<IAuthenticationViewState, IStat
                                     intent="primary"
                                     large
                                     loading={loading}
+                                    type={'submit'}
                                 >
                                     S'inscrire
                                 </Button>
@@ -260,7 +261,6 @@ class AuthenticationView extends React.Component<IAuthenticationViewState, IStat
                         }
                     }}
                     onError={(error: any) => {
-                        console.log(error.message)
                         this.props.toaster.show({
                             icon: 'error',
                             intent: 'danger',

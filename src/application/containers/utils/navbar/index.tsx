@@ -8,10 +8,12 @@ import {
     Toaster,
 } from '@blueprintjs/core'
 import * as React from 'react'
+import { gql } from 'apollo-client-preset'
 import {
     Mutation,
     Query,
     Subscription,
+    withApollo,
 } from 'react-apollo'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
@@ -39,7 +41,7 @@ const isAuthenticated = require('./graphql/queries/isAuthenticated.graphql')
 const me = require('./graphql/queries/me.graphql')
 
 export interface IProps extends IView {
-    history?: any,
+
 }
 
 interface IState {
@@ -72,50 +74,32 @@ class Navbar extends React.Component<IProps, IState> {
         super(props);
     }
 
+    componentDidMount = () => {
+        // Check if user is authentified and redirect accordingly.
+        this.props.client
+            .query({
+                query: gql`query { isAuthenticated }`,
+                // This query should not use the cache,
+                // or else users can't log in and out.
+                fetchPolicy: "network-only",
+            })
+            .then((response: any) => {
+                if (response.data.isAuthenticated) {
+                    if (["/", "/signin"].indexOf(this.props.location.pathname) >= 0) {
+                        this.props.history.push('/sources')
+                    }
+                } else if (this.props.location.pathname != "/signin") {
+                    this.props.history.push('/signin')
+                }
+            })
+    }
+
     public render = () => {
         const {
             dispatch,
             selectedDatabase,
             user,
         } = this.props
-
-        const userInformation = <Query
-            query={me}
-            skip={user.info.name !== null}
-        >
-            {({ data, loading }) => {
-                if (data && data.me) {
-                    const {id, name, email} = data.me
-                    dispatch(login(id, name, email))
-                    if (this.props.location.pathname == '/') {
-                        this.props.history.push('/sources')
-                    }
-                }
-
-                return loading ?
-                    <BPNavbar.Group align={Alignment.RIGHT}>
-                        <Spinner size={15} />
-                    </BPNavbar.Group> :
-                    user.isAuthenticated ?
-                        <BPNavbar.Group align={Alignment.RIGHT}>
-                            {user.info.name}
-                            <BPNavbar.Divider />
-                            <Button
-                                className="bp3-minimal"
-                                icon="log-out"
-                                onClick={() => {
-                                    localStorage.removeItem(AUTH_TOKEN)
-                                    dispatch(logout())
-                                    console.log('callback logout')
-                                    this.props.history.push('/')
-                                }}
-                                text="Se déconnecter"
-                            />
-                        </BPNavbar.Group> :
-                        null
-
-            }}
-        </Query>
 
         const logo = <BPNavbar.Heading>
             <span dangerouslySetInnerHTML={{__html: arkhnLogoWhite}} />
@@ -134,7 +118,7 @@ class Navbar extends React.Component<IProps, IState> {
                                 this.props.history.push('/sources')
                             }}
                         >
-                            Logiciels
+                            Sources
                         </Button>
                     </BPNavbar.Group>
                 }
@@ -152,7 +136,7 @@ class Navbar extends React.Component<IProps, IState> {
                                     this.props.history.push('/sources')
                                 }}
                             >
-                                Logiciels
+                                Sources
                             </Button>
                             <BPNavbar.Divider />
                             {selectedDatabase.name}
@@ -172,21 +156,39 @@ class Navbar extends React.Component<IProps, IState> {
         return <BPNavbar id="navbar" className="bp3-dark">
             {header()}
             <Query
-                query={isAuthenticated}
-                skip={user.isAuthenticated}
+                onCompleted={(data: any) => {
+                    if (data && data.me && user.id === null) {
+                        dispatch(login(data.me.id, data.me.name, data.me.email))
+                    }
+                }}
+                query={me}
+                skip={user.id !== null}
             >
                 {({ data, loading }) => {
                     return loading ?
                         <BPNavbar.Group align={Alignment.RIGHT}>
                             <Spinner size={15} />
                         </BPNavbar.Group> :
-                        data && data.isAuthenticated || user.isAuthenticated ?
-                            userInformation :
-                            null
+                        (user.id ?
+                            <BPNavbar.Group align={Alignment.RIGHT}>
+                                {user.name}
+                                <BPNavbar.Divider />
+                                <Button
+                                    className="bp3-minimal"
+                                    icon="log-out"
+                                    onClick={() => {
+                                        localStorage.removeItem(AUTH_TOKEN)
+                                        dispatch(logout())
+                                        this.props.history.push('/signin')
+                                    }}
+                                    text="Se déconnecter"
+                                />
+                            </BPNavbar.Group> :
+                            null)
                 }}
             </Query>
         </BPNavbar>
     }
 }
 
-export default withRouter(connect(mapReduxStateToReactProps)(Navbar) as any)
+export default withRouter(withApollo(connect(mapReduxStateToReactProps)(Navbar) as any) as any)

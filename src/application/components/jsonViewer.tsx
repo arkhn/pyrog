@@ -33,7 +33,6 @@ export default class JsonViewer extends React.Component<IJsonViewerProps, IJsonV
 
     private static genObjNodes(json: string): ITreeNode[] {
         const obj = JSON.parse(json);
-        console.log(obj);
         let returnList = [];
         for (let key of Object.keys(obj))
         {

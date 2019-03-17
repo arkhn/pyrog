@@ -13,12 +13,9 @@ export type IAction = ISimpleAction | IThunkAction | Promise<any>
 
 // Reducers
 export interface IUser {
-    isAuthenticated: boolean,
-    info: {
-        id: string,
-        name: string,
-        email: string,
-    }
+    id: string,
+    name: string,
+    email: string,
 }
 
 export interface ISelectedDatabase {
@@ -57,9 +54,13 @@ export interface IReduxStore {
 // VIEWS
 
 export interface IView {
+    // Apollo client (withApollo from 'react-apollo')
+    client?: any,
     data?: IData,
     dispatch?: any,
+    // Router history (withRouter from 'react-router-dom')
     history?: any,
+    // Router location (withRouter from 'react-router-dom')
     location?: any,
     selectedDatabase?: ISelectedDatabase,
     toaster?: IToaster,

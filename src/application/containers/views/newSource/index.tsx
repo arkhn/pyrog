@@ -37,9 +37,6 @@ import './style.less'
 // Queries
 const allDatabases = require('./graphql/queries/allDatabases.graphql')
 
-// Mutations
-const mutationLogin = require('./graphql/mutations/login.graphql')
-
 export interface INewSourceState {
 
 }

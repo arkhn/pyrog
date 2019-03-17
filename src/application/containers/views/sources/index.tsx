@@ -83,7 +83,7 @@ class SourcesView extends React.Component<ISourcesViewState, IState> {
                         this.props.history.push('/newSource')
                     }}
                 >
-                    Ajouter un logiciel
+                    Ajouter une source / un logiciel
                 </Button>
                 <Query
                     query={allDatabases}
@@ -99,7 +99,6 @@ class SourcesView extends React.Component<ISourcesViewState, IState> {
                                         key={index}
                                         onClick={() => {
                                             dispatch(changeSelectedDatabase(database.id, database.name))
-                                            console.log('callback schema')
                                             this.props.history.push('/mapping')
                                         }}
                                     >
