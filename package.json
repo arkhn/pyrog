@@ -1,18 +1,22 @@
 {
     "name": "fhirball-graphql",
     "scripts": {
-        "start": "dotenv -- nodemon -e ts,graphql -x ts-node src/index.ts",
-        "debug": "dotenv -- nodemon -e ts,graphql -x ts-node --inspect src/index.ts",
-        "build": "rimraf dist && tsc",
+        "start": "dotenv -e .env.staging -- nodemon --ext ts,graphql --exec ts-node src/index.ts",
+        "debug": "dotenv -e .env.staging -- nodemon --ext ts,graphql --exec ts-node --inspect src/index.ts",
+        "copy-schemas": "cpx src/**/*.graphql dist",
+        "build": "rimraf dist && tsc && yarn copy-schemas",
         "playground": "graphql playground",
         "test": "jest"
     },
     "dependencies": {
+        "@types/graphql": "^14.0.7",
         "bcryptjs": "2.4.3",
+        "cpx": "^1.5.0",
         "graphql-cli": "^3.0.11",
-        "graphql-yoga": "1.17.4",
+        "graphql-import-node": "^0.0.1",
+        "graphql-yoga": "^1.17.4",
         "jsonwebtoken": "8.5.0",
-        "prisma-binding": "^2.3.3"
+        "prisma-binding": "^2.3.8"
     },
     "devDependencies": {
         "@babel/preset-env": "^7.3.4",
@@ -28,6 +32,6 @@
         "stringify-object": "^3.3.0",
         "ts-jest": "^24.0.0",
         "ts-node": "7.0.1",
-        "typescript": "3.2.2"
+        "typescript": "^3.3.3333"
     }
 }
