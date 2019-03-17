@@ -151,11 +151,8 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
                 <div className={'node-type'}>{node.type}</div>
             </div>
 
-            if (node.attributes && node.attributes.length > 0) {
-                console.log(node.attributes)
-            }
-            if (node.isProfile) {
-                node.attributes.push({isProfileButton: true, ParentId: node.id, newProfileType: node.type})
+            if (node.type && node.type.startsWith("list::") && node.attributes) {
+                node.attributes.push({isProfileButton: true, ParentId: node.id, newProfileType: node.type.substring(6)})
             }
             // node.attattributes.push()
 
