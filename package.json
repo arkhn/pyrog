@@ -3,13 +3,15 @@
     "scripts": {
         "start": "dotenv -e .env.staging -- nodemon --ext ts,graphql --exec ts-node src/index.ts",
         "debug": "dotenv -e .env.staging -- nodemon --ext ts,graphql --exec ts-node --inspect src/index.ts",
-        "build": "rimraf dist && tsc",
+        "copy-schemas": "cpx src/**/*.graphql dist",
+        "build": "rimraf dist && tsc && yarn copy-schemas",
         "playground": "graphql playground",
         "test": "jest"
     },
     "dependencies": {
         "@types/graphql": "^14.0.7",
         "bcryptjs": "2.4.3",
+        "cpx": "^1.5.0",
         "graphql-cli": "^3.0.11",
         "graphql-import-node": "^0.0.1",
         "graphql-yoga": "^1.17.4",
