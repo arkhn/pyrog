@@ -12,6 +12,7 @@ import {isNullOrUndefined} from 'util';
 
 interface INodeData {
     comment: string,
+    id: string,
     isProfile: boolean,
     name: string,
     path: string[],
@@ -21,13 +22,14 @@ interface INodeData {
 export interface IProps {
     json: any,
     onClickCallback: any,
-    selectedNode: string[],
+    selectedNodeId: string,
 }
 
 export interface IState {
+    isBroken: boolean,
     nodes: ITreeNode<INodeData>[],
     renderJson: string,
-    isBroken: boolean,
+    selectedNode: ITreeNode<INodeData>,
 }
 
 export default class FhirResourceTree extends React.Component<IProps, IState> {
@@ -36,9 +38,10 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
         this.state = {
+            isBroken: false,
             nodes: [],
             renderJson: "",
-            isBroken: false,
+            selectedNode: null,
         }
     }
 
@@ -62,7 +65,7 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
     private static genObjNodes = (node: any, pathAcc: string[]): ITreeNode<INodeData> => {
         const hasChildren = (node.attributes && node.attributes.length > 0)
         const hasInputColumns = (node.inputColumns && node.inputColumns.length > 0)
-        const nodePath = [...pathAcc, node.name]
+        const nodePath = [...pathAcc, node.id]
 
         const secondaryLabel = hasInputColumns ?
             <Icon icon='small-tick' intent={'success'}/> :
@@ -76,6 +79,11 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
                     null
             )
 
+        const nodeLabel = <div className={'node-label'}>
+            <div>{node.name}</div>
+            <div className={'node-type'}>{node.type}</div>
+        </div>
+
         return {
             childNodes: hasChildren ? node.attributes.map((attribute: any) => {
                 return FhirResourceTree.genObjNodes(attribute, nodePath)
@@ -85,14 +93,12 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
             id: FhirResourceTree.getId(),
             isExpanded: false,
             isSelected: false,
-            label: <Tooltip content={node.comment}>
-                <div className={'node-label'}>
-                    <div>{node.name}</div>
-                    <div className={'node-type'}>{node.type}</div>
-                </div>
-            </Tooltip>,
+            label: node.comment ?
+                <Tooltip content={node.comment}>{nodeLabel}</Tooltip> :
+                nodeLabel,
             nodeData: {
                 comment: node.comment,
+                id: node.id,
                 isProfile: node.isProfile,
                 name: node.name,
                 path: nodePath,
@@ -116,30 +122,34 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
     static getDerivedStateFromProps(props: IProps, state: IState) {
         if (props.json !== state.renderJson) {
             try {
-                let nodes = props.json.attributes.map((attribute: any) => {
+                let nodes = props.json.map((attribute: any) => {
                     return FhirResourceTree.genObjNodes(attribute, [])
                 })
 
-                console.log(nodes)
+                const selectedNode = nodes.filter((node: ITreeNode<INodeData>) => {
+                    return node.nodeData.id == props.selectedNodeId
+                })[0]
 
                 FhirResourceTree.forEachNode(nodes, (node: ITreeNode<INodeData>) => {
-                    node.isSelected = node.nodeData.path == props.selectedNode
-                    node.isExpanded = props.selectedNode ?
-                        props.selectedNode.join('.').startsWith(node.nodeData.path.join('.')) :
+                    node.isSelected = node.nodeData.id == props.selectedNodeId
+                    node.isExpanded = selectedNode ?
+                        selectedNode.nodeData.path.indexOf(node.nodeData.id) != -1 :
                         false
                 })
 
                 return {
+                    isBroken: false,
                     nodes: nodes,
                     renderJson: props.json,
-                    isBroken: false,
+                    selectedNode,
                 }
             } catch(err) {
                 console.log(err)
                 return {
+                    isBroken: true,
                     nodes: [],
                     renderJson: props.json,
-                    isBroken: true,
+                    selectedNode: null,
                 }
             }
         } else {
@@ -169,7 +179,7 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
             node.isSelected = originallySelected == null ? true : !originallySelected;
             this.setState(this.state);
 
-            this.props.onClickCallback(node.nodeData.path)
+            this.props.onClickCallback(node.nodeData)
         } else {
             if (node.isExpanded) {
                 this.handleNodeCollapse(node)

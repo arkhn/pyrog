@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "start": "NODE_ENV=development webpack-dev-server --port 1729 --hot --host 0.0.0.0 --mode development",
-        "build-prod": "webpack --mode production"
+        "build": "webpack --mode production"
     },
     "dependencies": {
         "@blueprintjs/core": "^3.9.0",
@@ -29,8 +29,11 @@
         "apollo-boost": "^0.1.20",
         "apollo-client": "^2.4.5",
         "apollo-client-preset": "^1.0.8",
+        "apollo-link": "^1.2.9",
         "apollo-link-ws": "^1.0.9",
+        "apollo-utilities": "^1.2.1",
         "awesome-typescript-loader": "^5.2.1",
+        "axios": "^0.18.0",
         "css-loader": "^1.0.0",
         "file-loader": "^2.0.0",
         "graphql": "^14.0.2",
@@ -38,6 +41,7 @@
         "html-webpack-plugin": "^3.2.0",
         "less": "^3.8.1",
         "less-loader": "^4.0.5",
+        "raw-loader": "^1.0.0",
         "react": "^16.5.2",
         "react-addons-css-transition-group": "^15.6.0",
         "react-apollo": "^2.2.4",

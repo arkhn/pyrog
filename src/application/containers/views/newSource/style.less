@@ -1,0 +1,31 @@
+@import "~@blueprintjs/core/lib/css/blueprint.css";
+@import "~@blueprintjs/core/lib/less/variables";
+
+@window-padding: 20px;
+
+#main-container-newsource {
+    max-width: 600px;
+    margin: 0px auto;
+    padding: @window-padding;
+
+    button {
+        margin: @window-padding 0px;
+        margin-bottom: 4 * @window-padding;
+    }
+
+    p {
+        text-align: justify;
+    }
+
+    .align-right {
+        text-align: right;
+    }
+
+    .warning {
+        color: @pt-intent-warning;
+    }
+
+    .disabled-text {
+        color: @pt-text-color-disabled;
+    }
+}

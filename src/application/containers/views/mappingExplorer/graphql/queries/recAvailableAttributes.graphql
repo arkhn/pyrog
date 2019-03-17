@@ -1,0 +1,35 @@
+#import "../fragments/entireAttribute.graphql"
+
+query recAvailableAttributes($resourceId: ID!) {
+    recAvailableAttributes(resourceId: $resourceId) {
+        id
+        name
+        attributes {
+            ...entireAttribute
+            attributes {
+                ...entireAttribute
+                attributes {
+                    ...entireAttribute
+                    attributes {
+                        ...entireAttribute
+                        attributes {
+                            ...entireAttribute
+                            attributes {
+                                ...entireAttribute
+                                attributes {
+                                    ...entireAttribute
+                                    attributes {
+                                        ...entireAttribute
+                                        attributes {
+                                            ...entireAttribute
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

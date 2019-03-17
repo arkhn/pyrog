@@ -8,8 +8,8 @@ import {
     Tab,
     TabId,
     Tabs,
-    Tree
-    } from '@blueprintjs/core';
+    Tree,
+} from '@blueprintjs/core';
 import { isNullOrUndefined } from 'util'
 
 export interface IJsonViewerProps {
@@ -33,7 +33,6 @@ export default class JsonViewer extends React.Component<IJsonViewerProps, IJsonV
 
     private static genObjNodes(json: string): ITreeNode[] {
         const obj = JSON.parse(json);
-        console.log(obj);
         let returnList = [];
         for (let key of Object.keys(obj))
         {

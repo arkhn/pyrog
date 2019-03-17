@@ -34,7 +34,7 @@ module.exports = {
             },
             {
                 test: /\.svg$/,
-                loader: 'svg-inline-loader'
+                loader: 'raw-loader',
             },
             {
                 // This is, among others, for files present in ./node_modules/graphql

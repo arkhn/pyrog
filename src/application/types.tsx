@@ -1,3 +1,4 @@
+import { IToaster } from '@blueprintjs/core'
 import * as redux from 'redux'
 
 // REDUX
@@ -8,19 +9,62 @@ export interface ISimpleAction {
 
 export type IThunkAction = (dispatch: redux.Dispatch<any>, getState: any) => void
 
-export type IAction = ISimpleAction | IThunkAction
+export type IAction = ISimpleAction | IThunkAction | Promise<any>
 
+// Reducers
+export interface IUser {
+    id: string,
+    name: string,
+    email: string,
+}
+
+export interface ISelectedDatabase {
+    id: string,
+    name: string,
+}
+
+export interface IDatabaseSchemas {
+    loadingDatabaseSchema: boolean,
+    schemaByDatabaseName: {
+        [databaseName: string]: any,
+    }
+}
+
+export interface IRecommendedColumns {
+    columnsByAttribute: {
+        [fhirAttribute: string]: any,
+    }
+}
+
+export interface IData {
+    databaseSchemas: IDatabaseSchemas,
+    recommendedColumns: IRecommendedColumns,
+}
+
+// Store
 export interface IReduxStore {
-    data: any,
+    data: IData,
     dispatch?: any,
+    selectedDatabase: ISelectedDatabase,
+    toaster: IToaster,
+    user: IUser,
     views: any,
 }
 
 // VIEWS
 
 export interface IView {
-    data: any,
+    // Apollo client (withApollo from 'react-apollo')
+    client?: any,
+    data?: IData,
     dispatch?: any,
+    // Router history (withRouter from 'react-router-dom')
+    history?: any,
+    // Router location (withRouter from 'react-router-dom')
+    location?: any,
+    selectedDatabase?: ISelectedDatabase,
+    toaster?: IToaster,
+    user?: IUser,
 }
 
 // REACT
