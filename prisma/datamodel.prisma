@@ -57,10 +57,15 @@ type Join {
     inputColumn: InputColumn! @relation(name: "InputColumnToJoins")
 }
 
+enum Role {
+    ADMIN
+    USER
+}
+
 type User {
     id: ID! @unique
     email: String! @unique
-    password: String!
     name: String!
-    type: String
+    password: String!
+    role: Role @default(value: "USER")
 }

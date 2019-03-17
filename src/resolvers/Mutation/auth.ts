@@ -5,10 +5,13 @@ import { Context } from '../../utils'
 export const auth = {
     async signup(parent, args, context: Context) {
         const password = await bcrypt.hash(args.password, 10)
-        const user = await context.client.createUser({ ...args, password })
+        const user = await context.client.createUser({
+            ...args,
+            password,
+        })
 
         return {
-            token: jwt.sign({ userId: user.id, userType: user.type }, process.env.APP_SECRET),
+            token: jwt.sign({ userId: user.id }, process.env.APP_SECRET),
             user,
         }
     },
@@ -25,7 +28,7 @@ export const auth = {
         }
 
         return {
-            token: jwt.sign({ userId: user.id, userType: user.type }, process.env.APP_SECRET),
+            token: jwt.sign({ userId: user.id }, process.env.APP_SECRET),
             user,
         }
     },

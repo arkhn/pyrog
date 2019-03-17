@@ -1828,6 +1828,11 @@ input ResourceWhereUniqueInput {
   id: ID
 }
 
+enum Role {
+  ADMIN
+  USER
+}
+
 type Subscription {
   attribute(where: AttributeSubscriptionWhereInput): AttributeSubscriptionPayload
   database(where: DatabaseSubscriptionWhereInput): DatabaseSubscriptionPayload
@@ -1840,9 +1845,9 @@ type Subscription {
 type User {
   id: ID!
   email: String!
-  password: String!
   name: String!
-  type: String
+  password: String!
+  role: Role
 }
 
 type UserConnection {
@@ -1853,9 +1858,9 @@ type UserConnection {
 
 input UserCreateInput {
   email: String!
-  password: String!
   name: String!
-  type: String
+  password: String!
+  role: Role
 }
 
 type UserEdge {
@@ -1868,12 +1873,12 @@ enum UserOrderByInput {
   id_DESC
   email_ASC
   email_DESC
-  password_ASC
-  password_DESC
   name_ASC
   name_DESC
-  type_ASC
-  type_DESC
+  password_ASC
+  password_DESC
+  role_ASC
+  role_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -1883,9 +1888,9 @@ enum UserOrderByInput {
 type UserPreviousValues {
   id: ID!
   email: String!
-  password: String!
   name: String!
-  type: String
+  password: String!
+  role: Role
 }
 
 type UserSubscriptionPayload {
@@ -1908,16 +1913,16 @@ input UserSubscriptionWhereInput {
 
 input UserUpdateInput {
   email: String
-  password: String
   name: String
-  type: String
+  password: String
+  role: Role
 }
 
 input UserUpdateManyMutationInput {
   email: String
-  password: String
   name: String
-  type: String
+  password: String
+  role: Role
 }
 
 input UserWhereInput {
@@ -1949,20 +1954,6 @@ input UserWhereInput {
   email_not_starts_with: String
   email_ends_with: String
   email_not_ends_with: String
-  password: String
-  password_not: String
-  password_in: [String!]
-  password_not_in: [String!]
-  password_lt: String
-  password_lte: String
-  password_gt: String
-  password_gte: String
-  password_contains: String
-  password_not_contains: String
-  password_starts_with: String
-  password_not_starts_with: String
-  password_ends_with: String
-  password_not_ends_with: String
   name: String
   name_not: String
   name_in: [String!]
@@ -1977,20 +1968,24 @@ input UserWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
-  type: String
-  type_not: String
-  type_in: [String!]
-  type_not_in: [String!]
-  type_lt: String
-  type_lte: String
-  type_gt: String
-  type_gte: String
-  type_contains: String
-  type_not_contains: String
-  type_starts_with: String
-  type_not_starts_with: String
-  type_ends_with: String
-  type_not_ends_with: String
+  password: String
+  password_not: String
+  password_in: [String!]
+  password_not_in: [String!]
+  password_lt: String
+  password_lte: String
+  password_gt: String
+  password_gte: String
+  password_contains: String
+  password_not_contains: String
+  password_starts_with: String
+  password_not_starts_with: String
+  password_ends_with: String
+  password_not_ends_with: String
+  role: Role
+  role_not: Role
+  role_in: [Role!]
+  role_not_in: [Role!]
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
