@@ -15,6 +15,7 @@ const Routes = () => (
     <BrowserRouter>
         <Switch>
             <Route exact path='/' component={Authentication} />
+            <Route path='/signin' component={Authentication} />
             <Route path='/mapping' component={MappingExplorer} />
             <Route path='/mimic' component={MimicView} />
             <Route path='/newSource' component={NewSource} />

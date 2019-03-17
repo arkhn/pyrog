@@ -3,8 +3,10 @@ import {
     ControlGroup,
     Elevation,
     FormGroup,
+    Icon,
     InputGroup,
     Spinner,
+    Tag,
 } from '@blueprintjs/core'
 import * as React from 'react'
 import {
@@ -61,6 +63,7 @@ const mapReduxStateToReactProps = (state : IReduxStore): IAuthenticationViewStat
     return {
         data: state.data,
         dispatch: state.dispatch,
+        toaster: state.toaster,
         user: state.dispatch,
     }
 }
@@ -107,206 +110,234 @@ class AuthenticationView extends React.Component<IAuthenticationViewState, IStat
         const formulaires = <div className='formulaires'>
             <div className='signup-form'>
                 <h2>S'inscrire</h2>
-                <FormGroup
-                    label="Adresse mail"
-                    labelFor="text-input"
-                >
-                    <InputGroup
-                        leftIcon="inbox"
-                        placeholder="Email"
-                        value={signup.email}
-                        onChange={(event: React.FormEvent<HTMLElement>) => {
-                            const target = event.target as HTMLInputElement
-
-                            this.setState({
-                                signup: {
-                                    ...this.state.signup,
-                                    email: target.value,
-                                }
-                            })
-                        }}
-                    />
-                </FormGroup>
-                <FormGroup
-                    label="Nom"
-                    labelFor="text-input"
-                >
-                    <InputGroup
-                        leftIcon="user"
-                        placeholder="Nom"
-                        value={signup.name}
-                        onChange={(event: React.FormEvent<HTMLElement>) => {
-                            const target = event.target as HTMLInputElement
-
-                            this.setState({
-                                signup: {
-                                    ...this.state.signup,
-                                    name: target.value,
-                                }
-                            })
-                        }}
-                    />
-                </FormGroup>
-                <FormGroup
-                    label="Mot de passe"
-                    labelFor="text-input"
-                >
-                    <InputGroup
-                        leftIcon="lock"
-                        placeholder="Mot de passe"
-                        type="password"
-                        value={signup.password}
-                        onChange={(event: React.FormEvent<HTMLElement>) => {
-                            const target = event.target as HTMLInputElement
-
-                            this.setState({
-                                signup: {
-                                    ...this.state.signup,
-                                    password: target.value,
-                                }
-                            })
-                        }}
-                    />
-                </FormGroup>
-                <FormGroup
-                    label="Confirmation du mot de passe"
-                    labelFor="text-input"
-                >
-                    <InputGroup
-                        leftIcon="lock"
-                        placeholder="Mot de passe"
-                        type="password"
-                        value={signup.confirmPassword}
-                        onChange={(event: React.FormEvent<HTMLElement>) => {
-                            const target = event.target as HTMLInputElement
-
-                            this.setState({
-                                signup: {
-                                    ...this.state.signup,
-                                    confirmPassword: target.value,
-                                }
-                            })
-                        }}
-                    />
-                </FormGroup>
                 <Mutation
                     mutation={mutationSignup}
-                >
-                    {(mutationSignup, {data, loading}) => {
-                        const authenticated = data && data.signup && data.signup.token
-
-                        if (authenticated) {
+                    onCompleted={(data: any) => {
+                        if (data.signup.token) {
                             const token = data.signup.token
                             const {id, name, email} = data.signup.user
                             localStorage.setItem(AUTH_TOKEN, token)
-                            dispatch(loginAction(id, name, email), () => {
-                                console.log('callback')
-                                this.props.history.push('/sources')
-                            })
+                            dispatch(loginAction(id, name, email))
+                            this.props.history.push('/sources')
                         }
-
-                        return <div>
-                            <Button
-                                disabled={loading || signup.password == "" || signup.password != signup.confirmPassword}
-                                intent="primary"
-                                onClick={() => {
-                                    mutationSignup({
-                                        variables: {
-                                            email: signup.email,
-                                            name: signup.name,
-                                            password: signup.password,
-                                        }
-                                    })
-                                }}
+                    }}
+                    onError={(error: any) => {
+                        this.props.toaster.show({
+                            icon: 'error',
+                            intent: 'danger',
+                            message: error.message == "GraphQL error: A unique constraint would be violated on User. Details: Field name = email" ?
+                                "L'adresse mail est déjà enregistrée." :
+                                "Une erreur est survenue lors de l'inscription.",
+                            timeout: 4000,
+                        })
+                    }}
+                >
+                    {(mutationSignup, { data, loading }) => {
+                        return <form
+                            onSubmit={(e: any) => {
+                                e.preventDefault()
+                                mutationSignup({
+                                    variables: {
+                                        email: signup.email,
+                                        name: signup.name,
+                                        password: signup.password,
+                                    }
+                                })
+                            }}
+                        >
+                            <FormGroup
+                                label="Adresse mail"
+                                labelFor="text-input"
                             >
-                                S'inscrire
-                            </Button>
-                            {loading ?
-                                <Spinner /> :
-                                null
-                            }
-                        </div>
+                                <InputGroup
+                                    leftIcon="inbox"
+                                    placeholder="Email"
+                                    value={signup.email}
+                                    onChange={(event: React.FormEvent<HTMLElement>) => {
+                                        const target = event.target as HTMLInputElement
+
+                                        this.setState({
+                                            signup: {
+                                                ...this.state.signup,
+                                                email: target.value,
+                                            }
+                                        })
+                                    }}
+                                />
+                            </FormGroup>
+                            <FormGroup
+                                label="Nom"
+                                labelFor="text-input"
+                            >
+                                <InputGroup
+                                    leftIcon="user"
+                                    placeholder="Nom"
+                                    value={signup.name}
+                                    onChange={(event: React.FormEvent<HTMLElement>) => {
+                                        const target = event.target as HTMLInputElement
+
+                                        this.setState({
+                                            signup: {
+                                                ...this.state.signup,
+                                                name: target.value,
+                                            }
+                                        })
+                                    }}
+                                />
+                            </FormGroup>
+                            <FormGroup
+                                label="Mot de passe"
+                                labelFor="text-input"
+                            >
+                                <InputGroup
+                                    leftIcon="lock"
+                                    placeholder="Mot de passe"
+                                    type="password"
+                                    value={signup.password}
+                                    onChange={(event: React.FormEvent<HTMLElement>) => {
+                                        const target = event.target as HTMLInputElement
+
+                                        this.setState({
+                                            signup: {
+                                                ...this.state.signup,
+                                                password: target.value,
+                                            }
+                                        })
+                                    }}
+                                />
+                            </FormGroup>
+                            <FormGroup
+                                label="Confirmation du mot de passe"
+                                labelFor="text-input"
+                            >
+                                <InputGroup
+                                    leftIcon="lock"
+                                    placeholder="Mot de passe"
+                                    rightElement={signup.confirmPassword ?
+                                        (signup.confirmPassword != signup.password ?
+                                            <Tag minimal={true}><Icon color={'#EB532D'} icon={'cross'} /></Tag> :
+                                            <Tag minimal={true}><Icon color={'#15B371'} icon={'tick'} /></Tag>) :
+                                        <Tag className={'hidden'} minimal={true}><Icon icon={'tick'} /></Tag>}
+                                    type="password"
+                                    value={signup.confirmPassword}
+                                    onChange={(event: React.FormEvent<HTMLElement>) => {
+                                        const target = event.target as HTMLInputElement
+
+                                        this.setState({
+                                            signup: {
+                                                ...this.state.signup,
+                                                confirmPassword: target.value,
+                                            }
+                                        })
+                                    }}
+                                />
+                            </FormGroup>
+                            <FormGroup>
+                                <Button
+                                    disabled={loading || signup.password == "" || signup.password != signup.confirmPassword}
+                                    intent="primary"
+                                    large
+                                    loading={loading}
+                                >
+                                    S'inscrire
+                                </Button>
+                            </FormGroup>
+                        </form>
                     }}
                 </Mutation>
             </div>
             <div className='login-form'>
                 <h2>Se connecter</h2>
-                <FormGroup
-                    label="Adresse mail"
-                    labelFor="text-input"
-                >
-                    <InputGroup
-                        leftIcon="user"
-                        placeholder="Email"
-                        value={login.email}
-                        onChange={(event: React.FormEvent<HTMLElement>) => {
-                            const target = event.target as HTMLInputElement
-
-                            this.setState({
-                                login: {
-                                    ...this.state.login,
-                                    email: target.value,
-                                }
-                            })
-                        }}
-                    />
-                </FormGroup>
-                <FormGroup
-                    label="Mot de passe"
-                    labelFor="text-input"
-                >
-                    <InputGroup
-                        leftIcon="lock"
-                        placeholder="Mot de passe"
-                        type="password"
-                        value={login.password}
-                        onChange={(event: React.FormEvent<HTMLElement>) => {
-                            const target = event.target as HTMLInputElement
-
-                            this.setState({
-                                login: {
-                                    ...this.state.login,
-                                    password: target.value,
-                                }
-                            })
-                        }}
-                    />
-                </FormGroup>
                 <Mutation
                     mutation={mutationLogin}
-                >
-                    {(mutationLogin, {data, loading}) => {
-                        const authenticated = data && data.login && data.login.token
-
-                        if (authenticated) {
+                    onCompleted={(data: any) => {
+                        if (data.login.token) {
                             const token = data.login.token
                             const {id, name, email} = data.login.user
                             localStorage.setItem(AUTH_TOKEN, token)
                             dispatch(loginAction(id, name, email))
-                            console.log('callback')
                             this.props.history.push('/sources')
                         }
-
-                        return <div>
-                            <Button
-                                disabled={loading || login.password == "" || login.email == ""}
-                                intent="primary"
-                                onClick={() => {
-                                    mutationLogin({
-                                        variables: {
-                                            email: login.email,
-                                            password: login.password,
-                                        }
-                                    })
-                                }}
+                    }}
+                    onError={(error: any) => {
+                        console.log(error.message)
+                        this.props.toaster.show({
+                            icon: 'error',
+                            intent: 'danger',
+                            message: error.message == "GraphQL error: Invalid password" ?
+                                "Le mot de passe est incorrect." :
+                                error.message.startsWith("GraphQL error: No such user found for email") ?
+                                    "L'adresse utilisée n'est pas enregistrée." :
+                                    'Une erreur est survenue lors de l\'authentification.',
+                            timeout: 4000,
+                        })
+                    }}
+                >
+                    {(mutationLogin, { data, loading }) => {
+                        return <form
+                            onSubmit={(e: any) => {
+                                e.preventDefault()
+                                mutationLogin({
+                                    variables: {
+                                        email: login.email,
+                                        password: login.password,
+                                    }
+                                })
+                            }}
+                        >
+                            <FormGroup
+                                label="Adresse mail"
+                                labelFor="text-input"
                             >
-                                Se connecter
-                            </Button>
-                            {loading ?
-                                <Spinner /> :
-                                null
-                            }
-                        </div>
+                                <InputGroup
+                                    leftIcon="user"
+                                    placeholder="Email"
+                                    value={login.email}
+                                    onChange={(event: React.FormEvent<HTMLElement>) => {
+                                        const target = event.target as HTMLInputElement
+
+                                        this.setState({
+                                            login: {
+                                                ...this.state.login,
+                                                email: target.value,
+                                            }
+                                        })
+                                    }}
+                                />
+                            </FormGroup>
+                            <FormGroup
+                                label="Mot de passe"
+                                labelFor="text-input"
+                            >
+                                <InputGroup
+                                    leftIcon="lock"
+                                    placeholder="Mot de passe"
+                                    type="password"
+                                    value={login.password}
+                                    onChange={(event: React.FormEvent<HTMLElement>) => {
+                                        const target = event.target as HTMLInputElement
+
+                                        this.setState({
+                                            login: {
+                                                ...this.state.login,
+                                                password: target.value,
+                                            }
+                                        })
+                                    }}
+                                />
+                            </FormGroup>
+                            <FormGroup>
+                                <Button
+                                    disabled={loading || login.password == "" || login.email == ""}
+                                    intent="primary"
+                                    large
+                                    loading={loading}
+                                    type='submit'
+                                >
+                                    Se connecter
+                                </Button>
+                            </FormGroup>
+                        </form>
                     }}
                 </Mutation>
             </div>
