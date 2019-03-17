@@ -35,6 +35,7 @@
         "awesome-typescript-loader": "^5.2.1",
         "axios": "^0.18.0",
         "css-loader": "^1.0.0",
+        "favicons-webpack-plugin": "^0.0.9",
         "file-loader": "^2.0.0",
         "graphql": "^14.0.2",
         "graphql-tag": "^2.10.0",

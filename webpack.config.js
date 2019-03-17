@@ -1,5 +1,7 @@
 var path = require('path'),
     htmlPlugin = require('html-webpack-plugin')
+    FaviconsWebpackPlugin = require('favicons-webpack-plugin')
+
 
 var SRC_DIR = path.join(__dirname, './src')
 var DIST_DIR = path.join(__dirname, './dist')
@@ -55,6 +57,7 @@ module.exports = {
         new htmlPlugin({
             template: 'index.html'
         }),
+        new FaviconsWebpackPlugin({logo: './assets/img/logo.png'})
     ],
     // Resolvers are used to locate modules using absolute paths.
     // This allows to write `import * from './module'` instead of
