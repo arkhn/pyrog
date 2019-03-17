@@ -1,9 +1,5 @@
 version: '3'
 services:
-  # arkhn:
-  #   image: arkhn/fhirball-graphql:latest
-  #   ports:
-  #     - "4000:4000"
   prisma:
     image: prismagraphql/prisma:1.26
     restart: always
@@ -12,7 +8,6 @@ services:
     environment:
       PRISMA_CONFIG: |
         port: 4466
-        # managementApiSecret: mysecret42
         databases:
           default:
             connector: postgres
