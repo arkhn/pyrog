@@ -1,14 +1,22 @@
 import {
+    Button
     Classes,
     Icon,
+    InputGroup
     ITreeNode,
     Position,
     Tooltip,
     Tree
 } from '@blueprintjs/core'
+import {
+    Mutation,
+} from 'react-apollo'
 import * as React from 'react'
 
 import {isNullOrUndefined} from 'util';
+
+const createAttributeProfileInAttribute = require('./graphql/mutations/createAttributeProfileInAttribute.graphql')
+
 
 interface INodeData {
     comment: string,
@@ -63,48 +71,116 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
     }
 
     private static genObjNodes = (node: any, pathAcc: string[]): ITreeNode<INodeData> => {
-        const hasChildren = (node.attributes && node.attributes.length > 0)
-        const hasInputColumns = (node.inputColumns && node.inputColumns.length > 0)
-        const nodePath = [...pathAcc, node.id]
 
-        const secondaryLabel = hasInputColumns ?
-            <Icon icon='small-tick' intent={'success'}/> :
-            (
-                hasChildren ?
-                    (
-                        FhirResourceTree.breadFirstSearchInputColumn(node) ?
-                            <Icon icon='dot' /> :
-                            null
-                    ) :
-                    null
-            )
+        if (node.isProfileButton) {
 
-        const nodeLabel = <div className={'node-label'}>
-            <div>{node.name}</div>
-            <div className={'node-type'}>{node.type}</div>
-        </div>
+            let newProfileName = "new_attribute"
+            const nodeLabel = <div>
+                <InputGroup
+                    id="static-value-input"
+                    onChange={(event: React.FormEvent<HTMLElement>) => {
+                        const target = event.target as HTMLInputElement
 
-        return {
-            childNodes: hasChildren ? node.attributes.map((attribute: any) => {
-                return FhirResourceTree.genObjNodes(attribute, nodePath)
-            }) : null,
-            hasCaret: hasChildren,
-            icon: node.isProfile ? 'multi-select' : (hasChildren ? 'folder-open' : 'tag'),
-            id: FhirResourceTree.getId(),
-            isExpanded: false,
-            isSelected: false,
-            label: node.comment ?
-                <Tooltip content={node.comment}>{nodeLabel}</Tooltip> :
-                nodeLabel,
-            nodeData: {
-                comment: node.comment,
-                id: node.id,
-                isProfile: node.isProfile,
-                name: node.name,
-                path: nodePath,
-                type: node.type,
-            },
-            secondaryLabel: secondaryLabel,
+                        let newProfileName = target.value
+                    }}
+                    placeholder="Profile name"
+                    {/* value={newProfileName} */}
+                />
+                <Mutation
+                    mutation={createAttributeProfileInAttribute}
+                >
+                    {(createAttributeProfile, { data, loading }) => {
+                        return <Button
+                            icon={'add'}
+                            loading={loading}
+                            onClick={() => {
+                                console.log(node.ParentId)
+                                console.log(node.newProfileType)
+                                createAttributeProfile({
+                                    variables: {
+                                        parent_attribute_id: node.ParentId,
+                                        child_attribute_name: "prout",
+                                        child_attribute_type: node.newProfileType
+                                    }
+                                })
+                            }}
+                        />
+                    }}
+
+                </Mutation>
+            </div>
+
+            return {
+                childNodes: null,
+                hasCaret: false,
+                icon: null,
+                id: null,
+                isExpanded: false,
+                isSelected: false,
+                label: nodeLabel,
+                nodeData: {
+                    comment: null,
+                    id: null,
+                    isProfile: null,
+                    name: null,
+                    path: null,
+                    type: null,
+                },
+                secondaryLabel: null,
+            }
+        } else {
+
+            const hasChildren = (node.attributes && node.attributes.length > 0)
+            const hasInputColumns = (node.inputColumns && node.inputColumns.length > 0)
+            const nodePath = [...pathAcc, node.id]
+
+            const secondaryLabel = hasInputColumns ?
+                <Icon icon='small-tick' intent={'success'}/> :
+                (
+                    hasChildren ?
+                        (
+                            FhirResourceTree.breadFirstSearchInputColumn(node) ?
+                                <Icon icon='dot' /> :
+                                null
+                        ) :
+                        null
+                )
+
+            const nodeLabel = <div className={'node-label'}>
+                <div>{node.name}</div>
+                <div className={'node-type'}>{node.type}</div>
+            </div>
+
+            if (node.attributes && node.attributes.length > 0) {
+                console.log(node.attributes)
+            }
+            if (node.isProfile) {
+                node.attributes.push({isProfileButton: true, ParentId: node.id, newProfileType: node.type})
+            }
+            // node.attattributes.push()
+
+            return {
+                childNodes: hasChildren ? node.attributes.map((attribute: any) => {
+                    return FhirResourceTree.genObjNodes(attribute, nodePath)
+                }) : null,
+                hasCaret: hasChildren,
+                icon: node.isProfile ? 'multi-select' : (hasChildren ? 'folder-open' : 'tag'),
+                id: FhirResourceTree.getId(),
+                isExpanded: false,
+                isSelected: false,
+                label: node.comment ?
+                    <Tooltip content={node.comment}>{nodeLabel}</Tooltip> :
+                    nodeLabel,
+                nodeData: {
+                    comment: node.comment,
+                    id: node.id,
+                    isProfile: node.isProfile,
+                    name: node.name,
+                    path: nodePath,
+                    type: node.type,
+                },
+                secondaryLabel: secondaryLabel,
+            }
         }
     }
 

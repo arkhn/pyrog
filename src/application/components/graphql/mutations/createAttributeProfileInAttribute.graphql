@@ -1,0 +1,7 @@
+
+mutation createAttributeProfileInAttribute($parent_attribute_id: ID!, $child_attribute_name: String!, $child_attribute_type: String!) {
+    # createAttributeProfileInAttribute(parent_attribute_id: $parent_attribute_id, child_attribute_name: $child_attribute_name, child_attribute_type: $child_attribute_type) {
+    createAttributeProfileInAttribute(parent_attribute_id: $parent_attribute_id, child_attribute_name: $child_attribute_name, child_attribute_type: $child_attribute_type) {
+        name
+    }
+}
