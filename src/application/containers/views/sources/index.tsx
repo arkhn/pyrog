@@ -86,6 +86,7 @@ class SourcesView extends React.Component<ISourcesViewState, IState> {
                     Ajouter une source / un logiciel
                 </Button>
                 <Query
+                    fetchPolicy='network-only'
                     query={allDatabases}
                 >
                     {({ data, loading }) => {

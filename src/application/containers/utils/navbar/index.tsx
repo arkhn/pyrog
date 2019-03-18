@@ -8,7 +8,6 @@ import {
     Toaster,
 } from '@blueprintjs/core'
 import * as React from 'react'
-import { gql } from 'apollo-client-preset'
 import {
     Mutation,
     Query,
@@ -78,7 +77,7 @@ class Navbar extends React.Component<IProps, IState> {
         // Check if user is authentified and redirect accordingly.
         this.props.client
             .query({
-                query: gql`query { isAuthenticated }`,
+                query: isAuthenticated,
                 // This query should not use the cache,
                 // or else users can't log in and out.
                 fetchPolicy: "network-only",
@@ -94,6 +93,9 @@ class Navbar extends React.Component<IProps, IState> {
                 } else if (this.props.location.pathname != "/signin") {
                     this.props.history.push('/signin')
                 }
+            })
+            .catch((error: any) => {
+                console.log(error)
             })
     }
 
