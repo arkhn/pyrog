@@ -172,15 +172,20 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
                     <div className={'node-type'}>{node.type}</div>
                 </div>
 
+            // Implement button for profile addition if node type is "list::*"
+            // Bugfix: there might be no 'node.attributes' if recursive query to server was not long enough
             if (node.type && node.type.startsWith("list::") && node.attributes) {
-                node.attributes.push({
-                    isProfileButton: true,
-                    ParentId: node.id,
-                    newProfileType: node.type.substring(6).startsWith("Reference") ?
-                    // We want "Reference" instead of "Reference(Organisation)"
-                        "Reference" :
-                        node.type.substring(6)
-                })
+                // Don't add a second button if we already have one
+                (node.attributes[node.attributes.length-1] && node.attributes[node.attributes.length-1].isProfileButton) ?
+                    null :
+                    node.attributes.push({
+                        isProfileButton: true,
+                        ParentId: node.id,
+                        newProfileType: node.type.substring(6).startsWith("Reference") ?
+                        // We want "Reference" instead of "Reference(Organisation)"
+                            "Reference" :
+                            node.type.substring(6)
+                    })
             }
             // node.attattributes.push()
 
