@@ -28,9 +28,11 @@ import {connect} from 'react-redux'
 
 // Import actions
 import {
+    updateAddResource,
     updateFhirAttribute,
     updateFhirResource,
 } from './actions'
+import { availableResourceNames } from './reducer'
 
 // Import components
 import ColumnPicker from '../../../components/columnPicker'
@@ -40,6 +42,7 @@ import StringSelect from '../../../components/selects/stringSelect'
 import TSelect from '../../../components/selects/TSelect'
 import DatabaseSelect from '../../../components/selects/databaseSelect'
 import ResourceSelect from '../../../components/selects/resourceSelect'
+import AddResourceSelect from '../../../components/selects/addResourceSelect'
 import Navbar from '../../utils/navbar'
 
 // Import types
@@ -79,6 +82,11 @@ const arkhnLogoWhite = require("../../../../assets/img/arkhn_logo_only_white.svg
 const arkhnLogoBlack = require("../../../../assets/img/arkhn_logo_only_black.svg") as string;
 
 export interface IMappingExplorerState {
+    selectedAddResource: {
+        type: string,
+        subtype: string,
+        name: string,
+    },
     selectedFhirResource: {
         id: string,
         name: string,
@@ -138,16 +146,11 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
         }
     }
 
-    public componentDidMount() {
-        // this.props.dispatch(updateDatabase('cjpiarhzxmfmu0a611t9zwqgm', 'Crossway'))
-        // this.props.dispatch(updateFhirResource('cjpicvbkxusn60a57glvgvc90', 'Patient'))
-        // this.props.dispatch(updateFhirAttribute('link.other'))
-    }
-
     public render = () => {
         const {
             data,
             dispatch,
+            selectedAddResource,
             selectedDatabase,
             selectedFhirResource,
             selectedFhirAttribute,
@@ -158,18 +161,6 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
             selectedTabId,
             toggledNavBar,
         } = this.state
-
-        const initialMessage = <NonIdealState
-            description={'Please select a Database and Fhir Resource'}
-            icon={<div dangerouslySetInnerHTML={{__html: arkhnLogoBlack}}/>}
-            title={'Fhirball'}
-        />
-
-        const attributeMessage = <NonIdealState
-            description={'Please select a Fhir Attribute'}
-            icon={<div dangerouslySetInnerHTML={{__html: arkhnLogoBlack}}/>}
-            title={'Fhirball'}
-        />
 
         const inputColumnComponent = (attribute: any, column: any) => <div className='input-column'>
             <Mutation
@@ -390,9 +381,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
         </div>
 
         const joinComponent = (joinData: any, column: any) => <div className={'join'}>
-            <Mutation
-                mutation={deleteJoinAndUpdateInputColumn}
-            >
+            <Mutation mutation={deleteJoinAndUpdateInputColumn} >
                 {(deleteJoin, {data, loading}) => {
                     return <Button
                         icon={'trash'}
@@ -409,9 +398,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                     />
                 }}
             </Mutation>
-            <Mutation
-                mutation={updateJoin}
-            >
+            <Mutation mutation={updateJoin} >
                 {(updateJoin, {data, loading}) => {
                     return joinColumnsComponent(joinData, updateJoin)
                 }}
@@ -420,9 +407,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
 
         const inputColumnsComponent = <Query
             query={inputColumns}
-            variables={{
-                attributeId: selectedFhirAttribute.id,
-            }}
+            variables={{ attributeId: selectedFhirAttribute.id }}
             skip={!selectedFhirAttribute.id}
         >
             {({ data, loading }) => {
@@ -633,18 +618,14 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
 
         const fhirResourceTree = <Query
             query={resourceAttributeTree}
-            variables={{
-                resourceId: selectedFhirResource.id,
-            }}
+            variables={{ resourceId: selectedFhirResource.id }}
             skip={!selectedDatabase || !selectedFhirResource.id}
         >
             {({ data, loading }) => {
                 return loading ?
                     <Spinner /> :
                     <FhirResourceTree
-                        json={
-                            data.resource.attributes
-                        }
+                        json={data.resource.attributes}
                         onClickCallback={(nodeData: any) => {
                             dispatch(updateFhirAttribute(nodeData.id, nodeData.name))
                         }}
@@ -655,59 +636,63 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
 
         return <div>
             <Navbar />
-            <Query
-                query={allDatabases}
-            >
-                {({ data, loading }) => {
-                    return <div id='mapping-explorer-container'>
-                        {
-                            selectedDatabase ?
-                                <div id='main-container'>
-                                    <div id='left-part'>
-                                        <Query
-                                            query={availableResources}
-                                            variables={{
-                                                database: selectedDatabase.name
-                                            }}
-                                            skip={!selectedDatabase.name}
-                                        >
-                                            {({ data, loading }) => {
-                                                return <div id='resource-selector'>
-                                                    <ResourceSelect
-                                                        disabled={!selectedDatabase}
-                                                        icon={'layout-hierarchy'}
-                                                        inputItem={selectedFhirResource}
-                                                        intent={'primary'}
-                                                        items={data && data.availableResources ? data.availableResources : []}
-                                                        loading={loading}
-                                                        onChange={(resource: any) => {
-                                                            dispatch(updateFhirResource(resource.id, resource.name))
-                                                        }}
-                                                    />
-                                                </div>
-                                            }}
-                                        </Query>
-                                        <div id='fhir-resource-tree'>
-                                            {selectedFhirResource.name ?
-                                                fhirResourceTree :
-                                                null
-                                            }
-                                        </div>
-                                    </div>
-                                    {
-                                        selectedFhirAttribute ?
-                                            <div id='right-part'>
-                                                {inputColumnsComponent}
-                                                {columnSelectionComponent}
-                                            </div> :
-                                            attributeMessage
+            <div id='mapping-explorer-container'>
+                <div id='main-container'>
+                    <Query
+                        query={availableResources}
+                        variables={{ database: selectedDatabase.name }}
+                        skip={!selectedDatabase.name}
+                    >
+                        {({ data, loading }) => {
+                            return <div id='left-part'>
+                                <div id='resource-add'>
+                                    <FormGroup
+                                        label={'Ajouter une ressource'}
+                                    >
+                                        <ControlGroup>
+                                            <AddResourceSelect
+                                                disabled={!selectedDatabase}
+                                                intent={null}
+                                                inputItem={selectedAddResource}
+                                                items={availableResourceNames.filter((resource: any) => {
+                                                    return data && data.availableResources && data.availableResources.map((resource: any) => resource.name).indexOf(resource.name) < 0
+                                                })}
+                                                onChange={(resource: any) => {
+                                                    dispatch(updateAddResource(resource))
+                                                }}
+                                            />
+                                            <Button icon={'plus'} />
+                                        </ControlGroup>
+                                    </FormGroup>
+                                </div>
+                                <div id='resource-selector'>
+                                    <ResourceSelect
+                                        disabled={!selectedDatabase}
+                                        icon={'layout-hierarchy'}
+                                        inputItem={selectedFhirResource}
+                                        intent={'primary'}
+                                        items={data && data.availableResources ? data.availableResources : []}
+                                        loading={loading}
+                                        onChange={(resource: any) => {
+                                            dispatch(updateFhirResource(resource.id, resource.name))
+                                        }}
+                                    />
+                                </div>
+                                <div id='fhir-resource-tree'>
+                                    {selectedFhirResource.name ?
+                                        fhirResourceTree :
+                                        null
                                     }
-                                </div> :
-                                initialMessage
-                        }
+                                </div>
+                            </div>
+                        }}
+                    </Query>
+                    <div id='right-part'>
+                        {inputColumnsComponent}
+                        {columnSelectionComponent}
                     </div>
-                }}
-            </Query>
+                </div>
+            </div>
         </div>
     }
 }

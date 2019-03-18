@@ -21,6 +21,7 @@ interface ISelectProps<T> {
     intent?: Intent;
     loading?: boolean;
     onChange: any;
+    popoverProps?: any;
     renderItem: ItemRenderer<T>;
 };
 
@@ -32,11 +33,6 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
     private CustomSelect = Select.ofType<T>();
 
     private handleValueChange = (item: T) => {
-        // if (this.props.dispatch) {
-        //     this.props.dispatch(this.props.onChange(item))
-        // } else {
-        //     this.props.onChange(item)
-        // }
         this.props.onChange(item)
     }
 
@@ -50,29 +46,27 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
             intent,
             items,
             loading,
+            popoverProps,
             renderItem,
         } = this.props
 
-        return (
-            <div>
-                <this.CustomSelect
-                    disabled={disabled}
-                    items={items}
-                    itemPredicate={filterItems}
-                    itemRenderer={renderItem}
-                    noResults={<MenuItem disabled={true} text="No results." />}
-                    onItemSelect={this.handleValueChange}
-                >
-                    <Button
-                        disabled={disabled}
-                        icon={icon}
-                        intent={intent ? intent : null}
-                        loading={loading}
-                        rightIcon="caret-down"
-                        text={displayItem(inputItem)}
-                    />
-                </this.CustomSelect>
-            </div>
-        )
+        return <this.CustomSelect
+            disabled={disabled}
+            items={items}
+            itemPredicate={filterItems}
+            itemRenderer={renderItem}
+            noResults={<MenuItem disabled={true} text="No results." />}
+            onItemSelect={this.handleValueChange}
+            popoverProps={popoverProps}
+        >
+            <Button
+                disabled={disabled}
+                icon={icon}
+                intent={intent ? intent : null}
+                loading={loading}
+                rightIcon="caret-down"
+                text={displayItem(inputItem)}
+            />
+        </this.CustomSelect>
     }
 }
