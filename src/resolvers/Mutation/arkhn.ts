@@ -9,6 +9,13 @@ import {
 } from '../../utils'
 
 export const arkhn = {
+    async createDatabase(parent, {databaseName }, context: Context) {
+        getUserId(context)
+
+        return await context.client.createDatabase({
+            name: databaseName,
+        })
+    },
     // createInputColumnViaAttribute et deleteInputColumnViaAttribute
     // sont construite de sorte à créer ou supprimer une inputColumn
     // à travers son attribut parent directement.

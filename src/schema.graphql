@@ -16,6 +16,7 @@ type Query {
 }
 
 type Mutation {
+    createDatabase(databaseName: String!): Database!
     createInputColumnAndUpdateAttribute(attributeId: ID!, data: InputColumnCreateWithoutAttributeInput): InputColumn!
     deleteInputColumnAndUpdateAttribute(attributeId: ID!, inputColumnId: ID!): InputColumn!
     createJoinAndUpdateInputColumn(inputColumnId: ID!, data: JoinCreateWithoutInputColumnInput): Join!
