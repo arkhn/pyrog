@@ -3,7 +3,9 @@
     "version": "0.0.0",
     "private": true,
     "scripts": {
-        "start": "NODE_ENV=development webpack-dev-server --port 1729 --hot --host 0.0.0.0 --mode development",
+        "start": "run-script-os",
+        "start:darwin:linux": "NODE_ENV=development webpack-dev-server --port 1729 --hot --host 0.0.0.0 --mode development",
+        "start:win32": "set NODE_ENV=development & webpack-dev-server --port 1729 --hot --host 0.0.0.0 --mode development",
         "build": "webpack --mode production"
     },
     "dependencies": {
@@ -62,5 +64,8 @@
         "webpack": "^4.22.0",
         "webpack-cli": "^3.1.2",
         "webpack-dev-server": "^3.1.10"
+    },
+    "devDependencies": {
+        "run-script-os": "^1.0.5"
     }
 }
