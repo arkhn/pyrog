@@ -173,7 +173,14 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
                 </div>
 
             if (node.type && node.type.startsWith("list::") && node.attributes) {
-                node.attributes.push({isProfileButton: true, ParentId: node.id, newProfileType: node.type.substring(6)})
+                node.attributes.push({
+                    isProfileButton: true,
+                    ParentId: node.id,
+                    newProfileType: node.type.substring(6).startsWith("Reference") ?
+                    // We want "Reference" instead of "Reference(Organisation)"
+                        "Reference" :
+                        node.type.substring(6)
+                })
             }
             // node.attattributes.push()
 
