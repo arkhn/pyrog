@@ -1,7 +1,8 @@
+#import "../fragments/entireAttribute.graphql"
 
 mutation deleteAttribute($attributeId: ID!) {
     # createAttributeProfileInAttribute(parent_attribute_id: $parent_attribute_id, child_attribute_name: $child_attribute_name, child_attribute_type: $child_attribute_type) {
     deleteAttribute(id: $attributeId) {
-        name
+        ...entireAttribute
     }
 }
