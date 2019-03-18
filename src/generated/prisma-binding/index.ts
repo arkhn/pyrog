@@ -3437,9 +3437,9 @@ type Subscription {
 type User implements Node {
   id: ID!
   email: String!
+  name: String!
   password: String!
   role: Role
-  name: String!
 }
 
 """A connection to a list of items."""
@@ -3454,9 +3454,9 @@ type UserConnection {
 
 input UserCreateInput {
   email: String!
+  name: String!
   password: String!
   role: Role
-  name: String!
 }
 
 """An edge in a connection."""
@@ -3473,12 +3473,12 @@ enum UserOrderByInput {
   id_DESC
   email_ASC
   email_DESC
+  name_ASC
+  name_DESC
   password_ASC
   password_DESC
   role_ASC
   role_DESC
-  name_ASC
-  name_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -3488,9 +3488,9 @@ enum UserOrderByInput {
 type UserPreviousValues {
   id: ID!
   email: String!
+  name: String!
   password: String!
   role: Role
-  name: String!
 }
 
 type UserSubscriptionPayload {
@@ -3534,16 +3534,16 @@ input UserSubscriptionWhereInput {
 
 input UserUpdateInput {
   email: String
+  name: String
   password: String
   role: Role
-  name: String
 }
 
 input UserUpdateManyMutationInput {
   email: String
+  name: String
   password: String
   role: Role
-  name: String
 }
 
 input UserWhereInput {
@@ -3635,6 +3635,46 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   email_not_ends_with: String
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
   password: String
 
   """All values that are not equal to given value."""
@@ -3685,46 +3725,6 @@ input UserWhereInput {
 
   """All values that are not contained in given list."""
   role_not_in: [Role!]
-  name: String
-
-  """All values that are not equal to given value."""
-  name_not: String
-
-  """All values that are contained in given list."""
-  name_in: [String!]
-
-  """All values that are not contained in given list."""
-  name_not_in: [String!]
-
-  """All values less than the given value."""
-  name_lt: String
-
-  """All values less than or equal the given value."""
-  name_lte: String
-
-  """All values greater than the given value."""
-  name_gt: String
-
-  """All values greater than or equal the given value."""
-  name_gte: String
-
-  """All values containing the given string."""
-  name_contains: String
-
-  """All values not containing the given string."""
-  name_not_contains: String
-
-  """All values starting with the given string."""
-  name_starts_with: String
-
-  """All values not starting with the given string."""
-  name_not_starts_with: String
-
-  """All values ending with the given string."""
-  name_ends_with: String
-
-  """All values not ending with the given string."""
-  name_not_ends_with: String
 }
 
 input UserWhereUniqueInput {
@@ -3829,12 +3829,12 @@ export type UserOrderByInput =   'id_ASC' |
   'id_DESC' |
   'email_ASC' |
   'email_DESC' |
+  'name_ASC' |
+  'name_DESC' |
   'password_ASC' |
   'password_DESC' |
   'role_ASC' |
   'role_DESC' |
-  'name_ASC' |
-  'name_DESC' |
   'updatedAt_ASC' |
   'updatedAt_DESC' |
   'createdAt_ASC' |
@@ -5287,9 +5287,9 @@ export interface ResourceWhereUniqueInput {
 
 export interface UserCreateInput {
   email: String
+  name: String
   password: String
   role?: Role | null
-  name: String
 }
 
 export interface UserSubscriptionWhereInput {
@@ -5305,16 +5305,16 @@ export interface UserSubscriptionWhereInput {
 
 export interface UserUpdateInput {
   email?: String | null
+  name?: String | null
   password?: String | null
   role?: Role | null
-  name?: String | null
 }
 
 export interface UserUpdateManyMutationInput {
   email?: String | null
+  name?: String | null
   password?: String | null
   role?: Role | null
-  name?: String | null
 }
 
 export interface UserWhereInput {
@@ -5349,6 +5349,20 @@ export interface UserWhereInput {
   email_not_starts_with?: String | null
   email_ends_with?: String | null
   email_not_ends_with?: String | null
+  name?: String | null
+  name_not?: String | null
+  name_in?: String[] | String | null
+  name_not_in?: String[] | String | null
+  name_lt?: String | null
+  name_lte?: String | null
+  name_gt?: String | null
+  name_gte?: String | null
+  name_contains?: String | null
+  name_not_contains?: String | null
+  name_starts_with?: String | null
+  name_not_starts_with?: String | null
+  name_ends_with?: String | null
+  name_not_ends_with?: String | null
   password?: String | null
   password_not?: String | null
   password_in?: String[] | String | null
@@ -5367,20 +5381,6 @@ export interface UserWhereInput {
   role_not?: Role | null
   role_in?: Role[] | Role | null
   role_not_in?: Role[] | Role | null
-  name?: String | null
-  name_not?: String | null
-  name_in?: String[] | String | null
-  name_not_in?: String[] | String | null
-  name_lt?: String | null
-  name_lte?: String | null
-  name_gt?: String | null
-  name_gte?: String | null
-  name_contains?: String | null
-  name_not_contains?: String | null
-  name_starts_with?: String | null
-  name_not_starts_with?: String | null
-  name_ends_with?: String | null
-  name_not_ends_with?: String | null
 }
 
 export interface UserWhereUniqueInput {
@@ -5662,9 +5662,9 @@ export interface ResourceSubscriptionPayload {
 export interface User extends Node {
   id: ID_Output
   email: String
+  name: String
   password: String
   role?: Role | null
-  name: String
 }
 
 /*
@@ -5689,9 +5689,9 @@ export interface UserEdge {
 export interface UserPreviousValues {
   id: ID_Output
   email: String
+  name: String
   password: String
   role?: Role | null
-  name: String
 }
 
 export interface UserSubscriptionPayload {

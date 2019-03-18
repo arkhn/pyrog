@@ -125,14 +125,14 @@ export const arkhn = {
             console.log('Problem boy')
         }
     },
-    createAttributeProfileInAttribute(parent, args, context: Context, info) {
+    async createAttributeProfileInAttribute(parent, args, context: Context, info) {
         getUserId(context)
 
         try {
             // TODO : most horrible code line ever, change it
             let json_query = require('../../../../fhir-store/graphql/' + args.child_attribute_type + '.json')
 
-            return context.client.createAttribute({
+            const createdAttribute = await context.client.createAttribute({
                 attribute: {
                         connect: {
                             id: args.parent_attribute_id
@@ -141,6 +141,13 @@ export const arkhn = {
                     name: args.child_attribute_name,
                     attributes: (<any>json_query).attributes,
             })
+
+            const turnToProfile = await context.client.updateAttribute({
+                    data: {isProfile: true},
+                    where: { id: createdAttribute.id }
+                })
+
+            return createdAttribute
         } catch (error) {
             // TODO: return something consistent
             console.log('Problem boy')
@@ -149,13 +156,17 @@ export const arkhn = {
     deleteAttribute(parent, args, context: Context, info) {
         getUserId(context)
 
-        if (getUserType(context) == "dev") {
-            return context.client.deleteAttribute({
+        return context.client.deleteAttribute({
                 id: args.id,
-            })}
-        else {
-            console.log('u wish u were a dev boy')
-        }
+        })
+        // TODO : Reimplement Authorization for devs with new datamodel
+        // if (getUserType(context) == "dev") {
+        //     return context.client.deleteAttribute({
+        //         id: args.id,
+        //     })}
+        // else {
+        //     console.log('u wish u were a dev boy')
+        // }
     },
     // async updateAttributeNoId(parent, args, context: Context, info) {
     //     let attribute = await getAttribute(parent, {
