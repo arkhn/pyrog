@@ -128,21 +128,6 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
             }
         } else {
 
-            const hasChildren = (node.attributes && node.attributes.length > 0)
-            const hasInputColumns = (node.inputColumns && node.inputColumns.length > 0)
-            const nodePath = [...pathAcc, node.id]
-
-            const secondaryLabel = hasInputColumns ?
-                <Icon icon='small-tick' intent={'success'}/> :
-                (
-                    hasChildren ?
-                        (
-                            FhirResourceTree.breadFirstSearchInputColumn(node) ?
-                                <Icon icon='dot' /> :
-                                null
-                        ) :
-                        null
-                )
 
             const nodeLabel = node.isProfile ?
                 <div className={'node-label'}>
@@ -175,26 +160,53 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
             // Implement button for profile addition if node type is "list::*"
             // Bugfix: there might be no 'node.attributes' if recursive query to server was not long enough
             if (node.type && node.type.startsWith("list::") && node.attributes) {
-                // Don't add a second button if we already have one
-                (node.attributes[node.attributes.length-1] && node.attributes[node.attributes.length-1].isProfileButton) ?
-                    null :
-                    node.attributes.push({
+                //there will be no attributes if we deleted all profiles within list
+                if (node.attributes.length == 0) {
+                    node.attributes = [{
                         isProfileButton: true,
                         ParentId: node.id,
                         newProfileType: node.type.substring(6).startsWith("Reference") ?
                         // We want "Reference" instead of "Reference(Organisation)"
                             "Reference" :
                             node.type.substring(6)
-                    })
+                    },]
+                } else {
+                    // Don't add a second button if we already have one
+                    node.attributes[node.attributes.length-1].isProfileButton ?
+                        null :
+                        node.attributes.push({
+                            isProfileButton: true,
+                            ParentId: node.id,
+                            newProfileType: node.type.substring(6).startsWith("Reference") ?
+                            // We want "Reference" instead of "Reference(Organisation)"
+                                "Reference" :
+                                node.type.substring(6)
+                        })
+                }
             }
-            // node.attattributes.push()
+
+            const hasChildren = (node.attributes && node.attributes.length > 0)
+            const hasInputColumns = (node.inputColumns && node.inputColumns.length > 0)
+            const nodePath = [...pathAcc, node.id]
+
+            const secondaryLabel = hasInputColumns ?
+                <Icon icon='small-tick' intent={'success'}/> :
+                (
+                    hasChildren ?
+                        (
+                            FhirResourceTree.breadFirstSearchInputColumn(node) ?
+                                <Icon icon='dot' /> :
+                                null
+                        ) :
+                        null
+                )
 
             return {
                 childNodes: hasChildren ? node.attributes.map((attribute: any) => {
                     return FhirResourceTree.genObjNodes(attribute, nodePath)
                 }) : null,
-                hasCaret: hasChildren,
-                icon: node.isProfile ? 'multi-select' : (hasChildren ? 'folder-open' : 'tag'),
+                hasCaret: (hasChildren || node.type.startsWith("list::")),
+                icon: node.isProfile ? 'multi-select' : ((hasChildren || node.type.startsWith("list::")) ? 'folder-open' : 'tag'),
                 id: FhirResourceTree.getId(),
                 isExpanded: false,
                 isSelected: false,
