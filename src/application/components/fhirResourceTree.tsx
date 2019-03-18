@@ -16,6 +16,7 @@ import * as React from 'react'
 import {isNullOrUndefined} from 'util';
 
 const createAttributeProfileInAttribute = require('./graphql/mutations/createAttributeProfileInAttribute.graphql')
+const deleteAttribute = require('./graphql/mutations/deleteAttribute.graphql')
 
 
 interface INodeData {
@@ -94,8 +95,6 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
                             icon={'add'}
                             loading={loading}
                             onClick={() => {
-                                console.log(node.ParentId)
-                                console.log(node.newProfileType)
                                 createAttributeProfile({
                                     variables: {
                                         parent_attribute_id: node.ParentId,
@@ -106,7 +105,6 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
                             }}
                         />
                     }}
-
                 </Mutation>
             </div>
 
@@ -146,10 +144,33 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
                         null
                 )
 
-            const nodeLabel = <div className={'node-label'}>
-                <div>{node.name}</div>
-                <div className={'node-type'}>{node.type}</div>
-            </div>
+            const nodeLabel = node.isProfile ?
+                <div className={'node-label'}>
+                    <div>{node.name}</div>
+                    <div className={'node-type'}>{node.type}</div>
+                    <Mutation
+                        mutation={deleteAttribute}
+                    >
+                        {(deleteAttribute, { data, loading }) => {
+                            return <Button
+                                icon={'remove'}
+                                loading={loading}
+                                onClick={() => {
+                                    deleteAttribute({
+                                        variables: {
+                                            attributeId: node.id,
+                                        }
+                                    })
+                                }}
+                            />
+                        }}
+                    </Mutation>
+                </div> :
+
+                <div className={'node-label'}>
+                    <div>{node.name}</div>
+                    <div className={'node-type'}>{node.type}</div>
+                </div>
 
             if (node.type && node.type.startsWith("list::") && node.attributes) {
                 node.attributes.push({isProfileButton: true, ParentId: node.id, newProfileType: node.type.substring(6)})
