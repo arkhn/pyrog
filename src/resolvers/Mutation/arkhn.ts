@@ -95,40 +95,37 @@ export const arkhn = {
         return join
     },
     updateAttribute: checkAuth(forwardTo('binding')),
-    updateInputColumn(parent, { id, data }, context: Context) {
+    async updateInputColumn(parent, { id, data }, context: Context) {
         getUserId(context)
 
-        return context.client.updateInputColumn({
+        return await context.client.updateInputColumn({
             data,
             where: { id }
         })
     },
-    updateJoin(parent, { id, data }, context: Context) {
+    async updateJoin(parent, { id, data }, context: Context) {
         getUserId(context)
 
-        return context.client.updateJoin({
+        return await context.client.updateJoin({
             data,
             where: { id }
         })
     },
-    createResourceTreeInDatabase(parent, args, context: Context, info) {
+    createResourceTreeInDatabase(parent, { databaseId, resourceName }, context: Context) {
         getUserId(context)
 
         try {
             // TODO : most horrible code line ever, change it
-            let json_query = require('../../../../fhir-store/graphql/' + args.resource + '.json')
+            let json_query = require(`../../../../fhir-store/graphql/${resourceName}.json`)
 
             return context.client.createResource({
-                database: {
-                    connect: {
-                        name: args.database
-                    }
-                },
-                name: (<any>json_query).name,
+                database: { connect: { id: databaseId, } },
+                name: resourceName,
                 attributes: (<any>json_query).attributes,
             })
         } catch (error) {
             // TODO: return something consistent
+            console.log(error)
             console.log('Problem boy')
         }
     },
@@ -164,58 +161,4 @@ export const arkhn = {
             console.log('u wish u were a dev boy')
         }
     },
-    // async updateAttributeNoId(parent, args, context: Context, info) {
-    //     let attribute = await getAttribute(parent, {
-    //         database: args.database,
-    //         resource: args.resource,
-    //         attributePath: args.attributePath,
-    //     }, context, info)
-    //
-    //     return context.client.updateAttribute({
-    //         data: args.data,
-    //         where: {
-    //             id: attribute.id,
-    //         }
-    //     })
-    // },
-    // updateAttribute(parent, args, context: Context, info) {
-    //     return context.client.updateAttribute({
-    //         data: {
-    //             ...args.data,
-    //         },
-    //         where: {
-    //             id: args.id,
-    //         }
-    //     })
-    // },
-    // updateInputColumn(parent, args, context: Context, info) {
-    //     return context.client.updateInputColumn({
-    //         data: {
-    //             ...args.data,
-    //         },
-    //         where: {
-    //             id: args.id,
-    //         }
-    //     })
-    // },
-    // updateResource(parent, args, context: Context, info) {
-    //     return context.client.updateResource({
-    //         data: {
-    //             ...args.data,
-    //         },
-    //         where: {
-    //             id: args.id,
-    //         }
-    //     })
-    // },
-    // updateJoin(parent, args, context: Context, info) {
-    //     return context.client.updateJoin({
-    //         data: {
-    //             ...args.data,
-    //         },
-    //         where: {
-    //             id: args.id,
-    //         }
-    //     })
-    // },
 }
