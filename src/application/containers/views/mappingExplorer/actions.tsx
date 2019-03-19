@@ -22,9 +22,9 @@ export const updateAddResource = (resource: any): IAction => {
     }
 }
 
-export const rebootAddResource = (): IAction => {
+export const addResource = (): IAction => {
     return {
-        type: 'REBOOT_ADD_RESOURCE',
+        type: 'ADD_RESOURCE',
     }
 }
 

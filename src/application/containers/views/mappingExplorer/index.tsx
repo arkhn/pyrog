@@ -28,7 +28,7 @@ import {connect} from 'react-redux'
 
 // Import actions
 import {
-    rebootAddResource,
+    addResource,
     updateAddResource,
     updateFhirAttribute,
     updateFhirResource,
@@ -84,6 +84,7 @@ const arkhnLogoWhite = require("../../../../assets/img/arkhn_logo_only_white.svg
 const arkhnLogoBlack = require("../../../../assets/img/arkhn_logo_only_black.svg") as string;
 
 export interface IMappingExplorerState {
+    createdResources: number,
     selectedAddResource: {
         type: string,
         subtype: string,
@@ -151,6 +152,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
 
     public render = () => {
         const {
+            createdResources,
             data,
             dispatch,
             selectedAddResource,
@@ -649,7 +651,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                             databaseId: selectedDatabase.id,
                             // This allows to force refetch
                             // when a new resource is added.
-                            addResourceName: selectedAddResource.name,
+                            createdResources: createdResources,
                         }}
                     >
                         {({ data, loading }) => {
@@ -680,7 +682,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                                         timeout: 4000,
                                                     })
 
-                                                    dispatch(rebootAddResource())
+                                                    dispatch(addResource())
                                                 }}
                                             >
                                                 {(createResource, { data, loading }) => {

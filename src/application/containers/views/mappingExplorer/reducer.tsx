@@ -97,6 +97,7 @@ export const availableResourceNames = [
 ]
 
 const initialState: IMappingExplorerState = {
+    createdResources: 0,
     selectedAddResource: {
         type: null,
         subtype: null,
@@ -137,9 +138,10 @@ const reducer = (state = initialState, action: ISimpleAction): IMappingExplorerS
                 },
             }
 
-        case 'REBOOT_ADD_RESOURCE':
+        case 'ADD_RESOURCE':
             return {
                 ...state,
+                createdResources: state.createdResources + 1,
                 selectedAddResource: {
                     type: null,
                     subtype: null,
