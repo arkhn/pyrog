@@ -642,14 +642,15 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
             <div id='mapping-explorer-container'>
                 <div id='main-container'>
                     <Query
-                        fetchPolicy='network-only'
+                        fetchPolicy={'network-only'}
                         query={availableResources}
-                        variables={{ databaseId: selectedDatabase.id }}
-                        onCompleted={(data: any) => {
-                            console.log('fetched availableResources')
-                            console.log(data)
-                        }}
                         skip={!selectedDatabase.id}
+                        variables={{
+                            databaseId: selectedDatabase.id,
+                            // This allows to force refetch
+                            // when a new resource is added.
+                            addResourceName: selectedAddResource.name,
+                        }}
                     >
                         {({ data, loading }) => {
                             return <div id='left-part'>
@@ -678,6 +679,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                                         message: `Ressource ${data.createResourceTreeInDatabase.name} créée pour ${selectedDatabase.name}.`,
                                                         timeout: 4000,
                                                     })
+
                                                     dispatch(rebootAddResource())
                                                 }}
                                             >

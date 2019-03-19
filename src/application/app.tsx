@@ -84,20 +84,21 @@ const link = split(
 
 // Client
 const client = new ApolloClient({
+    cache: new InMemoryCache(),
+    connectToDevTools: true,
     link: ApolloLink.from(process.env.NODE_ENV === 'development' ?
         [errorLink, link] :
         [link]
     ),
-    cache: new InMemoryCache(),
-    connectToDevTools: true,
 })
 
 const token = localStorage.getItem(AUTH_TOKEN)
 
 // Render React app in DOM
+// TODO: fix bad type cast
 ReactDOM.render(
     <Provider store={store}>
-        <ApolloProvider client={client}>
+        <ApolloProvider client={client as any}>
             <Routes />
         </ApolloProvider>
     </Provider>,
