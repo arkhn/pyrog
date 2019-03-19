@@ -153,12 +153,18 @@ export const arkhn = {
             console.log('Problem boy')
         }
     },
-    deleteAttribute(parent, args, context: Context, info) {
+    async deleteAttributeProfile(parent, args, context: Context, info) {
         getUserId(context)
 
-        return context.client.deleteAttribute({
+        const attribute = await context.client.attribute({id: args.id})
+
+        if (attribute['isProfile']) {
+            return context.client.deleteAttribute({
                 id: args.id,
-        })
+            })
+        } else{
+            console.log("This attribute is not a profile. It cannot be deleted via 'deleteAttributeProfile'")
+        }
         // TODO : Reimplement Authorization for devs with new datamodel
         // if (getUserType(context) == "dev") {
         //     return context.client.deleteAttribute({
