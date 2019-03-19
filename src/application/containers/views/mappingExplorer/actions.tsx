@@ -13,6 +13,21 @@ export const updateFhirResource = (resourceId: string, resourceName: string): IA
     }
 }
 
+export const updateAddResource = (resource: any): IAction => {
+    return {
+        type: 'UPDATE_ADD_RESOURCE',
+        payload: {
+            ...resource,
+        }
+    }
+}
+
+export const addResource = (): IAction => {
+    return {
+        type: 'ADD_RESOURCE',
+    }
+}
+
 export const updateFhirAttribute = (attributeId: string, attributeName: string): IAction => {
     return {
         type: 'UPDATE_FHIR_ATTRIBUTE',

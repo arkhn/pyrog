@@ -50,21 +50,17 @@ export default class ResourceSelect extends React.Component<ISelectProps, any> {
             onChange,
         } = this.props;
 
-        return (
-            <div>
-                <TSelect<IResource>
-                    disabled={disabled}
-                    displayItem={this.displayItem}
-                    filterItems={this.filterByName}
-                    loading={loading}
-                    icon={icon}
-                    inputItem={inputItem}
-                    intent={intent}
-                    items={items}
-                    onChange={onChange}
-                    renderItem={this.renderItem}
-                />
-            </div>
-        )
+        return <TSelect<IResource>
+            disabled={disabled}
+            displayItem={this.displayItem}
+            filterItems={this.filterByName}
+            loading={loading}
+            icon={icon}
+            inputItem={inputItem}
+            intent={intent}
+            items={items}
+            onChange={onChange}
+            renderItem={this.renderItem}
+        />
     }
 }

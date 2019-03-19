@@ -1,0 +1,6 @@
+mutation createDatabase($databaseName: String!) {
+    createDatabase(databaseName: $databaseName) {
+        id
+        name
+    }
+}
