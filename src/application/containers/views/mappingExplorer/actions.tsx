@@ -22,6 +22,12 @@ export const updateAddResource = (resource: any): IAction => {
     }
 }
 
+export const rebootAddResource = (): IAction => {
+    return {
+        type: 'REBOOT_ADD_RESOURCE',
+    }
+}
+
 export const updateFhirAttribute = (attributeId: string, attributeName: string): IAction => {
     return {
         type: 'UPDATE_FHIR_ATTRIBUTE',

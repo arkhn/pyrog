@@ -28,6 +28,7 @@ import {connect} from 'react-redux'
 
 // Import actions
 import {
+    rebootAddResource,
     updateAddResource,
     updateFhirAttribute,
     updateFhirResource,
@@ -71,6 +72,7 @@ const deleteJoinAndUpdateInputColumn = require('./graphql/mutations/deleteJoinAn
 const updateJoin = require('./graphql/mutations/updateJoin.graphql')
 
 const updateAttribute = require('./graphql/mutations/updateAttribute.graphql')
+const createResourceTreeInDatabase = require('./graphql/mutations/createResourceTreeInDatabase.graphql')
 
 // Subscriptions
 const subscribeAttribute = require('./graphql/subscriptions/attribute.graphql')
@@ -116,6 +118,7 @@ const mapReduxStateToReactProps = (state : IReduxStore): IMappingExplorerViewSta
         data: state.data,
         dispatch: state.dispatch,
         selectedDatabase: state.selectedDatabase,
+        toaster: state.toaster,
     }
 }
 
@@ -639,9 +642,14 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
             <div id='mapping-explorer-container'>
                 <div id='main-container'>
                     <Query
+                        fetchPolicy='network-only'
                         query={availableResources}
-                        variables={{ database: selectedDatabase.name }}
-                        skip={!selectedDatabase.name}
+                        variables={{ databaseId: selectedDatabase.id }}
+                        onCompleted={(data: any) => {
+                            console.log('fetched availableResources')
+                            console.log(data)
+                        }}
+                        skip={!selectedDatabase.id}
                     >
                         {({ data, loading }) => {
                             return <div id='left-part'>
@@ -661,7 +669,33 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                                     dispatch(updateAddResource(resource))
                                                 }}
                                             />
-                                            <Button icon={'plus'} />
+                                            <Mutation
+                                                mutation={createResourceTreeInDatabase}
+                                                onCompleted={(data: any) => {
+                                                    this.props.toaster.show({
+                                                        icon: 'layout-hierarchy',
+                                                        intent: 'success',
+                                                        message: `Ressource ${data.createResourceTreeInDatabase.name} créée pour ${selectedDatabase.name}.`,
+                                                        timeout: 4000,
+                                                    })
+                                                    dispatch(rebootAddResource())
+                                                }}
+                                            >
+                                                {(createResource, { data, loading }) => {
+                                                    return <Button
+                                                        loading={loading}
+                                                        icon={'plus'}
+                                                        onClick={() => {
+                                                            createResource({
+                                                                variables: {
+                                                                    databaseId: selectedDatabase.id,
+                                                                    resourceName: selectedAddResource.name,
+                                                                }
+                                                            })
+                                                        }}
+                                                    />
+                                                }}
+                                            </Mutation>
                                         </ControlGroup>
                                     </FormGroup>
                                 </div>

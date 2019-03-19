@@ -137,6 +137,16 @@ const reducer = (state = initialState, action: ISimpleAction): IMappingExplorerS
                 },
             }
 
+        case 'REBOOT_ADD_RESOURCE':
+            return {
+                ...state,
+                selectedAddResource: {
+                    type: null,
+                    subtype: null,
+                    name: null,
+                },
+            }
+
         case 'UPDATE_FHIR_ATTRIBUTE':
             return {
                 ...state,

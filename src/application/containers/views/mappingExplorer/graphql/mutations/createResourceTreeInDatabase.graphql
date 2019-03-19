@@ -1,0 +1,6 @@
+mutation createResourceTreeInDatabase($databaseId: ID!, $resourceName: String!) {
+    createResourceTreeInDatabase(databaseId: $databaseId, resourceName: $resourceName) {
+        id
+        name
+    }
+}
