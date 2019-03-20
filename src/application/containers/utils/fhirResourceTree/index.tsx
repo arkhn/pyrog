@@ -1,6 +1,7 @@
 import {
     Button,
     Classes,
+    ContextMenu,
     ContextMenuTarget,
     ControlGroup,
     Icon,
@@ -14,8 +15,10 @@ import {
     Tooltip,
     Tree,
 } from '@blueprintjs/core'
+import { ApolloClient } from "apollo-client";
 import {
     Mutation,
+    withApollo,
 } from 'react-apollo'
 import * as React from 'react'
 
@@ -34,6 +37,7 @@ interface INodeData {
 }
 
 export interface IProps {
+    client?: ApolloClient<any>,
     json: any,
     onClickCallback: any,
     selectedNodeId: string,
@@ -46,39 +50,68 @@ export interface IState {
     selectedNode: ITreeNode<INodeData>,
 }
 
-@ContextMenuTarget
-export class ContextMenuExample extends React.Component<any, {}> {
+interface INodeLabelProps {
+    createProfile: any,
+    deleteAttribute: any,
+    node: any,
+}
+
+interface INodeLabelState {
+    isContextMenuOpen: boolean,
+}
+
+class NodeLabel extends React.PureComponent<INodeLabelProps, INodeLabelState> {
+    public state = { isContextMenuOpen: false }
+
     public render() {
         return (
-            <div className={'node-label'}>
+            <div className={'node-label'} onContextMenu={this.showContextMenu}>
                 <div>{this.props.node.name}</div>
                 <div className={'node-type'}>{this.props.node.type}</div>
             </div>
         )
     }
 
-    public renderContextMenu(e: React.MouseEvent<HTMLElement>) {
-        return (
+    private showContextMenu = (e: React.MouseEvent<HTMLDivElement>) => {
+        e.preventDefault()
+
+        const { node } = this.props
+
+        const menu = node.isProfile ?
             <Menu>
-                <MenuItem icon="select" text="Select all" />
-                <MenuItem icon="insert" text="Insert...">
-                    <MenuItem icon="new-object" text="Object" />
-                    <MenuItem icon="new-text-box" text="Text box" />
-                    <MenuItem icon="star" text="Astral body" />
-                </MenuItem>
-                <MenuItem icon="layout" text="Layout...">
-                    <MenuItem icon="layout-auto" text="Auto" />
-                    <MenuItem icon="layout-circle" text="Circle" />
-                    <MenuItem icon="layout-grid" text="Grid" />
-                </MenuItem>
+                <MenuItem icon={'edit'} text={'Renommer'} disabled />
+                <MenuItem icon={'duplicate'} text={'Dupliquer'} disabled />
                 <MenuDivider />
-                <MenuItem disabled={true} text={`Clicked at (${e.clientX}, ${e.clientY})`} />
-            </Menu>
-        );
+                <MenuItem
+                    icon={'trash'}
+                    intent={'danger'}
+                    onClick={() => this.props.deleteAttribute(node)}
+                    text={'Supprimer'}
+                />
+            </Menu> :
+            (
+                node.type && node.type.startsWith("list::") && node.attributes ?
+                    <Menu>
+                        <MenuItem
+                            icon={'add'}
+                            onClick={() => this.props.createProfile(node)}
+                            text={'Ajouter un profil'}
+                        />
+                    </Menu> :
+                    null
+            )
+
+        ContextMenu.show(
+            menu,
+            { left: e.clientX, top: e.clientY },
+            () => this.setState({ isContextMenuOpen: false }),
+        )
+
+        this.setState({ isContextMenuOpen: true })
     }
 }
 
-export default class FhirResourceTree extends React.Component<IProps, IState> {
+class FhirResourceTree extends React.Component<IProps, IState> {
     static id: number = 0;
 
     constructor(props: IProps) {
@@ -108,118 +141,47 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
         }
     }
 
-    private static genObjNodes = (node: any, pathAcc: string[]): ITreeNode<INodeData> => {
-        // if (node.isProfileButton) {
-        //     let newProfileName = "new_attribute"
-        //
-        //     const nodeLabel = <ControlGroup>
-        //         <InputGroup
-        //             id="static-value-input"
-        //             onChange={(event: React.FormEvent<HTMLElement>) => {
-        //                 const target = event.target as HTMLInputElement
-        //
-        //                 let newProfileName = target.value
-        //             }}
-        //             placeholder="Profile name"
-        //             value={newProfileName}
-        //         />
-        //         <Mutation
-        //             mutation={createAttributeProfileInAttribute}
-        //         >
-        //             {(createAttributeProfile, { data, loading }) => {
-        //                 return <Button
-        //                     icon={'add'}
-        //                     loading={loading}
-        //                     onClick={() => {
-        //                         createAttributeProfile({
-        //                             variables: {
-        //                                 parent_attribute_id: node.ParentId,
-        //                                 child_attribute_name: "prout",
-        //                                 child_attribute_type: node.newProfileType
-        //                             }
-        //                         })
-        //                     }}
-        //                 />
-        //             }}
-        //         </Mutation>
-        //     </ControlGroup>
-        //
-        //     return {
-        //         childNodes: null,
-        //         hasCaret: false,
-        //         icon: null,
-        //         id: null,
-        //         isExpanded: false,
-        //         isSelected: false,
-        //         label: nodeLabel,
-        //         nodeData: {
-        //             comment: null,
-        //             id: null,
-        //             isProfile: null,
-        //             name: null,
-        //             path: null,
-        //             type: null,
-        //         },
-        //         secondaryLabel: null,
-        //     }
-        // } else {
+    private static genObjNodes = (client: any, node: any, pathAcc: string[]): ITreeNode<INodeData> => {
+        const nodeLabel = (
+            <NodeLabel
+                createProfile={(node: any) => {
+                    // One puts "Reference" instead of "Reference(Organisation)"
+                    const type = node.type.substring(6).startsWith("Reference") ?
+                        "Reference" :
+                        node.type.substring(6)
 
-        const profileMenu = <Menu>
-            <MenuItem icon={'trash'} text={'Supprimer'}/>
-        </Menu>
-
-        // <Mutation
-        //     mutation={deleteAttribute}
-        // >
-        //     {(deleteAttribute, { data, loading }) => {
-        //         return <Button
-        //             icon={'remove'}
-        //             loading={loading}
-        //             onClick={() => {
-        //                 deleteAttribute({
-        //                     variables: {
-        //                         attributeId: node.id,
-        //                     }
-        //                 })
-        //             }}
-        //         />
-        //     }}
-        // </Mutation>
-
-        const nodeLabel = node.isProfile ?
-            <ContextMenuExample node={node} /> :
-            <div className={'node-label'}>
-                <div>{node.name}</div>
-                <div className={'node-type'}>{node.type}</div>
-            </div>
-
-        // Implement button for profile addition if node type is "list::*"
-        // Bugfix: there might be no 'node.attributes' if recursive query to server was not long enough
-        // if (node.type && node.type.startsWith("list::") && node.attributes) {
-        //     //there will be no attributes if we deleted all profiles within list
-        //     if (node.attributes.length == 0) {
-        //         node.attributes = [{
-        //             isProfileButton: true,
-        //             ParentId: node.id,
-        //             newProfileType: node.type.substring(6).startsWith("Reference") ?
-        //             // We want "Reference" instead of "Reference(Organisation)"
-        //                 "Reference" :
-        //                 node.type.substring(6)
-        //         },]
-        //     } else {
-        //         // Don't add a second button if we already have one
-        //         node.attributes[node.attributes.length-1].isProfileButton ?
-        //             null :
-        //             node.attributes.push({
-        //                 isProfileButton: true,
-        //                 ParentId: node.id,
-        //                 newProfileType: node.type.substring(6).startsWith("Reference") ?
-        //                 // We want "Reference" instead of "Reference(Organisation)"
-        //                     "Reference" :
-        //                     node.type.substring(6)
-        //             })
-        //     }
-        // }
+                    client.mutate({
+                        mutation: createAttributeProfileInAttribute,
+                        variables: {
+                            parentAttributeId: node.id,
+                            attributeName: `${type}_${node.attributes.length}`,
+                            attributeType: type,
+                        }
+                    })
+                    .then((response: any) => {
+                        console.log(response)
+                    })
+                    .catch((error: any) => {
+                        console.log(error)
+                    })
+                }}
+                deleteAttribute={(node: any) => {
+                    client.mutate({
+                        mutation: deleteAttribute,
+                        variables: {
+                            attributeId: node.id,
+                        }
+                    })
+                    .then((response: any) => {
+                        console.log(response)
+                    })
+                    .catch((error: any) => {
+                        console.log(error)
+                    })
+                }}
+                node={node}
+            />
+        )
 
         const hasChildren = (node.attributes && node.attributes.length > 0)
         const hasInputColumns = (node.inputColumns && node.inputColumns.length > 0)
@@ -239,7 +201,7 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
 
         return {
             childNodes: hasChildren ? node.attributes.map((attribute: any) => {
-                return FhirResourceTree.genObjNodes(attribute, nodePath)
+                return FhirResourceTree.genObjNodes(client, attribute, nodePath)
             }) : null,
             hasCaret: (hasChildren || node.type.startsWith("list::")),
             icon: node.isProfile ? 'multi-select' : ((hasChildren || node.type.startsWith("list::")) ? 'folder-open' : 'tag'),
@@ -276,7 +238,7 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
         if (props.json !== state.renderJson) {
             try {
                 let nodes = props.json.map((attribute: any) => {
-                    return FhirResourceTree.genObjNodes(attribute, [])
+                    return FhirResourceTree.genObjNodes(props.client, attribute, [])
                 })
 
                 const selectedNode = nodes.filter((node: ITreeNode<INodeData>) => {
@@ -354,3 +316,5 @@ export default class FhirResourceTree extends React.Component<IProps, IState> {
         );
     }
 }
+
+export default withApollo(FhirResourceTree as any) as any

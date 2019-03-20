@@ -37,13 +37,14 @@ import { availableResourceNames } from './reducer'
 
 // Import components
 import ColumnPicker from '../../../components/columnPicker'
-import FhirResourceTree from '../../../components/fhirResourceTree'
 import InputColumnsTable from '../../../components/inputColumnsTable'
 import StringSelect from '../../../components/selects/stringSelect'
 import TSelect from '../../../components/selects/TSelect'
 import DatabaseSelect from '../../../components/selects/databaseSelect'
 import ResourceSelect from '../../../components/selects/resourceSelect'
 import AddResourceSelect from '../../../components/selects/addResourceSelect'
+// Import containers
+import FhirResourceTree from '../../utils/fhirResourceTree'
 import Navbar from '../../utils/navbar'
 
 // Import types
