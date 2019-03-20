@@ -5,7 +5,8 @@ import {
     Context,
     getAttribute,
     getUserId,
-    getUserType
+    getUserType,
+    PermissionError,
 } from '../../utils'
 
 export const arkhn = {
@@ -129,36 +130,39 @@ export const arkhn = {
             console.log('Problem boy')
         }
     },
-    createAttributeProfileInAttribute(parent, args, context: Context, info) {
+    createAttributeProfileInAttribute(parent, { parentAttributeId, attributeName, attributeType }, context: Context, info) {
         getUserId(context)
 
         try {
             // TODO : most horrible code line ever, change it
-            let json_query = require('../../../../fhir-store/graphql/' + args.child_attribute_type + '.json')
+            let json_query = require(`../../../../fhir-store/graphql/${attributeType}.json`)
 
             return context.client.createAttribute({
                 attribute: {
-                        connect: {
-                            id: args.parent_attribute_id
-                        }
-                    },
-                    name: args.child_attribute_name,
-                    attributes: (<any>json_query).attributes,
+                    connect: {
+                        id: parentAttributeId,
+                    }
+                },
+                isProfile: true,
+                name: attributeName,
+                type: attributeType,
+                attributes: (<any>json_query).attributes,
             })
         } catch (error) {
             // TODO: return something consistent
-            console.log('Problem boy')
+            console.log(error)
         }
     },
-    deleteAttribute(parent, args, context: Context, info) {
-        getUserId(context)
+    async deleteAttribute(parent, { id }, context: Context, info) {
+        const userId = getUserId(context)
+        const user = await context.client.user({ id: userId })
 
-        if (getUserType(context) == "dev") {
-            return context.client.deleteAttribute({
-                id: args.id,
-            })}
-        else {
-            console.log('u wish u were a dev boy')
-        }
+        // TODO: check role
+        // if (user.role == "ADMIN") {
+        //     return context.client.deleteAttribute({ id: id })
+        // } else {
+        //     throw new PermissionError()
+        // }
+        return context.client.deleteAttribute({ id: id })
     },
 }

@@ -27,7 +27,7 @@ type Mutation {
     updateJoin(id: ID!, data: JoinUpdateInput): Join!
 
     createResourceTreeInDatabase(databaseId: ID!, resourceName: String!): Resource!
-    createAttributeProfileInAttribute(parent_attribute_id: ID!, child_attribute_name: String!, child_attribute_type: String!): Attribute!
+    createAttributeProfileInAttribute(parentAttributeId: ID!, attributeName: String!, attributeType: String!): Attribute!
     deleteAttribute(id: ID!): Attribute!
 
     signup(email: String!, password: String!, name: String!): AuthPayload!
