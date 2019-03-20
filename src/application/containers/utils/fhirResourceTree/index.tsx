@@ -37,7 +37,9 @@ interface INodeData {
 }
 
 export interface IProps {
+    addProfileCallback: any,
     client?: ApolloClient<any>,
+    deleteProfileCallback: any,
     json: any,
     onClickCallback: any,
     selectedNodeId: string,
@@ -141,7 +143,7 @@ class FhirResourceTree extends React.Component<IProps, IState> {
         }
     }
 
-    private static genObjNodes = (client: any, node: any, pathAcc: string[]): ITreeNode<INodeData> => {
+    private static genObjNodes = (client: any, addProfileCallback: any, deleteProfileCallback: any, node: any, pathAcc: string[]): ITreeNode<INodeData> => {
         const nodeLabel = (
             <NodeLabel
                 createProfile={(node: any) => {
@@ -159,7 +161,7 @@ class FhirResourceTree extends React.Component<IProps, IState> {
                         }
                     })
                     .then((response: any) => {
-                        console.log(response)
+                        addProfileCallback(response)
                     })
                     .catch((error: any) => {
                         console.log(error)
@@ -173,7 +175,7 @@ class FhirResourceTree extends React.Component<IProps, IState> {
                         }
                     })
                     .then((response: any) => {
-                        console.log(response)
+                        deleteProfileCallback(response)
                     })
                     .catch((error: any) => {
                         console.log(error)
@@ -201,7 +203,7 @@ class FhirResourceTree extends React.Component<IProps, IState> {
 
         return {
             childNodes: hasChildren ? node.attributes.map((attribute: any) => {
-                return FhirResourceTree.genObjNodes(client, attribute, nodePath)
+                return FhirResourceTree.genObjNodes(client, addProfileCallback, deleteProfileCallback, attribute, nodePath)
             }) : null,
             hasCaret: (hasChildren || node.type.startsWith("list::")),
             icon: node.isProfile ? 'multi-select' : ((hasChildren || node.type.startsWith("list::")) ? 'folder-open' : 'tag'),
@@ -238,7 +240,7 @@ class FhirResourceTree extends React.Component<IProps, IState> {
         if (props.json !== state.renderJson) {
             try {
                 let nodes = props.json.map((attribute: any) => {
-                    return FhirResourceTree.genObjNodes(props.client, attribute, [])
+                    return FhirResourceTree.genObjNodes(props.client, props.addProfileCallback, props.deleteProfileCallback, attribute, [])
                 })
 
                 const selectedNode = nodes.filter((node: ITreeNode<INodeData>) => {

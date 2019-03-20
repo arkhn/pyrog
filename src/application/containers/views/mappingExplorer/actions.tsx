@@ -28,6 +28,18 @@ export const addResource = (): IAction => {
     }
 }
 
+export const addProfile = (): IAction => {
+    return {
+        type: 'ADD_PROFILE',
+    }
+}
+
+export const deleteProfile = (): IAction => {
+    return {
+        type: 'DELETE_PROFILE',
+    }
+}
+
 export const updateFhirAttribute = (attributeId: string, attributeName: string): IAction => {
     return {
         type: 'UPDATE_FHIR_ATTRIBUTE',

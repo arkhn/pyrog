@@ -97,6 +97,7 @@ export const availableResourceNames = [
 ]
 
 const initialState: IMappingExplorerState = {
+    createdProfiles: 0,
     createdResources: 0,
     selectedAddResource: {
         type: null,
@@ -147,6 +148,18 @@ const reducer = (state = initialState, action: ISimpleAction): IMappingExplorerS
                     subtype: null,
                     name: null,
                 },
+            }
+
+        case 'ADD_PROFILE':
+            return {
+                ...state,
+                createdProfiles: state.createdProfiles + 1,
+            }
+
+        case 'DELETE_PROFILE':
+            return {
+                ...state,
+                createdProfiles: state.createdProfiles - 1,
             }
 
         case 'UPDATE_FHIR_ATTRIBUTE':

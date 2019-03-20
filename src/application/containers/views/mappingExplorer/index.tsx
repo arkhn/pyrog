@@ -28,7 +28,9 @@ import {connect} from 'react-redux'
 
 // Import actions
 import {
+    addProfile,
     addResource,
+    deleteProfile,
     updateAddResource,
     updateFhirAttribute,
     updateFhirResource,
@@ -85,6 +87,7 @@ const arkhnLogoWhite = require("../../../../assets/img/arkhn_logo_only_white.svg
 const arkhnLogoBlack = require("../../../../assets/img/arkhn_logo_only_black.svg") as string;
 
 export interface IMappingExplorerState {
+    createdProfiles: number,
     createdResources: number,
     selectedAddResource: {
         type: string,
@@ -153,6 +156,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
 
     public render = () => {
         const {
+            createdProfiles,
             createdResources,
             data,
             dispatch,
@@ -623,14 +627,20 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
         </div>
 
         const fhirResourceTree = <Query
+            fetchPolicy={'network-only'}
             query={resourceAttributeTree}
-            variables={{ resourceId: selectedFhirResource.id }}
+            variables={{
+                createdProfiles: createdProfiles,
+                resourceId: selectedFhirResource.id,
+            }}
             skip={!selectedDatabase || !selectedFhirResource.id}
         >
             {({ data, loading }) => {
                 return loading ?
                     <Spinner /> :
                     <FhirResourceTree
+                        addProfileCallback={(response: any) => { dispatch(addProfile()) }}
+                        deleteProfileCallback={(response: any) => { dispatch(deleteProfile()) }}
                         json={data.resource.attributes}
                         onClickCallback={(nodeData: any) => {
                             dispatch(updateFhirAttribute(nodeData.id, nodeData.name))
