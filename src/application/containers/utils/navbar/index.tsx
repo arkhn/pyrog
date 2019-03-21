@@ -108,6 +108,7 @@ class Navbar extends React.Component<IProps, IState> {
 
         const logo = <BPNavbar.Heading>
             <span dangerouslySetInnerHTML={{__html: arkhnLogoWhite}} />
+            <h2>PYROG</h2>
         </BPNavbar.Heading>
 
         const header = () => {
