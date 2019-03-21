@@ -163,7 +163,7 @@ class FhirResourceTree extends React.Component<IProps, IState> {
                 <NodeLabel
                     createProfile={(node: any) => {
                         // One puts "Reference" instead of "Reference(Organisation)"
-                        const type = node.type.substring(6).startsWith("Reference") ?
+                        const type = (node.type && node.type.substring(6).startsWith("Reference")) ?
                             "Reference" :
                             node.type.substring(6)
 
@@ -215,12 +215,11 @@ class FhirResourceTree extends React.Component<IProps, IState> {
                         ) :
                         null
                 )
-
             return {
                 childNodes: hasChildren ? node.attributes.map((attribute: any) => {
                     return genObjNodes(attribute, nodePath)
                 }) : null,
-                hasCaret: (hasChildren || node.type.startsWith("list::")),
+                hasCaret: hasChildren,
                 icon: node.isProfile ? 'multi-select' : (hasChildren ? 'folder-open' : 'tag'),
                 id: FhirResourceTree.getId(),
                 isExpanded: false,

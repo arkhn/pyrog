@@ -21,6 +21,21 @@ fragment resourceRecAttributes on Resource {
                                     ...entireAttribute
                                     attributes {
                                         ...entireAttribute
+                                        attributes {
+                                            ...entireAttribute
+                                            attributes {
+                                                ...entireAttribute
+                                                attributes {
+                                                    ...entireAttribute
+                                                    attributes {
+                                                        ...entireAttribute
+                                                        attributes {
+                                                            ...entireAttribute
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }
