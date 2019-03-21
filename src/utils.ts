@@ -65,6 +65,12 @@ export const getUserType = (context: Context) => {
 
 export class AuthError extends Error {
     constructor() {
+        super('Not authenticated')
+    }
+}
+
+export class PermissionError extends Error {
+    constructor() {
         super('Not authorized')
     }
 }

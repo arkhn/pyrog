@@ -19,21 +19,16 @@ export const Query = {
 
         return context.client.databases()
     },
-    availableResources(parent, { database }, context: Context) {
+    availableResources(parent, { databaseId }, context: Context) {
         getUserId(context)
 
-        return context.client.database({
-            name: database,
-        })
-        .resources()
+        return context.client.database({ id: databaseId }).resources()
     },
     async recAvailableAttributes(parent, { resourceId }, context: Context) {
         getUserId(context)
 
         const directAttributes = await context.client
-            .resource({
-                id: resourceId,
-            })
+            .resource({ id: resourceId })
             .attributes()
 
         return directAttributes.map(async (attribute) => {
@@ -106,40 +101,4 @@ export const Query = {
 
         return [numberMappedRessources, numberMappedAttributes]
     },
-    // async countMappedAttributes(parent, { databaseId }, context: Context) {
-    //     const id = getUserId(context)
-    //
-    //     const resources =  await context.client.database({
-    //         id: databaseId
-    //     })
-    //     .resources()
-    //
-    //     const recFunction = async (attribute) => {
-    //         const inputColumns = await context.client.attribute({id: attribute.id}).inputColumns()
-    //
-    //         if (inputColumns.length > 0) {
-    //             return 1
-    //         } else {
-    //             const attributes = await context.client.attribute({id: attribute.id}).attributes()
-    //
-    //             let a = 0
-    //             for (let childAttribute of attributes) {
-    //                 a += await recFunction(childAttribute)
-    //             }
-    //
-    //             return a
-    //         }
-    //     }
-    //
-    //     let r = 0
-    //     for (let resource of resources) {
-    //         const attributes = await context.client.resource({id: resource.id}).attributes()
-    //
-    //         for (let attribute of attributes) {
-    //             r += await recFunction(attribute)
-    //         }
-    //     }
-    //
-    //     return r
-    // }
 }

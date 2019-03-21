@@ -5,10 +5,18 @@ import {
     Context,
     getAttribute,
     getUserId,
-    getUserType
+    getUserType,
+    PermissionError,
 } from '../../utils'
 
 export const arkhn = {
+    async createDatabase(parent, {databaseName }, context: Context) {
+        getUserId(context)
+
+        return await context.client.createDatabase({
+            name: databaseName,
+        })
+    },
     // createInputColumnViaAttribute et deleteInputColumnViaAttribute
     // sont construite de sorte à créer ou supprimer une inputColumn
     // à travers son attribut parent directement.
@@ -88,144 +96,73 @@ export const arkhn = {
         return join
     },
     updateAttribute: checkAuth(forwardTo('binding')),
-    updateInputColumn(parent, { id, data }, context: Context) {
+    async updateInputColumn(parent, { id, data }, context: Context) {
         getUserId(context)
 
-        return context.client.updateInputColumn({
+        return await context.client.updateInputColumn({
             data,
             where: { id }
         })
     },
-    updateJoin(parent, { id, data }, context: Context) {
+    async updateJoin(parent, { id, data }, context: Context) {
         getUserId(context)
 
-        return context.client.updateJoin({
+        return await context.client.updateJoin({
             data,
             where: { id }
         })
     },
-    createResourceTreeInDatabase(parent, args, context: Context, info) {
+    createResourceTreeInDatabase(parent, { databaseId, resourceName }, context: Context) {
         getUserId(context)
 
         try {
             // TODO : most horrible code line ever, change it
-            let json_query = require('../../../../fhir-store/graphql/' + args.resource + '.json')
+            let json_query = require(`../../../../fhir-store/graphql/${resourceName}.json`)
 
             return context.client.createResource({
-                database: {
-                    connect: {
-                        name: args.database
-                    }
-                },
-                name: (<any>json_query).name,
+                database: { connect: { id: databaseId, } },
+                name: resourceName,
                 attributes: (<any>json_query).attributes,
             })
         } catch (error) {
             // TODO: return something consistent
+            console.log(error)
             console.log('Problem boy')
         }
     },
-    async createAttributeProfileInAttribute(parent, args, context: Context, info) {
+    createAttributeProfileInAttribute(parent, { parentAttributeId, attributeName, attributeType }, context: Context, info) {
         getUserId(context)
 
         try {
             // TODO : most horrible code line ever, change it
-            let json_query = require('../../../../fhir-store/graphql/' + args.child_attribute_type + '.json')
+            let json_query = require(`../../../../fhir-store/graphql/${attributeType}.json`)
 
-            const createdAttribute = await context.client.createAttribute({
+            return context.client.createAttribute({
                 attribute: {
-                        connect: {
-                            id: args.parent_attribute_id
-                        }
-                    },
-                    name: args.child_attribute_name,
-                    attributes: (<any>json_query).attributes,
+                    connect: {
+                        id: parentAttributeId,
+                    }
+                },
+                isProfile: true,
+                name: attributeName,
+                type: attributeType,
+                attributes: (<any>json_query).attributes,
             })
-
-            const turnToProfile = await context.client.updateAttribute({
-                    data: {isProfile: true},
-                    where: { id: createdAttribute.id }
-                })
-
-            return createdAttribute
         } catch (error) {
             // TODO: return something consistent
-            console.log('Problem boy')
+            console.log(error)
         }
     },
-    async deleteAttributeProfile(parent, args, context: Context, info) {
-        getUserId(context)
+    async deleteAttribute(parent, { id }, context: Context, info) {
+        const userId = getUserId(context)
+        const user = await context.client.user({ id: userId })
 
-        const attribute = await context.client.attribute({id: args.id})
-
-        if (attribute['isProfile']) {
-            return context.client.deleteAttribute({
-                id: args.id,
-            })
-        } else{
-            console.log("This attribute is not a profile. It cannot be deleted via 'deleteAttributeProfile'")
-        }
-        // TODO : Reimplement Authorization for devs with new datamodel
-        // if (getUserType(context) == "dev") {
-        //     return context.client.deleteAttribute({
-        //         id: args.id,
-        //     })}
-        // else {
-        //     console.log('u wish u were a dev boy')
+        // TODO: check role
+        // if (user.role == "ADMIN") {
+        //     return context.client.deleteAttribute({ id: id })
+        // } else {
+        //     throw new PermissionError()
         // }
+        return context.client.deleteAttribute({ id: id })
     },
-    // async updateAttributeNoId(parent, args, context: Context, info) {
-    //     let attribute = await getAttribute(parent, {
-    //         database: args.database,
-    //         resource: args.resource,
-    //         attributePath: args.attributePath,
-    //     }, context, info)
-    //
-    //     return context.client.updateAttribute({
-    //         data: args.data,
-    //         where: {
-    //             id: attribute.id,
-    //         }
-    //     })
-    // },
-    // updateAttribute(parent, args, context: Context, info) {
-    //     return context.client.updateAttribute({
-    //         data: {
-    //             ...args.data,
-    //         },
-    //         where: {
-    //             id: args.id,
-    //         }
-    //     })
-    // },
-    // updateInputColumn(parent, args, context: Context, info) {
-    //     return context.client.updateInputColumn({
-    //         data: {
-    //             ...args.data,
-    //         },
-    //         where: {
-    //             id: args.id,
-    //         }
-    //     })
-    // },
-    // updateResource(parent, args, context: Context, info) {
-    //     return context.client.updateResource({
-    //         data: {
-    //             ...args.data,
-    //         },
-    //         where: {
-    //             id: args.id,
-    //         }
-    //     })
-    // },
-    // updateJoin(parent, args, context: Context, info) {
-    //     return context.client.updateJoin({
-    //         data: {
-    //             ...args.data,
-    //         },
-    //         where: {
-    //             id: args.id,
-    //         }
-    //     })
-    // },
 }

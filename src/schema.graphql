@@ -7,7 +7,7 @@ type Query {
 
     # CLIENT QUERIES
     allDatabases: [Database!]!
-    availableResources(database: String!): [Resource!]
+    availableResources(databaseId: ID!): [Resource!]
     recAvailableAttributes(resourceId: ID!): [Attribute!]
     me: User
     isAuthenticated: Boolean!
@@ -16,6 +16,7 @@ type Query {
 }
 
 type Mutation {
+    createDatabase(databaseName: String!): Database!
     createInputColumnAndUpdateAttribute(attributeId: ID!, data: InputColumnCreateWithoutAttributeInput): InputColumn!
     deleteInputColumnAndUpdateAttribute(attributeId: ID!, inputColumnId: ID!): InputColumn!
     createJoinAndUpdateInputColumn(inputColumnId: ID!, data: JoinCreateWithoutInputColumnInput): Join!
@@ -25,9 +26,9 @@ type Mutation {
     updateInputColumn(id: ID!, data: InputColumnUpdateInput): InputColumn!
     updateJoin(id: ID!, data: JoinUpdateInput): Join!
 
-    createResourceTreeInDatabase(database: String!, resource: String!): Resource!
-    createAttributeProfileInAttribute(parent_attribute_id: ID!, child_attribute_name: String!, child_attribute_type: String!): Attribute!
-    deleteAttributeProfile(id: ID!): Attribute!
+    createResourceTreeInDatabase(databaseId: ID!, resourceName: String!): Resource!
+    createAttributeProfileInAttribute(parentAttributeId: ID!, attributeName: String!, attributeType: String!): Attribute!
+    deleteAttribute(id: ID!): Attribute!
 
     signup(email: String!, password: String!, name: String!): AuthPayload!
     login(email: String!, password: String!): AuthPayload!
