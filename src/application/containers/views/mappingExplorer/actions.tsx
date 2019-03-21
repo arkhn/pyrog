@@ -40,6 +40,24 @@ export const deleteProfile = (): IAction => {
     }
 }
 
+export const nodeCollapse = (node: any): IAction => {
+    return {
+        type: 'NODE_COLLAPSE',
+        payload: {
+            ...node,
+        }
+    }
+}
+
+export const nodeExpand = (node: any): IAction => {
+    return {
+        type: 'NODE_EXPAND',
+        payload: {
+            ...node,
+        }
+    }
+}
+
 export const updateFhirAttribute = (attributeId: string, attributeName: string): IAction => {
     return {
         type: 'UPDATE_FHIR_ATTRIBUTE',

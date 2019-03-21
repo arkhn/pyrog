@@ -99,6 +99,7 @@ export const availableResourceNames = [
 const initialState: IMappingExplorerState = {
     createdProfiles: 0,
     createdResources: 0,
+    expandedAttributesIdList: [] as string[],
     selectedAddResource: {
         type: null,
         subtype: null,
@@ -160,6 +161,18 @@ const reducer = (state = initialState, action: ISimpleAction): IMappingExplorerS
             return {
                 ...state,
                 createdProfiles: state.createdProfiles - 1,
+            }
+
+        case 'NODE_COLLAPSE':
+            return {
+                ...state,
+                expandedAttributesIdList: state.expandedAttributesIdList.filter((item: any) => item !== action.payload.nodeData.id)
+            }
+
+        case 'NODE_EXPAND':
+            return {
+                ...state,
+                expandedAttributesIdList: [...state.expandedAttributesIdList, action.payload.nodeData.id]
             }
 
         case 'UPDATE_FHIR_ATTRIBUTE':

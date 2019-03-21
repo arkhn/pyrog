@@ -31,6 +31,8 @@ import {
     addProfile,
     addResource,
     deleteProfile,
+    nodeCollapse,
+    nodeExpand,
     updateAddResource,
     updateFhirAttribute,
     updateFhirResource,
@@ -89,6 +91,7 @@ const arkhnLogoBlack = require("../../../../assets/img/arkhn_logo_only_black.svg
 export interface IMappingExplorerState {
     createdProfiles: number,
     createdResources: number,
+    expandedAttributesIdList: string[],
     selectedAddResource: {
         type: string,
         subtype: string,
@@ -641,6 +644,9 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                     <FhirResourceTree
                         addProfileCallback={(response: any) => { dispatch(addProfile()) }}
                         deleteProfileCallback={(response: any) => { dispatch(deleteProfile()) }}
+                        expandedAttributesIdList={this.props.expandedAttributesIdList}
+                        nodeCollapseCallback={(node: any) => dispatch(nodeCollapse(node))}
+                        nodeExpandCallback={(node: any) => dispatch(nodeExpand(node))}
                         json={data.resource.attributes}
                         onClickCallback={(nodeData: any) => {
                             dispatch(updateFhirAttribute(nodeData.id, nodeData.name))

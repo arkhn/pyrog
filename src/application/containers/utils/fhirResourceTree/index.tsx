@@ -40,6 +40,9 @@ export interface IProps {
     addProfileCallback: any,
     client?: ApolloClient<any>,
     deleteProfileCallback: any,
+    expandedAttributesIdList: string[],
+    nodeCollapseCallback: any,
+    nodeExpandCallback: any,
     json: any,
     onClickCallback: any,
     selectedNodeId: string,
@@ -117,7 +120,7 @@ class FhirResourceTree extends React.Component<IProps, IState> {
     static id: number = 0;
 
     constructor(props: IProps) {
-        super(props);
+        super(props)
         this.state = {
             isBroken: false,
             nodes: [],
@@ -143,88 +146,6 @@ class FhirResourceTree extends React.Component<IProps, IState> {
         }
     }
 
-    private static genObjNodes = (client: any, addProfileCallback: any, deleteProfileCallback: any, node: any, pathAcc: string[]): ITreeNode<INodeData> => {
-        const nodeLabel = (
-            <NodeLabel
-                createProfile={(node: any) => {
-                    // One puts "Reference" instead of "Reference(Organisation)"
-                    const type = node.type.substring(6).startsWith("Reference") ?
-                        "Reference" :
-                        node.type.substring(6)
-
-                    client.mutate({
-                        mutation: createAttributeProfileInAttribute,
-                        variables: {
-                            parentAttributeId: node.id,
-                            attributeName: `${type}_${node.attributes.length}`,
-                            attributeType: type,
-                        }
-                    })
-                    .then((response: any) => {
-                        addProfileCallback(response)
-                    })
-                    .catch((error: any) => {
-                        console.log(error)
-                    })
-                }}
-                deleteAttribute={(node: any) => {
-                    client.mutate({
-                        mutation: deleteAttribute,
-                        variables: {
-                            attributeId: node.id,
-                        }
-                    })
-                    .then((response: any) => {
-                        deleteProfileCallback(response)
-                    })
-                    .catch((error: any) => {
-                        console.log(error)
-                    })
-                }}
-                node={node}
-            />
-        )
-
-        const hasChildren = (node.attributes && node.attributes.length > 0)
-        const hasInputColumns = (node.inputColumns && node.inputColumns.length > 0)
-        const nodePath = [...pathAcc, node.id]
-
-        const secondaryLabel = hasInputColumns ?
-            <Icon icon='small-tick' intent={'success'}/> :
-            (
-                hasChildren ?
-                    (
-                        FhirResourceTree.breadFirstSearchInputColumn(node) ?
-                            <Icon icon='dot' /> :
-                            null
-                    ) :
-                    null
-            )
-
-        return {
-            childNodes: hasChildren ? node.attributes.map((attribute: any) => {
-                return FhirResourceTree.genObjNodes(client, addProfileCallback, deleteProfileCallback, attribute, nodePath)
-            }) : null,
-            hasCaret: (hasChildren || node.type.startsWith("list::")),
-            icon: node.isProfile ? 'multi-select' : ((hasChildren || node.type.startsWith("list::")) ? 'folder-open' : 'tag'),
-            id: FhirResourceTree.getId(),
-            isExpanded: false,
-            isSelected: false,
-            label: node.comment ?
-                <Tooltip content={node.comment}>{nodeLabel}</Tooltip> :
-                nodeLabel,
-            nodeData: {
-                comment: node.comment,
-                id: node.id,
-                isProfile: node.isProfile,
-                name: node.name,
-                path: nodePath,
-                type: node.type,
-            },
-            secondaryLabel: secondaryLabel,
-        }
-    }
-
     private static forEachNode(nodes: ITreeNode[], callback: (node: ITreeNode) => void) {
         if (nodes == null) {
             return;
@@ -237,10 +158,97 @@ class FhirResourceTree extends React.Component<IProps, IState> {
     }
 
     static getDerivedStateFromProps(props: IProps, state: IState) {
+        const genObjNodes = (node: any, pathAcc: string[]): ITreeNode<INodeData> => {
+            const nodeLabel = (
+                <NodeLabel
+                    createProfile={(node: any) => {
+                        // One puts "Reference" instead of "Reference(Organisation)"
+                        const type = node.type.substring(6).startsWith("Reference") ?
+                            "Reference" :
+                            node.type.substring(6)
+
+                        props.client.mutate({
+                            mutation: createAttributeProfileInAttribute,
+                            variables: {
+                                parentAttributeId: node.id,
+                                attributeName: `${type}_${node.attributes.length}`,
+                                attributeType: type,
+                            }
+                        })
+                        .then((response: any) => {
+                            props.addProfileCallback(response)
+                        })
+                        .catch((error: any) => {
+                            console.log(error)
+                        })
+                    }}
+                    deleteAttribute={(node: any) => {
+                        props.client.mutate({
+                            mutation: deleteAttribute,
+                            variables: {
+                                attributeId: node.id,
+                            }
+                        })
+                        .then((response: any) => {
+                            props.deleteProfileCallback(response)
+                        })
+                        .catch((error: any) => {
+                            console.log(error)
+                        })
+                    }}
+                    node={node}
+                />
+            )
+
+            const hasChildren = (node.attributes && node.attributes.length > 0)
+            const hasInputColumns = (node.inputColumns && node.inputColumns.length > 0)
+            const nodePath = [...pathAcc, node.id]
+
+            const secondaryLabel = hasInputColumns ?
+                <Icon icon='small-tick' intent={'success'}/> :
+                (
+                    hasChildren ?
+                        (
+                            FhirResourceTree.breadFirstSearchInputColumn(node) ?
+                                <Icon icon='dot' /> :
+                                null
+                        ) :
+                        null
+                )
+
+            return {
+                childNodes: hasChildren ? node.attributes.map((attribute: any) => {
+                    return genObjNodes(attribute, nodePath)
+                }) : null,
+                hasCaret: (hasChildren || node.type.startsWith("list::")),
+                icon: node.isProfile ? 'multi-select' : (hasChildren ? 'folder-open' : 'tag'),
+                id: FhirResourceTree.getId(),
+                isExpanded: false,
+                isSelected: false,
+                label: node.comment ?
+                    <Tooltip
+                        boundary={'viewport'}
+                        content={node.comment}
+                    >
+                        {nodeLabel}
+                    </Tooltip> :
+                    nodeLabel,
+                nodeData: {
+                    comment: node.comment,
+                    id: node.id,
+                    isProfile: node.isProfile,
+                    name: node.name,
+                    path: nodePath,
+                    type: node.type,
+                },
+                secondaryLabel: secondaryLabel,
+            }
+        }
+
         if (props.json !== state.renderJson) {
             try {
                 let nodes = props.json.map((attribute: any) => {
-                    return FhirResourceTree.genObjNodes(props.client, props.addProfileCallback, props.deleteProfileCallback, attribute, [])
+                    return genObjNodes(attribute, [])
                 })
 
                 const selectedNode = nodes.filter((node: ITreeNode<INodeData>) => {
@@ -251,7 +259,7 @@ class FhirResourceTree extends React.Component<IProps, IState> {
                     node.isSelected = node.nodeData.id == props.selectedNodeId
                     node.isExpanded = selectedNode ?
                         selectedNode.nodeData.path.indexOf(node.nodeData.id) != -1 :
-                        false
+                        props.expandedAttributesIdList.indexOf(node.nodeData.id) >= 0
                 })
 
                 return {
@@ -275,13 +283,15 @@ class FhirResourceTree extends React.Component<IProps, IState> {
     }
 
     private handleNodeCollapse = (node: ITreeNode<INodeData>) => {
-        node.isExpanded = false;
-        this.setState(this.state);
+        node.isExpanded = false
+        this.setState(this.state)
+        this.props.nodeCollapseCallback(node)
     }
 
     private handleNodeExpand = (node: ITreeNode<INodeData>) => {
-        node.isExpanded = true;
-        this.setState(this.state);
+        node.isExpanded = true
+        this.setState(this.state)
+        this.props.nodeExpandCallback(node)
     }
 
     private handleNodeClick = (node: ITreeNode<INodeData>, _nodePath: number[], e: React.MouseEvent<HTMLElement>) => {
