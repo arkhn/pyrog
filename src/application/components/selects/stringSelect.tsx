@@ -45,21 +45,17 @@ export default class StringSelect extends React.Component<ISelectProps, any> {
             onChange,
         } = this.props;
 
-        return (
-            <div>
-                <TSelect<string>
-                    disabled={disabled}
-                    displayItem={this.displayItem}
-                    filterItems={this.filterByName}
-                    loading={loading}
-                    icon={icon}
-                    inputItem={inputItem}
-                    intent={intent}
-                    items={items}
-                    onChange={onChange}
-                    renderItem={this.renderItem}
-                />
-            </div>
-        )
+        return <TSelect<string>
+            disabled={disabled}
+            displayItem={this.displayItem}
+            filterItems={this.filterByName}
+            loading={loading}
+            icon={icon}
+            inputItem={inputItem}
+            intent={intent}
+            items={items}
+            onChange={onChange}
+            renderItem={this.renderItem}
+        />
     }
 }

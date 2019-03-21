@@ -1,5 +1,5 @@
-query availableResources($database: String!) {
-    availableResources(database: $database) {
+query availableResources($databaseId: ID!) {
+    availableResources(databaseId: $databaseId) {
         id
         name
     }

@@ -13,6 +13,7 @@ import * as React from 'react'
 import {
     Mutation,
     Query,
+    withApollo,
 } from 'react-apollo'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
@@ -36,6 +37,9 @@ import './style.less'
 
 // Queries
 const allDatabases = require('./graphql/queries/allDatabases.graphql')
+
+// Mutations
+const createDatabase = require('./graphql/mutations/createDatabase.graphql')
 
 export interface INewSourceState {
 
@@ -140,18 +144,38 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
                 }), key)
             }
         }).then((response: any) => {
-            this.props.toaster.show(renderToastProps({
-                message: response.data.message,
-                success: response.data.success,
-            }), key)
-
+            // Create new source in Graphql
             if (response.data.success) {
-                this.setState({
-                    ...this.state,
-                    isUploading: false,
-                })
+                this.props.client
+                    .mutate({
+                        mutation: createDatabase,
+                        variables: {
+                            databaseName: this.state.sourceName,
+                        },
+                    })
+                    .then((graphqlResponse: any) => {
+                        // After source is created,
+                        // redirect to /sources page.
+                        this.props.toaster.show(renderToastProps({
+                            message: response.data.message,
+                            success: response.data.success,
+                        }), key)
 
-                this.props.history.push('/sources')
+                        this.setState({
+                            ...this.state,
+                            isUploading: false,
+                        })
+
+                        this.props.history.push('/sources')
+                    })
+                    .catch((error: any) => {
+                        console.log(error)
+                    })
+            } else {
+                this.props.toaster.show(renderToastProps({
+                    message: response.data.message,
+                    success: response.data.success,
+                }), key)
             }
         }).catch((response: any) => {
             this.setState({
@@ -198,6 +222,7 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
             <Navbar />
             <div id='main-container-newsource'>
                 <Query
+                    fetchPolicy='network-only'
                     query={allDatabases}
                 >
                     {({ data, loading}) => {
@@ -278,4 +303,4 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
     }
 }
 
-export default withRouter(connect(mapReduxStateToReactProps)(NewSourceView) as any)
+export default withRouter(withApollo(connect(mapReduxStateToReactProps)(NewSourceView) as any) as any)
