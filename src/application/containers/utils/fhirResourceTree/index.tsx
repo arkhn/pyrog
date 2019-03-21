@@ -215,12 +215,11 @@ class FhirResourceTree extends React.Component<IProps, IState> {
                         ) :
                         null
                 )
-
             return {
                 childNodes: hasChildren ? node.attributes.map((attribute: any) => {
                     return genObjNodes(attribute, nodePath)
                 }) : null,
-                hasCaret: (hasChildren || node.type.startsWith("list::")),
+                hasCaret: hasChildren,
                 icon: node.isProfile ? 'multi-select' : (hasChildren ? 'folder-open' : 'tag'),
                 id: FhirResourceTree.getId(),
                 isExpanded: false,

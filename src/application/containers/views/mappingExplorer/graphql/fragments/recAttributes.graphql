@@ -20,6 +20,21 @@ fragment recAttributes on Attribute {
                                     ...entireAttribute
                                     attributes {
                                         ...entireAttribute
+                                        attributes {
+                                            ...entireAttribute
+                                            attributes {
+                                                ...entireAttribute
+                                                attributes {
+                                                    ...entireAttribute
+                                                    attributes {
+                                                        ...entireAttribute
+                                                        attributes {
+                                                            ...entireAttribute
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }
