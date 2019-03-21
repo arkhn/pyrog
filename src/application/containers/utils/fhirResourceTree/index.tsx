@@ -163,7 +163,7 @@ class FhirResourceTree extends React.Component<IProps, IState> {
                 <NodeLabel
                     createProfile={(node: any) => {
                         // One puts "Reference" instead of "Reference(Organisation)"
-                        const type = node.type.substring(6).startsWith("Reference") ?
+                        const type = (node.type && node.type.substring(6).startsWith("Reference")) ?
                             "Reference" :
                             node.type.substring(6)
 
