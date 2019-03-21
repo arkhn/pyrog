@@ -117,7 +117,7 @@ export const arkhn = {
 
         try {
             // TODO: request these files from a server
-            let json_query = require(`../../../assets/fhirResources/${attributeType}.json`)
+            let json_query = require(`../../../assets/fhirResources/${resourceName}.json`)
 
             return context.client.createResource({
                 database: { connect: { id: databaseId, } },
