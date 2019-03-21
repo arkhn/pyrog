@@ -1,0 +1,222 @@
+{
+  "attributes": {
+    "create": [
+      {
+        "depth": 1,
+        "comment": "When the event occurs",
+        "name": "event",
+        "type": "list::dateTime"
+      },
+      {
+        "depth": 1,
+        "name": "repeat",
+        "type": "repeat",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "comment": "",
+              "name": "boundsDuration",
+              "type": "Duration"
+            },
+            {
+              "depth": 2,
+              "comment": "",
+              "name": "boundsRange",
+              "type": "Range",
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "comment": "C? Low limit",
+                    "name": "low",
+                    "type": "Quantity(SimpleQuantity)"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "C? High limit",
+                    "name": "high",
+                    "type": "Quantity(SimpleQuantity)"
+                  }
+                ]
+              }
+            },
+            {
+              "depth": 2,
+              "comment": "",
+              "name": "boundsPeriod",
+              "type": "Period",
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "comment": "C? Starting time with inclusive boundary",
+                    "name": "start",
+                    "type": "dateTime"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "C? End time with inclusive boundary if not ongoing",
+                    "name": "end",
+                    "type": "dateTime"
+                  }
+                ]
+              }
+            },
+            {
+              "depth": 2,
+              "comment": "Number of times to repeat",
+              "name": "count",
+              "type": "integer"
+            },
+            {
+              "depth": 2,
+              "comment": "Maximum number of times to repeat",
+              "name": "countMax",
+              "type": "integer"
+            },
+            {
+              "depth": 2,
+              "comment": "How long when it happens",
+              "name": "duration",
+              "type": "decimal"
+            },
+            {
+              "depth": 2,
+              "comment": "How long when it happens (Max)",
+              "name": "durationMax",
+              "type": "decimal"
+            },
+            {
+              "depth": 2,
+              "comment": "s | min | h | d | wk | mo | a - unit of time (UCUM)",
+              "name": "durationUnit",
+              "type": "code"
+            },
+            {
+              "depth": 2,
+              "comment": "Event occurs frequency times per period",
+              "name": "frequency",
+              "type": "integer"
+            },
+            {
+              "depth": 2,
+              "comment": "Event occurs up to frequencyMax times per period",
+              "name": "frequencyMax",
+              "type": "integer"
+            },
+            {
+              "depth": 2,
+              "comment": "Event occurs frequency times per period",
+              "name": "period",
+              "type": "decimal"
+            },
+            {
+              "depth": 2,
+              "comment": "Upper limit of period (3-4 hours)",
+              "name": "periodMax",
+              "type": "decimal"
+            },
+            {
+              "depth": 2,
+              "comment": "s | min | h | d | wk | mo | a - unit of time (UCUM)",
+              "name": "periodUnit",
+              "type": "code"
+            },
+            {
+              "depth": 2,
+              "comment": "mon | tue | wed | thu | fri | sat | sun",
+              "name": "dayOfWeek",
+              "type": "list::code"
+            },
+            {
+              "depth": 2,
+              "comment": "Time of day for action",
+              "name": "timeOfDay",
+              "type": "list::time"
+            },
+            {
+              "depth": 2,
+              "comment": "Regular life events the event is tied to",
+              "name": "when",
+              "type": "list::code"
+            },
+            {
+              "depth": 2,
+              "comment": "Minutes from event (before or after)",
+              "name": "offset",
+              "type": "unsignedInt"
+            }
+          ]
+        }
+      },
+      {
+        "depth": 1,
+        "comment": "BID | TID | QID | AM | PM | QD | QOD | Q4H | Q6H +",
+        "name": "code",
+        "type": "CodeableConcept",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "comment": "Code defined by a terminology system",
+              "name": "coding",
+              "type": "list::Coding",
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "name": "Coding_0",
+                    "type": "Coding",
+                    "isProfile": true,
+                    "attributes": {
+                      "create": [
+                        {
+                          "depth": 4,
+                          "comment": "Identity of the terminology system",
+                          "name": "system",
+                          "type": "uri"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Version of the system - if relevant",
+                          "name": "version",
+                          "type": "string"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Symbol in syntax defined by the system",
+                          "name": "code",
+                          "type": "code"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Representation defined by the system",
+                          "name": "display",
+                          "type": "string"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "If this coding was chosen directly by the user",
+                          "name": "userSelected",
+                          "type": "boolean"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "depth": 2,
+              "comment": "Plain text representation of the concept",
+              "name": "text",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "name": "Timing"
+}

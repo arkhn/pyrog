@@ -1,0 +1,36 @@
+{
+  "attributes": {
+    "create": [
+      {
+        "depth": 1,
+        "comment": "Identity of the terminology system",
+        "name": "system",
+        "type": "uri"
+      },
+      {
+        "depth": 1,
+        "comment": "Version of the system - if relevant",
+        "name": "version",
+        "type": "string"
+      },
+      {
+        "depth": 1,
+        "comment": "Symbol in syntax defined by the system",
+        "name": "code",
+        "type": "code"
+      },
+      {
+        "depth": 1,
+        "comment": "Representation defined by the system",
+        "name": "display",
+        "type": "string"
+      },
+      {
+        "depth": 1,
+        "comment": "If this coding was chosen directly by the user",
+        "name": "userSelected",
+        "type": "boolean"
+      }
+    ]
+  }
+}

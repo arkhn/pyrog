@@ -1,0 +1,36 @@
+{
+  "attributes": {
+    "create": [
+      {
+        "depth": 1,
+        "comment": "Numerical value (with implicit precision)",
+        "name": "value",
+        "type": "decimal"
+      },
+      {
+        "depth": 1,
+        "comment": "< | <= | >= | > - how to understand the value",
+        "name": "comparator",
+        "type": "code"
+      },
+      {
+        "depth": 1,
+        "comment": "Unit representation",
+        "name": "unit",
+        "type": "string"
+      },
+      {
+        "depth": 1,
+        "comment": "C? System that defines coded unit form",
+        "name": "system",
+        "type": "uri"
+      },
+      {
+        "depth": 1,
+        "comment": "Coded form of the unit",
+        "name": "code",
+        "type": "code"
+      }
+    ]
+  }
+}

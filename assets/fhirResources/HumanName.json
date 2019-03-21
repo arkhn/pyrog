@@ -1,0 +1,65 @@
+{
+  "attributes": {
+    "create": [
+      {
+        "depth": 1,
+        "comment": "usual | official | temp | nickname | anonymous | old | maiden",
+        "name": "use",
+        "type": "code"
+      },
+      {
+        "depth": 1,
+        "comment": "Text representation of the full name",
+        "name": "text",
+        "type": "string"
+      },
+      {
+        "depth": 1,
+        "comment": "Family name (often called 'Surname')",
+        "name": "family",
+        "type": "string"
+      },
+      {
+        "depth": 1,
+        "comment": "Given names (not always 'first'). Includes middle names",
+        "name": "given",
+        "type": "list::string"
+      },
+      {
+        "depth": 1,
+        "comment": "Parts that come before the name",
+        "name": "prefix",
+        "type": "list::string"
+      },
+      {
+        "depth": 1,
+        "comment": "Parts that come after the name",
+        "name": "suffix",
+        "type": "list::string"
+      },
+      {
+        "depth": 1,
+        "comment": "Time period when name was/is in use",
+        "name": "period",
+        "type": "Period",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "comment": "C? Starting time with inclusive boundary",
+              "name": "start",
+              "type": "dateTime"
+            },
+            {
+              "depth": 2,
+              "comment": "C? End time with inclusive boundary if not ongoing",
+              "name": "end",
+              "type": "dateTime"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "name": "HumanName"
+}

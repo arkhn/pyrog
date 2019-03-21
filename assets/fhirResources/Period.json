@@ -1,0 +1,18 @@
+{
+  "attributes": {
+    "create": [
+      {
+        "depth": 1,
+        "comment": "C? Starting time with inclusive boundary",
+        "name": "start",
+        "type": "dateTime"
+      },
+      {
+        "depth": 1,
+        "comment": "C? End time with inclusive boundary if not ongoing",
+        "name": "end",
+        "type": "dateTime"
+      }
+    ]
+  }
+}

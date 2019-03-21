@@ -1,0 +1,53 @@
+{
+  "attributes": {
+    "create": [
+      {
+        "depth": 1,
+        "comment": "C? phone | fax | email | pager | url | sms | other",
+        "name": "system",
+        "type": "code=phone|fax|email|pager|url|sms"
+      },
+      {
+        "depth": 1,
+        "comment": "The actual contact point details",
+        "name": "value",
+        "type": "string"
+      },
+      {
+        "depth": 1,
+        "comment": "home | work | temp | old | mobile - purpose of this contact point",
+        "name": "use",
+        "type": "code"
+      },
+      {
+        "depth": 1,
+        "comment": "Specify preferred order of use (1 = highest)",
+        "name": "rank",
+        "type": "positiveInt"
+      },
+      {
+        "depth": 1,
+        "comment": "Time period when the contact point was/is in use",
+        "name": "period",
+        "type": "Period",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "comment": "C? Starting time with inclusive boundary",
+              "name": "start",
+              "type": "dateTime"
+            },
+            {
+              "depth": 2,
+              "comment": "C? End time with inclusive boundary if not ongoing",
+              "name": "end",
+              "type": "dateTime"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "name": "ContactPoint"
+}
