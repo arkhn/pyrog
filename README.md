@@ -1,13 +1,13 @@
 [![GitHub license](https://img.shields.io/github/license/arkhn/fhir-pipe.svg)](https://github.com/arkhn/fhir-pipe/blob/master/LICENSE)
 [![Website arkhn.org](https://img.shields.io/website-up-down-green-red/https/arkhn.org.svg)](http://arkhn.org/)
 
-# Fhirball client
+# Pyrog client
 
-Fhirball is a web application meant to help people build and share database mappings.
+Pyrog is a web application meant to help people build and share database mappings from healthcare softwares to FHIR.
 
 ## Introduction
 
-This is a react-redux-based client for Fhirball. It is built using Webpack.
+This is a react-redux-based client for Pyrog. It is built using Webpack.
 
 ## Installation
 
