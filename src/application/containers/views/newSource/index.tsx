@@ -218,6 +218,23 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
     },
 }`
 
+        const sqlCommand: string = `
+SELECT OWNER, TABLE_NAME, COLUMN_NAME, DATA_TYPE FROM all_tab_columns;
+`
+
+        const sqlplusCommand: string = `
+set heading off;
+set underline off;
+set pagesize 0;
+set colsep ";";
+set trimspool on;
+set headsep off;
+set linesize 1000;
+set numw 64;
+spool schema_name.csv
+SELECT OWNER, TABLE_NAME, COLUMN_NAME, DATA_TYPE FROM all_tab_columns;
+`
+
         return <div>
             <Navbar />
             <div id='main-container-newsource'>
@@ -295,6 +312,19 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
                             <pre>
                                 <code dangerouslySetInnerHTML={{__html: schemaExample}} />
                             </pre>
+                            <p>
+                                Le schéma de données peut-être extrait en utilisant le logiciel Toad avec cette commande SQL :
+                            </p>
+                            <pre>
+                                <code dangerouslySetInnerHTML={{__html: sqlCommand}} />
+                            </pre>
+                            <p>
+                                ou en ligne de commande avec <code>sqlplus</code> :
+                            </p>
+                            <pre>
+                                <code dangerouslySetInnerHTML={{__html: sqlplusCommand}} />
+                            </pre>
+
                         </form>
                     }}
                 </Query>
