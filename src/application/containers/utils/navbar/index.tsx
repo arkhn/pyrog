@@ -21,6 +21,10 @@ import { AUTH_TOKEN } from '../../../constants'
 
 import { login, logout } from '../../../actions/user'
 import { deselectDatabase } from '../../../actions/selectedDatabase'
+import {
+    updateFhirAttribute,
+    updateFhirResource,
+} from '../../views/mappingExplorer/actions'
 
 // Import types
 import {
@@ -138,6 +142,8 @@ class Navbar extends React.Component<IProps, IState> {
                                 intent={'primary'}
                                 minimal={true}
                                 onClick={() => {
+                                    dispatch(updateFhirAttribute(null, null))
+                                    dispatch(updateFhirResource(null, null))
                                     dispatch(deselectDatabase())
                                     this.props.history.push('/sources')
                                 }}
