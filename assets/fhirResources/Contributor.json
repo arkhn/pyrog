@@ -1,0 +1,111 @@
+{
+  "attributes": {
+    "create": [
+      {
+        "depth": 1,
+        "comment": "R!  author | editor | reviewer | endorser",
+        "name": "type",
+        "type": "code=author|editor|reviewer"
+      },
+      {
+        "depth": 1,
+        "comment": "R!  Who contributed the content",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "depth": 1,
+        "comment": "Contact details of the contributor",
+        "name": "contact",
+        "type": "list::ContactDetail",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "name": "ContactDetail_0",
+              "type": "ContactDetail",
+              "isProfile": true,
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "comment": "Name of an individual to contact",
+                    "name": "name",
+                    "type": "string"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Contact details for individual or organization",
+                    "name": "telecom",
+                    "type": "list::ContactPoint",
+                    "attributes": {
+                      "create": [
+                        {
+                          "depth": 4,
+                          "name": "ContactPoint_0",
+                          "type": "ContactPoint",
+                          "isProfile": true,
+                          "attributes": {
+                            "create": [
+                              {
+                                "depth": 5,
+                                "comment": "C? phone | fax | email | pager | url | sms | other",
+                                "name": "system",
+                                "type": "code=phone|fax|email|pager|url|sms"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "The actual contact point details",
+                                "name": "value",
+                                "type": "string"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "home | work | temp | old | mobile - purpose of this contact point",
+                                "name": "use",
+                                "type": "code"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Specify preferred order of use (1 = highest)",
+                                "name": "rank",
+                                "type": "positiveInt"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Time period when the contact point was/is in use",
+                                "name": "period",
+                                "type": "Period",
+                                "attributes": {
+                                  "create": [
+                                    {
+                                      "depth": 6,
+                                      "comment": "C? Starting time with inclusive boundary",
+                                      "name": "start",
+                                      "type": "dateTime"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "C? End time with inclusive boundary if not ongoing",
+                                      "name": "end",
+                                      "type": "dateTime"
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "name": "Contributor"
+}

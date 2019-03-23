@@ -1,0 +1,54 @@
+{
+  "attributes": {
+    "create": [
+      {
+        "depth": 1,
+        "comment": "Mime type of the content, with charset etc.",
+        "name": "contentType",
+        "type": "code"
+      },
+      {
+        "depth": 1,
+        "comment": "Human language of the content (BCP-47)",
+        "name": "language",
+        "type": "code"
+      },
+      {
+        "depth": 1,
+        "comment": "Data inline, base64ed",
+        "name": "data",
+        "type": "base64Binary"
+      },
+      {
+        "depth": 1,
+        "comment": "Uri where the data can be found",
+        "name": "url",
+        "type": "uri"
+      },
+      {
+        "depth": 1,
+        "comment": "Number of bytes of content (if url provided)",
+        "name": "size",
+        "type": "unsignedInt"
+      },
+      {
+        "depth": 1,
+        "comment": "Hash of the data (sha-1, base64ed)",
+        "name": "hash",
+        "type": "base64Binary"
+      },
+      {
+        "depth": 1,
+        "comment": "Label to display in place of the data",
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "depth": 1,
+        "comment": "Date attachment was first created",
+        "name": "creation",
+        "type": "dateTime"
+      }
+    ]
+  }
+}

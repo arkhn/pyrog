@@ -1,0 +1,175 @@
+{
+  "attributes": {
+    "create": [
+      {
+        "depth": 1,
+        "comment": "R!  Type of context being specified",
+        "name": "code",
+        "type": "Coding",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "comment": "Identity of the terminology system",
+              "name": "system",
+              "type": "uri"
+            },
+            {
+              "depth": 2,
+              "comment": "Version of the system - if relevant",
+              "name": "version",
+              "type": "string"
+            },
+            {
+              "depth": 2,
+              "comment": "Symbol in syntax defined by the system",
+              "name": "code",
+              "type": "code"
+            },
+            {
+              "depth": 2,
+              "comment": "Representation defined by the system",
+              "name": "display",
+              "type": "string"
+            },
+            {
+              "depth": 2,
+              "comment": "If this coding was chosen directly by the user",
+              "name": "userSelected",
+              "type": "boolean"
+            }
+          ]
+        }
+      },
+      {
+        "depth": 1,
+        "comment": "",
+        "name": "valueCodeableConcept",
+        "type": "CodeableConcept",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "comment": "Code defined by a terminology system",
+              "name": "coding",
+              "type": "list::Coding",
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "name": "Coding_0",
+                    "type": "Coding",
+                    "isProfile": true,
+                    "attributes": {
+                      "create": [
+                        {
+                          "depth": 4,
+                          "comment": "Identity of the terminology system",
+                          "name": "system",
+                          "type": "uri"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Version of the system - if relevant",
+                          "name": "version",
+                          "type": "string"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Symbol in syntax defined by the system",
+                          "name": "code",
+                          "type": "code"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Representation defined by the system",
+                          "name": "display",
+                          "type": "string"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "If this coding was chosen directly by the user",
+                          "name": "userSelected",
+                          "type": "boolean"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "depth": 2,
+              "comment": "Plain text representation of the concept",
+              "name": "text",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      {
+        "depth": 1,
+        "comment": "",
+        "name": "valueQuantity",
+        "type": "Quantity",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "comment": "Numerical value (with implicit precision)",
+              "name": "value",
+              "type": "decimal"
+            },
+            {
+              "depth": 2,
+              "comment": "< | <= | >= | > - how to understand the value",
+              "name": "comparator",
+              "type": "code"
+            },
+            {
+              "depth": 2,
+              "comment": "Unit representation",
+              "name": "unit",
+              "type": "string"
+            },
+            {
+              "depth": 2,
+              "comment": "C? System that defines coded unit form",
+              "name": "system",
+              "type": "uri"
+            },
+            {
+              "depth": 2,
+              "comment": "Coded form of the unit",
+              "name": "code",
+              "type": "code"
+            }
+          ]
+        }
+      },
+      {
+        "depth": 1,
+        "comment": "",
+        "name": "valueRange",
+        "type": "Range",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "comment": "C? Low limit",
+              "name": "low",
+              "type": "Quantity(SimpleQuantity)"
+            },
+            {
+              "depth": 2,
+              "comment": "C? High limit",
+              "name": "high",
+              "type": "Quantity(SimpleQuantity)"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "name": "UsageContext"
+}

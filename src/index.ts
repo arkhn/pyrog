@@ -7,7 +7,11 @@ import { Prisma as PrismaClient } from './generated/prisma-client'
 import { Prisma as PrismaBinding } from './generated/prisma-binding'
 import resolvers from './resolvers'
 
-const endpoint = 'http://localhost:4466'
+const endpoint = process.env.NODE_ENV == 'docker' ?
+    'http://prisma:4466' :
+    'http://localhost:4466'
+
+// const endpoint = 'http://0.0.0.0:4466'
 
 const server = new GraphQLServer({
     typeDefs: Schema,

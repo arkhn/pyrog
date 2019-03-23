@@ -1,0 +1,62 @@
+{
+  "attributes": {
+    "create": [
+      {
+        "depth": 1,
+        "comment": "Code defined by a terminology system",
+        "name": "coding",
+        "type": "list::Coding",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "name": "Coding_0",
+              "type": "Coding",
+              "isProfile": true,
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "comment": "Identity of the terminology system",
+                    "name": "system",
+                    "type": "uri"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Version of the system - if relevant",
+                    "name": "version",
+                    "type": "string"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Symbol in syntax defined by the system",
+                    "name": "code",
+                    "type": "code"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Representation defined by the system",
+                    "name": "display",
+                    "type": "string"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "If this coding was chosen directly by the user",
+                    "name": "userSelected",
+                    "type": "boolean"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "depth": 1,
+        "comment": "Plain text representation of the concept",
+        "name": "text",
+        "type": "string"
+      }
+    ]
+  }
+}

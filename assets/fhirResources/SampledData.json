@@ -1,0 +1,48 @@
+{
+  "attributes": {
+    "create": [
+      {
+        "depth": 1,
+        "comment": "R!  Zero value and units",
+        "name": "origin",
+        "type": "Quantity(SimpleQuantity)"
+      },
+      {
+        "depth": 1,
+        "comment": "R!  Number of milliseconds between samples",
+        "name": "period",
+        "type": "decimal"
+      },
+      {
+        "depth": 1,
+        "comment": "Multiply data by this before adding to origin",
+        "name": "factor",
+        "type": "decimal"
+      },
+      {
+        "depth": 1,
+        "comment": "Lower limit of detection",
+        "name": "lowerLimit",
+        "type": "decimal"
+      },
+      {
+        "depth": 1,
+        "comment": "Upper limit of detection",
+        "name": "upperLimit",
+        "type": "decimal"
+      },
+      {
+        "depth": 1,
+        "comment": "R!  Number of sample points at each time point",
+        "name": "dimensions",
+        "type": "positiveInt"
+      },
+      {
+        "depth": 1,
+        "comment": "R!  Decimal values with spaces or \"E\" | \"U\" | \"L\"",
+        "name": "data",
+        "type": "string"
+      }
+    ]
+  }
+}

@@ -1,0 +1,844 @@
+{
+  "attributes": {
+    "create": [
+      {
+        "depth": 1,
+        "comment": "The order of the dosage instructions",
+        "name": "sequence",
+        "type": "integer"
+      },
+      {
+        "depth": 1,
+        "comment": "Free text dosage instructions e.g. SIG",
+        "name": "text",
+        "type": "string"
+      },
+      {
+        "depth": 1,
+        "comment": "Supplemental instruction - e.g. \"with meals\"",
+        "name": "additionalInstruction",
+        "type": "list::CodeableConcept",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "name": "CodeableConcept_0",
+              "type": "CodeableConcept",
+              "isProfile": true,
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "comment": "Code defined by a terminology system",
+                    "name": "coding",
+                    "type": "list::Coding",
+                    "attributes": {
+                      "create": [
+                        {
+                          "depth": 4,
+                          "name": "Coding_0",
+                          "type": "Coding",
+                          "isProfile": true,
+                          "attributes": {
+                            "create": [
+                              {
+                                "depth": 5,
+                                "comment": "Identity of the terminology system",
+                                "name": "system",
+                                "type": "uri"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Version of the system - if relevant",
+                                "name": "version",
+                                "type": "string"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Symbol in syntax defined by the system",
+                                "name": "code",
+                                "type": "code"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Representation defined by the system",
+                                "name": "display",
+                                "type": "string"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "If this coding was chosen directly by the user",
+                                "name": "userSelected",
+                                "type": "boolean"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Plain text representation of the concept",
+                    "name": "text",
+                    "type": "string"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "depth": 1,
+        "comment": "Patient or consumer oriented instructions",
+        "name": "patientInstruction",
+        "type": "string"
+      },
+      {
+        "depth": 1,
+        "comment": "When medication should be administered",
+        "name": "timing",
+        "type": "Timing",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "comment": "When the event occurs",
+              "name": "event",
+              "type": "list::dateTime"
+            },
+            {
+              "depth": 2,
+              "name": "repeat",
+              "type": "repeat",
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "comment": "",
+                    "name": "boundsDuration",
+                    "type": "Duration"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "",
+                    "name": "boundsRange",
+                    "type": "Range",
+                    "attributes": {
+                      "create": [
+                        {
+                          "depth": 4,
+                          "comment": "C? Low limit",
+                          "name": "low",
+                          "type": "Quantity(SimpleQuantity)"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "C? High limit",
+                          "name": "high",
+                          "type": "Quantity(SimpleQuantity)"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "",
+                    "name": "boundsPeriod",
+                    "type": "Period",
+                    "attributes": {
+                      "create": [
+                        {
+                          "depth": 4,
+                          "comment": "C? Starting time with inclusive boundary",
+                          "name": "start",
+                          "type": "dateTime"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "C? End time with inclusive boundary if not ongoing",
+                          "name": "end",
+                          "type": "dateTime"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Number of times to repeat",
+                    "name": "count",
+                    "type": "integer"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Maximum number of times to repeat",
+                    "name": "countMax",
+                    "type": "integer"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "How long when it happens",
+                    "name": "duration",
+                    "type": "decimal"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "How long when it happens (Max)",
+                    "name": "durationMax",
+                    "type": "decimal"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "s | min | h | d | wk | mo | a - unit of time (UCUM)",
+                    "name": "durationUnit",
+                    "type": "code"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Event occurs frequency times per period",
+                    "name": "frequency",
+                    "type": "integer"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Event occurs up to frequencyMax times per period",
+                    "name": "frequencyMax",
+                    "type": "integer"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Event occurs frequency times per period",
+                    "name": "period",
+                    "type": "decimal"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Upper limit of period (3-4 hours)",
+                    "name": "periodMax",
+                    "type": "decimal"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "s | min | h | d | wk | mo | a - unit of time (UCUM)",
+                    "name": "periodUnit",
+                    "type": "code"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "mon | tue | wed | thu | fri | sat | sun",
+                    "name": "dayOfWeek",
+                    "type": "list::code"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Time of day for action",
+                    "name": "timeOfDay",
+                    "type": "list::time"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Regular life events the event is tied to",
+                    "name": "when",
+                    "type": "list::code"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Minutes from event (before or after)",
+                    "name": "offset",
+                    "type": "unsignedInt"
+                  }
+                ]
+              }
+            },
+            {
+              "depth": 2,
+              "comment": "BID | TID | QID | AM | PM | QD | QOD | Q4H | Q6H +",
+              "name": "code",
+              "type": "CodeableConcept",
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "comment": "Code defined by a terminology system",
+                    "name": "coding",
+                    "type": "list::Coding",
+                    "attributes": {
+                      "create": [
+                        {
+                          "depth": 4,
+                          "name": "Coding_0",
+                          "type": "Coding",
+                          "isProfile": true,
+                          "attributes": {
+                            "create": [
+                              {
+                                "depth": 5,
+                                "comment": "Identity of the terminology system",
+                                "name": "system",
+                                "type": "uri"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Version of the system - if relevant",
+                                "name": "version",
+                                "type": "string"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Symbol in syntax defined by the system",
+                                "name": "code",
+                                "type": "code"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Representation defined by the system",
+                                "name": "display",
+                                "type": "string"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "If this coding was chosen directly by the user",
+                                "name": "userSelected",
+                                "type": "boolean"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Plain text representation of the concept",
+                    "name": "text",
+                    "type": "string"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "depth": 1,
+        "comment": "",
+        "name": "asNeededBoolean",
+        "type": "boolean"
+      },
+      {
+        "depth": 1,
+        "comment": "",
+        "name": "asNeededCodeableConcept",
+        "type": "CodeableConcept",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "comment": "Code defined by a terminology system",
+              "name": "coding",
+              "type": "list::Coding",
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "name": "Coding_0",
+                    "type": "Coding",
+                    "isProfile": true,
+                    "attributes": {
+                      "create": [
+                        {
+                          "depth": 4,
+                          "comment": "Identity of the terminology system",
+                          "name": "system",
+                          "type": "uri"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Version of the system - if relevant",
+                          "name": "version",
+                          "type": "string"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Symbol in syntax defined by the system",
+                          "name": "code",
+                          "type": "code"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Representation defined by the system",
+                          "name": "display",
+                          "type": "string"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "If this coding was chosen directly by the user",
+                          "name": "userSelected",
+                          "type": "boolean"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "depth": 2,
+              "comment": "Plain text representation of the concept",
+              "name": "text",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      {
+        "depth": 1,
+        "comment": "Body site to administer to",
+        "name": "site",
+        "type": "CodeableConcept",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "comment": "Code defined by a terminology system",
+              "name": "coding",
+              "type": "list::Coding",
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "name": "Coding_0",
+                    "type": "Coding",
+                    "isProfile": true,
+                    "attributes": {
+                      "create": [
+                        {
+                          "depth": 4,
+                          "comment": "Identity of the terminology system",
+                          "name": "system",
+                          "type": "uri"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Version of the system - if relevant",
+                          "name": "version",
+                          "type": "string"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Symbol in syntax defined by the system",
+                          "name": "code",
+                          "type": "code"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Representation defined by the system",
+                          "name": "display",
+                          "type": "string"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "If this coding was chosen directly by the user",
+                          "name": "userSelected",
+                          "type": "boolean"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "depth": 2,
+              "comment": "Plain text representation of the concept",
+              "name": "text",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      {
+        "depth": 1,
+        "comment": "How drug should enter body",
+        "name": "route",
+        "type": "CodeableConcept",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "comment": "Code defined by a terminology system",
+              "name": "coding",
+              "type": "list::Coding",
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "name": "Coding_0",
+                    "type": "Coding",
+                    "isProfile": true,
+                    "attributes": {
+                      "create": [
+                        {
+                          "depth": 4,
+                          "comment": "Identity of the terminology system",
+                          "name": "system",
+                          "type": "uri"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Version of the system - if relevant",
+                          "name": "version",
+                          "type": "string"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Symbol in syntax defined by the system",
+                          "name": "code",
+                          "type": "code"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Representation defined by the system",
+                          "name": "display",
+                          "type": "string"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "If this coding was chosen directly by the user",
+                          "name": "userSelected",
+                          "type": "boolean"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "depth": 2,
+              "comment": "Plain text representation of the concept",
+              "name": "text",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      {
+        "depth": 1,
+        "comment": "Technique for administering medication",
+        "name": "method",
+        "type": "CodeableConcept",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "comment": "Code defined by a terminology system",
+              "name": "coding",
+              "type": "list::Coding",
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "name": "Coding_0",
+                    "type": "Coding",
+                    "isProfile": true,
+                    "attributes": {
+                      "create": [
+                        {
+                          "depth": 4,
+                          "comment": "Identity of the terminology system",
+                          "name": "system",
+                          "type": "uri"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Version of the system - if relevant",
+                          "name": "version",
+                          "type": "string"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Symbol in syntax defined by the system",
+                          "name": "code",
+                          "type": "code"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Representation defined by the system",
+                          "name": "display",
+                          "type": "string"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "If this coding was chosen directly by the user",
+                          "name": "userSelected",
+                          "type": "boolean"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "depth": 2,
+              "comment": "Plain text representation of the concept",
+              "name": "text",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      {
+        "depth": 1,
+        "comment": "",
+        "name": "doseRange",
+        "type": "Range",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "comment": "C? Low limit",
+              "name": "low",
+              "type": "Quantity(SimpleQuantity)"
+            },
+            {
+              "depth": 2,
+              "comment": "C? High limit",
+              "name": "high",
+              "type": "Quantity(SimpleQuantity)"
+            }
+          ]
+        }
+      },
+      {
+        "depth": 1,
+        "comment": "",
+        "name": "doseQuantity",
+        "type": "Quantity(SimpleQuantity)"
+      },
+      {
+        "depth": 1,
+        "comment": "Upper limit on medication per unit of time",
+        "name": "maxDosePerPeriod",
+        "type": "Ratio",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "comment": "Numerator value",
+              "name": "numerator",
+              "type": "Quantity",
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "comment": "Numerical value (with implicit precision)",
+                    "name": "value",
+                    "type": "decimal"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "< | <= | >= | > - how to understand the value",
+                    "name": "comparator",
+                    "type": "code"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Unit representation",
+                    "name": "unit",
+                    "type": "string"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "C? System that defines coded unit form",
+                    "name": "system",
+                    "type": "uri"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Coded form of the unit",
+                    "name": "code",
+                    "type": "code"
+                  }
+                ]
+              }
+            },
+            {
+              "depth": 2,
+              "comment": "Denominator value",
+              "name": "denominator",
+              "type": "Quantity",
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "comment": "Numerical value (with implicit precision)",
+                    "name": "value",
+                    "type": "decimal"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "< | <= | >= | > - how to understand the value",
+                    "name": "comparator",
+                    "type": "code"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Unit representation",
+                    "name": "unit",
+                    "type": "string"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "C? System that defines coded unit form",
+                    "name": "system",
+                    "type": "uri"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Coded form of the unit",
+                    "name": "code",
+                    "type": "code"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "depth": 1,
+        "comment": "Upper limit on medication per administration",
+        "name": "maxDosePerAdministration",
+        "type": "Quantity(SimpleQuantity)"
+      },
+      {
+        "depth": 1,
+        "comment": "Upper limit on medication per lifetime of the patient",
+        "name": "maxDosePerLifetime",
+        "type": "Quantity(SimpleQuantity)"
+      },
+      {
+        "depth": 1,
+        "comment": "",
+        "name": "rateRatio",
+        "type": "Ratio",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "comment": "Numerator value",
+              "name": "numerator",
+              "type": "Quantity",
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "comment": "Numerical value (with implicit precision)",
+                    "name": "value",
+                    "type": "decimal"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "< | <= | >= | > - how to understand the value",
+                    "name": "comparator",
+                    "type": "code"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Unit representation",
+                    "name": "unit",
+                    "type": "string"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "C? System that defines coded unit form",
+                    "name": "system",
+                    "type": "uri"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Coded form of the unit",
+                    "name": "code",
+                    "type": "code"
+                  }
+                ]
+              }
+            },
+            {
+              "depth": 2,
+              "comment": "Denominator value",
+              "name": "denominator",
+              "type": "Quantity",
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "comment": "Numerical value (with implicit precision)",
+                    "name": "value",
+                    "type": "decimal"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "< | <= | >= | > - how to understand the value",
+                    "name": "comparator",
+                    "type": "code"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Unit representation",
+                    "name": "unit",
+                    "type": "string"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "C? System that defines coded unit form",
+                    "name": "system",
+                    "type": "uri"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Coded form of the unit",
+                    "name": "code",
+                    "type": "code"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "depth": 1,
+        "comment": "",
+        "name": "rateRange",
+        "type": "Range",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "comment": "C? Low limit",
+              "name": "low",
+              "type": "Quantity(SimpleQuantity)"
+            },
+            {
+              "depth": 2,
+              "comment": "C? High limit",
+              "name": "high",
+              "type": "Quantity(SimpleQuantity)"
+            }
+          ]
+        }
+      },
+      {
+        "depth": 1,
+        "comment": "",
+        "name": "rateQuantity",
+        "type": "Quantity(SimpleQuantity)"
+      }
+    ]
+  },
+  "name": "Dosage"
+}

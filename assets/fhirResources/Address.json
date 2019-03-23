@@ -1,0 +1,83 @@
+{
+  "attributes": {
+    "create": [
+      {
+        "depth": 1,
+        "comment": "home | work | temp | old - purpose of this address",
+        "name": "use",
+        "type": "code"
+      },
+      {
+        "depth": 1,
+        "comment": "postal | physical | both",
+        "name": "type",
+        "type": "code"
+      },
+      {
+        "depth": 1,
+        "comment": "Text representation of the address",
+        "name": "text",
+        "type": "string"
+      },
+      {
+        "depth": 1,
+        "comment": "Street name, number, direction & P.O. Box etc.",
+        "name": "line",
+        "type": "list::string"
+      },
+      {
+        "depth": 1,
+        "comment": "Name of city, town etc.",
+        "name": "city",
+        "type": "string"
+      },
+      {
+        "depth": 1,
+        "comment": "District name (aka county)",
+        "name": "district",
+        "type": "string"
+      },
+      {
+        "depth": 1,
+        "comment": "Sub-unit of country (abbreviations ok)",
+        "name": "state",
+        "type": "string"
+      },
+      {
+        "depth": 1,
+        "comment": "Postal code for area",
+        "name": "postalCode",
+        "type": "string"
+      },
+      {
+        "depth": 1,
+        "comment": "Country (e.g. can be ISO 3166 2 or 3 letter code)",
+        "name": "country",
+        "type": "string"
+      },
+      {
+        "depth": 1,
+        "comment": "Time period when address was/is in use",
+        "name": "period",
+        "type": "Period",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "comment": "C? Starting time with inclusive boundary",
+              "name": "start",
+              "type": "dateTime"
+            },
+            {
+              "depth": 2,
+              "comment": "C? End time with inclusive boundary if not ongoing",
+              "name": "end",
+              "type": "dateTime"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "name": "Address"
+}

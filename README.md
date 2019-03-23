@@ -9,3 +9,9 @@ Run `docker-compose up` so as to run required docker containers.
 * Install with `yarn install`
 * Run with `yarn start`
 * Build with `yarn build`
+
+## Build container
+
+```
+docker-compose up --build
+```

@@ -1,0 +1,186 @@
+{
+  "attributes": {
+    "create": [
+      {
+        "depth": 1,
+        "comment": "R!  requested | active | error | off",
+        "name": "status",
+        "type": "code=requested|active|error"
+      },
+      {
+        "depth": 1,
+        "comment": "Contact details for source (e.g. troubleshooting)",
+        "name": "contact",
+        "type": "list::ContactPoint",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "name": "ContactPoint_0",
+              "type": "ContactPoint",
+              "isProfile": true,
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "comment": "C? phone | fax | email | pager | url | sms | other",
+                    "name": "system",
+                    "type": "code=phone|fax|email|pager|url|sms"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "The actual contact point details",
+                    "name": "value",
+                    "type": "string"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "home | work | temp | old | mobile - purpose of this contact point",
+                    "name": "use",
+                    "type": "code"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Specify preferred order of use (1 = highest)",
+                    "name": "rank",
+                    "type": "positiveInt"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Time period when the contact point was/is in use",
+                    "name": "period",
+                    "type": "Period",
+                    "attributes": {
+                      "create": [
+                        {
+                          "depth": 4,
+                          "comment": "C? Starting time with inclusive boundary",
+                          "name": "start",
+                          "type": "dateTime"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "C? End time with inclusive boundary if not ongoing",
+                          "name": "end",
+                          "type": "dateTime"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "depth": 1,
+        "comment": "When to automatically delete the subscription",
+        "name": "end",
+        "type": "instant"
+      },
+      {
+        "depth": 1,
+        "comment": "R!  Description of why this subscription was created",
+        "name": "reason",
+        "type": "string"
+      },
+      {
+        "depth": 1,
+        "comment": "R!  Rule for server push criteria",
+        "name": "criteria",
+        "type": "string"
+      },
+      {
+        "depth": 1,
+        "comment": "Latest error note",
+        "name": "error",
+        "type": "string"
+      },
+      {
+        "depth": 1,
+        "name": "channel",
+        "type": "channel",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "comment": "R!  rest-hook | websocket | email | sms | message",
+              "name": "type",
+              "type": "code=rest-hook|websocket|email|sms"
+            },
+            {
+              "depth": 2,
+              "comment": "Where the channel points to",
+              "name": "endpoint",
+              "type": "uri"
+            },
+            {
+              "depth": 2,
+              "comment": "Mimetype to send, or omit for no payload",
+              "name": "payload",
+              "type": "string"
+            },
+            {
+              "depth": 2,
+              "comment": "Usage depends on the channel type",
+              "name": "header",
+              "type": "list::string"
+            }
+          ]
+        }
+      },
+      {
+        "depth": 1,
+        "comment": "A tag to add to matching resources",
+        "name": "tag",
+        "type": "list::Coding",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "name": "Coding_0",
+              "type": "Coding",
+              "isProfile": true,
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "comment": "Identity of the terminology system",
+                    "name": "system",
+                    "type": "uri"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Version of the system - if relevant",
+                    "name": "version",
+                    "type": "string"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Symbol in syntax defined by the system",
+                    "name": "code",
+                    "type": "code"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Representation defined by the system",
+                    "name": "display",
+                    "type": "string"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "If this coding was chosen directly by the user",
+                    "name": "userSelected",
+                    "type": "boolean"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "name": "Subscription"
+}

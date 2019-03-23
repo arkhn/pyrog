@@ -1,0 +1,113 @@
+{
+  "attributes": {
+    "create": [
+      {
+        "depth": 1,
+        "comment": "R!  A single issue associated with the action",
+        "name": "issue",
+        "type": "list",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "comment": "R!  fatal | error | warning | information",
+              "name": "severity",
+              "type": "code=fatal|error|warning"
+            },
+            {
+              "depth": 2,
+              "comment": "R!  Error or warning code",
+              "name": "code",
+              "type": "code"
+            },
+            {
+              "depth": 2,
+              "comment": "Additional details about the error",
+              "name": "details",
+              "type": "CodeableConcept",
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "comment": "Code defined by a terminology system",
+                    "name": "coding",
+                    "type": "list::Coding",
+                    "attributes": {
+                      "create": [
+                        {
+                          "depth": 4,
+                          "name": "Coding_0",
+                          "type": "Coding",
+                          "isProfile": true,
+                          "attributes": {
+                            "create": [
+                              {
+                                "depth": 5,
+                                "comment": "Identity of the terminology system",
+                                "name": "system",
+                                "type": "uri"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Version of the system - if relevant",
+                                "name": "version",
+                                "type": "string"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Symbol in syntax defined by the system",
+                                "name": "code",
+                                "type": "code"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Representation defined by the system",
+                                "name": "display",
+                                "type": "string"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "If this coding was chosen directly by the user",
+                                "name": "userSelected",
+                                "type": "boolean"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Plain text representation of the concept",
+                    "name": "text",
+                    "type": "string"
+                  }
+                ]
+              }
+            },
+            {
+              "depth": 2,
+              "comment": "Additional diagnostic information about the issue",
+              "name": "diagnostics",
+              "type": "string"
+            },
+            {
+              "depth": 2,
+              "comment": "Path of element(s) related to issue",
+              "name": "location",
+              "type": "list::string"
+            },
+            {
+              "depth": 2,
+              "comment": "FHIRPath of element(s) related to issue",
+              "name": "expression",
+              "type": "list::string"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "name": "OperationOutcome"
+}

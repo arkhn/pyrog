@@ -1,0 +1,2805 @@
+{
+  "attributes": {
+    "create": [
+      {
+        "depth": 1,
+        "comment": "R!  Target Reference(s) (usually version specific)",
+        "name": "target",
+        "type": "list::Reference(Any)",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "name": "Reference_0",
+              "type": "Reference",
+              "isProfile": true,
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "comment": "C? Literal reference, Relative, internal or absolute URL",
+                    "name": "reference",
+                    "type": "string"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Logical reference, when literal reference is not known",
+                    "name": "identifier",
+                    "type": "Identifier",
+                    "attributes": {
+                      "create": [
+                        {
+                          "depth": 4,
+                          "comment": "usual | official | temp | secondary (If known)",
+                          "name": "use",
+                          "type": "code"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Description of identifier",
+                          "name": "type",
+                          "type": "CodeableConcept",
+                          "attributes": {
+                            "create": [
+                              {
+                                "depth": 5,
+                                "comment": "Code defined by a terminology system",
+                                "name": "coding",
+                                "type": "list::Coding",
+                                "attributes": {
+                                  "create": [
+                                    {
+                                      "depth": 6,
+                                      "name": "Coding_0",
+                                      "type": "Coding",
+                                      "isProfile": true,
+                                      "attributes": {
+                                        "create": [
+                                          {
+                                            "depth": 7,
+                                            "comment": "Identity of the terminology system",
+                                            "name": "system",
+                                            "type": "uri"
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "Version of the system - if relevant",
+                                            "name": "version",
+                                            "type": "string"
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "Symbol in syntax defined by the system",
+                                            "name": "code",
+                                            "type": "code"
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "Representation defined by the system",
+                                            "name": "display",
+                                            "type": "string"
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "If this coding was chosen directly by the user",
+                                            "name": "userSelected",
+                                            "type": "boolean"
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Plain text representation of the concept",
+                                "name": "text",
+                                "type": "string"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "The namespace for the identifier value",
+                          "name": "system",
+                          "type": "uri"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "The value that is unique",
+                          "name": "value",
+                          "type": "string"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Time period when id is/was valid for use",
+                          "name": "period",
+                          "type": "Period",
+                          "attributes": {
+                            "create": [
+                              {
+                                "depth": 5,
+                                "comment": "C? Starting time with inclusive boundary",
+                                "name": "start",
+                                "type": "dateTime"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "C? End time with inclusive boundary if not ongoing",
+                                "name": "end",
+                                "type": "dateTime"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Organization that issued id (may be just text)",
+                          "name": "assigner",
+                          "type": "Reference(Organization)",
+                          "attributes": {
+                            "create": [
+                              {
+                                "depth": 5,
+                                "comment": "C? Literal reference, Relative, internal or absolute URL",
+                                "name": "reference",
+                                "type": "string"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Logical reference, when literal reference is not known",
+                                "name": "identifier",
+                                "type": "Identifier",
+                                "attributes": {
+                                  "create": [
+                                    {
+                                      "depth": 6,
+                                      "comment": "usual | official | temp | secondary (If known)",
+                                      "name": "use",
+                                      "type": "code"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Description of identifier",
+                                      "name": "type",
+                                      "type": "CodeableConcept",
+                                      "attributes": {
+                                        "create": [
+                                          {
+                                            "depth": 7,
+                                            "comment": "Code defined by a terminology system",
+                                            "name": "coding",
+                                            "type": "list::Coding",
+                                            "attributes": {
+                                              "create": [
+                                                {
+                                                  "depth": 8,
+                                                  "name": "Coding_0",
+                                                  "type": "Coding",
+                                                  "isProfile": true,
+                                                  "attributes": {
+                                                    "create": [
+                                                      {
+                                                        "depth": 9,
+                                                        "comment": "Identity of the terminology system",
+                                                        "name": "system",
+                                                        "type": "uri"
+                                                      },
+                                                      {
+                                                        "depth": 9,
+                                                        "comment": "Version of the system - if relevant",
+                                                        "name": "version",
+                                                        "type": "string"
+                                                      },
+                                                      {
+                                                        "depth": 9,
+                                                        "comment": "Symbol in syntax defined by the system",
+                                                        "name": "code",
+                                                        "type": "code"
+                                                      },
+                                                      {
+                                                        "depth": 9,
+                                                        "comment": "Representation defined by the system",
+                                                        "name": "display",
+                                                        "type": "string"
+                                                      },
+                                                      {
+                                                        "depth": 9,
+                                                        "comment": "If this coding was chosen directly by the user",
+                                                        "name": "userSelected",
+                                                        "type": "boolean"
+                                                      }
+                                                    ]
+                                                  }
+                                                }
+                                              ]
+                                            }
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "Plain text representation of the concept",
+                                            "name": "text",
+                                            "type": "string"
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "The namespace for the identifier value",
+                                      "name": "system",
+                                      "type": "uri"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "The value that is unique",
+                                      "name": "value",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Time period when id is/was valid for use",
+                                      "name": "period",
+                                      "type": "Period",
+                                      "attributes": {
+                                        "create": [
+                                          {
+                                            "depth": 7,
+                                            "comment": "C? Starting time with inclusive boundary",
+                                            "name": "start",
+                                            "type": "dateTime"
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "C? End time with inclusive boundary if not ongoing",
+                                            "name": "end",
+                                            "type": "dateTime"
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Organization that issued id (may be just text)",
+                                      "name": "assigner",
+                                      "type": "Reference(Organization)"
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Text alternative for the resource",
+                                "name": "display",
+                                "type": "string"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Text alternative for the resource",
+                    "name": "display",
+                    "type": "string"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "depth": 1,
+        "comment": "When the activity occurred",
+        "name": "period",
+        "type": "Period",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "comment": "C? Starting time with inclusive boundary",
+              "name": "start",
+              "type": "dateTime"
+            },
+            {
+              "depth": 2,
+              "comment": "C? End time with inclusive boundary if not ongoing",
+              "name": "end",
+              "type": "dateTime"
+            }
+          ]
+        }
+      },
+      {
+        "depth": 1,
+        "comment": "R!  When the activity was recorded / updated",
+        "name": "recorded",
+        "type": "instant"
+      },
+      {
+        "depth": 1,
+        "comment": "Policy or plan the activity was defined by",
+        "name": "policy",
+        "type": "list::uri"
+      },
+      {
+        "depth": 1,
+        "comment": "Where the activity occurred, if relevant",
+        "name": "location",
+        "type": "Reference(Location)",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "comment": "C? Literal reference, Relative, internal or absolute URL",
+              "name": "reference",
+              "type": "string"
+            },
+            {
+              "depth": 2,
+              "comment": "Logical reference, when literal reference is not known",
+              "name": "identifier",
+              "type": "Identifier",
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "comment": "usual | official | temp | secondary (If known)",
+                    "name": "use",
+                    "type": "code"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Description of identifier",
+                    "name": "type",
+                    "type": "CodeableConcept",
+                    "attributes": {
+                      "create": [
+                        {
+                          "depth": 4,
+                          "comment": "Code defined by a terminology system",
+                          "name": "coding",
+                          "type": "list::Coding",
+                          "attributes": {
+                            "create": [
+                              {
+                                "depth": 5,
+                                "name": "Coding_0",
+                                "type": "Coding",
+                                "isProfile": true,
+                                "attributes": {
+                                  "create": [
+                                    {
+                                      "depth": 6,
+                                      "comment": "Identity of the terminology system",
+                                      "name": "system",
+                                      "type": "uri"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Version of the system - if relevant",
+                                      "name": "version",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Symbol in syntax defined by the system",
+                                      "name": "code",
+                                      "type": "code"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Representation defined by the system",
+                                      "name": "display",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "If this coding was chosen directly by the user",
+                                      "name": "userSelected",
+                                      "type": "boolean"
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Plain text representation of the concept",
+                          "name": "text",
+                          "type": "string"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "The namespace for the identifier value",
+                    "name": "system",
+                    "type": "uri"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "The value that is unique",
+                    "name": "value",
+                    "type": "string"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Time period when id is/was valid for use",
+                    "name": "period",
+                    "type": "Period",
+                    "attributes": {
+                      "create": [
+                        {
+                          "depth": 4,
+                          "comment": "C? Starting time with inclusive boundary",
+                          "name": "start",
+                          "type": "dateTime"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "C? End time with inclusive boundary if not ongoing",
+                          "name": "end",
+                          "type": "dateTime"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Organization that issued id (may be just text)",
+                    "name": "assigner",
+                    "type": "Reference(Organization)",
+                    "attributes": {
+                      "create": [
+                        {
+                          "depth": 4,
+                          "comment": "C? Literal reference, Relative, internal or absolute URL",
+                          "name": "reference",
+                          "type": "string"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Logical reference, when literal reference is not known",
+                          "name": "identifier",
+                          "type": "Identifier",
+                          "attributes": {
+                            "create": [
+                              {
+                                "depth": 5,
+                                "comment": "usual | official | temp | secondary (If known)",
+                                "name": "use",
+                                "type": "code"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Description of identifier",
+                                "name": "type",
+                                "type": "CodeableConcept",
+                                "attributes": {
+                                  "create": [
+                                    {
+                                      "depth": 6,
+                                      "comment": "Code defined by a terminology system",
+                                      "name": "coding",
+                                      "type": "list::Coding",
+                                      "attributes": {
+                                        "create": [
+                                          {
+                                            "depth": 7,
+                                            "name": "Coding_0",
+                                            "type": "Coding",
+                                            "isProfile": true,
+                                            "attributes": {
+                                              "create": [
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "Identity of the terminology system",
+                                                  "name": "system",
+                                                  "type": "uri"
+                                                },
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "Version of the system - if relevant",
+                                                  "name": "version",
+                                                  "type": "string"
+                                                },
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "Symbol in syntax defined by the system",
+                                                  "name": "code",
+                                                  "type": "code"
+                                                },
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "Representation defined by the system",
+                                                  "name": "display",
+                                                  "type": "string"
+                                                },
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "If this coding was chosen directly by the user",
+                                                  "name": "userSelected",
+                                                  "type": "boolean"
+                                                }
+                                              ]
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Plain text representation of the concept",
+                                      "name": "text",
+                                      "type": "string"
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "The namespace for the identifier value",
+                                "name": "system",
+                                "type": "uri"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "The value that is unique",
+                                "name": "value",
+                                "type": "string"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Time period when id is/was valid for use",
+                                "name": "period",
+                                "type": "Period",
+                                "attributes": {
+                                  "create": [
+                                    {
+                                      "depth": 6,
+                                      "comment": "C? Starting time with inclusive boundary",
+                                      "name": "start",
+                                      "type": "dateTime"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "C? End time with inclusive boundary if not ongoing",
+                                      "name": "end",
+                                      "type": "dateTime"
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Organization that issued id (may be just text)",
+                                "name": "assigner",
+                                "type": "Reference(Organization)"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Text alternative for the resource",
+                          "name": "display",
+                          "type": "string"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "depth": 2,
+              "comment": "Text alternative for the resource",
+              "name": "display",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      {
+        "depth": 1,
+        "comment": "Reason the activity is occurring",
+        "name": "reason",
+        "type": "list::Coding",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "name": "Coding_0",
+              "type": "Coding",
+              "isProfile": true,
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "comment": "Identity of the terminology system",
+                    "name": "system",
+                    "type": "uri"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Version of the system - if relevant",
+                    "name": "version",
+                    "type": "string"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Symbol in syntax defined by the system",
+                    "name": "code",
+                    "type": "code"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Representation defined by the system",
+                    "name": "display",
+                    "type": "string"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "If this coding was chosen directly by the user",
+                    "name": "userSelected",
+                    "type": "boolean"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "depth": 1,
+        "comment": "Activity that occurred",
+        "name": "activity",
+        "type": "Coding",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "comment": "Identity of the terminology system",
+              "name": "system",
+              "type": "uri"
+            },
+            {
+              "depth": 2,
+              "comment": "Version of the system - if relevant",
+              "name": "version",
+              "type": "string"
+            },
+            {
+              "depth": 2,
+              "comment": "Symbol in syntax defined by the system",
+              "name": "code",
+              "type": "code"
+            },
+            {
+              "depth": 2,
+              "comment": "Representation defined by the system",
+              "name": "display",
+              "type": "string"
+            },
+            {
+              "depth": 2,
+              "comment": "If this coding was chosen directly by the user",
+              "name": "userSelected",
+              "type": "boolean"
+            }
+          ]
+        }
+      },
+      {
+        "depth": 1,
+        "comment": "R!  Actor involved",
+        "name": "agent",
+        "type": "list",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "comment": "What the agents role was",
+              "name": "role",
+              "type": "list::CodeableConcept",
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "name": "CodeableConcept_0",
+                    "type": "CodeableConcept",
+                    "isProfile": true,
+                    "attributes": {
+                      "create": [
+                        {
+                          "depth": 4,
+                          "comment": "Code defined by a terminology system",
+                          "name": "coding",
+                          "type": "list::Coding",
+                          "attributes": {
+                            "create": [
+                              {
+                                "depth": 5,
+                                "name": "Coding_0",
+                                "type": "Coding",
+                                "isProfile": true,
+                                "attributes": {
+                                  "create": [
+                                    {
+                                      "depth": 6,
+                                      "comment": "Identity of the terminology system",
+                                      "name": "system",
+                                      "type": "uri"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Version of the system - if relevant",
+                                      "name": "version",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Symbol in syntax defined by the system",
+                                      "name": "code",
+                                      "type": "code"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Representation defined by the system",
+                                      "name": "display",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "If this coding was chosen directly by the user",
+                                      "name": "userSelected",
+                                      "type": "boolean"
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Plain text representation of the concept",
+                          "name": "text",
+                          "type": "string"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "depth": 2,
+              "comment": "",
+              "name": "whoUri",
+              "type": "uri"
+            },
+            {
+              "depth": 2,
+              "comment": "",
+              "name": "whoReference",
+              "type": "Reference(Practitioner|RelatedPerson|Patient|Device|Organization)",
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "comment": "C? Literal reference, Relative, internal or absolute URL",
+                    "name": "reference",
+                    "type": "string"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Logical reference, when literal reference is not known",
+                    "name": "identifier",
+                    "type": "Identifier",
+                    "attributes": {
+                      "create": [
+                        {
+                          "depth": 4,
+                          "comment": "usual | official | temp | secondary (If known)",
+                          "name": "use",
+                          "type": "code"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Description of identifier",
+                          "name": "type",
+                          "type": "CodeableConcept",
+                          "attributes": {
+                            "create": [
+                              {
+                                "depth": 5,
+                                "comment": "Code defined by a terminology system",
+                                "name": "coding",
+                                "type": "list::Coding",
+                                "attributes": {
+                                  "create": [
+                                    {
+                                      "depth": 6,
+                                      "name": "Coding_0",
+                                      "type": "Coding",
+                                      "isProfile": true,
+                                      "attributes": {
+                                        "create": [
+                                          {
+                                            "depth": 7,
+                                            "comment": "Identity of the terminology system",
+                                            "name": "system",
+                                            "type": "uri"
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "Version of the system - if relevant",
+                                            "name": "version",
+                                            "type": "string"
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "Symbol in syntax defined by the system",
+                                            "name": "code",
+                                            "type": "code"
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "Representation defined by the system",
+                                            "name": "display",
+                                            "type": "string"
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "If this coding was chosen directly by the user",
+                                            "name": "userSelected",
+                                            "type": "boolean"
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Plain text representation of the concept",
+                                "name": "text",
+                                "type": "string"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "The namespace for the identifier value",
+                          "name": "system",
+                          "type": "uri"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "The value that is unique",
+                          "name": "value",
+                          "type": "string"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Time period when id is/was valid for use",
+                          "name": "period",
+                          "type": "Period",
+                          "attributes": {
+                            "create": [
+                              {
+                                "depth": 5,
+                                "comment": "C? Starting time with inclusive boundary",
+                                "name": "start",
+                                "type": "dateTime"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "C? End time with inclusive boundary if not ongoing",
+                                "name": "end",
+                                "type": "dateTime"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Organization that issued id (may be just text)",
+                          "name": "assigner",
+                          "type": "Reference(Organization)",
+                          "attributes": {
+                            "create": [
+                              {
+                                "depth": 5,
+                                "comment": "C? Literal reference, Relative, internal or absolute URL",
+                                "name": "reference",
+                                "type": "string"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Logical reference, when literal reference is not known",
+                                "name": "identifier",
+                                "type": "Identifier",
+                                "attributes": {
+                                  "create": [
+                                    {
+                                      "depth": 6,
+                                      "comment": "usual | official | temp | secondary (If known)",
+                                      "name": "use",
+                                      "type": "code"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Description of identifier",
+                                      "name": "type",
+                                      "type": "CodeableConcept",
+                                      "attributes": {
+                                        "create": [
+                                          {
+                                            "depth": 7,
+                                            "comment": "Code defined by a terminology system",
+                                            "name": "coding",
+                                            "type": "list::Coding",
+                                            "attributes": {
+                                              "create": [
+                                                {
+                                                  "depth": 8,
+                                                  "name": "Coding_0",
+                                                  "type": "Coding",
+                                                  "isProfile": true,
+                                                  "attributes": {
+                                                    "create": [
+                                                      {
+                                                        "depth": 9,
+                                                        "comment": "Identity of the terminology system",
+                                                        "name": "system",
+                                                        "type": "uri"
+                                                      },
+                                                      {
+                                                        "depth": 9,
+                                                        "comment": "Version of the system - if relevant",
+                                                        "name": "version",
+                                                        "type": "string"
+                                                      },
+                                                      {
+                                                        "depth": 9,
+                                                        "comment": "Symbol in syntax defined by the system",
+                                                        "name": "code",
+                                                        "type": "code"
+                                                      },
+                                                      {
+                                                        "depth": 9,
+                                                        "comment": "Representation defined by the system",
+                                                        "name": "display",
+                                                        "type": "string"
+                                                      },
+                                                      {
+                                                        "depth": 9,
+                                                        "comment": "If this coding was chosen directly by the user",
+                                                        "name": "userSelected",
+                                                        "type": "boolean"
+                                                      }
+                                                    ]
+                                                  }
+                                                }
+                                              ]
+                                            }
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "Plain text representation of the concept",
+                                            "name": "text",
+                                            "type": "string"
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "The namespace for the identifier value",
+                                      "name": "system",
+                                      "type": "uri"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "The value that is unique",
+                                      "name": "value",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Time period when id is/was valid for use",
+                                      "name": "period",
+                                      "type": "Period",
+                                      "attributes": {
+                                        "create": [
+                                          {
+                                            "depth": 7,
+                                            "comment": "C? Starting time with inclusive boundary",
+                                            "name": "start",
+                                            "type": "dateTime"
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "C? End time with inclusive boundary if not ongoing",
+                                            "name": "end",
+                                            "type": "dateTime"
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Organization that issued id (may be just text)",
+                                      "name": "assigner",
+                                      "type": "Reference(Organization)"
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Text alternative for the resource",
+                                "name": "display",
+                                "type": "string"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Text alternative for the resource",
+                    "name": "display",
+                    "type": "string"
+                  }
+                ]
+              }
+            },
+            {
+              "depth": 2,
+              "comment": "",
+              "name": "onBehalfOfUri",
+              "type": "uri"
+            },
+            {
+              "depth": 2,
+              "comment": "",
+              "name": "onBehalfOfReference",
+              "type": "Reference(Practitioner|RelatedPerson|Patient|Device|Organization)",
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "comment": "C? Literal reference, Relative, internal or absolute URL",
+                    "name": "reference",
+                    "type": "string"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Logical reference, when literal reference is not known",
+                    "name": "identifier",
+                    "type": "Identifier",
+                    "attributes": {
+                      "create": [
+                        {
+                          "depth": 4,
+                          "comment": "usual | official | temp | secondary (If known)",
+                          "name": "use",
+                          "type": "code"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Description of identifier",
+                          "name": "type",
+                          "type": "CodeableConcept",
+                          "attributes": {
+                            "create": [
+                              {
+                                "depth": 5,
+                                "comment": "Code defined by a terminology system",
+                                "name": "coding",
+                                "type": "list::Coding",
+                                "attributes": {
+                                  "create": [
+                                    {
+                                      "depth": 6,
+                                      "name": "Coding_0",
+                                      "type": "Coding",
+                                      "isProfile": true,
+                                      "attributes": {
+                                        "create": [
+                                          {
+                                            "depth": 7,
+                                            "comment": "Identity of the terminology system",
+                                            "name": "system",
+                                            "type": "uri"
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "Version of the system - if relevant",
+                                            "name": "version",
+                                            "type": "string"
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "Symbol in syntax defined by the system",
+                                            "name": "code",
+                                            "type": "code"
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "Representation defined by the system",
+                                            "name": "display",
+                                            "type": "string"
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "If this coding was chosen directly by the user",
+                                            "name": "userSelected",
+                                            "type": "boolean"
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Plain text representation of the concept",
+                                "name": "text",
+                                "type": "string"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "The namespace for the identifier value",
+                          "name": "system",
+                          "type": "uri"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "The value that is unique",
+                          "name": "value",
+                          "type": "string"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Time period when id is/was valid for use",
+                          "name": "period",
+                          "type": "Period",
+                          "attributes": {
+                            "create": [
+                              {
+                                "depth": 5,
+                                "comment": "C? Starting time with inclusive boundary",
+                                "name": "start",
+                                "type": "dateTime"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "C? End time with inclusive boundary if not ongoing",
+                                "name": "end",
+                                "type": "dateTime"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Organization that issued id (may be just text)",
+                          "name": "assigner",
+                          "type": "Reference(Organization)",
+                          "attributes": {
+                            "create": [
+                              {
+                                "depth": 5,
+                                "comment": "C? Literal reference, Relative, internal or absolute URL",
+                                "name": "reference",
+                                "type": "string"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Logical reference, when literal reference is not known",
+                                "name": "identifier",
+                                "type": "Identifier",
+                                "attributes": {
+                                  "create": [
+                                    {
+                                      "depth": 6,
+                                      "comment": "usual | official | temp | secondary (If known)",
+                                      "name": "use",
+                                      "type": "code"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Description of identifier",
+                                      "name": "type",
+                                      "type": "CodeableConcept",
+                                      "attributes": {
+                                        "create": [
+                                          {
+                                            "depth": 7,
+                                            "comment": "Code defined by a terminology system",
+                                            "name": "coding",
+                                            "type": "list::Coding",
+                                            "attributes": {
+                                              "create": [
+                                                {
+                                                  "depth": 8,
+                                                  "name": "Coding_0",
+                                                  "type": "Coding",
+                                                  "isProfile": true,
+                                                  "attributes": {
+                                                    "create": [
+                                                      {
+                                                        "depth": 9,
+                                                        "comment": "Identity of the terminology system",
+                                                        "name": "system",
+                                                        "type": "uri"
+                                                      },
+                                                      {
+                                                        "depth": 9,
+                                                        "comment": "Version of the system - if relevant",
+                                                        "name": "version",
+                                                        "type": "string"
+                                                      },
+                                                      {
+                                                        "depth": 9,
+                                                        "comment": "Symbol in syntax defined by the system",
+                                                        "name": "code",
+                                                        "type": "code"
+                                                      },
+                                                      {
+                                                        "depth": 9,
+                                                        "comment": "Representation defined by the system",
+                                                        "name": "display",
+                                                        "type": "string"
+                                                      },
+                                                      {
+                                                        "depth": 9,
+                                                        "comment": "If this coding was chosen directly by the user",
+                                                        "name": "userSelected",
+                                                        "type": "boolean"
+                                                      }
+                                                    ]
+                                                  }
+                                                }
+                                              ]
+                                            }
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "Plain text representation of the concept",
+                                            "name": "text",
+                                            "type": "string"
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "The namespace for the identifier value",
+                                      "name": "system",
+                                      "type": "uri"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "The value that is unique",
+                                      "name": "value",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Time period when id is/was valid for use",
+                                      "name": "period",
+                                      "type": "Period",
+                                      "attributes": {
+                                        "create": [
+                                          {
+                                            "depth": 7,
+                                            "comment": "C? Starting time with inclusive boundary",
+                                            "name": "start",
+                                            "type": "dateTime"
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "C? End time with inclusive boundary if not ongoing",
+                                            "name": "end",
+                                            "type": "dateTime"
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Organization that issued id (may be just text)",
+                                      "name": "assigner",
+                                      "type": "Reference(Organization)"
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Text alternative for the resource",
+                                "name": "display",
+                                "type": "string"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Text alternative for the resource",
+                    "name": "display",
+                    "type": "string"
+                  }
+                ]
+              }
+            },
+            {
+              "depth": 2,
+              "comment": "Type of relationship between agents",
+              "name": "relatedAgentType",
+              "type": "CodeableConcept",
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "comment": "Code defined by a terminology system",
+                    "name": "coding",
+                    "type": "list::Coding",
+                    "attributes": {
+                      "create": [
+                        {
+                          "depth": 4,
+                          "name": "Coding_0",
+                          "type": "Coding",
+                          "isProfile": true,
+                          "attributes": {
+                            "create": [
+                              {
+                                "depth": 5,
+                                "comment": "Identity of the terminology system",
+                                "name": "system",
+                                "type": "uri"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Version of the system - if relevant",
+                                "name": "version",
+                                "type": "string"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Symbol in syntax defined by the system",
+                                "name": "code",
+                                "type": "code"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Representation defined by the system",
+                                "name": "display",
+                                "type": "string"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "If this coding was chosen directly by the user",
+                                "name": "userSelected",
+                                "type": "boolean"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Plain text representation of the concept",
+                    "name": "text",
+                    "type": "string"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "depth": 1,
+        "comment": "An entity used in this activity",
+        "name": "entity",
+        "type": "list",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "comment": "",
+              "name": "role",
+              "type": "code"
+            },
+            {
+              "depth": 2,
+              "comment": "An entity used in this activity",
+              "name": "whatUri",
+              "type": "uri"
+            },
+            {
+              "depth": 2,
+              "comment": "",
+              "name": "whatReference",
+              "type": "Reference(Any)",
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "comment": "C? Literal reference, Relative, internal or absolute URL",
+                    "name": "reference",
+                    "type": "string"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Logical reference, when literal reference is not known",
+                    "name": "identifier",
+                    "type": "Identifier",
+                    "attributes": {
+                      "create": [
+                        {
+                          "depth": 4,
+                          "comment": "usual | official | temp | secondary (If known)",
+                          "name": "use",
+                          "type": "code"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Description of identifier",
+                          "name": "type",
+                          "type": "CodeableConcept",
+                          "attributes": {
+                            "create": [
+                              {
+                                "depth": 5,
+                                "comment": "Code defined by a terminology system",
+                                "name": "coding",
+                                "type": "list::Coding",
+                                "attributes": {
+                                  "create": [
+                                    {
+                                      "depth": 6,
+                                      "name": "Coding_0",
+                                      "type": "Coding",
+                                      "isProfile": true,
+                                      "attributes": {
+                                        "create": [
+                                          {
+                                            "depth": 7,
+                                            "comment": "Identity of the terminology system",
+                                            "name": "system",
+                                            "type": "uri"
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "Version of the system - if relevant",
+                                            "name": "version",
+                                            "type": "string"
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "Symbol in syntax defined by the system",
+                                            "name": "code",
+                                            "type": "code"
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "Representation defined by the system",
+                                            "name": "display",
+                                            "type": "string"
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "If this coding was chosen directly by the user",
+                                            "name": "userSelected",
+                                            "type": "boolean"
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Plain text representation of the concept",
+                                "name": "text",
+                                "type": "string"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "The namespace for the identifier value",
+                          "name": "system",
+                          "type": "uri"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "The value that is unique",
+                          "name": "value",
+                          "type": "string"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Time period when id is/was valid for use",
+                          "name": "period",
+                          "type": "Period",
+                          "attributes": {
+                            "create": [
+                              {
+                                "depth": 5,
+                                "comment": "C? Starting time with inclusive boundary",
+                                "name": "start",
+                                "type": "dateTime"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "C? End time with inclusive boundary if not ongoing",
+                                "name": "end",
+                                "type": "dateTime"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Organization that issued id (may be just text)",
+                          "name": "assigner",
+                          "type": "Reference(Organization)",
+                          "attributes": {
+                            "create": [
+                              {
+                                "depth": 5,
+                                "comment": "C? Literal reference, Relative, internal or absolute URL",
+                                "name": "reference",
+                                "type": "string"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Logical reference, when literal reference is not known",
+                                "name": "identifier",
+                                "type": "Identifier",
+                                "attributes": {
+                                  "create": [
+                                    {
+                                      "depth": 6,
+                                      "comment": "usual | official | temp | secondary (If known)",
+                                      "name": "use",
+                                      "type": "code"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Description of identifier",
+                                      "name": "type",
+                                      "type": "CodeableConcept",
+                                      "attributes": {
+                                        "create": [
+                                          {
+                                            "depth": 7,
+                                            "comment": "Code defined by a terminology system",
+                                            "name": "coding",
+                                            "type": "list::Coding",
+                                            "attributes": {
+                                              "create": [
+                                                {
+                                                  "depth": 8,
+                                                  "name": "Coding_0",
+                                                  "type": "Coding",
+                                                  "isProfile": true,
+                                                  "attributes": {
+                                                    "create": [
+                                                      {
+                                                        "depth": 9,
+                                                        "comment": "Identity of the terminology system",
+                                                        "name": "system",
+                                                        "type": "uri"
+                                                      },
+                                                      {
+                                                        "depth": 9,
+                                                        "comment": "Version of the system - if relevant",
+                                                        "name": "version",
+                                                        "type": "string"
+                                                      },
+                                                      {
+                                                        "depth": 9,
+                                                        "comment": "Symbol in syntax defined by the system",
+                                                        "name": "code",
+                                                        "type": "code"
+                                                      },
+                                                      {
+                                                        "depth": 9,
+                                                        "comment": "Representation defined by the system",
+                                                        "name": "display",
+                                                        "type": "string"
+                                                      },
+                                                      {
+                                                        "depth": 9,
+                                                        "comment": "If this coding was chosen directly by the user",
+                                                        "name": "userSelected",
+                                                        "type": "boolean"
+                                                      }
+                                                    ]
+                                                  }
+                                                }
+                                              ]
+                                            }
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "Plain text representation of the concept",
+                                            "name": "text",
+                                            "type": "string"
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "The namespace for the identifier value",
+                                      "name": "system",
+                                      "type": "uri"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "The value that is unique",
+                                      "name": "value",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Time period when id is/was valid for use",
+                                      "name": "period",
+                                      "type": "Period",
+                                      "attributes": {
+                                        "create": [
+                                          {
+                                            "depth": 7,
+                                            "comment": "C? Starting time with inclusive boundary",
+                                            "name": "start",
+                                            "type": "dateTime"
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "C? End time with inclusive boundary if not ongoing",
+                                            "name": "end",
+                                            "type": "dateTime"
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Organization that issued id (may be just text)",
+                                      "name": "assigner",
+                                      "type": "Reference(Organization)"
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Text alternative for the resource",
+                                "name": "display",
+                                "type": "string"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Text alternative for the resource",
+                    "name": "display",
+                    "type": "string"
+                  }
+                ]
+              }
+            },
+            {
+              "depth": 2,
+              "comment": "",
+              "name": "whatIdentifier",
+              "type": "Identifier",
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "comment": "usual | official | temp | secondary (If known)",
+                    "name": "use",
+                    "type": "code"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Description of identifier",
+                    "name": "type",
+                    "type": "CodeableConcept",
+                    "attributes": {
+                      "create": [
+                        {
+                          "depth": 4,
+                          "comment": "Code defined by a terminology system",
+                          "name": "coding",
+                          "type": "list::Coding",
+                          "attributes": {
+                            "create": [
+                              {
+                                "depth": 5,
+                                "name": "Coding_0",
+                                "type": "Coding",
+                                "isProfile": true,
+                                "attributes": {
+                                  "create": [
+                                    {
+                                      "depth": 6,
+                                      "comment": "Identity of the terminology system",
+                                      "name": "system",
+                                      "type": "uri"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Version of the system - if relevant",
+                                      "name": "version",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Symbol in syntax defined by the system",
+                                      "name": "code",
+                                      "type": "code"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Representation defined by the system",
+                                      "name": "display",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "If this coding was chosen directly by the user",
+                                      "name": "userSelected",
+                                      "type": "boolean"
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Plain text representation of the concept",
+                          "name": "text",
+                          "type": "string"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "The namespace for the identifier value",
+                    "name": "system",
+                    "type": "uri"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "The value that is unique",
+                    "name": "value",
+                    "type": "string"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Time period when id is/was valid for use",
+                    "name": "period",
+                    "type": "Period",
+                    "attributes": {
+                      "create": [
+                        {
+                          "depth": 4,
+                          "comment": "C? Starting time with inclusive boundary",
+                          "name": "start",
+                          "type": "dateTime"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "C? End time with inclusive boundary if not ongoing",
+                          "name": "end",
+                          "type": "dateTime"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "Organization that issued id (may be just text)",
+                    "name": "assigner",
+                    "type": "Reference(Organization)",
+                    "attributes": {
+                      "create": [
+                        {
+                          "depth": 4,
+                          "comment": "C? Literal reference, Relative, internal or absolute URL",
+                          "name": "reference",
+                          "type": "string"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Logical reference, when literal reference is not known",
+                          "name": "identifier",
+                          "type": "Identifier",
+                          "attributes": {
+                            "create": [
+                              {
+                                "depth": 5,
+                                "comment": "usual | official | temp | secondary (If known)",
+                                "name": "use",
+                                "type": "code"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Description of identifier",
+                                "name": "type",
+                                "type": "CodeableConcept",
+                                "attributes": {
+                                  "create": [
+                                    {
+                                      "depth": 6,
+                                      "comment": "Code defined by a terminology system",
+                                      "name": "coding",
+                                      "type": "list::Coding",
+                                      "attributes": {
+                                        "create": [
+                                          {
+                                            "depth": 7,
+                                            "name": "Coding_0",
+                                            "type": "Coding",
+                                            "isProfile": true,
+                                            "attributes": {
+                                              "create": [
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "Identity of the terminology system",
+                                                  "name": "system",
+                                                  "type": "uri"
+                                                },
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "Version of the system - if relevant",
+                                                  "name": "version",
+                                                  "type": "string"
+                                                },
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "Symbol in syntax defined by the system",
+                                                  "name": "code",
+                                                  "type": "code"
+                                                },
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "Representation defined by the system",
+                                                  "name": "display",
+                                                  "type": "string"
+                                                },
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "If this coding was chosen directly by the user",
+                                                  "name": "userSelected",
+                                                  "type": "boolean"
+                                                }
+                                              ]
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Plain text representation of the concept",
+                                      "name": "text",
+                                      "type": "string"
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "The namespace for the identifier value",
+                                "name": "system",
+                                "type": "uri"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "The value that is unique",
+                                "name": "value",
+                                "type": "string"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Time period when id is/was valid for use",
+                                "name": "period",
+                                "type": "Period",
+                                "attributes": {
+                                  "create": [
+                                    {
+                                      "depth": 6,
+                                      "comment": "C? Starting time with inclusive boundary",
+                                      "name": "start",
+                                      "type": "dateTime"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "C? End time with inclusive boundary if not ongoing",
+                                      "name": "end",
+                                      "type": "dateTime"
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Organization that issued id (may be just text)",
+                                "name": "assigner",
+                                "type": "Reference(Organization)",
+                                "attributes": {
+                                  "create": [
+                                    {
+                                      "depth": 6,
+                                      "comment": "C? Literal reference, Relative, internal or absolute URL",
+                                      "name": "reference",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Logical reference, when literal reference is not known",
+                                      "name": "identifier",
+                                      "type": "Identifier",
+                                      "attributes": {
+                                        "create": [
+                                          {
+                                            "depth": 7,
+                                            "comment": "usual | official | temp | secondary (If known)",
+                                            "name": "use",
+                                            "type": "code"
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "Description of identifier",
+                                            "name": "type",
+                                            "type": "CodeableConcept",
+                                            "attributes": {
+                                              "create": [
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "Code defined by a terminology system",
+                                                  "name": "coding",
+                                                  "type": "list::Coding",
+                                                  "attributes": {
+                                                    "create": [
+                                                      {
+                                                        "depth": 9,
+                                                        "name": "Coding_0",
+                                                        "type": "Coding",
+                                                        "isProfile": true,
+                                                        "attributes": {
+                                                          "create": [
+                                                            {
+                                                              "depth": 10,
+                                                              "comment": "Identity of the terminology system",
+                                                              "name": "system",
+                                                              "type": "uri"
+                                                            },
+                                                            {
+                                                              "depth": 10,
+                                                              "comment": "Version of the system - if relevant",
+                                                              "name": "version",
+                                                              "type": "string"
+                                                            },
+                                                            {
+                                                              "depth": 10,
+                                                              "comment": "Symbol in syntax defined by the system",
+                                                              "name": "code",
+                                                              "type": "code"
+                                                            },
+                                                            {
+                                                              "depth": 10,
+                                                              "comment": "Representation defined by the system",
+                                                              "name": "display",
+                                                              "type": "string"
+                                                            },
+                                                            {
+                                                              "depth": 10,
+                                                              "comment": "If this coding was chosen directly by the user",
+                                                              "name": "userSelected",
+                                                              "type": "boolean"
+                                                            }
+                                                          ]
+                                                        }
+                                                      }
+                                                    ]
+                                                  }
+                                                },
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "Plain text representation of the concept",
+                                                  "name": "text",
+                                                  "type": "string"
+                                                }
+                                              ]
+                                            }
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "The namespace for the identifier value",
+                                            "name": "system",
+                                            "type": "uri"
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "The value that is unique",
+                                            "name": "value",
+                                            "type": "string"
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "Time period when id is/was valid for use",
+                                            "name": "period",
+                                            "type": "Period",
+                                            "attributes": {
+                                              "create": [
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "C? Starting time with inclusive boundary",
+                                                  "name": "start",
+                                                  "type": "dateTime"
+                                                },
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "C? End time with inclusive boundary if not ongoing",
+                                                  "name": "end",
+                                                  "type": "dateTime"
+                                                }
+                                              ]
+                                            }
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "Organization that issued id (may be just text)",
+                                            "name": "assigner",
+                                            "type": "Reference(Organization)"
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Text alternative for the resource",
+                                      "name": "display",
+                                      "type": "string"
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Text alternative for the resource",
+                          "name": "display",
+                          "type": "string"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "depth": 2,
+              "comment": "Entity is attributed to this agent",
+              "name": "agent",
+              "type": "list::Content as for Provenance.agent"
+            }
+          ]
+        }
+      },
+      {
+        "depth": 1,
+        "comment": "Signature on target",
+        "name": "signature",
+        "type": "list::Signature",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "name": "Signature_0",
+              "type": "Signature",
+              "isProfile": true,
+              "attributes": {
+                "create": [
+                  {
+                    "depth": 3,
+                    "comment": "R!  Indication of the reason the entity signed the object(s)",
+                    "name": "type",
+                    "type": "list::Coding",
+                    "attributes": {
+                      "create": [
+                        {
+                          "depth": 4,
+                          "name": "Coding_0",
+                          "type": "Coding",
+                          "isProfile": true,
+                          "attributes": {
+                            "create": [
+                              {
+                                "depth": 5,
+                                "comment": "Identity of the terminology system",
+                                "name": "system",
+                                "type": "uri"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Version of the system - if relevant",
+                                "name": "version",
+                                "type": "string"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Symbol in syntax defined by the system",
+                                "name": "code",
+                                "type": "code"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Representation defined by the system",
+                                "name": "display",
+                                "type": "string"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "If this coding was chosen directly by the user",
+                                "name": "userSelected",
+                                "type": "boolean"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "R!  When the signature was created",
+                    "name": "when",
+                    "type": "instant"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "",
+                    "name": "whoUri",
+                    "type": "uri"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "",
+                    "name": "whoReference",
+                    "type": "Reference(Practitioner|RelatedPerson|Patient|Device|Organization)",
+                    "attributes": {
+                      "create": [
+                        {
+                          "depth": 4,
+                          "comment": "C? Literal reference, Relative, internal or absolute URL",
+                          "name": "reference",
+                          "type": "string"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Logical reference, when literal reference is not known",
+                          "name": "identifier",
+                          "type": "Identifier",
+                          "attributes": {
+                            "create": [
+                              {
+                                "depth": 5,
+                                "comment": "usual | official | temp | secondary (If known)",
+                                "name": "use",
+                                "type": "code"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Description of identifier",
+                                "name": "type",
+                                "type": "CodeableConcept",
+                                "attributes": {
+                                  "create": [
+                                    {
+                                      "depth": 6,
+                                      "comment": "Code defined by a terminology system",
+                                      "name": "coding",
+                                      "type": "list::Coding",
+                                      "attributes": {
+                                        "create": [
+                                          {
+                                            "depth": 7,
+                                            "name": "Coding_0",
+                                            "type": "Coding",
+                                            "isProfile": true,
+                                            "attributes": {
+                                              "create": [
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "Identity of the terminology system",
+                                                  "name": "system",
+                                                  "type": "uri"
+                                                },
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "Version of the system - if relevant",
+                                                  "name": "version",
+                                                  "type": "string"
+                                                },
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "Symbol in syntax defined by the system",
+                                                  "name": "code",
+                                                  "type": "code"
+                                                },
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "Representation defined by the system",
+                                                  "name": "display",
+                                                  "type": "string"
+                                                },
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "If this coding was chosen directly by the user",
+                                                  "name": "userSelected",
+                                                  "type": "boolean"
+                                                }
+                                              ]
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Plain text representation of the concept",
+                                      "name": "text",
+                                      "type": "string"
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "The namespace for the identifier value",
+                                "name": "system",
+                                "type": "uri"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "The value that is unique",
+                                "name": "value",
+                                "type": "string"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Time period when id is/was valid for use",
+                                "name": "period",
+                                "type": "Period",
+                                "attributes": {
+                                  "create": [
+                                    {
+                                      "depth": 6,
+                                      "comment": "C? Starting time with inclusive boundary",
+                                      "name": "start",
+                                      "type": "dateTime"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "C? End time with inclusive boundary if not ongoing",
+                                      "name": "end",
+                                      "type": "dateTime"
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Organization that issued id (may be just text)",
+                                "name": "assigner",
+                                "type": "Reference(Organization)",
+                                "attributes": {
+                                  "create": [
+                                    {
+                                      "depth": 6,
+                                      "comment": "C? Literal reference, Relative, internal or absolute URL",
+                                      "name": "reference",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Logical reference, when literal reference is not known",
+                                      "name": "identifier",
+                                      "type": "Identifier",
+                                      "attributes": {
+                                        "create": [
+                                          {
+                                            "depth": 7,
+                                            "comment": "usual | official | temp | secondary (If known)",
+                                            "name": "use",
+                                            "type": "code"
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "Description of identifier",
+                                            "name": "type",
+                                            "type": "CodeableConcept",
+                                            "attributes": {
+                                              "create": [
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "Code defined by a terminology system",
+                                                  "name": "coding",
+                                                  "type": "list::Coding",
+                                                  "attributes": {
+                                                    "create": [
+                                                      {
+                                                        "depth": 9,
+                                                        "name": "Coding_0",
+                                                        "type": "Coding",
+                                                        "isProfile": true,
+                                                        "attributes": {
+                                                          "create": [
+                                                            {
+                                                              "depth": 10,
+                                                              "comment": "Identity of the terminology system",
+                                                              "name": "system",
+                                                              "type": "uri"
+                                                            },
+                                                            {
+                                                              "depth": 10,
+                                                              "comment": "Version of the system - if relevant",
+                                                              "name": "version",
+                                                              "type": "string"
+                                                            },
+                                                            {
+                                                              "depth": 10,
+                                                              "comment": "Symbol in syntax defined by the system",
+                                                              "name": "code",
+                                                              "type": "code"
+                                                            },
+                                                            {
+                                                              "depth": 10,
+                                                              "comment": "Representation defined by the system",
+                                                              "name": "display",
+                                                              "type": "string"
+                                                            },
+                                                            {
+                                                              "depth": 10,
+                                                              "comment": "If this coding was chosen directly by the user",
+                                                              "name": "userSelected",
+                                                              "type": "boolean"
+                                                            }
+                                                          ]
+                                                        }
+                                                      }
+                                                    ]
+                                                  }
+                                                },
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "Plain text representation of the concept",
+                                                  "name": "text",
+                                                  "type": "string"
+                                                }
+                                              ]
+                                            }
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "The namespace for the identifier value",
+                                            "name": "system",
+                                            "type": "uri"
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "The value that is unique",
+                                            "name": "value",
+                                            "type": "string"
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "Time period when id is/was valid for use",
+                                            "name": "period",
+                                            "type": "Period",
+                                            "attributes": {
+                                              "create": [
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "C? Starting time with inclusive boundary",
+                                                  "name": "start",
+                                                  "type": "dateTime"
+                                                },
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "C? End time with inclusive boundary if not ongoing",
+                                                  "name": "end",
+                                                  "type": "dateTime"
+                                                }
+                                              ]
+                                            }
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "Organization that issued id (may be just text)",
+                                            "name": "assigner",
+                                            "type": "Reference(Organization)"
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Text alternative for the resource",
+                                      "name": "display",
+                                      "type": "string"
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Text alternative for the resource",
+                          "name": "display",
+                          "type": "string"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "",
+                    "name": "onBehalfOfUri",
+                    "type": "uri"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "",
+                    "name": "onBehalfOfReference",
+                    "type": "Reference(Practitioner|RelatedPerson|Patient|Device|Organization)",
+                    "attributes": {
+                      "create": [
+                        {
+                          "depth": 4,
+                          "comment": "C? Literal reference, Relative, internal or absolute URL",
+                          "name": "reference",
+                          "type": "string"
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Logical reference, when literal reference is not known",
+                          "name": "identifier",
+                          "type": "Identifier",
+                          "attributes": {
+                            "create": [
+                              {
+                                "depth": 5,
+                                "comment": "usual | official | temp | secondary (If known)",
+                                "name": "use",
+                                "type": "code"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Description of identifier",
+                                "name": "type",
+                                "type": "CodeableConcept",
+                                "attributes": {
+                                  "create": [
+                                    {
+                                      "depth": 6,
+                                      "comment": "Code defined by a terminology system",
+                                      "name": "coding",
+                                      "type": "list::Coding",
+                                      "attributes": {
+                                        "create": [
+                                          {
+                                            "depth": 7,
+                                            "name": "Coding_0",
+                                            "type": "Coding",
+                                            "isProfile": true,
+                                            "attributes": {
+                                              "create": [
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "Identity of the terminology system",
+                                                  "name": "system",
+                                                  "type": "uri"
+                                                },
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "Version of the system - if relevant",
+                                                  "name": "version",
+                                                  "type": "string"
+                                                },
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "Symbol in syntax defined by the system",
+                                                  "name": "code",
+                                                  "type": "code"
+                                                },
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "Representation defined by the system",
+                                                  "name": "display",
+                                                  "type": "string"
+                                                },
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "If this coding was chosen directly by the user",
+                                                  "name": "userSelected",
+                                                  "type": "boolean"
+                                                }
+                                              ]
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Plain text representation of the concept",
+                                      "name": "text",
+                                      "type": "string"
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "The namespace for the identifier value",
+                                "name": "system",
+                                "type": "uri"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "The value that is unique",
+                                "name": "value",
+                                "type": "string"
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Time period when id is/was valid for use",
+                                "name": "period",
+                                "type": "Period",
+                                "attributes": {
+                                  "create": [
+                                    {
+                                      "depth": 6,
+                                      "comment": "C? Starting time with inclusive boundary",
+                                      "name": "start",
+                                      "type": "dateTime"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "C? End time with inclusive boundary if not ongoing",
+                                      "name": "end",
+                                      "type": "dateTime"
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "depth": 5,
+                                "comment": "Organization that issued id (may be just text)",
+                                "name": "assigner",
+                                "type": "Reference(Organization)",
+                                "attributes": {
+                                  "create": [
+                                    {
+                                      "depth": 6,
+                                      "comment": "C? Literal reference, Relative, internal or absolute URL",
+                                      "name": "reference",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Logical reference, when literal reference is not known",
+                                      "name": "identifier",
+                                      "type": "Identifier",
+                                      "attributes": {
+                                        "create": [
+                                          {
+                                            "depth": 7,
+                                            "comment": "usual | official | temp | secondary (If known)",
+                                            "name": "use",
+                                            "type": "code"
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "Description of identifier",
+                                            "name": "type",
+                                            "type": "CodeableConcept",
+                                            "attributes": {
+                                              "create": [
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "Code defined by a terminology system",
+                                                  "name": "coding",
+                                                  "type": "list::Coding",
+                                                  "attributes": {
+                                                    "create": [
+                                                      {
+                                                        "depth": 9,
+                                                        "name": "Coding_0",
+                                                        "type": "Coding",
+                                                        "isProfile": true,
+                                                        "attributes": {
+                                                          "create": [
+                                                            {
+                                                              "depth": 10,
+                                                              "comment": "Identity of the terminology system",
+                                                              "name": "system",
+                                                              "type": "uri"
+                                                            },
+                                                            {
+                                                              "depth": 10,
+                                                              "comment": "Version of the system - if relevant",
+                                                              "name": "version",
+                                                              "type": "string"
+                                                            },
+                                                            {
+                                                              "depth": 10,
+                                                              "comment": "Symbol in syntax defined by the system",
+                                                              "name": "code",
+                                                              "type": "code"
+                                                            },
+                                                            {
+                                                              "depth": 10,
+                                                              "comment": "Representation defined by the system",
+                                                              "name": "display",
+                                                              "type": "string"
+                                                            },
+                                                            {
+                                                              "depth": 10,
+                                                              "comment": "If this coding was chosen directly by the user",
+                                                              "name": "userSelected",
+                                                              "type": "boolean"
+                                                            }
+                                                          ]
+                                                        }
+                                                      }
+                                                    ]
+                                                  }
+                                                },
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "Plain text representation of the concept",
+                                                  "name": "text",
+                                                  "type": "string"
+                                                }
+                                              ]
+                                            }
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "The namespace for the identifier value",
+                                            "name": "system",
+                                            "type": "uri"
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "The value that is unique",
+                                            "name": "value",
+                                            "type": "string"
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "Time period when id is/was valid for use",
+                                            "name": "period",
+                                            "type": "Period",
+                                            "attributes": {
+                                              "create": [
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "C? Starting time with inclusive boundary",
+                                                  "name": "start",
+                                                  "type": "dateTime"
+                                                },
+                                                {
+                                                  "depth": 8,
+                                                  "comment": "C? End time with inclusive boundary if not ongoing",
+                                                  "name": "end",
+                                                  "type": "dateTime"
+                                                }
+                                              ]
+                                            }
+                                          },
+                                          {
+                                            "depth": 7,
+                                            "comment": "Organization that issued id (may be just text)",
+                                            "name": "assigner",
+                                            "type": "Reference(Organization)"
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "depth": 6,
+                                      "comment": "Text alternative for the resource",
+                                      "name": "display",
+                                      "type": "string"
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "depth": 4,
+                          "comment": "Text alternative for the resource",
+                          "name": "display",
+                          "type": "string"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "",
+                    "name": "contentType",
+                    "type": "code"
+                  },
+                  {
+                    "depth": 3,
+                    "comment": "",
+                    "name": "blob",
+                    "type": "base64Binary"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "name": "Provenance"
+}

@@ -1,0 +1,86 @@
+{
+  "attributes": {
+    "create": [
+      {
+        "depth": 1,
+        "comment": "Numerator value",
+        "name": "numerator",
+        "type": "Quantity",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "comment": "Numerical value (with implicit precision)",
+              "name": "value",
+              "type": "decimal"
+            },
+            {
+              "depth": 2,
+              "comment": "< | <= | >= | > - how to understand the value",
+              "name": "comparator",
+              "type": "code"
+            },
+            {
+              "depth": 2,
+              "comment": "Unit representation",
+              "name": "unit",
+              "type": "string"
+            },
+            {
+              "depth": 2,
+              "comment": "C? System that defines coded unit form",
+              "name": "system",
+              "type": "uri"
+            },
+            {
+              "depth": 2,
+              "comment": "Coded form of the unit",
+              "name": "code",
+              "type": "code"
+            }
+          ]
+        }
+      },
+      {
+        "depth": 1,
+        "comment": "Denominator value",
+        "name": "denominator",
+        "type": "Quantity",
+        "attributes": {
+          "create": [
+            {
+              "depth": 2,
+              "comment": "Numerical value (with implicit precision)",
+              "name": "value",
+              "type": "decimal"
+            },
+            {
+              "depth": 2,
+              "comment": "< | <= | >= | > - how to understand the value",
+              "name": "comparator",
+              "type": "code"
+            },
+            {
+              "depth": 2,
+              "comment": "Unit representation",
+              "name": "unit",
+              "type": "string"
+            },
+            {
+              "depth": 2,
+              "comment": "C? System that defines coded unit form",
+              "name": "system",
+              "type": "uri"
+            },
+            {
+              "depth": 2,
+              "comment": "Coded form of the unit",
+              "name": "code",
+              "type": "code"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

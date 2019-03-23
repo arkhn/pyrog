@@ -116,8 +116,8 @@ export const arkhn = {
         getUserId(context)
 
         try {
-            // TODO : most horrible code line ever, change it
-            let json_query = require(`../../../../fhir-store/graphql/${resourceName}.json`)
+            // TODO: request these files from a server
+            let json_query = require(`../../../assets/fhirResources/${resourceName}.json`)
 
             return context.client.createResource({
                 database: { connect: { id: databaseId, } },
@@ -127,15 +127,14 @@ export const arkhn = {
         } catch (error) {
             // TODO: return something consistent
             console.log(error)
-            console.log('Problem boy')
         }
     },
     createAttributeProfileInAttribute(parent, { parentAttributeId, attributeName, attributeType }, context: Context, info) {
         getUserId(context)
 
         try {
-            // TODO : most horrible code line ever, change it
-            let json_query = require(`../../../../fhir-store/graphql/${attributeType}.json`)
+            // TODO: request these files from a server
+            let json_query = require(`../../../assets/fhirResources/${attributeType}.json`)
 
             return context.client.createAttribute({
                 attribute: {

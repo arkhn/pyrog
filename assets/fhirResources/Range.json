@@ -1,0 +1,18 @@
+{
+  "attributes": {
+    "create": [
+      {
+        "depth": 1,
+        "comment": "C? Low limit",
+        "name": "low",
+        "type": "Quantity(SimpleQuantity)"
+      },
+      {
+        "depth": 1,
+        "comment": "C? High limit",
+        "name": "high",
+        "type": "Quantity(SimpleQuantity)"
+      }
+    ]
+  }
+}
