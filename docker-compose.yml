@@ -1,9 +1,9 @@
 version: '3'
 services:
     pyrog:
-        image: arkhn/pyrog:latest
         build:
             context: .
+        image: arkhn/pyrog:latest
         ports:
             - "4000:4000"
         restart: always
@@ -25,6 +25,8 @@ services:
                         user: prisma
                         password: prisma
                         migrations: true
+        depends_on:
+            - postgres-db
     postgres-db:
         image: postgres
         restart: always
