@@ -5,7 +5,6 @@ import {
     Context,
     getAttribute,
     getUserId,
-    getUserType,
     PermissionError,
 } from '../../utils'
 

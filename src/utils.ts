@@ -31,6 +31,24 @@ export const checkAuth = (callback: (parent, args, context: Context, info: Graph
     }
 }
 
+export const checkIsAdmin = (callback: (parent, args, context: Context, info: GraphQLResolveInfo) => any) => {
+    return async <PARENT, ARGS>(
+        parent: PARENT,
+        args: ARGS,
+        context: Context,
+        info: GraphQLResolveInfo,
+    ) => {
+        const userId = getUserId(context)
+        const user = await context.client.user({ id: userId })
+
+        if (user.role != 'ADMIN') {
+            throw new PermissionError()
+        }
+
+        return callback(parent, args, context, info)
+    }
+}
+
 export const getUserId = (context: Context) => {
     // Token appears in different places depending
     // on whether the request is HTTP or WS
@@ -42,22 +60,6 @@ export const getUserId = (context: Context) => {
         const token = Authorization.replace('Bearer ', '')
         const { userId } = jwt.verify(token, process.env.APP_SECRET) as { userId: string }
         return userId
-    }
-
-    throw new AuthError()
-}
-
-export const getUserType = (context: Context) => {
-    // Token appears in different places depending
-    // on whether the request is HTTP or WS
-    const Authorization = context.request ?
-        context.request.get('Authorization') :
-        (context.connection.context.Authorization || null)
-
-    if (Authorization) {
-        const token = Authorization.replace('Bearer ', '')
-        const { userType } = jwt.verify(token, process.env.APP_SECRET) as { userType: string }
-        return userType
     }
 
     throw new AuthError()

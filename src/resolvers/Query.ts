@@ -3,6 +3,7 @@ import { forwardTo } from 'prisma-binding'
 
 import {
     checkAuth,
+    checkIsAdmin,
     Context,
     getUserId,
     getRecAttribute,
@@ -12,6 +13,7 @@ export const Query = {
     // BINDING QUERIES
     inputColumns: checkAuth(forwardTo('binding')),
     resource: checkAuth(forwardTo('binding')),
+    resources: checkIsAdmin(forwardTo('binding')),
 
     // CLIENT QUERIES
     allDatabases(parent, args, context: Context) {
