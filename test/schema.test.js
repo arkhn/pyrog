@@ -83,7 +83,7 @@ const serverInstance = new GraphQLServer({
 })
 
 const sendPostRequest = async (query, variables) => {
-    return await fetch('http://0.0.0.0:4000', {
+    return await fetch(`http://0.0.0.0:${process.env.SERVER_PORT}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

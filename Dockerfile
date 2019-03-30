@@ -1,8 +1,8 @@
 FROM node:10.15-alpine
-WORKDIR /usr/src/app
+WORKDIR $WORKDIR
 COPY package*.json yarn.lock ./
 RUN yarn install
 COPY . .
-EXPOSE 4000
+EXPOSE $SERVER_PORT
 ENV NODE_ENV docker
 CMD ["yarn", "start"]

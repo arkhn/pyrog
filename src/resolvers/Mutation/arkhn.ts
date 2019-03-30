@@ -6,6 +6,7 @@ import {
     getAttribute,
     getUserId,
     PermissionError,
+    ServerError,
 } from '../../utils'
 
 export const arkhn = {
@@ -115,37 +116,52 @@ export const arkhn = {
         getUserId(context)
 
         try {
-            // TODO: request these files from a server
-            let json_query = require(`../../../assets/fhirResources/${resourceName}.json`)
-
-            return context.client.createResource({
-                database: { connect: { id: databaseId, } },
-                name: resourceName,
-                attributes: (<any>json_query).attributes,
-            })
+            fetch(`http://localhost:${process.env.SERVER_PORT}/resource/${resourceName}.json`)
+                .then((response: any) => {
+                    return response.json()
+                })
+                .then((response: any) => {
+                    return context.client.createResource({
+                        database: { connect: { id: databaseId, } },
+                        name: resourceName,
+                        attributes: response['attributes'],
+                    })
+                })
+                .catch((error: any) => {
+                    console.log(error)
+                    throw new ServerError()
+                })
         } catch (error) {
             // TODO: return something consistent
             console.log(error)
+            throw new ServerError()
         }
     },
     createAttributeProfileInAttribute(parent, { parentAttributeId, attributeName, attributeType }, context: Context, info) {
         getUserId(context)
 
         try {
-            // TODO: request these files from a server
-            let json_query = require(`../../../assets/fhirResources/${attributeType}.json`)
-
-            return context.client.createAttribute({
-                attribute: {
-                    connect: {
-                        id: parentAttributeId,
-                    }
-                },
-                isProfile: true,
-                name: attributeName,
-                type: attributeType,
-                attributes: (<any>json_query).attributes,
-            })
+            fetch(`http://localhost:${process.env.SERVER_PORT}/resource/${attributeType}.json`)
+                .then((response: any) => {
+                    return response.json()
+                })
+                .then((response: any) => {
+                    return context.client.createAttribute({
+                        attribute: {
+                            connect: {
+                                id: parentAttributeId,
+                            }
+                        },
+                        isProfile: true,
+                        name: attributeName,
+                        type: attributeType,
+                        attributes: response['attributes'],
+                    })
+                })
+                .catch((error: any) => {
+                    console.log(error)
+                    throw new ServerError()
+                })
         } catch (error) {
             // TODO: return something consistent
             console.log(error)
