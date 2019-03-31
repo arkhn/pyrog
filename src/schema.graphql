@@ -4,6 +4,7 @@ type Query {
     # BINDING QUERIES
     inputColumns(where: InputColumnWhereInput): [InputColumn!]
     resource(where: ResourceWhereUniqueInput): Resource!
+    resources(where: ResourceWhereInput): [Resource]!
 
     # CLIENT QUERIES
     allDatabases: [Database!]!
