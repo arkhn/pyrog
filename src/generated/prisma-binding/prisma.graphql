@@ -1,11 +1,7 @@
 # source: http://0.0.0.0:4466
-# timestamp: Sun Mar 17 2019 15:58:40 GMT+0100 (Central European Standard Time)
+# timestamp: Sun Mar 31 2019 13:02:59 GMT+0200 (Central European Summer Time)
 
 type AggregateAttribute {
-  count: Int!
-}
-
-type AggregateDatabase {
   count: Int!
 }
 
@@ -18,6 +14,10 @@ type AggregateJoin {
 }
 
 type AggregateResource {
+  count: Int!
+}
+
+type AggregateSource {
   count: Int!
 }
 
@@ -854,224 +854,6 @@ input AttributeWhereUniqueInput {
 type BatchPayload {
   """The number of nodes that have been affected by the Batch operation."""
   count: Long!
-}
-
-type Database implements Node {
-  id: ID!
-  name: String!
-  resources(where: ResourceWhereInput, orderBy: ResourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Resource!]
-}
-
-"""A connection to a list of items."""
-type DatabaseConnection {
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """A list of edges."""
-  edges: [DatabaseEdge]!
-  aggregate: AggregateDatabase!
-}
-
-input DatabaseCreateInput {
-  name: String!
-  resources: ResourceCreateManyWithoutDatabaseInput
-}
-
-input DatabaseCreateOneWithoutResourcesInput {
-  create: DatabaseCreateWithoutResourcesInput
-  connect: DatabaseWhereUniqueInput
-}
-
-input DatabaseCreateWithoutResourcesInput {
-  name: String!
-}
-
-"""An edge in a connection."""
-type DatabaseEdge {
-  """The item at the end of the edge."""
-  node: Database!
-
-  """A cursor for use in pagination."""
-  cursor: String!
-}
-
-enum DatabaseOrderByInput {
-  id_ASC
-  id_DESC
-  name_ASC
-  name_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
-}
-
-type DatabasePreviousValues {
-  id: ID!
-  name: String!
-}
-
-type DatabaseSubscriptionPayload {
-  mutation: MutationType!
-  node: Database
-  updatedFields: [String!]
-  previousValues: DatabasePreviousValues
-}
-
-input DatabaseSubscriptionWhereInput {
-  """Logical AND on all given filters."""
-  AND: [DatabaseSubscriptionWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [DatabaseSubscriptionWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [DatabaseSubscriptionWhereInput!]
-
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
-  mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
-  updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
-  updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
-  updatedFields_contains_some: [String!]
-  node: DatabaseWhereInput
-}
-
-input DatabaseUpdateInput {
-  name: String
-  resources: ResourceUpdateManyWithoutDatabaseInput
-}
-
-input DatabaseUpdateManyMutationInput {
-  name: String
-}
-
-input DatabaseUpdateOneRequiredWithoutResourcesInput {
-  create: DatabaseCreateWithoutResourcesInput
-  connect: DatabaseWhereUniqueInput
-  update: DatabaseUpdateWithoutResourcesDataInput
-  upsert: DatabaseUpsertWithoutResourcesInput
-}
-
-input DatabaseUpdateWithoutResourcesDataInput {
-  name: String
-}
-
-input DatabaseUpsertWithoutResourcesInput {
-  update: DatabaseUpdateWithoutResourcesDataInput!
-  create: DatabaseCreateWithoutResourcesInput!
-}
-
-input DatabaseWhereInput {
-  """Logical AND on all given filters."""
-  AND: [DatabaseWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [DatabaseWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [DatabaseWhereInput!]
-  id: ID
-
-  """All values that are not equal to given value."""
-  id_not: ID
-
-  """All values that are contained in given list."""
-  id_in: [ID!]
-
-  """All values that are not contained in given list."""
-  id_not_in: [ID!]
-
-  """All values less than the given value."""
-  id_lt: ID
-
-  """All values less than or equal the given value."""
-  id_lte: ID
-
-  """All values greater than the given value."""
-  id_gt: ID
-
-  """All values greater than or equal the given value."""
-  id_gte: ID
-
-  """All values containing the given string."""
-  id_contains: ID
-
-  """All values not containing the given string."""
-  id_not_contains: ID
-
-  """All values starting with the given string."""
-  id_starts_with: ID
-
-  """All values not starting with the given string."""
-  id_not_starts_with: ID
-
-  """All values ending with the given string."""
-  id_ends_with: ID
-
-  """All values not ending with the given string."""
-  id_not_ends_with: ID
-  name: String
-
-  """All values that are not equal to given value."""
-  name_not: String
-
-  """All values that are contained in given list."""
-  name_in: [String!]
-
-  """All values that are not contained in given list."""
-  name_not_in: [String!]
-
-  """All values less than the given value."""
-  name_lt: String
-
-  """All values less than or equal the given value."""
-  name_lte: String
-
-  """All values greater than the given value."""
-  name_gt: String
-
-  """All values greater than or equal the given value."""
-  name_gte: String
-
-  """All values containing the given string."""
-  name_contains: String
-
-  """All values not containing the given string."""
-  name_not_contains: String
-
-  """All values starting with the given string."""
-  name_starts_with: String
-
-  """All values not starting with the given string."""
-  name_not_starts_with: String
-
-  """All values ending with the given string."""
-  name_ends_with: String
-
-  """All values not ending with the given string."""
-  name_not_ends_with: String
-  resources_every: ResourceWhereInput
-  resources_some: ResourceWhereInput
-  resources_none: ResourceWhereInput
-}
-
-input DatabaseWhereUniqueInput {
-  id: ID
-  name: String
 }
 
 type InputColumn implements Node {
@@ -2586,37 +2368,37 @@ Long can represent values between -(2^63) and 2^63 - 1.
 scalar Long
 
 type Mutation {
-  createDatabase(data: DatabaseCreateInput!): Database!
+  createSource(data: SourceCreateInput!): Source!
   createResource(data: ResourceCreateInput!): Resource!
   createAttribute(data: AttributeCreateInput!): Attribute!
   createInputColumn(data: InputColumnCreateInput!): InputColumn!
   createJoin(data: JoinCreateInput!): Join!
   createUser(data: UserCreateInput!): User!
-  updateDatabase(data: DatabaseUpdateInput!, where: DatabaseWhereUniqueInput!): Database
+  updateSource(data: SourceUpdateInput!, where: SourceWhereUniqueInput!): Source
   updateResource(data: ResourceUpdateInput!, where: ResourceWhereUniqueInput!): Resource
   updateAttribute(data: AttributeUpdateInput!, where: AttributeWhereUniqueInput!): Attribute
   updateInputColumn(data: InputColumnUpdateInput!, where: InputColumnWhereUniqueInput!): InputColumn
   updateJoin(data: JoinUpdateInput!, where: JoinWhereUniqueInput!): Join
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-  deleteDatabase(where: DatabaseWhereUniqueInput!): Database
+  deleteSource(where: SourceWhereUniqueInput!): Source
   deleteResource(where: ResourceWhereUniqueInput!): Resource
   deleteAttribute(where: AttributeWhereUniqueInput!): Attribute
   deleteInputColumn(where: InputColumnWhereUniqueInput!): InputColumn
   deleteJoin(where: JoinWhereUniqueInput!): Join
   deleteUser(where: UserWhereUniqueInput!): User
-  upsertDatabase(where: DatabaseWhereUniqueInput!, create: DatabaseCreateInput!, update: DatabaseUpdateInput!): Database!
+  upsertSource(where: SourceWhereUniqueInput!, create: SourceCreateInput!, update: SourceUpdateInput!): Source!
   upsertResource(where: ResourceWhereUniqueInput!, create: ResourceCreateInput!, update: ResourceUpdateInput!): Resource!
   upsertAttribute(where: AttributeWhereUniqueInput!, create: AttributeCreateInput!, update: AttributeUpdateInput!): Attribute!
   upsertInputColumn(where: InputColumnWhereUniqueInput!, create: InputColumnCreateInput!, update: InputColumnUpdateInput!): InputColumn!
   upsertJoin(where: JoinWhereUniqueInput!, create: JoinCreateInput!, update: JoinUpdateInput!): Join!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
-  updateManyDatabases(data: DatabaseUpdateManyMutationInput!, where: DatabaseWhereInput): BatchPayload!
+  updateManySources(data: SourceUpdateManyMutationInput!, where: SourceWhereInput): BatchPayload!
   updateManyResources(data: ResourceUpdateManyMutationInput!, where: ResourceWhereInput): BatchPayload!
   updateManyAttributes(data: AttributeUpdateManyMutationInput!, where: AttributeWhereInput): BatchPayload!
   updateManyInputColumns(data: InputColumnUpdateManyMutationInput!, where: InputColumnWhereInput): BatchPayload!
   updateManyJoins(data: JoinUpdateManyMutationInput!, where: JoinWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
-  deleteManyDatabases(where: DatabaseWhereInput): BatchPayload!
+  deleteManySources(where: SourceWhereInput): BatchPayload!
   deleteManyResources(where: ResourceWhereInput): BatchPayload!
   deleteManyAttributes(where: AttributeWhereInput): BatchPayload!
   deleteManyInputColumns(where: InputColumnWhereInput): BatchPayload!
@@ -2652,19 +2434,19 @@ type PageInfo {
 }
 
 type Query {
-  databases(where: DatabaseWhereInput, orderBy: DatabaseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Database]!
+  sources(where: SourceWhereInput, orderBy: SourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Source]!
   resources(where: ResourceWhereInput, orderBy: ResourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Resource]!
   attributes(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Attribute]!
   inputColumns(where: InputColumnWhereInput, orderBy: InputColumnOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [InputColumn]!
   joins(where: JoinWhereInput, orderBy: JoinOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Join]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
-  database(where: DatabaseWhereUniqueInput!): Database
+  source(where: SourceWhereUniqueInput!): Source
   resource(where: ResourceWhereUniqueInput!): Resource
   attribute(where: AttributeWhereUniqueInput!): Attribute
   inputColumn(where: InputColumnWhereUniqueInput!): InputColumn
   join(where: JoinWhereUniqueInput!): Join
   user(where: UserWhereUniqueInput!): User
-  databasesConnection(where: DatabaseWhereInput, orderBy: DatabaseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DatabaseConnection!
+  sourcesConnection(where: SourceWhereInput, orderBy: SourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SourceConnection!
   resourcesConnection(where: ResourceWhereInput, orderBy: ResourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ResourceConnection!
   attributesConnection(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AttributeConnection!
   inputColumnsConnection(where: InputColumnWhereInput, orderBy: InputColumnOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): InputColumnConnection!
@@ -2685,7 +2467,7 @@ type Resource implements Node {
   primaryKeyTable: String
   primaryKeyColumn: String
   attributes(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Attribute!]
-  database: Database!
+  source: Source!
 }
 
 """A connection to a list of items."""
@@ -2704,11 +2486,11 @@ input ResourceCreateInput {
   primaryKeyTable: String
   primaryKeyColumn: String
   attributes: AttributeCreateManyWithoutResourceInput
-  database: DatabaseCreateOneWithoutResourcesInput!
+  source: SourceCreateOneWithoutResourcesInput!
 }
 
-input ResourceCreateManyWithoutDatabaseInput {
-  create: [ResourceCreateWithoutDatabaseInput!]
+input ResourceCreateManyWithoutSourceInput {
+  create: [ResourceCreateWithoutSourceInput!]
   connect: [ResourceWhereUniqueInput!]
 }
 
@@ -2722,10 +2504,10 @@ input ResourceCreateWithoutAttributesInput {
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
-  database: DatabaseCreateOneWithoutResourcesInput!
+  source: SourceCreateOneWithoutResourcesInput!
 }
 
-input ResourceCreateWithoutDatabaseInput {
+input ResourceCreateWithoutSourceInput {
   name: String!
   primaryKeyOwner: String
   primaryKeyTable: String
@@ -3023,7 +2805,7 @@ input ResourceUpdateInput {
   primaryKeyTable: String
   primaryKeyColumn: String
   attributes: AttributeUpdateManyWithoutResourceInput
-  database: DatabaseUpdateOneRequiredWithoutResourcesInput
+  source: SourceUpdateOneRequiredWithoutResourcesInput
 }
 
 input ResourceUpdateManyDataInput {
@@ -3040,16 +2822,16 @@ input ResourceUpdateManyMutationInput {
   primaryKeyColumn: String
 }
 
-input ResourceUpdateManyWithoutDatabaseInput {
-  create: [ResourceCreateWithoutDatabaseInput!]
+input ResourceUpdateManyWithoutSourceInput {
+  create: [ResourceCreateWithoutSourceInput!]
   connect: [ResourceWhereUniqueInput!]
   set: [ResourceWhereUniqueInput!]
   disconnect: [ResourceWhereUniqueInput!]
   delete: [ResourceWhereUniqueInput!]
-  update: [ResourceUpdateWithWhereUniqueWithoutDatabaseInput!]
+  update: [ResourceUpdateWithWhereUniqueWithoutSourceInput!]
   updateMany: [ResourceUpdateManyWithWhereNestedInput!]
   deleteMany: [ResourceScalarWhereInput!]
-  upsert: [ResourceUpsertWithWhereUniqueWithoutDatabaseInput!]
+  upsert: [ResourceUpsertWithWhereUniqueWithoutSourceInput!]
 }
 
 input ResourceUpdateManyWithWhereNestedInput {
@@ -3071,10 +2853,10 @@ input ResourceUpdateWithoutAttributesDataInput {
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
-  database: DatabaseUpdateOneRequiredWithoutResourcesInput
+  source: SourceUpdateOneRequiredWithoutResourcesInput
 }
 
-input ResourceUpdateWithoutDatabaseDataInput {
+input ResourceUpdateWithoutSourceDataInput {
   name: String
   primaryKeyOwner: String
   primaryKeyTable: String
@@ -3082,9 +2864,9 @@ input ResourceUpdateWithoutDatabaseDataInput {
   attributes: AttributeUpdateManyWithoutResourceInput
 }
 
-input ResourceUpdateWithWhereUniqueWithoutDatabaseInput {
+input ResourceUpdateWithWhereUniqueWithoutSourceInput {
   where: ResourceWhereUniqueInput!
-  data: ResourceUpdateWithoutDatabaseDataInput!
+  data: ResourceUpdateWithoutSourceDataInput!
 }
 
 input ResourceUpsertWithoutAttributesInput {
@@ -3092,10 +2874,10 @@ input ResourceUpsertWithoutAttributesInput {
   create: ResourceCreateWithoutAttributesInput!
 }
 
-input ResourceUpsertWithWhereUniqueWithoutDatabaseInput {
+input ResourceUpsertWithWhereUniqueWithoutSourceInput {
   where: ResourceWhereUniqueInput!
-  update: ResourceUpdateWithoutDatabaseDataInput!
-  create: ResourceCreateWithoutDatabaseInput!
+  update: ResourceUpdateWithoutSourceDataInput!
+  create: ResourceCreateWithoutSourceInput!
 }
 
 input ResourceWhereInput {
@@ -3310,7 +3092,7 @@ input ResourceWhereInput {
   attributes_every: AttributeWhereInput
   attributes_some: AttributeWhereInput
   attributes_none: AttributeWhereInput
-  database: DatabaseWhereInput
+  source: SourceWhereInput
 }
 
 input ResourceWhereUniqueInput {
@@ -3322,8 +3104,226 @@ enum Role {
   USER
 }
 
+type Source implements Node {
+  id: ID!
+  name: String!
+  resources(where: ResourceWhereInput, orderBy: ResourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Resource!]
+}
+
+"""A connection to a list of items."""
+type SourceConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [SourceEdge]!
+  aggregate: AggregateSource!
+}
+
+input SourceCreateInput {
+  name: String!
+  resources: ResourceCreateManyWithoutSourceInput
+}
+
+input SourceCreateOneWithoutResourcesInput {
+  create: SourceCreateWithoutResourcesInput
+  connect: SourceWhereUniqueInput
+}
+
+input SourceCreateWithoutResourcesInput {
+  name: String!
+}
+
+"""An edge in a connection."""
+type SourceEdge {
+  """The item at the end of the edge."""
+  node: Source!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum SourceOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type SourcePreviousValues {
+  id: ID!
+  name: String!
+}
+
+type SourceSubscriptionPayload {
+  mutation: MutationType!
+  node: Source
+  updatedFields: [String!]
+  previousValues: SourcePreviousValues
+}
+
+input SourceSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [SourceSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [SourceSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [SourceSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: SourceWhereInput
+}
+
+input SourceUpdateInput {
+  name: String
+  resources: ResourceUpdateManyWithoutSourceInput
+}
+
+input SourceUpdateManyMutationInput {
+  name: String
+}
+
+input SourceUpdateOneRequiredWithoutResourcesInput {
+  create: SourceCreateWithoutResourcesInput
+  connect: SourceWhereUniqueInput
+  update: SourceUpdateWithoutResourcesDataInput
+  upsert: SourceUpsertWithoutResourcesInput
+}
+
+input SourceUpdateWithoutResourcesDataInput {
+  name: String
+}
+
+input SourceUpsertWithoutResourcesInput {
+  update: SourceUpdateWithoutResourcesDataInput!
+  create: SourceCreateWithoutResourcesInput!
+}
+
+input SourceWhereInput {
+  """Logical AND on all given filters."""
+  AND: [SourceWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [SourceWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [SourceWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  resources_every: ResourceWhereInput
+  resources_some: ResourceWhereInput
+  resources_none: ResourceWhereInput
+}
+
+input SourceWhereUniqueInput {
+  id: ID
+  name: String
+}
+
 type Subscription {
-  database(where: DatabaseSubscriptionWhereInput): DatabaseSubscriptionPayload
+  source(where: SourceSubscriptionWhereInput): SourceSubscriptionPayload
   resource(where: ResourceSubscriptionWhereInput): ResourceSubscriptionPayload
   attribute(where: AttributeSubscriptionWhereInput): AttributeSubscriptionPayload
   inputColumn(where: InputColumnSubscriptionWhereInput): InputColumnSubscriptionPayload

@@ -1,13 +1,17 @@
-import { Query } from './Query'
-import { Subscription } from './Subscription'
-import { auth } from './Mutation/auth'
-import { arkhn } from './Mutation/arkhn'
+import { authMutation } from './Mutation/auth'
+import { pyrogMutation } from './Mutation/pyrog'
+import { pyrogQuery } from './Query/pyrog'
+import { pyrogSubscription } from './Subscription/pyrog'
 
 export default {
-    Query,
-    Mutation: {
-        ...auth,
-        ...arkhn,
+    Query: {
+        ...pyrogQuery,
     },
-    Subscription,
+    Mutation: {
+        ...authMutation,
+        ...pyrogMutation,
+    },
+    Subscription: {
+        ...pyrogSubscription,
+    },
 }

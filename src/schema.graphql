@@ -1,4 +1,4 @@
-# import Database, Resource, Attribute from "./generated/prisma-binding/prisma.graphql"
+# import Source, Resource, Attribute from "./generated/prisma-binding/prisma.graphql"
 
 type Query {
     # BINDING QUERIES
@@ -7,17 +7,17 @@ type Query {
     resources(where: ResourceWhereInput): [Resource]!
 
     # CLIENT QUERIES
-    allDatabases: [Database!]!
-    availableResources(databaseId: ID!): [Resource!]
+    allSources: [Source!]!
+    availableResources(sourceId: ID!): [Resource!]
     recAvailableAttributes(resourceId: ID!): [Attribute!]
     me: User
     isAuthenticated: Boolean!
-    # countMappedAttributes(databaseId: ID!): Int
-    computeDatabaseMappingProgress(databaseId: ID!): [Int!]
+    # countMappedAttributes(sourceId: ID!): Int
+    computeSourceMappingProgress(sourceId: ID!): [Int!]
 }
 
 type Mutation {
-    createDatabase(databaseName: String!): Database!
+    createSource(sourceName: String!): Source!
     createInputColumnAndUpdateAttribute(attributeId: ID!, data: InputColumnCreateWithoutAttributeInput): InputColumn!
     deleteInputColumnAndUpdateAttribute(attributeId: ID!, inputColumnId: ID!): InputColumn!
     createJoinAndUpdateInputColumn(inputColumnId: ID!, data: JoinCreateWithoutInputColumnInput): Join!
@@ -27,7 +27,7 @@ type Mutation {
     updateInputColumn(id: ID!, data: InputColumnUpdateInput): InputColumn!
     updateJoin(id: ID!, data: JoinUpdateInput): Join!
 
-    createResourceTreeInDatabase(databaseId: ID!, resourceName: String!): Resource!
+    createResourceTreeInSource(sourceId: ID!, resourceName: String!): Resource!
     createAttributeProfileInAttribute(parentAttributeId: ID!, attributeName: String!, attributeType: String!): Attribute!
     deleteAttribute(id: ID!): Attribute!
 

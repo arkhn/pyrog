@@ -15,10 +15,10 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
 
 export interface Exists {
   attribute: (where?: AttributeWhereInput) => Promise<boolean>;
-  database: (where?: DatabaseWhereInput) => Promise<boolean>;
   inputColumn: (where?: InputColumnWhereInput) => Promise<boolean>;
   join: (where?: JoinWhereInput) => Promise<boolean>;
   resource: (where?: ResourceWhereInput) => Promise<boolean>;
+  source: (where?: SourceWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
 }
 
@@ -64,29 +64,6 @@ export interface Prisma {
       last?: Int;
     }
   ) => AttributeConnectionPromise;
-  database: (where: DatabaseWhereUniqueInput) => DatabasePromise;
-  databases: (
-    args?: {
-      where?: DatabaseWhereInput;
-      orderBy?: DatabaseOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => FragmentableArray<Database>;
-  databasesConnection: (
-    args?: {
-      where?: DatabaseWhereInput;
-      orderBy?: DatabaseOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => DatabaseConnectionPromise;
   inputColumn: (where: InputColumnWhereUniqueInput) => InputColumnPromise;
   inputColumns: (
     args?: {
@@ -156,6 +133,29 @@ export interface Prisma {
       last?: Int;
     }
   ) => ResourceConnectionPromise;
+  source: (where: SourceWhereUniqueInput) => SourcePromise;
+  sources: (
+    args?: {
+      where?: SourceWhereInput;
+      orderBy?: SourceOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<Source>;
+  sourcesConnection: (
+    args?: {
+      where?: SourceWhereInput;
+      orderBy?: SourceOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => SourceConnectionPromise;
   user: (where: UserWhereUniqueInput) => UserPromise;
   users: (
     args?: {
@@ -204,22 +204,6 @@ export interface Prisma {
   ) => AttributePromise;
   deleteAttribute: (where: AttributeWhereUniqueInput) => AttributePromise;
   deleteManyAttributes: (where?: AttributeWhereInput) => BatchPayloadPromise;
-  createDatabase: (data: DatabaseCreateInput) => DatabasePromise;
-  updateDatabase: (
-    args: { data: DatabaseUpdateInput; where: DatabaseWhereUniqueInput }
-  ) => DatabasePromise;
-  updateManyDatabases: (
-    args: { data: DatabaseUpdateManyMutationInput; where?: DatabaseWhereInput }
-  ) => BatchPayloadPromise;
-  upsertDatabase: (
-    args: {
-      where: DatabaseWhereUniqueInput;
-      create: DatabaseCreateInput;
-      update: DatabaseUpdateInput;
-    }
-  ) => DatabasePromise;
-  deleteDatabase: (where: DatabaseWhereUniqueInput) => DatabasePromise;
-  deleteManyDatabases: (where?: DatabaseWhereInput) => BatchPayloadPromise;
   createInputColumn: (data: InputColumnCreateInput) => InputColumnPromise;
   updateInputColumn: (
     args: { data: InputColumnUpdateInput; where: InputColumnWhereUniqueInput }
@@ -273,6 +257,22 @@ export interface Prisma {
   ) => ResourcePromise;
   deleteResource: (where: ResourceWhereUniqueInput) => ResourcePromise;
   deleteManyResources: (where?: ResourceWhereInput) => BatchPayloadPromise;
+  createSource: (data: SourceCreateInput) => SourcePromise;
+  updateSource: (
+    args: { data: SourceUpdateInput; where: SourceWhereUniqueInput }
+  ) => SourcePromise;
+  updateManySources: (
+    args: { data: SourceUpdateManyMutationInput; where?: SourceWhereInput }
+  ) => BatchPayloadPromise;
+  upsertSource: (
+    args: {
+      where: SourceWhereUniqueInput;
+      create: SourceCreateInput;
+      update: SourceUpdateInput;
+    }
+  ) => SourcePromise;
+  deleteSource: (where: SourceWhereUniqueInput) => SourcePromise;
+  deleteManySources: (where?: SourceWhereInput) => BatchPayloadPromise;
   createUser: (data: UserCreateInput) => UserPromise;
   updateUser: (
     args: { data: UserUpdateInput; where: UserWhereUniqueInput }
@@ -301,9 +301,6 @@ export interface Subscription {
   attribute: (
     where?: AttributeSubscriptionWhereInput
   ) => AttributeSubscriptionPayloadSubscription;
-  database: (
-    where?: DatabaseSubscriptionWhereInput
-  ) => DatabaseSubscriptionPayloadSubscription;
   inputColumn: (
     where?: InputColumnSubscriptionWhereInput
   ) => InputColumnSubscriptionPayloadSubscription;
@@ -313,6 +310,9 @@ export interface Subscription {
   resource: (
     where?: ResourceSubscriptionWhereInput
   ) => ResourceSubscriptionPayloadSubscription;
+  source: (
+    where?: SourceSubscriptionWhereInput
+  ) => SourceSubscriptionPayloadSubscription;
   user: (
     where?: UserSubscriptionWhereInput
   ) => UserSubscriptionPayloadSubscription;
@@ -400,7 +400,7 @@ export type JoinOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type DatabaseOrderByInput =
+export type SourceOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "name_ASC"
@@ -602,13 +602,13 @@ export interface ResourceWhereInput {
   attributes_every?: AttributeWhereInput;
   attributes_some?: AttributeWhereInput;
   attributes_none?: AttributeWhereInput;
-  database?: DatabaseWhereInput;
+  source?: SourceWhereInput;
   AND?: ResourceWhereInput[] | ResourceWhereInput;
   OR?: ResourceWhereInput[] | ResourceWhereInput;
   NOT?: ResourceWhereInput[] | ResourceWhereInput;
 }
 
-export interface DatabaseWhereInput {
+export interface SourceWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
   id_in?: ID_Input[] | ID_Input;
@@ -640,9 +640,9 @@ export interface DatabaseWhereInput {
   resources_every?: ResourceWhereInput;
   resources_some?: ResourceWhereInput;
   resources_none?: ResourceWhereInput;
-  AND?: DatabaseWhereInput[] | DatabaseWhereInput;
-  OR?: DatabaseWhereInput[] | DatabaseWhereInput;
-  NOT?: DatabaseWhereInput[] | DatabaseWhereInput;
+  AND?: SourceWhereInput[] | SourceWhereInput;
+  OR?: SourceWhereInput[] | SourceWhereInput;
+  NOT?: SourceWhereInput[] | SourceWhereInput;
 }
 
 export interface InputColumnWhereInput {
@@ -844,11 +844,6 @@ export interface JoinWhereInput {
   NOT?: JoinWhereInput[] | JoinWhereInput;
 }
 
-export type DatabaseWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  name?: String;
-}>;
-
 export type InputColumnWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
@@ -859,6 +854,11 @@ export type JoinWhereUniqueInput = AtLeastOne<{
 
 export type ResourceWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
+}>;
+
+export type SourceWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  name?: String;
 }>;
 
 export type UserWhereUniqueInput = AtLeastOne<{
@@ -955,15 +955,15 @@ export interface ResourceCreateWithoutAttributesInput {
   primaryKeyOwner?: String;
   primaryKeyTable?: String;
   primaryKeyColumn?: String;
-  database: DatabaseCreateOneWithoutResourcesInput;
+  source: SourceCreateOneWithoutResourcesInput;
 }
 
-export interface DatabaseCreateOneWithoutResourcesInput {
-  create?: DatabaseCreateWithoutResourcesInput;
-  connect?: DatabaseWhereUniqueInput;
+export interface SourceCreateOneWithoutResourcesInput {
+  create?: SourceCreateWithoutResourcesInput;
+  connect?: SourceWhereUniqueInput;
 }
 
-export interface DatabaseCreateWithoutResourcesInput {
+export interface SourceCreateWithoutResourcesInput {
   name: String;
 }
 
@@ -1062,23 +1062,23 @@ export interface ResourceUpdateWithoutAttributesDataInput {
   primaryKeyOwner?: String;
   primaryKeyTable?: String;
   primaryKeyColumn?: String;
-  database?: DatabaseUpdateOneRequiredWithoutResourcesInput;
+  source?: SourceUpdateOneRequiredWithoutResourcesInput;
 }
 
-export interface DatabaseUpdateOneRequiredWithoutResourcesInput {
-  create?: DatabaseCreateWithoutResourcesInput;
-  update?: DatabaseUpdateWithoutResourcesDataInput;
-  upsert?: DatabaseUpsertWithoutResourcesInput;
-  connect?: DatabaseWhereUniqueInput;
+export interface SourceUpdateOneRequiredWithoutResourcesInput {
+  create?: SourceCreateWithoutResourcesInput;
+  update?: SourceUpdateWithoutResourcesDataInput;
+  upsert?: SourceUpsertWithoutResourcesInput;
+  connect?: SourceWhereUniqueInput;
 }
 
-export interface DatabaseUpdateWithoutResourcesDataInput {
+export interface SourceUpdateWithoutResourcesDataInput {
   name?: String;
 }
 
-export interface DatabaseUpsertWithoutResourcesInput {
-  update: DatabaseUpdateWithoutResourcesDataInput;
-  create: DatabaseCreateWithoutResourcesInput;
+export interface SourceUpsertWithoutResourcesInput {
+  update: SourceUpdateWithoutResourcesDataInput;
+  create: SourceCreateWithoutResourcesInput;
 }
 
 export interface ResourceUpsertWithoutAttributesInput {
@@ -1565,224 +1565,6 @@ export interface AttributeUpdateManyMutationInput {
   depth?: Int;
 }
 
-export interface DatabaseCreateInput {
-  name: String;
-  resources?: ResourceCreateManyWithoutDatabaseInput;
-}
-
-export interface ResourceCreateManyWithoutDatabaseInput {
-  create?:
-    | ResourceCreateWithoutDatabaseInput[]
-    | ResourceCreateWithoutDatabaseInput;
-  connect?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput;
-}
-
-export interface ResourceCreateWithoutDatabaseInput {
-  name: String;
-  primaryKeyOwner?: String;
-  primaryKeyTable?: String;
-  primaryKeyColumn?: String;
-  attributes?: AttributeCreateManyWithoutResourceInput;
-}
-
-export interface AttributeCreateManyWithoutResourceInput {
-  create?:
-    | AttributeCreateWithoutResourceInput[]
-    | AttributeCreateWithoutResourceInput;
-  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
-}
-
-export interface AttributeCreateWithoutResourceInput {
-  name: String;
-  mergingScript?: String;
-  isProfile?: Boolean;
-  type?: String;
-  comment?: String;
-  depth?: Int;
-  attributes?: AttributeCreateManyWithoutAttributeInput;
-  attribute?: AttributeCreateOneWithoutAttributesInput;
-  inputColumns?: InputColumnCreateManyWithoutAttributeInput;
-}
-
-export interface DatabaseUpdateInput {
-  name?: String;
-  resources?: ResourceUpdateManyWithoutDatabaseInput;
-}
-
-export interface ResourceUpdateManyWithoutDatabaseInput {
-  create?:
-    | ResourceCreateWithoutDatabaseInput[]
-    | ResourceCreateWithoutDatabaseInput;
-  delete?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput;
-  connect?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput;
-  set?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput;
-  disconnect?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput;
-  update?:
-    | ResourceUpdateWithWhereUniqueWithoutDatabaseInput[]
-    | ResourceUpdateWithWhereUniqueWithoutDatabaseInput;
-  upsert?:
-    | ResourceUpsertWithWhereUniqueWithoutDatabaseInput[]
-    | ResourceUpsertWithWhereUniqueWithoutDatabaseInput;
-  deleteMany?: ResourceScalarWhereInput[] | ResourceScalarWhereInput;
-  updateMany?:
-    | ResourceUpdateManyWithWhereNestedInput[]
-    | ResourceUpdateManyWithWhereNestedInput;
-}
-
-export interface ResourceUpdateWithWhereUniqueWithoutDatabaseInput {
-  where: ResourceWhereUniqueInput;
-  data: ResourceUpdateWithoutDatabaseDataInput;
-}
-
-export interface ResourceUpdateWithoutDatabaseDataInput {
-  name?: String;
-  primaryKeyOwner?: String;
-  primaryKeyTable?: String;
-  primaryKeyColumn?: String;
-  attributes?: AttributeUpdateManyWithoutResourceInput;
-}
-
-export interface AttributeUpdateManyWithoutResourceInput {
-  create?:
-    | AttributeCreateWithoutResourceInput[]
-    | AttributeCreateWithoutResourceInput;
-  delete?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
-  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
-  set?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
-  disconnect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
-  update?:
-    | AttributeUpdateWithWhereUniqueWithoutResourceInput[]
-    | AttributeUpdateWithWhereUniqueWithoutResourceInput;
-  upsert?:
-    | AttributeUpsertWithWhereUniqueWithoutResourceInput[]
-    | AttributeUpsertWithWhereUniqueWithoutResourceInput;
-  deleteMany?: AttributeScalarWhereInput[] | AttributeScalarWhereInput;
-  updateMany?:
-    | AttributeUpdateManyWithWhereNestedInput[]
-    | AttributeUpdateManyWithWhereNestedInput;
-}
-
-export interface AttributeUpdateWithWhereUniqueWithoutResourceInput {
-  where: AttributeWhereUniqueInput;
-  data: AttributeUpdateWithoutResourceDataInput;
-}
-
-export interface AttributeUpdateWithoutResourceDataInput {
-  name?: String;
-  mergingScript?: String;
-  isProfile?: Boolean;
-  type?: String;
-  comment?: String;
-  depth?: Int;
-  attributes?: AttributeUpdateManyWithoutAttributeInput;
-  attribute?: AttributeUpdateOneWithoutAttributesInput;
-  inputColumns?: InputColumnUpdateManyWithoutAttributeInput;
-}
-
-export interface AttributeUpsertWithWhereUniqueWithoutResourceInput {
-  where: AttributeWhereUniqueInput;
-  update: AttributeUpdateWithoutResourceDataInput;
-  create: AttributeCreateWithoutResourceInput;
-}
-
-export interface ResourceUpsertWithWhereUniqueWithoutDatabaseInput {
-  where: ResourceWhereUniqueInput;
-  update: ResourceUpdateWithoutDatabaseDataInput;
-  create: ResourceCreateWithoutDatabaseInput;
-}
-
-export interface ResourceScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  primaryKeyOwner?: String;
-  primaryKeyOwner_not?: String;
-  primaryKeyOwner_in?: String[] | String;
-  primaryKeyOwner_not_in?: String[] | String;
-  primaryKeyOwner_lt?: String;
-  primaryKeyOwner_lte?: String;
-  primaryKeyOwner_gt?: String;
-  primaryKeyOwner_gte?: String;
-  primaryKeyOwner_contains?: String;
-  primaryKeyOwner_not_contains?: String;
-  primaryKeyOwner_starts_with?: String;
-  primaryKeyOwner_not_starts_with?: String;
-  primaryKeyOwner_ends_with?: String;
-  primaryKeyOwner_not_ends_with?: String;
-  primaryKeyTable?: String;
-  primaryKeyTable_not?: String;
-  primaryKeyTable_in?: String[] | String;
-  primaryKeyTable_not_in?: String[] | String;
-  primaryKeyTable_lt?: String;
-  primaryKeyTable_lte?: String;
-  primaryKeyTable_gt?: String;
-  primaryKeyTable_gte?: String;
-  primaryKeyTable_contains?: String;
-  primaryKeyTable_not_contains?: String;
-  primaryKeyTable_starts_with?: String;
-  primaryKeyTable_not_starts_with?: String;
-  primaryKeyTable_ends_with?: String;
-  primaryKeyTable_not_ends_with?: String;
-  primaryKeyColumn?: String;
-  primaryKeyColumn_not?: String;
-  primaryKeyColumn_in?: String[] | String;
-  primaryKeyColumn_not_in?: String[] | String;
-  primaryKeyColumn_lt?: String;
-  primaryKeyColumn_lte?: String;
-  primaryKeyColumn_gt?: String;
-  primaryKeyColumn_gte?: String;
-  primaryKeyColumn_contains?: String;
-  primaryKeyColumn_not_contains?: String;
-  primaryKeyColumn_starts_with?: String;
-  primaryKeyColumn_not_starts_with?: String;
-  primaryKeyColumn_ends_with?: String;
-  primaryKeyColumn_not_ends_with?: String;
-  AND?: ResourceScalarWhereInput[] | ResourceScalarWhereInput;
-  OR?: ResourceScalarWhereInput[] | ResourceScalarWhereInput;
-  NOT?: ResourceScalarWhereInput[] | ResourceScalarWhereInput;
-}
-
-export interface ResourceUpdateManyWithWhereNestedInput {
-  where: ResourceScalarWhereInput;
-  data: ResourceUpdateManyDataInput;
-}
-
-export interface ResourceUpdateManyDataInput {
-  name?: String;
-  primaryKeyOwner?: String;
-  primaryKeyTable?: String;
-  primaryKeyColumn?: String;
-}
-
-export interface DatabaseUpdateManyMutationInput {
-  name?: String;
-}
-
 export interface InputColumnCreateInput {
   owner?: String;
   table?: String;
@@ -1922,7 +1704,26 @@ export interface ResourceCreateInput {
   primaryKeyTable?: String;
   primaryKeyColumn?: String;
   attributes?: AttributeCreateManyWithoutResourceInput;
-  database: DatabaseCreateOneWithoutResourcesInput;
+  source: SourceCreateOneWithoutResourcesInput;
+}
+
+export interface AttributeCreateManyWithoutResourceInput {
+  create?:
+    | AttributeCreateWithoutResourceInput[]
+    | AttributeCreateWithoutResourceInput;
+  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
+}
+
+export interface AttributeCreateWithoutResourceInput {
+  name: String;
+  mergingScript?: String;
+  isProfile?: Boolean;
+  type?: String;
+  comment?: String;
+  depth?: Int;
+  attributes?: AttributeCreateManyWithoutAttributeInput;
+  attribute?: AttributeCreateOneWithoutAttributesInput;
+  inputColumns?: InputColumnCreateManyWithoutAttributeInput;
 }
 
 export interface ResourceUpdateInput {
@@ -1931,7 +1732,50 @@ export interface ResourceUpdateInput {
   primaryKeyTable?: String;
   primaryKeyColumn?: String;
   attributes?: AttributeUpdateManyWithoutResourceInput;
-  database?: DatabaseUpdateOneRequiredWithoutResourcesInput;
+  source?: SourceUpdateOneRequiredWithoutResourcesInput;
+}
+
+export interface AttributeUpdateManyWithoutResourceInput {
+  create?:
+    | AttributeCreateWithoutResourceInput[]
+    | AttributeCreateWithoutResourceInput;
+  delete?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
+  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
+  set?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
+  disconnect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
+  update?:
+    | AttributeUpdateWithWhereUniqueWithoutResourceInput[]
+    | AttributeUpdateWithWhereUniqueWithoutResourceInput;
+  upsert?:
+    | AttributeUpsertWithWhereUniqueWithoutResourceInput[]
+    | AttributeUpsertWithWhereUniqueWithoutResourceInput;
+  deleteMany?: AttributeScalarWhereInput[] | AttributeScalarWhereInput;
+  updateMany?:
+    | AttributeUpdateManyWithWhereNestedInput[]
+    | AttributeUpdateManyWithWhereNestedInput;
+}
+
+export interface AttributeUpdateWithWhereUniqueWithoutResourceInput {
+  where: AttributeWhereUniqueInput;
+  data: AttributeUpdateWithoutResourceDataInput;
+}
+
+export interface AttributeUpdateWithoutResourceDataInput {
+  name?: String;
+  mergingScript?: String;
+  isProfile?: Boolean;
+  type?: String;
+  comment?: String;
+  depth?: Int;
+  attributes?: AttributeUpdateManyWithoutAttributeInput;
+  attribute?: AttributeUpdateOneWithoutAttributesInput;
+  inputColumns?: InputColumnUpdateManyWithoutAttributeInput;
+}
+
+export interface AttributeUpsertWithWhereUniqueWithoutResourceInput {
+  where: AttributeWhereUniqueInput;
+  update: AttributeUpdateWithoutResourceDataInput;
+  create: AttributeCreateWithoutResourceInput;
 }
 
 export interface ResourceUpdateManyMutationInput {
@@ -1939,6 +1783,162 @@ export interface ResourceUpdateManyMutationInput {
   primaryKeyOwner?: String;
   primaryKeyTable?: String;
   primaryKeyColumn?: String;
+}
+
+export interface SourceCreateInput {
+  name: String;
+  resources?: ResourceCreateManyWithoutSourceInput;
+}
+
+export interface ResourceCreateManyWithoutSourceInput {
+  create?:
+    | ResourceCreateWithoutSourceInput[]
+    | ResourceCreateWithoutSourceInput;
+  connect?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput;
+}
+
+export interface ResourceCreateWithoutSourceInput {
+  name: String;
+  primaryKeyOwner?: String;
+  primaryKeyTable?: String;
+  primaryKeyColumn?: String;
+  attributes?: AttributeCreateManyWithoutResourceInput;
+}
+
+export interface SourceUpdateInput {
+  name?: String;
+  resources?: ResourceUpdateManyWithoutSourceInput;
+}
+
+export interface ResourceUpdateManyWithoutSourceInput {
+  create?:
+    | ResourceCreateWithoutSourceInput[]
+    | ResourceCreateWithoutSourceInput;
+  delete?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput;
+  connect?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput;
+  set?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput;
+  disconnect?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput;
+  update?:
+    | ResourceUpdateWithWhereUniqueWithoutSourceInput[]
+    | ResourceUpdateWithWhereUniqueWithoutSourceInput;
+  upsert?:
+    | ResourceUpsertWithWhereUniqueWithoutSourceInput[]
+    | ResourceUpsertWithWhereUniqueWithoutSourceInput;
+  deleteMany?: ResourceScalarWhereInput[] | ResourceScalarWhereInput;
+  updateMany?:
+    | ResourceUpdateManyWithWhereNestedInput[]
+    | ResourceUpdateManyWithWhereNestedInput;
+}
+
+export interface ResourceUpdateWithWhereUniqueWithoutSourceInput {
+  where: ResourceWhereUniqueInput;
+  data: ResourceUpdateWithoutSourceDataInput;
+}
+
+export interface ResourceUpdateWithoutSourceDataInput {
+  name?: String;
+  primaryKeyOwner?: String;
+  primaryKeyTable?: String;
+  primaryKeyColumn?: String;
+  attributes?: AttributeUpdateManyWithoutResourceInput;
+}
+
+export interface ResourceUpsertWithWhereUniqueWithoutSourceInput {
+  where: ResourceWhereUniqueInput;
+  update: ResourceUpdateWithoutSourceDataInput;
+  create: ResourceCreateWithoutSourceInput;
+}
+
+export interface ResourceScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  primaryKeyOwner?: String;
+  primaryKeyOwner_not?: String;
+  primaryKeyOwner_in?: String[] | String;
+  primaryKeyOwner_not_in?: String[] | String;
+  primaryKeyOwner_lt?: String;
+  primaryKeyOwner_lte?: String;
+  primaryKeyOwner_gt?: String;
+  primaryKeyOwner_gte?: String;
+  primaryKeyOwner_contains?: String;
+  primaryKeyOwner_not_contains?: String;
+  primaryKeyOwner_starts_with?: String;
+  primaryKeyOwner_not_starts_with?: String;
+  primaryKeyOwner_ends_with?: String;
+  primaryKeyOwner_not_ends_with?: String;
+  primaryKeyTable?: String;
+  primaryKeyTable_not?: String;
+  primaryKeyTable_in?: String[] | String;
+  primaryKeyTable_not_in?: String[] | String;
+  primaryKeyTable_lt?: String;
+  primaryKeyTable_lte?: String;
+  primaryKeyTable_gt?: String;
+  primaryKeyTable_gte?: String;
+  primaryKeyTable_contains?: String;
+  primaryKeyTable_not_contains?: String;
+  primaryKeyTable_starts_with?: String;
+  primaryKeyTable_not_starts_with?: String;
+  primaryKeyTable_ends_with?: String;
+  primaryKeyTable_not_ends_with?: String;
+  primaryKeyColumn?: String;
+  primaryKeyColumn_not?: String;
+  primaryKeyColumn_in?: String[] | String;
+  primaryKeyColumn_not_in?: String[] | String;
+  primaryKeyColumn_lt?: String;
+  primaryKeyColumn_lte?: String;
+  primaryKeyColumn_gt?: String;
+  primaryKeyColumn_gte?: String;
+  primaryKeyColumn_contains?: String;
+  primaryKeyColumn_not_contains?: String;
+  primaryKeyColumn_starts_with?: String;
+  primaryKeyColumn_not_starts_with?: String;
+  primaryKeyColumn_ends_with?: String;
+  primaryKeyColumn_not_ends_with?: String;
+  AND?: ResourceScalarWhereInput[] | ResourceScalarWhereInput;
+  OR?: ResourceScalarWhereInput[] | ResourceScalarWhereInput;
+  NOT?: ResourceScalarWhereInput[] | ResourceScalarWhereInput;
+}
+
+export interface ResourceUpdateManyWithWhereNestedInput {
+  where: ResourceScalarWhereInput;
+  data: ResourceUpdateManyDataInput;
+}
+
+export interface ResourceUpdateManyDataInput {
+  name?: String;
+  primaryKeyOwner?: String;
+  primaryKeyTable?: String;
+  primaryKeyColumn?: String;
+}
+
+export interface SourceUpdateManyMutationInput {
+  name?: String;
 }
 
 export interface UserCreateInput {
@@ -1973,17 +1973,6 @@ export interface AttributeSubscriptionWhereInput {
   NOT?: AttributeSubscriptionWhereInput[] | AttributeSubscriptionWhereInput;
 }
 
-export interface DatabaseSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: DatabaseWhereInput;
-  AND?: DatabaseSubscriptionWhereInput[] | DatabaseSubscriptionWhereInput;
-  OR?: DatabaseSubscriptionWhereInput[] | DatabaseSubscriptionWhereInput;
-  NOT?: DatabaseSubscriptionWhereInput[] | DatabaseSubscriptionWhereInput;
-}
-
 export interface InputColumnSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
@@ -2015,6 +2004,17 @@ export interface ResourceSubscriptionWhereInput {
   AND?: ResourceSubscriptionWhereInput[] | ResourceSubscriptionWhereInput;
   OR?: ResourceSubscriptionWhereInput[] | ResourceSubscriptionWhereInput;
   NOT?: ResourceSubscriptionWhereInput[] | ResourceSubscriptionWhereInput;
+}
+
+export interface SourceSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: SourceWhereInput;
+  AND?: SourceSubscriptionWhereInput[] | SourceSubscriptionWhereInput;
+  OR?: SourceSubscriptionWhereInput[] | SourceSubscriptionWhereInput;
+  NOT?: SourceSubscriptionWhereInput[] | SourceSubscriptionWhereInput;
 }
 
 export interface UserSubscriptionWhereInput {
@@ -2137,7 +2137,7 @@ export interface ResourcePromise extends Promise<Resource>, Fragmentable {
       last?: Int;
     }
   ) => T;
-  database: <T = DatabasePromise>() => T;
+  source: <T = SourcePromise>() => T;
 }
 
 export interface ResourceSubscription
@@ -2159,15 +2159,15 @@ export interface ResourceSubscription
       last?: Int;
     }
   ) => T;
-  database: <T = DatabaseSubscription>() => T;
+  source: <T = SourceSubscription>() => T;
 }
 
-export interface Database {
+export interface Source {
   id: ID_Output;
   name: String;
 }
 
-export interface DatabasePromise extends Promise<Database>, Fragmentable {
+export interface SourcePromise extends Promise<Source>, Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
   resources: <T = FragmentableArray<Resource>>(
@@ -2183,8 +2183,8 @@ export interface DatabasePromise extends Promise<Database>, Fragmentable {
   ) => T;
 }
 
-export interface DatabaseSubscription
-  extends Promise<AsyncIterator<Database>>,
+export interface SourceSubscription
+  extends Promise<AsyncIterator<Source>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   name: () => Promise<AsyncIterator<String>>;
@@ -2367,62 +2367,6 @@ export interface AggregateAttributeSubscription
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface DatabaseConnection {
-  pageInfo: PageInfo;
-  edges: DatabaseEdge[];
-}
-
-export interface DatabaseConnectionPromise
-  extends Promise<DatabaseConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<DatabaseEdge>>() => T;
-  aggregate: <T = AggregateDatabasePromise>() => T;
-}
-
-export interface DatabaseConnectionSubscription
-  extends Promise<AsyncIterator<DatabaseConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<DatabaseEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateDatabaseSubscription>() => T;
-}
-
-export interface DatabaseEdge {
-  node: Database;
-  cursor: String;
-}
-
-export interface DatabaseEdgePromise
-  extends Promise<DatabaseEdge>,
-    Fragmentable {
-  node: <T = DatabasePromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface DatabaseEdgeSubscription
-  extends Promise<AsyncIterator<DatabaseEdge>>,
-    Fragmentable {
-  node: <T = DatabaseSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateDatabase {
-  count: Int;
-}
-
-export interface AggregateDatabasePromise
-  extends Promise<AggregateDatabase>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateDatabaseSubscription
-  extends Promise<AsyncIterator<AggregateDatabase>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
 export interface InputColumnConnection {
   pageInfo: PageInfo;
   edges: InputColumnEdge[];
@@ -2589,6 +2533,60 @@ export interface AggregateResourceSubscription
   count: () => Promise<AsyncIterator<Int>>;
 }
 
+export interface SourceConnection {
+  pageInfo: PageInfo;
+  edges: SourceEdge[];
+}
+
+export interface SourceConnectionPromise
+  extends Promise<SourceConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<SourceEdge>>() => T;
+  aggregate: <T = AggregateSourcePromise>() => T;
+}
+
+export interface SourceConnectionSubscription
+  extends Promise<AsyncIterator<SourceConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<SourceEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateSourceSubscription>() => T;
+}
+
+export interface SourceEdge {
+  node: Source;
+  cursor: String;
+}
+
+export interface SourceEdgePromise extends Promise<SourceEdge>, Fragmentable {
+  node: <T = SourcePromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface SourceEdgeSubscription
+  extends Promise<AsyncIterator<SourceEdge>>,
+    Fragmentable {
+  node: <T = SourceSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateSource {
+  count: Int;
+}
+
+export interface AggregateSourcePromise
+  extends Promise<AggregateSource>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateSourceSubscription
+  extends Promise<AsyncIterator<AggregateSource>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
 export interface User {
   id: ID_Output;
   email: String;
@@ -2742,50 +2740,6 @@ export interface AttributePreviousValuesSubscription
   type: () => Promise<AsyncIterator<String>>;
   comment: () => Promise<AsyncIterator<String>>;
   depth: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface DatabaseSubscriptionPayload {
-  mutation: MutationType;
-  node: Database;
-  updatedFields: String[];
-  previousValues: DatabasePreviousValues;
-}
-
-export interface DatabaseSubscriptionPayloadPromise
-  extends Promise<DatabaseSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = DatabasePromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = DatabasePreviousValuesPromise>() => T;
-}
-
-export interface DatabaseSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<DatabaseSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = DatabaseSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = DatabasePreviousValuesSubscription>() => T;
-}
-
-export interface DatabasePreviousValues {
-  id: ID_Output;
-  name: String;
-}
-
-export interface DatabasePreviousValuesPromise
-  extends Promise<DatabasePreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-}
-
-export interface DatabasePreviousValuesSubscription
-  extends Promise<AsyncIterator<DatabasePreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
 }
 
 export interface InputColumnSubscriptionPayload {
@@ -2956,6 +2910,50 @@ export interface ResourcePreviousValuesSubscription
   primaryKeyColumn: () => Promise<AsyncIterator<String>>;
 }
 
+export interface SourceSubscriptionPayload {
+  mutation: MutationType;
+  node: Source;
+  updatedFields: String[];
+  previousValues: SourcePreviousValues;
+}
+
+export interface SourceSubscriptionPayloadPromise
+  extends Promise<SourceSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = SourcePromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = SourcePreviousValuesPromise>() => T;
+}
+
+export interface SourceSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<SourceSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = SourceSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = SourcePreviousValuesSubscription>() => T;
+}
+
+export interface SourcePreviousValues {
+  id: ID_Output;
+  name: String;
+}
+
+export interface SourcePreviousValuesPromise
+  extends Promise<SourcePreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+}
+
+export interface SourcePreviousValuesSubscription
+  extends Promise<AsyncIterator<SourcePreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+}
+
 export interface UserSubscriptionPayload {
   mutation: MutationType;
   node: User;
@@ -3038,7 +3036,7 @@ export type Long = string;
 
 export const models: Model[] = [
   {
-    name: "Database",
+    name: "Source",
     embedded: false
   },
   {
@@ -3074,6 +3072,6 @@ export const models: Model[] = [
 export const Prisma = makePrismaClientClass<ClientConstructor<Prisma>>({
   typeDefs,
   models,
-  endpoint: `http://localhost:4466`
+  endpoint: `http://0.0.0.0:4466`
 });
 export const prisma = new Prisma();

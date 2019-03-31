@@ -1,7 +1,7 @@
-type Database {
+type Source {
     id: ID! @unique
     name: String! @unique
-    resources: [Resource!]! @relation(name: "DatabaseToResource", onDelete: CASCADE)
+    resources: [Resource!]! @relation(name: "SourceToResource", onDelete: CASCADE)
 }
 
 type Resource {
@@ -11,7 +11,7 @@ type Resource {
     primaryKeyTable: String
     primaryKeyColumn: String
     attributes: [Attribute!]! @relation(name: "ResourceToAttributes", onDelete: CASCADE)
-    database: Database! @relation(name: "DatabaseToResource")
+    source: Source! @relation(name: "SourceToResource")
 }
 
 type Attribute {

@@ -4,9 +4,9 @@ import {
     checkAuth,
     Context,
     getUserId,
-} from '../utils'
+} from '../../utils'
 
-export const Subscription = {
+export const pyrogSubscription = {
     attribute: {
         subscribe: checkAuth(forwardTo('binding')),
     },

@@ -3,18 +3,17 @@ import { forwardTo } from 'prisma-binding'
 import {
     checkAuth,
     Context,
-    getAttribute,
     getUserId,
     PermissionError,
     ServerError,
 } from '../../utils'
 
-export const arkhn = {
-    async createDatabase(parent, {databaseName }, context: Context) {
+export const pyrogMutation = {
+    async createSource(parent, { sourceName }, context: Context) {
         getUserId(context)
 
-        return await context.client.createDatabase({
-            name: databaseName,
+        return await context.client.createSource({
+            name: sourceName,
         })
     },
     // createInputColumnViaAttribute et deleteInputColumnViaAttribute
@@ -112,7 +111,7 @@ export const arkhn = {
             where: { id }
         })
     },
-    createResourceTreeInDatabase(parent, { databaseId, resourceName }, context: Context) {
+    createResourceTreeInSource(parent, { sourceId, resourceName }, context: Context) {
         getUserId(context)
 
         try {
@@ -122,7 +121,7 @@ export const arkhn = {
                 })
                 .then((response: any) => {
                     return context.client.createResource({
-                        database: { connect: { id: databaseId, } },
+                        source: { connect: { id: sourceId, } },
                         name: resourceName,
                         attributes: response['attributes'],
                     })

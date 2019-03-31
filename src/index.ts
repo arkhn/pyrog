@@ -13,7 +13,7 @@ const endpoint = process.env.NODE_ENV == 'docker' ?
     'http://prisma:4466' :
     'http://localhost:4466'
 
-const DEST = `${process.env.STATIC_FILES_DIR}/schemas`
+const SCHEMAS_DEST = `${process.env.STATIC_FILES_DIR}/schemas`
 
 const server = new GraphQLServer({
     typeDefs: Schema,
@@ -37,12 +37,12 @@ const server = new GraphQLServer({
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, `${DEST}/`)
+        cb(null, `${SCHEMAS_DEST}/`)
     },
     filename: function (req, file, cb) {
         let name = `${file.originalname}.json`
 
-        if (fs.existsSync(`${DEST}/${name}`)) {
+        if (fs.existsSync(`${SCHEMAS_DEST}/${name}`)) {
             name = `${(Math.random() + 1).toString(36).substring(2,5)}.json`
         }
 
