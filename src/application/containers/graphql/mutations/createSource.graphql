@@ -1,0 +1,6 @@
+mutation createSource($sourceName: String!) {
+    createSource(sourceName: $sourceName) {
+        id
+        name
+    }
+}

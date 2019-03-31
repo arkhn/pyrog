@@ -18,15 +18,15 @@ export interface IUser {
     email: string,
 }
 
-export interface ISelectedDatabase {
+export interface ISelectedSource {
     id: string,
     name: string,
 }
 
-export interface IDatabaseSchemas {
-    loadingDatabaseSchema: boolean,
-    schemaByDatabaseName: {
-        [databaseName: string]: any,
+export interface ISourceSchemas {
+    loadingSourceSchema: boolean,
+    schemaBySourceName: {
+        [sourceName: string]: any,
     }
 }
 
@@ -37,7 +37,7 @@ export interface IRecommendedColumns {
 }
 
 export interface IData {
-    databaseSchemas: IDatabaseSchemas,
+    sourceSchemas: ISourceSchemas,
     recommendedColumns: IRecommendedColumns,
 }
 
@@ -45,7 +45,7 @@ export interface IData {
 export interface IReduxStore {
     data: IData,
     dispatch?: any,
-    selectedDatabase: ISelectedDatabase,
+    selectedSource: ISelectedSource,
     toaster: IToaster,
     user: IUser,
     views: any,
@@ -62,7 +62,7 @@ export interface IView {
     history?: any,
     // Router location (withRouter from 'react-router-dom')
     location?: any,
-    selectedDatabase?: ISelectedDatabase,
+    selectedSource?: ISelectedSource,
     toaster?: IToaster,
     user?: IUser,
 }
@@ -80,27 +80,27 @@ export interface IFhirResource {
 }
 
 // TODO: Deprecate type
-export interface IDatabase {
+export interface ISource {
     name: string,
     schema: any,
 }
 
-export interface IDatabaseSchema {
+export interface ISourceSchema {
     [owner: string]: {
         [table: string]: string[],
     }
 }
 
-export interface IDatabaseColumn {
+export interface ISourceColumn {
     owner: string,
     table: string,
     column: string,
 }
 
-export interface IInputColumn extends IDatabaseColumn {
+export interface IInputColumn extends ISourceColumn {
     join?: {
         sourceColumn: string,
-        targetColumn: IDatabaseColumn,
+        targetColumn: ISourceColumn,
     }
     script?: any,
 }
@@ -112,7 +112,7 @@ export interface IFhirIntegrationSpec {
 }
 
 export interface IMapping {
-    primaryKeyColumn: IDatabaseColumn,
+    primaryKeyColumn: ISourceColumn,
     fhirMapping: {
         [fhirAttribute: string]: IFhirIntegrationSpec,
     }

@@ -34,11 +34,11 @@ import './style.less'
 // GRAPHQL OPERATIONS
 
 // Queries
-const isAuthenticated = require('./graphql/queries/isAuthenticated.graphql')
+const isAuthenticated = require('../../graphql/queries/isAuthenticated.graphql')
 
 // Mutations
-const mutationLogin = require('./graphql/mutations/login.graphql')
-const mutationSignup = require('./graphql/mutations/signup.graphql')
+const mutationLogin = require('../../graphql/mutations/login.graphql')
+const mutationSignup = require('../../graphql/mutations/signup.graphql')
 
 export interface IAuthenticationState {
 

@@ -8,8 +8,8 @@ import * as React from 'react'
 
 import StringSelect from './selects/stringSelect'
 import {
-    IDatabaseColumn,
-    IDatabaseSchema,
+    ISourceColumn,
+    ISourceSchema,
 } from '../types'
 
 export interface IProps {
@@ -24,7 +24,7 @@ export interface IProps {
     onChangeOwner?: any,
     onChangeTable?: any,
     onChangeColumn?: any,
-    databaseSchema: IDatabaseSchema,
+    sourceSchema: ISourceSchema,
     label?: string,
     vertical?: boolean,
 }
@@ -95,7 +95,7 @@ export default class ColumnPicker extends React.Component<IProps, IState> {
             onChangeOwner,
             onChangeTable,
             onChangeColumn,
-            databaseSchema,
+            sourceSchema,
             label,
             vertical,
         } = this.props
@@ -106,14 +106,14 @@ export default class ColumnPicker extends React.Component<IProps, IState> {
             column,
         } = this.state
 
-        let owners = Object.keys(databaseSchema)
+        let owners = Object.keys(sourceSchema)
 
         let tables = owner ?
-            Object.keys(databaseSchema[owner]) :
+            Object.keys(sourceSchema[owner]) :
             []
 
         let columns = table ?
-            databaseSchema[owner][table] :
+            sourceSchema[owner][table] :
             []
 
         let controlGroup = <ControlGroup fill={false} vertical={vertical || false}>

@@ -44,7 +44,7 @@ import ColumnPicker from '../../../components/columnPicker'
 import InputColumnsTable from '../../../components/inputColumnsTable'
 import StringSelect from '../../../components/selects/stringSelect'
 import TSelect from '../../../components/selects/TSelect'
-import DatabaseSelect from '../../../components/selects/databaseSelect'
+import SourceSelect from '../../../components/selects/sourceSelect'
 import ResourceSelect from '../../../components/selects/resourceSelect'
 import AddResourceSelect from '../../../components/selects/addResourceSelect'
 // Import containers
@@ -62,27 +62,27 @@ import './style.less'
 // GRAPHQL OPERATIONS
 
 // Queries
-const allDatabases = require('./graphql/queries/allDatabases.graphql')
-const availableResources = require('./graphql/queries/availableResources.graphql')
-const inputColumns = require('./graphql/queries/inputColumns.graphql')
-const resourceAttributeTree = require('./graphql/queries/resourceAttributeTree.graphql')
+const allSources = require('../../graphql/queries/allSources.graphql')
+const availableResources = require('../../graphql/queries/availableResources.graphql')
+const inputColumns = require('../../graphql/queries/inputColumns.graphql')
+const resourceAttributeTree = require('../../graphql/queries/resourceAttributeTree.graphql')
 
 // Mutations
-const createInputColumnAndUpdateAttribute = require('./graphql/mutations/createInputColumnAndUpdateAttribute.graphql')
-const deleteInputColumnAndUpdateAttribute = require('./graphql/mutations/deleteInputColumnAndUpdateAttribute.graphql')
-const updateInputColumn = require('./graphql/mutations/updateInputColumn.graphql')
+const createInputColumnAndUpdateAttribute = require('../../graphql/mutations/createInputColumnAndUpdateAttribute.graphql')
+const deleteInputColumnAndUpdateAttribute = require('../../graphql/mutations/deleteInputColumnAndUpdateAttribute.graphql')
+const updateInputColumn = require('../../graphql/mutations/updateInputColumn.graphql')
 
-const createJoinAndUpdateInputColumn = require('./graphql/mutations/createJoinAndUpdateInputColumn.graphql')
-const deleteJoinAndUpdateInputColumn = require('./graphql/mutations/deleteJoinAndUpdateInputColumn.graphql')
-const updateJoin = require('./graphql/mutations/updateJoin.graphql')
+const createJoinAndUpdateInputColumn = require('../../graphql/mutations/createJoinAndUpdateInputColumn.graphql')
+const deleteJoinAndUpdateInputColumn = require('../../graphql/mutations/deleteJoinAndUpdateInputColumn.graphql')
+const updateJoin = require('../../graphql/mutations/updateJoin.graphql')
 
-const updateAttribute = require('./graphql/mutations/updateAttribute.graphql')
-const createResourceTreeInDatabase = require('./graphql/mutations/createResourceTreeInDatabase.graphql')
+const updateAttribute = require('../../graphql/mutations/updateAttribute.graphql')
+const createResourceTreeInSource = require('../../graphql/mutations/createResourceTreeInSource.graphql')
 
 // Subscriptions
-const subscribeAttribute = require('./graphql/subscriptions/attribute.graphql')
-const subscribeInputColumn = require('./graphql/subscriptions/inputColumn.graphql')
-const subscribeJoin = require('./graphql/subscriptions/join.graphql')
+const subscribeAttribute = require('../../graphql/subscriptions/attribute.graphql')
+const subscribeInputColumn = require('../../graphql/subscriptions/inputColumn.graphql')
+const subscribeJoin = require('../../graphql/subscriptions/join.graphql')
 
 // LOGO
 const arkhnLogoWhite = require("../../../../assets/img/arkhn_logo_only_white.svg") as string;
@@ -125,7 +125,7 @@ const mapReduxStateToReactProps = (state : IReduxStore): IMappingExplorerViewSta
         ...state.views.mappingExplorer,
         data: state.data,
         dispatch: state.dispatch,
-        selectedDatabase: state.selectedDatabase,
+        selectedSource: state.selectedSource,
         toaster: state.toaster,
     }
 }
@@ -164,7 +164,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
             data,
             dispatch,
             selectedAddResource,
-            selectedDatabase,
+            selectedSource,
             selectedFhirResource,
             selectedFhirAttribute,
         } = this.props
@@ -348,7 +348,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                     table: join.sourceTable,
                     column: join.sourceColumn,
                 }}
-                databaseSchema={selectedDatabase.name ? this.props.data.databaseSchemas.schemaByDatabaseName[selectedDatabase.name] : {}}
+                sourceSchema={selectedSource.name ? this.props.data.sourceSchemas.schemaBySourceName[selectedSource.name] : {}}
             />
             <ColumnPicker
                 ownerChangeCallback={(e: string) => {
@@ -389,7 +389,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                     table: join.targetTable,
                     column: join.targetColumn,
                 }}
-                databaseSchema={selectedDatabase.name ? this.props.data.databaseSchemas.schemaByDatabaseName[selectedDatabase.name] : {}}
+                sourceSchema={selectedSource.name ? this.props.data.sourceSchemas.schemaBySourceName[selectedSource.name] : {}}
             />
         </div>
 
@@ -541,7 +541,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                     }
                                 })
                             }}
-                            databaseSchema={selectedDatabase.name ? data.databaseSchemas.schemaByDatabaseName[selectedDatabase.name] : {}}
+                            sourceSchema={selectedSource.name ? data.sourceSchemas.schemaBySourceName[selectedSource.name] : {}}
                         />
                         <Mutation
                             mutation={createInputColumnAndUpdateAttribute}
@@ -636,7 +636,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                 createdProfiles: createdProfiles,
                 resourceId: selectedFhirResource.id,
             }}
-            skip={!selectedDatabase || !selectedFhirResource.id}
+            skip={!selectedSource || !selectedFhirResource.id}
         >
             {({ data, loading }) => {
                 return loading ?
@@ -663,9 +663,9 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                     <Query
                         fetchPolicy={'network-only'}
                         query={availableResources}
-                        skip={!selectedDatabase.id}
+                        skip={!selectedSource.id}
                         variables={{
-                            databaseId: selectedDatabase.id,
+                            sourceId: selectedSource.id,
                             // This allows to force refetch
                             // when a new resource is added.
                             createdResources: createdResources,
@@ -679,7 +679,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                     >
                                         <ControlGroup>
                                             <AddResourceSelect
-                                                disabled={!selectedDatabase}
+                                                disabled={!selectedSource}
                                                 intent={null}
                                                 inputItem={selectedAddResource}
                                                 items={availableResourceNames.filter((resource: any) => {
@@ -690,12 +690,12 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                                 }}
                                             />
                                             <Mutation
-                                                mutation={createResourceTreeInDatabase}
+                                                mutation={createResourceTreeInSource}
                                                 onCompleted={(data: any) => {
                                                     this.props.toaster.show({
                                                         icon: 'layout-hierarchy',
                                                         intent: 'success',
-                                                        message: `Ressource ${data.createResourceTreeInDatabase.name} créée pour ${selectedDatabase.name}.`,
+                                                        message: `Ressource ${data.createResourceTreeInSource.name} créée pour ${selectedSource.name}.`,
                                                         timeout: 4000,
                                                     })
 
@@ -709,7 +709,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                                         onClick={() => {
                                                             createResource({
                                                                 variables: {
-                                                                    databaseId: selectedDatabase.id,
+                                                                    sourceId: selectedSource.id,
                                                                     resourceName: selectedAddResource.name,
                                                                 }
                                                             })
@@ -722,7 +722,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                 </div>
                                 <div id='resource-selector'>
                                     <ResourceSelect
-                                        disabled={!selectedDatabase}
+                                        disabled={!selectedSource}
                                         icon={'layout-hierarchy'}
                                         inputItem={selectedFhirResource}
                                         intent={'primary'}

@@ -1,0 +1,6 @@
+query availableResources($sourceId: ID!) {
+    availableResources(sourceId: $sourceId) {
+        id
+        name
+    }
+}

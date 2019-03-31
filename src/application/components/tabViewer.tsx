@@ -15,22 +15,22 @@ import ColumnViewer from './columnViewer'
 
 // Import custom types
 import {
-    IDatabaseColumn,
-    IDatabaseSchema,
+    ISourceColumn,
+    ISourceSchema,
 } from '../types'
 
 export interface IProps {
-    databaseSchema: IDatabaseSchema,
+    sourceSchema: ISourceSchema,
 }
 
 export interface IState {
-    databaseColumn: IDatabaseColumn,
+    sourceColumn: ISourceColumn,
     navbarTabId: TabId,
 }
 
 export default class TabViewer extends React.Component<IProps, IState> {
     public state: IState = {
-        databaseColumn: {
+        sourceColumn: {
             owner: null,
             table: null,
             column: null,
@@ -45,28 +45,28 @@ export default class TabViewer extends React.Component<IProps, IState> {
     }
 
     private changeOwner = (owner: string) => {
-        const change = (owner != this.state.databaseColumn.owner)
+        const change = (owner != this.state.sourceColumn.owner)
 
         this.setState((state: IState) => {
             return {
-                databaseColumn: {
+                sourceColumn: {
                     owner: owner,
-                    table: change ? null : state.databaseColumn.table,
-                    column: change ? null : state.databaseColumn.column,
+                    table: change ? null : state.sourceColumn.table,
+                    column: change ? null : state.sourceColumn.column,
                 }
             }
         })
     }
 
     private changeTable = (table: string) => {
-        const change = (table != this.state.databaseColumn.table)
+        const change = (table != this.state.sourceColumn.table)
 
         this.setState((state: IState) => {
             return {
-                databaseColumn: {
-                    owner: state.databaseColumn.owner,
+                sourceColumn: {
+                    owner: state.sourceColumn.owner,
                     table: table,
-                    column: change ? null : state.databaseColumn.column,
+                    column: change ? null : state.sourceColumn.column,
                 }
             }
         })
@@ -75,9 +75,9 @@ export default class TabViewer extends React.Component<IProps, IState> {
     private changeColumn = (column: string) => {
         this.setState((state: IState) => {
             return {
-                databaseColumn: {
-                    owner: state.databaseColumn.owner,
-                    table: state.databaseColumn.table,
+                sourceColumn: {
+                    owner: state.sourceColumn.owner,
+                    table: state.sourceColumn.table,
                     column: column,
                 }
             }
@@ -85,9 +85,9 @@ export default class TabViewer extends React.Component<IProps, IState> {
     }
 
     private handleClick = (column: any) => {
-        // this.props.dispatch(clickAddInputColumn(this.state.databaseColumn))
+        // this.props.dispatch(clickAddInputColumn(this.state.sourceColumn))
         this.setState({
-            databaseColumn: {
+            sourceColumn: {
                 owner: null,
                 table: null,
                 column: null,
@@ -97,11 +97,11 @@ export default class TabViewer extends React.Component<IProps, IState> {
 
     public render() {
         let {
-            databaseSchema,
+            sourceSchema,
         } = this.props
 
         let {
-            databaseColumn,
+            sourceColumn,
             navbarTabId,
         } = this.state
 
@@ -122,10 +122,10 @@ export default class TabViewer extends React.Component<IProps, IState> {
                         onChangeOwner={this.changeOwner}
                         onChangeTable={this.changeTable}
                         onChangeColumn={this.changeColumn}
-                        databaseSchema={databaseSchema}
+                        sourceSchema={sourceSchema}
                     />
                     <Button
-                        disabled={!databaseColumn.column}
+                        disabled={!sourceColumn.column}
                         icon={'add'}
                         onClick={this.handleClick}
                     />

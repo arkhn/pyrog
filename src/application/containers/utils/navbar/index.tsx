@@ -20,7 +20,7 @@ import { withRouter } from 'react-router-dom'
 import { AUTH_TOKEN } from '../../../constants'
 
 import { login, logout } from '../../../actions/user'
-import { deselectDatabase } from '../../../actions/selectedDatabase'
+import { deselectSource } from '../../../actions/selectedSource'
 import {
     updateFhirAttribute,
     updateFhirResource,
@@ -40,8 +40,8 @@ const arkhnLogoWhite = require("../../../../assets/img/arkhn_logo_only_white.svg
 // GRAPHQL OPERATIONS
 
 // Queries
-const isAuthenticated = require('./graphql/queries/isAuthenticated.graphql')
-const me = require('./graphql/queries/me.graphql')
+const isAuthenticated = require('../../graphql/queries/isAuthenticated.graphql')
+const me = require('../../graphql/queries/me.graphql')
 
 export interface IProps extends IView {
 
@@ -55,7 +55,7 @@ const mapReduxStateToReactProps = (state : IReduxStore): IProps => {
     return {
         data: state.data,
         dispatch: state.dispatch,
-        selectedDatabase: state.selectedDatabase,
+        selectedSource: state.selectedSource,
         toaster: state.toaster,
         user: state.user,
     }
@@ -88,7 +88,7 @@ class Navbar extends React.Component<IProps, IState> {
             })
             .then((response: any) => {
                 if (response.data.isAuthenticated) {
-                    if (this.props.location.pathname == "/mapping" && !this.props.selectedDatabase.name) {
+                    if (this.props.location.pathname == "/mapping" && !this.props.selectedSource.name) {
                         this.props.history.push('/sources')
                     }
                     if (["/", "/signin"].indexOf(this.props.location.pathname) >= 0) {
@@ -106,7 +106,7 @@ class Navbar extends React.Component<IProps, IState> {
     public render = () => {
         const {
             dispatch,
-            selectedDatabase,
+            selectedSource,
             user,
         } = this.props
 
@@ -134,7 +134,7 @@ class Navbar extends React.Component<IProps, IState> {
                 }
 
                 case '/mapping': {
-                    return selectedDatabase.name !== null ?
+                    return selectedSource.name !== null ?
                         <BPNavbar.Group align={Alignment.LEFT}>
                             {logo}
                             <Button
@@ -144,14 +144,14 @@ class Navbar extends React.Component<IProps, IState> {
                                 onClick={() => {
                                     dispatch(updateFhirAttribute(null, null))
                                     dispatch(updateFhirResource(null, null))
-                                    dispatch(deselectDatabase())
+                                    dispatch(deselectSource())
                                     this.props.history.push('/sources')
                                 }}
                             >
                                 Sources
                             </Button>
                             <BPNavbar.Divider />
-                            {selectedDatabase.name}
+                            {selectedSource.name}
                         </BPNavbar.Group> :
                         <BPNavbar.Group align={Alignment.LEFT}>
                             {logo}

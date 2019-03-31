@@ -17,7 +17,7 @@ import { withRouter } from 'react-router-dom'
 
 import Navbar from '../../utils/navbar'
 
-import { changeSelectedDatabase } from '../../../actions/selectedDatabase'
+import { changeSelectedSource } from '../../../actions/selectedSource'
 
 // Import types
 import {
@@ -30,8 +30,8 @@ import './style.less'
 // GRAPHQL OPERATIONS
 
 // Queries
-const allDatabases = require('./graphql/queries/allDatabases.graphql')
-const computeDatabaseMappingProgress = require('./graphql/queries/computeDatabaseMappingProgress.graphql')
+const allSources = require('../../graphql/queries/allSources.graphql')
+const computeSourceMappingProgress = require('../../graphql/queries/computeSourceMappingProgress.graphql')
 
 export interface ISourcesState {
 
@@ -87,23 +87,23 @@ class SourcesView extends React.Component<ISourcesViewState, IState> {
                 </Button>
                 <Query
                     fetchPolicy='network-only'
-                    query={allDatabases}
+                    query={allSources}
                 >
                     {({ data, loading }) => {
                         return <div id="software-cards">
                             {loading ?
                                 <Spinner /> :
-                                data.allDatabases.map((database: any, index: number) => {
+                                data.allSources.map((source: any, index: number) => {
                                     return <Card
                                         elevation={Elevation.TWO}
                                         interactive={true}
                                         key={index}
                                         onClick={() => {
-                                            dispatch(changeSelectedDatabase(database.id, database.name))
+                                            dispatch(changeSelectedSource(source.id, source.name))
                                             this.props.history.push('/mapping')
                                         }}
                                     >
-                                        <h2>{database.name}</h2>
+                                        <h2>{source.name}</h2>
                                         <div className='tags'>
                                             <Tag>DPI</Tag>
                                             <Tag>Généraliste</Tag>
@@ -112,19 +112,19 @@ class SourcesView extends React.Component<ISourcesViewState, IState> {
 
                                         <div>
                                             <Query
-                                                query={computeDatabaseMappingProgress}
+                                                query={computeSourceMappingProgress}
                                                 variables={{
-                                                    databaseId: database.id,
+                                                    sourceId: source.id,
                                                 }}
-                                                skip={!database.id}
+                                                skip={!source.id}
                                             >
                                                 {({ data, loading }) => {
                                                     let numberResources = null
                                                     let numberAttributes = null
 
-                                                    if (data && data.computeDatabaseMappingProgress) {
-                                                        numberResources = data.computeDatabaseMappingProgress[0]
-                                                        numberAttributes = data.computeDatabaseMappingProgress[1]
+                                                    if (data && data.computeSourceMappingProgress) {
+                                                        numberResources = data.computeSourceMappingProgress[0]
+                                                        numberAttributes = data.computeSourceMappingProgress[1]
                                                     }
 
                                                     return loading ?
