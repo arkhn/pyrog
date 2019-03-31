@@ -6,10 +6,6 @@ export const typeDefs = /* GraphQL */ `type AggregateAttribute {
   count: Int!
 }
 
-type AggregateDatabase {
-  count: Int!
-}
-
 type AggregateInputColumn {
   count: Int!
 }
@@ -19,6 +15,10 @@ type AggregateJoin {
 }
 
 type AggregateResource {
+  count: Int!
+}
+
+type AggregateSource {
   count: Int!
 }
 
@@ -523,138 +523,6 @@ input AttributeWhereUniqueInput {
 
 type BatchPayload {
   count: Long!
-}
-
-type Database {
-  id: ID!
-  name: String!
-  resources(where: ResourceWhereInput, orderBy: ResourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Resource!]
-}
-
-type DatabaseConnection {
-  pageInfo: PageInfo!
-  edges: [DatabaseEdge]!
-  aggregate: AggregateDatabase!
-}
-
-input DatabaseCreateInput {
-  name: String!
-  resources: ResourceCreateManyWithoutDatabaseInput
-}
-
-input DatabaseCreateOneWithoutResourcesInput {
-  create: DatabaseCreateWithoutResourcesInput
-  connect: DatabaseWhereUniqueInput
-}
-
-input DatabaseCreateWithoutResourcesInput {
-  name: String!
-}
-
-type DatabaseEdge {
-  node: Database!
-  cursor: String!
-}
-
-enum DatabaseOrderByInput {
-  id_ASC
-  id_DESC
-  name_ASC
-  name_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-
-type DatabasePreviousValues {
-  id: ID!
-  name: String!
-}
-
-type DatabaseSubscriptionPayload {
-  mutation: MutationType!
-  node: Database
-  updatedFields: [String!]
-  previousValues: DatabasePreviousValues
-}
-
-input DatabaseSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: DatabaseWhereInput
-  AND: [DatabaseSubscriptionWhereInput!]
-  OR: [DatabaseSubscriptionWhereInput!]
-  NOT: [DatabaseSubscriptionWhereInput!]
-}
-
-input DatabaseUpdateInput {
-  name: String
-  resources: ResourceUpdateManyWithoutDatabaseInput
-}
-
-input DatabaseUpdateManyMutationInput {
-  name: String
-}
-
-input DatabaseUpdateOneRequiredWithoutResourcesInput {
-  create: DatabaseCreateWithoutResourcesInput
-  update: DatabaseUpdateWithoutResourcesDataInput
-  upsert: DatabaseUpsertWithoutResourcesInput
-  connect: DatabaseWhereUniqueInput
-}
-
-input DatabaseUpdateWithoutResourcesDataInput {
-  name: String
-}
-
-input DatabaseUpsertWithoutResourcesInput {
-  update: DatabaseUpdateWithoutResourcesDataInput!
-  create: DatabaseCreateWithoutResourcesInput!
-}
-
-input DatabaseWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  name: String
-  name_not: String
-  name_in: [String!]
-  name_not_in: [String!]
-  name_lt: String
-  name_lte: String
-  name_gt: String
-  name_gte: String
-  name_contains: String
-  name_not_contains: String
-  name_starts_with: String
-  name_not_starts_with: String
-  name_ends_with: String
-  name_not_ends_with: String
-  resources_every: ResourceWhereInput
-  resources_some: ResourceWhereInput
-  resources_none: ResourceWhereInput
-  AND: [DatabaseWhereInput!]
-  OR: [DatabaseWhereInput!]
-  NOT: [DatabaseWhereInput!]
-}
-
-input DatabaseWhereUniqueInput {
-  id: ID
-  name: String
 }
 
 type InputColumn {
@@ -1417,12 +1285,6 @@ type Mutation {
   upsertAttribute(where: AttributeWhereUniqueInput!, create: AttributeCreateInput!, update: AttributeUpdateInput!): Attribute!
   deleteAttribute(where: AttributeWhereUniqueInput!): Attribute
   deleteManyAttributes(where: AttributeWhereInput): BatchPayload!
-  createDatabase(data: DatabaseCreateInput!): Database!
-  updateDatabase(data: DatabaseUpdateInput!, where: DatabaseWhereUniqueInput!): Database
-  updateManyDatabases(data: DatabaseUpdateManyMutationInput!, where: DatabaseWhereInput): BatchPayload!
-  upsertDatabase(where: DatabaseWhereUniqueInput!, create: DatabaseCreateInput!, update: DatabaseUpdateInput!): Database!
-  deleteDatabase(where: DatabaseWhereUniqueInput!): Database
-  deleteManyDatabases(where: DatabaseWhereInput): BatchPayload!
   createInputColumn(data: InputColumnCreateInput!): InputColumn!
   updateInputColumn(data: InputColumnUpdateInput!, where: InputColumnWhereUniqueInput!): InputColumn
   updateManyInputColumns(data: InputColumnUpdateManyMutationInput!, where: InputColumnWhereInput): BatchPayload!
@@ -1441,6 +1303,12 @@ type Mutation {
   upsertResource(where: ResourceWhereUniqueInput!, create: ResourceCreateInput!, update: ResourceUpdateInput!): Resource!
   deleteResource(where: ResourceWhereUniqueInput!): Resource
   deleteManyResources(where: ResourceWhereInput): BatchPayload!
+  createSource(data: SourceCreateInput!): Source!
+  updateSource(data: SourceUpdateInput!, where: SourceWhereUniqueInput!): Source
+  updateManySources(data: SourceUpdateManyMutationInput!, where: SourceWhereInput): BatchPayload!
+  upsertSource(where: SourceWhereUniqueInput!, create: SourceCreateInput!, update: SourceUpdateInput!): Source!
+  deleteSource(where: SourceWhereUniqueInput!): Source
+  deleteManySources(where: SourceWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
@@ -1470,9 +1338,6 @@ type Query {
   attribute(where: AttributeWhereUniqueInput!): Attribute
   attributes(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Attribute]!
   attributesConnection(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AttributeConnection!
-  database(where: DatabaseWhereUniqueInput!): Database
-  databases(where: DatabaseWhereInput, orderBy: DatabaseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Database]!
-  databasesConnection(where: DatabaseWhereInput, orderBy: DatabaseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DatabaseConnection!
   inputColumn(where: InputColumnWhereUniqueInput!): InputColumn
   inputColumns(where: InputColumnWhereInput, orderBy: InputColumnOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [InputColumn]!
   inputColumnsConnection(where: InputColumnWhereInput, orderBy: InputColumnOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): InputColumnConnection!
@@ -1482,6 +1347,9 @@ type Query {
   resource(where: ResourceWhereUniqueInput!): Resource
   resources(where: ResourceWhereInput, orderBy: ResourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Resource]!
   resourcesConnection(where: ResourceWhereInput, orderBy: ResourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ResourceConnection!
+  source(where: SourceWhereUniqueInput!): Source
+  sources(where: SourceWhereInput, orderBy: SourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Source]!
+  sourcesConnection(where: SourceWhereInput, orderBy: SourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SourceConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
@@ -1495,7 +1363,7 @@ type Resource {
   primaryKeyTable: String
   primaryKeyColumn: String
   attributes(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Attribute!]
-  database: Database!
+  source: Source!
 }
 
 type ResourceConnection {
@@ -1510,11 +1378,11 @@ input ResourceCreateInput {
   primaryKeyTable: String
   primaryKeyColumn: String
   attributes: AttributeCreateManyWithoutResourceInput
-  database: DatabaseCreateOneWithoutResourcesInput!
+  source: SourceCreateOneWithoutResourcesInput!
 }
 
-input ResourceCreateManyWithoutDatabaseInput {
-  create: [ResourceCreateWithoutDatabaseInput!]
+input ResourceCreateManyWithoutSourceInput {
+  create: [ResourceCreateWithoutSourceInput!]
   connect: [ResourceWhereUniqueInput!]
 }
 
@@ -1528,10 +1396,10 @@ input ResourceCreateWithoutAttributesInput {
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
-  database: DatabaseCreateOneWithoutResourcesInput!
+  source: SourceCreateOneWithoutResourcesInput!
 }
 
-input ResourceCreateWithoutDatabaseInput {
+input ResourceCreateWithoutSourceInput {
   name: String!
   primaryKeyOwner: String
   primaryKeyTable: String
@@ -1669,7 +1537,7 @@ input ResourceUpdateInput {
   primaryKeyTable: String
   primaryKeyColumn: String
   attributes: AttributeUpdateManyWithoutResourceInput
-  database: DatabaseUpdateOneRequiredWithoutResourcesInput
+  source: SourceUpdateOneRequiredWithoutResourcesInput
 }
 
 input ResourceUpdateManyDataInput {
@@ -1686,14 +1554,14 @@ input ResourceUpdateManyMutationInput {
   primaryKeyColumn: String
 }
 
-input ResourceUpdateManyWithoutDatabaseInput {
-  create: [ResourceCreateWithoutDatabaseInput!]
+input ResourceUpdateManyWithoutSourceInput {
+  create: [ResourceCreateWithoutSourceInput!]
   delete: [ResourceWhereUniqueInput!]
   connect: [ResourceWhereUniqueInput!]
   set: [ResourceWhereUniqueInput!]
   disconnect: [ResourceWhereUniqueInput!]
-  update: [ResourceUpdateWithWhereUniqueWithoutDatabaseInput!]
-  upsert: [ResourceUpsertWithWhereUniqueWithoutDatabaseInput!]
+  update: [ResourceUpdateWithWhereUniqueWithoutSourceInput!]
+  upsert: [ResourceUpsertWithWhereUniqueWithoutSourceInput!]
   deleteMany: [ResourceScalarWhereInput!]
   updateMany: [ResourceUpdateManyWithWhereNestedInput!]
 }
@@ -1717,10 +1585,10 @@ input ResourceUpdateWithoutAttributesDataInput {
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
-  database: DatabaseUpdateOneRequiredWithoutResourcesInput
+  source: SourceUpdateOneRequiredWithoutResourcesInput
 }
 
-input ResourceUpdateWithoutDatabaseDataInput {
+input ResourceUpdateWithoutSourceDataInput {
   name: String
   primaryKeyOwner: String
   primaryKeyTable: String
@@ -1728,9 +1596,9 @@ input ResourceUpdateWithoutDatabaseDataInput {
   attributes: AttributeUpdateManyWithoutResourceInput
 }
 
-input ResourceUpdateWithWhereUniqueWithoutDatabaseInput {
+input ResourceUpdateWithWhereUniqueWithoutSourceInput {
   where: ResourceWhereUniqueInput!
-  data: ResourceUpdateWithoutDatabaseDataInput!
+  data: ResourceUpdateWithoutSourceDataInput!
 }
 
 input ResourceUpsertWithoutAttributesInput {
@@ -1738,10 +1606,10 @@ input ResourceUpsertWithoutAttributesInput {
   create: ResourceCreateWithoutAttributesInput!
 }
 
-input ResourceUpsertWithWhereUniqueWithoutDatabaseInput {
+input ResourceUpsertWithWhereUniqueWithoutSourceInput {
   where: ResourceWhereUniqueInput!
-  update: ResourceUpdateWithoutDatabaseDataInput!
-  create: ResourceCreateWithoutDatabaseInput!
+  update: ResourceUpdateWithoutSourceDataInput!
+  create: ResourceCreateWithoutSourceInput!
 }
 
 input ResourceWhereInput {
@@ -1818,7 +1686,7 @@ input ResourceWhereInput {
   attributes_every: AttributeWhereInput
   attributes_some: AttributeWhereInput
   attributes_none: AttributeWhereInput
-  database: DatabaseWhereInput
+  source: SourceWhereInput
   AND: [ResourceWhereInput!]
   OR: [ResourceWhereInput!]
   NOT: [ResourceWhereInput!]
@@ -1833,12 +1701,144 @@ enum Role {
   USER
 }
 
+type Source {
+  id: ID!
+  name: String!
+  resources(where: ResourceWhereInput, orderBy: ResourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Resource!]
+}
+
+type SourceConnection {
+  pageInfo: PageInfo!
+  edges: [SourceEdge]!
+  aggregate: AggregateSource!
+}
+
+input SourceCreateInput {
+  name: String!
+  resources: ResourceCreateManyWithoutSourceInput
+}
+
+input SourceCreateOneWithoutResourcesInput {
+  create: SourceCreateWithoutResourcesInput
+  connect: SourceWhereUniqueInput
+}
+
+input SourceCreateWithoutResourcesInput {
+  name: String!
+}
+
+type SourceEdge {
+  node: Source!
+  cursor: String!
+}
+
+enum SourceOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type SourcePreviousValues {
+  id: ID!
+  name: String!
+}
+
+type SourceSubscriptionPayload {
+  mutation: MutationType!
+  node: Source
+  updatedFields: [String!]
+  previousValues: SourcePreviousValues
+}
+
+input SourceSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: SourceWhereInput
+  AND: [SourceSubscriptionWhereInput!]
+  OR: [SourceSubscriptionWhereInput!]
+  NOT: [SourceSubscriptionWhereInput!]
+}
+
+input SourceUpdateInput {
+  name: String
+  resources: ResourceUpdateManyWithoutSourceInput
+}
+
+input SourceUpdateManyMutationInput {
+  name: String
+}
+
+input SourceUpdateOneRequiredWithoutResourcesInput {
+  create: SourceCreateWithoutResourcesInput
+  update: SourceUpdateWithoutResourcesDataInput
+  upsert: SourceUpsertWithoutResourcesInput
+  connect: SourceWhereUniqueInput
+}
+
+input SourceUpdateWithoutResourcesDataInput {
+  name: String
+}
+
+input SourceUpsertWithoutResourcesInput {
+  update: SourceUpdateWithoutResourcesDataInput!
+  create: SourceCreateWithoutResourcesInput!
+}
+
+input SourceWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  resources_every: ResourceWhereInput
+  resources_some: ResourceWhereInput
+  resources_none: ResourceWhereInput
+  AND: [SourceWhereInput!]
+  OR: [SourceWhereInput!]
+  NOT: [SourceWhereInput!]
+}
+
+input SourceWhereUniqueInput {
+  id: ID
+  name: String
+}
+
 type Subscription {
   attribute(where: AttributeSubscriptionWhereInput): AttributeSubscriptionPayload
-  database(where: DatabaseSubscriptionWhereInput): DatabaseSubscriptionPayload
   inputColumn(where: InputColumnSubscriptionWhereInput): InputColumnSubscriptionPayload
   join(where: JoinSubscriptionWhereInput): JoinSubscriptionPayload
   resource(where: ResourceSubscriptionWhereInput): ResourceSubscriptionPayload
+  source(where: SourceSubscriptionWhereInput): SourceSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 

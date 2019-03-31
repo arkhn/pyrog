@@ -4,7 +4,7 @@ import {
     checkAuth,
     Context,
     getUserId,
-} from '../utils'
+} from '../../utils'
 
 export const pyrogSubscription = {
     attribute: {

@@ -7,7 +7,7 @@ import {
     Context,
     getUserId,
     getRecAttribute,
-} from '../utils'
+} from '../../utils'
 
 export const pyrogQuery = {
     // BINDING QUERIES

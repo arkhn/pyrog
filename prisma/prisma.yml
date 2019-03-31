@@ -1,5 +1,4 @@
 # Specifies the HTTP endpoint of your Prisma API (deployed to a Prisma Demo server).
-# endpoint: https://eu1.prisma.sh/public-neonswoop-398/graphql-typescript-boilerplate/dev
 endpoint: http://0.0.0.0:4466
 
 # Defines your models, each model is mapped to the database as a table.
@@ -18,8 +17,8 @@ seed:
 hooks:
     post-deploy:
         - prisma generate
-        - graphql codegen
         - graphql get-schema --project database
+        - graphql codegen
 
 # If specified, the `secret` must be used to generate a JWT which is attached
 # to the `Authorization` header of HTTP requests made against the Prisma API.
