@@ -18,7 +18,7 @@ This will install all required node dependencies, setup 2 Docker containers (1 P
 
 Some static files are needed to have this server run. Download them manually [here](https://arkhn.org/pyrog_static_files.zip), or run this command:
 ```
-curl https://arkhn.org/pyrog_dev_static_files.zip > pyrog_dev_static_files.unzip
+curl https://arkhn.org/pyrog_dev_static_files.zip > pyrog_dev_static_files.zip
 unzip pyrog_dev_static_files.zip
 rm pyrog_dev_static_files.zip
 ```
