@@ -24,7 +24,7 @@ import Navbar from '../../utils/navbar'
 
 // Import types
 import {
-    IDatabase,
+    ISource,
     IReduxStore,
     IView,
 } from '../../../types'
@@ -36,10 +36,10 @@ import './style.less'
 // GRAPHQL OPERATIONS
 
 // Queries
-const allDatabases = require('./graphql/queries/allDatabases.graphql')
+const allSources = require('../../graphql/queries/allSources.graphql')
 
 // Mutations
-const createDatabase = require('./graphql/mutations/createDatabase.graphql')
+const createSource = require('../../graphql/mutations/createSource.graphql')
 
 export interface INewSourceState {
 
@@ -148,9 +148,9 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
             if (response.data.success) {
                 this.props.client
                     .mutate({
-                        mutation: createDatabase,
+                        mutation: createSource,
                         variables: {
-                            databaseName: this.state.sourceName,
+                            sourceName: this.state.sourceName,
                         },
                     })
                     .then((graphqlResponse: any) => {
@@ -240,11 +240,11 @@ SELECT OWNER, TABLE_NAME, COLUMN_NAME, DATA_TYPE FROM all_tab_columns;
             <div id='main-container-newsource'>
                 <Query
                     fetchPolicy='network-only'
-                    query={allDatabases}
+                    query={allSources}
                 >
                     {({ data, loading}) => {
-                        const databaseNames = data.allDatabases ?
-                            data.allDatabases.map((database: IDatabase) => database.name) :
+                        const sourceNames = data.allSources ?
+                            data.allSources.map((source: ISource) => source.name) :
                             null
 
                         return <form
@@ -252,7 +252,7 @@ SELECT OWNER, TABLE_NAME, COLUMN_NAME, DATA_TYPE FROM all_tab_columns;
                         >
                             <h1>Nom de la source</h1>
                             <FormGroup
-                                helperText={databaseNames && databaseNames.indexOf(sourceName) >= 0 ? <p className={'warning'}>Ce nom existe déjà et n'est pas disponible.</p>  : null}
+                                helperText={sourceNames && sourceNames.indexOf(sourceName) >= 0 ? <p className={'warning'}>Ce nom existe déjà et n'est pas disponible.</p>  : null}
                             >
                                 <InputGroup
                                     onChange={(event: React.FormEvent<HTMLElement>) => {
@@ -291,7 +291,7 @@ SELECT OWNER, TABLE_NAME, COLUMN_NAME, DATA_TYPE FROM all_tab_columns;
                             <br/>
                             <div className="align-right">
                                 <Button
-                                    disabled={!databaseNames || databaseNames.indexOf(sourceName) >= 0 || !sourceName || !schemaFile || isUploading}
+                                    disabled={!sourceNames || sourceNames.indexOf(sourceName) >= 0 || !sourceName || !schemaFile || isUploading}
                                     intent='primary'
                                     large
                                     type="submit"

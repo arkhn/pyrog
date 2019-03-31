@@ -1,3 +1,0 @@
-query computeDatabaseMappingProgress($databaseId: ID!) {
-    computeDatabaseMappingProgress(databaseId: $databaseId)
-}

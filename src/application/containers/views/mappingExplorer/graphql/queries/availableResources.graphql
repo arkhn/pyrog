@@ -1,6 +1,0 @@
-query availableResources($databaseId: ID!) {
-    availableResources(databaseId: $databaseId) {
-        id
-        name
-    }
-}

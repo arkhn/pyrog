@@ -10,14 +10,14 @@ import StringSelect from './selects/stringSelect'
 
 // Import custom types
 import {
-    IDatabaseSchema,
+    ISourceSchema,
     IInputColumn,
     IFhirIntegrationSpec,
 } from '../types'
 
 export interface IProps {
     inputColumns: any;
-    databaseSchema: IDatabaseSchema;
+    sourceSchema: ISourceSchema;
 }
 
 export interface IState {
@@ -46,7 +46,7 @@ export default class InputColumnsTable extends React.Component<IProps, IState> {
     public render() {
         let {
             inputColumns,
-            databaseSchema,
+            sourceSchema,
         } = this.props
 
         let rows = (inputColumns) ?
@@ -83,7 +83,7 @@ export default class InputColumnsTable extends React.Component<IProps, IState> {
                                 <StringSelect
                                     icon={'column-layout'}
                                     inputItem={column.join.sourceColumn}
-                                    items={databaseSchema[column.owner][column.table]}
+                                    items={sourceSchema[column.owner][column.table]}
                                     onChange={null}
                                 />
                             </td> :
@@ -93,7 +93,7 @@ export default class InputColumnsTable extends React.Component<IProps, IState> {
                         column.join ?
                             <td>
                                 <ColumnPicker
-                                    databaseSchema={databaseSchema}
+                                    sourceSchema={sourceSchema}
                                     onChangeOwner={null}
                                     onChangeTable={null}
                                     onChangeColumn={null}

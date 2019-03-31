@@ -1,9 +1,9 @@
 import {combineReducers} from 'redux'
 
 // Data fetching reducers
-import databaseSchemas from './databaseSchemas'
+import sourceSchemas from './sourceSchemas'
 import recommendedColumns from './recommendedColumns'
-import selectedDatabaseReducer from './selectedDatabase'
+import selectedSourceReducer from './selectedSource'
 import toasterReducer from './toaster'
 import userReducer from './user'
 
@@ -13,7 +13,7 @@ import mimic from '../containers/views/mimic/reducer'
 
 // Data reducer (also called canonical state)
 const dataReducer = combineReducers({
-    databaseSchemas,
+    sourceSchemas,
     recommendedColumns,
 })
 
@@ -25,7 +25,7 @@ const viewReducer = combineReducers({
 
 const mainReducer = combineReducers({
     data: dataReducer,
-    selectedDatabase: selectedDatabaseReducer,
+    selectedSource: selectedSourceReducer,
     toaster: toasterReducer,
     views: viewReducer,
     user: userReducer,

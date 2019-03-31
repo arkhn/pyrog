@@ -1,23 +1,23 @@
 import {
-    ISelectedDatabase,
+    ISelectedSource,
     ISimpleAction,
 } from '../types'
 
-const initialState: ISelectedDatabase = {
+const initialState: ISelectedSource = {
     id: null,
     name: null,
 }
 
-const selectedDatabaseReducer = (state = initialState, action: ISimpleAction): any => {
+const selectedSourceReducer = (state = initialState, action: ISimpleAction): any => {
     switch (action.type) {
-        case 'UPDATE_SELECTED_DATABASE':
+        case 'UPDATE_SELECTED_SOURCE':
             return {
                 ...state,
                 id: action.payload.id,
                 name: action.payload.name,
             }
 
-        case 'DESELECTED_DATABASE':
+        case 'DESELECTED_SOURCE':
             return {
                 ...state,
                 ...initialState,
@@ -28,4 +28,4 @@ const selectedDatabaseReducer = (state = initialState, action: ISimpleAction): a
     }
 }
 
-export default selectedDatabaseReducer
+export default selectedSourceReducer

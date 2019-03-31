@@ -24,8 +24,8 @@ import * as React from 'react'
 
 import { isNullOrUndefined } from 'util'
 
-const createAttributeProfileInAttribute = require('./graphql/mutations/createAttributeProfileInAttribute.graphql')
-const deleteAttribute = require('./graphql/mutations/deleteAttribute.graphql')
+const createAttributeProfileInAttribute = require('../../graphql/mutations/createAttributeProfileInAttribute.graphql')
+const deleteAttribute = require('../../graphql/mutations/deleteAttribute.graphql')
 
 interface INodeData {
     comment: string,
