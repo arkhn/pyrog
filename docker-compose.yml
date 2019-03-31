@@ -5,10 +5,12 @@ services:
             context: .
         image: arkhn/pyrog:latest
         ports:
-            - "4000:4000"
+            - "$SERVER_PORT:$SERVER_PORT"
         restart: always
         depends_on:
             - prisma
+        volumes:
+            - static:$WORKDIR/static_files
     prisma:
         image: prismagraphql/prisma:1.26
         restart: always
@@ -37,3 +39,4 @@ services:
             - postgres:/var/lib/postgresql/data
 volumes:
     postgres:
+    static:
