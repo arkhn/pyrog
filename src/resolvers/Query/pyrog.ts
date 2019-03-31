@@ -9,22 +9,22 @@ import {
     getRecAttribute,
 } from '../utils'
 
-export const Query = {
+export const pyrogQuery = {
     // BINDING QUERIES
     inputColumns: checkAuth(forwardTo('binding')),
     resource: checkAuth(forwardTo('binding')),
     resources: checkIsAdmin(forwardTo('binding')),
 
     // CLIENT QUERIES
-    allDatabases(parent, args, context: Context) {
+    allSources(parent, args, context: Context) {
         getUserId(context)
 
-        return context.client.databases()
+        return context.client.sources()
     },
-    availableResources(parent, { databaseId }, context: Context) {
+    availableResources(parent, { sourceId }, context: Context) {
         getUserId(context)
 
-        return context.client.database({ id: databaseId }).resources()
+        return context.client.source({ id: sourceId }).resources()
     },
     async recAvailableAttributes(parent, { resourceId }, context: Context) {
         getUserId(context)
@@ -65,14 +65,14 @@ export const Query = {
 
         return false
     },
-    async computeDatabaseMappingProgress(parent, { databaseId }, context: Context) {
+    async computeSourceMappingProgress(parent, { sourceId }, context: Context) {
 
         getUserId(context)
 
         // need to catch all graph, has to be long enough
-        const mydatabase =  await context.binding.request("query { database( where: {id: \""+databaseId+"\"})  { id name resources{ id name attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } } } } } } } } } } } } } } } } } } } } }")
+        const mysource =  await context.binding.request("query { source( where: {id: \""+sourceId+"\"})  { id name resources{ id name attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } } } } } } } } } } } } } } } } } } } } }")
 
-        const resources = mydatabase["data"]["database"]["resources"]
+        const resources = mysource["data"]["source"]["resources"]
 
         const numberMappedRessources = resources.length
 

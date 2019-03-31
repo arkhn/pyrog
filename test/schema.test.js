@@ -21,11 +21,11 @@ const prismaBindingInstance = () => {
 describe('Prisma binding', () => {
     test('Send direct request', async () => {
         expect(
-            await prismaBindingInstance().request(`query { databases { name } }`, {})
+            await prismaBindingInstance().request(`query { sources { name } }`, {})
         ).toEqual({
             data: {
-                databases: expect.arrayContaining([
-                    expect.objectContaining({ name: "Crossway" })
+                sources: expect.arrayContaining([
+                    expect.objectContaining({ name: "Mimic" })
                 ])
             }
         })
@@ -33,9 +33,9 @@ describe('Prisma binding', () => {
 
     test('Use `query` method', async () => {
         expect(
-            await prismaBindingInstance().query.databases({}, `{name}`)
+            await prismaBindingInstance().query.sources({}, `{name}`)
         ).toEqual(expect.arrayContaining([
-            expect.objectContaining({ name: "Crossway" })
+            expect.objectContaining({ name: "Mimic" })
         ]))
     })
 })
@@ -47,17 +47,17 @@ const prismaClientInstance = new PrismaClient({
 
 describe('Prisma client', () => {
     describe('Queries', () => {
-        test('database', async () => {
+        test('source', async () => {
             expect(
-                await prismaClientInstance.database({ name: "Crossway" })
-            ).toEqual(expect.objectContaining({ name: "Crossway" }))
+                await prismaClientInstance.source({ name: "Mimic" })
+            ).toEqual(expect.objectContaining({ name: "Mimic" }))
         })
 
-        test('databases', async () => {
+        test('sources', async () => {
             expect(
-                await prismaClientInstance.databases()
+                await prismaClientInstance.sources()
             ).toEqual(expect.arrayContaining([
-                expect.objectContaining({ name: "Crossway" })
+                expect.objectContaining({ name: "Mimic" })
             ]))
         })
     })
@@ -105,14 +105,14 @@ describe('Graphql server', () => {
     // attributs et enfin les variables.
     const useCases = [
         [
-            'allDatabases',
+            'allSources',
             null,
             null,
         ],
         [
             'availableResources',
             {
-                database: "Crossway"
+                source: "Mimic"
             },
             null,
         ]
@@ -139,13 +139,13 @@ describe('Graphql server', () => {
     })
 
     describe.skip('Queries', () => {
-        test('allDatabases', async () => {
+        test('allSources', async () => {
             expect(
-                await sendPostRequest(`query { allDatabases { id name }}`, {})
+                await sendPostRequest(`query { allSources { id name }}`, {})
             ).toEqual({
                 data: {
-                    allDatabases: expect.arrayContaining([
-                        expect.objectContaining({ name: "Crossway" })
+                    allSources: expect.arrayContaining([
+                        expect.objectContaining({ name: "Mimic" })
                     ])
                 }
             })

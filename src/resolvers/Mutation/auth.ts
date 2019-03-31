@@ -2,7 +2,7 @@ import * as bcrypt from 'bcryptjs'
 import * as jwt from 'jsonwebtoken'
 import { Context } from '../../utils'
 
-export const auth = {
+export const authMutation = {
     async signup(parent, args, context: Context) {
         const password = await bcrypt.hash(args.password, 10)
         const user = await context.client.createUser({
