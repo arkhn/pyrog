@@ -10,7 +10,7 @@ This is a web server for [Pyrog](https://github.com/arkhn/pyrog-client).
 Simply run
 ```
 yarn install
-env $(cat .env.staging) docker-compose up prisma
+env $(cat .env.staging) docker-compose up -d prisma
 prisma deploy
 ```
 
