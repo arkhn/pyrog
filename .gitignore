@@ -6,4 +6,4 @@ node_modules
 .vscode
 *.log
 
-static_files
+static

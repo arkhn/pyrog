@@ -20,16 +20,16 @@ This will install all required node dependencies, setup 2 Docker containers (1 P
 
 ### Static files and mock data
 
-[FHIR resources](https://www.hl7.org/fhir/resourcelist.html) json descriptions are needed for this server to run successfully. Download them manually [here](https://arkhn.org/pyrog_static_files.zip), or run this command:
+[FHIR resources](https://www.hl7.org/fhir/resourcelist.html) json descriptions are needed for this server to run successfully. Download them manually [here](https://arkhn.org/pyrog_dev_static.zip), or run this command:
 ```
-wget https://arkhn.org/pyrog_dev_static_files.zip
-unzip pyrog_dev_static_files.zip
-rm pyrog_dev_static_files.zip
+wget https://arkhn.org/pyrog_dev_static.zip
+unzip pyrog_dev_static.zip
+rm pyrog_dev_static.zip
 ```
 
 This zip file also contains some mock data, among which [Mimic](https://mimic.physionet.org)'s database schema and a partial mapping of Mimic into FHIR. So as to use this data, you can populate your local Postgres database with our mapping:
 ```
-yarn run prisma import --data ./static_files/pyrog_mimic_mapping.zip
+yarn run prisma import --data ./static/pyrog_mimic_mapping.zip
 ```
 
 This will create a user with login `user@arkhn.org` and password `secret42` which you can later use in the client.
