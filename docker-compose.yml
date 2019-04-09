@@ -1,0 +1,42 @@
+version: '3'
+services:
+    pyrog:
+        build:
+            context: .
+        image: arkhn/pyrog:latest
+        ports:
+            - "$SERVER_PORT:$SERVER_PORT"
+        restart: always
+        depends_on:
+            - prisma
+        volumes:
+            - static:$WORKDIR/static_files
+    prisma:
+        image: prismagraphql/prisma:1.26
+        restart: always
+        ports:
+            - "4466:4466"
+        environment:
+            PRISMA_CONFIG: |
+                port: 4466
+                databases:
+                    default:
+                        connector: postgres
+                        host: postgres-db
+                        port: 5432
+                        user: prisma
+                        password: prisma
+                        migrations: true
+        depends_on:
+            - postgres-db
+    postgres-db:
+        image: postgres
+        restart: always
+        environment:
+            POSTGRES_USER: prisma
+            POSTGRES_PASSWORD: prisma
+        volumes:
+            - postgres:/var/lib/postgresql/data
+volumes:
+    postgres:
+    static:
