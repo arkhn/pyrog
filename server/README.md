@@ -33,8 +33,8 @@ yarn run prisma import --data ./static/pyrog_mimic_mapping.zip
 ```
 
 In particular, this will register two users with different roles:
-* an `ADMIN` account (login: `admin@arkhn.org`, password: 'admin')
-* a `USER` account (login: `user@arkhn.org`, password: 'user')
+* an `ADMIN` account (login: `admin@arkhn.org`, password: `admin`)
+* a `USER` account (login: `user@arkhn.org`, password: `user`)
 
 ### Run
 

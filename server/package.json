@@ -1,5 +1,5 @@
 {
-    "name": "pyrog-graphql",
+    "name": "pyrog-serer",
     "license": "Apache-2.0",
     "scripts": {
         "start": "dotenv -e .env.staging -- nodemon --ext ts,graphql --exec ts-node src/index.ts",
