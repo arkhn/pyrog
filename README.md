@@ -7,6 +7,10 @@ Pyrog is a web application intended to help standardizing healthcare data collec
 
 This project comprises a `server` built with Prisma (GraphQL) and `client` which consists of a React application.
 
+## Installation
+
+Installation instructions can be found in `./client` and `./server`.
+
 ## Start contributing
 
 We have reported several issues with the label `Good first issue` which can be a good way to start! You can also join our [Slack](https://join.slack.com/t/arkhn/shared_invite/enQtNTc1NDE5MDIxMDU3LWZmMzUwYWIwN2U0NGI1ZjM2MjcwNTAyZDZhNzcyMWFiYjJhNTIxNWQ1MWY4YmRiM2VhMDY4MDkzNGU5MTQ4ZWM) to contact us if you have trouble or questions :)

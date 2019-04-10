@@ -32,7 +32,9 @@ This zip file also contains some mock data, among which [Mimic](https://mimic.ph
 yarn run prisma import --data ./static/pyrog_mimic_mapping.zip
 ```
 
-This will create a user with login `user@arkhn.org` and password `secret42` which you can later use in the client.
+In particular, this will register two users with different roles:
+* an `ADMIN` account (login: `admin@arkhn.org`, password: 'admin')
+* a `USER` account (login: `user@arkhn.org`, password: 'user')
 
 ### Run
 
