@@ -96,7 +96,14 @@ body {
         color: @light-gray1;
         min-width: 300px;
         flex-basis: 25%;
-        overflow-y: scroll;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        overflow: hidden;
+
+        #fhir-attributes {
+            overflow-y: scroll;
+        }
 
         #resource-add {
             background-color: @dark-gray2;

@@ -673,6 +673,27 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                     >
                         {({ data, loading }) => {
                             return <div id='left-part'>
+                                <div id='fhir-attributes'>
+                                    <div id='resource-selector'>
+                                        <ResourceSelect
+                                          disabled={!selectedSource}
+                                          icon={'layout-hierarchy'}
+                                          inputItem={selectedFhirResource}
+                                          intent={'primary'}
+                                          items={data && data.availableResources ? data.availableResources : []}
+                                          loading={loading}
+                                          onChange={(resource: any) => {
+                                            dispatch(updateFhirResource(resource.id, resource.name))
+                                          }}
+                                        />
+                                    </div>
+                                    <div id='fhir-resource-tree'>
+                                        {selectedFhirResource.name ?
+                                            fhirResourceTree :
+                                            null
+                                        }
+                                    </div>
+                                </div>
                                 <div id='resource-add'>
                                     <FormGroup
                                         label={'Ajouter une ressource'}
@@ -719,25 +740,6 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                             </Mutation>
                                         </ControlGroup>
                                     </FormGroup>
-                                </div>
-                                <div id='resource-selector'>
-                                    <ResourceSelect
-                                        disabled={!selectedSource}
-                                        icon={'layout-hierarchy'}
-                                        inputItem={selectedFhirResource}
-                                        intent={'primary'}
-                                        items={data && data.availableResources ? data.availableResources : []}
-                                        loading={loading}
-                                        onChange={(resource: any) => {
-                                            dispatch(updateFhirResource(resource.id, resource.name))
-                                        }}
-                                    />
-                                </div>
-                                <div id='fhir-resource-tree'>
-                                    {selectedFhirResource.name ?
-                                        fhirResourceTree :
-                                        null
-                                    }
                                 </div>
                             </div>
                         }}
