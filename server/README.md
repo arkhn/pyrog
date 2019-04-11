@@ -54,6 +54,14 @@ You can easily test your server using GraphQL's `Playground`:
 yarn playground
 ```
 
+## Prod build
+
+```
+yarn install
+env $(cat ../../.env) docker-compose up --build
+prisma deploy
+```
+
 ## Start contributing
 
 We have reported several issues with the label `Good first issue` which can be a good way to start! You can also join our [Slack](https://join.slack.com/t/arkhn/shared_invite/enQtNTc1NDE5MDIxMDU3LWZmMzUwYWIwN2U0NGI1ZjM2MjcwNTAyZDZhNzcyMWFiYjJhNTIxNWQ1MWY4YmRiM2VhMDY4MDkzNGU5MTQ4ZWM) to contact us if you have trouble or questions :)

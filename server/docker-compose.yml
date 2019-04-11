@@ -10,7 +10,7 @@ services:
         depends_on:
             - prisma
         volumes:
-            - static:$WORKDIR/static_files
+            - static:$WORKDIR/static
     prisma:
         image: prismagraphql/prisma:1.26
         restart: always

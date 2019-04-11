@@ -1,6 +1,6 @@
 FROM node:10.15-alpine
-WORKDIR $WORKDIR
-COPY package*.json yarn.lock ./
+WORKDIR /usr/src/app
+COPY package.json yarn.lock ./
 RUN yarn install
 COPY . .
 EXPOSE $SERVER_PORT
