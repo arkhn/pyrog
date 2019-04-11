@@ -82,13 +82,19 @@ const serverInstance = new GraphQLServer({
     },
 })
 
-const sendPostRequest = async (query, variables) => {
-    return await fetch(`http://0.0.0.0:${process.env.SERVER_PORT}`, {
+const sendPostRequest = (query, variables, token) => {
+    let headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+    }
+
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`
+    }
+
+    return fetch(`http://0.0.0.0:${process.env.SERVER_PORT}`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        },
+        headers,
         body: JSON.stringify({
             query,
             variables,
@@ -100,6 +106,7 @@ const sendPostRequest = async (query, variables) => {
 
 describe('Graphql server', () => {
     let server
+    let token
     // Définition de différents cas à tester.
     // On rentre d'abord le nom du endpoint, puis les
     // attributs et enfin les variables.
@@ -112,7 +119,7 @@ describe('Graphql server', () => {
         [
             'availableResources',
             {
-                source: "Mimic"
+                sourceName: "Mimic"
             },
             null,
         ]
@@ -120,6 +127,7 @@ describe('Graphql server', () => {
 
     beforeAll(async () => {
         server = await serverInstance.start()
+        token = await sendPostRequest(`mutation { login(email: "user@arkhn.org", password: "user") { token }}`, {}).then((res) => res.data.login.token)
     })
 
     describe.each(useCases)('Should request authentication', (queryName, queryAttr, queryVar) => {
@@ -132,16 +140,16 @@ describe('Graphql server', () => {
                 await sendPostRequest(query, {})
             ).toEqual(expect.objectContaining({
                 errors: expect.arrayContaining([
-                    expect.objectContaining({ message: "Not authorized" })
+                    expect.objectContaining({ message: "Not authenticated" })
                 ])
             }))
         })
     })
 
-    describe.skip('Queries', () => {
+    describe('Queries', () => {
         test('allSources', async () => {
             expect(
-                await sendPostRequest(`query { allSources { id name }}`, {})
+                await sendPostRequest(`query { allSources { id name }}`, {}, token)
             ).toEqual({
                 data: {
                     allSources: expect.arrayContaining([
@@ -149,6 +157,18 @@ describe('Graphql server', () => {
                     ])
                 }
             })
+        })
+    })
+
+    describe('Mutations', () => {
+        test('createResourceTreeInSource should not create already existing Resource', async () => {
+            const resourceName = await sendPostRequest(
+                `query { availableResources(sourceName:"Mimic") { id name }}`,{}, token)
+                .then((res) => res.data.availableResources[0].name)
+
+            expect(
+                await sendPostRequest(`mutation { createResourceTreeInSource(sourceName: "Mimic", resourceName: "${resourceName}") { id name }}`, {}, token)
+            ).toHaveProperty('errors')
         })
     })
 
