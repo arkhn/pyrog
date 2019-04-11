@@ -3,6 +3,7 @@ import { forwardTo } from 'prisma-binding'
 import {
     checkAuth,
     Context,
+    CustomError,
     getUserId,
     PermissionError,
     ServerError,
@@ -111,8 +112,19 @@ export const pyrogMutation = {
             where: { id }
         })
     },
-    createResourceTreeInSource(parent, { sourceId, resourceName }, context: Context) {
+    async createResourceTreeInSource(parent, { sourceId, resourceName }, context: Context) {
         getUserId(context)
+
+        const resourceAlreadyExists = await context.client.$exists.resource({
+            name: resourceName,
+            source: {
+                id: sourceId,
+            }
+        })
+
+        if (resourceAlreadyExists) {
+            throw new CustomError(`${resourceName} already exists for this Source`)
+        }
 
         try {
             fetch(`http://localhost:${process.env.SERVER_PORT}/resource/${resourceName}.json`)
