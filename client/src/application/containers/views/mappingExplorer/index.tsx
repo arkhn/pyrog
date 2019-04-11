@@ -683,7 +683,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                           items={data && data.availableResources ? data.availableResources : []}
                                           loading={loading}
                                           onChange={(resource: any) => {
-                                            dispatch(updateFhirResource(resource.id, resource.name))
+                                              dispatch(updateFhirResource(resource.id, resource.name))
                                           }}
                                         />
                                     </div>
@@ -721,6 +721,14 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                                     })
 
                                                     dispatch(addResource())
+                                                }}
+                                                onError={(error: any) => {
+                                                    this.props.toaster.show({
+                                                        icon: 'error',
+                                                        intent: 'danger',
+                                                        message: error.message,
+                                                        timeout: 4000,
+                                                    })
                                                 }}
                                             >
                                                 {(createResource, { data, loading }) => {
