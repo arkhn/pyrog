@@ -112,41 +112,46 @@ export const pyrogMutation = {
             where: { id }
         })
     },
-    async createResourceTreeInSource(parent, { sourceId, resourceName }, context: Context) {
+    async createResourceTreeInSource(parent, { sourceId, sourceName, resourceName }, context: Context) {
         getUserId(context)
 
-        const resourceAlreadyExists = await context.client.$exists.resource({
-            name: resourceName,
-            source: {
-                id: sourceId,
-            }
-        })
+        const resourceAlreadyExists = sourceName ?
+            await context.client.$exists.resource({
+                name: resourceName,
+                source: { id: sourceId }
+            }) :
+            await context.client.$exists.resource({
+                name: resourceName,
+                source: { name: sourceName }
+            })
 
         if (resourceAlreadyExists) {
             throw new CustomError(`${resourceName} already exists for this Source`)
         }
 
-        try {
-            fetch(`http://localhost:${process.env.SERVER_PORT}/resource/${resourceName}.json`)
-                .then((response: any) => {
-                    return response.json()
-                })
-                .then((response: any) => {
+        return fetch(`http://localhost:${process.env.SERVER_PORT}/resource/${resourceName}.json`)
+            .then((response: any) => {
+                return response.json()
+            })
+            .then((response: any) => {
+                if (sourceName) {
                     return context.client.createResource({
-                        source: { connect: { id: sourceId, } },
+                        source: { connect: { name: sourceName } },
                         name: resourceName,
                         attributes: response['attributes'],
                     })
-                })
-                .catch((error: any) => {
-                    console.log(error)
-                    throw new ServerError()
-                })
-        } catch (error) {
-            // TODO: return something consistent
-            console.log(error)
-            throw new ServerError()
-        }
+                } else {
+                    return context.client.createResource({
+                      source: { connect: { id: sourceId } },
+                      name: resourceName,
+                      attributes: response['attributes'],
+                    })
+                }
+            })
+            .catch((error: any) => {
+                console.log(error)
+                throw new ServerError()
+            })
     },
     createAttributeProfileInAttribute(parent, { parentAttributeId, attributeName, attributeType }, context: Context, info) {
         getUserId(context)

@@ -676,15 +676,15 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                 <div id='fhir-attributes'>
                                     <div id='resource-selector'>
                                         <ResourceSelect
-                                          disabled={!selectedSource}
-                                          icon={'layout-hierarchy'}
-                                          inputItem={selectedFhirResource}
-                                          intent={'primary'}
-                                          items={data && data.availableResources ? data.availableResources : []}
-                                          loading={loading}
-                                          onChange={(resource: any) => {
-                                              dispatch(updateFhirResource(resource.id, resource.name))
-                                          }}
+                                            disabled={!selectedSource}
+                                            icon={'layout-hierarchy'}
+                                            inputItem={selectedFhirResource}
+                                            intent={'primary'}
+                                            items={data && data.availableResources ? data.availableResources : []}
+                                            loading={loading}
+                                            onChange={(resource: any) => {
+                                                dispatch(updateFhirResource(resource.id, resource.name))
+                                            }}
                                         />
                                     </div>
                                     <div id='fhir-resource-tree'>
