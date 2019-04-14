@@ -614,6 +614,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
         </div>
 
         const columnSuggestionTab = <div>Suggestions</div>
+        const sqlRequestParserTab = <div>SQL Parser</div>
 
         const columnSelectionComponent = <div id='column-selection'>
             <Tabs
@@ -626,6 +627,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
             >
                 <Tab id="picker" title="Simple Tools" panel={columnPickingTab} />
                 <Tab id="mb" disabled title="Column Suggestion Tool" panel={columnSuggestionTab} />
+                <Tab id="sql-parser" title="SQL Parser Tool" panel={sqlRequestParserTab} />
             </Tabs>
         </div>
 
