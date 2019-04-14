@@ -79,21 +79,6 @@ class Navbar extends React.Component<IProps, IState> {
         super(props);
     }
 
-    state = {
-        redirect: false
-    }
-
-    setRedirect = () => {
-        this.setState({
-            redirect: true
-        })
-    }
-    renderRedirect = () => {
-        if (this.state.redirect) {
-            return <Redirect to='/' />
-        }
-    }
-
     componentDidMount = () => {
         // Check if user is authentified and redirect accordingly.
         this.props.client
@@ -127,12 +112,15 @@ class Navbar extends React.Component<IProps, IState> {
             user,
         } = this.props
 
-        const logo = <BPNavbar.Heading>
+        const logo = <BPNavbar.Heading
+            onClick={() => {
+                this.props.history.push('/')
+            }}
+        >
             <span dangerouslySetInnerHTML={{__html: arkhnLogoWhite}} />
-            {this.renderRedirect()}
-            <h2 onClick={this.setRedirect}>PYROG</h2>
+            <h2>PYROG</h2>
         </BPNavbar.Heading>
-
+      
         const header = () => {
             switch (this.props.location.pathname) {
                 case '/newSource': {
