@@ -675,7 +675,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                             return <div id='left-part'>
                                 <div id='resource-add'>
                                     <FormGroup
-                                        label={'Ajouter une ressource'}
+                                        label={'Add resource'}
                                     >
                                         <ControlGroup>
                                             <AddResourceSelect
