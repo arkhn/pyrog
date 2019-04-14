@@ -1,3 +1,4 @@
+
 import {
     Alignment,
     Button,
@@ -8,6 +9,7 @@ import {
     Toaster,
 } from '@blueprintjs/core'
 import * as React from 'react'
+import { Redirect } from 'react-router-dom'
 import {
     Mutation,
     Query,
@@ -77,6 +79,21 @@ class Navbar extends React.Component<IProps, IState> {
         super(props);
     }
 
+    state = {
+        redirect: false
+    }
+
+    setRedirect = () => {
+        this.setState({
+            redirect: true
+        })
+    }
+    renderRedirect = () => {
+        if (this.state.redirect) {
+            return <Redirect to='/' />
+        }
+    }
+
     componentDidMount = () => {
         // Check if user is authentified and redirect accordingly.
         this.props.client
@@ -112,7 +129,8 @@ class Navbar extends React.Component<IProps, IState> {
 
         const logo = <BPNavbar.Heading>
             <span dangerouslySetInnerHTML={{__html: arkhnLogoWhite}} />
-            <h2>PYROG</h2>
+            {this.renderRedirect()}
+            <h2 onClick={this.setRedirect}>PYROG</h2>
         </BPNavbar.Heading>
 
         const header = () => {
