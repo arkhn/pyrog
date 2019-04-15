@@ -36,6 +36,27 @@ In particular, this will register two users with different roles:
 * an `ADMIN` account (login: `admin@arkhn.org`, password: `admin`)
 * a `USER` account (login: `user@arkhn.org`, password: `user`)
 
+#### Reset mock data
+
+Resetting mock data will erase:
+* new source schemas you have imported when creating new sources (they are stored under `./static/schemas`)
+* all mapping data added on top of mock data
+
+Download new mock data and overwrite previous data:
+
+```
+wget https://arkhn.org/pyrog_dev_static.zip
+unzip -o pyrog_dev_static.zip
+rm pyrog_dev_static.zip
+```
+
+You should stop all docker containers related to pyrog except for the Postgres container before running the following commands:
+```
+docker exec -i <postgres_container_id> dropdb -U prisma prisma
+env $(cat .env.staging) docker-compose up -d prisma
+yarn run prisma import --data ./static/pyrog_mimic_mapping.zip
+```
+
 ### Run
 
 Ensure your docker containers are running:
@@ -54,12 +75,12 @@ You can easily test your server using GraphQL's `Playground`:
 yarn playground
 ```
 
-## Prod build
+### Prod build
 
 ```
 yarn install
 env $(cat ../../.env) docker-compose up --build
-prisma deploy
+yarn run prisma deploy
 ```
 
 ## Start contributing
