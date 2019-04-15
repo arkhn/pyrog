@@ -8,7 +8,7 @@ type Query {
 
     # CLIENT QUERIES
     allSources: [Source!]!
-    availableResources(sourceId: ID!): [Resource!]
+    availableResources(sourceId: ID, sourceName: String): [Resource!]
     recAvailableAttributes(resourceId: ID!): [Attribute!]
     me: User
     isAuthenticated: Boolean!
@@ -27,7 +27,7 @@ type Mutation {
     updateInputColumn(id: ID!, data: InputColumnUpdateInput): InputColumn!
     updateJoin(id: ID!, data: JoinUpdateInput): Join!
 
-    createResourceTreeInSource(sourceId: ID!, resourceName: String!): Resource!
+    createResourceTreeInSource(sourceId: ID, sourceName: String, resourceName: String!): Resource!
     createAttributeProfileInAttribute(parentAttributeId: ID!, attributeName: String!, attributeType: String!): Attribute!
     deleteAttribute(id: ID!): Attribute!
 

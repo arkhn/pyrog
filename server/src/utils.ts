@@ -83,6 +83,12 @@ export class ServerError extends Error {
     }
 }
 
+export class CustomError extends Error {
+    constructor(message: string) {
+        super(message)
+    }
+}
+
 // Recursively queries all nested attributes of a given attribute.
 export const getRecAttribute = async (attribute, context: Context) => {
     const directAttributes = await context.client.attribute({

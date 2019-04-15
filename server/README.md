@@ -75,12 +75,12 @@ You can easily test your server using GraphQL's `Playground`:
 yarn playground
 ```
 
-## Prod build
+### Prod build
 
 ```
 yarn install
 env $(cat ../../.env) docker-compose up --build
-prisma deploy
+yarn run prisma deploy
 ```
 
 ## Start contributing

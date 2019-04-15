@@ -1,7 +1,7 @@
 import * as React from 'react'
-import {Button, MenuItem, Intent} from "@blueprintjs/core";
-import {Select, ItemPredicate, ItemRenderer} from "@blueprintjs/select";
-import {IconName} from '@blueprintjs/icons';
+import { Button, MenuItem, Intent, Position } from "@blueprintjs/core";
+import { Select, ItemPredicate, ItemRenderer } from "@blueprintjs/select";
+import { IconName } from '@blueprintjs/icons';
 
 import TSelect from './TSelect'
 
@@ -60,6 +60,14 @@ export default class ResourceSelect extends React.Component<ISelectProps, any> {
             intent={intent}
             items={items}
             onChange={onChange}
+            popoverProps={{
+                autoFocus: true,
+                boundary: 'viewport',
+                canEscapeKeyClose: true,
+                lazy: true,
+                position: Position.RIGHT_BOTTOM,
+                usePortal: true,
+            }}
             renderItem={this.renderItem}
         />
     }

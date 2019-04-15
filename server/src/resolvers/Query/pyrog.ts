@@ -21,10 +21,14 @@ export const pyrogQuery = {
 
         return context.client.sources()
     },
-    availableResources(parent, { sourceId }, context: Context) {
+    availableResources(parent, { sourceId, sourceName }, context: Context) {
         getUserId(context)
 
-        return context.client.source({ id: sourceId }).resources()
+        if (sourceName) {
+            return context.client.source({ name: sourceName }).resources()
+        } else {
+            return context.client.source({ id: sourceId }).resources()
+        }
     },
     async recAvailableAttributes(parent, { resourceId }, context: Context) {
         getUserId(context)
