@@ -15,11 +15,6 @@ import './style.less'
 import Routes from './routes'
 import middlewares from './middlewares/middlewares'
 import mainReducer from './reducers/mainReducer'
-import {
-    AUTH_TOKEN,
-    GRAPHQL_WS_URL,
-    GRAPHQL_HTTP_URL,
-} from './constants'
 
 // Redux initialisation
 if (process.env.NODE_ENV === 'development') {
@@ -33,11 +28,11 @@ const store = finalCreateStore(mainReducer)
 
 // HttpLink
 const httpLink = new HttpLink({
-    uri: GRAPHQL_HTTP_URL,
+    uri: process.env.HTTP_BACKEND_URL,
 })
 
 const middlewareLink = new ApolloLink((operation, forward) => {
-    const token = localStorage.getItem(AUTH_TOKEN)
+    const token = localStorage.getItem(process.env.AUTH_TOKEN)
 
     operation.setContext({
         headers: {
@@ -52,11 +47,11 @@ const httpLinkAuth = middlewareLink.concat(httpLink)
 
 // WebSocketLink
 const wsLink = new WebSocketLink({
-    uri: GRAPHQL_WS_URL,
+    uri: process.env.WS_BACKEND_URL,
     options: {
         reconnect: true,
         connectionParams: {
-            Authorization: `Bearer ${localStorage.getItem(AUTH_TOKEN)}`,
+            Authorization: `Bearer ${localStorage.getItem(process.env.AUTH_TOKEN)}`,
         }
     },
 })
@@ -92,7 +87,7 @@ const client = new ApolloClient({
     ),
 })
 
-const token = localStorage.getItem(AUTH_TOKEN)
+const token = localStorage.getItem(process.env.AUTH_TOKEN)
 
 // Render React app in DOM
 // TODO: fix bad type cast
