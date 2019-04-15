@@ -1,10 +1,9 @@
 import { IAction } from '../types'
-import { ENGINE_URL } from '../constants'
 import { availableTypes } from '../mockdata/mimic'
 
 export const fetchRecommendedColumns = (fhirAttribute: string, type: string) : IAction => {
     return (dispatch: any, getState: any) => {
-        const url = `${ENGINE_URL}/search/${availableTypes[type]}`
+        const url = `${process.env.ENGINE_BACKEND_URL}/search/${availableTypes[type]}`
 
         return fetch(url)
             .then((response: any) => {
@@ -20,7 +19,7 @@ export const fetchRecommendedColumns = (fhirAttribute: string, type: string) : I
 
 export const fetchBetaRecommendedColumns = (fhirAttribute: string, type: string, head_table: string, mot_clef: string) : IAction => {
     return (dispatch: any, getState: any) => {
-        const url = mot_clef == '' || !mot_clef ? `${ENGINE_URL}/beta/search/${availableTypes[type]}/${head_table}` : `${ENGINE_URL}/beta/search/${type ? availableTypes[type] : 'all'}/${head_table}/${mot_clef}`
+        const url = mot_clef == '' || !mot_clef ? `${process.env.ENGINE_BACKEND_URL}/beta/search/${availableTypes[type]}/${head_table}` : `${process.env.ENGINE_BACKEND_URL}/beta/search/${type ? availableTypes[type] : 'all'}/${head_table}/${mot_clef}`
 
         return fetch(url)
             .then((response: any) => {

@@ -18,8 +18,6 @@ import {
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
-import { SCHEMA_URL } from '../../../constants'
-
 import Navbar from '../../utils/navbar'
 
 // Import types
@@ -131,7 +129,7 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
             }),
             data: formData,
             method: "post",
-            url: `${SCHEMA_URL}/upload`,
+            url: `${process.env.HTTP_BACKEND_URL}/upload`,
             onUploadProgress: (p) => {
                 this.props.toaster.show(renderToastProps({
                     action: {

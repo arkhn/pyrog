@@ -17,8 +17,6 @@ import {
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
-import { AUTH_TOKEN } from '../../../constants'
-
 import Navbar from '../../utils/navbar'
 
 import { login as loginAction } from '../../../actions/user'
@@ -116,7 +114,7 @@ class AuthenticationView extends React.Component<IAuthenticationViewState, IStat
                         if (data.signup.token) {
                             const token = data.signup.token
                             const {id, name, email} = data.signup.user
-                            localStorage.setItem(AUTH_TOKEN, token)
+                            localStorage.setItem(process.env.AUTH_TOKEN, token)
                             dispatch(loginAction(id, name, email))
                             this.props.history.push('/sources')
                         }
@@ -255,7 +253,7 @@ class AuthenticationView extends React.Component<IAuthenticationViewState, IStat
                         if (data.login.token) {
                             const token = data.login.token
                             const {id, name, email} = data.login.user
-                            localStorage.setItem(AUTH_TOKEN, token)
+                            localStorage.setItem(process.env.AUTH_TOKEN, token)
                             dispatch(loginAction(id, name, email))
                             this.props.history.push('/sources')
                         }

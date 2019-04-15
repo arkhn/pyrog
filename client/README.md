@@ -26,7 +26,7 @@ yarn start
 ### Building production files
 A _production_ version of the application can be built using the following command:
 ```
-yarn run build-prod
+yarn run build
 ```
 This will create bundles and output them in `./dist/`. These files can then be exported to a distant production server running the application.
 
