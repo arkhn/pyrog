@@ -1,5 +1,4 @@
 import { IAction } from '../types'
-import { SCHEMA_URL } from '../constants'
 
 // These actions handle source schema fetching.
 export const loadingSourceSchema = () : IAction => {
@@ -12,7 +11,7 @@ export const fetchSourceSchema = (sourceName: string, callback: any) : IAction =
     return (dispatch: any, getState: any) => {
         dispatch(loadingSourceSchema())
 
-        return fetch(`${SCHEMA_URL}/schemas/${sourceName}.json`)
+        return fetch(`${process.env.HTTP_BACKEND_URL}/schemas/${sourceName}.json`)
             .then((response: any) => {
                 return response.json()
             }).then((response: any) => {

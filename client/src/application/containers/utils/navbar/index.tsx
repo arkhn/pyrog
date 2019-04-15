@@ -17,8 +17,6 @@ import {
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
-import { AUTH_TOKEN } from '../../../constants'
-
 import { login, logout } from '../../../actions/user'
 import { deselectSource } from '../../../actions/selectedSource'
 import {
@@ -189,7 +187,7 @@ class Navbar extends React.Component<IProps, IState> {
                                     className="bp3-minimal"
                                     icon="log-out"
                                     onClick={() => {
-                                        localStorage.removeItem(AUTH_TOKEN)
+                                        localStorage.removeItem(process.env.AUTH_TOKEN)
                                         dispatch(logout())
                                         this.props.history.push('/signin')
                                     }}
