@@ -7,12 +7,14 @@ type Query {
     resources(where: ResourceWhereInput): [Resource]!
 
     # CLIENT QUERIES
+    sourceInfo(sourceId: ID!): Source!
+    resourceInfo(resourceId: ID!): Resource!
+    attributeInfo(attributeId: ID!): Attribute!
     allSources: [Source!]!
     availableResources(sourceId: ID, sourceName: String): [Resource!]
     recAvailableAttributes(resourceId: ID!): [Attribute!]
     me: User
     isAuthenticated: Boolean!
-    # countMappedAttributes(sourceId: ID!): Int
     computeSourceMappingProgress(sourceId: ID!): [Int!]
 }
 

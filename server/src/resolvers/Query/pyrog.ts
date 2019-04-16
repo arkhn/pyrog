@@ -16,6 +16,16 @@ export const pyrogQuery = {
     resources: checkIsAdmin(forwardTo('binding')),
 
     // CLIENT QUERIES
+    // Information queries
+    sourceInfo(parent, { sourceId }, context: Context) {
+        return context.client.source({ id: sourceId })
+    },
+    resourceInfo(parent, { resourceId }, context: Context) {
+        return context.client.resource({ id: resourceId })
+    },
+    attributeInfo(parent, { attributeId }, context: Context) {
+        return context.client.attribute({ id: attributeId })
+    },
     allSources(parent, args, context: Context) {
         getUserId(context)
 
