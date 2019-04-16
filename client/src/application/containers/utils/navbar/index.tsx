@@ -163,7 +163,11 @@ class Navbar extends React.Component<IProps, IState> {
     const { dispatch, selectedSource, user } = this.props;
 
     const logo = (
-      <BPNavbar.Heading>
+      <BPNavbar.Heading
+        onClick={() => {
+          this.props.history.push("/");
+        }}
+      >
         <span dangerouslySetInnerHTML={{ __html: arkhnLogoWhite }} />
         <h2>PYROG</h2>
       </BPNavbar.Heading>

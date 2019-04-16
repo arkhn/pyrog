@@ -793,7 +793,7 @@ export default class MappingExplorerView extends React.Component<
                       </div>
                     </div>
                     <div id="resource-add">
-                      <FormGroup label={"Ajouter une ressource"}>
+                      <FormGroup label={"Add Resource"}>
                         <ControlGroup>
                           <AddResourceSelect
                             disabled={!selectedSource}
