@@ -6,6 +6,7 @@ import {
     Spinner,
     Tag,
 } from '@blueprintjs/core'
+import * as QueryString from 'query-string'
 import * as React from 'react'
 import {
     Mutation,
@@ -100,7 +101,10 @@ class SourcesView extends React.Component<ISourcesViewState, IState> {
                                         key={index}
                                         onClick={() => {
                                             dispatch(changeSelectedSource(source.id, source.name))
-                                            this.props.history.push('/mapping')
+                                            this.props.history.push({
+                                                pathname: '/mapping',
+                                                search: QueryString.stringify({ sourceId: source.id })
+                                            })
                                         }}
                                     >
                                         <h2>{source.name}</h2>

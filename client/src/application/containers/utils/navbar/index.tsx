@@ -90,7 +90,7 @@ class Navbar extends React.Component<IProps, IState> {
             })
             .then((response: any) => {
                 if (response.data.isAuthenticated) {
-                    if (this.props.location.pathname == "/mapping") {
+                    if (this.props.location.pathname == "/mapping" && !this.props.selectedSource.id) {
                         // Load arguments given through our URL...
                         const args = QueryString.parse(this.props.location.search)
 
