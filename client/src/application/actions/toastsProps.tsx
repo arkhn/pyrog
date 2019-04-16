@@ -1,12 +1,12 @@
-import { IToastProps } from '@blueprintjs/core'
+import { IToastProps } from "@blueprintjs/core";
 
-import { IAction } from '../types'
+import { IAction } from "../types";
 
 export const addToast = (props: IToastProps): IAction => {
-    return {
-        type:'ADD_TOAST',
-        payload: {
-            props,
-        }
+  return {
+    type: "ADD_TOAST",
+    payload: {
+      props
     }
-}
+  };
+};

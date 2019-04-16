@@ -1,7 +1,7 @@
 #import "../fragments/entireInputColumn.graphql"
 
 query inputColumns($attributeId: ID!) {
-    inputColumns(where: {attribute: {id: $attributeId}}) {
-        ...entireInputColumn
-    }
+  inputColumns(where: { attribute: { id: $attributeId } }) {
+    ...entireInputColumn
+  }
 }

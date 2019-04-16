@@ -1,6 +1,6 @@
 query {
-    allSources {
-        id
-        name
-    }
+  allSources {
+    id
+    name
+  }
 }

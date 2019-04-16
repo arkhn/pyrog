@@ -1,7 +1,7 @@
 #import "../fragments/entireJoin.graphql"
 
 mutation updateJoin($id: ID!, $data: JoinUpdateInput) {
-    updateJoin(id: $id, data: $data) {
-        ...entireJoin
-    }
+  updateJoin(id: $id, data: $data) {
+    ...entireJoin
+  }
 }
