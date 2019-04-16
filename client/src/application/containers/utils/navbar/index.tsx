@@ -1,3 +1,4 @@
+
 import {
     Alignment,
     Button,
@@ -8,6 +9,7 @@ import {
     Toaster,
 } from '@blueprintjs/core'
 import * as React from 'react'
+import { Redirect } from 'react-router-dom'
 import {
     Mutation,
     Query,
@@ -108,11 +110,15 @@ class Navbar extends React.Component<IProps, IState> {
             user,
         } = this.props
 
-        const logo = <BPNavbar.Heading>
+        const logo = <BPNavbar.Heading
+            onClick={() => {
+                this.props.history.push('/')
+            }}
+        >
             <span dangerouslySetInnerHTML={{__html: arkhnLogoWhite}} />
             <h2>PYROG</h2>
         </BPNavbar.Heading>
-
+      
         const header = () => {
             switch (this.props.location.pathname) {
                 case '/newSource': {
