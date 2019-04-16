@@ -18,6 +18,7 @@ import {
     TabId,
     Tag,
 } from '@blueprintjs/core'
+import * as QueryString from 'query-string'
 import * as React from 'react'
 import {
     Mutation,
@@ -145,6 +146,7 @@ const reduxify = (mapReduxStateToReactProps: any, mapDispatchToProps?: any, merg
 export default class MappingExplorerView extends React.Component<IMappingExplorerViewState, IState> {
     constructor(props: IMappingExplorerViewState) {
         super(props)
+
         this.state = {
             columnPicker: {
                 owner: null,
@@ -155,6 +157,20 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
             selectedTabId: 'picker',
             toggledNavBar: false,
         }
+    }
+
+    /*
+    This function updates the current url with new information.
+    Before: url/pathname?attr1=value1
+    After: url/pathname?attr1=value1&key=value
+    */
+    private updateLocationSearch = (key: string, value: string) => {
+        const qs = QueryString.stringify({
+              ...QueryString.parse(this.props.location.search),
+              [key]: value,
+        })
+
+        this.props.history.push({ search: qs })
     }
 
     public render = () => {
@@ -650,6 +666,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                         json={data.resource.attributes}
                         onClickCallback={(nodeData: any) => {
                             dispatch(updateFhirAttribute(nodeData.id, nodeData.name))
+                            this.updateLocationSearch('attributeId', nodeData.id)
                         }}
                         selectedNodeId={selectedFhirAttribute.id}
                     />
@@ -684,6 +701,7 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                                             loading={loading}
                                             onChange={(resource: any) => {
                                                 dispatch(updateFhirResource(resource.id, resource.name))
+                                                this.updateLocationSearch('resourceId', resource.id)
                                             }}
                                         />
                                     </div>

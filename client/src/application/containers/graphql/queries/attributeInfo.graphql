@@ -1,0 +1,6 @@
+query attributeInfo($attributeId: ID!) {
+    attributeInfo(attributeId: $attributeId) {
+        id
+        name
+    }
+}
