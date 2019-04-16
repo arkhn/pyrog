@@ -1,108 +1,498 @@
-import { GraphQLResolveInfo, GraphQLSchema } from 'graphql'
-import { IResolvers } from 'graphql-tools/dist/Interfaces'
-import { Options } from 'graphql-binding'
-import { makePrismaBindingClass, BasePrismaOptions } from 'prisma-binding'
+import { GraphQLResolveInfo, GraphQLSchema } from "graphql";
+import { IResolvers } from "graphql-tools/dist/Interfaces";
+import { Options } from "graphql-binding";
+import { makePrismaBindingClass, BasePrismaOptions } from "prisma-binding";
 
 export interface Query {
-    sources: <T = Array<Source | null>>(args: { where?: SourceWhereInput | null, orderBy?: SourceOrderByInput | null, skip?: Int | null, after?: String | null, before?: String | null, first?: Int | null, last?: Int | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    resources: <T = Array<Resource | null>>(args: { where?: ResourceWhereInput | null, orderBy?: ResourceOrderByInput | null, skip?: Int | null, after?: String | null, before?: String | null, first?: Int | null, last?: Int | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    attributes: <T = Array<Attribute | null>>(args: { where?: AttributeWhereInput | null, orderBy?: AttributeOrderByInput | null, skip?: Int | null, after?: String | null, before?: String | null, first?: Int | null, last?: Int | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    inputColumns: <T = Array<InputColumn | null>>(args: { where?: InputColumnWhereInput | null, orderBy?: InputColumnOrderByInput | null, skip?: Int | null, after?: String | null, before?: String | null, first?: Int | null, last?: Int | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    joins: <T = Array<Join | null>>(args: { where?: JoinWhereInput | null, orderBy?: JoinOrderByInput | null, skip?: Int | null, after?: String | null, before?: String | null, first?: Int | null, last?: Int | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    users: <T = Array<User | null>>(args: { where?: UserWhereInput | null, orderBy?: UserOrderByInput | null, skip?: Int | null, after?: String | null, before?: String | null, first?: Int | null, last?: Int | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    source: <T = Source | null>(args: { where: SourceWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T | null> ,
-    resource: <T = Resource | null>(args: { where: ResourceWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T | null> ,
-    attribute: <T = Attribute | null>(args: { where: AttributeWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T | null> ,
-    inputColumn: <T = InputColumn | null>(args: { where: InputColumnWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T | null> ,
-    join: <T = Join | null>(args: { where: JoinWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T | null> ,
-    user: <T = User | null>(args: { where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T | null> ,
-    sourcesConnection: <T = SourceConnection>(args: { where?: SourceWhereInput | null, orderBy?: SourceOrderByInput | null, skip?: Int | null, after?: String | null, before?: String | null, first?: Int | null, last?: Int | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    resourcesConnection: <T = ResourceConnection>(args: { where?: ResourceWhereInput | null, orderBy?: ResourceOrderByInput | null, skip?: Int | null, after?: String | null, before?: String | null, first?: Int | null, last?: Int | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    attributesConnection: <T = AttributeConnection>(args: { where?: AttributeWhereInput | null, orderBy?: AttributeOrderByInput | null, skip?: Int | null, after?: String | null, before?: String | null, first?: Int | null, last?: Int | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    inputColumnsConnection: <T = InputColumnConnection>(args: { where?: InputColumnWhereInput | null, orderBy?: InputColumnOrderByInput | null, skip?: Int | null, after?: String | null, before?: String | null, first?: Int | null, last?: Int | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    joinsConnection: <T = JoinConnection>(args: { where?: JoinWhereInput | null, orderBy?: JoinOrderByInput | null, skip?: Int | null, after?: String | null, before?: String | null, first?: Int | null, last?: Int | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    usersConnection: <T = UserConnection>(args: { where?: UserWhereInput | null, orderBy?: UserOrderByInput | null, skip?: Int | null, after?: String | null, before?: String | null, first?: Int | null, last?: Int | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    node: <T = Node | null>(args: { id: ID_Output }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T | null> 
-  }
+  sources: <T = Array<Source | null>>(
+    args: {
+      where?: SourceWhereInput | null;
+      orderBy?: SourceOrderByInput | null;
+      skip?: Int | null;
+      after?: String | null;
+      before?: String | null;
+      first?: Int | null;
+      last?: Int | null;
+    },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  resources: <T = Array<Resource | null>>(
+    args: {
+      where?: ResourceWhereInput | null;
+      orderBy?: ResourceOrderByInput | null;
+      skip?: Int | null;
+      after?: String | null;
+      before?: String | null;
+      first?: Int | null;
+      last?: Int | null;
+    },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  attributes: <T = Array<Attribute | null>>(
+    args: {
+      where?: AttributeWhereInput | null;
+      orderBy?: AttributeOrderByInput | null;
+      skip?: Int | null;
+      after?: String | null;
+      before?: String | null;
+      first?: Int | null;
+      last?: Int | null;
+    },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  inputColumns: <T = Array<InputColumn | null>>(
+    args: {
+      where?: InputColumnWhereInput | null;
+      orderBy?: InputColumnOrderByInput | null;
+      skip?: Int | null;
+      after?: String | null;
+      before?: String | null;
+      first?: Int | null;
+      last?: Int | null;
+    },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  joins: <T = Array<Join | null>>(
+    args: {
+      where?: JoinWhereInput | null;
+      orderBy?: JoinOrderByInput | null;
+      skip?: Int | null;
+      after?: String | null;
+      before?: String | null;
+      first?: Int | null;
+      last?: Int | null;
+    },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  users: <T = Array<User | null>>(
+    args: {
+      where?: UserWhereInput | null;
+      orderBy?: UserOrderByInput | null;
+      skip?: Int | null;
+      after?: String | null;
+      before?: String | null;
+      first?: Int | null;
+      last?: Int | null;
+    },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  source: <T = Source | null>(
+    args: { where: SourceWhereUniqueInput },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T | null>;
+  resource: <T = Resource | null>(
+    args: { where: ResourceWhereUniqueInput },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T | null>;
+  attribute: <T = Attribute | null>(
+    args: { where: AttributeWhereUniqueInput },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T | null>;
+  inputColumn: <T = InputColumn | null>(
+    args: { where: InputColumnWhereUniqueInput },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T | null>;
+  join: <T = Join | null>(
+    args: { where: JoinWhereUniqueInput },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T | null>;
+  user: <T = User | null>(
+    args: { where: UserWhereUniqueInput },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T | null>;
+  sourcesConnection: <T = SourceConnection>(
+    args: {
+      where?: SourceWhereInput | null;
+      orderBy?: SourceOrderByInput | null;
+      skip?: Int | null;
+      after?: String | null;
+      before?: String | null;
+      first?: Int | null;
+      last?: Int | null;
+    },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  resourcesConnection: <T = ResourceConnection>(
+    args: {
+      where?: ResourceWhereInput | null;
+      orderBy?: ResourceOrderByInput | null;
+      skip?: Int | null;
+      after?: String | null;
+      before?: String | null;
+      first?: Int | null;
+      last?: Int | null;
+    },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  attributesConnection: <T = AttributeConnection>(
+    args: {
+      where?: AttributeWhereInput | null;
+      orderBy?: AttributeOrderByInput | null;
+      skip?: Int | null;
+      after?: String | null;
+      before?: String | null;
+      first?: Int | null;
+      last?: Int | null;
+    },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  inputColumnsConnection: <T = InputColumnConnection>(
+    args: {
+      where?: InputColumnWhereInput | null;
+      orderBy?: InputColumnOrderByInput | null;
+      skip?: Int | null;
+      after?: String | null;
+      before?: String | null;
+      first?: Int | null;
+      last?: Int | null;
+    },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  joinsConnection: <T = JoinConnection>(
+    args: {
+      where?: JoinWhereInput | null;
+      orderBy?: JoinOrderByInput | null;
+      skip?: Int | null;
+      after?: String | null;
+      before?: String | null;
+      first?: Int | null;
+      last?: Int | null;
+    },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  usersConnection: <T = UserConnection>(
+    args: {
+      where?: UserWhereInput | null;
+      orderBy?: UserOrderByInput | null;
+      skip?: Int | null;
+      after?: String | null;
+      before?: String | null;
+      first?: Int | null;
+      last?: Int | null;
+    },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  node: <T = Node | null>(
+    args: { id: ID_Output },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T | null>;
+}
 
 export interface Mutation {
-    createSource: <T = Source>(args: { data: SourceCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    createResource: <T = Resource>(args: { data: ResourceCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    createAttribute: <T = Attribute>(args: { data: AttributeCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    createInputColumn: <T = InputColumn>(args: { data: InputColumnCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    createJoin: <T = Join>(args: { data: JoinCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    createUser: <T = User>(args: { data: UserCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    updateSource: <T = Source | null>(args: { data: SourceUpdateInput, where: SourceWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T | null> ,
-    updateResource: <T = Resource | null>(args: { data: ResourceUpdateInput, where: ResourceWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T | null> ,
-    updateAttribute: <T = Attribute | null>(args: { data: AttributeUpdateInput, where: AttributeWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T | null> ,
-    updateInputColumn: <T = InputColumn | null>(args: { data: InputColumnUpdateInput, where: InputColumnWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T | null> ,
-    updateJoin: <T = Join | null>(args: { data: JoinUpdateInput, where: JoinWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T | null> ,
-    updateUser: <T = User | null>(args: { data: UserUpdateInput, where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T | null> ,
-    deleteSource: <T = Source | null>(args: { where: SourceWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T | null> ,
-    deleteResource: <T = Resource | null>(args: { where: ResourceWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T | null> ,
-    deleteAttribute: <T = Attribute | null>(args: { where: AttributeWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T | null> ,
-    deleteInputColumn: <T = InputColumn | null>(args: { where: InputColumnWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T | null> ,
-    deleteJoin: <T = Join | null>(args: { where: JoinWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T | null> ,
-    deleteUser: <T = User | null>(args: { where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T | null> ,
-    upsertSource: <T = Source>(args: { where: SourceWhereUniqueInput, create: SourceCreateInput, update: SourceUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    upsertResource: <T = Resource>(args: { where: ResourceWhereUniqueInput, create: ResourceCreateInput, update: ResourceUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    upsertAttribute: <T = Attribute>(args: { where: AttributeWhereUniqueInput, create: AttributeCreateInput, update: AttributeUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    upsertInputColumn: <T = InputColumn>(args: { where: InputColumnWhereUniqueInput, create: InputColumnCreateInput, update: InputColumnUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    upsertJoin: <T = Join>(args: { where: JoinWhereUniqueInput, create: JoinCreateInput, update: JoinUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    upsertUser: <T = User>(args: { where: UserWhereUniqueInput, create: UserCreateInput, update: UserUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    updateManySources: <T = BatchPayload>(args: { data: SourceUpdateManyMutationInput, where?: SourceWhereInput | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    updateManyResources: <T = BatchPayload>(args: { data: ResourceUpdateManyMutationInput, where?: ResourceWhereInput | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    updateManyAttributes: <T = BatchPayload>(args: { data: AttributeUpdateManyMutationInput, where?: AttributeWhereInput | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    updateManyInputColumns: <T = BatchPayload>(args: { data: InputColumnUpdateManyMutationInput, where?: InputColumnWhereInput | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    updateManyJoins: <T = BatchPayload>(args: { data: JoinUpdateManyMutationInput, where?: JoinWhereInput | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    updateManyUsers: <T = BatchPayload>(args: { data: UserUpdateManyMutationInput, where?: UserWhereInput | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    deleteManySources: <T = BatchPayload>(args: { where?: SourceWhereInput | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    deleteManyResources: <T = BatchPayload>(args: { where?: ResourceWhereInput | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    deleteManyAttributes: <T = BatchPayload>(args: { where?: AttributeWhereInput | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    deleteManyInputColumns: <T = BatchPayload>(args: { where?: InputColumnWhereInput | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    deleteManyJoins: <T = BatchPayload>(args: { where?: JoinWhereInput | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    deleteManyUsers: <T = BatchPayload>(args: { where?: UserWhereInput | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> 
-  }
+  createSource: <T = Source>(
+    args: { data: SourceCreateInput },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  createResource: <T = Resource>(
+    args: { data: ResourceCreateInput },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  createAttribute: <T = Attribute>(
+    args: { data: AttributeCreateInput },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  createInputColumn: <T = InputColumn>(
+    args: { data: InputColumnCreateInput },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  createJoin: <T = Join>(
+    args: { data: JoinCreateInput },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  createUser: <T = User>(
+    args: { data: UserCreateInput },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  updateSource: <T = Source | null>(
+    args: { data: SourceUpdateInput; where: SourceWhereUniqueInput },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T | null>;
+  updateResource: <T = Resource | null>(
+    args: { data: ResourceUpdateInput; where: ResourceWhereUniqueInput },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T | null>;
+  updateAttribute: <T = Attribute | null>(
+    args: { data: AttributeUpdateInput; where: AttributeWhereUniqueInput },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T | null>;
+  updateInputColumn: <T = InputColumn | null>(
+    args: { data: InputColumnUpdateInput; where: InputColumnWhereUniqueInput },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T | null>;
+  updateJoin: <T = Join | null>(
+    args: { data: JoinUpdateInput; where: JoinWhereUniqueInput },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T | null>;
+  updateUser: <T = User | null>(
+    args: { data: UserUpdateInput; where: UserWhereUniqueInput },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T | null>;
+  deleteSource: <T = Source | null>(
+    args: { where: SourceWhereUniqueInput },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T | null>;
+  deleteResource: <T = Resource | null>(
+    args: { where: ResourceWhereUniqueInput },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T | null>;
+  deleteAttribute: <T = Attribute | null>(
+    args: { where: AttributeWhereUniqueInput },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T | null>;
+  deleteInputColumn: <T = InputColumn | null>(
+    args: { where: InputColumnWhereUniqueInput },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T | null>;
+  deleteJoin: <T = Join | null>(
+    args: { where: JoinWhereUniqueInput },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T | null>;
+  deleteUser: <T = User | null>(
+    args: { where: UserWhereUniqueInput },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T | null>;
+  upsertSource: <T = Source>(
+    args: {
+      where: SourceWhereUniqueInput;
+      create: SourceCreateInput;
+      update: SourceUpdateInput;
+    },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  upsertResource: <T = Resource>(
+    args: {
+      where: ResourceWhereUniqueInput;
+      create: ResourceCreateInput;
+      update: ResourceUpdateInput;
+    },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  upsertAttribute: <T = Attribute>(
+    args: {
+      where: AttributeWhereUniqueInput;
+      create: AttributeCreateInput;
+      update: AttributeUpdateInput;
+    },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  upsertInputColumn: <T = InputColumn>(
+    args: {
+      where: InputColumnWhereUniqueInput;
+      create: InputColumnCreateInput;
+      update: InputColumnUpdateInput;
+    },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  upsertJoin: <T = Join>(
+    args: {
+      where: JoinWhereUniqueInput;
+      create: JoinCreateInput;
+      update: JoinUpdateInput;
+    },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  upsertUser: <T = User>(
+    args: {
+      where: UserWhereUniqueInput;
+      create: UserCreateInput;
+      update: UserUpdateInput;
+    },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  updateManySources: <T = BatchPayload>(
+    args: {
+      data: SourceUpdateManyMutationInput;
+      where?: SourceWhereInput | null;
+    },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  updateManyResources: <T = BatchPayload>(
+    args: {
+      data: ResourceUpdateManyMutationInput;
+      where?: ResourceWhereInput | null;
+    },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  updateManyAttributes: <T = BatchPayload>(
+    args: {
+      data: AttributeUpdateManyMutationInput;
+      where?: AttributeWhereInput | null;
+    },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  updateManyInputColumns: <T = BatchPayload>(
+    args: {
+      data: InputColumnUpdateManyMutationInput;
+      where?: InputColumnWhereInput | null;
+    },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  updateManyJoins: <T = BatchPayload>(
+    args: { data: JoinUpdateManyMutationInput; where?: JoinWhereInput | null },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  updateManyUsers: <T = BatchPayload>(
+    args: { data: UserUpdateManyMutationInput; where?: UserWhereInput | null },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  deleteManySources: <T = BatchPayload>(
+    args: { where?: SourceWhereInput | null },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  deleteManyResources: <T = BatchPayload>(
+    args: { where?: ResourceWhereInput | null },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  deleteManyAttributes: <T = BatchPayload>(
+    args: { where?: AttributeWhereInput | null },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  deleteManyInputColumns: <T = BatchPayload>(
+    args: { where?: InputColumnWhereInput | null },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  deleteManyJoins: <T = BatchPayload>(
+    args: { where?: JoinWhereInput | null },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  deleteManyUsers: <T = BatchPayload>(
+    args: { where?: UserWhereInput | null },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+}
 
 export interface Subscription {
-    source: <T = SourceSubscriptionPayload | null>(args: { where?: SourceSubscriptionWhereInput | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T | null>> ,
-    resource: <T = ResourceSubscriptionPayload | null>(args: { where?: ResourceSubscriptionWhereInput | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T | null>> ,
-    attribute: <T = AttributeSubscriptionPayload | null>(args: { where?: AttributeSubscriptionWhereInput | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T | null>> ,
-    inputColumn: <T = InputColumnSubscriptionPayload | null>(args: { where?: InputColumnSubscriptionWhereInput | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T | null>> ,
-    join: <T = JoinSubscriptionPayload | null>(args: { where?: JoinSubscriptionWhereInput | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T | null>> ,
-    user: <T = UserSubscriptionPayload | null>(args: { where?: UserSubscriptionWhereInput | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T | null>> 
-  }
+  source: <T = SourceSubscriptionPayload | null>(
+    args: { where?: SourceSubscriptionWhereInput | null },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<AsyncIterator<T | null>>;
+  resource: <T = ResourceSubscriptionPayload | null>(
+    args: { where?: ResourceSubscriptionWhereInput | null },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<AsyncIterator<T | null>>;
+  attribute: <T = AttributeSubscriptionPayload | null>(
+    args: { where?: AttributeSubscriptionWhereInput | null },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<AsyncIterator<T | null>>;
+  inputColumn: <T = InputColumnSubscriptionPayload | null>(
+    args: { where?: InputColumnSubscriptionWhereInput | null },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<AsyncIterator<T | null>>;
+  join: <T = JoinSubscriptionPayload | null>(
+    args: { where?: JoinSubscriptionWhereInput | null },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<AsyncIterator<T | null>>;
+  user: <T = UserSubscriptionPayload | null>(
+    args: { where?: UserSubscriptionWhereInput | null },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<AsyncIterator<T | null>>;
+}
 
 export interface Exists {
-  Source: (where?: SourceWhereInput) => Promise<boolean>
-  Resource: (where?: ResourceWhereInput) => Promise<boolean>
-  Attribute: (where?: AttributeWhereInput) => Promise<boolean>
-  InputColumn: (where?: InputColumnWhereInput) => Promise<boolean>
-  Join: (where?: JoinWhereInput) => Promise<boolean>
-  User: (where?: UserWhereInput) => Promise<boolean>
+  Source: (where?: SourceWhereInput) => Promise<boolean>;
+  Resource: (where?: ResourceWhereInput) => Promise<boolean>;
+  Attribute: (where?: AttributeWhereInput) => Promise<boolean>;
+  InputColumn: (where?: InputColumnWhereInput) => Promise<boolean>;
+  Join: (where?: JoinWhereInput) => Promise<boolean>;
+  User: (where?: UserWhereInput) => Promise<boolean>;
 }
 
 export interface Prisma {
-  query: Query
-  mutation: Mutation
-  subscription: Subscription
-  exists: Exists
-  request: <T = any>(query: string, variables?: {[key: string]: any}) => Promise<T>
-  delegate(operation: 'query' | 'mutation', fieldName: string, args: {
-    [key: string]: any;
-}, infoOrQuery?: GraphQLResolveInfo | string, options?: Options): Promise<any>;
-delegateSubscription(fieldName: string, args?: {
-    [key: string]: any;
-}, infoOrQuery?: GraphQLResolveInfo | string, options?: Options): Promise<AsyncIterator<any>>;
-getAbstractResolvers(filterSchema?: GraphQLSchema | string): IResolvers;
+  query: Query;
+  mutation: Mutation;
+  subscription: Subscription;
+  exists: Exists;
+  request: <T = any>(
+    query: string,
+    variables?: { [key: string]: any }
+  ) => Promise<T>;
+  delegate(
+    operation: "query" | "mutation",
+    fieldName: string,
+    args: {
+      [key: string]: any;
+    },
+    infoOrQuery?: GraphQLResolveInfo | string,
+    options?: Options
+  ): Promise<any>;
+  delegateSubscription(
+    fieldName: string,
+    args?: {
+      [key: string]: any;
+    },
+    infoOrQuery?: GraphQLResolveInfo | string,
+    options?: Options
+  ): Promise<AsyncIterator<any>>;
+  getAbstractResolvers(filterSchema?: GraphQLSchema | string): IResolvers;
 }
 
 export interface BindingConstructor<T> {
-  new(options: BasePrismaOptions): T
+  new (options: BasePrismaOptions): T;
 }
 /**
  * Type Defs
-*/
+ */
 
 const typeDefs = `type AggregateAttribute {
   count: Int!
@@ -3731,1661 +4121,1771 @@ input UserWhereUniqueInput {
   id: ID
   email: String
 }
-`
+`;
 
-export const Prisma = makePrismaBindingClass<BindingConstructor<Prisma>>({typeDefs})
+export const Prisma = makePrismaBindingClass<BindingConstructor<Prisma>>({
+  typeDefs
+});
 
 /**
  * Types
-*/
+ */
 
-export type AttributeOrderByInput =   'id_ASC' |
-  'id_DESC' |
-  'name_ASC' |
-  'name_DESC' |
-  'mergingScript_ASC' |
-  'mergingScript_DESC' |
-  'isProfile_ASC' |
-  'isProfile_DESC' |
-  'type_ASC' |
-  'type_DESC' |
-  'comment_ASC' |
-  'comment_DESC' |
-  'depth_ASC' |
-  'depth_DESC' |
-  'updatedAt_ASC' |
-  'updatedAt_DESC' |
-  'createdAt_ASC' |
-  'createdAt_DESC'
+export type AttributeOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "mergingScript_ASC"
+  | "mergingScript_DESC"
+  | "isProfile_ASC"
+  | "isProfile_DESC"
+  | "type_ASC"
+  | "type_DESC"
+  | "comment_ASC"
+  | "comment_DESC"
+  | "depth_ASC"
+  | "depth_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC";
 
-export type InputColumnOrderByInput =   'id_ASC' |
-  'id_DESC' |
-  'owner_ASC' |
-  'owner_DESC' |
-  'table_ASC' |
-  'table_DESC' |
-  'column_ASC' |
-  'column_DESC' |
-  'script_ASC' |
-  'script_DESC' |
-  'staticValue_ASC' |
-  'staticValue_DESC' |
-  'updatedAt_ASC' |
-  'updatedAt_DESC' |
-  'createdAt_ASC' |
-  'createdAt_DESC'
+export type InputColumnOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "owner_ASC"
+  | "owner_DESC"
+  | "table_ASC"
+  | "table_DESC"
+  | "column_ASC"
+  | "column_DESC"
+  | "script_ASC"
+  | "script_DESC"
+  | "staticValue_ASC"
+  | "staticValue_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC";
 
-export type JoinOrderByInput =   'id_ASC' |
-  'id_DESC' |
-  'sourceOwner_ASC' |
-  'sourceOwner_DESC' |
-  'sourceTable_ASC' |
-  'sourceTable_DESC' |
-  'sourceColumn_ASC' |
-  'sourceColumn_DESC' |
-  'targetOwner_ASC' |
-  'targetOwner_DESC' |
-  'targetTable_ASC' |
-  'targetTable_DESC' |
-  'targetColumn_ASC' |
-  'targetColumn_DESC' |
-  'updatedAt_ASC' |
-  'updatedAt_DESC' |
-  'createdAt_ASC' |
-  'createdAt_DESC'
+export type JoinOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "sourceOwner_ASC"
+  | "sourceOwner_DESC"
+  | "sourceTable_ASC"
+  | "sourceTable_DESC"
+  | "sourceColumn_ASC"
+  | "sourceColumn_DESC"
+  | "targetOwner_ASC"
+  | "targetOwner_DESC"
+  | "targetTable_ASC"
+  | "targetTable_DESC"
+  | "targetColumn_ASC"
+  | "targetColumn_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC";
 
-export type MutationType =   'CREATED' |
-  'UPDATED' |
-  'DELETED'
+export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export type ResourceOrderByInput =   'id_ASC' |
-  'id_DESC' |
-  'name_ASC' |
-  'name_DESC' |
-  'primaryKeyOwner_ASC' |
-  'primaryKeyOwner_DESC' |
-  'primaryKeyTable_ASC' |
-  'primaryKeyTable_DESC' |
-  'primaryKeyColumn_ASC' |
-  'primaryKeyColumn_DESC' |
-  'updatedAt_ASC' |
-  'updatedAt_DESC' |
-  'createdAt_ASC' |
-  'createdAt_DESC'
+export type ResourceOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "primaryKeyOwner_ASC"
+  | "primaryKeyOwner_DESC"
+  | "primaryKeyTable_ASC"
+  | "primaryKeyTable_DESC"
+  | "primaryKeyColumn_ASC"
+  | "primaryKeyColumn_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC";
 
-export type Role =   'ADMIN' |
-  'USER'
+export type Role = "ADMIN" | "USER";
 
-export type SourceOrderByInput =   'id_ASC' |
-  'id_DESC' |
-  'name_ASC' |
-  'name_DESC' |
-  'updatedAt_ASC' |
-  'updatedAt_DESC' |
-  'createdAt_ASC' |
-  'createdAt_DESC'
+export type SourceOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC";
 
-export type UserOrderByInput =   'id_ASC' |
-  'id_DESC' |
-  'email_ASC' |
-  'email_DESC' |
-  'name_ASC' |
-  'name_DESC' |
-  'password_ASC' |
-  'password_DESC' |
-  'role_ASC' |
-  'role_DESC' |
-  'updatedAt_ASC' |
-  'updatedAt_DESC' |
-  'createdAt_ASC' |
-  'createdAt_DESC'
+export type UserOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "email_ASC"
+  | "email_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "password_ASC"
+  | "password_DESC"
+  | "role_ASC"
+  | "role_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC";
 
 export interface AttributeCreateInput {
-  name: String
-  mergingScript?: String | null
-  isProfile?: Boolean | null
-  type?: String | null
-  comment?: String | null
-  depth?: Int | null
-  resource?: ResourceCreateOneWithoutAttributesInput | null
-  attributes?: AttributeCreateManyWithoutAttributeInput | null
-  attribute?: AttributeCreateOneWithoutAttributesInput | null
-  inputColumns?: InputColumnCreateManyWithoutAttributeInput | null
+  name: String;
+  mergingScript?: String | null;
+  isProfile?: Boolean | null;
+  type?: String | null;
+  comment?: String | null;
+  depth?: Int | null;
+  resource?: ResourceCreateOneWithoutAttributesInput | null;
+  attributes?: AttributeCreateManyWithoutAttributeInput | null;
+  attribute?: AttributeCreateOneWithoutAttributesInput | null;
+  inputColumns?: InputColumnCreateManyWithoutAttributeInput | null;
 }
 
 export interface AttributeCreateManyWithoutAttributeInput {
-  create?: AttributeCreateWithoutAttributeInput[] | AttributeCreateWithoutAttributeInput | null
-  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput | null
+  create?:
+    | AttributeCreateWithoutAttributeInput[]
+    | AttributeCreateWithoutAttributeInput
+    | null;
+  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput | null;
 }
 
 export interface AttributeCreateManyWithoutResourceInput {
-  create?: AttributeCreateWithoutResourceInput[] | AttributeCreateWithoutResourceInput | null
-  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput | null
+  create?:
+    | AttributeCreateWithoutResourceInput[]
+    | AttributeCreateWithoutResourceInput
+    | null;
+  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput | null;
 }
 
 export interface AttributeCreateOneWithoutAttributesInput {
-  create?: AttributeCreateWithoutAttributesInput | null
-  connect?: AttributeWhereUniqueInput | null
+  create?: AttributeCreateWithoutAttributesInput | null;
+  connect?: AttributeWhereUniqueInput | null;
 }
 
 export interface AttributeCreateOneWithoutInputColumnsInput {
-  create?: AttributeCreateWithoutInputColumnsInput | null
-  connect?: AttributeWhereUniqueInput | null
+  create?: AttributeCreateWithoutInputColumnsInput | null;
+  connect?: AttributeWhereUniqueInput | null;
 }
 
 export interface AttributeCreateWithoutAttributeInput {
-  name: String
-  mergingScript?: String | null
-  isProfile?: Boolean | null
-  type?: String | null
-  comment?: String | null
-  depth?: Int | null
-  resource?: ResourceCreateOneWithoutAttributesInput | null
-  attributes?: AttributeCreateManyWithoutAttributeInput | null
-  inputColumns?: InputColumnCreateManyWithoutAttributeInput | null
+  name: String;
+  mergingScript?: String | null;
+  isProfile?: Boolean | null;
+  type?: String | null;
+  comment?: String | null;
+  depth?: Int | null;
+  resource?: ResourceCreateOneWithoutAttributesInput | null;
+  attributes?: AttributeCreateManyWithoutAttributeInput | null;
+  inputColumns?: InputColumnCreateManyWithoutAttributeInput | null;
 }
 
 export interface AttributeCreateWithoutAttributesInput {
-  name: String
-  mergingScript?: String | null
-  isProfile?: Boolean | null
-  type?: String | null
-  comment?: String | null
-  depth?: Int | null
-  resource?: ResourceCreateOneWithoutAttributesInput | null
-  attribute?: AttributeCreateOneWithoutAttributesInput | null
-  inputColumns?: InputColumnCreateManyWithoutAttributeInput | null
+  name: String;
+  mergingScript?: String | null;
+  isProfile?: Boolean | null;
+  type?: String | null;
+  comment?: String | null;
+  depth?: Int | null;
+  resource?: ResourceCreateOneWithoutAttributesInput | null;
+  attribute?: AttributeCreateOneWithoutAttributesInput | null;
+  inputColumns?: InputColumnCreateManyWithoutAttributeInput | null;
 }
 
 export interface AttributeCreateWithoutInputColumnsInput {
-  name: String
-  mergingScript?: String | null
-  isProfile?: Boolean | null
-  type?: String | null
-  comment?: String | null
-  depth?: Int | null
-  resource?: ResourceCreateOneWithoutAttributesInput | null
-  attributes?: AttributeCreateManyWithoutAttributeInput | null
-  attribute?: AttributeCreateOneWithoutAttributesInput | null
+  name: String;
+  mergingScript?: String | null;
+  isProfile?: Boolean | null;
+  type?: String | null;
+  comment?: String | null;
+  depth?: Int | null;
+  resource?: ResourceCreateOneWithoutAttributesInput | null;
+  attributes?: AttributeCreateManyWithoutAttributeInput | null;
+  attribute?: AttributeCreateOneWithoutAttributesInput | null;
 }
 
 export interface AttributeCreateWithoutResourceInput {
-  name: String
-  mergingScript?: String | null
-  isProfile?: Boolean | null
-  type?: String | null
-  comment?: String | null
-  depth?: Int | null
-  attributes?: AttributeCreateManyWithoutAttributeInput | null
-  attribute?: AttributeCreateOneWithoutAttributesInput | null
-  inputColumns?: InputColumnCreateManyWithoutAttributeInput | null
+  name: String;
+  mergingScript?: String | null;
+  isProfile?: Boolean | null;
+  type?: String | null;
+  comment?: String | null;
+  depth?: Int | null;
+  attributes?: AttributeCreateManyWithoutAttributeInput | null;
+  attribute?: AttributeCreateOneWithoutAttributesInput | null;
+  inputColumns?: InputColumnCreateManyWithoutAttributeInput | null;
 }
 
 export interface AttributeScalarWhereInput {
-  AND?: AttributeScalarWhereInput[] | AttributeScalarWhereInput | null
-  OR?: AttributeScalarWhereInput[] | AttributeScalarWhereInput | null
-  NOT?: AttributeScalarWhereInput[] | AttributeScalarWhereInput | null
-  id?: ID_Input | null
-  id_not?: ID_Input | null
-  id_in?: ID_Output[] | ID_Output | null
-  id_not_in?: ID_Output[] | ID_Output | null
-  id_lt?: ID_Input | null
-  id_lte?: ID_Input | null
-  id_gt?: ID_Input | null
-  id_gte?: ID_Input | null
-  id_contains?: ID_Input | null
-  id_not_contains?: ID_Input | null
-  id_starts_with?: ID_Input | null
-  id_not_starts_with?: ID_Input | null
-  id_ends_with?: ID_Input | null
-  id_not_ends_with?: ID_Input | null
-  name?: String | null
-  name_not?: String | null
-  name_in?: String[] | String | null
-  name_not_in?: String[] | String | null
-  name_lt?: String | null
-  name_lte?: String | null
-  name_gt?: String | null
-  name_gte?: String | null
-  name_contains?: String | null
-  name_not_contains?: String | null
-  name_starts_with?: String | null
-  name_not_starts_with?: String | null
-  name_ends_with?: String | null
-  name_not_ends_with?: String | null
-  mergingScript?: String | null
-  mergingScript_not?: String | null
-  mergingScript_in?: String[] | String | null
-  mergingScript_not_in?: String[] | String | null
-  mergingScript_lt?: String | null
-  mergingScript_lte?: String | null
-  mergingScript_gt?: String | null
-  mergingScript_gte?: String | null
-  mergingScript_contains?: String | null
-  mergingScript_not_contains?: String | null
-  mergingScript_starts_with?: String | null
-  mergingScript_not_starts_with?: String | null
-  mergingScript_ends_with?: String | null
-  mergingScript_not_ends_with?: String | null
-  isProfile?: Boolean | null
-  isProfile_not?: Boolean | null
-  type?: String | null
-  type_not?: String | null
-  type_in?: String[] | String | null
-  type_not_in?: String[] | String | null
-  type_lt?: String | null
-  type_lte?: String | null
-  type_gt?: String | null
-  type_gte?: String | null
-  type_contains?: String | null
-  type_not_contains?: String | null
-  type_starts_with?: String | null
-  type_not_starts_with?: String | null
-  type_ends_with?: String | null
-  type_not_ends_with?: String | null
-  comment?: String | null
-  comment_not?: String | null
-  comment_in?: String[] | String | null
-  comment_not_in?: String[] | String | null
-  comment_lt?: String | null
-  comment_lte?: String | null
-  comment_gt?: String | null
-  comment_gte?: String | null
-  comment_contains?: String | null
-  comment_not_contains?: String | null
-  comment_starts_with?: String | null
-  comment_not_starts_with?: String | null
-  comment_ends_with?: String | null
-  comment_not_ends_with?: String | null
-  depth?: Int | null
-  depth_not?: Int | null
-  depth_in?: Int[] | Int | null
-  depth_not_in?: Int[] | Int | null
-  depth_lt?: Int | null
-  depth_lte?: Int | null
-  depth_gt?: Int | null
-  depth_gte?: Int | null
+  AND?: AttributeScalarWhereInput[] | AttributeScalarWhereInput | null;
+  OR?: AttributeScalarWhereInput[] | AttributeScalarWhereInput | null;
+  NOT?: AttributeScalarWhereInput[] | AttributeScalarWhereInput | null;
+  id?: ID_Input | null;
+  id_not?: ID_Input | null;
+  id_in?: ID_Output[] | ID_Output | null;
+  id_not_in?: ID_Output[] | ID_Output | null;
+  id_lt?: ID_Input | null;
+  id_lte?: ID_Input | null;
+  id_gt?: ID_Input | null;
+  id_gte?: ID_Input | null;
+  id_contains?: ID_Input | null;
+  id_not_contains?: ID_Input | null;
+  id_starts_with?: ID_Input | null;
+  id_not_starts_with?: ID_Input | null;
+  id_ends_with?: ID_Input | null;
+  id_not_ends_with?: ID_Input | null;
+  name?: String | null;
+  name_not?: String | null;
+  name_in?: String[] | String | null;
+  name_not_in?: String[] | String | null;
+  name_lt?: String | null;
+  name_lte?: String | null;
+  name_gt?: String | null;
+  name_gte?: String | null;
+  name_contains?: String | null;
+  name_not_contains?: String | null;
+  name_starts_with?: String | null;
+  name_not_starts_with?: String | null;
+  name_ends_with?: String | null;
+  name_not_ends_with?: String | null;
+  mergingScript?: String | null;
+  mergingScript_not?: String | null;
+  mergingScript_in?: String[] | String | null;
+  mergingScript_not_in?: String[] | String | null;
+  mergingScript_lt?: String | null;
+  mergingScript_lte?: String | null;
+  mergingScript_gt?: String | null;
+  mergingScript_gte?: String | null;
+  mergingScript_contains?: String | null;
+  mergingScript_not_contains?: String | null;
+  mergingScript_starts_with?: String | null;
+  mergingScript_not_starts_with?: String | null;
+  mergingScript_ends_with?: String | null;
+  mergingScript_not_ends_with?: String | null;
+  isProfile?: Boolean | null;
+  isProfile_not?: Boolean | null;
+  type?: String | null;
+  type_not?: String | null;
+  type_in?: String[] | String | null;
+  type_not_in?: String[] | String | null;
+  type_lt?: String | null;
+  type_lte?: String | null;
+  type_gt?: String | null;
+  type_gte?: String | null;
+  type_contains?: String | null;
+  type_not_contains?: String | null;
+  type_starts_with?: String | null;
+  type_not_starts_with?: String | null;
+  type_ends_with?: String | null;
+  type_not_ends_with?: String | null;
+  comment?: String | null;
+  comment_not?: String | null;
+  comment_in?: String[] | String | null;
+  comment_not_in?: String[] | String | null;
+  comment_lt?: String | null;
+  comment_lte?: String | null;
+  comment_gt?: String | null;
+  comment_gte?: String | null;
+  comment_contains?: String | null;
+  comment_not_contains?: String | null;
+  comment_starts_with?: String | null;
+  comment_not_starts_with?: String | null;
+  comment_ends_with?: String | null;
+  comment_not_ends_with?: String | null;
+  depth?: Int | null;
+  depth_not?: Int | null;
+  depth_in?: Int[] | Int | null;
+  depth_not_in?: Int[] | Int | null;
+  depth_lt?: Int | null;
+  depth_lte?: Int | null;
+  depth_gt?: Int | null;
+  depth_gte?: Int | null;
 }
 
 export interface AttributeSubscriptionWhereInput {
-  AND?: AttributeSubscriptionWhereInput[] | AttributeSubscriptionWhereInput | null
-  OR?: AttributeSubscriptionWhereInput[] | AttributeSubscriptionWhereInput | null
-  NOT?: AttributeSubscriptionWhereInput[] | AttributeSubscriptionWhereInput | null
-  mutation_in?: MutationType[] | MutationType | null
-  updatedFields_contains?: String | null
-  updatedFields_contains_every?: String[] | String | null
-  updatedFields_contains_some?: String[] | String | null
-  node?: AttributeWhereInput | null
+  AND?:
+    | AttributeSubscriptionWhereInput[]
+    | AttributeSubscriptionWhereInput
+    | null;
+  OR?:
+    | AttributeSubscriptionWhereInput[]
+    | AttributeSubscriptionWhereInput
+    | null;
+  NOT?:
+    | AttributeSubscriptionWhereInput[]
+    | AttributeSubscriptionWhereInput
+    | null;
+  mutation_in?: MutationType[] | MutationType | null;
+  updatedFields_contains?: String | null;
+  updatedFields_contains_every?: String[] | String | null;
+  updatedFields_contains_some?: String[] | String | null;
+  node?: AttributeWhereInput | null;
 }
 
 export interface AttributeUpdateInput {
-  name?: String | null
-  mergingScript?: String | null
-  isProfile?: Boolean | null
-  type?: String | null
-  comment?: String | null
-  depth?: Int | null
-  resource?: ResourceUpdateOneWithoutAttributesInput | null
-  attributes?: AttributeUpdateManyWithoutAttributeInput | null
-  attribute?: AttributeUpdateOneWithoutAttributesInput | null
-  inputColumns?: InputColumnUpdateManyWithoutAttributeInput | null
+  name?: String | null;
+  mergingScript?: String | null;
+  isProfile?: Boolean | null;
+  type?: String | null;
+  comment?: String | null;
+  depth?: Int | null;
+  resource?: ResourceUpdateOneWithoutAttributesInput | null;
+  attributes?: AttributeUpdateManyWithoutAttributeInput | null;
+  attribute?: AttributeUpdateOneWithoutAttributesInput | null;
+  inputColumns?: InputColumnUpdateManyWithoutAttributeInput | null;
 }
 
 export interface AttributeUpdateManyDataInput {
-  name?: String | null
-  mergingScript?: String | null
-  isProfile?: Boolean | null
-  type?: String | null
-  comment?: String | null
-  depth?: Int | null
+  name?: String | null;
+  mergingScript?: String | null;
+  isProfile?: Boolean | null;
+  type?: String | null;
+  comment?: String | null;
+  depth?: Int | null;
 }
 
 export interface AttributeUpdateManyMutationInput {
-  name?: String | null
-  mergingScript?: String | null
-  isProfile?: Boolean | null
-  type?: String | null
-  comment?: String | null
-  depth?: Int | null
+  name?: String | null;
+  mergingScript?: String | null;
+  isProfile?: Boolean | null;
+  type?: String | null;
+  comment?: String | null;
+  depth?: Int | null;
 }
 
 export interface AttributeUpdateManyWithoutAttributeInput {
-  create?: AttributeCreateWithoutAttributeInput[] | AttributeCreateWithoutAttributeInput | null
-  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput | null
-  set?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput | null
-  disconnect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput | null
-  delete?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput | null
-  update?: AttributeUpdateWithWhereUniqueWithoutAttributeInput[] | AttributeUpdateWithWhereUniqueWithoutAttributeInput | null
-  updateMany?: AttributeUpdateManyWithWhereNestedInput[] | AttributeUpdateManyWithWhereNestedInput | null
-  deleteMany?: AttributeScalarWhereInput[] | AttributeScalarWhereInput | null
-  upsert?: AttributeUpsertWithWhereUniqueWithoutAttributeInput[] | AttributeUpsertWithWhereUniqueWithoutAttributeInput | null
+  create?:
+    | AttributeCreateWithoutAttributeInput[]
+    | AttributeCreateWithoutAttributeInput
+    | null;
+  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput | null;
+  set?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput | null;
+  disconnect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput | null;
+  delete?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput | null;
+  update?:
+    | AttributeUpdateWithWhereUniqueWithoutAttributeInput[]
+    | AttributeUpdateWithWhereUniqueWithoutAttributeInput
+    | null;
+  updateMany?:
+    | AttributeUpdateManyWithWhereNestedInput[]
+    | AttributeUpdateManyWithWhereNestedInput
+    | null;
+  deleteMany?: AttributeScalarWhereInput[] | AttributeScalarWhereInput | null;
+  upsert?:
+    | AttributeUpsertWithWhereUniqueWithoutAttributeInput[]
+    | AttributeUpsertWithWhereUniqueWithoutAttributeInput
+    | null;
 }
 
 export interface AttributeUpdateManyWithoutResourceInput {
-  create?: AttributeCreateWithoutResourceInput[] | AttributeCreateWithoutResourceInput | null
-  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput | null
-  set?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput | null
-  disconnect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput | null
-  delete?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput | null
-  update?: AttributeUpdateWithWhereUniqueWithoutResourceInput[] | AttributeUpdateWithWhereUniqueWithoutResourceInput | null
-  updateMany?: AttributeUpdateManyWithWhereNestedInput[] | AttributeUpdateManyWithWhereNestedInput | null
-  deleteMany?: AttributeScalarWhereInput[] | AttributeScalarWhereInput | null
-  upsert?: AttributeUpsertWithWhereUniqueWithoutResourceInput[] | AttributeUpsertWithWhereUniqueWithoutResourceInput | null
+  create?:
+    | AttributeCreateWithoutResourceInput[]
+    | AttributeCreateWithoutResourceInput
+    | null;
+  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput | null;
+  set?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput | null;
+  disconnect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput | null;
+  delete?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput | null;
+  update?:
+    | AttributeUpdateWithWhereUniqueWithoutResourceInput[]
+    | AttributeUpdateWithWhereUniqueWithoutResourceInput
+    | null;
+  updateMany?:
+    | AttributeUpdateManyWithWhereNestedInput[]
+    | AttributeUpdateManyWithWhereNestedInput
+    | null;
+  deleteMany?: AttributeScalarWhereInput[] | AttributeScalarWhereInput | null;
+  upsert?:
+    | AttributeUpsertWithWhereUniqueWithoutResourceInput[]
+    | AttributeUpsertWithWhereUniqueWithoutResourceInput
+    | null;
 }
 
 export interface AttributeUpdateManyWithWhereNestedInput {
-  where: AttributeScalarWhereInput
-  data: AttributeUpdateManyDataInput
+  where: AttributeScalarWhereInput;
+  data: AttributeUpdateManyDataInput;
 }
 
 export interface AttributeUpdateOneRequiredWithoutInputColumnsInput {
-  create?: AttributeCreateWithoutInputColumnsInput | null
-  connect?: AttributeWhereUniqueInput | null
-  update?: AttributeUpdateWithoutInputColumnsDataInput | null
-  upsert?: AttributeUpsertWithoutInputColumnsInput | null
+  create?: AttributeCreateWithoutInputColumnsInput | null;
+  connect?: AttributeWhereUniqueInput | null;
+  update?: AttributeUpdateWithoutInputColumnsDataInput | null;
+  upsert?: AttributeUpsertWithoutInputColumnsInput | null;
 }
 
 export interface AttributeUpdateOneWithoutAttributesInput {
-  create?: AttributeCreateWithoutAttributesInput | null
-  connect?: AttributeWhereUniqueInput | null
-  disconnect?: Boolean | null
-  delete?: Boolean | null
-  update?: AttributeUpdateWithoutAttributesDataInput | null
-  upsert?: AttributeUpsertWithoutAttributesInput | null
+  create?: AttributeCreateWithoutAttributesInput | null;
+  connect?: AttributeWhereUniqueInput | null;
+  disconnect?: Boolean | null;
+  delete?: Boolean | null;
+  update?: AttributeUpdateWithoutAttributesDataInput | null;
+  upsert?: AttributeUpsertWithoutAttributesInput | null;
 }
 
 export interface AttributeUpdateWithoutAttributeDataInput {
-  name?: String | null
-  mergingScript?: String | null
-  isProfile?: Boolean | null
-  type?: String | null
-  comment?: String | null
-  depth?: Int | null
-  resource?: ResourceUpdateOneWithoutAttributesInput | null
-  attributes?: AttributeUpdateManyWithoutAttributeInput | null
-  inputColumns?: InputColumnUpdateManyWithoutAttributeInput | null
+  name?: String | null;
+  mergingScript?: String | null;
+  isProfile?: Boolean | null;
+  type?: String | null;
+  comment?: String | null;
+  depth?: Int | null;
+  resource?: ResourceUpdateOneWithoutAttributesInput | null;
+  attributes?: AttributeUpdateManyWithoutAttributeInput | null;
+  inputColumns?: InputColumnUpdateManyWithoutAttributeInput | null;
 }
 
 export interface AttributeUpdateWithoutAttributesDataInput {
-  name?: String | null
-  mergingScript?: String | null
-  isProfile?: Boolean | null
-  type?: String | null
-  comment?: String | null
-  depth?: Int | null
-  resource?: ResourceUpdateOneWithoutAttributesInput | null
-  attribute?: AttributeUpdateOneWithoutAttributesInput | null
-  inputColumns?: InputColumnUpdateManyWithoutAttributeInput | null
+  name?: String | null;
+  mergingScript?: String | null;
+  isProfile?: Boolean | null;
+  type?: String | null;
+  comment?: String | null;
+  depth?: Int | null;
+  resource?: ResourceUpdateOneWithoutAttributesInput | null;
+  attribute?: AttributeUpdateOneWithoutAttributesInput | null;
+  inputColumns?: InputColumnUpdateManyWithoutAttributeInput | null;
 }
 
 export interface AttributeUpdateWithoutInputColumnsDataInput {
-  name?: String | null
-  mergingScript?: String | null
-  isProfile?: Boolean | null
-  type?: String | null
-  comment?: String | null
-  depth?: Int | null
-  resource?: ResourceUpdateOneWithoutAttributesInput | null
-  attributes?: AttributeUpdateManyWithoutAttributeInput | null
-  attribute?: AttributeUpdateOneWithoutAttributesInput | null
+  name?: String | null;
+  mergingScript?: String | null;
+  isProfile?: Boolean | null;
+  type?: String | null;
+  comment?: String | null;
+  depth?: Int | null;
+  resource?: ResourceUpdateOneWithoutAttributesInput | null;
+  attributes?: AttributeUpdateManyWithoutAttributeInput | null;
+  attribute?: AttributeUpdateOneWithoutAttributesInput | null;
 }
 
 export interface AttributeUpdateWithoutResourceDataInput {
-  name?: String | null
-  mergingScript?: String | null
-  isProfile?: Boolean | null
-  type?: String | null
-  comment?: String | null
-  depth?: Int | null
-  attributes?: AttributeUpdateManyWithoutAttributeInput | null
-  attribute?: AttributeUpdateOneWithoutAttributesInput | null
-  inputColumns?: InputColumnUpdateManyWithoutAttributeInput | null
+  name?: String | null;
+  mergingScript?: String | null;
+  isProfile?: Boolean | null;
+  type?: String | null;
+  comment?: String | null;
+  depth?: Int | null;
+  attributes?: AttributeUpdateManyWithoutAttributeInput | null;
+  attribute?: AttributeUpdateOneWithoutAttributesInput | null;
+  inputColumns?: InputColumnUpdateManyWithoutAttributeInput | null;
 }
 
 export interface AttributeUpdateWithWhereUniqueWithoutAttributeInput {
-  where: AttributeWhereUniqueInput
-  data: AttributeUpdateWithoutAttributeDataInput
+  where: AttributeWhereUniqueInput;
+  data: AttributeUpdateWithoutAttributeDataInput;
 }
 
 export interface AttributeUpdateWithWhereUniqueWithoutResourceInput {
-  where: AttributeWhereUniqueInput
-  data: AttributeUpdateWithoutResourceDataInput
+  where: AttributeWhereUniqueInput;
+  data: AttributeUpdateWithoutResourceDataInput;
 }
 
 export interface AttributeUpsertWithoutAttributesInput {
-  update: AttributeUpdateWithoutAttributesDataInput
-  create: AttributeCreateWithoutAttributesInput
+  update: AttributeUpdateWithoutAttributesDataInput;
+  create: AttributeCreateWithoutAttributesInput;
 }
 
 export interface AttributeUpsertWithoutInputColumnsInput {
-  update: AttributeUpdateWithoutInputColumnsDataInput
-  create: AttributeCreateWithoutInputColumnsInput
+  update: AttributeUpdateWithoutInputColumnsDataInput;
+  create: AttributeCreateWithoutInputColumnsInput;
 }
 
 export interface AttributeUpsertWithWhereUniqueWithoutAttributeInput {
-  where: AttributeWhereUniqueInput
-  update: AttributeUpdateWithoutAttributeDataInput
-  create: AttributeCreateWithoutAttributeInput
+  where: AttributeWhereUniqueInput;
+  update: AttributeUpdateWithoutAttributeDataInput;
+  create: AttributeCreateWithoutAttributeInput;
 }
 
 export interface AttributeUpsertWithWhereUniqueWithoutResourceInput {
-  where: AttributeWhereUniqueInput
-  update: AttributeUpdateWithoutResourceDataInput
-  create: AttributeCreateWithoutResourceInput
+  where: AttributeWhereUniqueInput;
+  update: AttributeUpdateWithoutResourceDataInput;
+  create: AttributeCreateWithoutResourceInput;
 }
 
 export interface AttributeWhereInput {
-  AND?: AttributeWhereInput[] | AttributeWhereInput | null
-  OR?: AttributeWhereInput[] | AttributeWhereInput | null
-  NOT?: AttributeWhereInput[] | AttributeWhereInput | null
-  id?: ID_Input | null
-  id_not?: ID_Input | null
-  id_in?: ID_Output[] | ID_Output | null
-  id_not_in?: ID_Output[] | ID_Output | null
-  id_lt?: ID_Input | null
-  id_lte?: ID_Input | null
-  id_gt?: ID_Input | null
-  id_gte?: ID_Input | null
-  id_contains?: ID_Input | null
-  id_not_contains?: ID_Input | null
-  id_starts_with?: ID_Input | null
-  id_not_starts_with?: ID_Input | null
-  id_ends_with?: ID_Input | null
-  id_not_ends_with?: ID_Input | null
-  name?: String | null
-  name_not?: String | null
-  name_in?: String[] | String | null
-  name_not_in?: String[] | String | null
-  name_lt?: String | null
-  name_lte?: String | null
-  name_gt?: String | null
-  name_gte?: String | null
-  name_contains?: String | null
-  name_not_contains?: String | null
-  name_starts_with?: String | null
-  name_not_starts_with?: String | null
-  name_ends_with?: String | null
-  name_not_ends_with?: String | null
-  mergingScript?: String | null
-  mergingScript_not?: String | null
-  mergingScript_in?: String[] | String | null
-  mergingScript_not_in?: String[] | String | null
-  mergingScript_lt?: String | null
-  mergingScript_lte?: String | null
-  mergingScript_gt?: String | null
-  mergingScript_gte?: String | null
-  mergingScript_contains?: String | null
-  mergingScript_not_contains?: String | null
-  mergingScript_starts_with?: String | null
-  mergingScript_not_starts_with?: String | null
-  mergingScript_ends_with?: String | null
-  mergingScript_not_ends_with?: String | null
-  isProfile?: Boolean | null
-  isProfile_not?: Boolean | null
-  type?: String | null
-  type_not?: String | null
-  type_in?: String[] | String | null
-  type_not_in?: String[] | String | null
-  type_lt?: String | null
-  type_lte?: String | null
-  type_gt?: String | null
-  type_gte?: String | null
-  type_contains?: String | null
-  type_not_contains?: String | null
-  type_starts_with?: String | null
-  type_not_starts_with?: String | null
-  type_ends_with?: String | null
-  type_not_ends_with?: String | null
-  comment?: String | null
-  comment_not?: String | null
-  comment_in?: String[] | String | null
-  comment_not_in?: String[] | String | null
-  comment_lt?: String | null
-  comment_lte?: String | null
-  comment_gt?: String | null
-  comment_gte?: String | null
-  comment_contains?: String | null
-  comment_not_contains?: String | null
-  comment_starts_with?: String | null
-  comment_not_starts_with?: String | null
-  comment_ends_with?: String | null
-  comment_not_ends_with?: String | null
-  depth?: Int | null
-  depth_not?: Int | null
-  depth_in?: Int[] | Int | null
-  depth_not_in?: Int[] | Int | null
-  depth_lt?: Int | null
-  depth_lte?: Int | null
-  depth_gt?: Int | null
-  depth_gte?: Int | null
-  resource?: ResourceWhereInput | null
-  attributes_every?: AttributeWhereInput | null
-  attributes_some?: AttributeWhereInput | null
-  attributes_none?: AttributeWhereInput | null
-  attribute?: AttributeWhereInput | null
-  inputColumns_every?: InputColumnWhereInput | null
-  inputColumns_some?: InputColumnWhereInput | null
-  inputColumns_none?: InputColumnWhereInput | null
+  AND?: AttributeWhereInput[] | AttributeWhereInput | null;
+  OR?: AttributeWhereInput[] | AttributeWhereInput | null;
+  NOT?: AttributeWhereInput[] | AttributeWhereInput | null;
+  id?: ID_Input | null;
+  id_not?: ID_Input | null;
+  id_in?: ID_Output[] | ID_Output | null;
+  id_not_in?: ID_Output[] | ID_Output | null;
+  id_lt?: ID_Input | null;
+  id_lte?: ID_Input | null;
+  id_gt?: ID_Input | null;
+  id_gte?: ID_Input | null;
+  id_contains?: ID_Input | null;
+  id_not_contains?: ID_Input | null;
+  id_starts_with?: ID_Input | null;
+  id_not_starts_with?: ID_Input | null;
+  id_ends_with?: ID_Input | null;
+  id_not_ends_with?: ID_Input | null;
+  name?: String | null;
+  name_not?: String | null;
+  name_in?: String[] | String | null;
+  name_not_in?: String[] | String | null;
+  name_lt?: String | null;
+  name_lte?: String | null;
+  name_gt?: String | null;
+  name_gte?: String | null;
+  name_contains?: String | null;
+  name_not_contains?: String | null;
+  name_starts_with?: String | null;
+  name_not_starts_with?: String | null;
+  name_ends_with?: String | null;
+  name_not_ends_with?: String | null;
+  mergingScript?: String | null;
+  mergingScript_not?: String | null;
+  mergingScript_in?: String[] | String | null;
+  mergingScript_not_in?: String[] | String | null;
+  mergingScript_lt?: String | null;
+  mergingScript_lte?: String | null;
+  mergingScript_gt?: String | null;
+  mergingScript_gte?: String | null;
+  mergingScript_contains?: String | null;
+  mergingScript_not_contains?: String | null;
+  mergingScript_starts_with?: String | null;
+  mergingScript_not_starts_with?: String | null;
+  mergingScript_ends_with?: String | null;
+  mergingScript_not_ends_with?: String | null;
+  isProfile?: Boolean | null;
+  isProfile_not?: Boolean | null;
+  type?: String | null;
+  type_not?: String | null;
+  type_in?: String[] | String | null;
+  type_not_in?: String[] | String | null;
+  type_lt?: String | null;
+  type_lte?: String | null;
+  type_gt?: String | null;
+  type_gte?: String | null;
+  type_contains?: String | null;
+  type_not_contains?: String | null;
+  type_starts_with?: String | null;
+  type_not_starts_with?: String | null;
+  type_ends_with?: String | null;
+  type_not_ends_with?: String | null;
+  comment?: String | null;
+  comment_not?: String | null;
+  comment_in?: String[] | String | null;
+  comment_not_in?: String[] | String | null;
+  comment_lt?: String | null;
+  comment_lte?: String | null;
+  comment_gt?: String | null;
+  comment_gte?: String | null;
+  comment_contains?: String | null;
+  comment_not_contains?: String | null;
+  comment_starts_with?: String | null;
+  comment_not_starts_with?: String | null;
+  comment_ends_with?: String | null;
+  comment_not_ends_with?: String | null;
+  depth?: Int | null;
+  depth_not?: Int | null;
+  depth_in?: Int[] | Int | null;
+  depth_not_in?: Int[] | Int | null;
+  depth_lt?: Int | null;
+  depth_lte?: Int | null;
+  depth_gt?: Int | null;
+  depth_gte?: Int | null;
+  resource?: ResourceWhereInput | null;
+  attributes_every?: AttributeWhereInput | null;
+  attributes_some?: AttributeWhereInput | null;
+  attributes_none?: AttributeWhereInput | null;
+  attribute?: AttributeWhereInput | null;
+  inputColumns_every?: InputColumnWhereInput | null;
+  inputColumns_some?: InputColumnWhereInput | null;
+  inputColumns_none?: InputColumnWhereInput | null;
 }
 
 export interface AttributeWhereUniqueInput {
-  id?: ID_Input | null
+  id?: ID_Input | null;
 }
 
 export interface InputColumnCreateInput {
-  owner?: String | null
-  table?: String | null
-  column?: String | null
-  script?: String | null
-  staticValue?: String | null
-  joins?: JoinCreateManyWithoutInputColumnInput | null
-  attribute: AttributeCreateOneWithoutInputColumnsInput
+  owner?: String | null;
+  table?: String | null;
+  column?: String | null;
+  script?: String | null;
+  staticValue?: String | null;
+  joins?: JoinCreateManyWithoutInputColumnInput | null;
+  attribute: AttributeCreateOneWithoutInputColumnsInput;
 }
 
 export interface InputColumnCreateManyWithoutAttributeInput {
-  create?: InputColumnCreateWithoutAttributeInput[] | InputColumnCreateWithoutAttributeInput | null
-  connect?: InputColumnWhereUniqueInput[] | InputColumnWhereUniqueInput | null
+  create?:
+    | InputColumnCreateWithoutAttributeInput[]
+    | InputColumnCreateWithoutAttributeInput
+    | null;
+  connect?: InputColumnWhereUniqueInput[] | InputColumnWhereUniqueInput | null;
 }
 
 export interface InputColumnCreateOneWithoutJoinsInput {
-  create?: InputColumnCreateWithoutJoinsInput | null
-  connect?: InputColumnWhereUniqueInput | null
+  create?: InputColumnCreateWithoutJoinsInput | null;
+  connect?: InputColumnWhereUniqueInput | null;
 }
 
 export interface InputColumnCreateWithoutAttributeInput {
-  owner?: String | null
-  table?: String | null
-  column?: String | null
-  script?: String | null
-  staticValue?: String | null
-  joins?: JoinCreateManyWithoutInputColumnInput | null
+  owner?: String | null;
+  table?: String | null;
+  column?: String | null;
+  script?: String | null;
+  staticValue?: String | null;
+  joins?: JoinCreateManyWithoutInputColumnInput | null;
 }
 
 export interface InputColumnCreateWithoutJoinsInput {
-  owner?: String | null
-  table?: String | null
-  column?: String | null
-  script?: String | null
-  staticValue?: String | null
-  attribute: AttributeCreateOneWithoutInputColumnsInput
+  owner?: String | null;
+  table?: String | null;
+  column?: String | null;
+  script?: String | null;
+  staticValue?: String | null;
+  attribute: AttributeCreateOneWithoutInputColumnsInput;
 }
 
 export interface InputColumnScalarWhereInput {
-  AND?: InputColumnScalarWhereInput[] | InputColumnScalarWhereInput | null
-  OR?: InputColumnScalarWhereInput[] | InputColumnScalarWhereInput | null
-  NOT?: InputColumnScalarWhereInput[] | InputColumnScalarWhereInput | null
-  id?: ID_Input | null
-  id_not?: ID_Input | null
-  id_in?: ID_Output[] | ID_Output | null
-  id_not_in?: ID_Output[] | ID_Output | null
-  id_lt?: ID_Input | null
-  id_lte?: ID_Input | null
-  id_gt?: ID_Input | null
-  id_gte?: ID_Input | null
-  id_contains?: ID_Input | null
-  id_not_contains?: ID_Input | null
-  id_starts_with?: ID_Input | null
-  id_not_starts_with?: ID_Input | null
-  id_ends_with?: ID_Input | null
-  id_not_ends_with?: ID_Input | null
-  owner?: String | null
-  owner_not?: String | null
-  owner_in?: String[] | String | null
-  owner_not_in?: String[] | String | null
-  owner_lt?: String | null
-  owner_lte?: String | null
-  owner_gt?: String | null
-  owner_gte?: String | null
-  owner_contains?: String | null
-  owner_not_contains?: String | null
-  owner_starts_with?: String | null
-  owner_not_starts_with?: String | null
-  owner_ends_with?: String | null
-  owner_not_ends_with?: String | null
-  table?: String | null
-  table_not?: String | null
-  table_in?: String[] | String | null
-  table_not_in?: String[] | String | null
-  table_lt?: String | null
-  table_lte?: String | null
-  table_gt?: String | null
-  table_gte?: String | null
-  table_contains?: String | null
-  table_not_contains?: String | null
-  table_starts_with?: String | null
-  table_not_starts_with?: String | null
-  table_ends_with?: String | null
-  table_not_ends_with?: String | null
-  column?: String | null
-  column_not?: String | null
-  column_in?: String[] | String | null
-  column_not_in?: String[] | String | null
-  column_lt?: String | null
-  column_lte?: String | null
-  column_gt?: String | null
-  column_gte?: String | null
-  column_contains?: String | null
-  column_not_contains?: String | null
-  column_starts_with?: String | null
-  column_not_starts_with?: String | null
-  column_ends_with?: String | null
-  column_not_ends_with?: String | null
-  script?: String | null
-  script_not?: String | null
-  script_in?: String[] | String | null
-  script_not_in?: String[] | String | null
-  script_lt?: String | null
-  script_lte?: String | null
-  script_gt?: String | null
-  script_gte?: String | null
-  script_contains?: String | null
-  script_not_contains?: String | null
-  script_starts_with?: String | null
-  script_not_starts_with?: String | null
-  script_ends_with?: String | null
-  script_not_ends_with?: String | null
-  staticValue?: String | null
-  staticValue_not?: String | null
-  staticValue_in?: String[] | String | null
-  staticValue_not_in?: String[] | String | null
-  staticValue_lt?: String | null
-  staticValue_lte?: String | null
-  staticValue_gt?: String | null
-  staticValue_gte?: String | null
-  staticValue_contains?: String | null
-  staticValue_not_contains?: String | null
-  staticValue_starts_with?: String | null
-  staticValue_not_starts_with?: String | null
-  staticValue_ends_with?: String | null
-  staticValue_not_ends_with?: String | null
+  AND?: InputColumnScalarWhereInput[] | InputColumnScalarWhereInput | null;
+  OR?: InputColumnScalarWhereInput[] | InputColumnScalarWhereInput | null;
+  NOT?: InputColumnScalarWhereInput[] | InputColumnScalarWhereInput | null;
+  id?: ID_Input | null;
+  id_not?: ID_Input | null;
+  id_in?: ID_Output[] | ID_Output | null;
+  id_not_in?: ID_Output[] | ID_Output | null;
+  id_lt?: ID_Input | null;
+  id_lte?: ID_Input | null;
+  id_gt?: ID_Input | null;
+  id_gte?: ID_Input | null;
+  id_contains?: ID_Input | null;
+  id_not_contains?: ID_Input | null;
+  id_starts_with?: ID_Input | null;
+  id_not_starts_with?: ID_Input | null;
+  id_ends_with?: ID_Input | null;
+  id_not_ends_with?: ID_Input | null;
+  owner?: String | null;
+  owner_not?: String | null;
+  owner_in?: String[] | String | null;
+  owner_not_in?: String[] | String | null;
+  owner_lt?: String | null;
+  owner_lte?: String | null;
+  owner_gt?: String | null;
+  owner_gte?: String | null;
+  owner_contains?: String | null;
+  owner_not_contains?: String | null;
+  owner_starts_with?: String | null;
+  owner_not_starts_with?: String | null;
+  owner_ends_with?: String | null;
+  owner_not_ends_with?: String | null;
+  table?: String | null;
+  table_not?: String | null;
+  table_in?: String[] | String | null;
+  table_not_in?: String[] | String | null;
+  table_lt?: String | null;
+  table_lte?: String | null;
+  table_gt?: String | null;
+  table_gte?: String | null;
+  table_contains?: String | null;
+  table_not_contains?: String | null;
+  table_starts_with?: String | null;
+  table_not_starts_with?: String | null;
+  table_ends_with?: String | null;
+  table_not_ends_with?: String | null;
+  column?: String | null;
+  column_not?: String | null;
+  column_in?: String[] | String | null;
+  column_not_in?: String[] | String | null;
+  column_lt?: String | null;
+  column_lte?: String | null;
+  column_gt?: String | null;
+  column_gte?: String | null;
+  column_contains?: String | null;
+  column_not_contains?: String | null;
+  column_starts_with?: String | null;
+  column_not_starts_with?: String | null;
+  column_ends_with?: String | null;
+  column_not_ends_with?: String | null;
+  script?: String | null;
+  script_not?: String | null;
+  script_in?: String[] | String | null;
+  script_not_in?: String[] | String | null;
+  script_lt?: String | null;
+  script_lte?: String | null;
+  script_gt?: String | null;
+  script_gte?: String | null;
+  script_contains?: String | null;
+  script_not_contains?: String | null;
+  script_starts_with?: String | null;
+  script_not_starts_with?: String | null;
+  script_ends_with?: String | null;
+  script_not_ends_with?: String | null;
+  staticValue?: String | null;
+  staticValue_not?: String | null;
+  staticValue_in?: String[] | String | null;
+  staticValue_not_in?: String[] | String | null;
+  staticValue_lt?: String | null;
+  staticValue_lte?: String | null;
+  staticValue_gt?: String | null;
+  staticValue_gte?: String | null;
+  staticValue_contains?: String | null;
+  staticValue_not_contains?: String | null;
+  staticValue_starts_with?: String | null;
+  staticValue_not_starts_with?: String | null;
+  staticValue_ends_with?: String | null;
+  staticValue_not_ends_with?: String | null;
 }
 
 export interface InputColumnSubscriptionWhereInput {
-  AND?: InputColumnSubscriptionWhereInput[] | InputColumnSubscriptionWhereInput | null
-  OR?: InputColumnSubscriptionWhereInput[] | InputColumnSubscriptionWhereInput | null
-  NOT?: InputColumnSubscriptionWhereInput[] | InputColumnSubscriptionWhereInput | null
-  mutation_in?: MutationType[] | MutationType | null
-  updatedFields_contains?: String | null
-  updatedFields_contains_every?: String[] | String | null
-  updatedFields_contains_some?: String[] | String | null
-  node?: InputColumnWhereInput | null
+  AND?:
+    | InputColumnSubscriptionWhereInput[]
+    | InputColumnSubscriptionWhereInput
+    | null;
+  OR?:
+    | InputColumnSubscriptionWhereInput[]
+    | InputColumnSubscriptionWhereInput
+    | null;
+  NOT?:
+    | InputColumnSubscriptionWhereInput[]
+    | InputColumnSubscriptionWhereInput
+    | null;
+  mutation_in?: MutationType[] | MutationType | null;
+  updatedFields_contains?: String | null;
+  updatedFields_contains_every?: String[] | String | null;
+  updatedFields_contains_some?: String[] | String | null;
+  node?: InputColumnWhereInput | null;
 }
 
 export interface InputColumnUpdateInput {
-  owner?: String | null
-  table?: String | null
-  column?: String | null
-  script?: String | null
-  staticValue?: String | null
-  joins?: JoinUpdateManyWithoutInputColumnInput | null
-  attribute?: AttributeUpdateOneRequiredWithoutInputColumnsInput | null
+  owner?: String | null;
+  table?: String | null;
+  column?: String | null;
+  script?: String | null;
+  staticValue?: String | null;
+  joins?: JoinUpdateManyWithoutInputColumnInput | null;
+  attribute?: AttributeUpdateOneRequiredWithoutInputColumnsInput | null;
 }
 
 export interface InputColumnUpdateManyDataInput {
-  owner?: String | null
-  table?: String | null
-  column?: String | null
-  script?: String | null
-  staticValue?: String | null
+  owner?: String | null;
+  table?: String | null;
+  column?: String | null;
+  script?: String | null;
+  staticValue?: String | null;
 }
 
 export interface InputColumnUpdateManyMutationInput {
-  owner?: String | null
-  table?: String | null
-  column?: String | null
-  script?: String | null
-  staticValue?: String | null
+  owner?: String | null;
+  table?: String | null;
+  column?: String | null;
+  script?: String | null;
+  staticValue?: String | null;
 }
 
 export interface InputColumnUpdateManyWithoutAttributeInput {
-  create?: InputColumnCreateWithoutAttributeInput[] | InputColumnCreateWithoutAttributeInput | null
-  connect?: InputColumnWhereUniqueInput[] | InputColumnWhereUniqueInput | null
-  set?: InputColumnWhereUniqueInput[] | InputColumnWhereUniqueInput | null
-  disconnect?: InputColumnWhereUniqueInput[] | InputColumnWhereUniqueInput | null
-  delete?: InputColumnWhereUniqueInput[] | InputColumnWhereUniqueInput | null
-  update?: InputColumnUpdateWithWhereUniqueWithoutAttributeInput[] | InputColumnUpdateWithWhereUniqueWithoutAttributeInput | null
-  updateMany?: InputColumnUpdateManyWithWhereNestedInput[] | InputColumnUpdateManyWithWhereNestedInput | null
-  deleteMany?: InputColumnScalarWhereInput[] | InputColumnScalarWhereInput | null
-  upsert?: InputColumnUpsertWithWhereUniqueWithoutAttributeInput[] | InputColumnUpsertWithWhereUniqueWithoutAttributeInput | null
+  create?:
+    | InputColumnCreateWithoutAttributeInput[]
+    | InputColumnCreateWithoutAttributeInput
+    | null;
+  connect?: InputColumnWhereUniqueInput[] | InputColumnWhereUniqueInput | null;
+  set?: InputColumnWhereUniqueInput[] | InputColumnWhereUniqueInput | null;
+  disconnect?:
+    | InputColumnWhereUniqueInput[]
+    | InputColumnWhereUniqueInput
+    | null;
+  delete?: InputColumnWhereUniqueInput[] | InputColumnWhereUniqueInput | null;
+  update?:
+    | InputColumnUpdateWithWhereUniqueWithoutAttributeInput[]
+    | InputColumnUpdateWithWhereUniqueWithoutAttributeInput
+    | null;
+  updateMany?:
+    | InputColumnUpdateManyWithWhereNestedInput[]
+    | InputColumnUpdateManyWithWhereNestedInput
+    | null;
+  deleteMany?:
+    | InputColumnScalarWhereInput[]
+    | InputColumnScalarWhereInput
+    | null;
+  upsert?:
+    | InputColumnUpsertWithWhereUniqueWithoutAttributeInput[]
+    | InputColumnUpsertWithWhereUniqueWithoutAttributeInput
+    | null;
 }
 
 export interface InputColumnUpdateManyWithWhereNestedInput {
-  where: InputColumnScalarWhereInput
-  data: InputColumnUpdateManyDataInput
+  where: InputColumnScalarWhereInput;
+  data: InputColumnUpdateManyDataInput;
 }
 
 export interface InputColumnUpdateOneRequiredWithoutJoinsInput {
-  create?: InputColumnCreateWithoutJoinsInput | null
-  connect?: InputColumnWhereUniqueInput | null
-  update?: InputColumnUpdateWithoutJoinsDataInput | null
-  upsert?: InputColumnUpsertWithoutJoinsInput | null
+  create?: InputColumnCreateWithoutJoinsInput | null;
+  connect?: InputColumnWhereUniqueInput | null;
+  update?: InputColumnUpdateWithoutJoinsDataInput | null;
+  upsert?: InputColumnUpsertWithoutJoinsInput | null;
 }
 
 export interface InputColumnUpdateWithoutAttributeDataInput {
-  owner?: String | null
-  table?: String | null
-  column?: String | null
-  script?: String | null
-  staticValue?: String | null
-  joins?: JoinUpdateManyWithoutInputColumnInput | null
+  owner?: String | null;
+  table?: String | null;
+  column?: String | null;
+  script?: String | null;
+  staticValue?: String | null;
+  joins?: JoinUpdateManyWithoutInputColumnInput | null;
 }
 
 export interface InputColumnUpdateWithoutJoinsDataInput {
-  owner?: String | null
-  table?: String | null
-  column?: String | null
-  script?: String | null
-  staticValue?: String | null
-  attribute?: AttributeUpdateOneRequiredWithoutInputColumnsInput | null
+  owner?: String | null;
+  table?: String | null;
+  column?: String | null;
+  script?: String | null;
+  staticValue?: String | null;
+  attribute?: AttributeUpdateOneRequiredWithoutInputColumnsInput | null;
 }
 
 export interface InputColumnUpdateWithWhereUniqueWithoutAttributeInput {
-  where: InputColumnWhereUniqueInput
-  data: InputColumnUpdateWithoutAttributeDataInput
+  where: InputColumnWhereUniqueInput;
+  data: InputColumnUpdateWithoutAttributeDataInput;
 }
 
 export interface InputColumnUpsertWithoutJoinsInput {
-  update: InputColumnUpdateWithoutJoinsDataInput
-  create: InputColumnCreateWithoutJoinsInput
+  update: InputColumnUpdateWithoutJoinsDataInput;
+  create: InputColumnCreateWithoutJoinsInput;
 }
 
 export interface InputColumnUpsertWithWhereUniqueWithoutAttributeInput {
-  where: InputColumnWhereUniqueInput
-  update: InputColumnUpdateWithoutAttributeDataInput
-  create: InputColumnCreateWithoutAttributeInput
+  where: InputColumnWhereUniqueInput;
+  update: InputColumnUpdateWithoutAttributeDataInput;
+  create: InputColumnCreateWithoutAttributeInput;
 }
 
 export interface InputColumnWhereInput {
-  AND?: InputColumnWhereInput[] | InputColumnWhereInput | null
-  OR?: InputColumnWhereInput[] | InputColumnWhereInput | null
-  NOT?: InputColumnWhereInput[] | InputColumnWhereInput | null
-  id?: ID_Input | null
-  id_not?: ID_Input | null
-  id_in?: ID_Output[] | ID_Output | null
-  id_not_in?: ID_Output[] | ID_Output | null
-  id_lt?: ID_Input | null
-  id_lte?: ID_Input | null
-  id_gt?: ID_Input | null
-  id_gte?: ID_Input | null
-  id_contains?: ID_Input | null
-  id_not_contains?: ID_Input | null
-  id_starts_with?: ID_Input | null
-  id_not_starts_with?: ID_Input | null
-  id_ends_with?: ID_Input | null
-  id_not_ends_with?: ID_Input | null
-  owner?: String | null
-  owner_not?: String | null
-  owner_in?: String[] | String | null
-  owner_not_in?: String[] | String | null
-  owner_lt?: String | null
-  owner_lte?: String | null
-  owner_gt?: String | null
-  owner_gte?: String | null
-  owner_contains?: String | null
-  owner_not_contains?: String | null
-  owner_starts_with?: String | null
-  owner_not_starts_with?: String | null
-  owner_ends_with?: String | null
-  owner_not_ends_with?: String | null
-  table?: String | null
-  table_not?: String | null
-  table_in?: String[] | String | null
-  table_not_in?: String[] | String | null
-  table_lt?: String | null
-  table_lte?: String | null
-  table_gt?: String | null
-  table_gte?: String | null
-  table_contains?: String | null
-  table_not_contains?: String | null
-  table_starts_with?: String | null
-  table_not_starts_with?: String | null
-  table_ends_with?: String | null
-  table_not_ends_with?: String | null
-  column?: String | null
-  column_not?: String | null
-  column_in?: String[] | String | null
-  column_not_in?: String[] | String | null
-  column_lt?: String | null
-  column_lte?: String | null
-  column_gt?: String | null
-  column_gte?: String | null
-  column_contains?: String | null
-  column_not_contains?: String | null
-  column_starts_with?: String | null
-  column_not_starts_with?: String | null
-  column_ends_with?: String | null
-  column_not_ends_with?: String | null
-  script?: String | null
-  script_not?: String | null
-  script_in?: String[] | String | null
-  script_not_in?: String[] | String | null
-  script_lt?: String | null
-  script_lte?: String | null
-  script_gt?: String | null
-  script_gte?: String | null
-  script_contains?: String | null
-  script_not_contains?: String | null
-  script_starts_with?: String | null
-  script_not_starts_with?: String | null
-  script_ends_with?: String | null
-  script_not_ends_with?: String | null
-  staticValue?: String | null
-  staticValue_not?: String | null
-  staticValue_in?: String[] | String | null
-  staticValue_not_in?: String[] | String | null
-  staticValue_lt?: String | null
-  staticValue_lte?: String | null
-  staticValue_gt?: String | null
-  staticValue_gte?: String | null
-  staticValue_contains?: String | null
-  staticValue_not_contains?: String | null
-  staticValue_starts_with?: String | null
-  staticValue_not_starts_with?: String | null
-  staticValue_ends_with?: String | null
-  staticValue_not_ends_with?: String | null
-  joins_every?: JoinWhereInput | null
-  joins_some?: JoinWhereInput | null
-  joins_none?: JoinWhereInput | null
-  attribute?: AttributeWhereInput | null
+  AND?: InputColumnWhereInput[] | InputColumnWhereInput | null;
+  OR?: InputColumnWhereInput[] | InputColumnWhereInput | null;
+  NOT?: InputColumnWhereInput[] | InputColumnWhereInput | null;
+  id?: ID_Input | null;
+  id_not?: ID_Input | null;
+  id_in?: ID_Output[] | ID_Output | null;
+  id_not_in?: ID_Output[] | ID_Output | null;
+  id_lt?: ID_Input | null;
+  id_lte?: ID_Input | null;
+  id_gt?: ID_Input | null;
+  id_gte?: ID_Input | null;
+  id_contains?: ID_Input | null;
+  id_not_contains?: ID_Input | null;
+  id_starts_with?: ID_Input | null;
+  id_not_starts_with?: ID_Input | null;
+  id_ends_with?: ID_Input | null;
+  id_not_ends_with?: ID_Input | null;
+  owner?: String | null;
+  owner_not?: String | null;
+  owner_in?: String[] | String | null;
+  owner_not_in?: String[] | String | null;
+  owner_lt?: String | null;
+  owner_lte?: String | null;
+  owner_gt?: String | null;
+  owner_gte?: String | null;
+  owner_contains?: String | null;
+  owner_not_contains?: String | null;
+  owner_starts_with?: String | null;
+  owner_not_starts_with?: String | null;
+  owner_ends_with?: String | null;
+  owner_not_ends_with?: String | null;
+  table?: String | null;
+  table_not?: String | null;
+  table_in?: String[] | String | null;
+  table_not_in?: String[] | String | null;
+  table_lt?: String | null;
+  table_lte?: String | null;
+  table_gt?: String | null;
+  table_gte?: String | null;
+  table_contains?: String | null;
+  table_not_contains?: String | null;
+  table_starts_with?: String | null;
+  table_not_starts_with?: String | null;
+  table_ends_with?: String | null;
+  table_not_ends_with?: String | null;
+  column?: String | null;
+  column_not?: String | null;
+  column_in?: String[] | String | null;
+  column_not_in?: String[] | String | null;
+  column_lt?: String | null;
+  column_lte?: String | null;
+  column_gt?: String | null;
+  column_gte?: String | null;
+  column_contains?: String | null;
+  column_not_contains?: String | null;
+  column_starts_with?: String | null;
+  column_not_starts_with?: String | null;
+  column_ends_with?: String | null;
+  column_not_ends_with?: String | null;
+  script?: String | null;
+  script_not?: String | null;
+  script_in?: String[] | String | null;
+  script_not_in?: String[] | String | null;
+  script_lt?: String | null;
+  script_lte?: String | null;
+  script_gt?: String | null;
+  script_gte?: String | null;
+  script_contains?: String | null;
+  script_not_contains?: String | null;
+  script_starts_with?: String | null;
+  script_not_starts_with?: String | null;
+  script_ends_with?: String | null;
+  script_not_ends_with?: String | null;
+  staticValue?: String | null;
+  staticValue_not?: String | null;
+  staticValue_in?: String[] | String | null;
+  staticValue_not_in?: String[] | String | null;
+  staticValue_lt?: String | null;
+  staticValue_lte?: String | null;
+  staticValue_gt?: String | null;
+  staticValue_gte?: String | null;
+  staticValue_contains?: String | null;
+  staticValue_not_contains?: String | null;
+  staticValue_starts_with?: String | null;
+  staticValue_not_starts_with?: String | null;
+  staticValue_ends_with?: String | null;
+  staticValue_not_ends_with?: String | null;
+  joins_every?: JoinWhereInput | null;
+  joins_some?: JoinWhereInput | null;
+  joins_none?: JoinWhereInput | null;
+  attribute?: AttributeWhereInput | null;
 }
 
 export interface InputColumnWhereUniqueInput {
-  id?: ID_Input | null
+  id?: ID_Input | null;
 }
 
 export interface JoinCreateInput {
-  sourceOwner?: String | null
-  sourceTable?: String | null
-  sourceColumn?: String | null
-  targetOwner?: String | null
-  targetTable?: String | null
-  targetColumn?: String | null
-  inputColumn: InputColumnCreateOneWithoutJoinsInput
+  sourceOwner?: String | null;
+  sourceTable?: String | null;
+  sourceColumn?: String | null;
+  targetOwner?: String | null;
+  targetTable?: String | null;
+  targetColumn?: String | null;
+  inputColumn: InputColumnCreateOneWithoutJoinsInput;
 }
 
 export interface JoinCreateManyWithoutInputColumnInput {
-  create?: JoinCreateWithoutInputColumnInput[] | JoinCreateWithoutInputColumnInput | null
-  connect?: JoinWhereUniqueInput[] | JoinWhereUniqueInput | null
+  create?:
+    | JoinCreateWithoutInputColumnInput[]
+    | JoinCreateWithoutInputColumnInput
+    | null;
+  connect?: JoinWhereUniqueInput[] | JoinWhereUniqueInput | null;
 }
 
 export interface JoinCreateWithoutInputColumnInput {
-  sourceOwner?: String | null
-  sourceTable?: String | null
-  sourceColumn?: String | null
-  targetOwner?: String | null
-  targetTable?: String | null
-  targetColumn?: String | null
+  sourceOwner?: String | null;
+  sourceTable?: String | null;
+  sourceColumn?: String | null;
+  targetOwner?: String | null;
+  targetTable?: String | null;
+  targetColumn?: String | null;
 }
 
 export interface JoinScalarWhereInput {
-  AND?: JoinScalarWhereInput[] | JoinScalarWhereInput | null
-  OR?: JoinScalarWhereInput[] | JoinScalarWhereInput | null
-  NOT?: JoinScalarWhereInput[] | JoinScalarWhereInput | null
-  id?: ID_Input | null
-  id_not?: ID_Input | null
-  id_in?: ID_Output[] | ID_Output | null
-  id_not_in?: ID_Output[] | ID_Output | null
-  id_lt?: ID_Input | null
-  id_lte?: ID_Input | null
-  id_gt?: ID_Input | null
-  id_gte?: ID_Input | null
-  id_contains?: ID_Input | null
-  id_not_contains?: ID_Input | null
-  id_starts_with?: ID_Input | null
-  id_not_starts_with?: ID_Input | null
-  id_ends_with?: ID_Input | null
-  id_not_ends_with?: ID_Input | null
-  sourceOwner?: String | null
-  sourceOwner_not?: String | null
-  sourceOwner_in?: String[] | String | null
-  sourceOwner_not_in?: String[] | String | null
-  sourceOwner_lt?: String | null
-  sourceOwner_lte?: String | null
-  sourceOwner_gt?: String | null
-  sourceOwner_gte?: String | null
-  sourceOwner_contains?: String | null
-  sourceOwner_not_contains?: String | null
-  sourceOwner_starts_with?: String | null
-  sourceOwner_not_starts_with?: String | null
-  sourceOwner_ends_with?: String | null
-  sourceOwner_not_ends_with?: String | null
-  sourceTable?: String | null
-  sourceTable_not?: String | null
-  sourceTable_in?: String[] | String | null
-  sourceTable_not_in?: String[] | String | null
-  sourceTable_lt?: String | null
-  sourceTable_lte?: String | null
-  sourceTable_gt?: String | null
-  sourceTable_gte?: String | null
-  sourceTable_contains?: String | null
-  sourceTable_not_contains?: String | null
-  sourceTable_starts_with?: String | null
-  sourceTable_not_starts_with?: String | null
-  sourceTable_ends_with?: String | null
-  sourceTable_not_ends_with?: String | null
-  sourceColumn?: String | null
-  sourceColumn_not?: String | null
-  sourceColumn_in?: String[] | String | null
-  sourceColumn_not_in?: String[] | String | null
-  sourceColumn_lt?: String | null
-  sourceColumn_lte?: String | null
-  sourceColumn_gt?: String | null
-  sourceColumn_gte?: String | null
-  sourceColumn_contains?: String | null
-  sourceColumn_not_contains?: String | null
-  sourceColumn_starts_with?: String | null
-  sourceColumn_not_starts_with?: String | null
-  sourceColumn_ends_with?: String | null
-  sourceColumn_not_ends_with?: String | null
-  targetOwner?: String | null
-  targetOwner_not?: String | null
-  targetOwner_in?: String[] | String | null
-  targetOwner_not_in?: String[] | String | null
-  targetOwner_lt?: String | null
-  targetOwner_lte?: String | null
-  targetOwner_gt?: String | null
-  targetOwner_gte?: String | null
-  targetOwner_contains?: String | null
-  targetOwner_not_contains?: String | null
-  targetOwner_starts_with?: String | null
-  targetOwner_not_starts_with?: String | null
-  targetOwner_ends_with?: String | null
-  targetOwner_not_ends_with?: String | null
-  targetTable?: String | null
-  targetTable_not?: String | null
-  targetTable_in?: String[] | String | null
-  targetTable_not_in?: String[] | String | null
-  targetTable_lt?: String | null
-  targetTable_lte?: String | null
-  targetTable_gt?: String | null
-  targetTable_gte?: String | null
-  targetTable_contains?: String | null
-  targetTable_not_contains?: String | null
-  targetTable_starts_with?: String | null
-  targetTable_not_starts_with?: String | null
-  targetTable_ends_with?: String | null
-  targetTable_not_ends_with?: String | null
-  targetColumn?: String | null
-  targetColumn_not?: String | null
-  targetColumn_in?: String[] | String | null
-  targetColumn_not_in?: String[] | String | null
-  targetColumn_lt?: String | null
-  targetColumn_lte?: String | null
-  targetColumn_gt?: String | null
-  targetColumn_gte?: String | null
-  targetColumn_contains?: String | null
-  targetColumn_not_contains?: String | null
-  targetColumn_starts_with?: String | null
-  targetColumn_not_starts_with?: String | null
-  targetColumn_ends_with?: String | null
-  targetColumn_not_ends_with?: String | null
+  AND?: JoinScalarWhereInput[] | JoinScalarWhereInput | null;
+  OR?: JoinScalarWhereInput[] | JoinScalarWhereInput | null;
+  NOT?: JoinScalarWhereInput[] | JoinScalarWhereInput | null;
+  id?: ID_Input | null;
+  id_not?: ID_Input | null;
+  id_in?: ID_Output[] | ID_Output | null;
+  id_not_in?: ID_Output[] | ID_Output | null;
+  id_lt?: ID_Input | null;
+  id_lte?: ID_Input | null;
+  id_gt?: ID_Input | null;
+  id_gte?: ID_Input | null;
+  id_contains?: ID_Input | null;
+  id_not_contains?: ID_Input | null;
+  id_starts_with?: ID_Input | null;
+  id_not_starts_with?: ID_Input | null;
+  id_ends_with?: ID_Input | null;
+  id_not_ends_with?: ID_Input | null;
+  sourceOwner?: String | null;
+  sourceOwner_not?: String | null;
+  sourceOwner_in?: String[] | String | null;
+  sourceOwner_not_in?: String[] | String | null;
+  sourceOwner_lt?: String | null;
+  sourceOwner_lte?: String | null;
+  sourceOwner_gt?: String | null;
+  sourceOwner_gte?: String | null;
+  sourceOwner_contains?: String | null;
+  sourceOwner_not_contains?: String | null;
+  sourceOwner_starts_with?: String | null;
+  sourceOwner_not_starts_with?: String | null;
+  sourceOwner_ends_with?: String | null;
+  sourceOwner_not_ends_with?: String | null;
+  sourceTable?: String | null;
+  sourceTable_not?: String | null;
+  sourceTable_in?: String[] | String | null;
+  sourceTable_not_in?: String[] | String | null;
+  sourceTable_lt?: String | null;
+  sourceTable_lte?: String | null;
+  sourceTable_gt?: String | null;
+  sourceTable_gte?: String | null;
+  sourceTable_contains?: String | null;
+  sourceTable_not_contains?: String | null;
+  sourceTable_starts_with?: String | null;
+  sourceTable_not_starts_with?: String | null;
+  sourceTable_ends_with?: String | null;
+  sourceTable_not_ends_with?: String | null;
+  sourceColumn?: String | null;
+  sourceColumn_not?: String | null;
+  sourceColumn_in?: String[] | String | null;
+  sourceColumn_not_in?: String[] | String | null;
+  sourceColumn_lt?: String | null;
+  sourceColumn_lte?: String | null;
+  sourceColumn_gt?: String | null;
+  sourceColumn_gte?: String | null;
+  sourceColumn_contains?: String | null;
+  sourceColumn_not_contains?: String | null;
+  sourceColumn_starts_with?: String | null;
+  sourceColumn_not_starts_with?: String | null;
+  sourceColumn_ends_with?: String | null;
+  sourceColumn_not_ends_with?: String | null;
+  targetOwner?: String | null;
+  targetOwner_not?: String | null;
+  targetOwner_in?: String[] | String | null;
+  targetOwner_not_in?: String[] | String | null;
+  targetOwner_lt?: String | null;
+  targetOwner_lte?: String | null;
+  targetOwner_gt?: String | null;
+  targetOwner_gte?: String | null;
+  targetOwner_contains?: String | null;
+  targetOwner_not_contains?: String | null;
+  targetOwner_starts_with?: String | null;
+  targetOwner_not_starts_with?: String | null;
+  targetOwner_ends_with?: String | null;
+  targetOwner_not_ends_with?: String | null;
+  targetTable?: String | null;
+  targetTable_not?: String | null;
+  targetTable_in?: String[] | String | null;
+  targetTable_not_in?: String[] | String | null;
+  targetTable_lt?: String | null;
+  targetTable_lte?: String | null;
+  targetTable_gt?: String | null;
+  targetTable_gte?: String | null;
+  targetTable_contains?: String | null;
+  targetTable_not_contains?: String | null;
+  targetTable_starts_with?: String | null;
+  targetTable_not_starts_with?: String | null;
+  targetTable_ends_with?: String | null;
+  targetTable_not_ends_with?: String | null;
+  targetColumn?: String | null;
+  targetColumn_not?: String | null;
+  targetColumn_in?: String[] | String | null;
+  targetColumn_not_in?: String[] | String | null;
+  targetColumn_lt?: String | null;
+  targetColumn_lte?: String | null;
+  targetColumn_gt?: String | null;
+  targetColumn_gte?: String | null;
+  targetColumn_contains?: String | null;
+  targetColumn_not_contains?: String | null;
+  targetColumn_starts_with?: String | null;
+  targetColumn_not_starts_with?: String | null;
+  targetColumn_ends_with?: String | null;
+  targetColumn_not_ends_with?: String | null;
 }
 
 export interface JoinSubscriptionWhereInput {
-  AND?: JoinSubscriptionWhereInput[] | JoinSubscriptionWhereInput | null
-  OR?: JoinSubscriptionWhereInput[] | JoinSubscriptionWhereInput | null
-  NOT?: JoinSubscriptionWhereInput[] | JoinSubscriptionWhereInput | null
-  mutation_in?: MutationType[] | MutationType | null
-  updatedFields_contains?: String | null
-  updatedFields_contains_every?: String[] | String | null
-  updatedFields_contains_some?: String[] | String | null
-  node?: JoinWhereInput | null
+  AND?: JoinSubscriptionWhereInput[] | JoinSubscriptionWhereInput | null;
+  OR?: JoinSubscriptionWhereInput[] | JoinSubscriptionWhereInput | null;
+  NOT?: JoinSubscriptionWhereInput[] | JoinSubscriptionWhereInput | null;
+  mutation_in?: MutationType[] | MutationType | null;
+  updatedFields_contains?: String | null;
+  updatedFields_contains_every?: String[] | String | null;
+  updatedFields_contains_some?: String[] | String | null;
+  node?: JoinWhereInput | null;
 }
 
 export interface JoinUpdateInput {
-  sourceOwner?: String | null
-  sourceTable?: String | null
-  sourceColumn?: String | null
-  targetOwner?: String | null
-  targetTable?: String | null
-  targetColumn?: String | null
-  inputColumn?: InputColumnUpdateOneRequiredWithoutJoinsInput | null
+  sourceOwner?: String | null;
+  sourceTable?: String | null;
+  sourceColumn?: String | null;
+  targetOwner?: String | null;
+  targetTable?: String | null;
+  targetColumn?: String | null;
+  inputColumn?: InputColumnUpdateOneRequiredWithoutJoinsInput | null;
 }
 
 export interface JoinUpdateManyDataInput {
-  sourceOwner?: String | null
-  sourceTable?: String | null
-  sourceColumn?: String | null
-  targetOwner?: String | null
-  targetTable?: String | null
-  targetColumn?: String | null
+  sourceOwner?: String | null;
+  sourceTable?: String | null;
+  sourceColumn?: String | null;
+  targetOwner?: String | null;
+  targetTable?: String | null;
+  targetColumn?: String | null;
 }
 
 export interface JoinUpdateManyMutationInput {
-  sourceOwner?: String | null
-  sourceTable?: String | null
-  sourceColumn?: String | null
-  targetOwner?: String | null
-  targetTable?: String | null
-  targetColumn?: String | null
+  sourceOwner?: String | null;
+  sourceTable?: String | null;
+  sourceColumn?: String | null;
+  targetOwner?: String | null;
+  targetTable?: String | null;
+  targetColumn?: String | null;
 }
 
 export interface JoinUpdateManyWithoutInputColumnInput {
-  create?: JoinCreateWithoutInputColumnInput[] | JoinCreateWithoutInputColumnInput | null
-  connect?: JoinWhereUniqueInput[] | JoinWhereUniqueInput | null
-  set?: JoinWhereUniqueInput[] | JoinWhereUniqueInput | null
-  disconnect?: JoinWhereUniqueInput[] | JoinWhereUniqueInput | null
-  delete?: JoinWhereUniqueInput[] | JoinWhereUniqueInput | null
-  update?: JoinUpdateWithWhereUniqueWithoutInputColumnInput[] | JoinUpdateWithWhereUniqueWithoutInputColumnInput | null
-  updateMany?: JoinUpdateManyWithWhereNestedInput[] | JoinUpdateManyWithWhereNestedInput | null
-  deleteMany?: JoinScalarWhereInput[] | JoinScalarWhereInput | null
-  upsert?: JoinUpsertWithWhereUniqueWithoutInputColumnInput[] | JoinUpsertWithWhereUniqueWithoutInputColumnInput | null
+  create?:
+    | JoinCreateWithoutInputColumnInput[]
+    | JoinCreateWithoutInputColumnInput
+    | null;
+  connect?: JoinWhereUniqueInput[] | JoinWhereUniqueInput | null;
+  set?: JoinWhereUniqueInput[] | JoinWhereUniqueInput | null;
+  disconnect?: JoinWhereUniqueInput[] | JoinWhereUniqueInput | null;
+  delete?: JoinWhereUniqueInput[] | JoinWhereUniqueInput | null;
+  update?:
+    | JoinUpdateWithWhereUniqueWithoutInputColumnInput[]
+    | JoinUpdateWithWhereUniqueWithoutInputColumnInput
+    | null;
+  updateMany?:
+    | JoinUpdateManyWithWhereNestedInput[]
+    | JoinUpdateManyWithWhereNestedInput
+    | null;
+  deleteMany?: JoinScalarWhereInput[] | JoinScalarWhereInput | null;
+  upsert?:
+    | JoinUpsertWithWhereUniqueWithoutInputColumnInput[]
+    | JoinUpsertWithWhereUniqueWithoutInputColumnInput
+    | null;
 }
 
 export interface JoinUpdateManyWithWhereNestedInput {
-  where: JoinScalarWhereInput
-  data: JoinUpdateManyDataInput
+  where: JoinScalarWhereInput;
+  data: JoinUpdateManyDataInput;
 }
 
 export interface JoinUpdateWithoutInputColumnDataInput {
-  sourceOwner?: String | null
-  sourceTable?: String | null
-  sourceColumn?: String | null
-  targetOwner?: String | null
-  targetTable?: String | null
-  targetColumn?: String | null
+  sourceOwner?: String | null;
+  sourceTable?: String | null;
+  sourceColumn?: String | null;
+  targetOwner?: String | null;
+  targetTable?: String | null;
+  targetColumn?: String | null;
 }
 
 export interface JoinUpdateWithWhereUniqueWithoutInputColumnInput {
-  where: JoinWhereUniqueInput
-  data: JoinUpdateWithoutInputColumnDataInput
+  where: JoinWhereUniqueInput;
+  data: JoinUpdateWithoutInputColumnDataInput;
 }
 
 export interface JoinUpsertWithWhereUniqueWithoutInputColumnInput {
-  where: JoinWhereUniqueInput
-  update: JoinUpdateWithoutInputColumnDataInput
-  create: JoinCreateWithoutInputColumnInput
+  where: JoinWhereUniqueInput;
+  update: JoinUpdateWithoutInputColumnDataInput;
+  create: JoinCreateWithoutInputColumnInput;
 }
 
 export interface JoinWhereInput {
-  AND?: JoinWhereInput[] | JoinWhereInput | null
-  OR?: JoinWhereInput[] | JoinWhereInput | null
-  NOT?: JoinWhereInput[] | JoinWhereInput | null
-  id?: ID_Input | null
-  id_not?: ID_Input | null
-  id_in?: ID_Output[] | ID_Output | null
-  id_not_in?: ID_Output[] | ID_Output | null
-  id_lt?: ID_Input | null
-  id_lte?: ID_Input | null
-  id_gt?: ID_Input | null
-  id_gte?: ID_Input | null
-  id_contains?: ID_Input | null
-  id_not_contains?: ID_Input | null
-  id_starts_with?: ID_Input | null
-  id_not_starts_with?: ID_Input | null
-  id_ends_with?: ID_Input | null
-  id_not_ends_with?: ID_Input | null
-  sourceOwner?: String | null
-  sourceOwner_not?: String | null
-  sourceOwner_in?: String[] | String | null
-  sourceOwner_not_in?: String[] | String | null
-  sourceOwner_lt?: String | null
-  sourceOwner_lte?: String | null
-  sourceOwner_gt?: String | null
-  sourceOwner_gte?: String | null
-  sourceOwner_contains?: String | null
-  sourceOwner_not_contains?: String | null
-  sourceOwner_starts_with?: String | null
-  sourceOwner_not_starts_with?: String | null
-  sourceOwner_ends_with?: String | null
-  sourceOwner_not_ends_with?: String | null
-  sourceTable?: String | null
-  sourceTable_not?: String | null
-  sourceTable_in?: String[] | String | null
-  sourceTable_not_in?: String[] | String | null
-  sourceTable_lt?: String | null
-  sourceTable_lte?: String | null
-  sourceTable_gt?: String | null
-  sourceTable_gte?: String | null
-  sourceTable_contains?: String | null
-  sourceTable_not_contains?: String | null
-  sourceTable_starts_with?: String | null
-  sourceTable_not_starts_with?: String | null
-  sourceTable_ends_with?: String | null
-  sourceTable_not_ends_with?: String | null
-  sourceColumn?: String | null
-  sourceColumn_not?: String | null
-  sourceColumn_in?: String[] | String | null
-  sourceColumn_not_in?: String[] | String | null
-  sourceColumn_lt?: String | null
-  sourceColumn_lte?: String | null
-  sourceColumn_gt?: String | null
-  sourceColumn_gte?: String | null
-  sourceColumn_contains?: String | null
-  sourceColumn_not_contains?: String | null
-  sourceColumn_starts_with?: String | null
-  sourceColumn_not_starts_with?: String | null
-  sourceColumn_ends_with?: String | null
-  sourceColumn_not_ends_with?: String | null
-  targetOwner?: String | null
-  targetOwner_not?: String | null
-  targetOwner_in?: String[] | String | null
-  targetOwner_not_in?: String[] | String | null
-  targetOwner_lt?: String | null
-  targetOwner_lte?: String | null
-  targetOwner_gt?: String | null
-  targetOwner_gte?: String | null
-  targetOwner_contains?: String | null
-  targetOwner_not_contains?: String | null
-  targetOwner_starts_with?: String | null
-  targetOwner_not_starts_with?: String | null
-  targetOwner_ends_with?: String | null
-  targetOwner_not_ends_with?: String | null
-  targetTable?: String | null
-  targetTable_not?: String | null
-  targetTable_in?: String[] | String | null
-  targetTable_not_in?: String[] | String | null
-  targetTable_lt?: String | null
-  targetTable_lte?: String | null
-  targetTable_gt?: String | null
-  targetTable_gte?: String | null
-  targetTable_contains?: String | null
-  targetTable_not_contains?: String | null
-  targetTable_starts_with?: String | null
-  targetTable_not_starts_with?: String | null
-  targetTable_ends_with?: String | null
-  targetTable_not_ends_with?: String | null
-  targetColumn?: String | null
-  targetColumn_not?: String | null
-  targetColumn_in?: String[] | String | null
-  targetColumn_not_in?: String[] | String | null
-  targetColumn_lt?: String | null
-  targetColumn_lte?: String | null
-  targetColumn_gt?: String | null
-  targetColumn_gte?: String | null
-  targetColumn_contains?: String | null
-  targetColumn_not_contains?: String | null
-  targetColumn_starts_with?: String | null
-  targetColumn_not_starts_with?: String | null
-  targetColumn_ends_with?: String | null
-  targetColumn_not_ends_with?: String | null
-  inputColumn?: InputColumnWhereInput | null
+  AND?: JoinWhereInput[] | JoinWhereInput | null;
+  OR?: JoinWhereInput[] | JoinWhereInput | null;
+  NOT?: JoinWhereInput[] | JoinWhereInput | null;
+  id?: ID_Input | null;
+  id_not?: ID_Input | null;
+  id_in?: ID_Output[] | ID_Output | null;
+  id_not_in?: ID_Output[] | ID_Output | null;
+  id_lt?: ID_Input | null;
+  id_lte?: ID_Input | null;
+  id_gt?: ID_Input | null;
+  id_gte?: ID_Input | null;
+  id_contains?: ID_Input | null;
+  id_not_contains?: ID_Input | null;
+  id_starts_with?: ID_Input | null;
+  id_not_starts_with?: ID_Input | null;
+  id_ends_with?: ID_Input | null;
+  id_not_ends_with?: ID_Input | null;
+  sourceOwner?: String | null;
+  sourceOwner_not?: String | null;
+  sourceOwner_in?: String[] | String | null;
+  sourceOwner_not_in?: String[] | String | null;
+  sourceOwner_lt?: String | null;
+  sourceOwner_lte?: String | null;
+  sourceOwner_gt?: String | null;
+  sourceOwner_gte?: String | null;
+  sourceOwner_contains?: String | null;
+  sourceOwner_not_contains?: String | null;
+  sourceOwner_starts_with?: String | null;
+  sourceOwner_not_starts_with?: String | null;
+  sourceOwner_ends_with?: String | null;
+  sourceOwner_not_ends_with?: String | null;
+  sourceTable?: String | null;
+  sourceTable_not?: String | null;
+  sourceTable_in?: String[] | String | null;
+  sourceTable_not_in?: String[] | String | null;
+  sourceTable_lt?: String | null;
+  sourceTable_lte?: String | null;
+  sourceTable_gt?: String | null;
+  sourceTable_gte?: String | null;
+  sourceTable_contains?: String | null;
+  sourceTable_not_contains?: String | null;
+  sourceTable_starts_with?: String | null;
+  sourceTable_not_starts_with?: String | null;
+  sourceTable_ends_with?: String | null;
+  sourceTable_not_ends_with?: String | null;
+  sourceColumn?: String | null;
+  sourceColumn_not?: String | null;
+  sourceColumn_in?: String[] | String | null;
+  sourceColumn_not_in?: String[] | String | null;
+  sourceColumn_lt?: String | null;
+  sourceColumn_lte?: String | null;
+  sourceColumn_gt?: String | null;
+  sourceColumn_gte?: String | null;
+  sourceColumn_contains?: String | null;
+  sourceColumn_not_contains?: String | null;
+  sourceColumn_starts_with?: String | null;
+  sourceColumn_not_starts_with?: String | null;
+  sourceColumn_ends_with?: String | null;
+  sourceColumn_not_ends_with?: String | null;
+  targetOwner?: String | null;
+  targetOwner_not?: String | null;
+  targetOwner_in?: String[] | String | null;
+  targetOwner_not_in?: String[] | String | null;
+  targetOwner_lt?: String | null;
+  targetOwner_lte?: String | null;
+  targetOwner_gt?: String | null;
+  targetOwner_gte?: String | null;
+  targetOwner_contains?: String | null;
+  targetOwner_not_contains?: String | null;
+  targetOwner_starts_with?: String | null;
+  targetOwner_not_starts_with?: String | null;
+  targetOwner_ends_with?: String | null;
+  targetOwner_not_ends_with?: String | null;
+  targetTable?: String | null;
+  targetTable_not?: String | null;
+  targetTable_in?: String[] | String | null;
+  targetTable_not_in?: String[] | String | null;
+  targetTable_lt?: String | null;
+  targetTable_lte?: String | null;
+  targetTable_gt?: String | null;
+  targetTable_gte?: String | null;
+  targetTable_contains?: String | null;
+  targetTable_not_contains?: String | null;
+  targetTable_starts_with?: String | null;
+  targetTable_not_starts_with?: String | null;
+  targetTable_ends_with?: String | null;
+  targetTable_not_ends_with?: String | null;
+  targetColumn?: String | null;
+  targetColumn_not?: String | null;
+  targetColumn_in?: String[] | String | null;
+  targetColumn_not_in?: String[] | String | null;
+  targetColumn_lt?: String | null;
+  targetColumn_lte?: String | null;
+  targetColumn_gt?: String | null;
+  targetColumn_gte?: String | null;
+  targetColumn_contains?: String | null;
+  targetColumn_not_contains?: String | null;
+  targetColumn_starts_with?: String | null;
+  targetColumn_not_starts_with?: String | null;
+  targetColumn_ends_with?: String | null;
+  targetColumn_not_ends_with?: String | null;
+  inputColumn?: InputColumnWhereInput | null;
 }
 
 export interface JoinWhereUniqueInput {
-  id?: ID_Input | null
+  id?: ID_Input | null;
 }
 
 export interface ResourceCreateInput {
-  name: String
-  primaryKeyOwner?: String | null
-  primaryKeyTable?: String | null
-  primaryKeyColumn?: String | null
-  attributes?: AttributeCreateManyWithoutResourceInput | null
-  source: SourceCreateOneWithoutResourcesInput
+  name: String;
+  primaryKeyOwner?: String | null;
+  primaryKeyTable?: String | null;
+  primaryKeyColumn?: String | null;
+  attributes?: AttributeCreateManyWithoutResourceInput | null;
+  source: SourceCreateOneWithoutResourcesInput;
 }
 
 export interface ResourceCreateManyWithoutSourceInput {
-  create?: ResourceCreateWithoutSourceInput[] | ResourceCreateWithoutSourceInput | null
-  connect?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput | null
+  create?:
+    | ResourceCreateWithoutSourceInput[]
+    | ResourceCreateWithoutSourceInput
+    | null;
+  connect?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput | null;
 }
 
 export interface ResourceCreateOneWithoutAttributesInput {
-  create?: ResourceCreateWithoutAttributesInput | null
-  connect?: ResourceWhereUniqueInput | null
+  create?: ResourceCreateWithoutAttributesInput | null;
+  connect?: ResourceWhereUniqueInput | null;
 }
 
 export interface ResourceCreateWithoutAttributesInput {
-  name: String
-  primaryKeyOwner?: String | null
-  primaryKeyTable?: String | null
-  primaryKeyColumn?: String | null
-  source: SourceCreateOneWithoutResourcesInput
+  name: String;
+  primaryKeyOwner?: String | null;
+  primaryKeyTable?: String | null;
+  primaryKeyColumn?: String | null;
+  source: SourceCreateOneWithoutResourcesInput;
 }
 
 export interface ResourceCreateWithoutSourceInput {
-  name: String
-  primaryKeyOwner?: String | null
-  primaryKeyTable?: String | null
-  primaryKeyColumn?: String | null
-  attributes?: AttributeCreateManyWithoutResourceInput | null
+  name: String;
+  primaryKeyOwner?: String | null;
+  primaryKeyTable?: String | null;
+  primaryKeyColumn?: String | null;
+  attributes?: AttributeCreateManyWithoutResourceInput | null;
 }
 
 export interface ResourceScalarWhereInput {
-  AND?: ResourceScalarWhereInput[] | ResourceScalarWhereInput | null
-  OR?: ResourceScalarWhereInput[] | ResourceScalarWhereInput | null
-  NOT?: ResourceScalarWhereInput[] | ResourceScalarWhereInput | null
-  id?: ID_Input | null
-  id_not?: ID_Input | null
-  id_in?: ID_Output[] | ID_Output | null
-  id_not_in?: ID_Output[] | ID_Output | null
-  id_lt?: ID_Input | null
-  id_lte?: ID_Input | null
-  id_gt?: ID_Input | null
-  id_gte?: ID_Input | null
-  id_contains?: ID_Input | null
-  id_not_contains?: ID_Input | null
-  id_starts_with?: ID_Input | null
-  id_not_starts_with?: ID_Input | null
-  id_ends_with?: ID_Input | null
-  id_not_ends_with?: ID_Input | null
-  name?: String | null
-  name_not?: String | null
-  name_in?: String[] | String | null
-  name_not_in?: String[] | String | null
-  name_lt?: String | null
-  name_lte?: String | null
-  name_gt?: String | null
-  name_gte?: String | null
-  name_contains?: String | null
-  name_not_contains?: String | null
-  name_starts_with?: String | null
-  name_not_starts_with?: String | null
-  name_ends_with?: String | null
-  name_not_ends_with?: String | null
-  primaryKeyOwner?: String | null
-  primaryKeyOwner_not?: String | null
-  primaryKeyOwner_in?: String[] | String | null
-  primaryKeyOwner_not_in?: String[] | String | null
-  primaryKeyOwner_lt?: String | null
-  primaryKeyOwner_lte?: String | null
-  primaryKeyOwner_gt?: String | null
-  primaryKeyOwner_gte?: String | null
-  primaryKeyOwner_contains?: String | null
-  primaryKeyOwner_not_contains?: String | null
-  primaryKeyOwner_starts_with?: String | null
-  primaryKeyOwner_not_starts_with?: String | null
-  primaryKeyOwner_ends_with?: String | null
-  primaryKeyOwner_not_ends_with?: String | null
-  primaryKeyTable?: String | null
-  primaryKeyTable_not?: String | null
-  primaryKeyTable_in?: String[] | String | null
-  primaryKeyTable_not_in?: String[] | String | null
-  primaryKeyTable_lt?: String | null
-  primaryKeyTable_lte?: String | null
-  primaryKeyTable_gt?: String | null
-  primaryKeyTable_gte?: String | null
-  primaryKeyTable_contains?: String | null
-  primaryKeyTable_not_contains?: String | null
-  primaryKeyTable_starts_with?: String | null
-  primaryKeyTable_not_starts_with?: String | null
-  primaryKeyTable_ends_with?: String | null
-  primaryKeyTable_not_ends_with?: String | null
-  primaryKeyColumn?: String | null
-  primaryKeyColumn_not?: String | null
-  primaryKeyColumn_in?: String[] | String | null
-  primaryKeyColumn_not_in?: String[] | String | null
-  primaryKeyColumn_lt?: String | null
-  primaryKeyColumn_lte?: String | null
-  primaryKeyColumn_gt?: String | null
-  primaryKeyColumn_gte?: String | null
-  primaryKeyColumn_contains?: String | null
-  primaryKeyColumn_not_contains?: String | null
-  primaryKeyColumn_starts_with?: String | null
-  primaryKeyColumn_not_starts_with?: String | null
-  primaryKeyColumn_ends_with?: String | null
-  primaryKeyColumn_not_ends_with?: String | null
+  AND?: ResourceScalarWhereInput[] | ResourceScalarWhereInput | null;
+  OR?: ResourceScalarWhereInput[] | ResourceScalarWhereInput | null;
+  NOT?: ResourceScalarWhereInput[] | ResourceScalarWhereInput | null;
+  id?: ID_Input | null;
+  id_not?: ID_Input | null;
+  id_in?: ID_Output[] | ID_Output | null;
+  id_not_in?: ID_Output[] | ID_Output | null;
+  id_lt?: ID_Input | null;
+  id_lte?: ID_Input | null;
+  id_gt?: ID_Input | null;
+  id_gte?: ID_Input | null;
+  id_contains?: ID_Input | null;
+  id_not_contains?: ID_Input | null;
+  id_starts_with?: ID_Input | null;
+  id_not_starts_with?: ID_Input | null;
+  id_ends_with?: ID_Input | null;
+  id_not_ends_with?: ID_Input | null;
+  name?: String | null;
+  name_not?: String | null;
+  name_in?: String[] | String | null;
+  name_not_in?: String[] | String | null;
+  name_lt?: String | null;
+  name_lte?: String | null;
+  name_gt?: String | null;
+  name_gte?: String | null;
+  name_contains?: String | null;
+  name_not_contains?: String | null;
+  name_starts_with?: String | null;
+  name_not_starts_with?: String | null;
+  name_ends_with?: String | null;
+  name_not_ends_with?: String | null;
+  primaryKeyOwner?: String | null;
+  primaryKeyOwner_not?: String | null;
+  primaryKeyOwner_in?: String[] | String | null;
+  primaryKeyOwner_not_in?: String[] | String | null;
+  primaryKeyOwner_lt?: String | null;
+  primaryKeyOwner_lte?: String | null;
+  primaryKeyOwner_gt?: String | null;
+  primaryKeyOwner_gte?: String | null;
+  primaryKeyOwner_contains?: String | null;
+  primaryKeyOwner_not_contains?: String | null;
+  primaryKeyOwner_starts_with?: String | null;
+  primaryKeyOwner_not_starts_with?: String | null;
+  primaryKeyOwner_ends_with?: String | null;
+  primaryKeyOwner_not_ends_with?: String | null;
+  primaryKeyTable?: String | null;
+  primaryKeyTable_not?: String | null;
+  primaryKeyTable_in?: String[] | String | null;
+  primaryKeyTable_not_in?: String[] | String | null;
+  primaryKeyTable_lt?: String | null;
+  primaryKeyTable_lte?: String | null;
+  primaryKeyTable_gt?: String | null;
+  primaryKeyTable_gte?: String | null;
+  primaryKeyTable_contains?: String | null;
+  primaryKeyTable_not_contains?: String | null;
+  primaryKeyTable_starts_with?: String | null;
+  primaryKeyTable_not_starts_with?: String | null;
+  primaryKeyTable_ends_with?: String | null;
+  primaryKeyTable_not_ends_with?: String | null;
+  primaryKeyColumn?: String | null;
+  primaryKeyColumn_not?: String | null;
+  primaryKeyColumn_in?: String[] | String | null;
+  primaryKeyColumn_not_in?: String[] | String | null;
+  primaryKeyColumn_lt?: String | null;
+  primaryKeyColumn_lte?: String | null;
+  primaryKeyColumn_gt?: String | null;
+  primaryKeyColumn_gte?: String | null;
+  primaryKeyColumn_contains?: String | null;
+  primaryKeyColumn_not_contains?: String | null;
+  primaryKeyColumn_starts_with?: String | null;
+  primaryKeyColumn_not_starts_with?: String | null;
+  primaryKeyColumn_ends_with?: String | null;
+  primaryKeyColumn_not_ends_with?: String | null;
 }
 
 export interface ResourceSubscriptionWhereInput {
-  AND?: ResourceSubscriptionWhereInput[] | ResourceSubscriptionWhereInput | null
-  OR?: ResourceSubscriptionWhereInput[] | ResourceSubscriptionWhereInput | null
-  NOT?: ResourceSubscriptionWhereInput[] | ResourceSubscriptionWhereInput | null
-  mutation_in?: MutationType[] | MutationType | null
-  updatedFields_contains?: String | null
-  updatedFields_contains_every?: String[] | String | null
-  updatedFields_contains_some?: String[] | String | null
-  node?: ResourceWhereInput | null
+  AND?:
+    | ResourceSubscriptionWhereInput[]
+    | ResourceSubscriptionWhereInput
+    | null;
+  OR?: ResourceSubscriptionWhereInput[] | ResourceSubscriptionWhereInput | null;
+  NOT?:
+    | ResourceSubscriptionWhereInput[]
+    | ResourceSubscriptionWhereInput
+    | null;
+  mutation_in?: MutationType[] | MutationType | null;
+  updatedFields_contains?: String | null;
+  updatedFields_contains_every?: String[] | String | null;
+  updatedFields_contains_some?: String[] | String | null;
+  node?: ResourceWhereInput | null;
 }
 
 export interface ResourceUpdateInput {
-  name?: String | null
-  primaryKeyOwner?: String | null
-  primaryKeyTable?: String | null
-  primaryKeyColumn?: String | null
-  attributes?: AttributeUpdateManyWithoutResourceInput | null
-  source?: SourceUpdateOneRequiredWithoutResourcesInput | null
+  name?: String | null;
+  primaryKeyOwner?: String | null;
+  primaryKeyTable?: String | null;
+  primaryKeyColumn?: String | null;
+  attributes?: AttributeUpdateManyWithoutResourceInput | null;
+  source?: SourceUpdateOneRequiredWithoutResourcesInput | null;
 }
 
 export interface ResourceUpdateManyDataInput {
-  name?: String | null
-  primaryKeyOwner?: String | null
-  primaryKeyTable?: String | null
-  primaryKeyColumn?: String | null
+  name?: String | null;
+  primaryKeyOwner?: String | null;
+  primaryKeyTable?: String | null;
+  primaryKeyColumn?: String | null;
 }
 
 export interface ResourceUpdateManyMutationInput {
-  name?: String | null
-  primaryKeyOwner?: String | null
-  primaryKeyTable?: String | null
-  primaryKeyColumn?: String | null
+  name?: String | null;
+  primaryKeyOwner?: String | null;
+  primaryKeyTable?: String | null;
+  primaryKeyColumn?: String | null;
 }
 
 export interface ResourceUpdateManyWithoutSourceInput {
-  create?: ResourceCreateWithoutSourceInput[] | ResourceCreateWithoutSourceInput | null
-  connect?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput | null
-  set?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput | null
-  disconnect?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput | null
-  delete?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput | null
-  update?: ResourceUpdateWithWhereUniqueWithoutSourceInput[] | ResourceUpdateWithWhereUniqueWithoutSourceInput | null
-  updateMany?: ResourceUpdateManyWithWhereNestedInput[] | ResourceUpdateManyWithWhereNestedInput | null
-  deleteMany?: ResourceScalarWhereInput[] | ResourceScalarWhereInput | null
-  upsert?: ResourceUpsertWithWhereUniqueWithoutSourceInput[] | ResourceUpsertWithWhereUniqueWithoutSourceInput | null
+  create?:
+    | ResourceCreateWithoutSourceInput[]
+    | ResourceCreateWithoutSourceInput
+    | null;
+  connect?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput | null;
+  set?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput | null;
+  disconnect?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput | null;
+  delete?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput | null;
+  update?:
+    | ResourceUpdateWithWhereUniqueWithoutSourceInput[]
+    | ResourceUpdateWithWhereUniqueWithoutSourceInput
+    | null;
+  updateMany?:
+    | ResourceUpdateManyWithWhereNestedInput[]
+    | ResourceUpdateManyWithWhereNestedInput
+    | null;
+  deleteMany?: ResourceScalarWhereInput[] | ResourceScalarWhereInput | null;
+  upsert?:
+    | ResourceUpsertWithWhereUniqueWithoutSourceInput[]
+    | ResourceUpsertWithWhereUniqueWithoutSourceInput
+    | null;
 }
 
 export interface ResourceUpdateManyWithWhereNestedInput {
-  where: ResourceScalarWhereInput
-  data: ResourceUpdateManyDataInput
+  where: ResourceScalarWhereInput;
+  data: ResourceUpdateManyDataInput;
 }
 
 export interface ResourceUpdateOneWithoutAttributesInput {
-  create?: ResourceCreateWithoutAttributesInput | null
-  connect?: ResourceWhereUniqueInput | null
-  disconnect?: Boolean | null
-  delete?: Boolean | null
-  update?: ResourceUpdateWithoutAttributesDataInput | null
-  upsert?: ResourceUpsertWithoutAttributesInput | null
+  create?: ResourceCreateWithoutAttributesInput | null;
+  connect?: ResourceWhereUniqueInput | null;
+  disconnect?: Boolean | null;
+  delete?: Boolean | null;
+  update?: ResourceUpdateWithoutAttributesDataInput | null;
+  upsert?: ResourceUpsertWithoutAttributesInput | null;
 }
 
 export interface ResourceUpdateWithoutAttributesDataInput {
-  name?: String | null
-  primaryKeyOwner?: String | null
-  primaryKeyTable?: String | null
-  primaryKeyColumn?: String | null
-  source?: SourceUpdateOneRequiredWithoutResourcesInput | null
+  name?: String | null;
+  primaryKeyOwner?: String | null;
+  primaryKeyTable?: String | null;
+  primaryKeyColumn?: String | null;
+  source?: SourceUpdateOneRequiredWithoutResourcesInput | null;
 }
 
 export interface ResourceUpdateWithoutSourceDataInput {
-  name?: String | null
-  primaryKeyOwner?: String | null
-  primaryKeyTable?: String | null
-  primaryKeyColumn?: String | null
-  attributes?: AttributeUpdateManyWithoutResourceInput | null
+  name?: String | null;
+  primaryKeyOwner?: String | null;
+  primaryKeyTable?: String | null;
+  primaryKeyColumn?: String | null;
+  attributes?: AttributeUpdateManyWithoutResourceInput | null;
 }
 
 export interface ResourceUpdateWithWhereUniqueWithoutSourceInput {
-  where: ResourceWhereUniqueInput
-  data: ResourceUpdateWithoutSourceDataInput
+  where: ResourceWhereUniqueInput;
+  data: ResourceUpdateWithoutSourceDataInput;
 }
 
 export interface ResourceUpsertWithoutAttributesInput {
-  update: ResourceUpdateWithoutAttributesDataInput
-  create: ResourceCreateWithoutAttributesInput
+  update: ResourceUpdateWithoutAttributesDataInput;
+  create: ResourceCreateWithoutAttributesInput;
 }
 
 export interface ResourceUpsertWithWhereUniqueWithoutSourceInput {
-  where: ResourceWhereUniqueInput
-  update: ResourceUpdateWithoutSourceDataInput
-  create: ResourceCreateWithoutSourceInput
+  where: ResourceWhereUniqueInput;
+  update: ResourceUpdateWithoutSourceDataInput;
+  create: ResourceCreateWithoutSourceInput;
 }
 
 export interface ResourceWhereInput {
-  AND?: ResourceWhereInput[] | ResourceWhereInput | null
-  OR?: ResourceWhereInput[] | ResourceWhereInput | null
-  NOT?: ResourceWhereInput[] | ResourceWhereInput | null
-  id?: ID_Input | null
-  id_not?: ID_Input | null
-  id_in?: ID_Output[] | ID_Output | null
-  id_not_in?: ID_Output[] | ID_Output | null
-  id_lt?: ID_Input | null
-  id_lte?: ID_Input | null
-  id_gt?: ID_Input | null
-  id_gte?: ID_Input | null
-  id_contains?: ID_Input | null
-  id_not_contains?: ID_Input | null
-  id_starts_with?: ID_Input | null
-  id_not_starts_with?: ID_Input | null
-  id_ends_with?: ID_Input | null
-  id_not_ends_with?: ID_Input | null
-  name?: String | null
-  name_not?: String | null
-  name_in?: String[] | String | null
-  name_not_in?: String[] | String | null
-  name_lt?: String | null
-  name_lte?: String | null
-  name_gt?: String | null
-  name_gte?: String | null
-  name_contains?: String | null
-  name_not_contains?: String | null
-  name_starts_with?: String | null
-  name_not_starts_with?: String | null
-  name_ends_with?: String | null
-  name_not_ends_with?: String | null
-  primaryKeyOwner?: String | null
-  primaryKeyOwner_not?: String | null
-  primaryKeyOwner_in?: String[] | String | null
-  primaryKeyOwner_not_in?: String[] | String | null
-  primaryKeyOwner_lt?: String | null
-  primaryKeyOwner_lte?: String | null
-  primaryKeyOwner_gt?: String | null
-  primaryKeyOwner_gte?: String | null
-  primaryKeyOwner_contains?: String | null
-  primaryKeyOwner_not_contains?: String | null
-  primaryKeyOwner_starts_with?: String | null
-  primaryKeyOwner_not_starts_with?: String | null
-  primaryKeyOwner_ends_with?: String | null
-  primaryKeyOwner_not_ends_with?: String | null
-  primaryKeyTable?: String | null
-  primaryKeyTable_not?: String | null
-  primaryKeyTable_in?: String[] | String | null
-  primaryKeyTable_not_in?: String[] | String | null
-  primaryKeyTable_lt?: String | null
-  primaryKeyTable_lte?: String | null
-  primaryKeyTable_gt?: String | null
-  primaryKeyTable_gte?: String | null
-  primaryKeyTable_contains?: String | null
-  primaryKeyTable_not_contains?: String | null
-  primaryKeyTable_starts_with?: String | null
-  primaryKeyTable_not_starts_with?: String | null
-  primaryKeyTable_ends_with?: String | null
-  primaryKeyTable_not_ends_with?: String | null
-  primaryKeyColumn?: String | null
-  primaryKeyColumn_not?: String | null
-  primaryKeyColumn_in?: String[] | String | null
-  primaryKeyColumn_not_in?: String[] | String | null
-  primaryKeyColumn_lt?: String | null
-  primaryKeyColumn_lte?: String | null
-  primaryKeyColumn_gt?: String | null
-  primaryKeyColumn_gte?: String | null
-  primaryKeyColumn_contains?: String | null
-  primaryKeyColumn_not_contains?: String | null
-  primaryKeyColumn_starts_with?: String | null
-  primaryKeyColumn_not_starts_with?: String | null
-  primaryKeyColumn_ends_with?: String | null
-  primaryKeyColumn_not_ends_with?: String | null
-  attributes_every?: AttributeWhereInput | null
-  attributes_some?: AttributeWhereInput | null
-  attributes_none?: AttributeWhereInput | null
-  source?: SourceWhereInput | null
+  AND?: ResourceWhereInput[] | ResourceWhereInput | null;
+  OR?: ResourceWhereInput[] | ResourceWhereInput | null;
+  NOT?: ResourceWhereInput[] | ResourceWhereInput | null;
+  id?: ID_Input | null;
+  id_not?: ID_Input | null;
+  id_in?: ID_Output[] | ID_Output | null;
+  id_not_in?: ID_Output[] | ID_Output | null;
+  id_lt?: ID_Input | null;
+  id_lte?: ID_Input | null;
+  id_gt?: ID_Input | null;
+  id_gte?: ID_Input | null;
+  id_contains?: ID_Input | null;
+  id_not_contains?: ID_Input | null;
+  id_starts_with?: ID_Input | null;
+  id_not_starts_with?: ID_Input | null;
+  id_ends_with?: ID_Input | null;
+  id_not_ends_with?: ID_Input | null;
+  name?: String | null;
+  name_not?: String | null;
+  name_in?: String[] | String | null;
+  name_not_in?: String[] | String | null;
+  name_lt?: String | null;
+  name_lte?: String | null;
+  name_gt?: String | null;
+  name_gte?: String | null;
+  name_contains?: String | null;
+  name_not_contains?: String | null;
+  name_starts_with?: String | null;
+  name_not_starts_with?: String | null;
+  name_ends_with?: String | null;
+  name_not_ends_with?: String | null;
+  primaryKeyOwner?: String | null;
+  primaryKeyOwner_not?: String | null;
+  primaryKeyOwner_in?: String[] | String | null;
+  primaryKeyOwner_not_in?: String[] | String | null;
+  primaryKeyOwner_lt?: String | null;
+  primaryKeyOwner_lte?: String | null;
+  primaryKeyOwner_gt?: String | null;
+  primaryKeyOwner_gte?: String | null;
+  primaryKeyOwner_contains?: String | null;
+  primaryKeyOwner_not_contains?: String | null;
+  primaryKeyOwner_starts_with?: String | null;
+  primaryKeyOwner_not_starts_with?: String | null;
+  primaryKeyOwner_ends_with?: String | null;
+  primaryKeyOwner_not_ends_with?: String | null;
+  primaryKeyTable?: String | null;
+  primaryKeyTable_not?: String | null;
+  primaryKeyTable_in?: String[] | String | null;
+  primaryKeyTable_not_in?: String[] | String | null;
+  primaryKeyTable_lt?: String | null;
+  primaryKeyTable_lte?: String | null;
+  primaryKeyTable_gt?: String | null;
+  primaryKeyTable_gte?: String | null;
+  primaryKeyTable_contains?: String | null;
+  primaryKeyTable_not_contains?: String | null;
+  primaryKeyTable_starts_with?: String | null;
+  primaryKeyTable_not_starts_with?: String | null;
+  primaryKeyTable_ends_with?: String | null;
+  primaryKeyTable_not_ends_with?: String | null;
+  primaryKeyColumn?: String | null;
+  primaryKeyColumn_not?: String | null;
+  primaryKeyColumn_in?: String[] | String | null;
+  primaryKeyColumn_not_in?: String[] | String | null;
+  primaryKeyColumn_lt?: String | null;
+  primaryKeyColumn_lte?: String | null;
+  primaryKeyColumn_gt?: String | null;
+  primaryKeyColumn_gte?: String | null;
+  primaryKeyColumn_contains?: String | null;
+  primaryKeyColumn_not_contains?: String | null;
+  primaryKeyColumn_starts_with?: String | null;
+  primaryKeyColumn_not_starts_with?: String | null;
+  primaryKeyColumn_ends_with?: String | null;
+  primaryKeyColumn_not_ends_with?: String | null;
+  attributes_every?: AttributeWhereInput | null;
+  attributes_some?: AttributeWhereInput | null;
+  attributes_none?: AttributeWhereInput | null;
+  source?: SourceWhereInput | null;
 }
 
 export interface ResourceWhereUniqueInput {
-  id?: ID_Input | null
+  id?: ID_Input | null;
 }
 
 export interface SourceCreateInput {
-  name: String
-  resources?: ResourceCreateManyWithoutSourceInput | null
+  name: String;
+  resources?: ResourceCreateManyWithoutSourceInput | null;
 }
 
 export interface SourceCreateOneWithoutResourcesInput {
-  create?: SourceCreateWithoutResourcesInput | null
-  connect?: SourceWhereUniqueInput | null
+  create?: SourceCreateWithoutResourcesInput | null;
+  connect?: SourceWhereUniqueInput | null;
 }
 
 export interface SourceCreateWithoutResourcesInput {
-  name: String
+  name: String;
 }
 
 export interface SourceSubscriptionWhereInput {
-  AND?: SourceSubscriptionWhereInput[] | SourceSubscriptionWhereInput | null
-  OR?: SourceSubscriptionWhereInput[] | SourceSubscriptionWhereInput | null
-  NOT?: SourceSubscriptionWhereInput[] | SourceSubscriptionWhereInput | null
-  mutation_in?: MutationType[] | MutationType | null
-  updatedFields_contains?: String | null
-  updatedFields_contains_every?: String[] | String | null
-  updatedFields_contains_some?: String[] | String | null
-  node?: SourceWhereInput | null
+  AND?: SourceSubscriptionWhereInput[] | SourceSubscriptionWhereInput | null;
+  OR?: SourceSubscriptionWhereInput[] | SourceSubscriptionWhereInput | null;
+  NOT?: SourceSubscriptionWhereInput[] | SourceSubscriptionWhereInput | null;
+  mutation_in?: MutationType[] | MutationType | null;
+  updatedFields_contains?: String | null;
+  updatedFields_contains_every?: String[] | String | null;
+  updatedFields_contains_some?: String[] | String | null;
+  node?: SourceWhereInput | null;
 }
 
 export interface SourceUpdateInput {
-  name?: String | null
-  resources?: ResourceUpdateManyWithoutSourceInput | null
+  name?: String | null;
+  resources?: ResourceUpdateManyWithoutSourceInput | null;
 }
 
 export interface SourceUpdateManyMutationInput {
-  name?: String | null
+  name?: String | null;
 }
 
 export interface SourceUpdateOneRequiredWithoutResourcesInput {
-  create?: SourceCreateWithoutResourcesInput | null
-  connect?: SourceWhereUniqueInput | null
-  update?: SourceUpdateWithoutResourcesDataInput | null
-  upsert?: SourceUpsertWithoutResourcesInput | null
+  create?: SourceCreateWithoutResourcesInput | null;
+  connect?: SourceWhereUniqueInput | null;
+  update?: SourceUpdateWithoutResourcesDataInput | null;
+  upsert?: SourceUpsertWithoutResourcesInput | null;
 }
 
 export interface SourceUpdateWithoutResourcesDataInput {
-  name?: String | null
+  name?: String | null;
 }
 
 export interface SourceUpsertWithoutResourcesInput {
-  update: SourceUpdateWithoutResourcesDataInput
-  create: SourceCreateWithoutResourcesInput
+  update: SourceUpdateWithoutResourcesDataInput;
+  create: SourceCreateWithoutResourcesInput;
 }
 
 export interface SourceWhereInput {
-  AND?: SourceWhereInput[] | SourceWhereInput | null
-  OR?: SourceWhereInput[] | SourceWhereInput | null
-  NOT?: SourceWhereInput[] | SourceWhereInput | null
-  id?: ID_Input | null
-  id_not?: ID_Input | null
-  id_in?: ID_Output[] | ID_Output | null
-  id_not_in?: ID_Output[] | ID_Output | null
-  id_lt?: ID_Input | null
-  id_lte?: ID_Input | null
-  id_gt?: ID_Input | null
-  id_gte?: ID_Input | null
-  id_contains?: ID_Input | null
-  id_not_contains?: ID_Input | null
-  id_starts_with?: ID_Input | null
-  id_not_starts_with?: ID_Input | null
-  id_ends_with?: ID_Input | null
-  id_not_ends_with?: ID_Input | null
-  name?: String | null
-  name_not?: String | null
-  name_in?: String[] | String | null
-  name_not_in?: String[] | String | null
-  name_lt?: String | null
-  name_lte?: String | null
-  name_gt?: String | null
-  name_gte?: String | null
-  name_contains?: String | null
-  name_not_contains?: String | null
-  name_starts_with?: String | null
-  name_not_starts_with?: String | null
-  name_ends_with?: String | null
-  name_not_ends_with?: String | null
-  resources_every?: ResourceWhereInput | null
-  resources_some?: ResourceWhereInput | null
-  resources_none?: ResourceWhereInput | null
+  AND?: SourceWhereInput[] | SourceWhereInput | null;
+  OR?: SourceWhereInput[] | SourceWhereInput | null;
+  NOT?: SourceWhereInput[] | SourceWhereInput | null;
+  id?: ID_Input | null;
+  id_not?: ID_Input | null;
+  id_in?: ID_Output[] | ID_Output | null;
+  id_not_in?: ID_Output[] | ID_Output | null;
+  id_lt?: ID_Input | null;
+  id_lte?: ID_Input | null;
+  id_gt?: ID_Input | null;
+  id_gte?: ID_Input | null;
+  id_contains?: ID_Input | null;
+  id_not_contains?: ID_Input | null;
+  id_starts_with?: ID_Input | null;
+  id_not_starts_with?: ID_Input | null;
+  id_ends_with?: ID_Input | null;
+  id_not_ends_with?: ID_Input | null;
+  name?: String | null;
+  name_not?: String | null;
+  name_in?: String[] | String | null;
+  name_not_in?: String[] | String | null;
+  name_lt?: String | null;
+  name_lte?: String | null;
+  name_gt?: String | null;
+  name_gte?: String | null;
+  name_contains?: String | null;
+  name_not_contains?: String | null;
+  name_starts_with?: String | null;
+  name_not_starts_with?: String | null;
+  name_ends_with?: String | null;
+  name_not_ends_with?: String | null;
+  resources_every?: ResourceWhereInput | null;
+  resources_some?: ResourceWhereInput | null;
+  resources_none?: ResourceWhereInput | null;
 }
 
 export interface SourceWhereUniqueInput {
-  id?: ID_Input | null
-  name?: String | null
+  id?: ID_Input | null;
+  name?: String | null;
 }
 
 export interface UserCreateInput {
-  email: String
-  name: String
-  password: String
-  role?: Role | null
+  email: String;
+  name: String;
+  password: String;
+  role?: Role | null;
 }
 
 export interface UserSubscriptionWhereInput {
-  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput | null
-  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput | null
-  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput | null
-  mutation_in?: MutationType[] | MutationType | null
-  updatedFields_contains?: String | null
-  updatedFields_contains_every?: String[] | String | null
-  updatedFields_contains_some?: String[] | String | null
-  node?: UserWhereInput | null
+  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput | null;
+  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput | null;
+  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput | null;
+  mutation_in?: MutationType[] | MutationType | null;
+  updatedFields_contains?: String | null;
+  updatedFields_contains_every?: String[] | String | null;
+  updatedFields_contains_some?: String[] | String | null;
+  node?: UserWhereInput | null;
 }
 
 export interface UserUpdateInput {
-  email?: String | null
-  name?: String | null
-  password?: String | null
-  role?: Role | null
+  email?: String | null;
+  name?: String | null;
+  password?: String | null;
+  role?: Role | null;
 }
 
 export interface UserUpdateManyMutationInput {
-  email?: String | null
-  name?: String | null
-  password?: String | null
-  role?: Role | null
+  email?: String | null;
+  name?: String | null;
+  password?: String | null;
+  role?: Role | null;
 }
 
 export interface UserWhereInput {
-  AND?: UserWhereInput[] | UserWhereInput | null
-  OR?: UserWhereInput[] | UserWhereInput | null
-  NOT?: UserWhereInput[] | UserWhereInput | null
-  id?: ID_Input | null
-  id_not?: ID_Input | null
-  id_in?: ID_Output[] | ID_Output | null
-  id_not_in?: ID_Output[] | ID_Output | null
-  id_lt?: ID_Input | null
-  id_lte?: ID_Input | null
-  id_gt?: ID_Input | null
-  id_gte?: ID_Input | null
-  id_contains?: ID_Input | null
-  id_not_contains?: ID_Input | null
-  id_starts_with?: ID_Input | null
-  id_not_starts_with?: ID_Input | null
-  id_ends_with?: ID_Input | null
-  id_not_ends_with?: ID_Input | null
-  email?: String | null
-  email_not?: String | null
-  email_in?: String[] | String | null
-  email_not_in?: String[] | String | null
-  email_lt?: String | null
-  email_lte?: String | null
-  email_gt?: String | null
-  email_gte?: String | null
-  email_contains?: String | null
-  email_not_contains?: String | null
-  email_starts_with?: String | null
-  email_not_starts_with?: String | null
-  email_ends_with?: String | null
-  email_not_ends_with?: String | null
-  name?: String | null
-  name_not?: String | null
-  name_in?: String[] | String | null
-  name_not_in?: String[] | String | null
-  name_lt?: String | null
-  name_lte?: String | null
-  name_gt?: String | null
-  name_gte?: String | null
-  name_contains?: String | null
-  name_not_contains?: String | null
-  name_starts_with?: String | null
-  name_not_starts_with?: String | null
-  name_ends_with?: String | null
-  name_not_ends_with?: String | null
-  password?: String | null
-  password_not?: String | null
-  password_in?: String[] | String | null
-  password_not_in?: String[] | String | null
-  password_lt?: String | null
-  password_lte?: String | null
-  password_gt?: String | null
-  password_gte?: String | null
-  password_contains?: String | null
-  password_not_contains?: String | null
-  password_starts_with?: String | null
-  password_not_starts_with?: String | null
-  password_ends_with?: String | null
-  password_not_ends_with?: String | null
-  role?: Role | null
-  role_not?: Role | null
-  role_in?: Role[] | Role | null
-  role_not_in?: Role[] | Role | null
+  AND?: UserWhereInput[] | UserWhereInput | null;
+  OR?: UserWhereInput[] | UserWhereInput | null;
+  NOT?: UserWhereInput[] | UserWhereInput | null;
+  id?: ID_Input | null;
+  id_not?: ID_Input | null;
+  id_in?: ID_Output[] | ID_Output | null;
+  id_not_in?: ID_Output[] | ID_Output | null;
+  id_lt?: ID_Input | null;
+  id_lte?: ID_Input | null;
+  id_gt?: ID_Input | null;
+  id_gte?: ID_Input | null;
+  id_contains?: ID_Input | null;
+  id_not_contains?: ID_Input | null;
+  id_starts_with?: ID_Input | null;
+  id_not_starts_with?: ID_Input | null;
+  id_ends_with?: ID_Input | null;
+  id_not_ends_with?: ID_Input | null;
+  email?: String | null;
+  email_not?: String | null;
+  email_in?: String[] | String | null;
+  email_not_in?: String[] | String | null;
+  email_lt?: String | null;
+  email_lte?: String | null;
+  email_gt?: String | null;
+  email_gte?: String | null;
+  email_contains?: String | null;
+  email_not_contains?: String | null;
+  email_starts_with?: String | null;
+  email_not_starts_with?: String | null;
+  email_ends_with?: String | null;
+  email_not_ends_with?: String | null;
+  name?: String | null;
+  name_not?: String | null;
+  name_in?: String[] | String | null;
+  name_not_in?: String[] | String | null;
+  name_lt?: String | null;
+  name_lte?: String | null;
+  name_gt?: String | null;
+  name_gte?: String | null;
+  name_contains?: String | null;
+  name_not_contains?: String | null;
+  name_starts_with?: String | null;
+  name_not_starts_with?: String | null;
+  name_ends_with?: String | null;
+  name_not_ends_with?: String | null;
+  password?: String | null;
+  password_not?: String | null;
+  password_in?: String[] | String | null;
+  password_not_in?: String[] | String | null;
+  password_lt?: String | null;
+  password_lte?: String | null;
+  password_gt?: String | null;
+  password_gte?: String | null;
+  password_contains?: String | null;
+  password_not_contains?: String | null;
+  password_starts_with?: String | null;
+  password_not_starts_with?: String | null;
+  password_ends_with?: String | null;
+  password_not_ends_with?: String | null;
+  role?: Role | null;
+  role_not?: Role | null;
+  role_in?: Role[] | Role | null;
+  role_not_in?: Role[] | Role | null;
 }
 
 export interface UserWhereUniqueInput {
-  id?: ID_Input | null
-  email?: String | null
+  id?: ID_Input | null;
+  email?: String | null;
 }
 
 /*
@@ -5393,45 +5893,45 @@ export interface UserWhereUniqueInput {
 
  */
 export interface Node {
-  id: ID_Output
+  id: ID_Output;
 }
 
 export interface AggregateAttribute {
-  count: Int
+  count: Int;
 }
 
 export interface AggregateInputColumn {
-  count: Int
+  count: Int;
 }
 
 export interface AggregateJoin {
-  count: Int
+  count: Int;
 }
 
 export interface AggregateResource {
-  count: Int
+  count: Int;
 }
 
 export interface AggregateSource {
-  count: Int
+  count: Int;
 }
 
 export interface AggregateUser {
-  count: Int
+  count: Int;
 }
 
 export interface Attribute extends Node {
-  id: ID_Output
-  name: String
-  mergingScript?: String | null
-  isProfile?: Boolean | null
-  type?: String | null
-  comment?: String | null
-  depth?: Int | null
-  resource?: Resource | null
-  attributes?: Array<Attribute> | null
-  attribute?: Attribute | null
-  inputColumns?: Array<InputColumn> | null
+  id: ID_Output;
+  name: String;
+  mergingScript?: String | null;
+  isProfile?: Boolean | null;
+  type?: String | null;
+  comment?: String | null;
+  depth?: Int | null;
+  resource?: Resource | null;
+  attributes?: Array<Attribute> | null;
+  attribute?: Attribute | null;
+  inputColumns?: Array<InputColumn> | null;
 }
 
 /*
@@ -5439,9 +5939,9 @@ export interface Attribute extends Node {
 
  */
 export interface AttributeConnection {
-  pageInfo: PageInfo
-  edges: Array<AttributeEdge | null>
-  aggregate: AggregateAttribute
+  pageInfo: PageInfo;
+  edges: Array<AttributeEdge | null>;
+  aggregate: AggregateAttribute;
 }
 
 /*
@@ -5449,40 +5949,40 @@ export interface AttributeConnection {
 
  */
 export interface AttributeEdge {
-  node: Attribute
-  cursor: String
+  node: Attribute;
+  cursor: String;
 }
 
 export interface AttributePreviousValues {
-  id: ID_Output
-  name: String
-  mergingScript?: String | null
-  isProfile?: Boolean | null
-  type?: String | null
-  comment?: String | null
-  depth?: Int | null
+  id: ID_Output;
+  name: String;
+  mergingScript?: String | null;
+  isProfile?: Boolean | null;
+  type?: String | null;
+  comment?: String | null;
+  depth?: Int | null;
 }
 
 export interface AttributeSubscriptionPayload {
-  mutation: MutationType
-  node?: Attribute | null
-  updatedFields?: Array<String> | null
-  previousValues?: AttributePreviousValues | null
+  mutation: MutationType;
+  node?: Attribute | null;
+  updatedFields?: Array<String> | null;
+  previousValues?: AttributePreviousValues | null;
 }
 
 export interface BatchPayload {
-  count: Long
+  count: Long;
 }
 
 export interface InputColumn extends Node {
-  id: ID_Output
-  owner?: String | null
-  table?: String | null
-  column?: String | null
-  script?: String | null
-  staticValue?: String | null
-  joins?: Array<Join> | null
-  attribute: Attribute
+  id: ID_Output;
+  owner?: String | null;
+  table?: String | null;
+  column?: String | null;
+  script?: String | null;
+  staticValue?: String | null;
+  joins?: Array<Join> | null;
+  attribute: Attribute;
 }
 
 /*
@@ -5490,9 +5990,9 @@ export interface InputColumn extends Node {
 
  */
 export interface InputColumnConnection {
-  pageInfo: PageInfo
-  edges: Array<InputColumnEdge | null>
-  aggregate: AggregateInputColumn
+  pageInfo: PageInfo;
+  edges: Array<InputColumnEdge | null>;
+  aggregate: AggregateInputColumn;
 }
 
 /*
@@ -5500,35 +6000,35 @@ export interface InputColumnConnection {
 
  */
 export interface InputColumnEdge {
-  node: InputColumn
-  cursor: String
+  node: InputColumn;
+  cursor: String;
 }
 
 export interface InputColumnPreviousValues {
-  id: ID_Output
-  owner?: String | null
-  table?: String | null
-  column?: String | null
-  script?: String | null
-  staticValue?: String | null
+  id: ID_Output;
+  owner?: String | null;
+  table?: String | null;
+  column?: String | null;
+  script?: String | null;
+  staticValue?: String | null;
 }
 
 export interface InputColumnSubscriptionPayload {
-  mutation: MutationType
-  node?: InputColumn | null
-  updatedFields?: Array<String> | null
-  previousValues?: InputColumnPreviousValues | null
+  mutation: MutationType;
+  node?: InputColumn | null;
+  updatedFields?: Array<String> | null;
+  previousValues?: InputColumnPreviousValues | null;
 }
 
 export interface Join extends Node {
-  id: ID_Output
-  sourceOwner?: String | null
-  sourceTable?: String | null
-  sourceColumn?: String | null
-  targetOwner?: String | null
-  targetTable?: String | null
-  targetColumn?: String | null
-  inputColumn: InputColumn
+  id: ID_Output;
+  sourceOwner?: String | null;
+  sourceTable?: String | null;
+  sourceColumn?: String | null;
+  targetOwner?: String | null;
+  targetTable?: String | null;
+  targetColumn?: String | null;
+  inputColumn: InputColumn;
 }
 
 /*
@@ -5536,9 +6036,9 @@ export interface Join extends Node {
 
  */
 export interface JoinConnection {
-  pageInfo: PageInfo
-  edges: Array<JoinEdge | null>
-  aggregate: AggregateJoin
+  pageInfo: PageInfo;
+  edges: Array<JoinEdge | null>;
+  aggregate: AggregateJoin;
 }
 
 /*
@@ -5546,25 +6046,25 @@ export interface JoinConnection {
 
  */
 export interface JoinEdge {
-  node: Join
-  cursor: String
+  node: Join;
+  cursor: String;
 }
 
 export interface JoinPreviousValues {
-  id: ID_Output
-  sourceOwner?: String | null
-  sourceTable?: String | null
-  sourceColumn?: String | null
-  targetOwner?: String | null
-  targetTable?: String | null
-  targetColumn?: String | null
+  id: ID_Output;
+  sourceOwner?: String | null;
+  sourceTable?: String | null;
+  sourceColumn?: String | null;
+  targetOwner?: String | null;
+  targetTable?: String | null;
+  targetColumn?: String | null;
 }
 
 export interface JoinSubscriptionPayload {
-  mutation: MutationType
-  node?: Join | null
-  updatedFields?: Array<String> | null
-  previousValues?: JoinPreviousValues | null
+  mutation: MutationType;
+  node?: Join | null;
+  updatedFields?: Array<String> | null;
+  previousValues?: JoinPreviousValues | null;
 }
 
 /*
@@ -5572,20 +6072,20 @@ export interface JoinSubscriptionPayload {
 
  */
 export interface PageInfo {
-  hasNextPage: Boolean
-  hasPreviousPage: Boolean
-  startCursor?: String | null
-  endCursor?: String | null
+  hasNextPage: Boolean;
+  hasPreviousPage: Boolean;
+  startCursor?: String | null;
+  endCursor?: String | null;
 }
 
 export interface Resource extends Node {
-  id: ID_Output
-  name: String
-  primaryKeyOwner?: String | null
-  primaryKeyTable?: String | null
-  primaryKeyColumn?: String | null
-  attributes?: Array<Attribute> | null
-  source: Source
+  id: ID_Output;
+  name: String;
+  primaryKeyOwner?: String | null;
+  primaryKeyTable?: String | null;
+  primaryKeyColumn?: String | null;
+  attributes?: Array<Attribute> | null;
+  source: Source;
 }
 
 /*
@@ -5593,9 +6093,9 @@ export interface Resource extends Node {
 
  */
 export interface ResourceConnection {
-  pageInfo: PageInfo
-  edges: Array<ResourceEdge | null>
-  aggregate: AggregateResource
+  pageInfo: PageInfo;
+  edges: Array<ResourceEdge | null>;
+  aggregate: AggregateResource;
 }
 
 /*
@@ -5603,29 +6103,29 @@ export interface ResourceConnection {
 
  */
 export interface ResourceEdge {
-  node: Resource
-  cursor: String
+  node: Resource;
+  cursor: String;
 }
 
 export interface ResourcePreviousValues {
-  id: ID_Output
-  name: String
-  primaryKeyOwner?: String | null
-  primaryKeyTable?: String | null
-  primaryKeyColumn?: String | null
+  id: ID_Output;
+  name: String;
+  primaryKeyOwner?: String | null;
+  primaryKeyTable?: String | null;
+  primaryKeyColumn?: String | null;
 }
 
 export interface ResourceSubscriptionPayload {
-  mutation: MutationType
-  node?: Resource | null
-  updatedFields?: Array<String> | null
-  previousValues?: ResourcePreviousValues | null
+  mutation: MutationType;
+  node?: Resource | null;
+  updatedFields?: Array<String> | null;
+  previousValues?: ResourcePreviousValues | null;
 }
 
 export interface Source extends Node {
-  id: ID_Output
-  name: String
-  resources?: Array<Resource> | null
+  id: ID_Output;
+  name: String;
+  resources?: Array<Resource> | null;
 }
 
 /*
@@ -5633,9 +6133,9 @@ export interface Source extends Node {
 
  */
 export interface SourceConnection {
-  pageInfo: PageInfo
-  edges: Array<SourceEdge | null>
-  aggregate: AggregateSource
+  pageInfo: PageInfo;
+  edges: Array<SourceEdge | null>;
+  aggregate: AggregateSource;
 }
 
 /*
@@ -5643,28 +6143,28 @@ export interface SourceConnection {
 
  */
 export interface SourceEdge {
-  node: Source
-  cursor: String
+  node: Source;
+  cursor: String;
 }
 
 export interface SourcePreviousValues {
-  id: ID_Output
-  name: String
+  id: ID_Output;
+  name: String;
 }
 
 export interface SourceSubscriptionPayload {
-  mutation: MutationType
-  node?: Source | null
-  updatedFields?: Array<String> | null
-  previousValues?: SourcePreviousValues | null
+  mutation: MutationType;
+  node?: Source | null;
+  updatedFields?: Array<String> | null;
+  previousValues?: SourcePreviousValues | null;
 }
 
 export interface User extends Node {
-  id: ID_Output
-  email: String
-  name: String
-  password: String
-  role?: Role | null
+  id: ID_Output;
+  email: String;
+  name: String;
+  password: String;
+  role?: Role | null;
 }
 
 /*
@@ -5672,9 +6172,9 @@ export interface User extends Node {
 
  */
 export interface UserConnection {
-  pageInfo: PageInfo
-  edges: Array<UserEdge | null>
-  aggregate: AggregateUser
+  pageInfo: PageInfo;
+  edges: Array<UserEdge | null>;
+  aggregate: AggregateUser;
 }
 
 /*
@@ -5682,48 +6182,48 @@ export interface UserConnection {
 
  */
 export interface UserEdge {
-  node: User
-  cursor: String
+  node: User;
+  cursor: String;
 }
 
 export interface UserPreviousValues {
-  id: ID_Output
-  email: String
-  name: String
-  password: String
-  role?: Role | null
+  id: ID_Output;
+  email: String;
+  name: String;
+  password: String;
+  role?: Role | null;
 }
 
 export interface UserSubscriptionPayload {
-  mutation: MutationType
-  node?: User | null
-  updatedFields?: Array<String> | null
-  previousValues?: UserPreviousValues | null
+  mutation: MutationType;
+  node?: User | null;
+  updatedFields?: Array<String> | null;
+  previousValues?: UserPreviousValues | null;
 }
 
 /*
 The `Boolean` scalar type represents `true` or `false`.
 */
-export type Boolean = boolean
+export type Boolean = boolean;
 
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
 */
-export type ID_Input = string | number
-export type ID_Output = string
+export type ID_Input = string | number;
+export type ID_Output = string;
 
 /*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
 */
-export type Int = number
+export type Int = number;
 
 /*
 The `Long` scalar type represents non-fractional signed whole numeric values.
 Long can represent values between -(2^63) and 2^63 - 1.
 */
-export type Long = string
+export type Long = string;
 
 /*
 The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
-export type String = string
+export type String = string;

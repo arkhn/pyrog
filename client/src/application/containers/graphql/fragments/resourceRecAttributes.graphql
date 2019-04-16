@@ -1,48 +1,48 @@
 #import "./entireAttribute.graphql"
 
 fragment resourceRecAttributes on Resource {
-    id
-    name
+  id
+  name
+  attributes {
+    ...entireAttribute
     attributes {
+      ...entireAttribute
+      attributes {
         ...entireAttribute
         attributes {
+          ...entireAttribute
+          attributes {
             ...entireAttribute
             attributes {
+              ...entireAttribute
+              attributes {
                 ...entireAttribute
                 attributes {
+                  ...entireAttribute
+                  attributes {
                     ...entireAttribute
                     attributes {
+                      ...entireAttribute
+                      attributes {
                         ...entireAttribute
                         attributes {
+                          ...entireAttribute
+                          attributes {
                             ...entireAttribute
                             attributes {
-                                ...entireAttribute
-                                attributes {
-                                    ...entireAttribute
-                                    attributes {
-                                        ...entireAttribute
-                                        attributes {
-                                            ...entireAttribute
-                                            attributes {
-                                                ...entireAttribute
-                                                attributes {
-                                                    ...entireAttribute
-                                                    attributes {
-                                                        ...entireAttribute
-                                                        attributes {
-                                                            ...entireAttribute
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
+                              ...entireAttribute
                             }
+                          }
                         }
+                      }
                     }
+                  }
                 }
+              }
             }
+          }
         }
+      }
     }
+  }
 }

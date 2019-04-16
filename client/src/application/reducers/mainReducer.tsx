@@ -1,34 +1,34 @@
-import {combineReducers} from 'redux'
+import { combineReducers } from "redux";
 
 // Data fetching reducers
-import sourceSchemas from './sourceSchemas'
-import recommendedColumns from './recommendedColumns'
-import selectedSourceReducer from './selectedSource'
-import toasterReducer from './toaster'
-import userReducer from './user'
+import sourceSchemas from "./sourceSchemas";
+import recommendedColumns from "./recommendedColumns";
+import selectedSourceReducer from "./selectedSource";
+import toasterReducer from "./toaster";
+import userReducer from "./user";
 
 // View reducers
-import mappingExplorer from '../containers/views/mappingExplorer/reducer'
-import mimic from '../containers/views/mimic/reducer'
+import mappingExplorer from "../containers/views/mappingExplorer/reducer";
+import mimic from "../containers/views/mimic/reducer";
 
 // Data reducer (also called canonical state)
 const dataReducer = combineReducers({
-    sourceSchemas,
-    recommendedColumns,
-})
+  sourceSchemas,
+  recommendedColumns
+});
 
 // View reducer
 const viewReducer = combineReducers({
-    mappingExplorer,
-    mimic,
-})
+  mappingExplorer,
+  mimic
+});
 
 const mainReducer = combineReducers({
-    data: dataReducer,
-    selectedSource: selectedSourceReducer,
-    toaster: toasterReducer,
-    views: viewReducer,
-    user: userReducer,
-})
+  data: dataReducer,
+  selectedSource: selectedSourceReducer,
+  toaster: toasterReducer,
+  views: viewReducer,
+  user: userReducer
+});
 
-export default mainReducer
+export default mainReducer;

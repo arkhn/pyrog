@@ -1,71 +1,71 @@
 type Source {
-    id: ID! @unique
-    name: String! @unique
-    resources: [Resource!]! @relation(name: "SourceToResource", onDelete: CASCADE)
+  id: ID! @unique
+  name: String! @unique
+  resources: [Resource!]! @relation(name: "SourceToResource", onDelete: CASCADE)
 }
 
 type Resource {
-    id: ID! @unique
-    name: String!
-    primaryKeyOwner: String
-    primaryKeyTable: String
-    primaryKeyColumn: String
-    attributes: [Attribute!]! @relation(name: "ResourceToAttributes", onDelete: CASCADE)
-    source: Source! @relation(name: "SourceToResource")
+  id: ID! @unique
+  name: String!
+  primaryKeyOwner: String
+  primaryKeyTable: String
+  primaryKeyColumn: String
+  attributes: [Attribute!]! @relation(name: "ResourceToAttributes", onDelete: CASCADE)
+  source: Source! @relation(name: "SourceToResource")
 }
 
 type Attribute {
-    id: ID! @unique
-    name: String!
-    mergingScript: String
-    isProfile: Boolean
-    type: String
-    comment: String
-    depth: Int
-    # Parent resource
-    resource: Resource @relation(name: "ResourceToAttributes")
-    # Children attributes
-    attributes: [Attribute!] @relation(name: "AttributeToAttributes", onDelete: CASCADE)
-    # Parent attribute
-    attribute: Attribute @relation(name: "AttributeToAttributes")
-    # Children input columns
-    inputColumns: [InputColumn!] @relation(name: "AttributeToInputColumns", onDelete: CASCADE)
+  id: ID! @unique
+  name: String!
+  mergingScript: String
+  isProfile: Boolean
+  type: String
+  comment: String
+  depth: Int
+  # Parent resource
+  resource: Resource @relation(name: "ResourceToAttributes")
+  # Children attributes
+  attributes: [Attribute!] @relation(name: "AttributeToAttributes", onDelete: CASCADE)
+  # Parent attribute
+  attribute: Attribute @relation(name: "AttributeToAttributes")
+  # Children input columns
+  inputColumns: [InputColumn!] @relation(name: "AttributeToInputColumns", onDelete: CASCADE)
 }
 
 type InputColumn {
-    id: ID! @unique
-    owner: String
-    table: String
-    column: String
-    script: String
-    staticValue: String
-    # Children joins
-    joins: [Join!] @relation(name: "InputColumnToJoins", onDelete: CASCADE)
-    # Parent attribute
-    attribute: Attribute! @relation(name: "AttributeToInputColumns")
+  id: ID! @unique
+  owner: String
+  table: String
+  column: String
+  script: String
+  staticValue: String
+  # Children joins
+  joins: [Join!] @relation(name: "InputColumnToJoins", onDelete: CASCADE)
+  # Parent attribute
+  attribute: Attribute! @relation(name: "AttributeToInputColumns")
 }
 
 type Join {
-    id: ID! @unique
-    sourceOwner: String
-    sourceTable: String
-    sourceColumn: String
-    targetOwner: String
-    targetTable: String
-    targetColumn: String
-    # Parent input column
-    inputColumn: InputColumn! @relation(name: "InputColumnToJoins")
+  id: ID! @unique
+  sourceOwner: String
+  sourceTable: String
+  sourceColumn: String
+  targetOwner: String
+  targetTable: String
+  targetColumn: String
+  # Parent input column
+  inputColumn: InputColumn! @relation(name: "InputColumnToJoins")
 }
 
 enum Role {
-    ADMIN
-    USER
+  ADMIN
+  USER
 }
 
 type User {
-    id: ID! @unique
-    email: String! @unique
-    name: String!
-    password: String!
-    role: Role @default(value: "USER")
+  id: ID! @unique
+  email: String! @unique
+  name: String!
+  password: String!
+  role: Role @default(value: "USER")
 }

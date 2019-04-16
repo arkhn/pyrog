@@ -1,11 +1,15 @@
 #import "../fragments/entireAttribute.graphql"
 
-mutation createAttributeProfileInAttribute($parentAttributeId: ID!, $attributeName: String!, $attributeType: String!) {
-    createAttributeProfileInAttribute(
-        parentAttributeId: $parentAttributeId,
-        attributeName: $attributeName,
-        attributeType: $attributeType
-    ) {
-        ...entireAttribute
-    }
+mutation createAttributeProfileInAttribute(
+  $parentAttributeId: ID!
+  $attributeName: String!
+  $attributeType: String!
+) {
+  createAttributeProfileInAttribute(
+    parentAttributeId: $parentAttributeId
+    attributeName: $attributeName
+    attributeType: $attributeType
+  ) {
+    ...entireAttribute
+  }
 }

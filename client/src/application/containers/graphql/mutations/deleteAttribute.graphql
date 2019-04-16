@@ -1,7 +1,7 @@
 #import "../fragments/entireAttribute.graphql"
 
 mutation deleteAttribute($attributeId: ID!) {
-    deleteAttribute(id: $attributeId) {
-        ...entireAttribute
-    }
+  deleteAttribute(id: $attributeId) {
+    ...entireAttribute
+  }
 }

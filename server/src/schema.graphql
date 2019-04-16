@@ -1,47 +1,70 @@
 # import Source, Resource, Attribute from "./generated/prisma-binding/prisma.graphql"
 
 type Query {
-    # BINDING QUERIES
-    inputColumns(where: InputColumnWhereInput): [InputColumn!]
-    resource(where: ResourceWhereUniqueInput): Resource!
-    resources(where: ResourceWhereInput): [Resource]!
+  # BINDING QUERIES
+  inputColumns(where: InputColumnWhereInput): [InputColumn!]
+  resource(where: ResourceWhereUniqueInput): Resource!
+  resources(where: ResourceWhereInput): [Resource]!
 
-    # CLIENT QUERIES
-    allSources: [Source!]!
-    availableResources(sourceId: ID, sourceName: String): [Resource!]
-    recAvailableAttributes(resourceId: ID!): [Attribute!]
-    me: User
-    isAuthenticated: Boolean!
-    # countMappedAttributes(sourceId: ID!): Int
-    computeSourceMappingProgress(sourceId: ID!): [Int!]
+  # CLIENT QUERIES
+  sourceInfo(sourceId: ID!): Source!
+  resourceInfo(resourceId: ID!): Resource!
+  attributeInfo(attributeId: ID!): Attribute!
+  allSources: [Source!]!
+  availableResources(sourceId: ID, sourceName: String): [Resource!]
+  recAvailableAttributes(resourceId: ID!): [Attribute!]
+  me: User
+  isAuthenticated: Boolean!
+  computeSourceMappingProgress(sourceId: ID!): [Int!]
 }
 
 type Mutation {
-    createSource(sourceName: String!): Source!
-    createInputColumnAndUpdateAttribute(attributeId: ID!, data: InputColumnCreateWithoutAttributeInput): InputColumn!
-    deleteInputColumnAndUpdateAttribute(attributeId: ID!, inputColumnId: ID!): InputColumn!
-    createJoinAndUpdateInputColumn(inputColumnId: ID!, data: JoinCreateWithoutInputColumnInput): Join!
-    deleteJoinAndUpdateInputColumn(inputColumnId: ID!, joinId: ID!): Join!
+  createSource(sourceName: String!): Source!
+  createInputColumnAndUpdateAttribute(
+    attributeId: ID!
+    data: InputColumnCreateWithoutAttributeInput
+  ): InputColumn!
+  deleteInputColumnAndUpdateAttribute(
+    attributeId: ID!
+    inputColumnId: ID!
+  ): InputColumn!
+  createJoinAndUpdateInputColumn(
+    inputColumnId: ID!
+    data: JoinCreateWithoutInputColumnInput
+  ): Join!
+  deleteJoinAndUpdateInputColumn(inputColumnId: ID!, joinId: ID!): Join!
 
-    updateAttribute(id: ID!, data: AttributeUpdateInput): Attribute!
-    updateInputColumn(id: ID!, data: InputColumnUpdateInput): InputColumn!
-    updateJoin(id: ID!, data: JoinUpdateInput): Join!
+  updateAttribute(id: ID!, data: AttributeUpdateInput): Attribute!
+  updateInputColumn(id: ID!, data: InputColumnUpdateInput): InputColumn!
+  updateJoin(id: ID!, data: JoinUpdateInput): Join!
 
-    createResourceTreeInSource(sourceId: ID, sourceName: String, resourceName: String!): Resource!
-    createAttributeProfileInAttribute(parentAttributeId: ID!, attributeName: String!, attributeType: String!): Attribute!
-    deleteAttribute(id: ID!): Attribute!
+  createResourceTreeInSource(
+    sourceId: ID
+    sourceName: String
+    resourceName: String!
+  ): Resource!
+  createAttributeProfileInAttribute(
+    parentAttributeId: ID!
+    attributeName: String!
+    attributeType: String!
+  ): Attribute!
+  deleteAttribute(id: ID!): Attribute!
 
-    signup(email: String!, password: String!, name: String!): AuthPayload!
-    login(email: String!, password: String!): AuthPayload!
+  signup(email: String!, password: String!, name: String!): AuthPayload!
+  login(email: String!, password: String!): AuthPayload!
 }
 
 type Subscription {
-    attribute(where: AttributeSubscriptionWhereInput): AttributeSubscriptionPayload
-    inputColumn(where: InputColumnSubscriptionWhereInput): InputColumnSubscriptionPayload
-    join(where: JoinSubscriptionWhereInput): JoinSubscriptionPayload
+  attribute(
+    where: AttributeSubscriptionWhereInput
+  ): AttributeSubscriptionPayload
+  inputColumn(
+    where: InputColumnSubscriptionWhereInput
+  ): InputColumnSubscriptionPayload
+  join(where: JoinSubscriptionWhereInput): JoinSubscriptionPayload
 }
 
 type AuthPayload {
-    token: String!
-    user: User!
+  token: String!
+  user: User!
 }

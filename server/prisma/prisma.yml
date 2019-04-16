@@ -6,16 +6,15 @@ datamodel: datamodel.prisma
 
 # Specifies the language and directory for the generated Prisma client.
 generate:
-    - generator: typescript-client
-      output: ../src/generated/prisma-client
+  - generator: typescript-client
+    output: ../src/generated/prisma-client
 
 # Ensures Prisma client is re-generated after a datamodel change.
 hooks:
-    post-deploy:
-        - prisma generate
-        - graphql get-schema --project database
-        - graphql codegen
-
+  post-deploy:
+    - prisma generate
+    - graphql get-schema --project database
+    - graphql codegen
 # If specified, the `secret` must be used to generate a JWT which is attached
 # to the `Authorization` header of HTTP requests made against the Prisma API.
 # Info: https://www.prisma.io/docs/reference/prisma-api/concepts-utee3eiquo#authentication
