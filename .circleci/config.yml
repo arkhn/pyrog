@@ -7,20 +7,23 @@ jobs:
     steps:
       - checkout
       - run:
-          name: update-npm
+          name: Update npm
           command: "sudo npm install -g npm@latest"
       - run:
-          name: cd to server
-          command: cd ./server
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-      - run:
-          name: yarn install
-          command: yarn install
-      - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-          paths:
-            - ./node_modules
-      - run:
-          name: yarn run test
-          command: yarn run test
+          name: ls
+          command: find .
+      # - run:
+      #     name: cd to server
+      #     command: cd ./server
+      # - restore_cache:
+      #     key: dependency-cache-{{ checksum "package.json" }}
+      # - run:
+      #     name: yarn install
+      #     command: yarn install
+      # - save_cache:
+      #     key: dependency-cache-{{ checksum "package.json" }}
+      #     paths:
+      #       - ./node_modules
+      # - run:
+      #     name: yarn run test
+      #     command: yarn run test
