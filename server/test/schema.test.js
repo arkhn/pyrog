@@ -162,6 +162,20 @@ describe("Graphql server", () => {
         }
       });
     });
+
+    test("sourceInfo", async () => {
+      expect(
+        await sendPostRequest(
+          `query { sourceInfo(sourceName: "Mimic") { id name }}`,
+          {},
+          token
+        )
+      ).toEqual({
+        data: {
+          sourceInfo: expect.objectContaining({ name: "Mimic" })
+        }
+      });
+    });
   });
 
   describe("Mutations", () => {

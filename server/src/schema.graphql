@@ -7,7 +7,7 @@ type Query {
   resources(where: ResourceWhereInput): [Resource]!
 
   # CLIENT QUERIES
-  sourceInfo(sourceId: ID!): Source!
+  sourceInfo(sourceId: ID, sourceName: String): Source!
   resourceInfo(resourceId: ID!): Resource!
   attributeInfo(attributeId: ID!): Attribute!
   allSources: [Source!]!
