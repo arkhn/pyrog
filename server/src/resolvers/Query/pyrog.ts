@@ -17,7 +17,10 @@ export const pyrogQuery = {
 
   // CLIENT QUERIES
   // Information queries
-  sourceInfo(parent, { sourceId }, context: Context) {
+  sourceInfo(parent, { sourceId, sourceName }, context: Context) {
+    if (sourceName) {
+      return context.client.source({ name: sourceName });
+    }
     return context.client.source({ id: sourceId });
   },
   resourceInfo(parent, { resourceId }, context: Context) {
