@@ -1,11 +1,12 @@
 version: 2
 jobs:
   build:
-    working_directory: ~
+    working_directory: ~/pyrog/server
     docker:
       - image: circleci/node:4.8.2
     steps:
-      - checkout
+      - checkout:
+          path: ~/pyrog
       - run:
           name: Update npm
           command: "sudo npm install -g npm@latest"
