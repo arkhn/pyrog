@@ -19,18 +19,10 @@ jobs:
             - ./node_modules
       - run:
           name: Start docker containers
-          command: env $(cat .env.staging) docker-compose up -d prisma
+          command: env $(cat .env.staging) docker-compose up -d --build
       - run:
           name: Test docker
           command: docker ps
-      - run:
-          name: Reset static files
-          command: |
-            yarn run prisma deploy
-            wget https://arkhn.org/pyrog_dev_static.zip
-            unzip pyrog_dev_static.zip
-            rm pyrog_dev_static.zip
-            yarn run prisma import --data ./static/pyrog_mimic_mapping.zip
       - run:
           name: Run yarn run test
           command: yarn run test

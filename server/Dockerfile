@@ -5,4 +5,8 @@ RUN yarn install
 COPY . .
 EXPOSE $SERVER_PORT
 ENV NODE_ENV docker
+RUN wget https://arkhn.org/pyrog_dev_static.zip
+RUN unzip pyrog_dev_static.zip
+RUN rm pyrog_dev_static.zip
+RUN yarn run prisma import --data ./static/pyrog_mimic_mapping.zip
 CMD ["yarn", "start"]
