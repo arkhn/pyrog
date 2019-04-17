@@ -7,7 +7,7 @@
     "copy-schemas": "cpx src/**/*.graphql dist",
     "build": "rimraf dist && tsc && yarn copy-schemas",
     "playground": "graphql playground",
-    "test": "env $(cat .env.staging) jest"
+    "test": "env $(cat .env.staging) yarn run jest"
   },
   "dependencies": {
     "@types/graphql": "^14.0.7",
