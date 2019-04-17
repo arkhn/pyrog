@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/server
+    working_directory: ~/pyrog
     docker:
       - image: circleci/node:4.8.2
     steps:
@@ -9,6 +9,9 @@ jobs:
       - run:
           name: update-npm
           command: "sudo npm install -g npm@latest"
+      - run:
+          name: cd to server
+          command: cd ./server
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
