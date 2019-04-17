@@ -4,4 +4,4 @@ COPY package.json yarn.lock ./
 RUN yarn install
 COPY . .
 ENV NODE_ENV docker
-CMD env $(cat .env.staging) yarn run test
+CMD yarn run wait-on http://pyrog:4000 && env $(cat .env.staging) yarn run test

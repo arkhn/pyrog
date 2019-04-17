@@ -93,7 +93,7 @@ const sendPostRequest = (query, variables, token) => {
   }
 
   return fetch(
-    `http://${process.env.NODE_ENV === "docker" ? "prisma" : "0.0.0.0"}:${
+    `http://${process.env.NODE_ENV === "docker" ? "pyrog" : "0.0.0.0"}:${
       process.env.SERVER_PORT
     }`,
     {
