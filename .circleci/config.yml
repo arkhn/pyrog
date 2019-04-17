@@ -10,6 +10,9 @@ jobs:
           name: Update npm
           command: "sudo npm install -g npm@latest"
       - run:
+          name: pwd
+          command: pwd
+      - run:
           name: ls
           command: find .
       - restore_cache:
