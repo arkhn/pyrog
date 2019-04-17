@@ -3,6 +3,11 @@
 
 module.exports = {
   coverageDirectory: "coverage",
+  globals: {
+    "ts-jest": {
+      tsConfig: "tsconfig.json"
+    }
+  },
   testEnvironment: "node",
   testPathIgnorePatterns: ["/node_modules/"],
   transform: {
