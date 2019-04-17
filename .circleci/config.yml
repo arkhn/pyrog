@@ -5,10 +5,8 @@ jobs:
     docker:
       - image: circleci/node:4.8.2
     steps:
-      - checkout
-      - run:
-          name: Update npm
-          command: "sudo npm install -g npm@latest"
+      - checkout:
+          path: ~/pyrog
       - run:
           name: pwd
           command: pwd
@@ -18,12 +16,23 @@ jobs:
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
-          name: yarn install
+          name: Run yarn install
           command: yarn install
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - ./node_modules
       - run:
-          name: yarn run test
+          name: Start docker containers
+          command: docker-compose up prisma
+      - run:
+          name: Reset static files
+          command: |
+            yarn run prisma deploy
+            wget https://arkhn.org/pyrog_dev_static.zip
+            unzip pyrog_dev_static.zip
+            rm pyrog_dev_static.zip
+            yarn run prisma import --data ./static/pyrog_mimic_mapping.zip
+      - run:
+          name: Run yarn run test
           command: yarn run test
