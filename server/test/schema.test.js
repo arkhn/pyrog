@@ -114,13 +114,6 @@ describe("Graphql server", () => {
         sourceName: "Mimic"
       },
       null
-    ],
-    [
-      "sourceInfo",
-      {
-        sourceName: "Mimic"
-      },
-      null
     ]
   ];
 
