@@ -8,21 +8,9 @@ jobs:
       - checkout:
           path: ~/pyrog
       - setup_remote_docker
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
       - run:
-          name: Run yarn install
-          command: yarn install
-      - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-          paths:
-            - ./node_modules
+          name: Build docker images
+          command: env $(cat .env.staging) docker-compose -f docker-compose.test.yml build
       - run:
-          name: Start docker containers
-          command: env $(cat .env.staging) docker-compose up -d --build
-      - run:
-          name: Test docker
-          command: docker ps
-      - run:
-          name: Run yarn run test
-          command: yarn run test
+          name: Run tests in docker
+          command: env $(cat .env.staging) docker-compose -f docker-compose.test.yml up --exit-code-from test

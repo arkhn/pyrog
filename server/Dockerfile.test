@@ -3,6 +3,5 @@ WORKDIR /usr/src/app
 COPY package.json yarn.lock ./
 RUN yarn install
 COPY . .
-EXPOSE 4000
 ENV NODE_ENV docker
-CMD ["yarn", "start"]
+CMD env $(cat .env.staging) yarn run test

@@ -8,7 +8,11 @@ import { Prisma as PrismaClient } from "../src/generated/prisma-client";
 import { Prisma as PrismaBinding } from "../src/generated/prisma-binding";
 import resolvers from "../src/resolvers";
 
-const endpoint = "http://localhost:4466";
+const endpoint =
+  process.env.NODE_ENV === "docker"
+    ? "http://prisma:4466"
+    : "http://localhost:4466";
+
 const debug = false;
 
 const prismaBindingInstance = () => {
@@ -88,14 +92,19 @@ const sendPostRequest = (query, variables, token) => {
     headers["Authorization"] = `Bearer ${token}`;
   }
 
-  return fetch(`http://0.0.0.0:${process.env.SERVER_PORT}`, {
-    method: "POST",
-    headers,
-    body: JSON.stringify({
-      query,
-      variables
-    })
-  }).then(response => {
+  return fetch(
+    `http://${process.env.NODE_ENV === "docker" ? "prisma" : "0.0.0.0"}:${
+      process.env.SERVER_PORT
+    }`,
+    {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        query,
+        variables
+      })
+    }
+  ).then(response => {
     return response.json();
   });
 };

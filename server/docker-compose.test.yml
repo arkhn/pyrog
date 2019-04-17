@@ -1,5 +1,24 @@
 version: "3"
 services:
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    image: arkhn/pyrog_test:lastest
+    links:
+      - pyrog
+  pyrog:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: arkhn/pyrog:latest
+    ports:
+      - "$SERVER_PORT:$SERVER_PORT"
+    restart: always
+    depends_on:
+      - prisma
+    volumes:
+      - static:$WORKDIR/static
   postgres-db:
     image: postgres
     restart: always
@@ -26,21 +45,6 @@ services:
                 migrations: true
     depends_on:
       - postgres-db
-  pyrog:
-    build:
-      context: .
-    image: arkhn/pyrog:latest
-    ports:
-      - "$SERVER_PORT:$SERVER_PORT"
-    restart: always
-    command: yarn run test
-    depends_on:
-      - prisma
-    volumes:
-      - static:$WORKDIR/static
-  test:
-    image: arkhn/pyrog:latest
-    command: yarn run wait-on pyrog:4000 && echo "YESSS"
 volumes:
   postgres:
   static:
