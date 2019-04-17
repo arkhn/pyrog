@@ -114,11 +114,18 @@ describe("Graphql server", () => {
         sourceName: "Mimic"
       },
       null
+    ],
+    [
+      "sourceInfo",
+      {
+        sourceName: "Mimic"
+      },
+      null
     ]
   ];
 
   beforeAll(async () => {
-    server = await serverInstance.start();
+    // server = await serverInstance.start();
     token = await sendPostRequest(
       `mutation { login(email: "user@arkhn.org", password: "user") { token }}`,
       {}
