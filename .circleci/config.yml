@@ -8,11 +8,13 @@ jobs:
       - checkout
       - restore_cache:
         key: dependency-cache-{{ checksum "package.json" }}
-      - run: yarn install
+      - run:
+        name: yarn install
+        command: yarn install
       - save_cache:
         key: dependency-cache-{{ checksum "package.json" }}
         paths:
           - ./node_modules
       - run:
-        name: test
+        name: yarn run test
         command: yarn run test
