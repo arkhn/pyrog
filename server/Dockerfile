@@ -3,7 +3,7 @@ WORKDIR /usr/src/app
 COPY package.json yarn.lock ./
 RUN yarn install
 COPY . .
-EXPOSE $SERVER_PORT
+EXPOSE 4000
 ENV NODE_ENV docker
 RUN wget https://arkhn.org/pyrog_dev_static.zip
 RUN unzip pyrog_dev_static.zip
