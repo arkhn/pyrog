@@ -18,15 +18,21 @@ export const pyrogQuery = {
   // CLIENT QUERIES
   // Information queries
   sourceInfo(parent, { sourceId, sourceName }, context: Context) {
+    getUserId(context);
+
     if (sourceName) {
       return context.client.source({ name: sourceName });
     }
     return context.client.source({ id: sourceId });
   },
   resourceInfo(parent, { resourceId }, context: Context) {
+    getUserId(context);
+
     return context.client.resource({ id: resourceId });
   },
   attributeInfo(parent, { attributeId }, context: Context) {
+    getUserId(context);
+
     return context.client.attribute({ id: attributeId });
   },
   allSources(parent, args, context: Context) {
