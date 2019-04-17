@@ -7,6 +7,12 @@ Pyrog is a web application intended to help standardizing healthcare data collec
 
 This project comprises a `server` built with Prisma (GraphQL) and `client` which consists of a React application.
 
+**Want to see what our project looks like?
+Checkout our staging client and dive into our staging GraphQL server (playground):**
+
+- [https://pyrog.staging.arkhn.org](https://pyrog.staging.arkhn.org) (sign in with login `user@arkhn.org`, password `user` or login `admin@arkhn.org`, password `admin`)
+- [https://graphql.pyrog.staging.arkhn.org](https://graphql.pyrog.staging.arkhn.org)
+
 ## Installation
 
 Installation instructions can be found in `./client` and `./server`.
