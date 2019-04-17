@@ -5,26 +5,22 @@ jobs:
     docker:
       - image: circleci/node:4.8.2
     steps:
-      - checkout:
-          path: ~/pyrog
+      - checkout
       - run:
           name: Update npm
           command: "sudo npm install -g npm@latest"
       - run:
           name: ls
           command: find .
-      # - run:
-      #     name: cd to server
-      #     command: cd ./server
-      # - restore_cache:
-      #     key: dependency-cache-{{ checksum "package.json" }}
-      # - run:
-      #     name: yarn install
-      #     command: yarn install
-      # - save_cache:
-      #     key: dependency-cache-{{ checksum "package.json" }}
-      #     paths:
-      #       - ./node_modules
-      # - run:
-      #     name: yarn run test
-      #     command: yarn run test
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: yarn install
+          command: yarn install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: yarn run test
+          command: yarn run test
