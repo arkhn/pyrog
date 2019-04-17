@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/pyrog/server
     docker:
-      - image: circleci/node:9.11.2
+      - image: circleci/node:chakracore-10.13
     steps:
       - checkout:
           path: ~/pyrog
