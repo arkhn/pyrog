@@ -7,12 +7,6 @@ jobs:
     steps:
       - checkout:
           path: ~/pyrog
-      - run:
-          name: pwd
-          command: pwd
-      - run:
-          name: ls
-          command: find .
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
@@ -24,7 +18,7 @@ jobs:
             - ./node_modules
       - run:
           name: Start docker containers
-          command: docker-compose up prisma
+          command: env $(cat .env.staging) docker-compose up -d prisma
       - run:
           name: Reset static files
           command: |
