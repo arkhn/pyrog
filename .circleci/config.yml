@@ -31,6 +31,6 @@ jobs:
           command: ls -alh
       - run:
           name: List files coverage
-          command: ls coverge
+          command: ls coverage
       - store_artifacts:
           path: coverage
