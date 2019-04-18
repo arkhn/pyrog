@@ -11,14 +11,6 @@ services:
       - prisma
     volumes:
       - static:$WORKDIR/static
-  postgres-db:
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_USER: prisma
-      POSTGRES_PASSWORD: prisma
-    volumes:
-      - postgres:/var/lib/postgresql/data
   prisma:
     image: prismagraphql/prisma:1.26
     restart: always
@@ -37,6 +29,14 @@ services:
                 migrations: true
     depends_on:
       - postgres-db
+  postgres-db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: prisma
+      POSTGRES_PASSWORD: prisma
+    volumes:
+      - postgres:/var/lib/postgresql/data
 volumes:
   postgres:
   static:
