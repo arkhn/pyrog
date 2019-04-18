@@ -17,8 +17,5 @@ jobs:
       - run:
           name: Docker ps
           command: docker ps
-      - run:
-          name: Copy coverage metrics from docker container
-          command: env $(cat .env.staging); docker cp server_test_1:$WORKDIR/coverage .
       - store_artifacts:
-          path: coverage
+          path: "docker volume inspect -f '{{ .Mountpoint }}' server_coverage"
