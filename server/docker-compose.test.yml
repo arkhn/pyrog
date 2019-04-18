@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.test
-    image: arkhn/pyrog_test:lastest
+    image: arkhn/pyrog_test:latest
     links:
       - pyrog
     volumes:

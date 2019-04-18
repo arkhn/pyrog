@@ -9,23 +9,17 @@ jobs:
           path: ~/pyrog
       - setup_remote_docker
       - run:
-          name: Build docker images
-          command: env $(cat .env.staging) docker-compose -f docker-compose.test.yml build
+          name: Docker compose up pyrog
+          command: env $(cat .env.staging) docker-compose up --build -d
       - run:
-          name: Run tests in docker
-          command: env $(cat .env.staging) docker-compose -f docker-compose.test.yml up --exit-code-from test
-      - run:
-          name: Create symlink to coverage folder
-          command: ln -s $(docker volume inspect -f '{{ .Mountpoint }}' server_coverage) coverage
-      - run:
-          name: File list coverage volume
-          command: ls -alh $(docker volume inspect -f '{{ .Mountpoint }}' server_coverage)
+          name: Build and run docker container for tests
+          command: |
+            docker build -f Dockerfile.test --network server_default -t arkhn/pyrog_test:latest .
+            docker run --name test --network server_default arkhn/pyrog_test:latest
+            docker cp test:/usr/src/app/coverage .
       - run:
           name: List docker containers
           command: docker ps -a
-      - run:
-          name: List docker volumes
-          command: docker volume ls
       - run:
           name: Find files
           command: find .
