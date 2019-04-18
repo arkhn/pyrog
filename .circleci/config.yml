@@ -17,17 +17,5 @@ jobs:
             docker build -f Dockerfile.test --network server_default -t arkhn/pyrog_test:latest .
             docker run --name test --network server_default arkhn/pyrog_test:latest
             docker cp test:/usr/src/app/coverage .
-      - run:
-          name: List docker containers
-          command: docker ps -a
-      - run:
-          name: Find files
-          command: find .
-      - run:
-          name: List files
-          command: ls -alh
-      - run:
-          name: List files coverage
-          command: ls coverage
       - store_artifacts:
           path: ./coverage
