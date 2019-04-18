@@ -33,4 +33,4 @@ jobs:
           name: List files coverage
           command: ls coverage
       - store_artifacts:
-          path: coverage
+          path: ./coverage
