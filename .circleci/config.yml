@@ -15,6 +15,10 @@ jobs:
           name: Build and run docker container for tests
           command: |
             docker build -f Dockerfile.test --network server_default -t arkhn/pyrog_test:latest .
+            PRISMA_ENDPOINT="http://prisma:4466" yarn run prisma deploy
+            wget https://arkhn.org/pyrog_dev_static.zip
+            unzip pyrog_dev_static.zip
+            PRISMA_ENDPOINT="http://prisma:4466" yarn run prisma import --data ./static/pyrog_mimic_mapping.zip
             docker run --name test --network server_default arkhn/pyrog_test:latest
             docker cp test:/usr/src/app/coverage .
       - run:
