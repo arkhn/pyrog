@@ -21,7 +21,16 @@ jobs:
           name: List docker containers
           command: docker ps -a
       - run:
-          name: LS
+          name: List docker volumes
+          command: docker volume ls
+      - run:
+          name: Find files
           command: find .
+      - run:
+          name: List files
+          command: ls -alh
+      - run:
+          name: List files coverage
+          command: ls coverge
       - store_artifacts:
           path: coverage
