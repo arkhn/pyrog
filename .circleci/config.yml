@@ -17,5 +17,11 @@ jobs:
       - run:
           name: Create symlink to coverage folder
           command: ln -s $(docker volume inspect -f '{{ .Mountpoint }}' server_coverage) coverage
+      - run:
+          name: List docker containers
+          command: docker ps -a
+      - run:
+          name: LS
+          command: find .
       - store_artifacts:
           path: coverage
