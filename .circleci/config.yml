@@ -1,4 +1,6 @@
 version: 2
+orbs:
+  codecov: codecov/codecov@1.0.2
 jobs:
   build:
     working_directory: ~/pyrog/server
@@ -17,5 +19,5 @@ jobs:
             docker build -f Dockerfile.test --network server_default -t arkhn/pyrog_test:latest .
             docker run --name test --network server_default arkhn/pyrog_test:latest
             docker cp test:/usr/src/app/coverage .
-      - store_artifacts:
-          path: ./coverage
+      - codecov/upload:
+          file: ./coverage/lcov.info
