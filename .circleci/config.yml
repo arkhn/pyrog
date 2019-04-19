@@ -12,7 +12,7 @@ jobs:
           name: Docker compose up pyrog
           command: env $(cat .env.staging) docker-compose up --build -d
       - run:
-          name: Build and run docker container for tests
+          name: Build and run docker container for tests ; Update codecov results
           command: |
             docker build -f Dockerfile.test --network server_default -t arkhn/pyrog_test:latest .
             docker run --name test --network server_default arkhn/pyrog_test:latest
