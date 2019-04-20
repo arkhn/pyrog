@@ -14,7 +14,6 @@
     "@types/graphql": "^14.0.7",
     "bcryptjs": "2.4.3",
     "cpx": "^1.5.0",
-    "graphql": "^14.2.1",
     "graphql-cli": "^3.0.11",
     "graphql-import-node": "^0.0.1",
     "graphql-yoga": "^1.17.4",
