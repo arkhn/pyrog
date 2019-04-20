@@ -35,6 +35,7 @@ jobs:
             bash <(curl -s https://codecov.io/bash) -F client
 workflows:
   version: 2.1
-  jobs:
-    - server
-    - client
+  testing_workflow:
+    jobs:
+      - server
+      - client
