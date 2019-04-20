@@ -19,7 +19,7 @@ jobs:
             docker cp server_test:/usr/src/app/coverage .
             bash <(curl -s https://codecov.io/bash) -F server
   client:
-    working_directory: ~pyrog/client
+    working_directory: ~/pyrog/client
     docker:
       - image: circleci/node:chakracore-10.13
     steps:
