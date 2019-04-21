@@ -89,6 +89,9 @@ const subscribeJoin = require('../../graphql/subscriptions/join.graphql')
 const arkhnLogoWhite = require("../../../../assets/img/arkhn_logo_only_white.svg") as string;
 const arkhnLogoBlack = require("../../../../assets/img/arkhn_logo_only_black.svg") as string;
 
+// SQL parser
+const sqlParser = require('js-sql-parser')
+
 export interface IMappingExplorerState {
     createdProfiles: number,
     createdResources: number,
@@ -625,7 +628,19 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
                     <ControlGroup fill={true}>
                         <SqlRequestParser 
                             onChangeCallback={(e: string) => {
-                                parse(e);
+                                var result = parse(e);
+                                if (result) {
+                                    this.setState({
+                                        columnPicker: {
+                                            ...this.state.columnPicker,
+                                            owner: selectedSource.name,
+                                            table: result.table,
+                                            column: result.column,
+                                        }
+                                    }, () => {
+                                        console.log(this.state);
+                                    })
+                                }
                             }}
                         />
                     </ControlGroup>
@@ -633,65 +648,11 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
             </Card>
             <Card elevation={Elevation.ONE}>
                 <FormGroup
-                    label={<h3>Column Picker</h3>}
+                    label={<h4>Table: {this.state.columnPicker.table} Column: {this.state.columnPicker.column}</h4>}
                     labelFor='text-input'
                     inline={true}
-                >
-                    <ControlGroup>
-                        <ColumnPicker
-                            ownerChangeCallback={(e: string) => {
-                                this.setState({
-                                    columnPicker: {
-                                        ...this.state.columnPicker,
-                                        owner: e,
-                                        table: null,
-                                        column: null,
-                                    }
-                                })
-                            }}
-                            tableChangeCallback={(e: string) => {
-                                this.setState({
-                                    columnPicker: {
-                                        ...this.state.columnPicker,
-                                        table: e,
-                                        column: null,
-                                    }
-                                })
-                            }}
-                            columnChangeCallback={(e: string) => {
-                                this.setState({
-                                    columnPicker: {
-                                        ...this.state.columnPicker,
-                                        column: e,
-                                    }
-                                })
-                            }}
-                            sourceSchema={selectedSource.name ? data.sourceSchemas.schemaBySourceName[selectedSource.name] : {}}
-                        />
-                        <Mutation
-                            mutation={createInputColumnAndUpdateAttribute}
-                        >
-                            {(createInputColumnAndUpdateAttribute, { data, loading }) => {
-                                return <Button
-                                    disabled={!columnPicker.column || !selectedFhirAttribute}
-                                    icon={'add'}
-                                    loading={loading}
-                                    onClick={() => createInputColumnAndUpdateAttribute({
-                                        variables: {
-                                            attributeId: selectedFhirAttribute.id,
-                                            data: {
-                                                owner: columnPicker.owner,
-                                                table: columnPicker.table,
-                                                column: columnPicker.column,
-                                            }
-                                        }
-                                    })}
-                                />
-                            }}
-                        </Mutation>
-                    </ControlGroup>
-                </FormGroup>
-            </Card>
+                ></FormGroup>
+            </Card>   
         </div>
 
         const columnSelectionComponent = <div id='column-selection'>
@@ -833,6 +794,24 @@ export default class MappingExplorerView extends React.Component<IMappingExplore
 }
 
 function parse(request: string) {
-    console.log(request);
-    // TODO
+
+    var column = null;
+    var table = null;
+
+    try {
+        const ast = sqlParser.parse(request);
+        column = ast.value.selectItems.value[0].value;
+        table = ast.value.from.value[0].value.value.value;
+    }
+    catch(err) {
+        console.log(err);
+        return;
+    }
+
+    var result = {
+        table: table,
+        column: column
+    }
+    return result;
+    
 }
