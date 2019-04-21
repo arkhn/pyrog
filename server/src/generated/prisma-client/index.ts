@@ -42,143 +42,119 @@ export interface Prisma {
    */
 
   attribute: (where: AttributeWhereUniqueInput) => AttributePromise;
-  attributes: (
-    args?: {
-      where?: AttributeWhereInput;
-      orderBy?: AttributeOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => FragmentableArray<Attribute>;
-  attributesConnection: (
-    args?: {
-      where?: AttributeWhereInput;
-      orderBy?: AttributeOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => AttributeConnectionPromise;
+  attributes: (args?: {
+    where?: AttributeWhereInput;
+    orderBy?: AttributeOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Attribute>;
+  attributesConnection: (args?: {
+    where?: AttributeWhereInput;
+    orderBy?: AttributeOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => AttributeConnectionPromise;
   inputColumn: (where: InputColumnWhereUniqueInput) => InputColumnPromise;
-  inputColumns: (
-    args?: {
-      where?: InputColumnWhereInput;
-      orderBy?: InputColumnOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => FragmentableArray<InputColumn>;
-  inputColumnsConnection: (
-    args?: {
-      where?: InputColumnWhereInput;
-      orderBy?: InputColumnOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => InputColumnConnectionPromise;
+  inputColumns: (args?: {
+    where?: InputColumnWhereInput;
+    orderBy?: InputColumnOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<InputColumn>;
+  inputColumnsConnection: (args?: {
+    where?: InputColumnWhereInput;
+    orderBy?: InputColumnOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => InputColumnConnectionPromise;
   join: (where: JoinWhereUniqueInput) => JoinPromise;
-  joins: (
-    args?: {
-      where?: JoinWhereInput;
-      orderBy?: JoinOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => FragmentableArray<Join>;
-  joinsConnection: (
-    args?: {
-      where?: JoinWhereInput;
-      orderBy?: JoinOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => JoinConnectionPromise;
+  joins: (args?: {
+    where?: JoinWhereInput;
+    orderBy?: JoinOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Join>;
+  joinsConnection: (args?: {
+    where?: JoinWhereInput;
+    orderBy?: JoinOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => JoinConnectionPromise;
   resource: (where: ResourceWhereUniqueInput) => ResourcePromise;
-  resources: (
-    args?: {
-      where?: ResourceWhereInput;
-      orderBy?: ResourceOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => FragmentableArray<Resource>;
-  resourcesConnection: (
-    args?: {
-      where?: ResourceWhereInput;
-      orderBy?: ResourceOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => ResourceConnectionPromise;
+  resources: (args?: {
+    where?: ResourceWhereInput;
+    orderBy?: ResourceOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Resource>;
+  resourcesConnection: (args?: {
+    where?: ResourceWhereInput;
+    orderBy?: ResourceOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => ResourceConnectionPromise;
   source: (where: SourceWhereUniqueInput) => SourcePromise;
-  sources: (
-    args?: {
-      where?: SourceWhereInput;
-      orderBy?: SourceOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => FragmentableArray<Source>;
-  sourcesConnection: (
-    args?: {
-      where?: SourceWhereInput;
-      orderBy?: SourceOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => SourceConnectionPromise;
+  sources: (args?: {
+    where?: SourceWhereInput;
+    orderBy?: SourceOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Source>;
+  sourcesConnection: (args?: {
+    where?: SourceWhereInput;
+    orderBy?: SourceOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => SourceConnectionPromise;
   user: (where: UserWhereUniqueInput) => UserPromise;
-  users: (
-    args?: {
-      where?: UserWhereInput;
-      orderBy?: UserOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => FragmentableArray<User>;
-  usersConnection: (
-    args?: {
-      where?: UserWhereInput;
-      orderBy?: UserOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => UserConnectionPromise;
+  users: (args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<User>;
+  usersConnection: (args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => UserConnectionPromise;
   node: (args: { id: ID_Output }) => Node;
 
   /**
@@ -186,107 +162,101 @@ export interface Prisma {
    */
 
   createAttribute: (data: AttributeCreateInput) => AttributePromise;
-  updateAttribute: (
-    args: { data: AttributeUpdateInput; where: AttributeWhereUniqueInput }
-  ) => AttributePromise;
-  updateManyAttributes: (
-    args: {
-      data: AttributeUpdateManyMutationInput;
-      where?: AttributeWhereInput;
-    }
-  ) => BatchPayloadPromise;
-  upsertAttribute: (
-    args: {
-      where: AttributeWhereUniqueInput;
-      create: AttributeCreateInput;
-      update: AttributeUpdateInput;
-    }
-  ) => AttributePromise;
+  updateAttribute: (args: {
+    data: AttributeUpdateInput;
+    where: AttributeWhereUniqueInput;
+  }) => AttributePromise;
+  updateManyAttributes: (args: {
+    data: AttributeUpdateManyMutationInput;
+    where?: AttributeWhereInput;
+  }) => BatchPayloadPromise;
+  upsertAttribute: (args: {
+    where: AttributeWhereUniqueInput;
+    create: AttributeCreateInput;
+    update: AttributeUpdateInput;
+  }) => AttributePromise;
   deleteAttribute: (where: AttributeWhereUniqueInput) => AttributePromise;
   deleteManyAttributes: (where?: AttributeWhereInput) => BatchPayloadPromise;
   createInputColumn: (data: InputColumnCreateInput) => InputColumnPromise;
-  updateInputColumn: (
-    args: { data: InputColumnUpdateInput; where: InputColumnWhereUniqueInput }
-  ) => InputColumnPromise;
-  updateManyInputColumns: (
-    args: {
-      data: InputColumnUpdateManyMutationInput;
-      where?: InputColumnWhereInput;
-    }
-  ) => BatchPayloadPromise;
-  upsertInputColumn: (
-    args: {
-      where: InputColumnWhereUniqueInput;
-      create: InputColumnCreateInput;
-      update: InputColumnUpdateInput;
-    }
-  ) => InputColumnPromise;
+  updateInputColumn: (args: {
+    data: InputColumnUpdateInput;
+    where: InputColumnWhereUniqueInput;
+  }) => InputColumnPromise;
+  updateManyInputColumns: (args: {
+    data: InputColumnUpdateManyMutationInput;
+    where?: InputColumnWhereInput;
+  }) => BatchPayloadPromise;
+  upsertInputColumn: (args: {
+    where: InputColumnWhereUniqueInput;
+    create: InputColumnCreateInput;
+    update: InputColumnUpdateInput;
+  }) => InputColumnPromise;
   deleteInputColumn: (where: InputColumnWhereUniqueInput) => InputColumnPromise;
   deleteManyInputColumns: (
     where?: InputColumnWhereInput
   ) => BatchPayloadPromise;
   createJoin: (data: JoinCreateInput) => JoinPromise;
-  updateJoin: (
-    args: { data: JoinUpdateInput; where: JoinWhereUniqueInput }
-  ) => JoinPromise;
-  updateManyJoins: (
-    args: { data: JoinUpdateManyMutationInput; where?: JoinWhereInput }
-  ) => BatchPayloadPromise;
-  upsertJoin: (
-    args: {
-      where: JoinWhereUniqueInput;
-      create: JoinCreateInput;
-      update: JoinUpdateInput;
-    }
-  ) => JoinPromise;
+  updateJoin: (args: {
+    data: JoinUpdateInput;
+    where: JoinWhereUniqueInput;
+  }) => JoinPromise;
+  updateManyJoins: (args: {
+    data: JoinUpdateManyMutationInput;
+    where?: JoinWhereInput;
+  }) => BatchPayloadPromise;
+  upsertJoin: (args: {
+    where: JoinWhereUniqueInput;
+    create: JoinCreateInput;
+    update: JoinUpdateInput;
+  }) => JoinPromise;
   deleteJoin: (where: JoinWhereUniqueInput) => JoinPromise;
   deleteManyJoins: (where?: JoinWhereInput) => BatchPayloadPromise;
   createResource: (data: ResourceCreateInput) => ResourcePromise;
-  updateResource: (
-    args: { data: ResourceUpdateInput; where: ResourceWhereUniqueInput }
-  ) => ResourcePromise;
-  updateManyResources: (
-    args: { data: ResourceUpdateManyMutationInput; where?: ResourceWhereInput }
-  ) => BatchPayloadPromise;
-  upsertResource: (
-    args: {
-      where: ResourceWhereUniqueInput;
-      create: ResourceCreateInput;
-      update: ResourceUpdateInput;
-    }
-  ) => ResourcePromise;
+  updateResource: (args: {
+    data: ResourceUpdateInput;
+    where: ResourceWhereUniqueInput;
+  }) => ResourcePromise;
+  updateManyResources: (args: {
+    data: ResourceUpdateManyMutationInput;
+    where?: ResourceWhereInput;
+  }) => BatchPayloadPromise;
+  upsertResource: (args: {
+    where: ResourceWhereUniqueInput;
+    create: ResourceCreateInput;
+    update: ResourceUpdateInput;
+  }) => ResourcePromise;
   deleteResource: (where: ResourceWhereUniqueInput) => ResourcePromise;
   deleteManyResources: (where?: ResourceWhereInput) => BatchPayloadPromise;
   createSource: (data: SourceCreateInput) => SourcePromise;
-  updateSource: (
-    args: { data: SourceUpdateInput; where: SourceWhereUniqueInput }
-  ) => SourcePromise;
-  updateManySources: (
-    args: { data: SourceUpdateManyMutationInput; where?: SourceWhereInput }
-  ) => BatchPayloadPromise;
-  upsertSource: (
-    args: {
-      where: SourceWhereUniqueInput;
-      create: SourceCreateInput;
-      update: SourceUpdateInput;
-    }
-  ) => SourcePromise;
+  updateSource: (args: {
+    data: SourceUpdateInput;
+    where: SourceWhereUniqueInput;
+  }) => SourcePromise;
+  updateManySources: (args: {
+    data: SourceUpdateManyMutationInput;
+    where?: SourceWhereInput;
+  }) => BatchPayloadPromise;
+  upsertSource: (args: {
+    where: SourceWhereUniqueInput;
+    create: SourceCreateInput;
+    update: SourceUpdateInput;
+  }) => SourcePromise;
   deleteSource: (where: SourceWhereUniqueInput) => SourcePromise;
   deleteManySources: (where?: SourceWhereInput) => BatchPayloadPromise;
   createUser: (data: UserCreateInput) => UserPromise;
-  updateUser: (
-    args: { data: UserUpdateInput; where: UserWhereUniqueInput }
-  ) => UserPromise;
-  updateManyUsers: (
-    args: { data: UserUpdateManyMutationInput; where?: UserWhereInput }
-  ) => BatchPayloadPromise;
-  upsertUser: (
-    args: {
-      where: UserWhereUniqueInput;
-      create: UserCreateInput;
-      update: UserUpdateInput;
-    }
-  ) => UserPromise;
+  updateUser: (args: {
+    data: UserUpdateInput;
+    where: UserWhereUniqueInput;
+  }) => UserPromise;
+  updateManyUsers: (args: {
+    data: UserUpdateManyMutationInput;
+    where?: UserWhereInput;
+  }) => BatchPayloadPromise;
+  upsertUser: (args: {
+    where: UserWhereUniqueInput;
+    create: UserCreateInput;
+    update: UserUpdateInput;
+  }) => UserPromise;
   deleteUser: (where: UserWhereUniqueInput) => UserPromise;
   deleteManyUsers: (where?: UserWhereInput) => BatchPayloadPromise;
 
@@ -2051,29 +2021,25 @@ export interface AttributePromise extends Promise<Attribute>, Fragmentable {
   comment: () => Promise<String>;
   depth: () => Promise<Int>;
   resource: <T = ResourcePromise>() => T;
-  attributes: <T = FragmentableArray<Attribute>>(
-    args?: {
-      where?: AttributeWhereInput;
-      orderBy?: AttributeOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
+  attributes: <T = FragmentableArray<Attribute>>(args?: {
+    where?: AttributeWhereInput;
+    orderBy?: AttributeOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
   attribute: <T = AttributePromise>() => T;
-  inputColumns: <T = FragmentableArray<InputColumn>>(
-    args?: {
-      where?: InputColumnWhereInput;
-      orderBy?: InputColumnOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
+  inputColumns: <T = FragmentableArray<InputColumn>>(args?: {
+    where?: InputColumnWhereInput;
+    orderBy?: InputColumnOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
 export interface AttributeSubscription
@@ -2087,29 +2053,25 @@ export interface AttributeSubscription
   comment: () => Promise<AsyncIterator<String>>;
   depth: () => Promise<AsyncIterator<Int>>;
   resource: <T = ResourceSubscription>() => T;
-  attributes: <T = Promise<AsyncIterator<AttributeSubscription>>>(
-    args?: {
-      where?: AttributeWhereInput;
-      orderBy?: AttributeOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
+  attributes: <T = Promise<AsyncIterator<AttributeSubscription>>>(args?: {
+    where?: AttributeWhereInput;
+    orderBy?: AttributeOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
   attribute: <T = AttributeSubscription>() => T;
-  inputColumns: <T = Promise<AsyncIterator<InputColumnSubscription>>>(
-    args?: {
-      where?: InputColumnWhereInput;
-      orderBy?: InputColumnOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
+  inputColumns: <T = Promise<AsyncIterator<InputColumnSubscription>>>(args?: {
+    where?: InputColumnWhereInput;
+    orderBy?: InputColumnOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
 export interface Resource {
@@ -2126,17 +2088,15 @@ export interface ResourcePromise extends Promise<Resource>, Fragmentable {
   primaryKeyOwner: () => Promise<String>;
   primaryKeyTable: () => Promise<String>;
   primaryKeyColumn: () => Promise<String>;
-  attributes: <T = FragmentableArray<Attribute>>(
-    args?: {
-      where?: AttributeWhereInput;
-      orderBy?: AttributeOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
+  attributes: <T = FragmentableArray<Attribute>>(args?: {
+    where?: AttributeWhereInput;
+    orderBy?: AttributeOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
   source: <T = SourcePromise>() => T;
 }
 
@@ -2148,17 +2108,15 @@ export interface ResourceSubscription
   primaryKeyOwner: () => Promise<AsyncIterator<String>>;
   primaryKeyTable: () => Promise<AsyncIterator<String>>;
   primaryKeyColumn: () => Promise<AsyncIterator<String>>;
-  attributes: <T = Promise<AsyncIterator<AttributeSubscription>>>(
-    args?: {
-      where?: AttributeWhereInput;
-      orderBy?: AttributeOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
+  attributes: <T = Promise<AsyncIterator<AttributeSubscription>>>(args?: {
+    where?: AttributeWhereInput;
+    orderBy?: AttributeOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
   source: <T = SourceSubscription>() => T;
 }
 
@@ -2170,17 +2128,15 @@ export interface Source {
 export interface SourcePromise extends Promise<Source>, Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
-  resources: <T = FragmentableArray<Resource>>(
-    args?: {
-      where?: ResourceWhereInput;
-      orderBy?: ResourceOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
+  resources: <T = FragmentableArray<Resource>>(args?: {
+    where?: ResourceWhereInput;
+    orderBy?: ResourceOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
 export interface SourceSubscription
@@ -2188,17 +2144,15 @@ export interface SourceSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   name: () => Promise<AsyncIterator<String>>;
-  resources: <T = Promise<AsyncIterator<ResourceSubscription>>>(
-    args?: {
-      where?: ResourceWhereInput;
-      orderBy?: ResourceOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
+  resources: <T = Promise<AsyncIterator<ResourceSubscription>>>(args?: {
+    where?: ResourceWhereInput;
+    orderBy?: ResourceOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
 export interface InputColumn {
@@ -2217,17 +2171,15 @@ export interface InputColumnPromise extends Promise<InputColumn>, Fragmentable {
   column: () => Promise<String>;
   script: () => Promise<String>;
   staticValue: () => Promise<String>;
-  joins: <T = FragmentableArray<Join>>(
-    args?: {
-      where?: JoinWhereInput;
-      orderBy?: JoinOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
+  joins: <T = FragmentableArray<Join>>(args?: {
+    where?: JoinWhereInput;
+    orderBy?: JoinOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
   attribute: <T = AttributePromise>() => T;
 }
 
@@ -2240,17 +2192,15 @@ export interface InputColumnSubscription
   column: () => Promise<AsyncIterator<String>>;
   script: () => Promise<AsyncIterator<String>>;
   staticValue: () => Promise<AsyncIterator<String>>;
-  joins: <T = Promise<AsyncIterator<JoinSubscription>>>(
-    args?: {
-      where?: JoinWhereInput;
-      orderBy?: JoinOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
+  joins: <T = Promise<AsyncIterator<JoinSubscription>>>(args?: {
+    where?: JoinWhereInput;
+    orderBy?: JoinOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
   attribute: <T = AttributeSubscription>() => T;
 }
 

@@ -1,7 +1,10 @@
 #import "../fragments/entireJoin.graphql"
 
-mutation createJoinAndUpdateInputColumn($inputColumnId: ID!, $data: JoinCreateWithoutInputColumnInput) {
-    createJoinAndUpdateInputColumn(inputColumnId: $inputColumnId, data: $data) {
-        ...entireJoin
-    }
+mutation createJoinAndUpdateInputColumn(
+  $inputColumnId: ID!
+  $data: JoinCreateWithoutInputColumnInput
+) {
+  createJoinAndUpdateInputColumn(inputColumnId: $inputColumnId, data: $data) {
+    ...entireJoin
+  }
 }

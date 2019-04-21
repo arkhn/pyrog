@@ -1,0 +1,6 @@
+query sourceInfo($sourceId: ID!) {
+  sourceInfo(sourceId: $sourceId) {
+    id
+    name
+  }
+}

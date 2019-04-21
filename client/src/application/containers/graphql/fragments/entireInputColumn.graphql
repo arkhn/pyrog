@@ -1,13 +1,13 @@
 #import "./entireJoin.graphql"
 
 fragment entireInputColumn on InputColumn {
-    id
-    owner
-    table
-    column
-    script
-    staticValue
-    joins {
-        ...entireJoin
-    }
+  id
+  owner
+  table
+  column
+  script
+  staticValue
+  joins {
+    ...entireJoin
+  }
 }

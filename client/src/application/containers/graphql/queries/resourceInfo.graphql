@@ -1,0 +1,6 @@
+query resourceInfo($resourceId: ID!) {
+  resourceInfo(resourceId: $resourceId) {
+    id
+    name
+  }
+}
