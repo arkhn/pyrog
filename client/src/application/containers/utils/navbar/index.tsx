@@ -235,7 +235,7 @@ class Navbar extends React.Component<IProps, IState> {
           query={me}
           skip={user.id !== null}
         >
-          {({ data, loading }) => {
+          {({ data, loading }: any) => {
             return loading ? (
               <BPNavbar.Group align={Alignment.RIGHT}>
                 <Spinner size={15} />
