@@ -37,15 +37,14 @@ import {
 import { availableResourceNames } from "./reducer";
 
 // Import components
-
 import ColumnPicker from "../../../components/columnPicker";
-import SqlRequestParser from "../../../components/sqlRequestParser";
 import InputColumnsTable from "../../../components/inputColumnsTable";
 import StringSelect from "../../../components/selects/stringSelect";
 import TSelect from "../../../components/selects/TSelect";
 import SourceSelect from "../../../components/selects/sourceSelect";
 import ResourceSelect from "../../../components/selects/resourceSelect";
 import AddResourceSelect from "../../../components/selects/addResourceSelect";
+import SQLRequestParserTab from "../../../components/tabs/sqlRequestParserTab";
 
 // Import containers
 import FhirResourceTree from "../../utils/fhirResourceTree";
@@ -84,9 +83,6 @@ const subscribeJoin = require("../../graphql/subscriptions/join.graphql");
 // LOGO
 const arkhnLogoWhite = require("../../../../assets/img/arkhn_logo_only_white.svg") as string;
 const arkhnLogoBlack = require("../../../../assets/img/arkhn_logo_only_black.svg") as string;
-
-// SQL parser
-const sqlParser = require("js-sql-parser");
 
 export interface IMappingExplorerState {
   createdProfiles: number;
@@ -198,7 +194,7 @@ export default class MappingExplorerView extends React.Component<
     const inputColumnComponent = (attribute: any, column: any) => (
       <div className="input-column">
         <Mutation mutation={deleteInputColumnAndUpdateAttribute}>
-          {(deleteInputColumn, { data, loading, error }) => {
+          {(deleteInputColumn: any, { data, loading, error }: any) => {
             return (
               <Button
                 icon={"trash"}
@@ -265,7 +261,7 @@ export default class MappingExplorerView extends React.Component<
                   ]}
                 />
                 <Mutation mutation={updateInputColumn}>
-                  {(updateInputColumn, { data, loading }) => {
+                  {(updateInputColumn: any, { data, loading }: any) => {
                     return (
                       <div className="stacked-tags">
                         <Tag>SCRIPT</Tag>
@@ -292,7 +288,7 @@ export default class MappingExplorerView extends React.Component<
               </div>
               <div className="input-column-joins">
                 <Mutation mutation={createJoinAndUpdateInputColumn}>
-                  {(createJoin, { data, loading }) => {
+                  {(createJoin: any, { data, loading }: any) => {
                     return (
                       <Button
                         icon={"add"}
@@ -322,7 +318,7 @@ export default class MappingExplorerView extends React.Component<
                             id: join.id
                           }}
                         >
-                          {({ data, loading }) => {
+                          {({ data, loading }: any) => {
                             joinData =
                               data && data.join && data.join.node
                                 ? data.join.node
@@ -445,7 +441,7 @@ export default class MappingExplorerView extends React.Component<
     const joinComponent = (joinData: any, column: any) => (
       <div className={"join"}>
         <Mutation mutation={deleteJoinAndUpdateInputColumn}>
-          {(deleteJoin, { data, loading }) => {
+          {(deleteJoin: any, { data, loading }: any) => {
             return (
               <Button
                 icon={"trash"}
@@ -464,7 +460,7 @@ export default class MappingExplorerView extends React.Component<
           }}
         </Mutation>
         <Mutation mutation={updateJoin}>
-          {(updateJoin, { data, loading }) => {
+          {(updateJoin: any, { data, loading }: any) => {
             return joinColumnsComponent(joinData, updateJoin);
           }}
         </Mutation>
@@ -477,7 +473,7 @@ export default class MappingExplorerView extends React.Component<
         variables={{ attributeId: selectedFhirAttribute.id }}
         skip={!selectedFhirAttribute.id}
       >
-        {({ data, loading }) => {
+        {({ data, loading }: any) => {
           if (loading) {
             return <Spinner />;
           }
@@ -490,7 +486,7 @@ export default class MappingExplorerView extends React.Component<
                 id: selectedFhirAttribute.id
               }}
             >
-              {({ data, loading, error }) => {
+              {({ data, loading, error }: any) => {
                 const attribute =
                   data && data.attribute && data.attribute.node
                     ? data.attribute.node
@@ -513,7 +509,7 @@ export default class MappingExplorerView extends React.Component<
                               id: inputColumn.id
                             }}
                           >
-                            {({ data, loading }) => {
+                            {({ data, loading }: any) => {
                               const column =
                                 data &&
                                 data.inputColumn &&
@@ -535,7 +531,7 @@ export default class MappingExplorerView extends React.Component<
                     {inputColumns.length > 1 ? (
                       <div id="input-column-merging-script">
                         <Mutation mutation={updateAttribute}>
-                          {(updateAttribute, { data, loading }) => {
+                          {(updateAttribute: any, { data, loading }: any) => {
                             return (
                               <div className="stacked-tags">
                                 <Tag>SCRIPT</Tag>
@@ -618,7 +614,10 @@ export default class MappingExplorerView extends React.Component<
                 }
               />
               <Mutation mutation={createInputColumnAndUpdateAttribute}>
-                {(createInputColumnAndUpdateAttribute, { data, loading }) => {
+                {(
+                  createInputColumnAndUpdateAttribute: any,
+                  { data, loading }: any
+                ) => {
                   return (
                     <Button
                       disabled={!columnPicker.column || !selectedFhirAttribute}
@@ -666,7 +665,7 @@ export default class MappingExplorerView extends React.Component<
                 value={columnPicker.staticValue}
               />
               <Mutation mutation={createInputColumnAndUpdateAttribute}>
-                {(createInputColumn, { data, loading }) => {
+                {(createInputColumn: any, { data, loading }: any) => {
                   return (
                     <Button
                       disabled={columnPicker.staticValue.length == 0}
@@ -694,53 +693,6 @@ export default class MappingExplorerView extends React.Component<
 
     const columnSuggestionTab = <div>Suggestions</div>;
 
-    const sqlRequestParserTab = (
-      <div id="sql-request-parser">
-        <Card elevation={Elevation.ONE}>
-          <FormGroup
-            label={<h3>SQL Request</h3>}
-            labelFor="text-input"
-            //inline={true}
-          >
-            <ControlGroup fill={true}>
-              <SqlRequestParser
-                onChangeCallback={(e: string) => {
-                  var result = parse(e);
-                  if (result) {
-                    this.setState(
-                      {
-                        columnPicker: {
-                          ...this.state.columnPicker,
-                          owner: selectedSource.name,
-                          table: result.table,
-                          column: result.column
-                        }
-                      },
-                      () => {
-                        console.log(this.state);
-                      }
-                    );
-                  }
-                }}
-              />
-            </ControlGroup>
-          </FormGroup>
-        </Card>
-        <Card elevation={Elevation.ONE}>
-          <FormGroup
-            label={
-              <h4>
-                Table: {this.state.columnPicker.table} Column:{" "}
-                {this.state.columnPicker.column}
-              </h4>
-            }
-            labelFor="text-input"
-            inline={true}
-          />
-        </Card>
-      </div>
-    );
-
     const columnSelectionComponent = (
       <div id="column-selection">
         <Tabs
@@ -761,7 +713,7 @@ export default class MappingExplorerView extends React.Component<
           <Tab
             id="sql-parser"
             title="SQL Parser Tool"
-            panel={sqlRequestParserTab}
+            panel={<SQLRequestParserTab selectedSource={selectedSource} />}
           />
         </Tabs>
       </div>
@@ -777,7 +729,7 @@ export default class MappingExplorerView extends React.Component<
         }}
         skip={!selectedSource || !selectedFhirResource.id}
       >
-        {({ data, loading }) => {
+        {({ data, loading }: any) => {
           return loading ? (
             <Spinner />
           ) : (
@@ -819,7 +771,7 @@ export default class MappingExplorerView extends React.Component<
                 createdResources: createdResources
               }}
             >
-              {({ data, loading }) => {
+              {({ data, loading }: any) => {
                 return (
                   <div id="left-part">
                     <div id="fhir-attributes">
@@ -895,7 +847,7 @@ export default class MappingExplorerView extends React.Component<
                               });
                             }}
                           >
-                            {(createResource, { data, loading }) => {
+                            {(createResource: any, { data, loading }: any) => {
                               return (
                                 <Button
                                   loading={loading}
@@ -928,24 +880,4 @@ export default class MappingExplorerView extends React.Component<
       </div>
     );
   };
-}
-
-function parse(request: string) {
-  var column = null;
-  var table = null;
-
-  try {
-    const ast = sqlParser.parse(request);
-    column = ast.value.selectItems.value[0].value;
-    table = ast.value.from.value[0].value.value.value;
-  } catch (err) {
-    console.log(err);
-    return;
-  }
-
-  var result = {
-    table: table,
-    column: column
-  };
-  return result;
 }

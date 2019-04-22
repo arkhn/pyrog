@@ -71,7 +71,7 @@ class SourcesView extends React.Component<ISourcesViewState, IState> {
             Ajouter une source / un logiciel
           </Button>
           <Query fetchPolicy="network-only" query={allSources}>
-            {({ data, loading }) => {
+            {({ data, loading }: any) => {
               return (
                 <div id="software-cards">
                   {loading ? (
@@ -110,7 +110,7 @@ class SourcesView extends React.Component<ISourcesViewState, IState> {
                               }}
                               skip={!source.id}
                             >
-                              {({ data, loading }) => {
+                              {({ data, loading }: any) => {
                                 let numberResources = null;
                                 let numberAttributes = null;
 
