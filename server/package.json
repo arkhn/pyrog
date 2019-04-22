@@ -35,12 +35,12 @@
     "nodemon": "1.18.10",
     "prettier": "1.17.0",
     "pretty-quick": "^1.10.0",
-    "prisma": "1.27.3",
+    "prisma": "^1.31.1",
     "rimraf": "2.6.3",
     "stringify-object": "^3.3.0",
     "ts-jest": "^24.0.0",
     "ts-node": "7.0.1",
-    "typescript": "^3.3.3333"
+    "typescript": "^3.4.4"
   },
   "husky": {
     "hooks": {
