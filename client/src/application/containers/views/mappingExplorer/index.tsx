@@ -192,7 +192,7 @@ export default class MappingExplorerView extends React.Component<
     const inputColumnComponent = (attribute: any, column: any) => (
       <div className="input-column">
         <Mutation mutation={deleteInputColumnAndUpdateAttribute}>
-          {(deleteInputColumn, { data, loading, error }) => {
+          {(deleteInputColumn: any, { data, loading, error }: any) => {
             return (
               <Button
                 icon={"trash"}
@@ -259,7 +259,7 @@ export default class MappingExplorerView extends React.Component<
                   ]}
                 />
                 <Mutation mutation={updateInputColumn}>
-                  {(updateInputColumn, { data, loading }) => {
+                  {(updateInputColumn: any, { data, loading }: any) => {
                     return (
                       <div className="stacked-tags">
                         <Tag>SCRIPT</Tag>
@@ -286,7 +286,7 @@ export default class MappingExplorerView extends React.Component<
               </div>
               <div className="input-column-joins">
                 <Mutation mutation={createJoinAndUpdateInputColumn}>
-                  {(createJoin, { data, loading }) => {
+                  {(createJoin: any, { data, loading }: any) => {
                     return (
                       <Button
                         icon={"add"}
@@ -316,7 +316,7 @@ export default class MappingExplorerView extends React.Component<
                             id: join.id
                           }}
                         >
-                          {({ data, loading }) => {
+                          {({ data, loading }: any) => {
                             joinData =
                               data && data.join && data.join.node
                                 ? data.join.node
@@ -439,7 +439,7 @@ export default class MappingExplorerView extends React.Component<
     const joinComponent = (joinData: any, column: any) => (
       <div className={"join"}>
         <Mutation mutation={deleteJoinAndUpdateInputColumn}>
-          {(deleteJoin, { data, loading }) => {
+          {(deleteJoin: any, { data, loading }: any) => {
             return (
               <Button
                 icon={"trash"}
@@ -458,7 +458,7 @@ export default class MappingExplorerView extends React.Component<
           }}
         </Mutation>
         <Mutation mutation={updateJoin}>
-          {(updateJoin, { data, loading }) => {
+          {(updateJoin: any, { data, loading }: any) => {
             return joinColumnsComponent(joinData, updateJoin);
           }}
         </Mutation>
@@ -471,7 +471,7 @@ export default class MappingExplorerView extends React.Component<
         variables={{ attributeId: selectedFhirAttribute.id }}
         skip={!selectedFhirAttribute.id}
       >
-        {({ data, loading }) => {
+        {({ data, loading }: any) => {
           if (loading) {
             return <Spinner />;
           }
@@ -484,7 +484,7 @@ export default class MappingExplorerView extends React.Component<
                 id: selectedFhirAttribute.id
               }}
             >
-              {({ data, loading, error }) => {
+              {({ data, loading, error }: any) => {
                 const attribute =
                   data && data.attribute && data.attribute.node
                     ? data.attribute.node
@@ -507,7 +507,7 @@ export default class MappingExplorerView extends React.Component<
                               id: inputColumn.id
                             }}
                           >
-                            {({ data, loading }) => {
+                            {({ data, loading }: any) => {
                               const column =
                                 data &&
                                 data.inputColumn &&
@@ -529,7 +529,7 @@ export default class MappingExplorerView extends React.Component<
                     {inputColumns.length > 1 ? (
                       <div id="input-column-merging-script">
                         <Mutation mutation={updateAttribute}>
-                          {(updateAttribute, { data, loading }) => {
+                          {(updateAttribute: any, { data, loading }: any) => {
                             return (
                               <div className="stacked-tags">
                                 <Tag>SCRIPT</Tag>
@@ -612,7 +612,10 @@ export default class MappingExplorerView extends React.Component<
                 }
               />
               <Mutation mutation={createInputColumnAndUpdateAttribute}>
-                {(createInputColumnAndUpdateAttribute, { data, loading }) => {
+                {(
+                  createInputColumnAndUpdateAttribute: any,
+                  { data, loading }: any
+                ) => {
                   return (
                     <Button
                       disabled={!columnPicker.column || !selectedFhirAttribute}
@@ -660,7 +663,7 @@ export default class MappingExplorerView extends React.Component<
                 value={columnPicker.staticValue}
               />
               <Mutation mutation={createInputColumnAndUpdateAttribute}>
-                {(createInputColumn, { data, loading }) => {
+                {(createInputColumn: any, { data, loading }: any) => {
                   return (
                     <Button
                       disabled={columnPicker.staticValue.length == 0}
@@ -719,7 +722,7 @@ export default class MappingExplorerView extends React.Component<
         }}
         skip={!selectedSource || !selectedFhirResource.id}
       >
-        {({ data, loading }) => {
+        {({ data, loading }: any) => {
           return loading ? (
             <Spinner />
           ) : (
@@ -761,7 +764,7 @@ export default class MappingExplorerView extends React.Component<
                 createdResources: createdResources
               }}
             >
-              {({ data, loading }) => {
+              {({ data, loading }: any) => {
                 return (
                   <div id="left-part">
                     <div id="fhir-attributes">
@@ -837,7 +840,7 @@ export default class MappingExplorerView extends React.Component<
                               });
                             }}
                           >
-                            {(createResource, { data, loading }) => {
+                            {(createResource: any, { data, loading }: any) => {
                               return (
                                 <Button
                                   loading={loading}

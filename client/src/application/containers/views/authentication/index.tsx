@@ -127,7 +127,7 @@ class AuthenticationView extends React.Component<
               });
             }}
           >
-            {(mutationSignup, { data, loading }) => {
+            {(mutationSignup: any, { data, loading }: any) => {
               return (
                 <form
                   onSubmit={(e: any) => {
@@ -280,7 +280,7 @@ class AuthenticationView extends React.Component<
               });
             }}
           >
-            {(mutationLogin, { data, loading }) => {
+            {(mutationLogin: any, { data, loading }: any) => {
               return (
                 <form
                   onSubmit={(e: any) => {

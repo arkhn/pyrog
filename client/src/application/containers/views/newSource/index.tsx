@@ -254,7 +254,7 @@ SELECT OWNER, TABLE_NAME, COLUMN_NAME, DATA_TYPE FROM all_tab_columns;
         <Navbar />
         <div id="main-container-newsource">
           <Query fetchPolicy="network-only" query={allSources}>
-            {({ data, loading }) => {
+            {({ data, loading }: any) => {
               const sourceNames = data.allSources
                 ? data.allSources.map((source: ISource) => source.name)
                 : null;
