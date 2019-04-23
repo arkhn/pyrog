@@ -109,12 +109,7 @@ export default class TabViewer extends React.Component<IProps, IState> {
       <div id={"dummy-column-picker"}>
         <FormGroup label="Choose column" labelFor="text-input" inline={true}>
           <ControlGroup>
-            <ColumnPicker
-              onChangeOwner={this.changeOwner}
-              onChangeTable={this.changeTable}
-              onChangeColumn={this.changeColumn}
-              sourceSchema={sourceSchema}
-            />
+            <ColumnPicker sourceSchema={sourceSchema} />
             <Button
               disabled={!sourceColumn.column}
               icon={"add"}

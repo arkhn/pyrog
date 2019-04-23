@@ -10,11 +10,12 @@ import {
 } from "../../utils";
 
 export const pyrogMutation = {
-  async createSource(parent, { sourceName }, context: Context) {
+  async createSource(parent, { sourceName, hasOwner }, context: Context) {
     getUserId(context);
 
     return await context.client.createSource({
-      name: sourceName
+      name: sourceName,
+      hasOwner: hasOwner
     });
   },
   // createInputColumnViaAttribute et deleteInputColumnViaAttribute

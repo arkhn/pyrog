@@ -9,6 +9,7 @@ import StringSelect from "./selects/stringSelect";
 import { ISourceSchema, IInputColumn, IFhirIntegrationSpec } from "../types";
 
 export interface IProps {
+  hasOwner: boolean;
   inputColumns: any;
   sourceSchema: ISourceSchema;
 }
@@ -16,53 +17,23 @@ export interface IProps {
 export interface IState {}
 
 export default class InputColumnsTable extends React.Component<IProps, IState> {
-  private handleRemoveColumnClick = (columnIndex: number) => {
-    return (event: any) => {
-      // this.props.dispatch(clickRemoveInputColumn(columnIndex))
-    };
-  };
-
-  private handleRemoveJoinClick = (columnIndex: number) => {
-    return (event: any) => {
-      // this.props.dispatch(clickRemoveJoin(columnIndex))
-    };
-  };
-
-  private handleAddJoinClick = (columnIndex: number) => {
-    return (event: any) => {
-      // this.props.dispatch(clickAddJoin(columnIndex))
-    };
-  };
-
   public render() {
-    let { inputColumns, sourceSchema } = this.props;
+    let { hasOwner, inputColumns, sourceSchema } = this.props;
 
     let rows = inputColumns
       ? inputColumns.map((column: IInputColumn, index: number) => (
           <tr key={index}>
             <td>
-              <Button
-                icon={"delete"}
-                minimal={true}
-                onClick={this.handleRemoveColumnClick(index)}
-              />
+              <Button icon={"delete"} minimal={true} />
             </td>
             <td>{`${column.owner} > ${column.table} > ${column.column}`}</td>
             {column.join ? (
               <td>
-                <Button
-                  icon={"delete"}
-                  minimal={true}
-                  onClick={this.handleRemoveJoinClick(index)}
-                />
+                <Button icon={"delete"} minimal={true} />
               </td>
             ) : (
               <td colSpan={3}>
-                <Button
-                  icon={"add"}
-                  minimal={true}
-                  onClick={this.handleAddJoinClick(index)}
-                />
+                <Button icon={"add"} minimal={true} />
               </td>
             )}
             {column.join ? (
@@ -70,19 +41,18 @@ export default class InputColumnsTable extends React.Component<IProps, IState> {
                 <StringSelect
                   icon={"column-layout"}
                   inputItem={column.join.sourceColumn}
-                  items={sourceSchema[column.owner][column.table]}
+                  items={
+                    (sourceSchema[column.owner] as { [key: string]: string[] })[
+                      column.table
+                    ]
+                  }
                   onChange={null}
                 />
               </td>
             ) : null}
             {column.join ? (
               <td>
-                <ColumnPicker
-                  sourceSchema={sourceSchema}
-                  onChangeOwner={null}
-                  onChangeTable={null}
-                  onChangeColumn={null}
-                />
+                <ColumnPicker hasOwner={hasOwner} sourceSchema={sourceSchema} />
               </td>
             ) : null}
             <td>

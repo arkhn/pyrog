@@ -2,7 +2,8 @@ import { ISelectedSource, ISimpleAction } from "../types";
 
 const initialState: ISelectedSource = {
   id: null,
-  name: null
+  name: null,
+  hasOwner: null
 };
 
 const selectedSourceReducer = (
@@ -14,7 +15,8 @@ const selectedSourceReducer = (
       return {
         ...state,
         id: action.payload.id,
-        name: action.payload.name
+        name: action.payload.name,
+        hasOwner: action.payload.hasOwner
       };
 
     case "DESELECTED_SOURCE":

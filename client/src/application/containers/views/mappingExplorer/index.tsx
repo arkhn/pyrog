@@ -167,7 +167,7 @@ export default class MappingExplorerView extends React.Component<
     This function updates the current url with new information.
     Before: url/pathname?attr1=value1
     After: url/pathname?attr1=value1&key=value
-    */
+  */
   private updateLocationSearch = (key: string, value: string) => {
     const qs = QueryString.stringify({
       ...QueryString.parse(this.props.location.search),
@@ -227,38 +227,63 @@ export default class MappingExplorerView extends React.Component<
                   breadcrumbRenderer={(item: IBreadcrumbProps) => {
                     return <div>{item.text}</div>;
                   }}
-                  items={[
-                    {
-                      text: (
-                        <div className="stacked-tags">
-                          <Tag minimal={true}>OWNER</Tag>
-                          <Tag intent={"success"} large={true}>
-                            {column.owner}
-                          </Tag>
-                        </div>
-                      )
-                    },
-                    {
-                      text: (
-                        <div className="stacked-tags">
-                          <Tag minimal={true}>TABLE</Tag>
-                          <Tag intent={"success"} large={true}>
-                            {column.table}
-                          </Tag>
-                        </div>
-                      )
-                    },
-                    {
-                      text: (
-                        <div className="stacked-tags">
-                          <Tag minimal={true}>COLUMN</Tag>
-                          <Tag intent={"success"} large={true}>
-                            {column.column}
-                          </Tag>
-                        </div>
-                      )
-                    }
-                  ]}
+                  items={
+                    selectedSource.hasOwner
+                      ? [
+                          {
+                            text: (
+                              <div className="stacked-tags">
+                                <Tag minimal={true}>OWNER</Tag>
+                                <Tag intent={"success"} large={true}>
+                                  {column.owner}
+                                </Tag>
+                              </div>
+                            )
+                          },
+                          {
+                            text: (
+                              <div className="stacked-tags">
+                                <Tag minimal={true}>TABLE</Tag>
+                                <Tag intent={"success"} large={true}>
+                                  {column.table}
+                                </Tag>
+                              </div>
+                            )
+                          },
+                          {
+                            text: (
+                              <div className="stacked-tags">
+                                <Tag minimal={true}>COLUMN</Tag>
+                                <Tag intent={"success"} large={true}>
+                                  {column.column}
+                                </Tag>
+                              </div>
+                            )
+                          }
+                        ]
+                      : [
+                          {
+                            text: (
+                              <div className="stacked-tags">
+                                <Tag minimal={true}>TABLE</Tag>
+                                <Tag intent={"success"} large={true}>
+                                  {column.table}
+                                </Tag>
+                              </div>
+                            )
+                          },
+                          {
+                            text: (
+                              <div className="stacked-tags">
+                                <Tag minimal={true}>COLUMN</Tag>
+                                <Tag intent={"success"} large={true}>
+                                  {column.column}
+                                </Tag>
+                              </div>
+                            )
+                          }
+                        ]
+                  }
                 />
                 <Mutation mutation={updateInputColumn}>
                   {(updateInputColumn: any, { data, loading }: any) => {
@@ -342,6 +367,7 @@ export default class MappingExplorerView extends React.Component<
     const joinColumnsComponent = (join: any, updateJoin: any) => (
       <div className="join-columns">
         <ColumnPicker
+          hasOwner={selectedSource.hasOwner}
           ownerChangeCallback={(e: string) => {
             updateJoin({
               variables: {
@@ -389,6 +415,7 @@ export default class MappingExplorerView extends React.Component<
           }
         />
         <ColumnPicker
+          hasOwner={selectedSource.hasOwner}
           ownerChangeCallback={(e: string) => {
             updateJoin({
               variables: {
@@ -580,6 +607,7 @@ export default class MappingExplorerView extends React.Component<
           >
             <ControlGroup>
               <ColumnPicker
+                hasOwner={selectedSource.hasOwner}
                 ownerChangeCallback={(e: string) => {
                   this.setState({
                     columnPicker: {

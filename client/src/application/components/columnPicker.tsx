@@ -8,21 +8,19 @@ export interface IProps {
   ownerChangeCallback?: any;
   tableChangeCallback?: any;
   columnChangeCallback?: any;
+  hasOwner?: boolean;
   initialColumn?: {
-    owner: string;
+    owner?: string;
     table: string;
     column: string;
   };
-  onChangeOwner?: any;
-  onChangeTable?: any;
-  onChangeColumn?: any;
   sourceSchema: ISourceSchema;
   label?: string;
   vertical?: boolean;
 }
 
 export interface IState {
-  owner: string;
+  owner?: string;
   table: string;
   column: string;
 }
@@ -36,6 +34,10 @@ export default class ColumnPicker extends React.Component<IProps, IState> {
       column: null
     };
   }
+
+  static defaultProps = () => {
+    hasOwner: true;
+  };
 
   private changeOwner = (e: string) => {
     this.setState({
@@ -83,33 +85,38 @@ export default class ColumnPicker extends React.Component<IProps, IState> {
   }
 
   public render() {
-    let {
-      onChangeOwner,
-      onChangeTable,
-      onChangeColumn,
-      sourceSchema,
-      label,
-      vertical
-    } = this.props;
+    let { hasOwner, sourceSchema, label, vertical } = this.props;
 
     let { owner, table, column } = this.state;
 
     let owners = Object.keys(sourceSchema);
 
-    let tables = owner ? Object.keys(sourceSchema[owner]) : [];
+    let tables = hasOwner
+      ? owner
+        ? Object.keys(sourceSchema[owner])
+        : []
+      : Object.keys(sourceSchema);
 
-    let columns = table ? sourceSchema[owner][table] : [];
+    let columns = table
+      ? ((hasOwner
+          ? ((sourceSchema[owner] as { [key: string]: string[] })[
+              table
+            ] as string[])
+          : (sourceSchema[table] as string[])) as any)
+      : [];
 
     let controlGroup = (
       <ControlGroup fill={false} vertical={vertical || false}>
+        {hasOwner ? (
+          <StringSelect
+            icon={"group-objects"}
+            inputItem={owner}
+            items={owners}
+            onChange={this.changeOwner}
+          />
+        ) : null}
         <StringSelect
-          icon={"group-objects"}
-          inputItem={owner}
-          items={owners}
-          onChange={this.changeOwner}
-        />
-        <StringSelect
-          disabled={!owner}
+          disabled={hasOwner && !owner}
           icon={"th"}
           inputItem={table}
           items={tables}
