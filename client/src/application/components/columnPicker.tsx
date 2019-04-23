@@ -35,8 +35,8 @@ export default class ColumnPicker extends React.Component<IProps, IState> {
     };
   }
 
-  defaultProps = {
-    hasOwner: true
+  static defaultProps = () => {
+    hasOwner: true;
   };
 
   private changeOwner = (e: string) => {
@@ -91,9 +91,19 @@ export default class ColumnPicker extends React.Component<IProps, IState> {
 
     let owners = Object.keys(sourceSchema);
 
-    let tables = owner && hasOwner ? Object.keys(sourceSchema[owner]) : [];
+    let tables = hasOwner
+      ? owner
+        ? Object.keys(sourceSchema[owner])
+        : []
+      : Object.keys(sourceSchema);
 
-    let columns = table ? sourceSchema[owner][table] : [];
+    let columns = table
+      ? ((hasOwner
+          ? ((sourceSchema[owner] as { [key: string]: string[] })[
+              table
+            ] as string[])
+          : (sourceSchema[table] as string[])) as any)
+      : [];
 
     let controlGroup = (
       <ControlGroup fill={false} vertical={vertical || false}>
@@ -106,7 +116,7 @@ export default class ColumnPicker extends React.Component<IProps, IState> {
           />
         ) : null}
         <StringSelect
-          disabled={!(owner && hasOwner)}
+          disabled={hasOwner && !owner}
           icon={"th"}
           inputItem={table}
           items={tables}

@@ -89,11 +89,17 @@ export interface ISource {
   schema: any;
 }
 
-export interface ISourceSchema {
+export interface ISourceSchemaWithOwner {
   [owner: string]: {
     [table: string]: string[];
   };
 }
+
+export interface ISourceSchemaWithoutOwner {
+  [table: string]: string[];
+}
+
+export type ISourceSchema = ISourceSchemaWithOwner | ISourceSchemaWithoutOwner;
 
 export interface ISourceColumn {
   owner: string;

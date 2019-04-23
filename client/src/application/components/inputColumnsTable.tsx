@@ -41,7 +41,11 @@ export default class InputColumnsTable extends React.Component<IProps, IState> {
                 <StringSelect
                   icon={"column-layout"}
                   inputItem={column.join.sourceColumn}
-                  items={sourceSchema[column.owner][column.table]}
+                  items={
+                    (sourceSchema[column.owner] as { [key: string]: string[] })[
+                      column.table
+                    ]
+                  }
                   onChange={null}
                 />
               </td>

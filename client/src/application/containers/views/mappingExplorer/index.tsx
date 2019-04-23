@@ -225,38 +225,63 @@ export default class MappingExplorerView extends React.Component<
                   breadcrumbRenderer={(item: IBreadcrumbProps) => {
                     return <div>{item.text}</div>;
                   }}
-                  items={[
-                    {
-                      text: (
-                        <div className="stacked-tags">
-                          <Tag minimal={true}>OWNER</Tag>
-                          <Tag intent={"success"} large={true}>
-                            {column.owner}
-                          </Tag>
-                        </div>
-                      )
-                    },
-                    {
-                      text: (
-                        <div className="stacked-tags">
-                          <Tag minimal={true}>TABLE</Tag>
-                          <Tag intent={"success"} large={true}>
-                            {column.table}
-                          </Tag>
-                        </div>
-                      )
-                    },
-                    {
-                      text: (
-                        <div className="stacked-tags">
-                          <Tag minimal={true}>COLUMN</Tag>
-                          <Tag intent={"success"} large={true}>
-                            {column.column}
-                          </Tag>
-                        </div>
-                      )
-                    }
-                  ]}
+                  items={
+                    selectedSource.hasOwner
+                      ? [
+                          {
+                            text: (
+                              <div className="stacked-tags">
+                                <Tag minimal={true}>OWNER</Tag>
+                                <Tag intent={"success"} large={true}>
+                                  {column.owner}
+                                </Tag>
+                              </div>
+                            )
+                          },
+                          {
+                            text: (
+                              <div className="stacked-tags">
+                                <Tag minimal={true}>TABLE</Tag>
+                                <Tag intent={"success"} large={true}>
+                                  {column.table}
+                                </Tag>
+                              </div>
+                            )
+                          },
+                          {
+                            text: (
+                              <div className="stacked-tags">
+                                <Tag minimal={true}>COLUMN</Tag>
+                                <Tag intent={"success"} large={true}>
+                                  {column.column}
+                                </Tag>
+                              </div>
+                            )
+                          }
+                        ]
+                      : [
+                          {
+                            text: (
+                              <div className="stacked-tags">
+                                <Tag minimal={true}>TABLE</Tag>
+                                <Tag intent={"success"} large={true}>
+                                  {column.table}
+                                </Tag>
+                              </div>
+                            )
+                          },
+                          {
+                            text: (
+                              <div className="stacked-tags">
+                                <Tag minimal={true}>COLUMN</Tag>
+                                <Tag intent={"success"} large={true}>
+                                  {column.column}
+                                </Tag>
+                              </div>
+                            )
+                          }
+                        ]
+                  }
                 />
                 <Mutation mutation={updateInputColumn}>
                   {(updateInputColumn: any, { data, loading }: any) => {
