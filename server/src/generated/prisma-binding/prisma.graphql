@@ -1,5 +1,5 @@
 # source: http://0.0.0.0:4466
-# timestamp: Sun Mar 31 2019 13:02:59 GMT+0200 (Central European Summer Time)
+# timestamp: Mon Apr 22 2019 12:58:24 GMT+0200 (Central European Summer Time)
 
 type AggregateAttribute {
   count: Int!
@@ -53,6 +53,8 @@ type Attribute implements Node {
     first: Int
     last: Int
   ): [InputColumn!]
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 """
@@ -72,6 +74,7 @@ type AttributeConnection {
 }
 
 input AttributeCreateInput {
+  id: ID
   name: String!
   mergingScript: String
   isProfile: Boolean
@@ -105,6 +108,7 @@ input AttributeCreateOneWithoutInputColumnsInput {
 }
 
 input AttributeCreateWithoutAttributeInput {
+  id: ID
   name: String!
   mergingScript: String
   isProfile: Boolean
@@ -117,6 +121,7 @@ input AttributeCreateWithoutAttributeInput {
 }
 
 input AttributeCreateWithoutAttributesInput {
+  id: ID
   name: String!
   mergingScript: String
   isProfile: Boolean
@@ -129,6 +134,7 @@ input AttributeCreateWithoutAttributesInput {
 }
 
 input AttributeCreateWithoutInputColumnsInput {
+  id: ID
   name: String!
   mergingScript: String
   isProfile: Boolean
@@ -141,6 +147,7 @@ input AttributeCreateWithoutInputColumnsInput {
 }
 
 input AttributeCreateWithoutResourceInput {
+  id: ID
   name: String!
   mergingScript: String
   isProfile: Boolean
@@ -196,6 +203,8 @@ type AttributePreviousValues {
   type: String
   comment: String
   depth: Int
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 input AttributeScalarWhereInput {
@@ -585,6 +594,78 @@ input AttributeScalarWhereInput {
   All values greater than or equal the given value.
   """
   depth_gte: Int
+  updatedAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  updatedAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  updatedAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  updatedAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  updatedAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  updatedAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  updatedAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  createdAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  createdAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  createdAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  createdAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  createdAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  createdAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  createdAt_gte: DateTime
 }
 
 type AttributeSubscriptionPayload {
@@ -1175,6 +1256,78 @@ input AttributeWhereInput {
   All values greater than or equal the given value.
   """
   depth_gte: Int
+  updatedAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  updatedAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  updatedAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  updatedAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  updatedAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  updatedAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  updatedAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  createdAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  createdAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  createdAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  createdAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  createdAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  createdAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  createdAt_gte: DateTime
   resource: ResourceWhereInput
   attributes_every: AttributeWhereInput
   attributes_some: AttributeWhereInput
@@ -1196,6 +1349,8 @@ type BatchPayload {
   count: Long!
 }
 
+scalar DateTime
+
 type InputColumn implements Node {
   id: ID!
   owner: String
@@ -1213,6 +1368,8 @@ type InputColumn implements Node {
     last: Int
   ): [Join!]
   attribute: Attribute!
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 """
@@ -1232,6 +1389,7 @@ type InputColumnConnection {
 }
 
 input InputColumnCreateInput {
+  id: ID
   owner: String
   table: String
   column: String
@@ -1252,6 +1410,7 @@ input InputColumnCreateOneWithoutJoinsInput {
 }
 
 input InputColumnCreateWithoutAttributeInput {
+  id: ID
   owner: String
   table: String
   column: String
@@ -1261,6 +1420,7 @@ input InputColumnCreateWithoutAttributeInput {
 }
 
 input InputColumnCreateWithoutJoinsInput {
+  id: ID
   owner: String
   table: String
   column: String
@@ -1310,6 +1470,8 @@ type InputColumnPreviousValues {
   column: String
   script: String
   staticValue: String
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 input InputColumnScalarWhereInput {
@@ -1723,6 +1885,78 @@ input InputColumnScalarWhereInput {
   All values not ending with the given string.
   """
   staticValue_not_ends_with: String
+  updatedAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  updatedAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  updatedAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  updatedAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  updatedAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  updatedAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  updatedAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  createdAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  createdAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  createdAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  createdAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  createdAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  createdAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  createdAt_gte: DateTime
 }
 
 type InputColumnSubscriptionPayload {
@@ -2265,6 +2499,78 @@ input InputColumnWhereInput {
   All values not ending with the given string.
   """
   staticValue_not_ends_with: String
+  updatedAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  updatedAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  updatedAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  updatedAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  updatedAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  updatedAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  updatedAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  createdAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  createdAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  createdAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  createdAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  createdAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  createdAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  createdAt_gte: DateTime
   joins_every: JoinWhereInput
   joins_some: JoinWhereInput
   joins_none: JoinWhereInput
@@ -2284,6 +2590,8 @@ type Join implements Node {
   targetTable: String
   targetColumn: String
   inputColumn: InputColumn!
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 """
@@ -2303,6 +2611,7 @@ type JoinConnection {
 }
 
 input JoinCreateInput {
+  id: ID
   sourceOwner: String
   sourceTable: String
   sourceColumn: String
@@ -2318,6 +2627,7 @@ input JoinCreateManyWithoutInputColumnInput {
 }
 
 input JoinCreateWithoutInputColumnInput {
+  id: ID
   sourceOwner: String
   sourceTable: String
   sourceColumn: String
@@ -2370,6 +2680,8 @@ type JoinPreviousValues {
   targetOwner: String
   targetTable: String
   targetColumn: String
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 input JoinScalarWhereInput {
@@ -2849,6 +3161,78 @@ input JoinScalarWhereInput {
   All values not ending with the given string.
   """
   targetColumn_not_ends_with: String
+  updatedAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  updatedAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  updatedAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  updatedAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  updatedAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  updatedAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  updatedAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  createdAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  createdAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  createdAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  createdAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  createdAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  createdAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  createdAt_gte: DateTime
 }
 
 type JoinSubscriptionPayload {
@@ -3438,6 +3822,78 @@ input JoinWhereInput {
   All values not ending with the given string.
   """
   targetColumn_not_ends_with: String
+  updatedAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  updatedAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  updatedAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  updatedAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  updatedAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  updatedAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  updatedAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  createdAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  createdAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  createdAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  createdAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  createdAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  createdAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  createdAt_gte: DateTime
   inputColumn: InputColumnWhereInput
 }
 
@@ -3725,6 +4181,8 @@ type Resource implements Node {
     last: Int
   ): [Attribute!]
   source: Source!
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 """
@@ -3744,6 +4202,7 @@ type ResourceConnection {
 }
 
 input ResourceCreateInput {
+  id: ID
   name: String!
   primaryKeyOwner: String
   primaryKeyTable: String
@@ -3763,6 +4222,7 @@ input ResourceCreateOneWithoutAttributesInput {
 }
 
 input ResourceCreateWithoutAttributesInput {
+  id: ID
   name: String!
   primaryKeyOwner: String
   primaryKeyTable: String
@@ -3771,6 +4231,7 @@ input ResourceCreateWithoutAttributesInput {
 }
 
 input ResourceCreateWithoutSourceInput {
+  id: ID
   name: String!
   primaryKeyOwner: String
   primaryKeyTable: String
@@ -3816,6 +4277,8 @@ type ResourcePreviousValues {
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 input ResourceScalarWhereInput {
@@ -4163,6 +4626,78 @@ input ResourceScalarWhereInput {
   All values not ending with the given string.
   """
   primaryKeyColumn_not_ends_with: String
+  updatedAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  updatedAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  updatedAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  updatedAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  updatedAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  updatedAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  updatedAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  createdAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  createdAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  createdAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  createdAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  createdAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  createdAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  createdAt_gte: DateTime
 }
 
 type ResourceSubscriptionPayload {
@@ -4636,6 +5171,78 @@ input ResourceWhereInput {
   All values not ending with the given string.
   """
   primaryKeyColumn_not_ends_with: String
+  updatedAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  updatedAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  updatedAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  updatedAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  updatedAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  updatedAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  updatedAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  createdAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  createdAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  createdAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  createdAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  createdAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  createdAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  createdAt_gte: DateTime
   attributes_every: AttributeWhereInput
   attributes_some: AttributeWhereInput
   attributes_none: AttributeWhereInput
@@ -4663,6 +5270,8 @@ type Source implements Node {
     first: Int
     last: Int
   ): [Resource!]
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 """
@@ -4682,6 +5291,7 @@ type SourceConnection {
 }
 
 input SourceCreateInput {
+  id: ID
   name: String!
   resources: ResourceCreateManyWithoutSourceInput
 }
@@ -4692,6 +5302,7 @@ input SourceCreateOneWithoutResourcesInput {
 }
 
 input SourceCreateWithoutResourcesInput {
+  id: ID
   name: String!
 }
 
@@ -4724,6 +5335,8 @@ enum SourceOrderByInput {
 type SourcePreviousValues {
   id: ID!
   name: String!
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 type SourceSubscriptionPayload {
@@ -4943,6 +5556,78 @@ input SourceWhereInput {
   All values not ending with the given string.
   """
   name_not_ends_with: String
+  updatedAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  updatedAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  updatedAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  updatedAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  updatedAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  updatedAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  updatedAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  createdAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  createdAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  createdAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  createdAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  createdAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  createdAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  createdAt_gte: DateTime
   resources_every: ResourceWhereInput
   resources_some: ResourceWhereInput
   resources_none: ResourceWhereInput
@@ -4972,6 +5657,8 @@ type User implements Node {
   name: String!
   password: String!
   role: Role
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 """
@@ -4991,6 +5678,7 @@ type UserConnection {
 }
 
 input UserCreateInput {
+  id: ID
   email: String!
   name: String!
   password: String!
@@ -5035,6 +5723,8 @@ type UserPreviousValues {
   name: String!
   password: String!
   role: Role
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 type UserSubscriptionPayload {
@@ -5391,6 +6081,78 @@ input UserWhereInput {
   All values that are not contained in given list.
   """
   role_not_in: [Role!]
+  updatedAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  updatedAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  updatedAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  updatedAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  updatedAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  updatedAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  updatedAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  createdAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  createdAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  createdAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  createdAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  createdAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  createdAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  createdAt_gte: DateTime
 }
 
 input UserWhereUniqueInput {

@@ -1,21 +1,25 @@
 type Source {
-  id: ID! @unique
+  id: ID! @unique @id
   name: String! @unique
   resources: [Resource!]! @relation(name: "SourceToResource", onDelete: CASCADE)
+  updatedAt: DateTime! @updatedAt
+  createdAt: DateTime! @createdAt
 }
 
 type Resource {
-  id: ID! @unique
+  id: ID! @unique @id
   name: String!
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
   attributes: [Attribute!]! @relation(name: "ResourceToAttributes", onDelete: CASCADE)
   source: Source! @relation(name: "SourceToResource")
+  updatedAt: DateTime! @updatedAt
+  createdAt: DateTime! @createdAt
 }
 
 type Attribute {
-  id: ID! @unique
+  id: ID! @unique @id
   name: String!
   mergingScript: String
   isProfile: Boolean
@@ -30,10 +34,12 @@ type Attribute {
   attribute: Attribute @relation(name: "AttributeToAttributes")
   # Children input columns
   inputColumns: [InputColumn!] @relation(name: "AttributeToInputColumns", onDelete: CASCADE)
+  updatedAt: DateTime! @updatedAt
+  createdAt: DateTime! @createdAt
 }
 
 type InputColumn {
-  id: ID! @unique
+  id: ID! @unique @id
   owner: String
   table: String
   column: String
@@ -43,10 +49,12 @@ type InputColumn {
   joins: [Join!] @relation(name: "InputColumnToJoins", onDelete: CASCADE)
   # Parent attribute
   attribute: Attribute! @relation(name: "AttributeToInputColumns")
+  updatedAt: DateTime! @updatedAt
+  createdAt: DateTime! @createdAt
 }
 
 type Join {
-  id: ID! @unique
+  id: ID! @unique @id
   sourceOwner: String
   sourceTable: String
   sourceColumn: String
@@ -55,6 +63,8 @@ type Join {
   targetColumn: String
   # Parent input column
   inputColumn: InputColumn! @relation(name: "InputColumnToJoins")
+  updatedAt: DateTime! @updatedAt
+  createdAt: DateTime! @createdAt
 }
 
 enum Role {
@@ -63,9 +73,11 @@ enum Role {
 }
 
 type User {
-  id: ID! @unique
+  id: ID! @unique @id
   email: String! @unique
   name: String!
   password: String!
-  role: Role @default(value: "USER")
+  role: Role @default(value: USER)
+  updatedAt: DateTime! @updatedAt
+  createdAt: DateTime! @createdAt
 }

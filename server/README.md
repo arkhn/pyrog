@@ -22,7 +22,7 @@ Simply run
 ```
 yarn install
 env $(cat .env.staging) docker-compose up -d prisma
-yarn run prisma deploy
+yarn run prisma deploy -e .env.staging
 ```
 
 This will install all required node dependencies, setup 2 Docker containers (1 Prisma, 1 Postgres), 1 Docker volume (which will persistently contain all data collected in Pyrog and our mock data) and initiate our Postgres database schema with our GraphQL datamodel.
@@ -40,7 +40,7 @@ rm pyrog_dev_static.zip
 This zip file also contains some mock data, among which [Mimic](https://mimic.physionet.org)'s database schema and a partial mapping of Mimic into FHIR. So as to use this data, you can populate your local Postgres database with our mapping:
 
 ```
-yarn run prisma import --data ./static/pyrog_mimic_mapping.zip
+yarn run prisma import --data ./static/pyrog_mimic_mapping.zip -e .env.staging
 ```
 
 In particular, this will register two users with different roles:
@@ -63,12 +63,11 @@ unzip -o pyrog_dev_static.zip
 rm pyrog_dev_static.zip
 ```
 
-You should stop all docker containers related to pyrog except for the Postgres container before running the following commands:
+Reset Postgres data:
 
 ```
-docker exec -i <postgres_container_id> dropdb -U prisma prisma
-env $(cat .env.staging) docker-compose up -d prisma
-yarn run prisma import --data ./static/pyrog_mimic_mapping.zip
+yarn run prisma reset -e .env.staging
+yarn run prisma import --data ./static/pyrog_mimic_mapping.zip -e .env.staging
 ```
 
 ### Run

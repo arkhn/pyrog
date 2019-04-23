@@ -530,6 +530,8 @@ type Attribute implements Node {
   attributes(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Attribute!]
   attribute: Attribute
   inputColumns(where: InputColumnWhereInput, orderBy: InputColumnOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [InputColumn!]
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 """A connection to a list of items."""
@@ -543,6 +545,7 @@ type AttributeConnection {
 }
 
 input AttributeCreateInput {
+  id: ID
   name: String!
   mergingScript: String
   isProfile: Boolean
@@ -576,6 +579,7 @@ input AttributeCreateOneWithoutInputColumnsInput {
 }
 
 input AttributeCreateWithoutAttributeInput {
+  id: ID
   name: String!
   mergingScript: String
   isProfile: Boolean
@@ -588,6 +592,7 @@ input AttributeCreateWithoutAttributeInput {
 }
 
 input AttributeCreateWithoutAttributesInput {
+  id: ID
   name: String!
   mergingScript: String
   isProfile: Boolean
@@ -600,6 +605,7 @@ input AttributeCreateWithoutAttributesInput {
 }
 
 input AttributeCreateWithoutInputColumnsInput {
+  id: ID
   name: String!
   mergingScript: String
   isProfile: Boolean
@@ -612,6 +618,7 @@ input AttributeCreateWithoutInputColumnsInput {
 }
 
 input AttributeCreateWithoutResourceInput {
+  id: ID
   name: String!
   mergingScript: String
   isProfile: Boolean
@@ -661,6 +668,8 @@ type AttributePreviousValues {
   type: String
   comment: String
   depth: Int
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 input AttributeScalarWhereInput {
@@ -898,6 +907,50 @@ input AttributeScalarWhereInput {
 
   """All values greater than or equal the given value."""
   depth_gte: Int
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
 }
 
 type AttributeSubscriptionPayload {
@@ -917,9 +970,7 @@ input AttributeSubscriptionWhereInput {
   """Logical NOT on all given filters combined by AND."""
   NOT: [AttributeSubscriptionWhereInput!]
 
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
+  """The subscription event gets dispatched when it's listed in mutation_in"""
   mutation_in: [MutationType!]
 
   """
@@ -1330,6 +1381,50 @@ input AttributeWhereInput {
 
   """All values greater than or equal the given value."""
   depth_gte: Int
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
   resource: ResourceWhereInput
   attributes_every: AttributeWhereInput
   attributes_some: AttributeWhereInput
@@ -1349,6 +1444,8 @@ type BatchPayload {
   count: Long!
 }
 
+scalar DateTime
+
 type InputColumn implements Node {
   id: ID!
   owner: String
@@ -1358,6 +1455,8 @@ type InputColumn implements Node {
   staticValue: String
   joins(where: JoinWhereInput, orderBy: JoinOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Join!]
   attribute: Attribute!
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 """A connection to a list of items."""
@@ -1371,6 +1470,7 @@ type InputColumnConnection {
 }
 
 input InputColumnCreateInput {
+  id: ID
   owner: String
   table: String
   column: String
@@ -1391,6 +1491,7 @@ input InputColumnCreateOneWithoutJoinsInput {
 }
 
 input InputColumnCreateWithoutAttributeInput {
+  id: ID
   owner: String
   table: String
   column: String
@@ -1400,6 +1501,7 @@ input InputColumnCreateWithoutAttributeInput {
 }
 
 input InputColumnCreateWithoutJoinsInput {
+  id: ID
   owner: String
   table: String
   column: String
@@ -1443,6 +1545,8 @@ type InputColumnPreviousValues {
   column: String
   script: String
   staticValue: String
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 input InputColumnScalarWhereInput {
@@ -1694,6 +1798,50 @@ input InputColumnScalarWhereInput {
 
   """All values not ending with the given string."""
   staticValue_not_ends_with: String
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
 }
 
 type InputColumnSubscriptionPayload {
@@ -1713,9 +1861,7 @@ input InputColumnSubscriptionWhereInput {
   """Logical NOT on all given filters combined by AND."""
   NOT: [InputColumnSubscriptionWhereInput!]
 
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
+  """The subscription event gets dispatched when it's listed in mutation_in"""
   mutation_in: [MutationType!]
 
   """
@@ -2068,6 +2214,50 @@ input InputColumnWhereInput {
 
   """All values not ending with the given string."""
   staticValue_not_ends_with: String
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
   joins_every: JoinWhereInput
   joins_some: JoinWhereInput
   joins_none: JoinWhereInput
@@ -2087,6 +2277,8 @@ type Join implements Node {
   targetTable: String
   targetColumn: String
   inputColumn: InputColumn!
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 """A connection to a list of items."""
@@ -2100,6 +2292,7 @@ type JoinConnection {
 }
 
 input JoinCreateInput {
+  id: ID
   sourceOwner: String
   sourceTable: String
   sourceColumn: String
@@ -2115,6 +2308,7 @@ input JoinCreateManyWithoutInputColumnInput {
 }
 
 input JoinCreateWithoutInputColumnInput {
+  id: ID
   sourceOwner: String
   sourceTable: String
   sourceColumn: String
@@ -2161,6 +2355,8 @@ type JoinPreviousValues {
   targetOwner: String
   targetTable: String
   targetColumn: String
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 input JoinScalarWhereInput {
@@ -2452,6 +2648,50 @@ input JoinScalarWhereInput {
 
   """All values not ending with the given string."""
   targetColumn_not_ends_with: String
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
 }
 
 type JoinSubscriptionPayload {
@@ -2471,9 +2711,7 @@ input JoinSubscriptionWhereInput {
   """Logical NOT on all given filters combined by AND."""
   NOT: [JoinSubscriptionWhereInput!]
 
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
+  """The subscription event gets dispatched when it's listed in mutation_in"""
   mutation_in: [MutationType!]
 
   """
@@ -2847,6 +3085,50 @@ input JoinWhereInput {
 
   """All values not ending with the given string."""
   targetColumn_not_ends_with: String
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
   inputColumn: InputColumnWhereInput
 }
 
@@ -2961,6 +3243,8 @@ type Resource implements Node {
   primaryKeyColumn: String
   attributes(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Attribute!]
   source: Source!
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 """A connection to a list of items."""
@@ -2974,6 +3258,7 @@ type ResourceConnection {
 }
 
 input ResourceCreateInput {
+  id: ID
   name: String!
   primaryKeyOwner: String
   primaryKeyTable: String
@@ -2993,6 +3278,7 @@ input ResourceCreateOneWithoutAttributesInput {
 }
 
 input ResourceCreateWithoutAttributesInput {
+  id: ID
   name: String!
   primaryKeyOwner: String
   primaryKeyTable: String
@@ -3001,6 +3287,7 @@ input ResourceCreateWithoutAttributesInput {
 }
 
 input ResourceCreateWithoutSourceInput {
+  id: ID
   name: String!
   primaryKeyOwner: String
   primaryKeyTable: String
@@ -3040,6 +3327,8 @@ type ResourcePreviousValues {
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 input ResourceScalarWhereInput {
@@ -3251,6 +3540,50 @@ input ResourceScalarWhereInput {
 
   """All values not ending with the given string."""
   primaryKeyColumn_not_ends_with: String
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
 }
 
 type ResourceSubscriptionPayload {
@@ -3270,9 +3603,7 @@ input ResourceSubscriptionWhereInput {
   """Logical NOT on all given filters combined by AND."""
   NOT: [ResourceSubscriptionWhereInput!]
 
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
+  """The subscription event gets dispatched when it's listed in mutation_in"""
   mutation_in: [MutationType!]
 
   """
@@ -3582,6 +3913,50 @@ input ResourceWhereInput {
 
   """All values not ending with the given string."""
   primaryKeyColumn_not_ends_with: String
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
   attributes_every: AttributeWhereInput
   attributes_some: AttributeWhereInput
   attributes_none: AttributeWhereInput
@@ -3601,6 +3976,8 @@ type Source implements Node {
   id: ID!
   name: String!
   resources(where: ResourceWhereInput, orderBy: ResourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Resource!]
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 """A connection to a list of items."""
@@ -3614,6 +3991,7 @@ type SourceConnection {
 }
 
 input SourceCreateInput {
+  id: ID
   name: String!
   resources: ResourceCreateManyWithoutSourceInput
 }
@@ -3624,6 +4002,7 @@ input SourceCreateOneWithoutResourcesInput {
 }
 
 input SourceCreateWithoutResourcesInput {
+  id: ID
   name: String!
 }
 
@@ -3650,6 +4029,8 @@ enum SourceOrderByInput {
 type SourcePreviousValues {
   id: ID!
   name: String!
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 type SourceSubscriptionPayload {
@@ -3669,9 +4050,7 @@ input SourceSubscriptionWhereInput {
   """Logical NOT on all given filters combined by AND."""
   NOT: [SourceSubscriptionWhereInput!]
 
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
+  """The subscription event gets dispatched when it's listed in mutation_in"""
   mutation_in: [MutationType!]
 
   """
@@ -3805,6 +4184,50 @@ input SourceWhereInput {
 
   """All values not ending with the given string."""
   name_not_ends_with: String
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
   resources_every: ResourceWhereInput
   resources_some: ResourceWhereInput
   resources_none: ResourceWhereInput
@@ -3830,6 +4253,8 @@ type User implements Node {
   name: String!
   password: String!
   role: Role
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 """A connection to a list of items."""
@@ -3843,6 +4268,7 @@ type UserConnection {
 }
 
 input UserCreateInput {
+  id: ID
   email: String!
   name: String!
   password: String!
@@ -3881,6 +4307,8 @@ type UserPreviousValues {
   name: String!
   password: String!
   role: Role
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 type UserSubscriptionPayload {
@@ -3900,9 +4328,7 @@ input UserSubscriptionWhereInput {
   """Logical NOT on all given filters combined by AND."""
   NOT: [UserSubscriptionWhereInput!]
 
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
+  """The subscription event gets dispatched when it's listed in mutation_in"""
   mutation_in: [MutationType!]
 
   """
@@ -4115,6 +4541,50 @@ input UserWhereInput {
 
   """All values that are not contained in given list."""
   role_not_in: [Role!]
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
 }
 
 input UserWhereUniqueInput {
@@ -4236,6 +4706,7 @@ export type UserOrderByInput =
   | "createdAt_DESC";
 
 export interface AttributeCreateInput {
+  id?: ID_Input | null;
   name: String;
   mergingScript?: String | null;
   isProfile?: Boolean | null;
@@ -4275,6 +4746,7 @@ export interface AttributeCreateOneWithoutInputColumnsInput {
 }
 
 export interface AttributeCreateWithoutAttributeInput {
+  id?: ID_Input | null;
   name: String;
   mergingScript?: String | null;
   isProfile?: Boolean | null;
@@ -4287,6 +4759,7 @@ export interface AttributeCreateWithoutAttributeInput {
 }
 
 export interface AttributeCreateWithoutAttributesInput {
+  id?: ID_Input | null;
   name: String;
   mergingScript?: String | null;
   isProfile?: Boolean | null;
@@ -4299,6 +4772,7 @@ export interface AttributeCreateWithoutAttributesInput {
 }
 
 export interface AttributeCreateWithoutInputColumnsInput {
+  id?: ID_Input | null;
   name: String;
   mergingScript?: String | null;
   isProfile?: Boolean | null;
@@ -4311,6 +4785,7 @@ export interface AttributeCreateWithoutInputColumnsInput {
 }
 
 export interface AttributeCreateWithoutResourceInput {
+  id?: ID_Input | null;
   name: String;
   mergingScript?: String | null;
   isProfile?: Boolean | null;
@@ -4406,6 +4881,22 @@ export interface AttributeScalarWhereInput {
   depth_lte?: Int | null;
   depth_gt?: Int | null;
   depth_gte?: Int | null;
+  updatedAt?: DateTime | null;
+  updatedAt_not?: DateTime | null;
+  updatedAt_in?: DateTime[] | DateTime | null;
+  updatedAt_not_in?: DateTime[] | DateTime | null;
+  updatedAt_lt?: DateTime | null;
+  updatedAt_lte?: DateTime | null;
+  updatedAt_gt?: DateTime | null;
+  updatedAt_gte?: DateTime | null;
+  createdAt?: DateTime | null;
+  createdAt_not?: DateTime | null;
+  createdAt_in?: DateTime[] | DateTime | null;
+  createdAt_not_in?: DateTime[] | DateTime | null;
+  createdAt_lt?: DateTime | null;
+  createdAt_lte?: DateTime | null;
+  createdAt_gt?: DateTime | null;
+  createdAt_gte?: DateTime | null;
 }
 
 export interface AttributeSubscriptionWhereInput {
@@ -4692,6 +5183,22 @@ export interface AttributeWhereInput {
   depth_lte?: Int | null;
   depth_gt?: Int | null;
   depth_gte?: Int | null;
+  updatedAt?: DateTime | null;
+  updatedAt_not?: DateTime | null;
+  updatedAt_in?: DateTime[] | DateTime | null;
+  updatedAt_not_in?: DateTime[] | DateTime | null;
+  updatedAt_lt?: DateTime | null;
+  updatedAt_lte?: DateTime | null;
+  updatedAt_gt?: DateTime | null;
+  updatedAt_gte?: DateTime | null;
+  createdAt?: DateTime | null;
+  createdAt_not?: DateTime | null;
+  createdAt_in?: DateTime[] | DateTime | null;
+  createdAt_not_in?: DateTime[] | DateTime | null;
+  createdAt_lt?: DateTime | null;
+  createdAt_lte?: DateTime | null;
+  createdAt_gt?: DateTime | null;
+  createdAt_gte?: DateTime | null;
   resource?: ResourceWhereInput | null;
   attributes_every?: AttributeWhereInput | null;
   attributes_some?: AttributeWhereInput | null;
@@ -4707,6 +5214,7 @@ export interface AttributeWhereUniqueInput {
 }
 
 export interface InputColumnCreateInput {
+  id?: ID_Input | null;
   owner?: String | null;
   table?: String | null;
   column?: String | null;
@@ -4730,6 +5238,7 @@ export interface InputColumnCreateOneWithoutJoinsInput {
 }
 
 export interface InputColumnCreateWithoutAttributeInput {
+  id?: ID_Input | null;
   owner?: String | null;
   table?: String | null;
   column?: String | null;
@@ -4739,6 +5248,7 @@ export interface InputColumnCreateWithoutAttributeInput {
 }
 
 export interface InputColumnCreateWithoutJoinsInput {
+  id?: ID_Input | null;
   owner?: String | null;
   table?: String | null;
   column?: String | null;
@@ -4835,6 +5345,22 @@ export interface InputColumnScalarWhereInput {
   staticValue_not_starts_with?: String | null;
   staticValue_ends_with?: String | null;
   staticValue_not_ends_with?: String | null;
+  updatedAt?: DateTime | null;
+  updatedAt_not?: DateTime | null;
+  updatedAt_in?: DateTime[] | DateTime | null;
+  updatedAt_not_in?: DateTime[] | DateTime | null;
+  updatedAt_lt?: DateTime | null;
+  updatedAt_lte?: DateTime | null;
+  updatedAt_gt?: DateTime | null;
+  updatedAt_gte?: DateTime | null;
+  createdAt?: DateTime | null;
+  createdAt_not?: DateTime | null;
+  createdAt_in?: DateTime[] | DateTime | null;
+  createdAt_not_in?: DateTime[] | DateTime | null;
+  createdAt_lt?: DateTime | null;
+  createdAt_lte?: DateTime | null;
+  createdAt_gt?: DateTime | null;
+  createdAt_gte?: DateTime | null;
 }
 
 export interface InputColumnSubscriptionWhereInput {
@@ -5047,6 +5573,22 @@ export interface InputColumnWhereInput {
   staticValue_not_starts_with?: String | null;
   staticValue_ends_with?: String | null;
   staticValue_not_ends_with?: String | null;
+  updatedAt?: DateTime | null;
+  updatedAt_not?: DateTime | null;
+  updatedAt_in?: DateTime[] | DateTime | null;
+  updatedAt_not_in?: DateTime[] | DateTime | null;
+  updatedAt_lt?: DateTime | null;
+  updatedAt_lte?: DateTime | null;
+  updatedAt_gt?: DateTime | null;
+  updatedAt_gte?: DateTime | null;
+  createdAt?: DateTime | null;
+  createdAt_not?: DateTime | null;
+  createdAt_in?: DateTime[] | DateTime | null;
+  createdAt_not_in?: DateTime[] | DateTime | null;
+  createdAt_lt?: DateTime | null;
+  createdAt_lte?: DateTime | null;
+  createdAt_gt?: DateTime | null;
+  createdAt_gte?: DateTime | null;
   joins_every?: JoinWhereInput | null;
   joins_some?: JoinWhereInput | null;
   joins_none?: JoinWhereInput | null;
@@ -5058,6 +5600,7 @@ export interface InputColumnWhereUniqueInput {
 }
 
 export interface JoinCreateInput {
+  id?: ID_Input | null;
   sourceOwner?: String | null;
   sourceTable?: String | null;
   sourceColumn?: String | null;
@@ -5076,6 +5619,7 @@ export interface JoinCreateManyWithoutInputColumnInput {
 }
 
 export interface JoinCreateWithoutInputColumnInput {
+  id?: ID_Input | null;
   sourceOwner?: String | null;
   sourceTable?: String | null;
   sourceColumn?: String | null;
@@ -5186,6 +5730,22 @@ export interface JoinScalarWhereInput {
   targetColumn_not_starts_with?: String | null;
   targetColumn_ends_with?: String | null;
   targetColumn_not_ends_with?: String | null;
+  updatedAt?: DateTime | null;
+  updatedAt_not?: DateTime | null;
+  updatedAt_in?: DateTime[] | DateTime | null;
+  updatedAt_not_in?: DateTime[] | DateTime | null;
+  updatedAt_lt?: DateTime | null;
+  updatedAt_lte?: DateTime | null;
+  updatedAt_gt?: DateTime | null;
+  updatedAt_gte?: DateTime | null;
+  createdAt?: DateTime | null;
+  createdAt_not?: DateTime | null;
+  createdAt_in?: DateTime[] | DateTime | null;
+  createdAt_not_in?: DateTime[] | DateTime | null;
+  createdAt_lt?: DateTime | null;
+  createdAt_lte?: DateTime | null;
+  createdAt_gt?: DateTime | null;
+  createdAt_gte?: DateTime | null;
 }
 
 export interface JoinSubscriptionWhereInput {
@@ -5378,6 +5938,22 @@ export interface JoinWhereInput {
   targetColumn_not_starts_with?: String | null;
   targetColumn_ends_with?: String | null;
   targetColumn_not_ends_with?: String | null;
+  updatedAt?: DateTime | null;
+  updatedAt_not?: DateTime | null;
+  updatedAt_in?: DateTime[] | DateTime | null;
+  updatedAt_not_in?: DateTime[] | DateTime | null;
+  updatedAt_lt?: DateTime | null;
+  updatedAt_lte?: DateTime | null;
+  updatedAt_gt?: DateTime | null;
+  updatedAt_gte?: DateTime | null;
+  createdAt?: DateTime | null;
+  createdAt_not?: DateTime | null;
+  createdAt_in?: DateTime[] | DateTime | null;
+  createdAt_not_in?: DateTime[] | DateTime | null;
+  createdAt_lt?: DateTime | null;
+  createdAt_lte?: DateTime | null;
+  createdAt_gt?: DateTime | null;
+  createdAt_gte?: DateTime | null;
   inputColumn?: InputColumnWhereInput | null;
 }
 
@@ -5386,6 +5962,7 @@ export interface JoinWhereUniqueInput {
 }
 
 export interface ResourceCreateInput {
+  id?: ID_Input | null;
   name: String;
   primaryKeyOwner?: String | null;
   primaryKeyTable?: String | null;
@@ -5408,6 +5985,7 @@ export interface ResourceCreateOneWithoutAttributesInput {
 }
 
 export interface ResourceCreateWithoutAttributesInput {
+  id?: ID_Input | null;
   name: String;
   primaryKeyOwner?: String | null;
   primaryKeyTable?: String | null;
@@ -5416,6 +5994,7 @@ export interface ResourceCreateWithoutAttributesInput {
 }
 
 export interface ResourceCreateWithoutSourceInput {
+  id?: ID_Input | null;
   name: String;
   primaryKeyOwner?: String | null;
   primaryKeyTable?: String | null;
@@ -5497,6 +6076,22 @@ export interface ResourceScalarWhereInput {
   primaryKeyColumn_not_starts_with?: String | null;
   primaryKeyColumn_ends_with?: String | null;
   primaryKeyColumn_not_ends_with?: String | null;
+  updatedAt?: DateTime | null;
+  updatedAt_not?: DateTime | null;
+  updatedAt_in?: DateTime[] | DateTime | null;
+  updatedAt_not_in?: DateTime[] | DateTime | null;
+  updatedAt_lt?: DateTime | null;
+  updatedAt_lte?: DateTime | null;
+  updatedAt_gt?: DateTime | null;
+  updatedAt_gte?: DateTime | null;
+  createdAt?: DateTime | null;
+  createdAt_not?: DateTime | null;
+  createdAt_in?: DateTime[] | DateTime | null;
+  createdAt_not_in?: DateTime[] | DateTime | null;
+  createdAt_lt?: DateTime | null;
+  createdAt_lte?: DateTime | null;
+  createdAt_gt?: DateTime | null;
+  createdAt_gte?: DateTime | null;
 }
 
 export interface ResourceSubscriptionWhereInput {
@@ -5683,6 +6278,22 @@ export interface ResourceWhereInput {
   primaryKeyColumn_not_starts_with?: String | null;
   primaryKeyColumn_ends_with?: String | null;
   primaryKeyColumn_not_ends_with?: String | null;
+  updatedAt?: DateTime | null;
+  updatedAt_not?: DateTime | null;
+  updatedAt_in?: DateTime[] | DateTime | null;
+  updatedAt_not_in?: DateTime[] | DateTime | null;
+  updatedAt_lt?: DateTime | null;
+  updatedAt_lte?: DateTime | null;
+  updatedAt_gt?: DateTime | null;
+  updatedAt_gte?: DateTime | null;
+  createdAt?: DateTime | null;
+  createdAt_not?: DateTime | null;
+  createdAt_in?: DateTime[] | DateTime | null;
+  createdAt_not_in?: DateTime[] | DateTime | null;
+  createdAt_lt?: DateTime | null;
+  createdAt_lte?: DateTime | null;
+  createdAt_gt?: DateTime | null;
+  createdAt_gte?: DateTime | null;
   attributes_every?: AttributeWhereInput | null;
   attributes_some?: AttributeWhereInput | null;
   attributes_none?: AttributeWhereInput | null;
@@ -5694,6 +6305,7 @@ export interface ResourceWhereUniqueInput {
 }
 
 export interface SourceCreateInput {
+  id?: ID_Input | null;
   name: String;
   resources?: ResourceCreateManyWithoutSourceInput | null;
 }
@@ -5704,6 +6316,7 @@ export interface SourceCreateOneWithoutResourcesInput {
 }
 
 export interface SourceCreateWithoutResourcesInput {
+  id?: ID_Input | null;
   name: String;
 }
 
@@ -5775,6 +6388,22 @@ export interface SourceWhereInput {
   name_not_starts_with?: String | null;
   name_ends_with?: String | null;
   name_not_ends_with?: String | null;
+  updatedAt?: DateTime | null;
+  updatedAt_not?: DateTime | null;
+  updatedAt_in?: DateTime[] | DateTime | null;
+  updatedAt_not_in?: DateTime[] | DateTime | null;
+  updatedAt_lt?: DateTime | null;
+  updatedAt_lte?: DateTime | null;
+  updatedAt_gt?: DateTime | null;
+  updatedAt_gte?: DateTime | null;
+  createdAt?: DateTime | null;
+  createdAt_not?: DateTime | null;
+  createdAt_in?: DateTime[] | DateTime | null;
+  createdAt_not_in?: DateTime[] | DateTime | null;
+  createdAt_lt?: DateTime | null;
+  createdAt_lte?: DateTime | null;
+  createdAt_gt?: DateTime | null;
+  createdAt_gte?: DateTime | null;
   resources_every?: ResourceWhereInput | null;
   resources_some?: ResourceWhereInput | null;
   resources_none?: ResourceWhereInput | null;
@@ -5786,6 +6415,7 @@ export interface SourceWhereUniqueInput {
 }
 
 export interface UserCreateInput {
+  id?: ID_Input | null;
   email: String;
   name: String;
   password: String;
@@ -5881,6 +6511,22 @@ export interface UserWhereInput {
   role_not?: Role | null;
   role_in?: Role[] | Role | null;
   role_not_in?: Role[] | Role | null;
+  updatedAt?: DateTime | null;
+  updatedAt_not?: DateTime | null;
+  updatedAt_in?: DateTime[] | DateTime | null;
+  updatedAt_not_in?: DateTime[] | DateTime | null;
+  updatedAt_lt?: DateTime | null;
+  updatedAt_lte?: DateTime | null;
+  updatedAt_gt?: DateTime | null;
+  updatedAt_gte?: DateTime | null;
+  createdAt?: DateTime | null;
+  createdAt_not?: DateTime | null;
+  createdAt_in?: DateTime[] | DateTime | null;
+  createdAt_not_in?: DateTime[] | DateTime | null;
+  createdAt_lt?: DateTime | null;
+  createdAt_lte?: DateTime | null;
+  createdAt_gt?: DateTime | null;
+  createdAt_gte?: DateTime | null;
 }
 
 export interface UserWhereUniqueInput {
@@ -5932,6 +6578,8 @@ export interface Attribute extends Node {
   attributes?: Array<Attribute> | null;
   attribute?: Attribute | null;
   inputColumns?: Array<InputColumn> | null;
+  updatedAt: DateTime;
+  createdAt: DateTime;
 }
 
 /*
@@ -5961,6 +6609,8 @@ export interface AttributePreviousValues {
   type?: String | null;
   comment?: String | null;
   depth?: Int | null;
+  updatedAt: DateTime;
+  createdAt: DateTime;
 }
 
 export interface AttributeSubscriptionPayload {
@@ -5983,6 +6633,8 @@ export interface InputColumn extends Node {
   staticValue?: String | null;
   joins?: Array<Join> | null;
   attribute: Attribute;
+  updatedAt: DateTime;
+  createdAt: DateTime;
 }
 
 /*
@@ -6011,6 +6663,8 @@ export interface InputColumnPreviousValues {
   column?: String | null;
   script?: String | null;
   staticValue?: String | null;
+  updatedAt: DateTime;
+  createdAt: DateTime;
 }
 
 export interface InputColumnSubscriptionPayload {
@@ -6029,6 +6683,8 @@ export interface Join extends Node {
   targetTable?: String | null;
   targetColumn?: String | null;
   inputColumn: InputColumn;
+  updatedAt: DateTime;
+  createdAt: DateTime;
 }
 
 /*
@@ -6058,6 +6714,8 @@ export interface JoinPreviousValues {
   targetOwner?: String | null;
   targetTable?: String | null;
   targetColumn?: String | null;
+  updatedAt: DateTime;
+  createdAt: DateTime;
 }
 
 export interface JoinSubscriptionPayload {
@@ -6086,6 +6744,8 @@ export interface Resource extends Node {
   primaryKeyColumn?: String | null;
   attributes?: Array<Attribute> | null;
   source: Source;
+  updatedAt: DateTime;
+  createdAt: DateTime;
 }
 
 /*
@@ -6113,6 +6773,8 @@ export interface ResourcePreviousValues {
   primaryKeyOwner?: String | null;
   primaryKeyTable?: String | null;
   primaryKeyColumn?: String | null;
+  updatedAt: DateTime;
+  createdAt: DateTime;
 }
 
 export interface ResourceSubscriptionPayload {
@@ -6126,6 +6788,8 @@ export interface Source extends Node {
   id: ID_Output;
   name: String;
   resources?: Array<Resource> | null;
+  updatedAt: DateTime;
+  createdAt: DateTime;
 }
 
 /*
@@ -6150,6 +6814,8 @@ export interface SourceEdge {
 export interface SourcePreviousValues {
   id: ID_Output;
   name: String;
+  updatedAt: DateTime;
+  createdAt: DateTime;
 }
 
 export interface SourceSubscriptionPayload {
@@ -6165,6 +6831,8 @@ export interface User extends Node {
   name: String;
   password: String;
   role?: Role | null;
+  updatedAt: DateTime;
+  createdAt: DateTime;
 }
 
 /*
@@ -6192,6 +6860,8 @@ export interface UserPreviousValues {
   name: String;
   password: String;
   role?: Role | null;
+  updatedAt: DateTime;
+  createdAt: DateTime;
 }
 
 export interface UserSubscriptionPayload {
@@ -6205,6 +6875,8 @@ export interface UserSubscriptionPayload {
 The `Boolean` scalar type represents `true` or `false`.
 */
 export type Boolean = boolean;
+
+export type DateTime = Date | string;
 
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
