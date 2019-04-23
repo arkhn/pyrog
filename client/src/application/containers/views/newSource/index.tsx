@@ -1,5 +1,6 @@
 import {
   Button,
+  Checkbox,
   Code,
   FileInput,
   FormGroup,
@@ -34,6 +35,7 @@ const createSource = require("../../graphql/mutations/createSource.graphql");
 export interface INewSourceState {}
 
 interface IState {
+  hasOwner: boolean;
   isUploading: boolean;
   sourceName: string;
   schemaFile: any;
@@ -69,6 +71,7 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
   constructor(props: INewSourceViewState) {
     super(props);
     this.state = {
+      hasOwner: false,
       isUploading: false,
       sourceName: "",
       schemaFile: null
@@ -161,7 +164,8 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
             .mutate({
               mutation: createSource,
               variables: {
-                sourceName: this.state.sourceName
+                sourceName: this.state.sourceName,
+                hasOwner: this.state.hasOwner
               }
             })
             .then((graphqlResponse: any) => {
@@ -254,7 +258,7 @@ SELECT OWNER, TABLE_NAME, COLUMN_NAME, DATA_TYPE FROM all_tab_columns;
         <Navbar />
         <div id="main-container-newsource">
           <Query fetchPolicy="network-only" query={allSources}>
-            {({ data, loading }) => {
+            {({ data, loading }: any) => {
               const sourceNames = data.allSources
                 ? data.allSources.map((source: ISource) => source.name)
                 : null;
@@ -305,6 +309,16 @@ SELECT OWNER, TABLE_NAME, COLUMN_NAME, DATA_TYPE FROM all_tab_columns;
                       ) : (
                         <p className="disabled-text">Importer un schéma...</p>
                       )
+                    }
+                  />
+                  <br />
+                  <Checkbox
+                    checked={this.state.hasOwner}
+                    label="Le schéma a un OWNER"
+                    onChange={(event: React.FormEvent<HTMLElement>) =>
+                      this.setState({
+                        hasOwner: !this.state.hasOwner
+                      })
                     }
                   />
                   <br />
