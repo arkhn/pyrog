@@ -102,8 +102,8 @@ class Navbar extends React.Component<IProps, IState> {
                   }
                 })
                 .then((response: any) => {
-                  const { id, name } = response.data.sourceInfo;
-                  this.props.dispatch(changeSelectedSource(id, name));
+                  const { id, name, hasOwner } = response.data.sourceInfo;
+                  this.props.dispatch(changeSelectedSource(id, name, hasOwner));
                 })
                 .catch((error: any) => {
                   console.log(error);

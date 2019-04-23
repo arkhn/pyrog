@@ -85,7 +85,11 @@ class SourcesView extends React.Component<ISourcesViewState, IState> {
                           key={index}
                           onClick={() => {
                             dispatch(
-                              changeSelectedSource(source.id, source.name)
+                              changeSelectedSource(
+                                source.id,
+                                source.name,
+                                source.hasOwner
+                              )
                             );
                             this.props.history.push({
                               pathname: "/mapping",
