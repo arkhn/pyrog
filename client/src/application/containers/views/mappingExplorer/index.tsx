@@ -165,7 +165,7 @@ export default class MappingExplorerView extends React.Component<
     This function updates the current url with new information.
     Before: url/pathname?attr1=value1
     After: url/pathname?attr1=value1&key=value
-    */
+  */
   private updateLocationSearch = (key: string, value: string) => {
     const qs = QueryString.stringify({
       ...QueryString.parse(this.props.location.search),
@@ -340,6 +340,7 @@ export default class MappingExplorerView extends React.Component<
     const joinColumnsComponent = (join: any, updateJoin: any) => (
       <div className="join-columns">
         <ColumnPicker
+          hasOwner={selectedSource.hasOwner}
           ownerChangeCallback={(e: string) => {
             updateJoin({
               variables: {
@@ -387,6 +388,7 @@ export default class MappingExplorerView extends React.Component<
           }
         />
         <ColumnPicker
+          hasOwner={selectedSource.hasOwner}
           ownerChangeCallback={(e: string) => {
             updateJoin({
               variables: {
@@ -578,6 +580,7 @@ export default class MappingExplorerView extends React.Component<
           >
             <ControlGroup>
               <ColumnPicker
+                hasOwner={selectedSource.hasOwner}
                 ownerChangeCallback={(e: string) => {
                   this.setState({
                     columnPicker: {

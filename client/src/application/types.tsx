@@ -24,6 +24,7 @@ export interface IUser {
 export interface ISelectedSource {
   id: string;
   name: string;
+  hasOwner: boolean;
 }
 
 export interface ISourceSchemas {
