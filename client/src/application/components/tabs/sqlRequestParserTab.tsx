@@ -11,9 +11,6 @@ import * as React from "react";
 
 const sqlParser = require("js-sql-parser");
 
-//TODO
-import "../../containers/views/mappingExplorer/style.less";
-
 import SqlRequestParser from "../sqlRequestParser";
 
 import { ISelectedSource } from "../../types";
