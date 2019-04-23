@@ -17,11 +17,7 @@ import SqlRequestParser from "../sqlRequestParser";
 
 import { ISelectedSource } from "../../types";
 
-interface IProps {
-  selectedSource: ISelectedSource;
-}
-
-const SQLRequestParserTab = ({ selectedSource }: IProps) => {
+const SQLRequestParserTab = () => {
   const [table, setTable] = React.useState(null);
   const [columns, setColumns] = React.useState([]);
 
