@@ -67,6 +67,7 @@ Reset Postgres data:
 
 ```
 yarn run prisma reset -e .env.staging
+yarn run prisma deploy -e .env.staging
 yarn run prisma import --data ./static/pyrog_mimic_mapping.zip -e .env.staging
 ```
 
