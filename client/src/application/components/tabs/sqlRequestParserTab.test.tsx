@@ -4,8 +4,6 @@ import SQLRequestParserTab from "./sqlRequestParserTab";
 
 describe("SQLRequestParserTab component", () => {
   it("Renders without crashing", () => {
-    shallow(
-      <SQLRequestParserTab selectedSource={{ id: "myid", name: "Mimic" }} />
-    );
+    shallow(<SQLRequestParserTab />);
   });
 });
