@@ -40,7 +40,7 @@ rm pyrog_dev_static.zip
 This zip file also contains some mock data, among which [Mimic](https://mimic.physionet.org)'s database schema and a partial mapping of Mimic into FHIR. So as to use this data, you can populate your local Postgres database with our mapping:
 
 ```
-yarn run prisma import --data ./static/pyrog_mimic_mapping.zip -e .env.staging
+yarn run prisma import -d ./static/pyrog_mimic_mapping.zip -e .env.staging
 ```
 
 In particular, this will register two users with different roles:

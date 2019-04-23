@@ -375,6 +375,8 @@ export type SourceOrderByInput =
   | "id_DESC"
   | "name_ASC"
   | "name_DESC"
+  | "hasOwner_ASC"
+  | "hasOwner_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC"
   | "createdAt_ASC"
@@ -639,6 +641,8 @@ export interface SourceWhereInput {
   name_not_starts_with?: String;
   name_ends_with?: String;
   name_not_ends_with?: String;
+  hasOwner?: Boolean;
+  hasOwner_not?: Boolean;
   resources_every?: ResourceWhereInput;
   resources_some?: ResourceWhereInput;
   resources_none?: ResourceWhereInput;
@@ -1034,6 +1038,7 @@ export interface SourceCreateOneWithoutResourcesInput {
 export interface SourceCreateWithoutResourcesInput {
   id?: ID_Input;
   name: String;
+  hasOwner?: Boolean;
 }
 
 export interface AttributeCreateManyWithoutAttributeInput {
@@ -1147,6 +1152,7 @@ export interface SourceUpdateOneRequiredWithoutResourcesInput {
 
 export interface SourceUpdateWithoutResourcesDataInput {
   name?: String;
+  hasOwner?: Boolean;
 }
 
 export interface SourceUpsertWithoutResourcesInput {
@@ -1915,6 +1921,7 @@ export interface ResourceUpdateManyMutationInput {
 export interface SourceCreateInput {
   id?: ID_Input;
   name: String;
+  hasOwner?: Boolean;
   resources?: ResourceCreateManyWithoutSourceInput;
 }
 
@@ -1936,6 +1943,7 @@ export interface ResourceCreateWithoutSourceInput {
 
 export interface SourceUpdateInput {
   name?: String;
+  hasOwner?: Boolean;
   resources?: ResourceUpdateManyWithoutSourceInput;
 }
 
@@ -2084,6 +2092,7 @@ export interface ResourceUpdateManyDataInput {
 
 export interface SourceUpdateManyMutationInput {
   name?: String;
+  hasOwner?: Boolean;
 }
 
 export interface UserCreateInput {
@@ -2311,6 +2320,7 @@ export interface ResourceSubscription
 export interface Source {
   id: ID_Output;
   name: String;
+  hasOwner: Boolean;
   updatedAt: DateTimeOutput;
   createdAt: DateTimeOutput;
 }
@@ -2318,6 +2328,7 @@ export interface Source {
 export interface SourcePromise extends Promise<Source>, Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
+  hasOwner: () => Promise<Boolean>;
   resources: <T = FragmentableArray<Resource>>(args?: {
     where?: ResourceWhereInput;
     orderBy?: ResourceOrderByInput;
@@ -2336,6 +2347,7 @@ export interface SourceSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   name: () => Promise<AsyncIterator<String>>;
+  hasOwner: () => Promise<AsyncIterator<Boolean>>;
   resources: <T = Promise<AsyncIterator<ResourceSubscription>>>(args?: {
     where?: ResourceWhereInput;
     orderBy?: ResourceOrderByInput;
@@ -3124,6 +3136,7 @@ export interface SourceSubscriptionPayloadSubscription
 export interface SourcePreviousValues {
   id: ID_Output;
   name: String;
+  hasOwner: Boolean;
   updatedAt: DateTimeOutput;
   createdAt: DateTimeOutput;
 }
@@ -3133,6 +3146,7 @@ export interface SourcePreviousValuesPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
+  hasOwner: () => Promise<Boolean>;
   updatedAt: () => Promise<DateTimeOutput>;
   createdAt: () => Promise<DateTimeOutput>;
 }
@@ -3142,6 +3156,7 @@ export interface SourcePreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   name: () => Promise<AsyncIterator<String>>;
+  hasOwner: () => Promise<AsyncIterator<Boolean>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }

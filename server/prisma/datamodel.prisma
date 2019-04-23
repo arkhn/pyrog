@@ -1,7 +1,8 @@
 type Source {
   id: ID! @unique @id
   name: String! @unique
-  resources: [Resource!]! @relation(name: "SourceToResource", onDelete: CASCADE)
+  hasOwner: Boolean! @default(value: false)
+  resources: [Resource!]! @relation(link: TABLE, name: "SourceToResource", onDelete: CASCADE)
   updatedAt: DateTime! @updatedAt
   createdAt: DateTime! @createdAt
 }
@@ -12,7 +13,7 @@ type Resource {
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
-  attributes: [Attribute!]! @relation(name: "ResourceToAttributes", onDelete: CASCADE)
+  attributes: [Attribute!]! @relation(link: TABLE, name: "ResourceToAttributes", onDelete: CASCADE)
   source: Source! @relation(name: "SourceToResource")
   updatedAt: DateTime! @updatedAt
   createdAt: DateTime! @createdAt
@@ -29,11 +30,11 @@ type Attribute {
   # Parent resource
   resource: Resource @relation(name: "ResourceToAttributes")
   # Children attributes
-  attributes: [Attribute!] @relation(name: "AttributeToAttributes", onDelete: CASCADE)
+  attributes: [Attribute!] @relation(link: TABLE, name: "AttributeToAttributes", onDelete: CASCADE)
   # Parent attribute
   attribute: Attribute @relation(name: "AttributeToAttributes")
   # Children input columns
-  inputColumns: [InputColumn!] @relation(name: "AttributeToInputColumns", onDelete: CASCADE)
+  inputColumns: [InputColumn!] @relation(link: TABLE, name: "AttributeToInputColumns", onDelete: CASCADE)
   updatedAt: DateTime! @updatedAt
   createdAt: DateTime! @createdAt
 }
@@ -46,7 +47,7 @@ type InputColumn {
   script: String
   staticValue: String
   # Children joins
-  joins: [Join!] @relation(name: "InputColumnToJoins", onDelete: CASCADE)
+  joins: [Join!] @relation(link: TABLE, name: "InputColumnToJoins", onDelete: CASCADE)
   # Parent attribute
   attribute: Attribute! @relation(name: "AttributeToInputColumns")
   updatedAt: DateTime! @updatedAt

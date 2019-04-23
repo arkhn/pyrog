@@ -2046,6 +2046,7 @@ export const typeDefs = /* GraphQL */ `
   type Source {
     id: ID!
     name: String!
+    hasOwner: Boolean!
     resources(
       where: ResourceWhereInput
       orderBy: ResourceOrderByInput
@@ -2068,6 +2069,7 @@ export const typeDefs = /* GraphQL */ `
   input SourceCreateInput {
     id: ID
     name: String!
+    hasOwner: Boolean
     resources: ResourceCreateManyWithoutSourceInput
   }
 
@@ -2079,6 +2081,7 @@ export const typeDefs = /* GraphQL */ `
   input SourceCreateWithoutResourcesInput {
     id: ID
     name: String!
+    hasOwner: Boolean
   }
 
   type SourceEdge {
@@ -2091,6 +2094,8 @@ export const typeDefs = /* GraphQL */ `
     id_DESC
     name_ASC
     name_DESC
+    hasOwner_ASC
+    hasOwner_DESC
     updatedAt_ASC
     updatedAt_DESC
     createdAt_ASC
@@ -2100,6 +2105,7 @@ export const typeDefs = /* GraphQL */ `
   type SourcePreviousValues {
     id: ID!
     name: String!
+    hasOwner: Boolean!
     updatedAt: DateTime!
     createdAt: DateTime!
   }
@@ -2124,11 +2130,13 @@ export const typeDefs = /* GraphQL */ `
 
   input SourceUpdateInput {
     name: String
+    hasOwner: Boolean
     resources: ResourceUpdateManyWithoutSourceInput
   }
 
   input SourceUpdateManyMutationInput {
     name: String
+    hasOwner: Boolean
   }
 
   input SourceUpdateOneRequiredWithoutResourcesInput {
@@ -2140,6 +2148,7 @@ export const typeDefs = /* GraphQL */ `
 
   input SourceUpdateWithoutResourcesDataInput {
     name: String
+    hasOwner: Boolean
   }
 
   input SourceUpsertWithoutResourcesInput {
@@ -2176,6 +2185,8 @@ export const typeDefs = /* GraphQL */ `
     name_not_starts_with: String
     name_ends_with: String
     name_not_ends_with: String
+    hasOwner: Boolean
+    hasOwner_not: Boolean
     resources_every: ResourceWhereInput
     resources_some: ResourceWhereInput
     resources_none: ResourceWhereInput

@@ -3975,6 +3975,7 @@ enum Role {
 type Source implements Node {
   id: ID!
   name: String!
+  hasOwner: Boolean!
   resources(where: ResourceWhereInput, orderBy: ResourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Resource!]
   updatedAt: DateTime!
   createdAt: DateTime!
@@ -3993,6 +3994,7 @@ type SourceConnection {
 input SourceCreateInput {
   id: ID
   name: String!
+  hasOwner: Boolean
   resources: ResourceCreateManyWithoutSourceInput
 }
 
@@ -4004,6 +4006,7 @@ input SourceCreateOneWithoutResourcesInput {
 input SourceCreateWithoutResourcesInput {
   id: ID
   name: String!
+  hasOwner: Boolean
 }
 
 """An edge in a connection."""
@@ -4020,6 +4023,8 @@ enum SourceOrderByInput {
   id_DESC
   name_ASC
   name_DESC
+  hasOwner_ASC
+  hasOwner_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -4029,6 +4034,7 @@ enum SourceOrderByInput {
 type SourcePreviousValues {
   id: ID!
   name: String!
+  hasOwner: Boolean!
   updatedAt: DateTime!
   createdAt: DateTime!
 }
@@ -4072,11 +4078,13 @@ input SourceSubscriptionWhereInput {
 
 input SourceUpdateInput {
   name: String
+  hasOwner: Boolean
   resources: ResourceUpdateManyWithoutSourceInput
 }
 
 input SourceUpdateManyMutationInput {
   name: String
+  hasOwner: Boolean
 }
 
 input SourceUpdateOneRequiredWithoutResourcesInput {
@@ -4088,6 +4096,7 @@ input SourceUpdateOneRequiredWithoutResourcesInput {
 
 input SourceUpdateWithoutResourcesDataInput {
   name: String
+  hasOwner: Boolean
 }
 
 input SourceUpsertWithoutResourcesInput {
@@ -4184,6 +4193,10 @@ input SourceWhereInput {
 
   """All values not ending with the given string."""
   name_not_ends_with: String
+  hasOwner: Boolean
+
+  """All values that are not equal to given value."""
+  hasOwner_not: Boolean
   updatedAt: DateTime
 
   """All values that are not equal to given value."""
@@ -4684,6 +4697,8 @@ export type SourceOrderByInput =
   | "id_DESC"
   | "name_ASC"
   | "name_DESC"
+  | "hasOwner_ASC"
+  | "hasOwner_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC"
   | "createdAt_ASC"
@@ -6307,6 +6322,7 @@ export interface ResourceWhereUniqueInput {
 export interface SourceCreateInput {
   id?: ID_Input | null;
   name: String;
+  hasOwner?: Boolean | null;
   resources?: ResourceCreateManyWithoutSourceInput | null;
 }
 
@@ -6318,6 +6334,7 @@ export interface SourceCreateOneWithoutResourcesInput {
 export interface SourceCreateWithoutResourcesInput {
   id?: ID_Input | null;
   name: String;
+  hasOwner?: Boolean | null;
 }
 
 export interface SourceSubscriptionWhereInput {
@@ -6333,11 +6350,13 @@ export interface SourceSubscriptionWhereInput {
 
 export interface SourceUpdateInput {
   name?: String | null;
+  hasOwner?: Boolean | null;
   resources?: ResourceUpdateManyWithoutSourceInput | null;
 }
 
 export interface SourceUpdateManyMutationInput {
   name?: String | null;
+  hasOwner?: Boolean | null;
 }
 
 export interface SourceUpdateOneRequiredWithoutResourcesInput {
@@ -6349,6 +6368,7 @@ export interface SourceUpdateOneRequiredWithoutResourcesInput {
 
 export interface SourceUpdateWithoutResourcesDataInput {
   name?: String | null;
+  hasOwner?: Boolean | null;
 }
 
 export interface SourceUpsertWithoutResourcesInput {
@@ -6388,6 +6408,8 @@ export interface SourceWhereInput {
   name_not_starts_with?: String | null;
   name_ends_with?: String | null;
   name_not_ends_with?: String | null;
+  hasOwner?: Boolean | null;
+  hasOwner_not?: Boolean | null;
   updatedAt?: DateTime | null;
   updatedAt_not?: DateTime | null;
   updatedAt_in?: DateTime[] | DateTime | null;
@@ -6787,6 +6809,7 @@ export interface ResourceSubscriptionPayload {
 export interface Source extends Node {
   id: ID_Output;
   name: String;
+  hasOwner: Boolean;
   resources?: Array<Resource> | null;
   updatedAt: DateTime;
   createdAt: DateTime;
@@ -6814,6 +6837,7 @@ export interface SourceEdge {
 export interface SourcePreviousValues {
   id: ID_Output;
   name: String;
+  hasOwner: Boolean;
   updatedAt: DateTime;
   createdAt: DateTime;
 }

@@ -1,5 +1,5 @@
-mutation createSource($sourceName: String!) {
-  createSource(sourceName: $sourceName) {
+mutation createSource($sourceName: String!, $hasOwner: Boolean!) {
+  createSource(sourceName: $sourceName, hasOwner: $hasOwner) {
     id
     name
   }

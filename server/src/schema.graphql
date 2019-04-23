@@ -19,7 +19,7 @@ type Query {
 }
 
 type Mutation {
-  createSource(sourceName: String!): Source!
+  createSource(sourceName: String!, hasOwner: Boolean!): Source!
   createInputColumnAndUpdateAttribute(
     attributeId: ID!
     data: InputColumnCreateWithoutAttributeInput

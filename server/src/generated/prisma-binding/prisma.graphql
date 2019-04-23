@@ -1,5 +1,5 @@
 # source: http://0.0.0.0:4466
-# timestamp: Mon Apr 22 2019 12:58:24 GMT+0200 (Central European Summer Time)
+# timestamp: Tue Apr 23 2019 10:54:09 GMT+0200 (Central European Summer Time)
 
 type AggregateAttribute {
   count: Int!
@@ -5261,6 +5261,7 @@ enum Role {
 type Source implements Node {
   id: ID!
   name: String!
+  hasOwner: Boolean!
   resources(
     where: ResourceWhereInput
     orderBy: ResourceOrderByInput
@@ -5293,6 +5294,7 @@ type SourceConnection {
 input SourceCreateInput {
   id: ID
   name: String!
+  hasOwner: Boolean
   resources: ResourceCreateManyWithoutSourceInput
 }
 
@@ -5304,6 +5306,7 @@ input SourceCreateOneWithoutResourcesInput {
 input SourceCreateWithoutResourcesInput {
   id: ID
   name: String!
+  hasOwner: Boolean
 }
 
 """
@@ -5326,6 +5329,8 @@ enum SourceOrderByInput {
   id_DESC
   name_ASC
   name_DESC
+  hasOwner_ASC
+  hasOwner_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -5335,6 +5340,7 @@ enum SourceOrderByInput {
 type SourcePreviousValues {
   id: ID!
   name: String!
+  hasOwner: Boolean!
   updatedAt: DateTime!
   createdAt: DateTime!
 }
@@ -5386,11 +5392,13 @@ input SourceSubscriptionWhereInput {
 
 input SourceUpdateInput {
   name: String
+  hasOwner: Boolean
   resources: ResourceUpdateManyWithoutSourceInput
 }
 
 input SourceUpdateManyMutationInput {
   name: String
+  hasOwner: Boolean
 }
 
 input SourceUpdateOneRequiredWithoutResourcesInput {
@@ -5402,6 +5410,7 @@ input SourceUpdateOneRequiredWithoutResourcesInput {
 
 input SourceUpdateWithoutResourcesDataInput {
   name: String
+  hasOwner: Boolean
 }
 
 input SourceUpsertWithoutResourcesInput {
@@ -5556,6 +5565,12 @@ input SourceWhereInput {
   All values not ending with the given string.
   """
   name_not_ends_with: String
+  hasOwner: Boolean
+
+  """
+  All values that are not equal to given value.
+  """
+  hasOwner_not: Boolean
   updatedAt: DateTime
 
   """
