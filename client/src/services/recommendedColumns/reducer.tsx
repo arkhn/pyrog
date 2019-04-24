@@ -1,4 +1,4 @@
-import { IRecommendedColumns, ISimpleAction } from "../types";
+import { IRecommendedColumns, ISimpleAction } from "../../types";
 
 let initialState: IRecommendedColumns = {
   columnsByAttribute: {}

@@ -7,7 +7,7 @@ import { withRouter } from "react-router-dom";
 
 import Navbar from "../../components/navbar";
 
-import { changeSelectedSource } from "../../actions/selectedSource";
+import { changeSelectedSource } from "../../services//selectedSource/actions";
 
 // Import types
 import { IReduxStore, IView } from "../../types";

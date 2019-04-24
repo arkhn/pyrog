@@ -10,21 +10,68 @@ import { onError } from "apollo-link-error";
 import { getMainDefinition } from "apollo-utilities";
 import { WebSocketLink } from "apollo-link-ws";
 import { ApolloProvider } from "react-apollo";
+import { combineReducers } from "redux";
 
 import "./style.less";
 import Routes from "./routes";
-import middlewares from "./middlewares/middlewares";
-import mainReducer from "./reducers/mainReducer";
 
-// Redux initialisation
+// REDUX
+
+// Middlewares
+const middlewares = [
+  function thunkMiddleware({ dispatch, getState }: any) {
+    return function(next: any) {
+      return function(action: any) {
+        return typeof action === "function"
+          ? action(dispatch, getState)
+          : next(action);
+      };
+    };
+  }
+];
 if (process.env.NODE_ENV === "development") {
   // Log redux dispatch only in development
   middlewares.push(createLogger({}));
 }
+
+// Reducers
+
+// Data fetching reducers
+import sourceSchemas from "./services/sourceSchemas/reducer";
+import recommendedColumns from "./services/recommendedColumns/reducer";
+import selectedSourceReducer from "./services/selectedSource/reducer";
+import toasterReducer from "./services/toaster/reducer";
+import userReducer from "./services/user/reducer";
+
+// View reducers
+import mapping from "./views/mapping/reducer";
+import mimic from "./views/mimic/reducer";
+
+// Data reducer (also called canonical state)
+const dataReducer = combineReducers({
+  sourceSchemas,
+  recommendedColumns
+});
+
+// View reducer
+const viewReducer = combineReducers({
+  mapping,
+  mimic
+});
+
+const mainReducer = combineReducers({
+  data: dataReducer,
+  selectedSource: selectedSourceReducer,
+  toaster: toasterReducer,
+  views: viewReducer,
+  user: userReducer
+});
+
+// Store
 const finalCreateStore = applyMiddleware(...middlewares)(createStore);
 const store = finalCreateStore(mainReducer);
 
-// APOLLO SETUP
+// APOLLO
 
 // HttpLink
 const httpLink = new HttpLink({

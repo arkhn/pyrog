@@ -1,6 +1,6 @@
-import { IAction } from "../types";
+import { IAction } from "../../types";
 
-import { fetchSourceSchema } from "./sourceSchemas";
+import { fetchSourceSchema } from "../sourceSchemas/actions";
 
 export const changeSelectedSource = (
   id: string,

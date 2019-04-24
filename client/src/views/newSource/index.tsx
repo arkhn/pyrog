@@ -20,7 +20,7 @@ import Navbar from "../../components/navbar";
 // Import types
 import { ISource, IReduxStore, IView } from "../../types";
 
-import { addToast } from "../../actions/toastsProps";
+import { addToast } from "../../services/toaster/actions";
 
 import "./style.less";
 

@@ -1,4 +1,4 @@
-import { IAction } from "../types";
+import { IAction } from "../../types";
 
 export const login = (id: string, name: string, email: string): IAction => {
   return {

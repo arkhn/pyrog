@@ -1,5 +1,5 @@
-import { IAction } from "../types";
-import { availableTypes } from "../mockdata/mimic";
+import { IAction } from "../../types";
+import { availableTypes } from "../../mockdata/mimic";
 
 export const fetchRecommendedColumns = (
   fhirAttribute: string,

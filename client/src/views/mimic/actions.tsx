@@ -3,7 +3,7 @@ import { IAction } from "../../types";
 import {
   fetchBetaRecommendedColumns,
   fetchRecommendedColumns
-} from "../../actions/recommendedColumns";
+} from "../../services/recommendedColumns/actions";
 
 export const addInputColumn = (fhirAttribute: string, inputColumn: string) => {
   return {

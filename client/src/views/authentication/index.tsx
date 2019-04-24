@@ -15,7 +15,7 @@ import { withRouter } from "react-router-dom";
 
 import Navbar from "../../components/navbar";
 
-import { login as loginAction } from "../../actions/user";
+import { login as loginAction } from "../../services/user/actions";
 
 // Import types
 import { IReduxStore, IView } from "../../types";

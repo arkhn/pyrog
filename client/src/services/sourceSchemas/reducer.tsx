@@ -1,4 +1,4 @@
-import { ISourceSchemas, ISimpleAction } from "../types";
+import { ISourceSchemas, ISimpleAction } from "../../types";
 
 const initialState: ISourceSchemas = {
   loadingSourceSchema: false,

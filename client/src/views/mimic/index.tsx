@@ -16,7 +16,7 @@ import { addInputColumn, changeMotClefMimic, changeTypeMimic } from "./actions";
 import {
   fetchBetaRecommendedColumns,
   fetchRecommendedColumns
-} from "../../actions/recommendedColumns";
+} from "../../services/recommendedColumns/actions";
 
 // Import custom components
 import StringSelect from "../../components/selects/stringSelect";

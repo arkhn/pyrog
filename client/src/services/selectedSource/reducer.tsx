@@ -1,4 +1,4 @@
-import { ISelectedSource, ISimpleAction } from "../types";
+import { ISelectedSource, ISimpleAction } from "../../types";
 
 const initialState: ISelectedSource = {
   id: null,

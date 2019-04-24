@@ -16,8 +16,10 @@ import { withRouter } from "react-router-dom";
 import {
   changeSelectedSource,
   deselectSource
-} from "../../actions/selectedSource";
-import { login, logout } from "../../actions/user";
+} from "../../services/selectedSource/actions";
+import { login, logout } from "../../services/user/actions";
+// TODO: this dependency should be removed
+// as components should not rely on View's actions
 import {
   updateFhirAttribute,
   updateFhirResource

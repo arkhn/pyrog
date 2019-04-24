@@ -1,4 +1,4 @@
-import { IAction } from "../types";
+import { IAction } from "../../types";
 
 // These actions handle source schema fetching.
 export const loadingSourceSchema = (): IAction => {
