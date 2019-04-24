@@ -21,7 +21,7 @@ import { login, logout } from "../../actions/user";
 import {
   updateFhirAttribute,
   updateFhirResource
-} from "../../views/mappingExplorer/actions";
+} from "../../views/mapping/actions";
 
 // Import types
 import { IReduxStore, IView } from "../../types";

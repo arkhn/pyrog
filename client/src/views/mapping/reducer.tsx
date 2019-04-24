@@ -1,6 +1,6 @@
 // Import custom types
 import { ISimpleAction } from "../../types";
-import { IMappingExplorerState } from "./index";
+import { IMappingProps } from "./index";
 
 export const availableResourceNames = [
   {
@@ -160,7 +160,7 @@ export const availableResourceNames = [
   { type: "Conformance", subtype: "Content", name: "DataElement" }
 ];
 
-const initialState: IMappingExplorerState = {
+const initialState: IMappingProps = {
   createdProfiles: 0,
   createdResources: 0,
   expandedAttributesIdList: [] as string[],
@@ -182,7 +182,7 @@ const initialState: IMappingExplorerState = {
 const reducer = (
   state = initialState,
   action: ISimpleAction
-): IMappingExplorerState => {
+): IMappingProps => {
   switch (action.type) {
     case "UPDATE_FHIR_RESOURCE":
       return {

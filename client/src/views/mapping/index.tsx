@@ -55,7 +55,7 @@ const createResourceTreeInSource = require("../../graphql/mutations/createResour
 const arkhnLogoWhite = require("../../assets/img/arkhn_logo_only_white.svg") as string;
 const arkhnLogoBlack = require("../../assets/img/arkhn_logo_only_black.svg") as string;
 
-export interface IMappingExplorerState {
+export interface IMappingProps {
   createdProfiles: number;
   createdResources: number;
   expandedAttributesIdList: string[];
@@ -85,13 +85,11 @@ interface IState {
   toggledNavBar: boolean;
 }
 
-interface IMappingExplorerViewState extends IView, IMappingExplorerState {}
+interface IMappingViewProps extends IView, IMappingProps {}
 
-const mapReduxStateToReactProps = (
-  state: IReduxStore
-): IMappingExplorerViewState => {
+const mapReduxStateToReactProps = (state: IReduxStore): IMappingViewProps => {
   return {
-    ...state.views.mappingExplorer,
+    ...state.views.mapping,
     data: state.data,
     dispatch: state.dispatch,
     selectedSource: state.selectedSource,
@@ -115,11 +113,11 @@ const reduxify = (
 };
 
 @reduxify(mapReduxStateToReactProps)
-export default class MappingExplorerView extends React.Component<
-  IMappingExplorerViewState,
+export default class MappingView extends React.Component<
+  IMappingViewProps,
   IState
 > {
-  constructor(props: IMappingExplorerViewState) {
+  constructor(props: IMappingViewProps) {
     super(props);
 
     this.state = {
