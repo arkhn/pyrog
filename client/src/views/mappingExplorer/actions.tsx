@@ -1,4 +1,4 @@
-import { IAction } from "../../../types";
+import { IAction } from "../../types";
 
 // STATE UPDATES
 export const updateFhirResource = (

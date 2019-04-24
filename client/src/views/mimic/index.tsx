@@ -16,16 +16,16 @@ import { addInputColumn, changeMotClefMimic, changeTypeMimic } from "./actions";
 import {
   fetchBetaRecommendedColumns,
   fetchRecommendedColumns
-} from "../../../actions/recommendedColumns";
+} from "../../actions/recommendedColumns";
 
 // Import custom components
-import StringSelect from "../../../components/selects/stringSelect";
+import StringSelect from "../../components/selects/stringSelect";
 
 // Import mockdata
-import { availableTypes, questions } from "../../../mockdata/mimic";
+import { availableTypes, questions } from "../../mockdata/mimic";
 
 // Import custom types
-import { IReduxStore, IView } from "../../../types";
+import { IReduxStore, IView } from "../../types";
 
 // Mimic types
 

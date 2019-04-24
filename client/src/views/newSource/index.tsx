@@ -18,9 +18,9 @@ import { withRouter } from "react-router-dom";
 import Navbar from "../../utils/navbar";
 
 // Import types
-import { ISource, IReduxStore, IView } from "../../../types";
+import { ISource, IReduxStore, IView } from "../../types";
 
-import { addToast } from "../../../actions/toastsProps";
+import { addToast } from "../../actions/toastsProps";
 
 import "./style.less";
 

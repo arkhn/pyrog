@@ -2,11 +2,11 @@ import * as React from "react";
 import { Route } from "react-router";
 import { BrowserRouter, Switch } from "react-router-dom";
 
-import Authentication from "./containers/views/authentication";
-import MappingExplorer from "./containers/views/mappingExplorer";
-import MimicView from "./containers/views/mimic";
-import NewSource from "./containers/views/newSource";
-import Sources from "./containers/views/sources";
+import Authentication from "./views/authentication";
+import MappingExplorer from "./views/mappingExplorer";
+import MimicView from "./views/mimic";
+import NewSource from "./views/newSource";
+import Sources from "./views/sources";
 
 const Routes = () => (
   <BrowserRouter>

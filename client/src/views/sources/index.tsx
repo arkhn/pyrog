@@ -7,10 +7,10 @@ import { withRouter } from "react-router-dom";
 
 import Navbar from "../../utils/navbar";
 
-import { changeSelectedSource } from "../../../actions/selectedSource";
+import { changeSelectedSource } from "../../actions/selectedSource";
 
 // Import types
-import { IReduxStore, IView } from "../../../types";
+import { IReduxStore, IView } from "../../types";
 
 import "./style.less";
 

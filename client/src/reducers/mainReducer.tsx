@@ -8,8 +8,8 @@ import toasterReducer from "./toaster";
 import userReducer from "./user";
 
 // View reducers
-import mappingExplorer from "../containers/views/mappingExplorer/reducer";
-import mimic from "../containers/views/mimic/reducer";
+import mappingExplorer from "../views/mappingExplorer/reducer";
+import mimic from "../views/mimic/reducer";
 
 // Data reducer (also called canonical state)
 const dataReducer = combineReducers({

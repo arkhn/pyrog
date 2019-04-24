@@ -16,20 +16,20 @@ import { withRouter } from "react-router-dom";
 import {
   changeSelectedSource,
   deselectSource
-} from "../../../actions/selectedSource";
-import { login, logout } from "../../../actions/user";
+} from "../../actions/selectedSource";
+import { login, logout } from "../../actions/user";
 import {
   updateFhirAttribute,
   updateFhirResource
 } from "../../views/mappingExplorer/actions";
 
 // Import types
-import { IReduxStore, IView } from "../../../types";
+import { IReduxStore, IView } from "../../types";
 
 import "./style.less";
 
 // LOGO
-const arkhnLogoWhite = require("../../../../assets/img/arkhn_logo_only_white.svg");
+const arkhnLogoWhite = require("../../assets/img/arkhn_logo_only_white.svg");
 
 // GRAPHQL OPERATIONS
 

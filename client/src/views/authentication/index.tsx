@@ -15,10 +15,10 @@ import { withRouter } from "react-router-dom";
 
 import Navbar from "../../utils/navbar";
 
-import { login as loginAction } from "../../../actions/user";
+import { login as loginAction } from "../../actions/user";
 
 // Import types
-import { IReduxStore, IView } from "../../../types";
+import { IReduxStore, IView } from "../../types";
 
 import "./style.less";
 

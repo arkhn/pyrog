@@ -37,19 +37,19 @@ import {
 import { availableResourceNames } from "./reducer";
 
 // Import components
-import ColumnPicker from "../../../components/columnPicker";
-import InputColumnsTable from "../../../components/inputColumnsTable";
-import StringSelect from "../../../components/selects/stringSelect";
-import TSelect from "../../../components/selects/TSelect";
-import SourceSelect from "../../../components/selects/sourceSelect";
-import ResourceSelect from "../../../components/selects/resourceSelect";
-import AddResourceSelect from "../../../components/selects/addResourceSelect";
+import ColumnPicker from "../../components/columnPicker";
+import InputColumnsTable from "../../components/inputColumnsTable";
+import StringSelect from "../../components/selects/stringSelect";
+import TSelect from "../../components/selects/TSelect";
+import SourceSelect from "../../components/selects/sourceSelect";
+import ResourceSelect from "../../components/selects/resourceSelect";
+import AddResourceSelect from "../../components/selects/addResourceSelect";
 // Import containers
 import FhirResourceTree from "../../utils/fhirResourceTree";
 import Navbar from "../../utils/navbar";
 
 // Import types
-import { IReduxStore, IView } from "../../../types";
+import { IReduxStore, IView } from "../../types";
 
 import "./style.less";
 
@@ -79,8 +79,8 @@ const subscribeInputColumn = require("../../graphql/subscriptions/inputColumn.gr
 const subscribeJoin = require("../../graphql/subscriptions/join.graphql");
 
 // LOGO
-const arkhnLogoWhite = require("../../../../assets/img/arkhn_logo_only_white.svg") as string;
-const arkhnLogoBlack = require("../../../../assets/img/arkhn_logo_only_black.svg") as string;
+const arkhnLogoWhite = require("../../assets/img/arkhn_logo_only_white.svg") as string;
+const arkhnLogoBlack = require("../../assets/img/arkhn_logo_only_black.svg") as string;
 
 export interface IMappingExplorerState {
   createdProfiles: number;
