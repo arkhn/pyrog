@@ -326,7 +326,7 @@ export default class MappingView extends React.Component<
             </Query>
             <div id="right-part">
               <InputColumns
-                attribute={selectedFhirAttribute}
+                selectedAttribute={selectedFhirAttribute}
                 schema={
                   selectedSource.name
                     ? this.props.data.sourceSchemas.schemaBySourceName[

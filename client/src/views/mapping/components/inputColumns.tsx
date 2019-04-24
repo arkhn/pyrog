@@ -15,20 +15,20 @@ const subscribeAttribute = require("../../../graphql/subscriptions/attribute.gra
 const subscribeInputColumn = require("../../../graphql/subscriptions/inputColumn.graphql");
 
 interface IProps {
-  attribute: {
+  schema: any;
+  selectedAttribute: {
     id: string;
     name: string;
   };
-  schema: any;
   source: ISelectedSource;
 }
 
-const InputColumns = ({ attribute, schema, source }: IProps) => {
+const InputColumns = ({ schema, selectedAttribute, source }: IProps) => {
   return (
     <Query
       query={inputColumns}
-      variables={{ attributeId: attribute.id }}
-      skip={!attribute.id}
+      variables={{ attributeId: selectedAttribute.id }}
+      skip={!selectedAttribute.id}
     >
       {({ data, loading }: any) => {
         if (loading) {
@@ -36,11 +36,11 @@ const InputColumns = ({ attribute, schema, source }: IProps) => {
         }
         let inputColumns = data && data.inputColumns ? data.inputColumns : [];
 
-        return attribute.id ? (
+        return selectedAttribute.id ? (
           <Subscription
             subscription={subscribeAttribute}
             variables={{
-              id: attribute.id
+              id: selectedAttribute.id
             }}
           >
             {({ data, loading, error }: any) => {
@@ -74,7 +74,7 @@ const InputColumns = ({ attribute, schema, source }: IProps) => {
 
                             return column ? (
                               <InputColumn
-                                attribute={attribute}
+                                attribute={selectedAttribute}
                                 column={column}
                                 schema={schema}
                                 source={source}
@@ -104,7 +104,7 @@ const InputColumns = ({ attribute, schema, source }: IProps) => {
                                 onChange={(e: string) => {
                                   updateAttribute({
                                     variables: {
-                                      id: attribute.id,
+                                      id: selectedAttribute.id,
                                       data: {
                                         mergingScript: e
                                       }
