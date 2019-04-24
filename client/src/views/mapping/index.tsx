@@ -20,10 +20,12 @@ import {
   deleteProfile,
   nodeCollapse,
   nodeExpand,
-  updateAddResource,
+  updateAddResource
+} from "./actions";
+import {
   updateFhirAttribute,
   updateFhirResource
-} from "./actions";
+} from "../../services/selectedNode/actions";
 import { availableResourceNames } from "./reducer";
 
 // COMPONENTS
@@ -63,14 +65,6 @@ export interface IMappingProps {
     subtype: string;
     name: string;
   };
-  selectedFhirResource: {
-    id: string;
-    name: string;
-  };
-  selectedFhirAttribute: {
-    id: string;
-    name: string;
-  };
 }
 
 interface IState {
@@ -91,7 +85,7 @@ const mapReduxStateToReactProps = (state: IReduxStore): IMappingViewProps => {
     ...state.views.mapping,
     data: state.data,
     dispatch: state.dispatch,
-    selectedSource: state.selectedSource,
+    selectedNode: state.selectedNode,
     toaster: state.toaster
   };
 };
@@ -152,9 +146,7 @@ export default class MappingView extends React.Component<
       data,
       dispatch,
       selectedAddResource,
-      selectedSource,
-      selectedFhirResource,
-      selectedFhirAttribute
+      selectedNode
     } = this.props;
 
     const { columnPicker, selectedTabId, toggledNavBar } = this.state;
@@ -167,9 +159,9 @@ export default class MappingView extends React.Component<
             <Query
               fetchPolicy={"network-only"}
               query={availableResources}
-              skip={!selectedSource.id}
+              skip={!selectedNode.source.id}
               variables={{
-                sourceId: selectedSource.id,
+                sourceId: selectedNode.source.id,
                 // This allows to force refetch
                 // when a new resource is added.
                 createdResources: createdResources
@@ -181,9 +173,9 @@ export default class MappingView extends React.Component<
                     <div id="fhir-attributes">
                       <div id="resource-selector">
                         <ResourceSelect
-                          disabled={!selectedSource}
+                          disabled={!selectedNode.source}
                           icon={"layout-hierarchy"}
-                          inputItem={selectedFhirResource}
+                          inputItem={selectedNode.resource}
                           intent={"primary"}
                           items={
                             data && data.availableResources
@@ -203,15 +195,17 @@ export default class MappingView extends React.Component<
                         />
                       </div>
                       <div id="fhir-resource-tree">
-                        {selectedFhirResource.name ? (
+                        {selectedNode.resource.name ? (
                           <Query
                             fetchPolicy={"network-only"}
                             query={resourceAttributeTree}
                             variables={{
                               createdProfiles: createdProfiles,
-                              resourceId: selectedFhirResource.id
+                              resourceId: selectedNode.resource.id
                             }}
-                            skip={!selectedSource || !selectedFhirResource.id}
+                            skip={
+                              !selectedNode.source || !selectedNode.resource.id
+                            }
                           >
                             {({ data, loading }: any) => {
                               return loading ? (
@@ -246,7 +240,7 @@ export default class MappingView extends React.Component<
                                       nodeData.id
                                     );
                                   }}
-                                  selectedNodeId={selectedFhirAttribute.id}
+                                  selectedNodeId={selectedNode.attribute.id}
                                 />
                               );
                             }}
@@ -258,7 +252,7 @@ export default class MappingView extends React.Component<
                       <FormGroup label={"Add Resource"}>
                         <ControlGroup>
                           <AddResourceSelect
-                            disabled={!selectedSource}
+                            disabled={!selectedNode.source}
                             intent={null}
                             inputItem={selectedAddResource}
                             items={availableResourceNames.filter(
@@ -284,7 +278,7 @@ export default class MappingView extends React.Component<
                                 intent: "success",
                                 message: `Ressource ${
                                   data.createResourceTreeInSource.name
-                                } créée pour ${selectedSource.name}.`,
+                                } créée pour ${selectedNode.source.name}.`,
                                 timeout: 4000
                               });
 
@@ -307,7 +301,7 @@ export default class MappingView extends React.Component<
                                   onClick={() => {
                                     createResource({
                                       variables: {
-                                        sourceId: selectedSource.id,
+                                        sourceId: selectedNode.source.id,
                                         resourceName: selectedAddResource.name
                                       }
                                     });
@@ -325,15 +319,15 @@ export default class MappingView extends React.Component<
             </Query>
             <div id="right-part">
               <InputColumns
-                selectedAttribute={selectedFhirAttribute}
+                selectedAttribute={selectedNode.attribute}
                 schema={
-                  selectedSource.name
+                  selectedNode.source.name
                     ? this.props.data.sourceSchemas.schemaBySourceName[
-                        selectedSource.name
+                        selectedNode.source.name
                       ]
                     : {}
                 }
-                source={selectedSource}
+                source={selectedNode.source}
               />
               <div id="column-selection">
                 <Tabs
@@ -348,15 +342,15 @@ export default class MappingView extends React.Component<
                     id="picker"
                     panel={
                       <ColumnPickingTab
-                        attribute={selectedFhirAttribute}
+                        attribute={selectedNode.attribute}
                         schema={
-                          selectedSource.name
+                          selectedNode.source.name
                             ? this.props.data.sourceSchemas.schemaBySourceName[
-                                selectedSource.name
+                                selectedNode.source.name
                               ]
                             : {}
                         }
-                        source={selectedSource}
+                        source={selectedNode.source}
                       />
                     }
                     title="Simple Tools"

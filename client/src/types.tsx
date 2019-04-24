@@ -27,6 +27,22 @@ export interface ISelectedSource {
   hasOwner: boolean;
 }
 
+export interface ISelectedResource {
+  id: string;
+  name: string;
+}
+
+export interface ISelectedAttribute {
+  id: string;
+  name: string;
+}
+
+export interface ISelectedNode {
+  source: ISelectedSource;
+  resource: ISelectedResource;
+  attribute: ISelectedAttribute;
+}
+
 export interface ISourceSchemas {
   loadingSourceSchema: boolean;
   schemaBySourceName: {
@@ -49,7 +65,7 @@ export interface IData {
 export interface IReduxStore {
   data: IData;
   dispatch?: any;
-  selectedSource: ISelectedSource;
+  selectedNode: ISelectedNode;
   toaster: IToaster;
   user: IUser;
   views: any;
@@ -66,7 +82,7 @@ export interface IView {
   history?: any;
   // Router location (withRouter from 'react-router-dom')
   location?: any;
-  selectedSource?: ISelectedSource;
+  selectedNode?: ISelectedNode;
   toaster?: IToaster;
   user?: IUser;
 }

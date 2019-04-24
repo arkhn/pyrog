@@ -15,15 +15,11 @@ import { withRouter } from "react-router-dom";
 
 import {
   changeSelectedSource,
-  deselectSource
-} from "../../services/selectedSource/actions";
-import { login, logout } from "../../services/user/actions";
-// TODO: this dependency should be removed
-// as components should not rely on View's actions
-import {
+  deselectSource,
   updateFhirAttribute,
   updateFhirResource
-} from "../../views/mapping/actions";
+} from "../../services/selectedNode/actions";
+import { login, logout } from "../../services/user/actions";
 
 // Import types
 import { IReduxStore, IView } from "../../types";
@@ -50,7 +46,7 @@ const mapReduxStateToReactProps = (state: IReduxStore): IProps => {
   return {
     data: state.data,
     dispatch: state.dispatch,
-    selectedSource: state.selectedSource,
+    selectedNode: state.selectedNode,
     toaster: state.toaster,
     user: state.user
   };
@@ -89,7 +85,7 @@ class Navbar extends React.Component<IProps, IState> {
         if (response.data.isAuthenticated) {
           if (
             this.props.location.pathname == "/mapping" &&
-            !this.props.selectedSource.id
+            !this.props.selectedNode.source.id
           ) {
             // Load arguments given through our URL...
             const args = QueryString.parse(this.props.location.search);
@@ -162,7 +158,7 @@ class Navbar extends React.Component<IProps, IState> {
   };
 
   public render = () => {
-    const { dispatch, selectedSource, user } = this.props;
+    const { dispatch, selectedNode, user } = this.props;
 
     const logo = (
       <BPNavbar.Heading
@@ -196,7 +192,7 @@ class Navbar extends React.Component<IProps, IState> {
         }
 
         case "/mapping": {
-          return selectedSource.name !== null ? (
+          return selectedNode.source.name !== null ? (
             <BPNavbar.Group align={Alignment.LEFT}>
               {logo}
               <Button
@@ -213,7 +209,7 @@ class Navbar extends React.Component<IProps, IState> {
                 Sources
               </Button>
               <BPNavbar.Divider />
-              {selectedSource.name}
+              {selectedNode.source.name}
             </BPNavbar.Group>
           ) : (
             <BPNavbar.Group align={Alignment.LEFT}>{logo}</BPNavbar.Group>

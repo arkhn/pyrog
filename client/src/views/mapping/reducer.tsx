@@ -168,14 +168,6 @@ const initialState: IMappingProps = {
     type: null,
     subtype: null,
     name: null
-  },
-  selectedFhirResource: {
-    id: null,
-    name: null
-  },
-  selectedFhirAttribute: {
-    id: null,
-    name: null
   }
 };
 
@@ -184,19 +176,6 @@ const reducer = (
   action: ISimpleAction
 ): IMappingProps => {
   switch (action.type) {
-    case "UPDATE_FHIR_RESOURCE":
-      return {
-        ...state,
-        selectedFhirResource: {
-          id: action.payload.resourceId,
-          name: action.payload.resourceName
-        },
-        selectedFhirAttribute: {
-          id: null,
-          name: null
-        }
-      };
-
     case "UPDATE_ADD_RESOURCE":
       return {
         ...state,
@@ -245,15 +224,6 @@ const reducer = (
           ...state.expandedAttributesIdList,
           action.payload.nodeData.id
         ]
-      };
-
-    case "UPDATE_FHIR_ATTRIBUTE":
-      return {
-        ...state,
-        selectedFhirAttribute: {
-          id: action.payload.attributeId,
-          name: action.payload.attributeName
-        }
       };
 
     default:

@@ -39,7 +39,7 @@ if (process.env.NODE_ENV === "development") {
 // Data fetching reducers
 import sourceSchemas from "./services/sourceSchemas/reducer";
 import recommendedColumns from "./services/recommendedColumns/reducer";
-import selectedSourceReducer from "./services/selectedSource/reducer";
+import selectedNodeReducer from "./services/selectedNode/reducer";
 import toasterReducer from "./services/toaster/reducer";
 import userReducer from "./services/user/reducer";
 
@@ -61,7 +61,7 @@ const viewReducer = combineReducers({
 
 const mainReducer = combineReducers({
   data: dataReducer,
-  selectedSource: selectedSourceReducer,
+  selectedNode: selectedNodeReducer,
   toaster: toasterReducer,
   views: viewReducer,
   user: userReducer
