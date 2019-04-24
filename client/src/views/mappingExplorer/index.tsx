@@ -1,29 +1,19 @@
 import {
-  Alignment,
-  Breadcrumbs,
-  IBreadcrumbProps,
   Button,
-  Card,
-  Code,
   ControlGroup,
-  Elevation,
   FormGroup,
   InputGroup,
-  MenuItem,
-  NonIdealState,
-  OverflowList,
   Spinner,
   Tab,
   Tabs,
-  TabId,
-  Tag
+  TabId
 } from "@blueprintjs/core";
 import * as QueryString from "query-string";
 import * as React from "react";
 import { Mutation, Query, Subscription } from "react-apollo";
 import { connect } from "react-redux";
 
-// Import actions
+// ACTIONS
 import {
   addProfile,
   addResource,
@@ -36,7 +26,7 @@ import {
 } from "./actions";
 import { availableResourceNames } from "./reducer";
 
-// Import components
+// COMPONENTS
 import ColumnPicker from "../../components/columnPicker";
 import InputColumnsTable from "../../components/inputColumnsTable";
 import StringSelect from "../../components/selects/stringSelect";
@@ -46,36 +36,20 @@ import ResourceSelect from "../../components/selects/resourceSelect";
 import AddResourceSelect from "../../components/selects/addResourceSelect";
 import FhirResourceTree from "../../components/fhirResourceTree";
 import Navbar from "../../components/navbar";
+import InputColumns from "./components/inputColumns";
+import ColumnSuggestionTab from "./components/tabs/columnSuggestionTab";
+import ColumnPickingTab from "./components/tabs/columnPickingTab";
 
 // Import types
 import { IReduxStore, IView } from "../../types";
 
 import "./style.less";
 
-// GRAPHQL OPERATIONS
-
-// Queries
+// GRAPHQL
 const allSources = require("../../graphql/queries/allSources.graphql");
 const availableResources = require("../../graphql/queries/availableResources.graphql");
-const inputColumns = require("../../graphql/queries/inputColumns.graphql");
 const resourceAttributeTree = require("../../graphql/queries/resourceAttributeTree.graphql");
-
-// Mutations
-const createInputColumnAndUpdateAttribute = require("../../graphql/mutations/createInputColumnAndUpdateAttribute.graphql");
-const deleteInputColumnAndUpdateAttribute = require("../../graphql/mutations/deleteInputColumnAndUpdateAttribute.graphql");
-const updateInputColumn = require("../../graphql/mutations/updateInputColumn.graphql");
-
-const createJoinAndUpdateInputColumn = require("../../graphql/mutations/createJoinAndUpdateInputColumn.graphql");
-const deleteJoinAndUpdateInputColumn = require("../../graphql/mutations/deleteJoinAndUpdateInputColumn.graphql");
-const updateJoin = require("../../graphql/mutations/updateJoin.graphql");
-
-const updateAttribute = require("../../graphql/mutations/updateAttribute.graphql");
 const createResourceTreeInSource = require("../../graphql/mutations/createResourceTreeInSource.graphql");
-
-// Subscriptions
-const subscribeAttribute = require("../../graphql/subscriptions/attribute.graphql");
-const subscribeInputColumn = require("../../graphql/subscriptions/inputColumn.graphql");
-const subscribeJoin = require("../../graphql/subscriptions/join.graphql");
 
 // LOGO
 const arkhnLogoWhite = require("../../assets/img/arkhn_logo_only_white.svg") as string;
@@ -188,593 +162,6 @@ export default class MappingExplorerView extends React.Component<
 
     const { columnPicker, selectedTabId, toggledNavBar } = this.state;
 
-    const inputColumnComponent = (attribute: any, column: any) => (
-      <div className="input-column">
-        <Mutation mutation={deleteInputColumnAndUpdateAttribute}>
-          {(deleteInputColumn: any, { data, loading, error }: any) => {
-            return (
-              <Button
-                icon={"trash"}
-                loading={loading}
-                minimal={true}
-                onClick={() => {
-                  deleteInputColumn({
-                    variables: {
-                      attributeId: selectedFhirAttribute.id,
-                      inputColumnId: column.id
-                    }
-                  });
-                }}
-              />
-            );
-          }}
-        </Mutation>
-        <Card elevation={Elevation.ONE} className="input-column-info">
-          {column.staticValue ? (
-            <div className="input-column-name">
-              <Tag large={true}>Static</Tag>
-              <Tag intent={"success"} large={true} minimal={true}>
-                {column.staticValue}
-              </Tag>
-            </div>
-          ) : (
-            <div>
-              <div className="input-column-name">
-                <Breadcrumbs
-                  breadcrumbRenderer={(item: IBreadcrumbProps) => {
-                    return <div>{item.text}</div>;
-                  }}
-                  items={
-                    selectedSource.hasOwner
-                      ? [
-                          {
-                            text: (
-                              <div className="stacked-tags">
-                                <Tag minimal={true}>OWNER</Tag>
-                                <Tag intent={"success"} large={true}>
-                                  {column.owner}
-                                </Tag>
-                              </div>
-                            )
-                          },
-                          {
-                            text: (
-                              <div className="stacked-tags">
-                                <Tag minimal={true}>TABLE</Tag>
-                                <Tag intent={"success"} large={true}>
-                                  {column.table}
-                                </Tag>
-                              </div>
-                            )
-                          },
-                          {
-                            text: (
-                              <div className="stacked-tags">
-                                <Tag minimal={true}>COLUMN</Tag>
-                                <Tag intent={"success"} large={true}>
-                                  {column.column}
-                                </Tag>
-                              </div>
-                            )
-                          }
-                        ]
-                      : [
-                          {
-                            text: (
-                              <div className="stacked-tags">
-                                <Tag minimal={true}>TABLE</Tag>
-                                <Tag intent={"success"} large={true}>
-                                  {column.table}
-                                </Tag>
-                              </div>
-                            )
-                          },
-                          {
-                            text: (
-                              <div className="stacked-tags">
-                                <Tag minimal={true}>COLUMN</Tag>
-                                <Tag intent={"success"} large={true}>
-                                  {column.column}
-                                </Tag>
-                              </div>
-                            )
-                          }
-                        ]
-                  }
-                />
-                <Mutation mutation={updateInputColumn}>
-                  {(updateInputColumn: any, { data, loading }: any) => {
-                    return (
-                      <div className="stacked-tags">
-                        <Tag>SCRIPT</Tag>
-                        <StringSelect
-                          disabled={true}
-                          inputItem={column.script}
-                          items={["script1.py", "script2.py"]}
-                          loading={loading}
-                          onChange={(e: string) => {
-                            updateInputColumn({
-                              variables: {
-                                id: column.id,
-                                data: {
-                                  script: e
-                                }
-                              }
-                            });
-                          }}
-                        />
-                      </div>
-                    );
-                  }}
-                </Mutation>
-              </div>
-              <div className="input-column-joins">
-                <Mutation mutation={createJoinAndUpdateInputColumn}>
-                  {(createJoin: any, { data, loading }: any) => {
-                    return (
-                      <Button
-                        icon={"add"}
-                        loading={loading}
-                        onClick={() => {
-                          createJoin({
-                            variables: {
-                              inputColumnId: column.id,
-                              data: {}
-                            }
-                          });
-                        }}
-                      >
-                        Add Join
-                      </Button>
-                    );
-                  }}
-                </Mutation>
-                {column.joins
-                  ? column.joins.map((join: any, index: number) => {
-                      let joinData = join;
-                      return (
-                        <Subscription
-                          key={index}
-                          subscription={subscribeJoin}
-                          variables={{
-                            id: join.id
-                          }}
-                        >
-                          {({ data, loading }: any) => {
-                            joinData =
-                              data && data.join && data.join.node
-                                ? data.join.node
-                                : joinData;
-
-                            return joinData
-                              ? joinComponent(joinData, column)
-                              : null;
-                          }}
-                        </Subscription>
-                      );
-                    })
-                  : null}
-              </div>
-            </div>
-          )}
-        </Card>
-      </div>
-    );
-
-    const joinColumnsComponent = (join: any, updateJoin: any) => (
-      <div className="join-columns">
-        <ColumnPicker
-          hasOwner={selectedSource.hasOwner}
-          ownerChangeCallback={(e: string) => {
-            updateJoin({
-              variables: {
-                id: join.id,
-                data: {
-                  sourceOwner: e,
-                  sourceTable: null,
-                  sourceColumn: null
-                }
-              }
-            });
-          }}
-          tableChangeCallback={(e: string) => {
-            updateJoin({
-              variables: {
-                id: join.id,
-                data: {
-                  sourceTable: e,
-                  sourceColumn: null
-                }
-              }
-            });
-          }}
-          columnChangeCallback={(e: string) => {
-            updateJoin({
-              variables: {
-                id: join.id,
-                data: {
-                  sourceColumn: e
-                }
-              }
-            });
-          }}
-          initialColumn={{
-            owner: join.sourceOwner,
-            table: join.sourceTable,
-            column: join.sourceColumn
-          }}
-          sourceSchema={
-            selectedSource.name
-              ? this.props.data.sourceSchemas.schemaBySourceName[
-                  selectedSource.name
-                ]
-              : {}
-          }
-        />
-        <ColumnPicker
-          hasOwner={selectedSource.hasOwner}
-          ownerChangeCallback={(e: string) => {
-            updateJoin({
-              variables: {
-                id: join.id,
-                data: {
-                  targetOwner: e,
-                  targetTable: null,
-                  targetColumn: null
-                }
-              }
-            });
-          }}
-          tableChangeCallback={(e: string) => {
-            updateJoin({
-              variables: {
-                id: join.id,
-                data: {
-                  targetTable: e,
-                  targetColumn: null
-                }
-              }
-            });
-          }}
-          columnChangeCallback={(e: string) => {
-            updateJoin({
-              variables: {
-                id: join.id,
-                data: {
-                  targetColumn: e
-                }
-              }
-            });
-          }}
-          initialColumn={{
-            owner: join.targetOwner,
-            table: join.targetTable,
-            column: join.targetColumn
-          }}
-          sourceSchema={
-            selectedSource.name
-              ? this.props.data.sourceSchemas.schemaBySourceName[
-                  selectedSource.name
-                ]
-              : {}
-          }
-        />
-      </div>
-    );
-
-    const joinComponent = (joinData: any, column: any) => (
-      <div className={"join"}>
-        <Mutation mutation={deleteJoinAndUpdateInputColumn}>
-          {(deleteJoin: any, { data, loading }: any) => {
-            return (
-              <Button
-                icon={"trash"}
-                minimal={true}
-                loading={loading}
-                onClick={() => {
-                  deleteJoin({
-                    variables: {
-                      inputColumnId: column.id,
-                      joinId: joinData.id
-                    }
-                  });
-                }}
-              />
-            );
-          }}
-        </Mutation>
-        <Mutation mutation={updateJoin}>
-          {(updateJoin: any, { data, loading }: any) => {
-            return joinColumnsComponent(joinData, updateJoin);
-          }}
-        </Mutation>
-      </div>
-    );
-
-    const inputColumnsComponent = (
-      <Query
-        query={inputColumns}
-        variables={{ attributeId: selectedFhirAttribute.id }}
-        skip={!selectedFhirAttribute.id}
-      >
-        {({ data, loading }: any) => {
-          if (loading) {
-            return <Spinner />;
-          }
-          let inputColumns = data && data.inputColumns ? data.inputColumns : [];
-
-          return selectedFhirAttribute.id ? (
-            <Subscription
-              subscription={subscribeAttribute}
-              variables={{
-                id: selectedFhirAttribute.id
-              }}
-            >
-              {({ data, loading, error }: any) => {
-                const attribute =
-                  data && data.attribute && data.attribute.node
-                    ? data.attribute.node
-                    : null;
-
-                inputColumns =
-                  attribute && attribute.inputColumns
-                    ? attribute.inputColumns
-                    : inputColumns;
-
-                return (
-                  <div id="input-columns">
-                    <div id="input-column-rows">
-                      {inputColumns.map((inputColumn: any, index: number) => {
-                        return (
-                          <Subscription
-                            key={index}
-                            subscription={subscribeInputColumn}
-                            variables={{
-                              id: inputColumn.id
-                            }}
-                          >
-                            {({ data, loading }: any) => {
-                              const column =
-                                data &&
-                                data.inputColumn &&
-                                data.inputColumn.node
-                                  ? data.inputColumn.node
-                                  : inputColumn;
-
-                              return column
-                                ? inputColumnComponent(
-                                    selectedFhirAttribute,
-                                    column
-                                  )
-                                : null;
-                            }}
-                          </Subscription>
-                        );
-                      })}
-                    </div>
-                    {inputColumns.length > 1 ? (
-                      <div id="input-column-merging-script">
-                        <Mutation mutation={updateAttribute}>
-                          {(updateAttribute: any, { data, loading }: any) => {
-                            return (
-                              <div className="stacked-tags">
-                                <Tag>SCRIPT</Tag>
-                                <StringSelect
-                                  disabled={true}
-                                  inputItem={
-                                    attribute && attribute.mergingScript
-                                      ? attribute.mergingScript
-                                      : ""
-                                  }
-                                  items={["mergingScript.py"]}
-                                  loading={loading}
-                                  onChange={(e: string) => {
-                                    updateAttribute({
-                                      variables: {
-                                        id: attribute.id,
-                                        data: {
-                                          mergingScript: e
-                                        }
-                                      }
-                                    });
-                                  }}
-                                />
-                              </div>
-                            );
-                          }}
-                        </Mutation>
-                      </div>
-                    ) : null}
-                  </div>
-                );
-              }}
-            </Subscription>
-          ) : null;
-        }}
-      </Query>
-    );
-
-    const columnPickingTab = (
-      <div id={"column-picker"}>
-        <Card elevation={Elevation.ONE}>
-          <FormGroup
-            label={<h3>Column Picker</h3>}
-            labelFor="text-input"
-            inline={true}
-          >
-            <ControlGroup>
-              <ColumnPicker
-                hasOwner={selectedSource.hasOwner}
-                ownerChangeCallback={(e: string) => {
-                  this.setState({
-                    columnPicker: {
-                      ...this.state.columnPicker,
-                      owner: e,
-                      table: null,
-                      column: null
-                    }
-                  });
-                }}
-                tableChangeCallback={(e: string) => {
-                  this.setState({
-                    columnPicker: {
-                      ...this.state.columnPicker,
-                      table: e,
-                      column: null
-                    }
-                  });
-                }}
-                columnChangeCallback={(e: string) => {
-                  this.setState({
-                    columnPicker: {
-                      ...this.state.columnPicker,
-                      column: e
-                    }
-                  });
-                }}
-                sourceSchema={
-                  selectedSource.name
-                    ? data.sourceSchemas.schemaBySourceName[selectedSource.name]
-                    : {}
-                }
-              />
-              <Mutation mutation={createInputColumnAndUpdateAttribute}>
-                {(
-                  createInputColumnAndUpdateAttribute: any,
-                  { data, loading }: any
-                ) => {
-                  return (
-                    <Button
-                      disabled={!columnPicker.column || !selectedFhirAttribute}
-                      icon={"add"}
-                      loading={loading}
-                      onClick={() =>
-                        createInputColumnAndUpdateAttribute({
-                          variables: {
-                            attributeId: selectedFhirAttribute.id,
-                            data: {
-                              owner: columnPicker.owner,
-                              table: columnPicker.table,
-                              column: columnPicker.column
-                            }
-                          }
-                        })
-                      }
-                    />
-                  );
-                }}
-              </Mutation>
-            </ControlGroup>
-          </FormGroup>
-        </Card>
-        <Card elevation={Elevation.ONE}>
-          <FormGroup
-            label={<h3>Column With Static Value</h3>}
-            labelFor="text-input"
-            inline={true}
-          >
-            <ControlGroup>
-              <InputGroup
-                id="static-value-input"
-                onChange={(event: React.FormEvent<HTMLElement>) => {
-                  const target = event.target as HTMLInputElement;
-
-                  this.setState({
-                    columnPicker: {
-                      ...this.state.columnPicker,
-                      staticValue: target.value
-                    }
-                  });
-                }}
-                placeholder="Column static value"
-                value={columnPicker.staticValue}
-              />
-              <Mutation mutation={createInputColumnAndUpdateAttribute}>
-                {(createInputColumn: any, { data, loading }: any) => {
-                  return (
-                    <Button
-                      disabled={columnPicker.staticValue.length == 0}
-                      icon={"add"}
-                      loading={loading}
-                      onClick={() =>
-                        createInputColumn({
-                          variables: {
-                            attributeId: selectedFhirAttribute.id,
-                            data: {
-                              staticValue: columnPicker.staticValue
-                            }
-                          }
-                        })
-                      }
-                    />
-                  );
-                }}
-              </Mutation>
-            </ControlGroup>
-          </FormGroup>
-        </Card>
-      </div>
-    );
-
-    const columnSuggestionTab = <div>Suggestions</div>;
-
-    const columnSelectionComponent = (
-      <div id="column-selection">
-        <Tabs
-          onChange={(tabId: TabId) => {
-            this.setState({
-              selectedTabId: tabId
-            });
-          }}
-          selectedTabId={selectedTabId}
-        >
-          <Tab id="picker" title="Simple Tools" panel={columnPickingTab} />
-          <Tab
-            id="mb"
-            disabled
-            title="Column Suggestion Tool"
-            panel={columnSuggestionTab}
-          />
-        </Tabs>
-      </div>
-    );
-
-    const fhirResourceTree = (
-      <Query
-        fetchPolicy={"network-only"}
-        query={resourceAttributeTree}
-        variables={{
-          createdProfiles: createdProfiles,
-          resourceId: selectedFhirResource.id
-        }}
-        skip={!selectedSource || !selectedFhirResource.id}
-      >
-        {({ data, loading }: any) => {
-          return loading ? (
-            <Spinner />
-          ) : (
-            <FhirResourceTree
-              addProfileCallback={(response: any) => {
-                dispatch(addProfile());
-              }}
-              deleteProfileCallback={(response: any) => {
-                dispatch(deleteProfile());
-              }}
-              expandedAttributesIdList={this.props.expandedAttributesIdList}
-              nodeCollapseCallback={(node: any) => dispatch(nodeCollapse(node))}
-              nodeExpandCallback={(node: any) => dispatch(nodeExpand(node))}
-              json={data.resource.attributes}
-              onClickCallback={(nodeData: any) => {
-                dispatch(updateFhirAttribute(nodeData.id, nodeData.name));
-                this.updateLocationSearch("attributeId", nodeData.id);
-              }}
-              selectedNodeId={selectedFhirAttribute.id}
-            />
-          );
-        }}
-      </Query>
-    );
-
     return (
       <div>
         <Navbar />
@@ -819,7 +206,55 @@ export default class MappingExplorerView extends React.Component<
                         />
                       </div>
                       <div id="fhir-resource-tree">
-                        {selectedFhirResource.name ? fhirResourceTree : null}
+                        {selectedFhirResource.name ? (
+                          <Query
+                            fetchPolicy={"network-only"}
+                            query={resourceAttributeTree}
+                            variables={{
+                              createdProfiles: createdProfiles,
+                              resourceId: selectedFhirResource.id
+                            }}
+                            skip={!selectedSource || !selectedFhirResource.id}
+                          >
+                            {({ data, loading }: any) => {
+                              return loading ? (
+                                <Spinner />
+                              ) : (
+                                <FhirResourceTree
+                                  addProfileCallback={(response: any) => {
+                                    dispatch(addProfile());
+                                  }}
+                                  deleteProfileCallback={(response: any) => {
+                                    dispatch(deleteProfile());
+                                  }}
+                                  expandedAttributesIdList={
+                                    this.props.expandedAttributesIdList
+                                  }
+                                  nodeCollapseCallback={(node: any) =>
+                                    dispatch(nodeCollapse(node))
+                                  }
+                                  nodeExpandCallback={(node: any) =>
+                                    dispatch(nodeExpand(node))
+                                  }
+                                  json={data.resource.attributes}
+                                  onClickCallback={(nodeData: any) => {
+                                    dispatch(
+                                      updateFhirAttribute(
+                                        nodeData.id,
+                                        nodeData.name
+                                      )
+                                    );
+                                    this.updateLocationSearch(
+                                      "attributeId",
+                                      nodeData.id
+                                    );
+                                  }}
+                                  selectedNodeId={selectedFhirAttribute.id}
+                                />
+                              );
+                            }}
+                          </Query>
+                        ) : null}
                       </div>
                     </div>
                     <div id="resource-add">
@@ -892,8 +327,51 @@ export default class MappingExplorerView extends React.Component<
               }}
             </Query>
             <div id="right-part">
-              {inputColumnsComponent}
-              {columnSelectionComponent}
+              <InputColumns
+                attribute={selectedFhirAttribute}
+                schema={
+                  selectedSource.name
+                    ? this.props.data.sourceSchemas.schemaBySourceName[
+                        selectedSource.name
+                      ]
+                    : {}
+                }
+                source={selectedSource}
+              />
+              <div id="column-selection">
+                <Tabs
+                  onChange={(tabId: TabId) => {
+                    this.setState({
+                      selectedTabId: tabId
+                    });
+                  }}
+                  selectedTabId={selectedTabId}
+                >
+                  <Tab
+                    id="picker"
+                    panel={
+                      <ColumnPickingTab
+                        attribute={selectedFhirAttribute}
+                        schema={
+                          selectedSource.name
+                            ? this.props.data.sourceSchemas.schemaBySourceName[
+                                selectedSource.name
+                              ]
+                            : {}
+                        }
+                        source={selectedSource}
+                      />
+                    }
+                    title="Simple Tools"
+                  />
+                  <Tab
+                    id="mb"
+                    disabled
+                    panel={<ColumnSuggestionTab />}
+                    title="Column Suggestion Tool"
+                  />
+                </Tabs>
+              </div>
             </div>
           </div>
         </div>
