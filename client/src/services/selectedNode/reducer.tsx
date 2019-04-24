@@ -21,6 +21,20 @@ const selectedNodeReducer = (
   action: ISimpleAction
 ): any => {
   switch (action.type) {
+    case "UPDATE_NODE":
+      return {
+        ...state,
+        source: {
+          ...action.payload.source
+        },
+        resource: {
+          ...action.payload.resource
+        },
+        attribute: {
+          ...action.payload.attribute
+        }
+      };
+
     case "UPDATE_SELECTED_SOURCE":
       return {
         ...state,

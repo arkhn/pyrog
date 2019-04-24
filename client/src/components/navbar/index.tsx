@@ -14,10 +14,8 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 
 import {
-  changeSelectedSource,
   deselectSource,
-  updateFhirAttribute,
-  updateFhirResource
+  changeNode
 } from "../../services/selectedNode/actions";
 import { login, logout } from "../../services/user/actions";
 
@@ -34,9 +32,6 @@ const arkhnLogoWhite = require("../../assets/img/arkhn_logo_only_white.svg");
 // Queries
 const isAuthenticated = require("../../graphql/queries/isAuthenticated.graphql");
 const me = require("../../graphql/queries/me.graphql");
-const attributeInfo = require("../../graphql/queries/attributeInfo.graphql");
-const resourceInfo = require("../../graphql/queries/resourceInfo.graphql");
-const sourceInfo = require("../../graphql/queries/sourceInfo.graphql");
 
 export interface IProps extends IView {}
 
@@ -91,59 +86,9 @@ class Navbar extends React.Component<IProps, IState> {
             const args = QueryString.parse(this.props.location.search);
 
             // and update redux state accordingly.
-            if (args.sourceId) {
-              this.props.client
-                .query({
-                  query: sourceInfo,
-                  variables: {
-                    sourceId: args.sourceId
-                  }
-                })
-                .then((response: any) => {
-                  const { id, name, hasOwner } = response.data.sourceInfo;
-                  this.props.dispatch(changeSelectedSource(id, name, hasOwner));
-                })
-                .catch((error: any) => {
-                  console.log(error);
-                  this.props.history.push("/sources");
-                });
-            } else {
-              this.props.history.push("/sources");
-            }
-
-            if (args.resourceId) {
-              this.props.client
-                .query({
-                  query: resourceInfo,
-                  variables: {
-                    resourceId: args.resourceId
-                  }
-                })
-                .then((response: any) => {
-                  const { id, name } = response.data.resourceInfo;
-                  this.props.dispatch(updateFhirResource(id, name));
-                })
-                .catch((error: any) => {
-                  console.log(error);
-                });
-            }
-
-            if (args.resourceId) {
-              this.props.client
-                .query({
-                  query: attributeInfo,
-                  variables: {
-                    attributeId: args.attributeId
-                  }
-                })
-                .then((response: any) => {
-                  const { id, name } = response.data.attributeInfo;
-                  this.props.dispatch(updateFhirAttribute(id, name));
-                })
-                .catch((error: any) => {
-                  console.log(error);
-                });
-            }
+            this.props.dispatch(
+              changeNode(args.sourceId, args.resourceId, args.attributeId)
+            );
           }
           if (["/", "/signin"].indexOf(this.props.location.pathname) >= 0) {
             this.props.history.push("/sources");
@@ -200,8 +145,6 @@ class Navbar extends React.Component<IProps, IState> {
                 intent={"primary"}
                 minimal={true}
                 onClick={() => {
-                  dispatch(updateFhirAttribute(null, null));
-                  dispatch(updateFhirResource(null, null));
                   dispatch(deselectSource());
                   this.props.history.push("/sources");
                 }}
