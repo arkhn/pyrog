@@ -28,7 +28,6 @@ import { availableResourceNames } from "./reducer";
 
 // COMPONENTS
 import ColumnPicker from "../../components/columnPicker";
-import InputColumnsTable from "../../components/inputColumnsTable";
 import StringSelect from "../../components/selects/stringSelect";
 import TSelect from "../../components/selects/TSelect";
 import SourceSelect from "../../components/selects/sourceSelect";
