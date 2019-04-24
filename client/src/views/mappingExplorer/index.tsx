@@ -44,9 +44,8 @@ import TSelect from "../../components/selects/TSelect";
 import SourceSelect from "../../components/selects/sourceSelect";
 import ResourceSelect from "../../components/selects/resourceSelect";
 import AddResourceSelect from "../../components/selects/addResourceSelect";
-// Import containers
-import FhirResourceTree from "../../utils/fhirResourceTree";
-import Navbar from "../../utils/navbar";
+import FhirResourceTree from "../../components/fhirResourceTree";
+import Navbar from "../../components/navbar";
 
 // Import types
 import { IReduxStore, IView } from "../../types";

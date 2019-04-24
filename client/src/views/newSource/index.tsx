@@ -15,7 +15,7 @@ import { Mutation, Query, withApollo } from "react-apollo";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 
-import Navbar from "../../utils/navbar";
+import Navbar from "../../components/navbar";
 
 // Import types
 import { ISource, IReduxStore, IView } from "../../types";
