@@ -8,7 +8,6 @@ const waitForExpect = require("wait-for-expect");
 
 import { Prisma as PrismaClient } from "../src/generated/prisma-client";
 import { Prisma as PrismaBinding } from "../src/generated/prisma-binding";
-import resolvers from "../src/resolvers";
 
 import { queries, mutations, subscriptions } from "./useCases";
 
