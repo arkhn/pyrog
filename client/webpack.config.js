@@ -10,7 +10,7 @@ module.exports = (env, argv) => {
   return {
     // Indicates where to start so as to build the module dependency graph
     context: SRC_DIR,
-    entry: "./application/app.tsx",
+    entry: "./app.tsx",
     // Where bundles should be emitted
     output: {
       path: DIST_DIR,

@@ -12,7 +12,7 @@ services:
     volumes:
       - static:$WORKDIR/static
   prisma:
-    image: prismagraphql/prisma:1.26
+    image: prismagraphql/prisma:1.31
     restart: always
     ports:
       - "4466:4466"

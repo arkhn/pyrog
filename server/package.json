@@ -12,6 +12,7 @@
   "dependencies": {
     "@babel/core": "^7.4.3",
     "@types/graphql": "^14.0.7",
+    "@types/jest": "^24.0.11",
     "bcryptjs": "2.4.3",
     "cpx": "^1.5.0",
     "graphql-cli": "^3.0.11",
@@ -20,7 +21,9 @@
     "jsonwebtoken": "8.5.0",
     "multer": "^1.4.1",
     "prisma-binding": "^2.3.8",
-    "wait-on": "^3.2.0"
+    "wait-for-expect": "^1.1.1",
+    "wait-on": "^3.2.0",
+    "ws": "^6.2.1"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.3.4",
@@ -35,12 +38,12 @@
     "nodemon": "1.18.10",
     "prettier": "1.17.0",
     "pretty-quick": "^1.10.0",
-    "prisma": "1.27.3",
+    "prisma": "^1.31.1",
     "rimraf": "2.6.3",
     "stringify-object": "^3.3.0",
     "ts-jest": "^24.0.0",
     "ts-node": "7.0.1",
-    "typescript": "^3.3.3333"
+    "typescript": "^3.4.4"
   },
   "husky": {
     "hooks": {
