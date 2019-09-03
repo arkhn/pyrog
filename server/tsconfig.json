@@ -4,8 +4,9 @@
     "moduleResolution": "node",
     "module": "commonjs",
     "sourceMap": true,
-    "rootDir": "src",
+    // "rootDir": "./src",
     "outDir": "dist",
     "lib": ["esnext", "dom"]
-  }
+  },
+  "include": ["src"]
 }

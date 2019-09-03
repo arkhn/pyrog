@@ -20,13 +20,13 @@ services:
       PRISMA_CONFIG: |
         port: 4466
         databases:
-            default:
-                connector: postgres
-                host: postgres-db
-                port: 5432
-                user: prisma
-                password: prisma
-                migrations: true
+          default:
+            connector: postgres
+            host: postgres-db
+            port: 5432
+            user: prisma
+            password: prisma
+            migrations: true
     depends_on:
       - postgres-db
   postgres-db:
