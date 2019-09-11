@@ -40,6 +40,7 @@ import Navbar from "../../components/navbar";
 import InputColumns from "./components/inputColumns";
 import ColumnSuggestionTab from "./components/tabs/columnSuggestionTab";
 import ColumnPickingTab from "./components/tabs/columnPickingTab";
+import SQLRequestParserTab from "./components/tabs/SQLRequestParserTab";
 
 // Import types
 import { IReduxStore, IView } from "../../types";
@@ -332,9 +333,7 @@ export default class MappingView extends React.Component<
               <div id="column-selection">
                 <Tabs
                   onChange={(tabId: TabId) => {
-                    this.setState({
-                      selectedTabId: tabId
-                    });
+                    this.setState({ selectedTabId: tabId });
                   }}
                   selectedTabId={selectedTabId}
                 >
@@ -354,6 +353,11 @@ export default class MappingView extends React.Component<
                       />
                     }
                     title="Simple Tools"
+                  />
+                  <Tab
+                    id="sql-parser"
+                    panel={<SQLRequestParserTab />}
+                    title="SQL Parser Tool"
                   />
                   <Tab
                     id="mb"
