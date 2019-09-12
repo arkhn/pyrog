@@ -54,7 +54,7 @@ module.exports = (env, argv) => {
       }),
       new FaviconsWebpackPlugin({ logo: "./assets/img/logo.png" }),
       new Dotenv({
-        path: argv.mode === "production" ? "../../.env" : "./.env.staging"
+        path: argv.mode === "production" ? "./.env" : "./.env.staging"
       })
     ],
     // Resolvers are used to locate modules using absolute paths.
