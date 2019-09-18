@@ -1,6 +1,11 @@
 import * as React from "react";
 import { Button, Intent, MenuItem, Position } from "@blueprintjs/core";
-import { Select, ItemPredicate, ItemRenderer } from "@blueprintjs/select";
+import {
+  Select,
+  ItemPredicate,
+  ItemRenderer,
+  ItemListPredicate
+} from "@blueprintjs/select";
 import { IconName } from "@blueprintjs/icons";
 
 import TSelect from "./TSelect";
@@ -53,6 +58,29 @@ export default class AddResourceSelect extends React.Component<
     );
   };
 
+  private sortAlphabetically = (item1: string, item2: string): number => {
+    const name1 = item1.toLowerCase();
+    const name2 = item2.toLowerCase();
+    if (name1 < name2) return -1;
+    if (name1 > name2) return 1;
+    return 0;
+  };
+
+  private sortItems: ItemListPredicate<IFhirResource> = (
+    query,
+    resources: IFhirResource[]
+  ) => {
+    resources.sort((r1, r2) => {
+      let sortResult;
+      sortResult = this.sortAlphabetically(r1.type, r2.type);
+      if (sortResult !== 0) return sortResult;
+      sortResult = this.sortAlphabetically(r1.subtype, r2.subtype);
+      if (sortResult !== 0) return sortResult;
+      return this.sortAlphabetically(r1.name, r2.name);
+    });
+    return resources;
+  };
+
   private displayItem = function(resource: IFhirResource): string {
     return resource.name ? resource.name : "None";
   };
@@ -74,6 +102,7 @@ export default class AddResourceSelect extends React.Component<
         disabled={disabled}
         displayItem={this.displayItem}
         filterItems={this.filterByName}
+        sortItems={this.sortItems}
         loading={loading}
         icon={icon}
         inputItem={inputItem}
