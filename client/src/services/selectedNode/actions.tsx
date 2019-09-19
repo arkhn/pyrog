@@ -135,6 +135,12 @@ export const updateFhirResource = (
   };
 };
 
+export const deselectFhirResource = (): IAction => {
+  return {
+    type: "DESELECTED_FHIR_RESOURCE"
+  };
+};
+
 // Fhir Attribute
 export const updateFhirAttribute = (
   attributeId: string,

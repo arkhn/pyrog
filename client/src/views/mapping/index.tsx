@@ -18,11 +18,13 @@ import {
   addProfile,
   addResource,
   deleteProfile,
+  deleteResource,
   nodeCollapse,
   nodeExpand,
   updateAddResource
 } from "./actions";
 import {
+  deselectFhirResource,
   updateFhirAttribute,
   updateFhirResource
 } from "../../services/selectedNode/actions";
@@ -52,6 +54,7 @@ const allSources = require("../../graphql/queries/allSources.graphql");
 const availableResources = require("../../graphql/queries/availableResources.graphql");
 const resourceAttributeTree = require("../../graphql/queries/resourceAttributeTree.graphql");
 const createResourceTreeInSource = require("../../graphql/mutations/createResourceTreeInSource.graphql");
+const deleteResourceTreeInSource = require("../../graphql/mutations/deleteResourceTreeInSource.graphql");
 
 // LOGO
 const arkhnLogoWhite = require("../../assets/img/arkhn_logo_only_white.svg") as string;
@@ -173,27 +176,79 @@ export default class MappingView extends React.Component<
                   <div id="left-part">
                     <div id="fhir-attributes">
                       <div id="resource-selector">
-                        <ResourceSelect
-                          disabled={!selectedNode.source}
-                          icon={"layout-hierarchy"}
-                          inputItem={selectedNode.resource}
-                          intent={"primary"}
-                          items={
-                            data && data.availableResources
-                              ? data.availableResources
-                              : []
-                          }
-                          loading={loading}
-                          onChange={(resource: any) => {
-                            dispatch(
-                              updateFhirResource(resource.id, resource.name)
-                            );
-                            this.updateLocationSearch(
-                              "resourceId",
-                              resource.id
-                            );
-                          }}
-                        />
+                        <FormGroup label={"Add Resource"}>
+                          <ControlGroup>
+                            <ResourceSelect
+                              disabled={!selectedNode.source}
+                              icon={"layout-hierarchy"}
+                              inputItem={selectedNode.resource}
+                              intent={"primary"}
+                              items={
+                                data && data.availableResources
+                                  ? data.availableResources
+                                  : []
+                              }
+                              loading={loading}
+                              onChange={(resource: any) => {
+                                dispatch(
+                                  updateFhirResource(resource.id, resource.name)
+                                );
+                                this.updateLocationSearch(
+                                  "resourceId",
+                                  resource.id
+                                );
+                              }}
+                            />
+                            <Mutation
+                              mutation={deleteResourceTreeInSource}
+                              onCompleted={(data: any) => {
+                                this.props.toaster.show({
+                                  icon: "layout-hierarchy",
+                                  intent: "success",
+                                  message: `Ressource ${
+                                    data.deleteResourceTreeInSource.name
+                                  } supprimée pour ${
+                                    selectedNode.source.name
+                                  }.`,
+                                  timeout: 4000
+                                });
+
+                                dispatch(deselectFhirResource());
+                                dispatch(deleteResource());
+                              }}
+                              onError={(error: any) => {
+                                this.props.toaster.show({
+                                  icon: "error",
+                                  intent: "danger",
+                                  message: error.message,
+                                  timeout: 4000
+                                });
+                              }}
+                            >
+                              {(
+                                deleteResource: any,
+                                { data, loading }: any
+                              ) => {
+                                return (
+                                  <Button
+                                    disabled={selectedNode.resource.id === null}
+                                    loading={loading}
+                                    icon={"trash"}
+                                    intent={"primary"}
+                                    onClick={() => {
+                                      deleteResource({
+                                        variables: {
+                                          sourceId: selectedNode.source.id,
+                                          resourceId: selectedNode.resource.id
+                                        }
+                                      });
+                                    }}
+                                  />
+                                );
+                              }}
+                            </Mutation>
+                          </ControlGroup>
+                        </FormGroup>
                       </div>
                       <div id="fhir-resource-tree">
                         {selectedNode.resource.name ? (
