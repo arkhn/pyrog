@@ -402,11 +402,70 @@ export type UserOrderByInput =
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
+export interface JoinUpdateWithoutInputColumnDataInput {
+  sourceOwner?: String;
+  sourceTable?: String;
+  sourceColumn?: String;
+  targetOwner?: String;
+  targetTable?: String;
+  targetColumn?: String;
+}
+
 export type AttributeWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
 
-export interface AttributeWhereInput {
+export interface AttributeCreateWithoutAttributesInput {
+  id?: ID_Input;
+  name: String;
+  mergingScript?: String;
+  isProfile?: Boolean;
+  type?: String;
+  comment?: String;
+  depth?: Int;
+  resource?: ResourceCreateOneWithoutAttributesInput;
+  attribute?: AttributeCreateOneWithoutAttributesInput;
+  inputColumns?: InputColumnCreateManyWithoutAttributeInput;
+}
+
+export interface JoinUpdateManyMutationInput {
+  sourceOwner?: String;
+  sourceTable?: String;
+  sourceColumn?: String;
+  targetOwner?: String;
+  targetTable?: String;
+  targetColumn?: String;
+}
+
+export interface AttributeUpdateInput {
+  name?: String;
+  mergingScript?: String;
+  isProfile?: Boolean;
+  type?: String;
+  comment?: String;
+  depth?: Int;
+  resource?: ResourceUpdateOneWithoutAttributesInput;
+  attributes?: AttributeUpdateManyWithoutAttributeInput;
+  attribute?: AttributeUpdateOneWithoutAttributesInput;
+  inputColumns?: InputColumnUpdateManyWithoutAttributeInput;
+}
+
+export interface InputColumnUpsertWithWhereUniqueWithoutAttributeInput {
+  where: InputColumnWhereUniqueInput;
+  update: InputColumnUpdateWithoutAttributeDataInput;
+  create: InputColumnCreateWithoutAttributeInput;
+}
+
+export interface ResourceUpdateOneWithoutAttributesInput {
+  create?: ResourceCreateWithoutAttributesInput;
+  update?: ResourceUpdateWithoutAttributesDataInput;
+  upsert?: ResourceUpsertWithoutAttributesInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: ResourceWhereUniqueInput;
+}
+
+export interface SourceWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
   id_in?: ID_Input[] | ID_Input;
@@ -435,66 +494,11 @@ export interface AttributeWhereInput {
   name_not_starts_with?: String;
   name_ends_with?: String;
   name_not_ends_with?: String;
-  mergingScript?: String;
-  mergingScript_not?: String;
-  mergingScript_in?: String[] | String;
-  mergingScript_not_in?: String[] | String;
-  mergingScript_lt?: String;
-  mergingScript_lte?: String;
-  mergingScript_gt?: String;
-  mergingScript_gte?: String;
-  mergingScript_contains?: String;
-  mergingScript_not_contains?: String;
-  mergingScript_starts_with?: String;
-  mergingScript_not_starts_with?: String;
-  mergingScript_ends_with?: String;
-  mergingScript_not_ends_with?: String;
-  isProfile?: Boolean;
-  isProfile_not?: Boolean;
-  type?: String;
-  type_not?: String;
-  type_in?: String[] | String;
-  type_not_in?: String[] | String;
-  type_lt?: String;
-  type_lte?: String;
-  type_gt?: String;
-  type_gte?: String;
-  type_contains?: String;
-  type_not_contains?: String;
-  type_starts_with?: String;
-  type_not_starts_with?: String;
-  type_ends_with?: String;
-  type_not_ends_with?: String;
-  comment?: String;
-  comment_not?: String;
-  comment_in?: String[] | String;
-  comment_not_in?: String[] | String;
-  comment_lt?: String;
-  comment_lte?: String;
-  comment_gt?: String;
-  comment_gte?: String;
-  comment_contains?: String;
-  comment_not_contains?: String;
-  comment_starts_with?: String;
-  comment_not_starts_with?: String;
-  comment_ends_with?: String;
-  comment_not_ends_with?: String;
-  depth?: Int;
-  depth_not?: Int;
-  depth_in?: Int[] | Int;
-  depth_not_in?: Int[] | Int;
-  depth_lt?: Int;
-  depth_lte?: Int;
-  depth_gt?: Int;
-  depth_gte?: Int;
-  resource?: ResourceWhereInput;
-  attributes_every?: AttributeWhereInput;
-  attributes_some?: AttributeWhereInput;
-  attributes_none?: AttributeWhereInput;
-  attribute?: AttributeWhereInput;
-  inputColumns_every?: InputColumnWhereInput;
-  inputColumns_some?: InputColumnWhereInput;
-  inputColumns_none?: InputColumnWhereInput;
+  hasOwner?: Boolean;
+  hasOwner_not?: Boolean;
+  resources_every?: ResourceWhereInput;
+  resources_some?: ResourceWhereInput;
+  resources_none?: ResourceWhereInput;
   updatedAt?: DateTimeInput;
   updatedAt_not?: DateTimeInput;
   updatedAt_in?: DateTimeInput[] | DateTimeInput;
@@ -511,9 +515,17 @@ export interface AttributeWhereInput {
   createdAt_lte?: DateTimeInput;
   createdAt_gt?: DateTimeInput;
   createdAt_gte?: DateTimeInput;
-  AND?: AttributeWhereInput[] | AttributeWhereInput;
-  OR?: AttributeWhereInput[] | AttributeWhereInput;
-  NOT?: AttributeWhereInput[] | AttributeWhereInput;
+  AND?: SourceWhereInput[] | SourceWhereInput;
+  OR?: SourceWhereInput[] | SourceWhereInput;
+  NOT?: SourceWhereInput[] | SourceWhereInput;
+}
+
+export interface ResourceUpdateWithoutAttributesDataInput {
+  name?: String;
+  primaryKeyOwner?: String;
+  primaryKeyTable?: String;
+  primaryKeyColumn?: String;
+  source?: SourceUpdateOneRequiredWithoutResourcesInput;
 }
 
 export interface ResourceWhereInput {
@@ -612,7 +624,262 @@ export interface ResourceWhereInput {
   NOT?: ResourceWhereInput[] | ResourceWhereInput;
 }
 
-export interface SourceWhereInput {
+export interface SourceUpdateOneRequiredWithoutResourcesInput {
+  create?: SourceCreateWithoutResourcesInput;
+  update?: SourceUpdateWithoutResourcesDataInput;
+  upsert?: SourceUpsertWithoutResourcesInput;
+  connect?: SourceWhereUniqueInput;
+}
+
+export interface SourceSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: SourceWhereInput;
+  AND?: SourceSubscriptionWhereInput[] | SourceSubscriptionWhereInput;
+  OR?: SourceSubscriptionWhereInput[] | SourceSubscriptionWhereInput;
+  NOT?: SourceSubscriptionWhereInput[] | SourceSubscriptionWhereInput;
+}
+
+export interface SourceUpdateWithoutResourcesDataInput {
+  name?: String;
+  hasOwner?: Boolean;
+}
+
+export interface JoinSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: JoinWhereInput;
+  AND?: JoinSubscriptionWhereInput[] | JoinSubscriptionWhereInput;
+  OR?: JoinSubscriptionWhereInput[] | JoinSubscriptionWhereInput;
+  NOT?: JoinSubscriptionWhereInput[] | JoinSubscriptionWhereInput;
+}
+
+export interface SourceUpsertWithoutResourcesInput {
+  update: SourceUpdateWithoutResourcesDataInput;
+  create: SourceCreateWithoutResourcesInput;
+}
+
+export interface AttributeSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: AttributeWhereInput;
+  AND?: AttributeSubscriptionWhereInput[] | AttributeSubscriptionWhereInput;
+  OR?: AttributeSubscriptionWhereInput[] | AttributeSubscriptionWhereInput;
+  NOT?: AttributeSubscriptionWhereInput[] | AttributeSubscriptionWhereInput;
+}
+
+export interface ResourceUpsertWithoutAttributesInput {
+  update: ResourceUpdateWithoutAttributesDataInput;
+  create: ResourceCreateWithoutAttributesInput;
+}
+
+export interface UserUpdateInput {
+  email?: String;
+  name?: String;
+  password?: String;
+  role?: Role;
+}
+
+export interface AttributeUpdateManyWithoutAttributeInput {
+  create?:
+    | AttributeCreateWithoutAttributeInput[]
+    | AttributeCreateWithoutAttributeInput;
+  delete?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
+  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
+  set?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
+  disconnect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
+  update?:
+    | AttributeUpdateWithWhereUniqueWithoutAttributeInput[]
+    | AttributeUpdateWithWhereUniqueWithoutAttributeInput;
+  upsert?:
+    | AttributeUpsertWithWhereUniqueWithoutAttributeInput[]
+    | AttributeUpsertWithWhereUniqueWithoutAttributeInput;
+  deleteMany?: AttributeScalarWhereInput[] | AttributeScalarWhereInput;
+  updateMany?:
+    | AttributeUpdateManyWithWhereNestedInput[]
+    | AttributeUpdateManyWithWhereNestedInput;
+}
+
+export interface UserCreateInput {
+  id?: ID_Input;
+  email: String;
+  name: String;
+  password: String;
+  role?: Role;
+}
+
+export interface AttributeUpdateWithWhereUniqueWithoutAttributeInput {
+  where: AttributeWhereUniqueInput;
+  data: AttributeUpdateWithoutAttributeDataInput;
+}
+
+export interface ResourceUpdateManyDataInput {
+  name?: String;
+  primaryKeyOwner?: String;
+  primaryKeyTable?: String;
+  primaryKeyColumn?: String;
+}
+
+export interface AttributeUpdateWithoutAttributeDataInput {
+  name?: String;
+  mergingScript?: String;
+  isProfile?: Boolean;
+  type?: String;
+  comment?: String;
+  depth?: Int;
+  resource?: ResourceUpdateOneWithoutAttributesInput;
+  attributes?: AttributeUpdateManyWithoutAttributeInput;
+  inputColumns?: InputColumnUpdateManyWithoutAttributeInput;
+}
+
+export interface ResourceUpdateManyWithWhereNestedInput {
+  where: ResourceScalarWhereInput;
+  data: ResourceUpdateManyDataInput;
+}
+
+export interface InputColumnUpdateManyWithoutAttributeInput {
+  create?:
+    | InputColumnCreateWithoutAttributeInput[]
+    | InputColumnCreateWithoutAttributeInput;
+  delete?: InputColumnWhereUniqueInput[] | InputColumnWhereUniqueInput;
+  connect?: InputColumnWhereUniqueInput[] | InputColumnWhereUniqueInput;
+  set?: InputColumnWhereUniqueInput[] | InputColumnWhereUniqueInput;
+  disconnect?: InputColumnWhereUniqueInput[] | InputColumnWhereUniqueInput;
+  update?:
+    | InputColumnUpdateWithWhereUniqueWithoutAttributeInput[]
+    | InputColumnUpdateWithWhereUniqueWithoutAttributeInput;
+  upsert?:
+    | InputColumnUpsertWithWhereUniqueWithoutAttributeInput[]
+    | InputColumnUpsertWithWhereUniqueWithoutAttributeInput;
+  deleteMany?: InputColumnScalarWhereInput[] | InputColumnScalarWhereInput;
+  updateMany?:
+    | InputColumnUpdateManyWithWhereNestedInput[]
+    | InputColumnUpdateManyWithWhereNestedInput;
+}
+
+export interface ResourceUpsertWithWhereUniqueWithoutSourceInput {
+  where: ResourceWhereUniqueInput;
+  update: ResourceUpdateWithoutSourceDataInput;
+  create: ResourceCreateWithoutSourceInput;
+}
+
+export interface InputColumnUpdateWithWhereUniqueWithoutAttributeInput {
+  where: InputColumnWhereUniqueInput;
+  data: InputColumnUpdateWithoutAttributeDataInput;
+}
+
+export interface ResourceUpdateWithoutSourceDataInput {
+  name?: String;
+  primaryKeyOwner?: String;
+  primaryKeyTable?: String;
+  primaryKeyColumn?: String;
+  attributes?: AttributeUpdateManyWithoutResourceInput;
+}
+
+export interface InputColumnUpdateWithoutAttributeDataInput {
+  owner?: String;
+  table?: String;
+  column?: String;
+  script?: String;
+  staticValue?: String;
+  joins?: JoinUpdateManyWithoutInputColumnInput;
+}
+
+export interface ResourceUpdateManyWithoutSourceInput {
+  create?:
+    | ResourceCreateWithoutSourceInput[]
+    | ResourceCreateWithoutSourceInput;
+  delete?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput;
+  connect?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput;
+  set?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput;
+  disconnect?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput;
+  update?:
+    | ResourceUpdateWithWhereUniqueWithoutSourceInput[]
+    | ResourceUpdateWithWhereUniqueWithoutSourceInput;
+  upsert?:
+    | ResourceUpsertWithWhereUniqueWithoutSourceInput[]
+    | ResourceUpsertWithWhereUniqueWithoutSourceInput;
+  deleteMany?: ResourceScalarWhereInput[] | ResourceScalarWhereInput;
+  updateMany?:
+    | ResourceUpdateManyWithWhereNestedInput[]
+    | ResourceUpdateManyWithWhereNestedInput;
+}
+
+export interface JoinUpdateManyWithoutInputColumnInput {
+  create?:
+    | JoinCreateWithoutInputColumnInput[]
+    | JoinCreateWithoutInputColumnInput;
+  delete?: JoinWhereUniqueInput[] | JoinWhereUniqueInput;
+  connect?: JoinWhereUniqueInput[] | JoinWhereUniqueInput;
+  set?: JoinWhereUniqueInput[] | JoinWhereUniqueInput;
+  disconnect?: JoinWhereUniqueInput[] | JoinWhereUniqueInput;
+  update?:
+    | JoinUpdateWithWhereUniqueWithoutInputColumnInput[]
+    | JoinUpdateWithWhereUniqueWithoutInputColumnInput;
+  upsert?:
+    | JoinUpsertWithWhereUniqueWithoutInputColumnInput[]
+    | JoinUpsertWithWhereUniqueWithoutInputColumnInput;
+  deleteMany?: JoinScalarWhereInput[] | JoinScalarWhereInput;
+  updateMany?:
+    | JoinUpdateManyWithWhereNestedInput[]
+    | JoinUpdateManyWithWhereNestedInput;
+}
+
+export interface SourceUpdateInput {
+  name?: String;
+  hasOwner?: Boolean;
+  resources?: ResourceUpdateManyWithoutSourceInput;
+}
+
+export interface JoinUpdateWithWhereUniqueWithoutInputColumnInput {
+  where: JoinWhereUniqueInput;
+  data: JoinUpdateWithoutInputColumnDataInput;
+}
+
+export interface ResourceCreateManyWithoutSourceInput {
+  create?:
+    | ResourceCreateWithoutSourceInput[]
+    | ResourceCreateWithoutSourceInput;
+  connect?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput;
+}
+
+export interface AttributeCreateWithoutResourceInput {
+  id?: ID_Input;
+  name: String;
+  mergingScript?: String;
+  isProfile?: Boolean;
+  type?: String;
+  comment?: String;
+  depth?: Int;
+  attributes?: AttributeCreateManyWithoutAttributeInput;
+  attribute?: AttributeCreateOneWithoutAttributesInput;
+  inputColumns?: InputColumnCreateManyWithoutAttributeInput;
+}
+
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  email?: String;
+}>;
+
+export interface JoinUpsertWithWhereUniqueWithoutInputColumnInput {
+  where: JoinWhereUniqueInput;
+  update: JoinUpdateWithoutInputColumnDataInput;
+  create: JoinCreateWithoutInputColumnInput;
+}
+
+export interface AttributeUpsertWithWhereUniqueWithoutResourceInput {
+  where: AttributeWhereUniqueInput;
+  update: AttributeUpdateWithoutResourceDataInput;
+  create: AttributeCreateWithoutResourceInput;
+}
+
+export interface JoinScalarWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
   id_in?: ID_Input[] | ID_Input;
@@ -627,25 +894,90 @@ export interface SourceWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  hasOwner?: Boolean;
-  hasOwner_not?: Boolean;
-  resources_every?: ResourceWhereInput;
-  resources_some?: ResourceWhereInput;
-  resources_none?: ResourceWhereInput;
+  sourceOwner?: String;
+  sourceOwner_not?: String;
+  sourceOwner_in?: String[] | String;
+  sourceOwner_not_in?: String[] | String;
+  sourceOwner_lt?: String;
+  sourceOwner_lte?: String;
+  sourceOwner_gt?: String;
+  sourceOwner_gte?: String;
+  sourceOwner_contains?: String;
+  sourceOwner_not_contains?: String;
+  sourceOwner_starts_with?: String;
+  sourceOwner_not_starts_with?: String;
+  sourceOwner_ends_with?: String;
+  sourceOwner_not_ends_with?: String;
+  sourceTable?: String;
+  sourceTable_not?: String;
+  sourceTable_in?: String[] | String;
+  sourceTable_not_in?: String[] | String;
+  sourceTable_lt?: String;
+  sourceTable_lte?: String;
+  sourceTable_gt?: String;
+  sourceTable_gte?: String;
+  sourceTable_contains?: String;
+  sourceTable_not_contains?: String;
+  sourceTable_starts_with?: String;
+  sourceTable_not_starts_with?: String;
+  sourceTable_ends_with?: String;
+  sourceTable_not_ends_with?: String;
+  sourceColumn?: String;
+  sourceColumn_not?: String;
+  sourceColumn_in?: String[] | String;
+  sourceColumn_not_in?: String[] | String;
+  sourceColumn_lt?: String;
+  sourceColumn_lte?: String;
+  sourceColumn_gt?: String;
+  sourceColumn_gte?: String;
+  sourceColumn_contains?: String;
+  sourceColumn_not_contains?: String;
+  sourceColumn_starts_with?: String;
+  sourceColumn_not_starts_with?: String;
+  sourceColumn_ends_with?: String;
+  sourceColumn_not_ends_with?: String;
+  targetOwner?: String;
+  targetOwner_not?: String;
+  targetOwner_in?: String[] | String;
+  targetOwner_not_in?: String[] | String;
+  targetOwner_lt?: String;
+  targetOwner_lte?: String;
+  targetOwner_gt?: String;
+  targetOwner_gte?: String;
+  targetOwner_contains?: String;
+  targetOwner_not_contains?: String;
+  targetOwner_starts_with?: String;
+  targetOwner_not_starts_with?: String;
+  targetOwner_ends_with?: String;
+  targetOwner_not_ends_with?: String;
+  targetTable?: String;
+  targetTable_not?: String;
+  targetTable_in?: String[] | String;
+  targetTable_not_in?: String[] | String;
+  targetTable_lt?: String;
+  targetTable_lte?: String;
+  targetTable_gt?: String;
+  targetTable_gte?: String;
+  targetTable_contains?: String;
+  targetTable_not_contains?: String;
+  targetTable_starts_with?: String;
+  targetTable_not_starts_with?: String;
+  targetTable_ends_with?: String;
+  targetTable_not_ends_with?: String;
+  targetColumn?: String;
+  targetColumn_not?: String;
+  targetColumn_in?: String[] | String;
+  targetColumn_not_in?: String[] | String;
+  targetColumn_lt?: String;
+  targetColumn_lte?: String;
+  targetColumn_gt?: String;
+  targetColumn_gte?: String;
+  targetColumn_contains?: String;
+  targetColumn_not_contains?: String;
+  targetColumn_starts_with?: String;
+  targetColumn_not_starts_with?: String;
+  targetColumn_ends_with?: String;
+  targetColumn_not_ends_with?: String;
   updatedAt?: DateTimeInput;
   updatedAt_not?: DateTimeInput;
   updatedAt_in?: DateTimeInput[] | DateTimeInput;
@@ -662,9 +994,60 @@ export interface SourceWhereInput {
   createdAt_lte?: DateTimeInput;
   createdAt_gt?: DateTimeInput;
   createdAt_gte?: DateTimeInput;
-  AND?: SourceWhereInput[] | SourceWhereInput;
-  OR?: SourceWhereInput[] | SourceWhereInput;
-  NOT?: SourceWhereInput[] | SourceWhereInput;
+  AND?: JoinScalarWhereInput[] | JoinScalarWhereInput;
+  OR?: JoinScalarWhereInput[] | JoinScalarWhereInput;
+  NOT?: JoinScalarWhereInput[] | JoinScalarWhereInput;
+}
+
+export interface AttributeUpdateWithoutResourceDataInput {
+  name?: String;
+  mergingScript?: String;
+  isProfile?: Boolean;
+  type?: String;
+  comment?: String;
+  depth?: Int;
+  attributes?: AttributeUpdateManyWithoutAttributeInput;
+  attribute?: AttributeUpdateOneWithoutAttributesInput;
+  inputColumns?: InputColumnUpdateManyWithoutAttributeInput;
+}
+
+export interface JoinUpdateManyWithWhereNestedInput {
+  where: JoinScalarWhereInput;
+  data: JoinUpdateManyDataInput;
+}
+
+export interface AttributeUpdateManyWithoutResourceInput {
+  create?:
+    | AttributeCreateWithoutResourceInput[]
+    | AttributeCreateWithoutResourceInput;
+  delete?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
+  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
+  set?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
+  disconnect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
+  update?:
+    | AttributeUpdateWithWhereUniqueWithoutResourceInput[]
+    | AttributeUpdateWithWhereUniqueWithoutResourceInput;
+  upsert?:
+    | AttributeUpsertWithWhereUniqueWithoutResourceInput[]
+    | AttributeUpsertWithWhereUniqueWithoutResourceInput;
+  deleteMany?: AttributeScalarWhereInput[] | AttributeScalarWhereInput;
+  updateMany?:
+    | AttributeUpdateManyWithWhereNestedInput[]
+    | AttributeUpdateManyWithWhereNestedInput;
+}
+
+export interface JoinUpdateManyDataInput {
+  sourceOwner?: String;
+  sourceTable?: String;
+  sourceColumn?: String;
+  targetOwner?: String;
+  targetTable?: String;
+  targetColumn?: String;
+}
+
+export interface ResourceCreateOneWithoutAttributesInput {
+  create?: ResourceCreateWithoutAttributesInput;
+  connect?: ResourceWhereUniqueInput;
 }
 
 export interface InputColumnWhereInput {
@@ -775,6 +1158,551 @@ export interface InputColumnWhereInput {
   AND?: InputColumnWhereInput[] | InputColumnWhereInput;
   OR?: InputColumnWhereInput[] | InputColumnWhereInput;
   NOT?: InputColumnWhereInput[] | InputColumnWhereInput;
+}
+
+export interface SourceCreateOneWithoutResourcesInput {
+  create?: SourceCreateWithoutResourcesInput;
+  connect?: SourceWhereUniqueInput;
+}
+
+export interface InputColumnScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  owner?: String;
+  owner_not?: String;
+  owner_in?: String[] | String;
+  owner_not_in?: String[] | String;
+  owner_lt?: String;
+  owner_lte?: String;
+  owner_gt?: String;
+  owner_gte?: String;
+  owner_contains?: String;
+  owner_not_contains?: String;
+  owner_starts_with?: String;
+  owner_not_starts_with?: String;
+  owner_ends_with?: String;
+  owner_not_ends_with?: String;
+  table?: String;
+  table_not?: String;
+  table_in?: String[] | String;
+  table_not_in?: String[] | String;
+  table_lt?: String;
+  table_lte?: String;
+  table_gt?: String;
+  table_gte?: String;
+  table_contains?: String;
+  table_not_contains?: String;
+  table_starts_with?: String;
+  table_not_starts_with?: String;
+  table_ends_with?: String;
+  table_not_ends_with?: String;
+  column?: String;
+  column_not?: String;
+  column_in?: String[] | String;
+  column_not_in?: String[] | String;
+  column_lt?: String;
+  column_lte?: String;
+  column_gt?: String;
+  column_gte?: String;
+  column_contains?: String;
+  column_not_contains?: String;
+  column_starts_with?: String;
+  column_not_starts_with?: String;
+  column_ends_with?: String;
+  column_not_ends_with?: String;
+  script?: String;
+  script_not?: String;
+  script_in?: String[] | String;
+  script_not_in?: String[] | String;
+  script_lt?: String;
+  script_lte?: String;
+  script_gt?: String;
+  script_gte?: String;
+  script_contains?: String;
+  script_not_contains?: String;
+  script_starts_with?: String;
+  script_not_starts_with?: String;
+  script_ends_with?: String;
+  script_not_ends_with?: String;
+  staticValue?: String;
+  staticValue_not?: String;
+  staticValue_in?: String[] | String;
+  staticValue_not_in?: String[] | String;
+  staticValue_lt?: String;
+  staticValue_lte?: String;
+  staticValue_gt?: String;
+  staticValue_gte?: String;
+  staticValue_contains?: String;
+  staticValue_not_contains?: String;
+  staticValue_starts_with?: String;
+  staticValue_not_starts_with?: String;
+  staticValue_ends_with?: String;
+  staticValue_not_ends_with?: String;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  AND?: InputColumnScalarWhereInput[] | InputColumnScalarWhereInput;
+  OR?: InputColumnScalarWhereInput[] | InputColumnScalarWhereInput;
+  NOT?: InputColumnScalarWhereInput[] | InputColumnScalarWhereInput;
+}
+
+export interface AttributeCreateManyWithoutAttributeInput {
+  create?:
+    | AttributeCreateWithoutAttributeInput[]
+    | AttributeCreateWithoutAttributeInput;
+  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
+}
+
+export interface InputColumnUpdateManyWithWhereNestedInput {
+  where: InputColumnScalarWhereInput;
+  data: InputColumnUpdateManyDataInput;
+}
+
+export interface InputColumnCreateManyWithoutAttributeInput {
+  create?:
+    | InputColumnCreateWithoutAttributeInput[]
+    | InputColumnCreateWithoutAttributeInput;
+  connect?: InputColumnWhereUniqueInput[] | InputColumnWhereUniqueInput;
+}
+
+export interface InputColumnUpdateManyDataInput {
+  owner?: String;
+  table?: String;
+  column?: String;
+  script?: String;
+  staticValue?: String;
+}
+
+export interface JoinCreateManyWithoutInputColumnInput {
+  create?:
+    | JoinCreateWithoutInputColumnInput[]
+    | JoinCreateWithoutInputColumnInput;
+  connect?: JoinWhereUniqueInput[] | JoinWhereUniqueInput;
+}
+
+export interface AttributeUpsertWithWhereUniqueWithoutAttributeInput {
+  where: AttributeWhereUniqueInput;
+  update: AttributeUpdateWithoutAttributeDataInput;
+  create: AttributeCreateWithoutAttributeInput;
+}
+
+export interface AttributeCreateOneWithoutAttributesInput {
+  create?: AttributeCreateWithoutAttributesInput;
+  connect?: AttributeWhereUniqueInput;
+}
+
+export interface AttributeScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  mergingScript?: String;
+  mergingScript_not?: String;
+  mergingScript_in?: String[] | String;
+  mergingScript_not_in?: String[] | String;
+  mergingScript_lt?: String;
+  mergingScript_lte?: String;
+  mergingScript_gt?: String;
+  mergingScript_gte?: String;
+  mergingScript_contains?: String;
+  mergingScript_not_contains?: String;
+  mergingScript_starts_with?: String;
+  mergingScript_not_starts_with?: String;
+  mergingScript_ends_with?: String;
+  mergingScript_not_ends_with?: String;
+  isProfile?: Boolean;
+  isProfile_not?: Boolean;
+  type?: String;
+  type_not?: String;
+  type_in?: String[] | String;
+  type_not_in?: String[] | String;
+  type_lt?: String;
+  type_lte?: String;
+  type_gt?: String;
+  type_gte?: String;
+  type_contains?: String;
+  type_not_contains?: String;
+  type_starts_with?: String;
+  type_not_starts_with?: String;
+  type_ends_with?: String;
+  type_not_ends_with?: String;
+  comment?: String;
+  comment_not?: String;
+  comment_in?: String[] | String;
+  comment_not_in?: String[] | String;
+  comment_lt?: String;
+  comment_lte?: String;
+  comment_gt?: String;
+  comment_gte?: String;
+  comment_contains?: String;
+  comment_not_contains?: String;
+  comment_starts_with?: String;
+  comment_not_starts_with?: String;
+  comment_ends_with?: String;
+  comment_not_ends_with?: String;
+  depth?: Int;
+  depth_not?: Int;
+  depth_in?: Int[] | Int;
+  depth_not_in?: Int[] | Int;
+  depth_lt?: Int;
+  depth_lte?: Int;
+  depth_gt?: Int;
+  depth_gte?: Int;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  AND?: AttributeScalarWhereInput[] | AttributeScalarWhereInput;
+  OR?: AttributeScalarWhereInput[] | AttributeScalarWhereInput;
+  NOT?: AttributeScalarWhereInput[] | AttributeScalarWhereInput;
+}
+
+export interface UserSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: UserWhereInput;
+  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+}
+
+export interface AttributeUpdateManyWithWhereNestedInput {
+  where: AttributeScalarWhereInput;
+  data: AttributeUpdateManyDataInput;
+}
+
+export interface ResourceSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: ResourceWhereInput;
+  AND?: ResourceSubscriptionWhereInput[] | ResourceSubscriptionWhereInput;
+  OR?: ResourceSubscriptionWhereInput[] | ResourceSubscriptionWhereInput;
+  NOT?: ResourceSubscriptionWhereInput[] | ResourceSubscriptionWhereInput;
+}
+
+export interface AttributeUpdateManyDataInput {
+  name?: String;
+  mergingScript?: String;
+  isProfile?: Boolean;
+  type?: String;
+  comment?: String;
+  depth?: Int;
+}
+
+export interface UserUpdateManyMutationInput {
+  email?: String;
+  name?: String;
+  password?: String;
+  role?: Role;
+}
+
+export interface AttributeUpdateOneWithoutAttributesInput {
+  create?: AttributeCreateWithoutAttributesInput;
+  update?: AttributeUpdateWithoutAttributesDataInput;
+  upsert?: AttributeUpsertWithoutAttributesInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: AttributeWhereUniqueInput;
+}
+
+export interface SourceUpdateManyMutationInput {
+  name?: String;
+  hasOwner?: Boolean;
+}
+
+export interface AttributeUpdateWithoutAttributesDataInput {
+  name?: String;
+  mergingScript?: String;
+  isProfile?: Boolean;
+  type?: String;
+  comment?: String;
+  depth?: Int;
+  resource?: ResourceUpdateOneWithoutAttributesInput;
+  attribute?: AttributeUpdateOneWithoutAttributesInput;
+  inputColumns?: InputColumnUpdateManyWithoutAttributeInput;
+}
+
+export interface ResourceScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  primaryKeyOwner?: String;
+  primaryKeyOwner_not?: String;
+  primaryKeyOwner_in?: String[] | String;
+  primaryKeyOwner_not_in?: String[] | String;
+  primaryKeyOwner_lt?: String;
+  primaryKeyOwner_lte?: String;
+  primaryKeyOwner_gt?: String;
+  primaryKeyOwner_gte?: String;
+  primaryKeyOwner_contains?: String;
+  primaryKeyOwner_not_contains?: String;
+  primaryKeyOwner_starts_with?: String;
+  primaryKeyOwner_not_starts_with?: String;
+  primaryKeyOwner_ends_with?: String;
+  primaryKeyOwner_not_ends_with?: String;
+  primaryKeyTable?: String;
+  primaryKeyTable_not?: String;
+  primaryKeyTable_in?: String[] | String;
+  primaryKeyTable_not_in?: String[] | String;
+  primaryKeyTable_lt?: String;
+  primaryKeyTable_lte?: String;
+  primaryKeyTable_gt?: String;
+  primaryKeyTable_gte?: String;
+  primaryKeyTable_contains?: String;
+  primaryKeyTable_not_contains?: String;
+  primaryKeyTable_starts_with?: String;
+  primaryKeyTable_not_starts_with?: String;
+  primaryKeyTable_ends_with?: String;
+  primaryKeyTable_not_ends_with?: String;
+  primaryKeyColumn?: String;
+  primaryKeyColumn_not?: String;
+  primaryKeyColumn_in?: String[] | String;
+  primaryKeyColumn_not_in?: String[] | String;
+  primaryKeyColumn_lt?: String;
+  primaryKeyColumn_lte?: String;
+  primaryKeyColumn_gt?: String;
+  primaryKeyColumn_gte?: String;
+  primaryKeyColumn_contains?: String;
+  primaryKeyColumn_not_contains?: String;
+  primaryKeyColumn_starts_with?: String;
+  primaryKeyColumn_not_starts_with?: String;
+  primaryKeyColumn_ends_with?: String;
+  primaryKeyColumn_not_ends_with?: String;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  AND?: ResourceScalarWhereInput[] | ResourceScalarWhereInput;
+  OR?: ResourceScalarWhereInput[] | ResourceScalarWhereInput;
+  NOT?: ResourceScalarWhereInput[] | ResourceScalarWhereInput;
+}
+
+export interface AttributeUpsertWithoutAttributesInput {
+  update: AttributeUpdateWithoutAttributesDataInput;
+  create: AttributeCreateWithoutAttributesInput;
+}
+
+export interface ResourceUpdateWithWhereUniqueWithoutSourceInput {
+  where: ResourceWhereUniqueInput;
+  data: ResourceUpdateWithoutSourceDataInput;
+}
+
+export interface AttributeUpdateManyMutationInput {
+  name?: String;
+  mergingScript?: String;
+  isProfile?: Boolean;
+  type?: String;
+  comment?: String;
+  depth?: Int;
+}
+
+export interface ResourceCreateWithoutSourceInput {
+  id?: ID_Input;
+  name: String;
+  primaryKeyOwner?: String;
+  primaryKeyTable?: String;
+  primaryKeyColumn?: String;
+  attributes?: AttributeCreateManyWithoutResourceInput;
+}
+
+export interface AttributeCreateManyWithoutResourceInput {
+  create?:
+    | AttributeCreateWithoutResourceInput[]
+    | AttributeCreateWithoutResourceInput;
+  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
+}
+
+export interface ResourceUpdateManyMutationInput {
+  name?: String;
+  primaryKeyOwner?: String;
+  primaryKeyTable?: String;
+  primaryKeyColumn?: String;
+}
+
+export interface ResourceCreateInput {
+  id?: ID_Input;
+  name: String;
+  primaryKeyOwner?: String;
+  primaryKeyTable?: String;
+  primaryKeyColumn?: String;
+  attributes?: AttributeCreateManyWithoutResourceInput;
+  source: SourceCreateOneWithoutResourcesInput;
+}
+
+export interface AttributeUpdateWithWhereUniqueWithoutResourceInput {
+  where: AttributeWhereUniqueInput;
+  data: AttributeUpdateWithoutResourceDataInput;
+}
+
+export interface InputColumnCreateInput {
+  id?: ID_Input;
+  owner?: String;
+  table?: String;
+  column?: String;
+  script?: String;
+  staticValue?: String;
+  joins?: JoinCreateManyWithoutInputColumnInput;
+  attribute: AttributeCreateOneWithoutInputColumnsInput;
+}
+
+export interface AttributeCreateInput {
+  id?: ID_Input;
+  name: String;
+  mergingScript?: String;
+  isProfile?: Boolean;
+  type?: String;
+  comment?: String;
+  depth?: Int;
+  resource?: ResourceCreateOneWithoutAttributesInput;
+  attributes?: AttributeCreateManyWithoutAttributeInput;
+  attribute?: AttributeCreateOneWithoutAttributesInput;
+  inputColumns?: InputColumnCreateManyWithoutAttributeInput;
+}
+
+export interface AttributeCreateOneWithoutInputColumnsInput {
+  create?: AttributeCreateWithoutInputColumnsInput;
+  connect?: AttributeWhereUniqueInput;
+}
+
+export interface SourceCreateWithoutResourcesInput {
+  id?: ID_Input;
+  name: String;
+  hasOwner?: Boolean;
+}
+
+export interface AttributeCreateWithoutInputColumnsInput {
+  id?: ID_Input;
+  name: String;
+  mergingScript?: String;
+  isProfile?: Boolean;
+  type?: String;
+  comment?: String;
+  depth?: Int;
+  resource?: ResourceCreateOneWithoutAttributesInput;
+  attributes?: AttributeCreateManyWithoutAttributeInput;
+  attribute?: AttributeCreateOneWithoutAttributesInput;
+}
+
+export interface InputColumnCreateWithoutAttributeInput {
+  id?: ID_Input;
+  owner?: String;
+  table?: String;
+  column?: String;
+  script?: String;
+  staticValue?: String;
+  joins?: JoinCreateManyWithoutInputColumnInput;
+}
+
+export interface InputColumnUpdateInput {
+  owner?: String;
+  table?: String;
+  column?: String;
+  script?: String;
+  staticValue?: String;
+  joins?: JoinUpdateManyWithoutInputColumnInput;
+  attribute?: AttributeUpdateOneRequiredWithoutInputColumnsInput;
 }
 
 export interface JoinWhereInput {
@@ -898,27 +1826,57 @@ export interface JoinWhereInput {
   NOT?: JoinWhereInput[] | JoinWhereInput;
 }
 
-export type InputColumnWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface AttributeUpdateOneRequiredWithoutInputColumnsInput {
+  create?: AttributeCreateWithoutInputColumnsInput;
+  update?: AttributeUpdateWithoutInputColumnsDataInput;
+  upsert?: AttributeUpsertWithoutInputColumnsInput;
+  connect?: AttributeWhereUniqueInput;
+}
+
+export interface InputColumnSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: InputColumnWhereInput;
+  AND?: InputColumnSubscriptionWhereInput[] | InputColumnSubscriptionWhereInput;
+  OR?: InputColumnSubscriptionWhereInput[] | InputColumnSubscriptionWhereInput;
+  NOT?: InputColumnSubscriptionWhereInput[] | InputColumnSubscriptionWhereInput;
+}
+
+export interface AttributeUpdateWithoutInputColumnsDataInput {
+  name?: String;
+  mergingScript?: String;
+  isProfile?: Boolean;
+  type?: String;
+  comment?: String;
+  depth?: Int;
+  resource?: ResourceUpdateOneWithoutAttributesInput;
+  attributes?: AttributeUpdateManyWithoutAttributeInput;
+  attribute?: AttributeUpdateOneWithoutAttributesInput;
+}
 
 export type JoinWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
 
-export type ResourceWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface AttributeUpsertWithoutInputColumnsInput {
+  update: AttributeUpdateWithoutInputColumnsDataInput;
+  create: AttributeCreateWithoutInputColumnsInput;
+}
 
 export type SourceWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
   name?: String;
 }>;
 
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  email?: String;
-}>;
+export interface InputColumnUpdateManyMutationInput {
+  owner?: String;
+  table?: String;
+  column?: String;
+  script?: String;
+  staticValue?: String;
+}
 
 export interface UserWhereInput {
   id?: ID_Input;
@@ -1002,23 +1960,15 @@ export interface UserWhereInput {
   NOT?: UserWhereInput[] | UserWhereInput;
 }
 
-export interface AttributeCreateInput {
+export interface JoinCreateInput {
   id?: ID_Input;
-  name: String;
-  mergingScript?: String;
-  isProfile?: Boolean;
-  type?: String;
-  comment?: String;
-  depth?: Int;
-  resource?: ResourceCreateOneWithoutAttributesInput;
-  attributes?: AttributeCreateManyWithoutAttributeInput;
-  attribute?: AttributeCreateOneWithoutAttributesInput;
-  inputColumns?: InputColumnCreateManyWithoutAttributeInput;
-}
-
-export interface ResourceCreateOneWithoutAttributesInput {
-  create?: ResourceCreateWithoutAttributesInput;
-  connect?: ResourceWhereUniqueInput;
+  sourceOwner?: String;
+  sourceTable?: String;
+  sourceColumn?: String;
+  targetOwner?: String;
+  targetTable?: String;
+  targetColumn?: String;
+  inputColumn: InputColumnCreateOneWithoutJoinsInput;
 }
 
 export interface ResourceCreateWithoutAttributesInput {
@@ -1030,59 +1980,9 @@ export interface ResourceCreateWithoutAttributesInput {
   source: SourceCreateOneWithoutResourcesInput;
 }
 
-export interface SourceCreateOneWithoutResourcesInput {
-  create?: SourceCreateWithoutResourcesInput;
-  connect?: SourceWhereUniqueInput;
-}
-
-export interface SourceCreateWithoutResourcesInput {
-  id?: ID_Input;
-  name: String;
-  hasOwner?: Boolean;
-}
-
-export interface AttributeCreateManyWithoutAttributeInput {
-  create?:
-    | AttributeCreateWithoutAttributeInput[]
-    | AttributeCreateWithoutAttributeInput;
-  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
-}
-
-export interface AttributeCreateWithoutAttributeInput {
-  id?: ID_Input;
-  name: String;
-  mergingScript?: String;
-  isProfile?: Boolean;
-  type?: String;
-  comment?: String;
-  depth?: Int;
-  resource?: ResourceCreateOneWithoutAttributesInput;
-  attributes?: AttributeCreateManyWithoutAttributeInput;
-  inputColumns?: InputColumnCreateManyWithoutAttributeInput;
-}
-
-export interface InputColumnCreateManyWithoutAttributeInput {
-  create?:
-    | InputColumnCreateWithoutAttributeInput[]
-    | InputColumnCreateWithoutAttributeInput;
-  connect?: InputColumnWhereUniqueInput[] | InputColumnWhereUniqueInput;
-}
-
-export interface InputColumnCreateWithoutAttributeInput {
-  id?: ID_Input;
-  owner?: String;
-  table?: String;
-  column?: String;
-  script?: String;
-  staticValue?: String;
-  joins?: JoinCreateManyWithoutInputColumnInput;
-}
-
-export interface JoinCreateManyWithoutInputColumnInput {
-  create?:
-    | JoinCreateWithoutInputColumnInput[]
-    | JoinCreateWithoutInputColumnInput;
-  connect?: JoinWhereUniqueInput[] | JoinWhereUniqueInput;
+export interface InputColumnCreateOneWithoutJoinsInput {
+  create?: InputColumnCreateWithoutJoinsInput;
+  connect?: InputColumnWhereUniqueInput;
 }
 
 export interface JoinCreateWithoutInputColumnInput {
@@ -1095,453 +1995,56 @@ export interface JoinCreateWithoutInputColumnInput {
   targetColumn?: String;
 }
 
-export interface AttributeCreateOneWithoutAttributesInput {
-  create?: AttributeCreateWithoutAttributesInput;
-  connect?: AttributeWhereUniqueInput;
-}
-
-export interface AttributeCreateWithoutAttributesInput {
+export interface InputColumnCreateWithoutJoinsInput {
   id?: ID_Input;
-  name: String;
-  mergingScript?: String;
-  isProfile?: Boolean;
-  type?: String;
-  comment?: String;
-  depth?: Int;
-  resource?: ResourceCreateOneWithoutAttributesInput;
-  attribute?: AttributeCreateOneWithoutAttributesInput;
-  inputColumns?: InputColumnCreateManyWithoutAttributeInput;
-}
-
-export interface AttributeUpdateInput {
-  name?: String;
-  mergingScript?: String;
-  isProfile?: Boolean;
-  type?: String;
-  comment?: String;
-  depth?: Int;
-  resource?: ResourceUpdateOneWithoutAttributesInput;
-  attributes?: AttributeUpdateManyWithoutAttributeInput;
-  attribute?: AttributeUpdateOneWithoutAttributesInput;
-  inputColumns?: InputColumnUpdateManyWithoutAttributeInput;
-}
-
-export interface ResourceUpdateOneWithoutAttributesInput {
-  create?: ResourceCreateWithoutAttributesInput;
-  update?: ResourceUpdateWithoutAttributesDataInput;
-  upsert?: ResourceUpsertWithoutAttributesInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: ResourceWhereUniqueInput;
-}
-
-export interface ResourceUpdateWithoutAttributesDataInput {
-  name?: String;
-  primaryKeyOwner?: String;
-  primaryKeyTable?: String;
-  primaryKeyColumn?: String;
-  source?: SourceUpdateOneRequiredWithoutResourcesInput;
-}
-
-export interface SourceUpdateOneRequiredWithoutResourcesInput {
-  create?: SourceCreateWithoutResourcesInput;
-  update?: SourceUpdateWithoutResourcesDataInput;
-  upsert?: SourceUpsertWithoutResourcesInput;
-  connect?: SourceWhereUniqueInput;
-}
-
-export interface SourceUpdateWithoutResourcesDataInput {
-  name?: String;
-  hasOwner?: Boolean;
-}
-
-export interface SourceUpsertWithoutResourcesInput {
-  update: SourceUpdateWithoutResourcesDataInput;
-  create: SourceCreateWithoutResourcesInput;
-}
-
-export interface ResourceUpsertWithoutAttributesInput {
-  update: ResourceUpdateWithoutAttributesDataInput;
-  create: ResourceCreateWithoutAttributesInput;
-}
-
-export interface AttributeUpdateManyWithoutAttributeInput {
-  create?:
-    | AttributeCreateWithoutAttributeInput[]
-    | AttributeCreateWithoutAttributeInput;
-  delete?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
-  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
-  set?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
-  disconnect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
-  update?:
-    | AttributeUpdateWithWhereUniqueWithoutAttributeInput[]
-    | AttributeUpdateWithWhereUniqueWithoutAttributeInput;
-  upsert?:
-    | AttributeUpsertWithWhereUniqueWithoutAttributeInput[]
-    | AttributeUpsertWithWhereUniqueWithoutAttributeInput;
-  deleteMany?: AttributeScalarWhereInput[] | AttributeScalarWhereInput;
-  updateMany?:
-    | AttributeUpdateManyWithWhereNestedInput[]
-    | AttributeUpdateManyWithWhereNestedInput;
-}
-
-export interface AttributeUpdateWithWhereUniqueWithoutAttributeInput {
-  where: AttributeWhereUniqueInput;
-  data: AttributeUpdateWithoutAttributeDataInput;
-}
-
-export interface AttributeUpdateWithoutAttributeDataInput {
-  name?: String;
-  mergingScript?: String;
-  isProfile?: Boolean;
-  type?: String;
-  comment?: String;
-  depth?: Int;
-  resource?: ResourceUpdateOneWithoutAttributesInput;
-  attributes?: AttributeUpdateManyWithoutAttributeInput;
-  inputColumns?: InputColumnUpdateManyWithoutAttributeInput;
-}
-
-export interface InputColumnUpdateManyWithoutAttributeInput {
-  create?:
-    | InputColumnCreateWithoutAttributeInput[]
-    | InputColumnCreateWithoutAttributeInput;
-  delete?: InputColumnWhereUniqueInput[] | InputColumnWhereUniqueInput;
-  connect?: InputColumnWhereUniqueInput[] | InputColumnWhereUniqueInput;
-  set?: InputColumnWhereUniqueInput[] | InputColumnWhereUniqueInput;
-  disconnect?: InputColumnWhereUniqueInput[] | InputColumnWhereUniqueInput;
-  update?:
-    | InputColumnUpdateWithWhereUniqueWithoutAttributeInput[]
-    | InputColumnUpdateWithWhereUniqueWithoutAttributeInput;
-  upsert?:
-    | InputColumnUpsertWithWhereUniqueWithoutAttributeInput[]
-    | InputColumnUpsertWithWhereUniqueWithoutAttributeInput;
-  deleteMany?: InputColumnScalarWhereInput[] | InputColumnScalarWhereInput;
-  updateMany?:
-    | InputColumnUpdateManyWithWhereNestedInput[]
-    | InputColumnUpdateManyWithWhereNestedInput;
-}
-
-export interface InputColumnUpdateWithWhereUniqueWithoutAttributeInput {
-  where: InputColumnWhereUniqueInput;
-  data: InputColumnUpdateWithoutAttributeDataInput;
-}
-
-export interface InputColumnUpdateWithoutAttributeDataInput {
   owner?: String;
   table?: String;
   column?: String;
   script?: String;
   staticValue?: String;
-  joins?: JoinUpdateManyWithoutInputColumnInput;
+  attribute: AttributeCreateOneWithoutInputColumnsInput;
 }
 
-export interface JoinUpdateManyWithoutInputColumnInput {
-  create?:
-    | JoinCreateWithoutInputColumnInput[]
-    | JoinCreateWithoutInputColumnInput;
-  delete?: JoinWhereUniqueInput[] | JoinWhereUniqueInput;
-  connect?: JoinWhereUniqueInput[] | JoinWhereUniqueInput;
-  set?: JoinWhereUniqueInput[] | JoinWhereUniqueInput;
-  disconnect?: JoinWhereUniqueInput[] | JoinWhereUniqueInput;
-  update?:
-    | JoinUpdateWithWhereUniqueWithoutInputColumnInput[]
-    | JoinUpdateWithWhereUniqueWithoutInputColumnInput;
-  upsert?:
-    | JoinUpsertWithWhereUniqueWithoutInputColumnInput[]
-    | JoinUpsertWithWhereUniqueWithoutInputColumnInput;
-  deleteMany?: JoinScalarWhereInput[] | JoinScalarWhereInput;
-  updateMany?:
-    | JoinUpdateManyWithWhereNestedInput[]
-    | JoinUpdateManyWithWhereNestedInput;
+export type InputColumnWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface InputColumnUpsertWithoutJoinsInput {
+  update: InputColumnUpdateWithoutJoinsDataInput;
+  create: InputColumnCreateWithoutJoinsInput;
 }
 
-export interface JoinUpdateWithWhereUniqueWithoutInputColumnInput {
-  where: JoinWhereUniqueInput;
-  data: JoinUpdateWithoutInputColumnDataInput;
+export interface InputColumnUpdateWithoutJoinsDataInput {
+  owner?: String;
+  table?: String;
+  column?: String;
+  script?: String;
+  staticValue?: String;
+  attribute?: AttributeUpdateOneRequiredWithoutInputColumnsInput;
 }
 
-export interface JoinUpdateWithoutInputColumnDataInput {
+export interface InputColumnUpdateOneRequiredWithoutJoinsInput {
+  create?: InputColumnCreateWithoutJoinsInput;
+  update?: InputColumnUpdateWithoutJoinsDataInput;
+  upsert?: InputColumnUpsertWithoutJoinsInput;
+  connect?: InputColumnWhereUniqueInput;
+}
+
+export interface JoinUpdateInput {
   sourceOwner?: String;
   sourceTable?: String;
   sourceColumn?: String;
   targetOwner?: String;
   targetTable?: String;
   targetColumn?: String;
+  inputColumn?: InputColumnUpdateOneRequiredWithoutJoinsInput;
 }
 
-export interface JoinUpsertWithWhereUniqueWithoutInputColumnInput {
-  where: JoinWhereUniqueInput;
-  update: JoinUpdateWithoutInputColumnDataInput;
-  create: JoinCreateWithoutInputColumnInput;
-}
+export type ResourceWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
-export interface JoinScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  sourceOwner?: String;
-  sourceOwner_not?: String;
-  sourceOwner_in?: String[] | String;
-  sourceOwner_not_in?: String[] | String;
-  sourceOwner_lt?: String;
-  sourceOwner_lte?: String;
-  sourceOwner_gt?: String;
-  sourceOwner_gte?: String;
-  sourceOwner_contains?: String;
-  sourceOwner_not_contains?: String;
-  sourceOwner_starts_with?: String;
-  sourceOwner_not_starts_with?: String;
-  sourceOwner_ends_with?: String;
-  sourceOwner_not_ends_with?: String;
-  sourceTable?: String;
-  sourceTable_not?: String;
-  sourceTable_in?: String[] | String;
-  sourceTable_not_in?: String[] | String;
-  sourceTable_lt?: String;
-  sourceTable_lte?: String;
-  sourceTable_gt?: String;
-  sourceTable_gte?: String;
-  sourceTable_contains?: String;
-  sourceTable_not_contains?: String;
-  sourceTable_starts_with?: String;
-  sourceTable_not_starts_with?: String;
-  sourceTable_ends_with?: String;
-  sourceTable_not_ends_with?: String;
-  sourceColumn?: String;
-  sourceColumn_not?: String;
-  sourceColumn_in?: String[] | String;
-  sourceColumn_not_in?: String[] | String;
-  sourceColumn_lt?: String;
-  sourceColumn_lte?: String;
-  sourceColumn_gt?: String;
-  sourceColumn_gte?: String;
-  sourceColumn_contains?: String;
-  sourceColumn_not_contains?: String;
-  sourceColumn_starts_with?: String;
-  sourceColumn_not_starts_with?: String;
-  sourceColumn_ends_with?: String;
-  sourceColumn_not_ends_with?: String;
-  targetOwner?: String;
-  targetOwner_not?: String;
-  targetOwner_in?: String[] | String;
-  targetOwner_not_in?: String[] | String;
-  targetOwner_lt?: String;
-  targetOwner_lte?: String;
-  targetOwner_gt?: String;
-  targetOwner_gte?: String;
-  targetOwner_contains?: String;
-  targetOwner_not_contains?: String;
-  targetOwner_starts_with?: String;
-  targetOwner_not_starts_with?: String;
-  targetOwner_ends_with?: String;
-  targetOwner_not_ends_with?: String;
-  targetTable?: String;
-  targetTable_not?: String;
-  targetTable_in?: String[] | String;
-  targetTable_not_in?: String[] | String;
-  targetTable_lt?: String;
-  targetTable_lte?: String;
-  targetTable_gt?: String;
-  targetTable_gte?: String;
-  targetTable_contains?: String;
-  targetTable_not_contains?: String;
-  targetTable_starts_with?: String;
-  targetTable_not_starts_with?: String;
-  targetTable_ends_with?: String;
-  targetTable_not_ends_with?: String;
-  targetColumn?: String;
-  targetColumn_not?: String;
-  targetColumn_in?: String[] | String;
-  targetColumn_not_in?: String[] | String;
-  targetColumn_lt?: String;
-  targetColumn_lte?: String;
-  targetColumn_gt?: String;
-  targetColumn_gte?: String;
-  targetColumn_contains?: String;
-  targetColumn_not_contains?: String;
-  targetColumn_starts_with?: String;
-  targetColumn_not_starts_with?: String;
-  targetColumn_ends_with?: String;
-  targetColumn_not_ends_with?: String;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  AND?: JoinScalarWhereInput[] | JoinScalarWhereInput;
-  OR?: JoinScalarWhereInput[] | JoinScalarWhereInput;
-  NOT?: JoinScalarWhereInput[] | JoinScalarWhereInput;
-}
-
-export interface JoinUpdateManyWithWhereNestedInput {
-  where: JoinScalarWhereInput;
-  data: JoinUpdateManyDataInput;
-}
-
-export interface JoinUpdateManyDataInput {
-  sourceOwner?: String;
-  sourceTable?: String;
-  sourceColumn?: String;
-  targetOwner?: String;
-  targetTable?: String;
-  targetColumn?: String;
-}
-
-export interface InputColumnUpsertWithWhereUniqueWithoutAttributeInput {
-  where: InputColumnWhereUniqueInput;
-  update: InputColumnUpdateWithoutAttributeDataInput;
-  create: InputColumnCreateWithoutAttributeInput;
-}
-
-export interface InputColumnScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  owner?: String;
-  owner_not?: String;
-  owner_in?: String[] | String;
-  owner_not_in?: String[] | String;
-  owner_lt?: String;
-  owner_lte?: String;
-  owner_gt?: String;
-  owner_gte?: String;
-  owner_contains?: String;
-  owner_not_contains?: String;
-  owner_starts_with?: String;
-  owner_not_starts_with?: String;
-  owner_ends_with?: String;
-  owner_not_ends_with?: String;
-  table?: String;
-  table_not?: String;
-  table_in?: String[] | String;
-  table_not_in?: String[] | String;
-  table_lt?: String;
-  table_lte?: String;
-  table_gt?: String;
-  table_gte?: String;
-  table_contains?: String;
-  table_not_contains?: String;
-  table_starts_with?: String;
-  table_not_starts_with?: String;
-  table_ends_with?: String;
-  table_not_ends_with?: String;
-  column?: String;
-  column_not?: String;
-  column_in?: String[] | String;
-  column_not_in?: String[] | String;
-  column_lt?: String;
-  column_lte?: String;
-  column_gt?: String;
-  column_gte?: String;
-  column_contains?: String;
-  column_not_contains?: String;
-  column_starts_with?: String;
-  column_not_starts_with?: String;
-  column_ends_with?: String;
-  column_not_ends_with?: String;
-  script?: String;
-  script_not?: String;
-  script_in?: String[] | String;
-  script_not_in?: String[] | String;
-  script_lt?: String;
-  script_lte?: String;
-  script_gt?: String;
-  script_gte?: String;
-  script_contains?: String;
-  script_not_contains?: String;
-  script_starts_with?: String;
-  script_not_starts_with?: String;
-  script_ends_with?: String;
-  script_not_ends_with?: String;
-  staticValue?: String;
-  staticValue_not?: String;
-  staticValue_in?: String[] | String;
-  staticValue_not_in?: String[] | String;
-  staticValue_lt?: String;
-  staticValue_lte?: String;
-  staticValue_gt?: String;
-  staticValue_gte?: String;
-  staticValue_contains?: String;
-  staticValue_not_contains?: String;
-  staticValue_starts_with?: String;
-  staticValue_not_starts_with?: String;
-  staticValue_ends_with?: String;
-  staticValue_not_ends_with?: String;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  AND?: InputColumnScalarWhereInput[] | InputColumnScalarWhereInput;
-  OR?: InputColumnScalarWhereInput[] | InputColumnScalarWhereInput;
-  NOT?: InputColumnScalarWhereInput[] | InputColumnScalarWhereInput;
-}
-
-export interface InputColumnUpdateManyWithWhereNestedInput {
-  where: InputColumnScalarWhereInput;
-  data: InputColumnUpdateManyDataInput;
-}
-
-export interface InputColumnUpdateManyDataInput {
-  owner?: String;
-  table?: String;
-  column?: String;
-  script?: String;
-  staticValue?: String;
-}
-
-export interface AttributeUpsertWithWhereUniqueWithoutAttributeInput {
-  where: AttributeWhereUniqueInput;
-  update: AttributeUpdateWithoutAttributeDataInput;
-  create: AttributeCreateWithoutAttributeInput;
-}
-
-export interface AttributeScalarWhereInput {
+export interface AttributeWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
   id_in?: ID_Input[] | ID_Input;
@@ -1622,6 +2125,14 @@ export interface AttributeScalarWhereInput {
   depth_lte?: Int;
   depth_gt?: Int;
   depth_gte?: Int;
+  resource?: ResourceWhereInput;
+  attributes_every?: AttributeWhereInput;
+  attributes_some?: AttributeWhereInput;
+  attributes_none?: AttributeWhereInput;
+  attribute?: AttributeWhereInput;
+  inputColumns_every?: InputColumnWhereInput;
+  inputColumns_some?: InputColumnWhereInput;
+  inputColumns_none?: InputColumnWhereInput;
   updatedAt?: DateTimeInput;
   updatedAt_not?: DateTimeInput;
   updatedAt_in?: DateTimeInput[] | DateTimeInput;
@@ -1638,77 +2149,12 @@ export interface AttributeScalarWhereInput {
   createdAt_lte?: DateTimeInput;
   createdAt_gt?: DateTimeInput;
   createdAt_gte?: DateTimeInput;
-  AND?: AttributeScalarWhereInput[] | AttributeScalarWhereInput;
-  OR?: AttributeScalarWhereInput[] | AttributeScalarWhereInput;
-  NOT?: AttributeScalarWhereInput[] | AttributeScalarWhereInput;
+  AND?: AttributeWhereInput[] | AttributeWhereInput;
+  OR?: AttributeWhereInput[] | AttributeWhereInput;
+  NOT?: AttributeWhereInput[] | AttributeWhereInput;
 }
 
-export interface AttributeUpdateManyWithWhereNestedInput {
-  where: AttributeScalarWhereInput;
-  data: AttributeUpdateManyDataInput;
-}
-
-export interface AttributeUpdateManyDataInput {
-  name?: String;
-  mergingScript?: String;
-  isProfile?: Boolean;
-  type?: String;
-  comment?: String;
-  depth?: Int;
-}
-
-export interface AttributeUpdateOneWithoutAttributesInput {
-  create?: AttributeCreateWithoutAttributesInput;
-  update?: AttributeUpdateWithoutAttributesDataInput;
-  upsert?: AttributeUpsertWithoutAttributesInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: AttributeWhereUniqueInput;
-}
-
-export interface AttributeUpdateWithoutAttributesDataInput {
-  name?: String;
-  mergingScript?: String;
-  isProfile?: Boolean;
-  type?: String;
-  comment?: String;
-  depth?: Int;
-  resource?: ResourceUpdateOneWithoutAttributesInput;
-  attribute?: AttributeUpdateOneWithoutAttributesInput;
-  inputColumns?: InputColumnUpdateManyWithoutAttributeInput;
-}
-
-export interface AttributeUpsertWithoutAttributesInput {
-  update: AttributeUpdateWithoutAttributesDataInput;
-  create: AttributeCreateWithoutAttributesInput;
-}
-
-export interface AttributeUpdateManyMutationInput {
-  name?: String;
-  mergingScript?: String;
-  isProfile?: Boolean;
-  type?: String;
-  comment?: String;
-  depth?: Int;
-}
-
-export interface InputColumnCreateInput {
-  id?: ID_Input;
-  owner?: String;
-  table?: String;
-  column?: String;
-  script?: String;
-  staticValue?: String;
-  joins?: JoinCreateManyWithoutInputColumnInput;
-  attribute: AttributeCreateOneWithoutInputColumnsInput;
-}
-
-export interface AttributeCreateOneWithoutInputColumnsInput {
-  create?: AttributeCreateWithoutInputColumnsInput;
-  connect?: AttributeWhereUniqueInput;
-}
-
-export interface AttributeCreateWithoutInputColumnsInput {
+export interface AttributeCreateWithoutAttributeInput {
   id?: ID_Input;
   name: String;
   mergingScript?: String;
@@ -1718,144 +2164,6 @@ export interface AttributeCreateWithoutInputColumnsInput {
   depth?: Int;
   resource?: ResourceCreateOneWithoutAttributesInput;
   attributes?: AttributeCreateManyWithoutAttributeInput;
-  attribute?: AttributeCreateOneWithoutAttributesInput;
-}
-
-export interface InputColumnUpdateInput {
-  owner?: String;
-  table?: String;
-  column?: String;
-  script?: String;
-  staticValue?: String;
-  joins?: JoinUpdateManyWithoutInputColumnInput;
-  attribute?: AttributeUpdateOneRequiredWithoutInputColumnsInput;
-}
-
-export interface AttributeUpdateOneRequiredWithoutInputColumnsInput {
-  create?: AttributeCreateWithoutInputColumnsInput;
-  update?: AttributeUpdateWithoutInputColumnsDataInput;
-  upsert?: AttributeUpsertWithoutInputColumnsInput;
-  connect?: AttributeWhereUniqueInput;
-}
-
-export interface AttributeUpdateWithoutInputColumnsDataInput {
-  name?: String;
-  mergingScript?: String;
-  isProfile?: Boolean;
-  type?: String;
-  comment?: String;
-  depth?: Int;
-  resource?: ResourceUpdateOneWithoutAttributesInput;
-  attributes?: AttributeUpdateManyWithoutAttributeInput;
-  attribute?: AttributeUpdateOneWithoutAttributesInput;
-}
-
-export interface AttributeUpsertWithoutInputColumnsInput {
-  update: AttributeUpdateWithoutInputColumnsDataInput;
-  create: AttributeCreateWithoutInputColumnsInput;
-}
-
-export interface InputColumnUpdateManyMutationInput {
-  owner?: String;
-  table?: String;
-  column?: String;
-  script?: String;
-  staticValue?: String;
-}
-
-export interface JoinCreateInput {
-  id?: ID_Input;
-  sourceOwner?: String;
-  sourceTable?: String;
-  sourceColumn?: String;
-  targetOwner?: String;
-  targetTable?: String;
-  targetColumn?: String;
-  inputColumn: InputColumnCreateOneWithoutJoinsInput;
-}
-
-export interface InputColumnCreateOneWithoutJoinsInput {
-  create?: InputColumnCreateWithoutJoinsInput;
-  connect?: InputColumnWhereUniqueInput;
-}
-
-export interface InputColumnCreateWithoutJoinsInput {
-  id?: ID_Input;
-  owner?: String;
-  table?: String;
-  column?: String;
-  script?: String;
-  staticValue?: String;
-  attribute: AttributeCreateOneWithoutInputColumnsInput;
-}
-
-export interface JoinUpdateInput {
-  sourceOwner?: String;
-  sourceTable?: String;
-  sourceColumn?: String;
-  targetOwner?: String;
-  targetTable?: String;
-  targetColumn?: String;
-  inputColumn?: InputColumnUpdateOneRequiredWithoutJoinsInput;
-}
-
-export interface InputColumnUpdateOneRequiredWithoutJoinsInput {
-  create?: InputColumnCreateWithoutJoinsInput;
-  update?: InputColumnUpdateWithoutJoinsDataInput;
-  upsert?: InputColumnUpsertWithoutJoinsInput;
-  connect?: InputColumnWhereUniqueInput;
-}
-
-export interface InputColumnUpdateWithoutJoinsDataInput {
-  owner?: String;
-  table?: String;
-  column?: String;
-  script?: String;
-  staticValue?: String;
-  attribute?: AttributeUpdateOneRequiredWithoutInputColumnsInput;
-}
-
-export interface InputColumnUpsertWithoutJoinsInput {
-  update: InputColumnUpdateWithoutJoinsDataInput;
-  create: InputColumnCreateWithoutJoinsInput;
-}
-
-export interface JoinUpdateManyMutationInput {
-  sourceOwner?: String;
-  sourceTable?: String;
-  sourceColumn?: String;
-  targetOwner?: String;
-  targetTable?: String;
-  targetColumn?: String;
-}
-
-export interface ResourceCreateInput {
-  id?: ID_Input;
-  name: String;
-  primaryKeyOwner?: String;
-  primaryKeyTable?: String;
-  primaryKeyColumn?: String;
-  attributes?: AttributeCreateManyWithoutResourceInput;
-  source: SourceCreateOneWithoutResourcesInput;
-}
-
-export interface AttributeCreateManyWithoutResourceInput {
-  create?:
-    | AttributeCreateWithoutResourceInput[]
-    | AttributeCreateWithoutResourceInput;
-  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
-}
-
-export interface AttributeCreateWithoutResourceInput {
-  id?: ID_Input;
-  name: String;
-  mergingScript?: String;
-  isProfile?: Boolean;
-  type?: String;
-  comment?: String;
-  depth?: Int;
-  attributes?: AttributeCreateManyWithoutAttributeInput;
-  attribute?: AttributeCreateOneWithoutAttributesInput;
   inputColumns?: InputColumnCreateManyWithoutAttributeInput;
 }
 
@@ -1868,56 +2176,6 @@ export interface ResourceUpdateInput {
   source?: SourceUpdateOneRequiredWithoutResourcesInput;
 }
 
-export interface AttributeUpdateManyWithoutResourceInput {
-  create?:
-    | AttributeCreateWithoutResourceInput[]
-    | AttributeCreateWithoutResourceInput;
-  delete?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
-  connect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
-  set?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
-  disconnect?: AttributeWhereUniqueInput[] | AttributeWhereUniqueInput;
-  update?:
-    | AttributeUpdateWithWhereUniqueWithoutResourceInput[]
-    | AttributeUpdateWithWhereUniqueWithoutResourceInput;
-  upsert?:
-    | AttributeUpsertWithWhereUniqueWithoutResourceInput[]
-    | AttributeUpsertWithWhereUniqueWithoutResourceInput;
-  deleteMany?: AttributeScalarWhereInput[] | AttributeScalarWhereInput;
-  updateMany?:
-    | AttributeUpdateManyWithWhereNestedInput[]
-    | AttributeUpdateManyWithWhereNestedInput;
-}
-
-export interface AttributeUpdateWithWhereUniqueWithoutResourceInput {
-  where: AttributeWhereUniqueInput;
-  data: AttributeUpdateWithoutResourceDataInput;
-}
-
-export interface AttributeUpdateWithoutResourceDataInput {
-  name?: String;
-  mergingScript?: String;
-  isProfile?: Boolean;
-  type?: String;
-  comment?: String;
-  depth?: Int;
-  attributes?: AttributeUpdateManyWithoutAttributeInput;
-  attribute?: AttributeUpdateOneWithoutAttributesInput;
-  inputColumns?: InputColumnUpdateManyWithoutAttributeInput;
-}
-
-export interface AttributeUpsertWithWhereUniqueWithoutResourceInput {
-  where: AttributeWhereUniqueInput;
-  update: AttributeUpdateWithoutResourceDataInput;
-  create: AttributeCreateWithoutResourceInput;
-}
-
-export interface ResourceUpdateManyMutationInput {
-  name?: String;
-  primaryKeyOwner?: String;
-  primaryKeyTable?: String;
-  primaryKeyColumn?: String;
-}
-
 export interface SourceCreateInput {
   id?: ID_Input;
   name: String;
@@ -1925,266 +2183,308 @@ export interface SourceCreateInput {
   resources?: ResourceCreateManyWithoutSourceInput;
 }
 
-export interface ResourceCreateManyWithoutSourceInput {
-  create?:
-    | ResourceCreateWithoutSourceInput[]
-    | ResourceCreateWithoutSourceInput;
-  connect?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput;
+export interface NodeNode {
+  id: ID_Output;
 }
 
-export interface ResourceCreateWithoutSourceInput {
-  id?: ID_Input;
-  name: String;
-  primaryKeyOwner?: String;
-  primaryKeyTable?: String;
-  primaryKeyColumn?: String;
-  attributes?: AttributeCreateManyWithoutResourceInput;
-}
-
-export interface SourceUpdateInput {
-  name?: String;
-  hasOwner?: Boolean;
-  resources?: ResourceUpdateManyWithoutSourceInput;
-}
-
-export interface ResourceUpdateManyWithoutSourceInput {
-  create?:
-    | ResourceCreateWithoutSourceInput[]
-    | ResourceCreateWithoutSourceInput;
-  delete?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput;
-  connect?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput;
-  set?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput;
-  disconnect?: ResourceWhereUniqueInput[] | ResourceWhereUniqueInput;
-  update?:
-    | ResourceUpdateWithWhereUniqueWithoutSourceInput[]
-    | ResourceUpdateWithWhereUniqueWithoutSourceInput;
-  upsert?:
-    | ResourceUpsertWithWhereUniqueWithoutSourceInput[]
-    | ResourceUpsertWithWhereUniqueWithoutSourceInput;
-  deleteMany?: ResourceScalarWhereInput[] | ResourceScalarWhereInput;
-  updateMany?:
-    | ResourceUpdateManyWithWhereNestedInput[]
-    | ResourceUpdateManyWithWhereNestedInput;
-}
-
-export interface ResourceUpdateWithWhereUniqueWithoutSourceInput {
-  where: ResourceWhereUniqueInput;
-  data: ResourceUpdateWithoutSourceDataInput;
-}
-
-export interface ResourceUpdateWithoutSourceDataInput {
-  name?: String;
-  primaryKeyOwner?: String;
-  primaryKeyTable?: String;
-  primaryKeyColumn?: String;
-  attributes?: AttributeUpdateManyWithoutResourceInput;
-}
-
-export interface ResourceUpsertWithWhereUniqueWithoutSourceInput {
-  where: ResourceWhereUniqueInput;
-  update: ResourceUpdateWithoutSourceDataInput;
-  create: ResourceCreateWithoutSourceInput;
-}
-
-export interface ResourceScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  primaryKeyOwner?: String;
-  primaryKeyOwner_not?: String;
-  primaryKeyOwner_in?: String[] | String;
-  primaryKeyOwner_not_in?: String[] | String;
-  primaryKeyOwner_lt?: String;
-  primaryKeyOwner_lte?: String;
-  primaryKeyOwner_gt?: String;
-  primaryKeyOwner_gte?: String;
-  primaryKeyOwner_contains?: String;
-  primaryKeyOwner_not_contains?: String;
-  primaryKeyOwner_starts_with?: String;
-  primaryKeyOwner_not_starts_with?: String;
-  primaryKeyOwner_ends_with?: String;
-  primaryKeyOwner_not_ends_with?: String;
-  primaryKeyTable?: String;
-  primaryKeyTable_not?: String;
-  primaryKeyTable_in?: String[] | String;
-  primaryKeyTable_not_in?: String[] | String;
-  primaryKeyTable_lt?: String;
-  primaryKeyTable_lte?: String;
-  primaryKeyTable_gt?: String;
-  primaryKeyTable_gte?: String;
-  primaryKeyTable_contains?: String;
-  primaryKeyTable_not_contains?: String;
-  primaryKeyTable_starts_with?: String;
-  primaryKeyTable_not_starts_with?: String;
-  primaryKeyTable_ends_with?: String;
-  primaryKeyTable_not_ends_with?: String;
-  primaryKeyColumn?: String;
-  primaryKeyColumn_not?: String;
-  primaryKeyColumn_in?: String[] | String;
-  primaryKeyColumn_not_in?: String[] | String;
-  primaryKeyColumn_lt?: String;
-  primaryKeyColumn_lte?: String;
-  primaryKeyColumn_gt?: String;
-  primaryKeyColumn_gte?: String;
-  primaryKeyColumn_contains?: String;
-  primaryKeyColumn_not_contains?: String;
-  primaryKeyColumn_starts_with?: String;
-  primaryKeyColumn_not_starts_with?: String;
-  primaryKeyColumn_ends_with?: String;
-  primaryKeyColumn_not_ends_with?: String;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  AND?: ResourceScalarWhereInput[] | ResourceScalarWhereInput;
-  OR?: ResourceScalarWhereInput[] | ResourceScalarWhereInput;
-  NOT?: ResourceScalarWhereInput[] | ResourceScalarWhereInput;
-}
-
-export interface ResourceUpdateManyWithWhereNestedInput {
-  where: ResourceScalarWhereInput;
-  data: ResourceUpdateManyDataInput;
-}
-
-export interface ResourceUpdateManyDataInput {
-  name?: String;
-  primaryKeyOwner?: String;
-  primaryKeyTable?: String;
-  primaryKeyColumn?: String;
-}
-
-export interface SourceUpdateManyMutationInput {
-  name?: String;
-  hasOwner?: Boolean;
-}
-
-export interface UserCreateInput {
-  id?: ID_Input;
+export interface UserPreviousValues {
+  id: ID_Output;
   email: String;
   name: String;
   password: String;
   role?: Role;
+  updatedAt: DateTimeOutput;
+  createdAt: DateTimeOutput;
 }
 
-export interface UserUpdateInput {
-  email?: String;
-  name?: String;
-  password?: String;
-  role?: Role;
+export interface UserPreviousValuesPromise
+  extends Promise<UserPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  email: () => Promise<String>;
+  name: () => Promise<String>;
+  password: () => Promise<String>;
+  role: () => Promise<Role>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
 }
 
-export interface UserUpdateManyMutationInput {
-  email?: String;
-  name?: String;
-  password?: String;
-  role?: Role;
+export interface UserPreviousValuesSubscription
+  extends Promise<AsyncIterator<UserPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  email: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+  password: () => Promise<AsyncIterator<String>>;
+  role: () => Promise<AsyncIterator<Role>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface AttributeSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: AttributeWhereInput;
-  AND?: AttributeSubscriptionWhereInput[] | AttributeSubscriptionWhereInput;
-  OR?: AttributeSubscriptionWhereInput[] | AttributeSubscriptionWhereInput;
-  NOT?: AttributeSubscriptionWhereInput[] | AttributeSubscriptionWhereInput;
+export interface AggregateInputColumn {
+  count: Int;
 }
 
-export interface InputColumnSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: InputColumnWhereInput;
-  AND?: InputColumnSubscriptionWhereInput[] | InputColumnSubscriptionWhereInput;
-  OR?: InputColumnSubscriptionWhereInput[] | InputColumnSubscriptionWhereInput;
-  NOT?: InputColumnSubscriptionWhereInput[] | InputColumnSubscriptionWhereInput;
+export interface AggregateInputColumnPromise
+  extends Promise<AggregateInputColumn>,
+    Fragmentable {
+  count: () => Promise<Int>;
 }
 
-export interface JoinSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: JoinWhereInput;
-  AND?: JoinSubscriptionWhereInput[] | JoinSubscriptionWhereInput;
-  OR?: JoinSubscriptionWhereInput[] | JoinSubscriptionWhereInput;
-  NOT?: JoinSubscriptionWhereInput[] | JoinSubscriptionWhereInput;
+export interface AggregateInputColumnSubscription
+  extends Promise<AsyncIterator<AggregateInputColumn>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface ResourceSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: ResourceWhereInput;
-  AND?: ResourceSubscriptionWhereInput[] | ResourceSubscriptionWhereInput;
-  OR?: ResourceSubscriptionWhereInput[] | ResourceSubscriptionWhereInput;
-  NOT?: ResourceSubscriptionWhereInput[] | ResourceSubscriptionWhereInput;
-}
-
-export interface SourceSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: SourceWhereInput;
-  AND?: SourceSubscriptionWhereInput[] | SourceSubscriptionWhereInput;
-  OR?: SourceSubscriptionWhereInput[] | SourceSubscriptionWhereInput;
-  NOT?: SourceSubscriptionWhereInput[] | SourceSubscriptionWhereInput;
-}
-
-export interface UserSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: UserWhereInput;
-  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-}
-
-export interface NodeNode {
+export interface InputColumn {
   id: ID_Output;
+  owner?: String;
+  table?: String;
+  column?: String;
+  script?: String;
+  staticValue?: String;
+  updatedAt: DateTimeOutput;
+  createdAt: DateTimeOutput;
+}
+
+export interface InputColumnPromise extends Promise<InputColumn>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  owner: () => Promise<String>;
+  table: () => Promise<String>;
+  column: () => Promise<String>;
+  script: () => Promise<String>;
+  staticValue: () => Promise<String>;
+  joins: <T = FragmentableArray<Join>>(args?: {
+    where?: JoinWhereInput;
+    orderBy?: JoinOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  attribute: <T = AttributePromise>() => T;
+  updatedAt: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface InputColumnSubscription
+  extends Promise<AsyncIterator<InputColumn>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  owner: () => Promise<AsyncIterator<String>>;
+  table: () => Promise<AsyncIterator<String>>;
+  column: () => Promise<AsyncIterator<String>>;
+  script: () => Promise<AsyncIterator<String>>;
+  staticValue: () => Promise<AsyncIterator<String>>;
+  joins: <T = Promise<AsyncIterator<JoinSubscription>>>(args?: {
+    where?: JoinWhereInput;
+    orderBy?: JoinOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  attribute: <T = AttributeSubscription>() => T;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface InputColumnEdge {
+  node: InputColumn;
+  cursor: String;
+}
+
+export interface InputColumnEdgePromise
+  extends Promise<InputColumnEdge>,
+    Fragmentable {
+  node: <T = InputColumnPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface InputColumnEdgeSubscription
+  extends Promise<AsyncIterator<InputColumnEdge>>,
+    Fragmentable {
+  node: <T = InputColumnSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface InputColumnConnection {
+  pageInfo: PageInfo;
+  edges: InputColumnEdge[];
+}
+
+export interface InputColumnConnectionPromise
+  extends Promise<InputColumnConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<InputColumnEdge>>() => T;
+  aggregate: <T = AggregateInputColumnPromise>() => T;
+}
+
+export interface InputColumnConnectionSubscription
+  extends Promise<AsyncIterator<InputColumnConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<InputColumnEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateInputColumnSubscription>() => T;
+}
+
+export interface BatchPayload {
+  count: Long;
+}
+
+export interface BatchPayloadPromise
+  extends Promise<BatchPayload>,
+    Fragmentable {
+  count: () => Promise<Long>;
+}
+
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayload>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Long>>;
+}
+
+export interface AggregateUser {
+  count: Int;
+}
+
+export interface AggregateUserPromise
+  extends Promise<AggregateUser>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateUserSubscription
+  extends Promise<AsyncIterator<AggregateUser>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface AggregateAttribute {
+  count: Int;
+}
+
+export interface AggregateAttributePromise
+  extends Promise<AggregateAttribute>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateAttributeSubscription
+  extends Promise<AsyncIterator<AggregateAttribute>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface UserConnection {
+  pageInfo: PageInfo;
+  edges: UserEdge[];
+}
+
+export interface UserConnectionPromise
+  extends Promise<UserConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<UserEdge>>() => T;
+  aggregate: <T = AggregateUserPromise>() => T;
+}
+
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserSubscription>() => T;
+}
+
+export interface AttributeEdge {
+  node: Attribute;
+  cursor: String;
+}
+
+export interface AttributeEdgePromise
+  extends Promise<AttributeEdge>,
+    Fragmentable {
+  node: <T = AttributePromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface AttributeEdgeSubscription
+  extends Promise<AsyncIterator<AttributeEdge>>,
+    Fragmentable {
+  node: <T = AttributeSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface SourcePreviousValues {
+  id: ID_Output;
+  name: String;
+  hasOwner: Boolean;
+  updatedAt: DateTimeOutput;
+  createdAt: DateTimeOutput;
+}
+
+export interface SourcePreviousValuesPromise
+  extends Promise<SourcePreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  hasOwner: () => Promise<Boolean>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface SourcePreviousValuesSubscription
+  extends Promise<AsyncIterator<SourcePreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  hasOwner: () => Promise<AsyncIterator<Boolean>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface PageInfo {
+  hasNextPage: Boolean;
+  hasPreviousPage: Boolean;
+  startCursor?: String;
+  endCursor?: String;
+}
+
+export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
+  hasNextPage: () => Promise<Boolean>;
+  hasPreviousPage: () => Promise<Boolean>;
+  startCursor: () => Promise<String>;
+  endCursor: () => Promise<String>;
+}
+
+export interface PageInfoSubscription
+  extends Promise<AsyncIterator<PageInfo>>,
+    Fragmentable {
+  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
+  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
+  startCursor: () => Promise<AsyncIterator<String>>;
+  endCursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateSource {
+  count: Int;
+}
+
+export interface AggregateSourcePromise
+  extends Promise<AggregateSource>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateSourceSubscription
+  extends Promise<AsyncIterator<AggregateSource>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface Attribute {
@@ -2265,6 +2565,479 @@ export interface AttributeSubscription
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
+export interface SourceConnection {
+  pageInfo: PageInfo;
+  edges: SourceEdge[];
+}
+
+export interface SourceConnectionPromise
+  extends Promise<SourceConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<SourceEdge>>() => T;
+  aggregate: <T = AggregateSourcePromise>() => T;
+}
+
+export interface SourceConnectionSubscription
+  extends Promise<AsyncIterator<SourceConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<SourceEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateSourceSubscription>() => T;
+}
+
+export interface AttributeSubscriptionPayload {
+  mutation: MutationType;
+  node: Attribute;
+  updatedFields: String[];
+  previousValues: AttributePreviousValues;
+}
+
+export interface AttributeSubscriptionPayloadPromise
+  extends Promise<AttributeSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = AttributePromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = AttributePreviousValuesPromise>() => T;
+}
+
+export interface AttributeSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<AttributeSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = AttributeSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = AttributePreviousValuesSubscription>() => T;
+}
+
+export interface AggregateResource {
+  count: Int;
+}
+
+export interface AggregateResourcePromise
+  extends Promise<AggregateResource>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateResourceSubscription
+  extends Promise<AsyncIterator<AggregateResource>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface AttributePreviousValues {
+  id: ID_Output;
+  name: String;
+  mergingScript?: String;
+  isProfile?: Boolean;
+  type?: String;
+  comment?: String;
+  depth?: Int;
+  updatedAt: DateTimeOutput;
+  createdAt: DateTimeOutput;
+}
+
+export interface AttributePreviousValuesPromise
+  extends Promise<AttributePreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  mergingScript: () => Promise<String>;
+  isProfile: () => Promise<Boolean>;
+  type: () => Promise<String>;
+  comment: () => Promise<String>;
+  depth: () => Promise<Int>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface AttributePreviousValuesSubscription
+  extends Promise<AsyncIterator<AttributePreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  mergingScript: () => Promise<AsyncIterator<String>>;
+  isProfile: () => Promise<AsyncIterator<Boolean>>;
+  type: () => Promise<AsyncIterator<String>>;
+  comment: () => Promise<AsyncIterator<String>>;
+  depth: () => Promise<AsyncIterator<Int>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface ResourceConnection {
+  pageInfo: PageInfo;
+  edges: ResourceEdge[];
+}
+
+export interface ResourceConnectionPromise
+  extends Promise<ResourceConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<ResourceEdge>>() => T;
+  aggregate: <T = AggregateResourcePromise>() => T;
+}
+
+export interface ResourceConnectionSubscription
+  extends Promise<AsyncIterator<ResourceConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<ResourceEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateResourceSubscription>() => T;
+}
+
+export interface AttributeConnection {
+  pageInfo: PageInfo;
+  edges: AttributeEdge[];
+}
+
+export interface AttributeConnectionPromise
+  extends Promise<AttributeConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<AttributeEdge>>() => T;
+  aggregate: <T = AggregateAttributePromise>() => T;
+}
+
+export interface AttributeConnectionSubscription
+  extends Promise<AsyncIterator<AttributeConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<AttributeEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateAttributeSubscription>() => T;
+}
+
+export interface JoinEdge {
+  node: Join;
+  cursor: String;
+}
+
+export interface JoinEdgePromise extends Promise<JoinEdge>, Fragmentable {
+  node: <T = JoinPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface JoinEdgeSubscription
+  extends Promise<AsyncIterator<JoinEdge>>,
+    Fragmentable {
+  node: <T = JoinSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface InputColumnSubscriptionPayload {
+  mutation: MutationType;
+  node: InputColumn;
+  updatedFields: String[];
+  previousValues: InputColumnPreviousValues;
+}
+
+export interface InputColumnSubscriptionPayloadPromise
+  extends Promise<InputColumnSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = InputColumnPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = InputColumnPreviousValuesPromise>() => T;
+}
+
+export interface InputColumnSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<InputColumnSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = InputColumnSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = InputColumnPreviousValuesSubscription>() => T;
+}
+
+export interface UserSubscriptionPayload {
+  mutation: MutationType;
+  node: User;
+  updatedFields: String[];
+  previousValues: UserPreviousValues;
+}
+
+export interface UserSubscriptionPayloadPromise
+  extends Promise<UserSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = UserPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = UserPreviousValuesPromise>() => T;
+}
+
+export interface UserSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<UserSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = UserSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = UserPreviousValuesSubscription>() => T;
+}
+
+export interface InputColumnPreviousValues {
+  id: ID_Output;
+  owner?: String;
+  table?: String;
+  column?: String;
+  script?: String;
+  staticValue?: String;
+  updatedAt: DateTimeOutput;
+  createdAt: DateTimeOutput;
+}
+
+export interface InputColumnPreviousValuesPromise
+  extends Promise<InputColumnPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  owner: () => Promise<String>;
+  table: () => Promise<String>;
+  column: () => Promise<String>;
+  script: () => Promise<String>;
+  staticValue: () => Promise<String>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface InputColumnPreviousValuesSubscription
+  extends Promise<AsyncIterator<InputColumnPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  owner: () => Promise<AsyncIterator<String>>;
+  table: () => Promise<AsyncIterator<String>>;
+  column: () => Promise<AsyncIterator<String>>;
+  script: () => Promise<AsyncIterator<String>>;
+  staticValue: () => Promise<AsyncIterator<String>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface Source {
+  id: ID_Output;
+  name: String;
+  hasOwner: Boolean;
+  updatedAt: DateTimeOutput;
+  createdAt: DateTimeOutput;
+}
+
+export interface SourcePromise extends Promise<Source>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  hasOwner: () => Promise<Boolean>;
+  resources: <T = FragmentableArray<Resource>>(args?: {
+    where?: ResourceWhereInput;
+    orderBy?: ResourceOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  updatedAt: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface SourceSubscription
+  extends Promise<AsyncIterator<Source>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  hasOwner: () => Promise<AsyncIterator<Boolean>>;
+  resources: <T = Promise<AsyncIterator<ResourceSubscription>>>(args?: {
+    where?: ResourceWhereInput;
+    orderBy?: ResourceOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface Join {
+  id: ID_Output;
+  sourceOwner?: String;
+  sourceTable?: String;
+  sourceColumn?: String;
+  targetOwner?: String;
+  targetTable?: String;
+  targetColumn?: String;
+  updatedAt: DateTimeOutput;
+  createdAt: DateTimeOutput;
+}
+
+export interface JoinPromise extends Promise<Join>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  sourceOwner: () => Promise<String>;
+  sourceTable: () => Promise<String>;
+  sourceColumn: () => Promise<String>;
+  targetOwner: () => Promise<String>;
+  targetTable: () => Promise<String>;
+  targetColumn: () => Promise<String>;
+  inputColumn: <T = InputColumnPromise>() => T;
+  updatedAt: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface JoinSubscription
+  extends Promise<AsyncIterator<Join>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  sourceOwner: () => Promise<AsyncIterator<String>>;
+  sourceTable: () => Promise<AsyncIterator<String>>;
+  sourceColumn: () => Promise<AsyncIterator<String>>;
+  targetOwner: () => Promise<AsyncIterator<String>>;
+  targetTable: () => Promise<AsyncIterator<String>>;
+  targetColumn: () => Promise<AsyncIterator<String>>;
+  inputColumn: <T = InputColumnSubscription>() => T;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface SourceEdge {
+  node: Source;
+  cursor: String;
+}
+
+export interface SourceEdgePromise extends Promise<SourceEdge>, Fragmentable {
+  node: <T = SourcePromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface SourceEdgeSubscription
+  extends Promise<AsyncIterator<SourceEdge>>,
+    Fragmentable {
+  node: <T = SourceSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface JoinSubscriptionPayload {
+  mutation: MutationType;
+  node: Join;
+  updatedFields: String[];
+  previousValues: JoinPreviousValues;
+}
+
+export interface JoinSubscriptionPayloadPromise
+  extends Promise<JoinSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = JoinPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = JoinPreviousValuesPromise>() => T;
+}
+
+export interface JoinSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<JoinSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = JoinSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = JoinPreviousValuesSubscription>() => T;
+}
+
+export interface ResourceEdge {
+  node: Resource;
+  cursor: String;
+}
+
+export interface ResourceEdgePromise
+  extends Promise<ResourceEdge>,
+    Fragmentable {
+  node: <T = ResourcePromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface ResourceEdgeSubscription
+  extends Promise<AsyncIterator<ResourceEdge>>,
+    Fragmentable {
+  node: <T = ResourceSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface JoinConnection {
+  pageInfo: PageInfo;
+  edges: JoinEdge[];
+}
+
+export interface JoinConnectionPromise
+  extends Promise<JoinConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<JoinEdge>>() => T;
+  aggregate: <T = AggregateJoinPromise>() => T;
+}
+
+export interface JoinConnectionSubscription
+  extends Promise<AsyncIterator<JoinConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<JoinEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateJoinSubscription>() => T;
+}
+
+export interface ResourcePreviousValues {
+  id: ID_Output;
+  name: String;
+  primaryKeyOwner?: String;
+  primaryKeyTable?: String;
+  primaryKeyColumn?: String;
+  updatedAt: DateTimeOutput;
+  createdAt: DateTimeOutput;
+}
+
+export interface ResourcePreviousValuesPromise
+  extends Promise<ResourcePreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  primaryKeyOwner: () => Promise<String>;
+  primaryKeyTable: () => Promise<String>;
+  primaryKeyColumn: () => Promise<String>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface ResourcePreviousValuesSubscription
+  extends Promise<AsyncIterator<ResourcePreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  primaryKeyOwner: () => Promise<AsyncIterator<String>>;
+  primaryKeyTable: () => Promise<AsyncIterator<String>>;
+  primaryKeyColumn: () => Promise<AsyncIterator<String>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface ResourceSubscriptionPayload {
+  mutation: MutationType;
+  node: Resource;
+  updatedFields: String[];
+  previousValues: ResourcePreviousValues;
+}
+
+export interface ResourceSubscriptionPayloadPromise
+  extends Promise<ResourceSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = ResourcePromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = ResourcePreviousValuesPromise>() => T;
+}
+
+export interface ResourceSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<ResourceSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = ResourceSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = ResourcePreviousValuesSubscription>() => T;
+}
+
 export interface Resource {
   id: ID_Output;
   name: String;
@@ -2317,698 +3090,6 @@ export interface ResourceSubscription
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface Source {
-  id: ID_Output;
-  name: String;
-  hasOwner: Boolean;
-  updatedAt: DateTimeOutput;
-  createdAt: DateTimeOutput;
-}
-
-export interface SourcePromise extends Promise<Source>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  hasOwner: () => Promise<Boolean>;
-  resources: <T = FragmentableArray<Resource>>(args?: {
-    where?: ResourceWhereInput;
-    orderBy?: ResourceOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  updatedAt: () => Promise<DateTimeOutput>;
-  createdAt: () => Promise<DateTimeOutput>;
-}
-
-export interface SourceSubscription
-  extends Promise<AsyncIterator<Source>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-  hasOwner: () => Promise<AsyncIterator<Boolean>>;
-  resources: <T = Promise<AsyncIterator<ResourceSubscription>>>(args?: {
-    where?: ResourceWhereInput;
-    orderBy?: ResourceOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface InputColumn {
-  id: ID_Output;
-  owner?: String;
-  table?: String;
-  column?: String;
-  script?: String;
-  staticValue?: String;
-  updatedAt: DateTimeOutput;
-  createdAt: DateTimeOutput;
-}
-
-export interface InputColumnPromise extends Promise<InputColumn>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  owner: () => Promise<String>;
-  table: () => Promise<String>;
-  column: () => Promise<String>;
-  script: () => Promise<String>;
-  staticValue: () => Promise<String>;
-  joins: <T = FragmentableArray<Join>>(args?: {
-    where?: JoinWhereInput;
-    orderBy?: JoinOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  attribute: <T = AttributePromise>() => T;
-  updatedAt: () => Promise<DateTimeOutput>;
-  createdAt: () => Promise<DateTimeOutput>;
-}
-
-export interface InputColumnSubscription
-  extends Promise<AsyncIterator<InputColumn>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  owner: () => Promise<AsyncIterator<String>>;
-  table: () => Promise<AsyncIterator<String>>;
-  column: () => Promise<AsyncIterator<String>>;
-  script: () => Promise<AsyncIterator<String>>;
-  staticValue: () => Promise<AsyncIterator<String>>;
-  joins: <T = Promise<AsyncIterator<JoinSubscription>>>(args?: {
-    where?: JoinWhereInput;
-    orderBy?: JoinOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  attribute: <T = AttributeSubscription>() => T;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface Join {
-  id: ID_Output;
-  sourceOwner?: String;
-  sourceTable?: String;
-  sourceColumn?: String;
-  targetOwner?: String;
-  targetTable?: String;
-  targetColumn?: String;
-  updatedAt: DateTimeOutput;
-  createdAt: DateTimeOutput;
-}
-
-export interface JoinPromise extends Promise<Join>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  sourceOwner: () => Promise<String>;
-  sourceTable: () => Promise<String>;
-  sourceColumn: () => Promise<String>;
-  targetOwner: () => Promise<String>;
-  targetTable: () => Promise<String>;
-  targetColumn: () => Promise<String>;
-  inputColumn: <T = InputColumnPromise>() => T;
-  updatedAt: () => Promise<DateTimeOutput>;
-  createdAt: () => Promise<DateTimeOutput>;
-}
-
-export interface JoinSubscription
-  extends Promise<AsyncIterator<Join>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  sourceOwner: () => Promise<AsyncIterator<String>>;
-  sourceTable: () => Promise<AsyncIterator<String>>;
-  sourceColumn: () => Promise<AsyncIterator<String>>;
-  targetOwner: () => Promise<AsyncIterator<String>>;
-  targetTable: () => Promise<AsyncIterator<String>>;
-  targetColumn: () => Promise<AsyncIterator<String>>;
-  inputColumn: <T = InputColumnSubscription>() => T;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface AttributeConnection {
-  pageInfo: PageInfo;
-  edges: AttributeEdge[];
-}
-
-export interface AttributeConnectionPromise
-  extends Promise<AttributeConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<AttributeEdge>>() => T;
-  aggregate: <T = AggregateAttributePromise>() => T;
-}
-
-export interface AttributeConnectionSubscription
-  extends Promise<AsyncIterator<AttributeConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<AttributeEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateAttributeSubscription>() => T;
-}
-
-export interface PageInfo {
-  hasNextPage: Boolean;
-  hasPreviousPage: Boolean;
-  startCursor?: String;
-  endCursor?: String;
-}
-
-export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
-  hasNextPage: () => Promise<Boolean>;
-  hasPreviousPage: () => Promise<Boolean>;
-  startCursor: () => Promise<String>;
-  endCursor: () => Promise<String>;
-}
-
-export interface PageInfoSubscription
-  extends Promise<AsyncIterator<PageInfo>>,
-    Fragmentable {
-  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
-  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
-  startCursor: () => Promise<AsyncIterator<String>>;
-  endCursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AttributeEdge {
-  node: Attribute;
-  cursor: String;
-}
-
-export interface AttributeEdgePromise
-  extends Promise<AttributeEdge>,
-    Fragmentable {
-  node: <T = AttributePromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface AttributeEdgeSubscription
-  extends Promise<AsyncIterator<AttributeEdge>>,
-    Fragmentable {
-  node: <T = AttributeSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateAttribute {
-  count: Int;
-}
-
-export interface AggregateAttributePromise
-  extends Promise<AggregateAttribute>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateAttributeSubscription
-  extends Promise<AsyncIterator<AggregateAttribute>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface InputColumnConnection {
-  pageInfo: PageInfo;
-  edges: InputColumnEdge[];
-}
-
-export interface InputColumnConnectionPromise
-  extends Promise<InputColumnConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<InputColumnEdge>>() => T;
-  aggregate: <T = AggregateInputColumnPromise>() => T;
-}
-
-export interface InputColumnConnectionSubscription
-  extends Promise<AsyncIterator<InputColumnConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<InputColumnEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateInputColumnSubscription>() => T;
-}
-
-export interface InputColumnEdge {
-  node: InputColumn;
-  cursor: String;
-}
-
-export interface InputColumnEdgePromise
-  extends Promise<InputColumnEdge>,
-    Fragmentable {
-  node: <T = InputColumnPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface InputColumnEdgeSubscription
-  extends Promise<AsyncIterator<InputColumnEdge>>,
-    Fragmentable {
-  node: <T = InputColumnSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateInputColumn {
-  count: Int;
-}
-
-export interface AggregateInputColumnPromise
-  extends Promise<AggregateInputColumn>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateInputColumnSubscription
-  extends Promise<AsyncIterator<AggregateInputColumn>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface JoinConnection {
-  pageInfo: PageInfo;
-  edges: JoinEdge[];
-}
-
-export interface JoinConnectionPromise
-  extends Promise<JoinConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<JoinEdge>>() => T;
-  aggregate: <T = AggregateJoinPromise>() => T;
-}
-
-export interface JoinConnectionSubscription
-  extends Promise<AsyncIterator<JoinConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<JoinEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateJoinSubscription>() => T;
-}
-
-export interface JoinEdge {
-  node: Join;
-  cursor: String;
-}
-
-export interface JoinEdgePromise extends Promise<JoinEdge>, Fragmentable {
-  node: <T = JoinPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface JoinEdgeSubscription
-  extends Promise<AsyncIterator<JoinEdge>>,
-    Fragmentable {
-  node: <T = JoinSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateJoin {
-  count: Int;
-}
-
-export interface AggregateJoinPromise
-  extends Promise<AggregateJoin>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateJoinSubscription
-  extends Promise<AsyncIterator<AggregateJoin>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface ResourceConnection {
-  pageInfo: PageInfo;
-  edges: ResourceEdge[];
-}
-
-export interface ResourceConnectionPromise
-  extends Promise<ResourceConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<ResourceEdge>>() => T;
-  aggregate: <T = AggregateResourcePromise>() => T;
-}
-
-export interface ResourceConnectionSubscription
-  extends Promise<AsyncIterator<ResourceConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<ResourceEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateResourceSubscription>() => T;
-}
-
-export interface ResourceEdge {
-  node: Resource;
-  cursor: String;
-}
-
-export interface ResourceEdgePromise
-  extends Promise<ResourceEdge>,
-    Fragmentable {
-  node: <T = ResourcePromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface ResourceEdgeSubscription
-  extends Promise<AsyncIterator<ResourceEdge>>,
-    Fragmentable {
-  node: <T = ResourceSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateResource {
-  count: Int;
-}
-
-export interface AggregateResourcePromise
-  extends Promise<AggregateResource>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateResourceSubscription
-  extends Promise<AsyncIterator<AggregateResource>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface SourceConnection {
-  pageInfo: PageInfo;
-  edges: SourceEdge[];
-}
-
-export interface SourceConnectionPromise
-  extends Promise<SourceConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<SourceEdge>>() => T;
-  aggregate: <T = AggregateSourcePromise>() => T;
-}
-
-export interface SourceConnectionSubscription
-  extends Promise<AsyncIterator<SourceConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<SourceEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateSourceSubscription>() => T;
-}
-
-export interface SourceEdge {
-  node: Source;
-  cursor: String;
-}
-
-export interface SourceEdgePromise extends Promise<SourceEdge>, Fragmentable {
-  node: <T = SourcePromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface SourceEdgeSubscription
-  extends Promise<AsyncIterator<SourceEdge>>,
-    Fragmentable {
-  node: <T = SourceSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateSource {
-  count: Int;
-}
-
-export interface AggregateSourcePromise
-  extends Promise<AggregateSource>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateSourceSubscription
-  extends Promise<AsyncIterator<AggregateSource>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface User {
-  id: ID_Output;
-  email: String;
-  name: String;
-  password: String;
-  role?: Role;
-  updatedAt: DateTimeOutput;
-  createdAt: DateTimeOutput;
-}
-
-export interface UserPromise extends Promise<User>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  email: () => Promise<String>;
-  name: () => Promise<String>;
-  password: () => Promise<String>;
-  role: () => Promise<Role>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  createdAt: () => Promise<DateTimeOutput>;
-}
-
-export interface UserSubscription
-  extends Promise<AsyncIterator<User>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  email: () => Promise<AsyncIterator<String>>;
-  name: () => Promise<AsyncIterator<String>>;
-  password: () => Promise<AsyncIterator<String>>;
-  role: () => Promise<AsyncIterator<Role>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface UserConnection {
-  pageInfo: PageInfo;
-  edges: UserEdge[];
-}
-
-export interface UserConnectionPromise
-  extends Promise<UserConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<UserEdge>>() => T;
-  aggregate: <T = AggregateUserPromise>() => T;
-}
-
-export interface UserConnectionSubscription
-  extends Promise<AsyncIterator<UserConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateUserSubscription>() => T;
-}
-
-export interface UserEdge {
-  node: User;
-  cursor: String;
-}
-
-export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
-  node: <T = UserPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface UserEdgeSubscription
-  extends Promise<AsyncIterator<UserEdge>>,
-    Fragmentable {
-  node: <T = UserSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateUser {
-  count: Int;
-}
-
-export interface AggregateUserPromise
-  extends Promise<AggregateUser>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateUserSubscription
-  extends Promise<AsyncIterator<AggregateUser>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface BatchPayload {
-  count: Long;
-}
-
-export interface BatchPayloadPromise
-  extends Promise<BatchPayload>,
-    Fragmentable {
-  count: () => Promise<Long>;
-}
-
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayload>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
-}
-
-export interface AttributeSubscriptionPayload {
-  mutation: MutationType;
-  node: Attribute;
-  updatedFields: String[];
-  previousValues: AttributePreviousValues;
-}
-
-export interface AttributeSubscriptionPayloadPromise
-  extends Promise<AttributeSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = AttributePromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = AttributePreviousValuesPromise>() => T;
-}
-
-export interface AttributeSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<AttributeSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = AttributeSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = AttributePreviousValuesSubscription>() => T;
-}
-
-export interface AttributePreviousValues {
-  id: ID_Output;
-  name: String;
-  mergingScript?: String;
-  isProfile?: Boolean;
-  type?: String;
-  comment?: String;
-  depth?: Int;
-  updatedAt: DateTimeOutput;
-  createdAt: DateTimeOutput;
-}
-
-export interface AttributePreviousValuesPromise
-  extends Promise<AttributePreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  mergingScript: () => Promise<String>;
-  isProfile: () => Promise<Boolean>;
-  type: () => Promise<String>;
-  comment: () => Promise<String>;
-  depth: () => Promise<Int>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  createdAt: () => Promise<DateTimeOutput>;
-}
-
-export interface AttributePreviousValuesSubscription
-  extends Promise<AsyncIterator<AttributePreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-  mergingScript: () => Promise<AsyncIterator<String>>;
-  isProfile: () => Promise<AsyncIterator<Boolean>>;
-  type: () => Promise<AsyncIterator<String>>;
-  comment: () => Promise<AsyncIterator<String>>;
-  depth: () => Promise<AsyncIterator<Int>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface InputColumnSubscriptionPayload {
-  mutation: MutationType;
-  node: InputColumn;
-  updatedFields: String[];
-  previousValues: InputColumnPreviousValues;
-}
-
-export interface InputColumnSubscriptionPayloadPromise
-  extends Promise<InputColumnSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = InputColumnPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = InputColumnPreviousValuesPromise>() => T;
-}
-
-export interface InputColumnSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<InputColumnSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = InputColumnSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = InputColumnPreviousValuesSubscription>() => T;
-}
-
-export interface InputColumnPreviousValues {
-  id: ID_Output;
-  owner?: String;
-  table?: String;
-  column?: String;
-  script?: String;
-  staticValue?: String;
-  updatedAt: DateTimeOutput;
-  createdAt: DateTimeOutput;
-}
-
-export interface InputColumnPreviousValuesPromise
-  extends Promise<InputColumnPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  owner: () => Promise<String>;
-  table: () => Promise<String>;
-  column: () => Promise<String>;
-  script: () => Promise<String>;
-  staticValue: () => Promise<String>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  createdAt: () => Promise<DateTimeOutput>;
-}
-
-export interface InputColumnPreviousValuesSubscription
-  extends Promise<AsyncIterator<InputColumnPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  owner: () => Promise<AsyncIterator<String>>;
-  table: () => Promise<AsyncIterator<String>>;
-  column: () => Promise<AsyncIterator<String>>;
-  script: () => Promise<AsyncIterator<String>>;
-  staticValue: () => Promise<AsyncIterator<String>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface JoinSubscriptionPayload {
-  mutation: MutationType;
-  node: Join;
-  updatedFields: String[];
-  previousValues: JoinPreviousValues;
-}
-
-export interface JoinSubscriptionPayloadPromise
-  extends Promise<JoinSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = JoinPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = JoinPreviousValuesPromise>() => T;
-}
-
-export interface JoinSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<JoinSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = JoinSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = JoinPreviousValuesSubscription>() => T;
-}
-
 export interface JoinPreviousValues {
   id: ID_Output;
   sourceOwner?: String;
@@ -3049,63 +3130,37 @@ export interface JoinPreviousValuesSubscription
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface ResourceSubscriptionPayload {
-  mutation: MutationType;
-  node: Resource;
-  updatedFields: String[];
-  previousValues: ResourcePreviousValues;
+export interface UserEdge {
+  node: User;
+  cursor: String;
 }
 
-export interface ResourceSubscriptionPayloadPromise
-  extends Promise<ResourceSubscriptionPayload>,
+export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
+  node: <T = UserPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface UserEdgeSubscription
+  extends Promise<AsyncIterator<UserEdge>>,
     Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = ResourcePromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = ResourcePreviousValuesPromise>() => T;
+  node: <T = UserSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface ResourceSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<ResourceSubscriptionPayload>>,
+export interface AggregateJoin {
+  count: Int;
+}
+
+export interface AggregateJoinPromise
+  extends Promise<AggregateJoin>,
     Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = ResourceSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = ResourcePreviousValuesSubscription>() => T;
+  count: () => Promise<Int>;
 }
 
-export interface ResourcePreviousValues {
-  id: ID_Output;
-  name: String;
-  primaryKeyOwner?: String;
-  primaryKeyTable?: String;
-  primaryKeyColumn?: String;
-  updatedAt: DateTimeOutput;
-  createdAt: DateTimeOutput;
-}
-
-export interface ResourcePreviousValuesPromise
-  extends Promise<ResourcePreviousValues>,
+export interface AggregateJoinSubscription
+  extends Promise<AsyncIterator<AggregateJoin>>,
     Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  primaryKeyOwner: () => Promise<String>;
-  primaryKeyTable: () => Promise<String>;
-  primaryKeyColumn: () => Promise<String>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  createdAt: () => Promise<DateTimeOutput>;
-}
-
-export interface ResourcePreviousValuesSubscription
-  extends Promise<AsyncIterator<ResourcePreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-  primaryKeyOwner: () => Promise<AsyncIterator<String>>;
-  primaryKeyTable: () => Promise<AsyncIterator<String>>;
-  primaryKeyColumn: () => Promise<AsyncIterator<String>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface SourceSubscriptionPayload {
@@ -3133,60 +3188,7 @@ export interface SourceSubscriptionPayloadSubscription
   previousValues: <T = SourcePreviousValuesSubscription>() => T;
 }
 
-export interface SourcePreviousValues {
-  id: ID_Output;
-  name: String;
-  hasOwner: Boolean;
-  updatedAt: DateTimeOutput;
-  createdAt: DateTimeOutput;
-}
-
-export interface SourcePreviousValuesPromise
-  extends Promise<SourcePreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  hasOwner: () => Promise<Boolean>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  createdAt: () => Promise<DateTimeOutput>;
-}
-
-export interface SourcePreviousValuesSubscription
-  extends Promise<AsyncIterator<SourcePreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-  hasOwner: () => Promise<AsyncIterator<Boolean>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface UserSubscriptionPayload {
-  mutation: MutationType;
-  node: User;
-  updatedFields: String[];
-  previousValues: UserPreviousValues;
-}
-
-export interface UserSubscriptionPayloadPromise
-  extends Promise<UserSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = UserPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = UserPreviousValuesPromise>() => T;
-}
-
-export interface UserSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<UserSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = UserSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = UserPreviousValuesSubscription>() => T;
-}
-
-export interface UserPreviousValues {
+export interface User {
   id: ID_Output;
   email: String;
   name: String;
@@ -3196,9 +3198,7 @@ export interface UserPreviousValues {
   createdAt: DateTimeOutput;
 }
 
-export interface UserPreviousValuesPromise
-  extends Promise<UserPreviousValues>,
-    Fragmentable {
+export interface UserPromise extends Promise<User>, Fragmentable {
   id: () => Promise<ID_Output>;
   email: () => Promise<String>;
   name: () => Promise<String>;
@@ -3208,8 +3208,8 @@ export interface UserPreviousValuesPromise
   createdAt: () => Promise<DateTimeOutput>;
 }
 
-export interface UserPreviousValuesSubscription
-  extends Promise<AsyncIterator<UserPreviousValues>>,
+export interface UserSubscription
+  extends Promise<AsyncIterator<User>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   email: () => Promise<AsyncIterator<String>>;
@@ -3219,6 +3219,18 @@ export interface UserPreviousValuesSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
+
+/*
+DateTime scalar input type, allowing Date
+*/
+export type DateTimeInput = Date | string;
+
+/*
+DateTime scalar output type, which is always a string
+*/
+export type DateTimeOutput = string;
+
+export type Long = string;
 
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
@@ -3240,18 +3252,6 @@ export type Boolean = boolean;
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
 */
 export type Int = number;
-
-/*
-DateTime scalar input type, allowing Date
-*/
-export type DateTimeInput = Date | string;
-
-/*
-DateTime scalar output type, which is always a string
-*/
-export type DateTimeOutput = string;
-
-export type Long = string;
 
 /**
  * Model Metadata
