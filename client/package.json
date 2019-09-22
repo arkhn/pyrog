@@ -7,7 +7,7 @@
     "start:darwin:linux": "NODE_ENV=development webpack-dev-server --port 1729 --hot --host 0.0.0.0 --mode development",
     "start:win32": "set NODE_ENV=development & webpack-dev-server --port 1729 --hot --host 0.0.0.0 --mode development",
     "build": "webpack --mode production",
-    "test": "env $(cat .env.staging) yarn run jest"
+    "test": "env $([ -f .env.dev.custom ] && cat .env.dev.custom || cat .env.dev.default) yarn run jest"
   },
   "dependencies": {
     "@babel/core": "^7.4.3",

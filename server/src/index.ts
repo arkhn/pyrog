@@ -12,7 +12,7 @@ import resolvers from "./resolvers";
 const endpoint =
   process.env.NODE_ENV == "docker"
     ? "http://prisma:4466"
-    : "http://localhost:4466";
+    : process.env.PRISMA_ENDPOINT;
 
 const SCHEMAS_DEST = `${process.env.STATIC_FILES_DIR}/schemas`;
 
@@ -107,5 +107,6 @@ const serverOptions = {
 };
 
 server.start(serverOptions, ({ port }) =>
-  console.log(`🚀 Server is running on http://localhost:${port}`)
+  console.log(`Prisma endpoint: ${endpoint}
+🚀 Server is running on http://localhost:${port}`)
 );

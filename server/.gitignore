@@ -1,4 +1,5 @@
 .env
+.env.dev.custom
 dist
 
 node_modules

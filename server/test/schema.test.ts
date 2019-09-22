@@ -1,7 +1,3 @@
-import { graphql } from "graphql";
-import { importSchema } from "graphql-import";
-import { makeExecutableSchema, mockServer } from "graphql-tools";
-import { GraphQLServer } from "graphql-yoga";
 const stringifyObject = require("stringify-object");
 const ws = require("ws");
 const waitForExpect = require("wait-for-expect");
@@ -14,7 +10,7 @@ import { queries, mutations, subscriptions } from "./useCases";
 const prismaServerEndpoint =
   process.env.NODE_ENV === "docker"
     ? "http://prisma:4466"
-    : "http://localhost:4466";
+    : process.env.PRISMA_ENDPOINT;
 
 const wsEndpoint =
   process.env.NODE_ENV === "docker" ? "ws://pyrog:4000" : "ws://localhost:4000";

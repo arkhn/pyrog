@@ -13,37 +13,45 @@ Pyrog is a web application meant to help people build and share mappings from he
 
 - [https://pyrog.staging.arkhn.org](https://pyrog.staging.arkhn.org)
 
-## Introduction
+## Quick install
 
-This is a react-redux-based client for Pyrog. It is built using Webpack.
+```
+yarn install
+yarn start
+```
 
-## Installation
+## Detailed installation
 
-The first thing to do after cloning this repository is to install all needed node modules:
+### Custom setup
+
+`.env.dev.default` already contains a default setup. However, you can use a custom setup under `.env.dev.custom`. In particular, this allows you to point to a specific Pyrog server. This is useful if you are working on the client part of Pyrog only and do not want to run a Pyrog server locally. You could then use our running staging Pyrog server and your `.env.dev.custom` file should then look something like this:
+
+```
+AUTH_TOKEN="ARKHN_TOKEN"
+ENGINE_BACKEND_URL="https://engine.arkhn.org"
+HTTP_BACKEND_URL="https://graphql.pyrog.staging.arkhn.org"
+WS_BACKEND_URL="wss://graphql.pyrog.staging.arkhn.org"
+```
+
+### Install dependencies
 
 ```
 yarn install
 ```
 
-All commands listed in the coming sections can be tweaked in `./package.json`.
-
-### Running the app locally
-
-Hitting the following command will run a `webpack-dev-server` which serves a _development_ version of the app under _http://0.0.0.0:3000_:
+### Run client
 
 ```
 yarn start
 ```
 
-### Building production files
-
-A _production_ version of the application can be built using the following command:
+### Building production version
 
 ```
 yarn run build
 ```
 
-This will create bundles and output them in `./dist/`. These files can then be exported to a distant production server running the application.
+This will create bundles and output them to `./dist/`. These files can then be exported to a distant production server running the application.
 
 ## Code organisation
 

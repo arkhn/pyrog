@@ -2,12 +2,12 @@
   "name": "pyrog-serer",
   "license": "Apache-2.0",
   "scripts": {
-    "start": "dotenv -e .env.staging -- nodemon --ext ts,graphql --exec ts-node src/index.ts",
-    "debug": "dotenv -e .env.staging -- nodemon --ext ts,graphql --exec ts-node --inspect src/index.ts",
+    "start": "dotenv -e $([ -f .env.dev.custom ] && echo \".env.dev.custom\" || echo \".env.dev.default\") -- nodemon --ext ts,graphql --exec ts-node src/index.ts",
+    "debug": "dotenv -e $([ -f .env.dev.custom ] && echo \".env.dev.custom\" || echo \".env.dev.default\") -- nodemon --ext ts,graphql --exec ts-node --inspect src/index.ts",
     "copy-schemas": "cpx src/**/*.graphql dist",
     "build": "rimraf dist && tsc && yarn copy-schemas",
     "playground": "graphql playground",
-    "test": "env $(cat .env.staging) yarn run jest"
+    "test": "env $([ -f .env.dev.custom ] && cat .env.dev.custom || cat .env.dev.default) yarn run jest"
   },
   "dependencies": {
     "@babel/core": "^7.4.3",

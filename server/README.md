@@ -9,25 +9,48 @@
 
 This is a web server for [Pyrog](https://github.com/arkhn/pyrog-client).
 
-**Checkout the staging GraphQL playground here:**
+**Checkout our staging GraphQL playground here:**
 
 - [https://graphql.pyrog.staging.arkhn.org](https://graphql.pyrog.staging.arkhn.org)
 
-## Install and run in development
+## Quick install
 
-### Dependencies
+```
+yarn install
+env $(cat .env.dev.default) docker-compose up -d prisma
+yarn run prisma deploy -e .env.dev.default
+wget https://arkhn.org/pyrog_static.zip
+unzip pyrog_static.zip
+rm pyrog_static.zip
+yarn start
+```
+
+## Detailed installation
+
+### Server setup
+
+This server comes with a default development setup with assumes all changes are happening on your machine. You can introduce a custom setup under `.env.dev.custom`. This is useful only if you want your Pyrog server to target a specific Prisma instance you already know.
+
+### Installing npm dependencies
 
 Simply run
 
 ```
 yarn install
-env $(cat .env.staging) docker-compose up -d prisma
-yarn run prisma deploy -e .env.staging
+```
+
+### Running docker containers
+
+This server expects being able to reach a Prisma service, which itself expects to talk to a Postgres service. You can launch both on your local machine with the following command
+
+```
+env $(cat .env.dev.default) docker-compose up -d prisma
+yarn run prisma deploy -e .env.dev.default
 ```
 
 This will install all required node dependencies, setup 2 Docker containers (1 Prisma, 1 Postgres), 1 Docker volume (which will persistently contain all data collected in Pyrog and our mock data) and initiate our Postgres database schema with our GraphQL datamodel.
 
-### Static files and mock data
+### Downloading static files and mock data
 
 [FHIR resources](https://www.hl7.org/fhir/resourcelist.html) json descriptions are needed for this server to run successfully. Download them manually [here](https://arkhn.org/pyrog_dev_static.zip), or run this command:
 
@@ -40,7 +63,7 @@ rm pyrog_dev_static.zip
 This zip file also contains some mock data, among which [Mimic](https://mimic.physionet.org)'s database schema and a partial mapping of Mimic into FHIR. So as to use this data, you can populate your local Postgres database with our mapping:
 
 ```
-yarn run prisma import -d ./static/pyrog_mimic_mapping.zip -e .env.staging
+yarn run prisma import -d ./static/pyrog_mimic_mapping.zip -e .env.dev.default
 ```
 
 In particular, this will register two users with different roles:
@@ -50,7 +73,7 @@ In particular, this will register two users with different roles:
 
 #### Reset mock data
 
-Resetting mock data will erase:
+You may need to hard reset data in your Postgres database. Resetting mock data will erase:
 
 - new source schemas you have imported when creating new sources (they are stored under `./static/schemas`)
 - all mapping data added on top of mock data
@@ -66,27 +89,32 @@ rm pyrog_dev_static.zip
 Reset Postgres data:
 
 ```
-yarn run prisma reset -e .env.staging
-yarn run prisma deploy -e .env.staging
-yarn run prisma import --data ./static/pyrog_mimic_mapping.zip -e .env.staging
+yarn run prisma reset -e .env.dev.default
+yarn run prisma deploy -e .env.dev.default
+yarn run prisma import --data ./static/pyrog_mimic_mapping.zip -e .env.dev.default
 ```
 
 ### Run
 
-Ensure your docker containers are running:
+Ensure your docker containers (postgres and prisma) are running with
 
 ```
 docker ps
+```
+
+If not, start them with
+
+```
 docker-compose up -d prisma
 ```
 
-Then, you can simply start this server with
+Then, simply start this server with
 
 ```
 yarn start
 ```
 
-You can easily test your server using GraphQL's `Playground`:
+Also, you can easily test your server using GraphQL's `Playground`:
 
 ```
 yarn playground
@@ -95,9 +123,7 @@ yarn playground
 ### Prod build
 
 ```
-yarn install
-env $(cat ../../.env) docker-compose up --build
-yarn run prisma deploy
+yarn run build
 ```
 
 ## Start contributing
