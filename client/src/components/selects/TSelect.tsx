@@ -1,11 +1,17 @@
 import { Button, Intent, MenuItem } from "@blueprintjs/core";
 import { IconName } from "@blueprintjs/icons";
-import { ItemPredicate, ItemRenderer, Select } from "@blueprintjs/select";
+import {
+  ItemPredicate,
+  ItemRenderer,
+  Select,
+  ItemListPredicate
+} from "@blueprintjs/select";
 import * as React from "react";
 
 interface ISelectProps<T> {
   disabled: boolean;
   displayItem: (item: any) => string;
+  sortItems?: ItemListPredicate<T>;
   filterItems: ItemPredicate<T>;
   items: T[];
   icon?: IconName;
@@ -32,6 +38,7 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
     const {
       disabled,
       displayItem,
+      sortItems,
       filterItems,
       icon,
       inputItem,
@@ -46,6 +53,7 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
       <this.CustomSelect
         disabled={disabled}
         items={items}
+        itemListPredicate={sortItems}
         itemPredicate={filterItems}
         itemRenderer={renderItem}
         noResults={<MenuItem disabled={true} text="No results." />}
