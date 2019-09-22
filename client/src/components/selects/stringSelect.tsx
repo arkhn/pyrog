@@ -1,6 +1,11 @@
 import * as React from "react";
 import { Button, MenuItem, Intent } from "@blueprintjs/core";
-import { Select, ItemPredicate, ItemRenderer } from "@blueprintjs/select";
+import {
+  Select,
+  ItemPredicate,
+  ItemRenderer,
+  ItemListPredicate
+} from "@blueprintjs/select";
 import { IconName } from "@blueprintjs/icons";
 
 import TSelect from "./TSelect";
@@ -27,6 +32,20 @@ export default class StringSelect extends React.Component<ISelectProps, any> {
     return `${item.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0;
   };
 
+  private sortItems: ItemListPredicate<string> = (
+    query,
+    resources: string[]
+  ) => {
+    resources.sort((s1, s2) => {
+      const name1 = s1.toLowerCase();
+      const name2 = s2.toLowerCase();
+      if (name1 < name2) return -1;
+      if (name1 > name2) return 1;
+      return 0;
+    });
+    return resources;
+  };
+
   private displayItem = function(item: string): string {
     return item ? item : "None";
   };
@@ -46,6 +65,7 @@ export default class StringSelect extends React.Component<ISelectProps, any> {
       <TSelect<string>
         disabled={disabled}
         displayItem={this.displayItem}
+        sortItems={this.sortItems}
         filterItems={this.filterByName}
         loading={loading}
         icon={icon}
