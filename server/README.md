@@ -105,7 +105,7 @@ docker ps
 If not, start them with
 
 ```
-docker-compose up -d prisma
+env $(cat .env.dev.default) docker-compose up -d prisma
 ```
 
 Then, simply start this server with

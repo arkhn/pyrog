@@ -274,18 +274,18 @@ describe("Graphql server", () => {
         newResourceId = res.data.createResourceTreeInSource.id;
       });
       await sendPostRequest(
-        `mutation { deleteResourceTreeInSource(resourceId: "${newResourceId}") { id }}`,
+        `mutation { deleteResource(resourceId: "${newResourceId}") { id }}`,
         {},
         token
       )
         .then(res => {
           expect(res).toEqual({
             data: {
-              deleteResourceTreeInSource: { id: newResourceId }
+              deleteResource: { id: newResourceId }
             }
           });
           return sendPostRequest(
-            `mutation { deleteResourceTreeInSource(resourceId: "${newResourceId}") { id }}`,
+            `mutation { deleteResource(resourceId: "${newResourceId}") { id }}`,
             {},
             token
           );

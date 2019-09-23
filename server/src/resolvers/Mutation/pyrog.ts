@@ -172,12 +172,7 @@ export const pyrogMutation = {
         return context.client.createResource(newResource);
       });
   },
-  async deleteResourceTreeInSource(
-    parent,
-    { resourceId },
-    context: Context,
-    info
-  ) {
+  async deleteResource(parent, { resourceId }, context: Context, info) {
     getUserId(context);
     return context.client.deleteResource({ id: resourceId });
   },

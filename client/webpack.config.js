@@ -1,8 +1,8 @@
-var path = require("path");
+var Dotenv = require("dotenv-webpack");
+var FaviconsWebpackPlugin = require("favicons-webpack-plugin");
 var fs = require("fs");
 var htmlPlugin = require("html-webpack-plugin");
-var FaviconsWebpackPlugin = require("favicons-webpack-plugin");
-var Dotenv = require("dotenv-webpack");
+var path = require("path");
 
 var SRC_DIR = path.join(__dirname, "./src");
 var DIST_DIR = path.join(__dirname, "./dist");
@@ -15,7 +15,7 @@ module.exports = (env, argv) => {
     // Where bundles should be emitted
     output: {
       path: DIST_DIR,
-      filename: "fhirball.bundle.js"
+      filename: "pyrog.bundle.js"
     },
     // By default, webpack only handles js and json files.
     // In order to process other types of files, one should use

@@ -51,7 +51,7 @@ import selectedNodeReducer from "../../services/selectedNode/reducer";
 const availableResources = require("../../graphql/queries/availableResources.graphql");
 const resourceAttributeTree = require("../../graphql/queries/resourceAttributeTree.graphql");
 const createResourceTreeInSource = require("../../graphql/mutations/createResourceTreeInSource.graphql");
-const deleteResourceTreeInSource = require("../../graphql/mutations/deleteResourceTreeInSource.graphql");
+const deleteResourceMutation = require("../../graphql/mutations/deleteResource.graphql");
 const updateResource = require("../../graphql/mutations/updateResource.graphql");
 
 export interface IMappingProps {
@@ -307,13 +307,13 @@ export default class MappingView extends React.Component<
                               }}
                             </Mutation>
                             <Mutation
-                              mutation={deleteResourceTreeInSource}
+                              mutation={deleteResourceMutation}
                               onCompleted={(data: any) => {
                                 this.props.toaster.show({
                                   icon: "layout-hierarchy",
                                   intent: "success",
                                   message: `Ressource ${
-                                    data.deleteResourceTreeInSource.fhirType
+                                    data.deleteResource.fhirType
                                   } supprimée pour ${
                                     selectedNode.source.name
                                   }.`,

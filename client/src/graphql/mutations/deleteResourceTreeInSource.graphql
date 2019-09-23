@@ -1,7 +1,0 @@
-mutation deleteResourceTreeInSource($resourceId: ID!) {
-  deleteResourceTreeInSource(resourceId: $resourceId) {
-    id
-    label
-    fhirType
-  }
-}
