@@ -23,6 +23,7 @@ const server = new GraphQLServer({
   // This issue can be tracked here:
   // https://github.com/prisma/graphqlgen/issues/15#issuecomment-461024244
   resolvers: resolvers as any,
+  resolverValidationOptions: { requireResolversForResolveType: false },
   context: request => ({
     ...request,
     binding: new PrismaBinding({
