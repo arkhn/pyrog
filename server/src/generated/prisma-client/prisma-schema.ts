@@ -1653,7 +1653,7 @@ export const typeDefs = /* GraphQL */ `
 
   type Resource {
     id: ID!
-    instance_name: String
+    instanceName: String
     fhirResourceName: String!
     primaryKeyOwner: String
     primaryKeyTable: String
@@ -1680,7 +1680,7 @@ export const typeDefs = /* GraphQL */ `
 
   input ResourceCreateInput {
     id: ID
-    instance_name: String
+    instanceName: String
     fhirResourceName: String!
     primaryKeyOwner: String
     primaryKeyTable: String
@@ -1701,7 +1701,7 @@ export const typeDefs = /* GraphQL */ `
 
   input ResourceCreateWithoutAttributesInput {
     id: ID
-    instance_name: String
+    instanceName: String
     fhirResourceName: String!
     primaryKeyOwner: String
     primaryKeyTable: String
@@ -1711,7 +1711,7 @@ export const typeDefs = /* GraphQL */ `
 
   input ResourceCreateWithoutSourceInput {
     id: ID
-    instance_name: String
+    instanceName: String
     fhirResourceName: String!
     primaryKeyOwner: String
     primaryKeyTable: String
@@ -1727,8 +1727,8 @@ export const typeDefs = /* GraphQL */ `
   enum ResourceOrderByInput {
     id_ASC
     id_DESC
-    instance_name_ASC
-    instance_name_DESC
+    instanceName_ASC
+    instanceName_DESC
     fhirResourceName_ASC
     fhirResourceName_DESC
     primaryKeyOwner_ASC
@@ -1745,7 +1745,7 @@ export const typeDefs = /* GraphQL */ `
 
   type ResourcePreviousValues {
     id: ID!
-    instance_name: String
+    instanceName: String
     fhirResourceName: String!
     primaryKeyOwner: String
     primaryKeyTable: String
@@ -1769,20 +1769,20 @@ export const typeDefs = /* GraphQL */ `
     id_not_starts_with: ID
     id_ends_with: ID
     id_not_ends_with: ID
-    instance_name: String
-    instance_name_not: String
-    instance_name_in: [String!]
-    instance_name_not_in: [String!]
-    instance_name_lt: String
-    instance_name_lte: String
-    instance_name_gt: String
-    instance_name_gte: String
-    instance_name_contains: String
-    instance_name_not_contains: String
-    instance_name_starts_with: String
-    instance_name_not_starts_with: String
-    instance_name_ends_with: String
-    instance_name_not_ends_with: String
+    instanceName: String
+    instanceName_not: String
+    instanceName_in: [String!]
+    instanceName_not_in: [String!]
+    instanceName_lt: String
+    instanceName_lte: String
+    instanceName_gt: String
+    instanceName_gte: String
+    instanceName_contains: String
+    instanceName_not_contains: String
+    instanceName_starts_with: String
+    instanceName_not_starts_with: String
+    instanceName_ends_with: String
+    instanceName_not_ends_with: String
     fhirResourceName: String
     fhirResourceName_not: String
     fhirResourceName_in: [String!]
@@ -1879,7 +1879,7 @@ export const typeDefs = /* GraphQL */ `
   }
 
   input ResourceUpdateInput {
-    instance_name: String
+    instanceName: String
     fhirResourceName: String
     primaryKeyOwner: String
     primaryKeyTable: String
@@ -1889,7 +1889,7 @@ export const typeDefs = /* GraphQL */ `
   }
 
   input ResourceUpdateManyDataInput {
-    instance_name: String
+    instanceName: String
     fhirResourceName: String
     primaryKeyOwner: String
     primaryKeyTable: String
@@ -1897,7 +1897,7 @@ export const typeDefs = /* GraphQL */ `
   }
 
   input ResourceUpdateManyMutationInput {
-    instance_name: String
+    instanceName: String
     fhirResourceName: String
     primaryKeyOwner: String
     primaryKeyTable: String
@@ -1931,7 +1931,7 @@ export const typeDefs = /* GraphQL */ `
   }
 
   input ResourceUpdateWithoutAttributesDataInput {
-    instance_name: String
+    instanceName: String
     fhirResourceName: String
     primaryKeyOwner: String
     primaryKeyTable: String
@@ -1940,7 +1940,7 @@ export const typeDefs = /* GraphQL */ `
   }
 
   input ResourceUpdateWithoutSourceDataInput {
-    instance_name: String
+    instanceName: String
     fhirResourceName: String
     primaryKeyOwner: String
     primaryKeyTable: String
@@ -1979,20 +1979,20 @@ export const typeDefs = /* GraphQL */ `
     id_not_starts_with: ID
     id_ends_with: ID
     id_not_ends_with: ID
-    instance_name: String
-    instance_name_not: String
-    instance_name_in: [String!]
-    instance_name_not_in: [String!]
-    instance_name_lt: String
-    instance_name_lte: String
-    instance_name_gt: String
-    instance_name_gte: String
-    instance_name_contains: String
-    instance_name_not_contains: String
-    instance_name_starts_with: String
-    instance_name_not_starts_with: String
-    instance_name_ends_with: String
-    instance_name_not_ends_with: String
+    instanceName: String
+    instanceName_not: String
+    instanceName_in: [String!]
+    instanceName_not_in: [String!]
+    instanceName_lt: String
+    instanceName_lte: String
+    instanceName_gt: String
+    instanceName_gte: String
+    instanceName_contains: String
+    instanceName_not_contains: String
+    instanceName_starts_with: String
+    instanceName_not_starts_with: String
+    instanceName_ends_with: String
+    instanceName_not_ends_with: String
     fhirResourceName: String
     fhirResourceName_not: String
     fhirResourceName_in: [String!]
