@@ -22,20 +22,20 @@ interface ISelectProps {
 
 export default class SourceSelect extends React.Component<ISelectProps, any> {
   private renderItem: ItemRenderer<ISource> = (
-    resource: ISource,
+    source: ISource,
     { handleClick, modifiers, query }
   ) => {
     return (
-      <MenuItem key={resource.id} onClick={handleClick} text={resource.name} />
+      <MenuItem key={source.id} onClick={handleClick} text={source.name} />
     );
   };
 
-  private filterByName: ItemPredicate<ISource> = (query, resource: ISource) => {
-    return `${resource.name.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0;
+  private filterByName: ItemPredicate<ISource> = (query, source: ISource) => {
+    return `${source.name.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0;
   };
 
-  private displayItem = function(resource: ISource): string {
-    return resource.name ? resource.name : "None";
+  private displayItem = function(source: ISource): string {
+    return source.name ? source.name : "None";
   };
 
   public render() {
