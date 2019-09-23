@@ -302,17 +302,7 @@ export default class MappingView extends React.Component<
                             disabled={!selectedNode.source}
                             intent={null}
                             inputItem={selectedAddResource}
-                            items={availableResourceNames.filter(
-                              (resource: any) => {
-                                return (
-                                  data &&
-                                  data.availableResources &&
-                                  data.availableResources
-                                    .map((resource: any) => resource.name)
-                                    .indexOf(resource.name) < 0
-                                );
-                              }
-                            )}
+                            items={availableResourceNames}
                             onChange={(resource: any) => {
                               dispatch(updateAddResource(resource));
                             }}
