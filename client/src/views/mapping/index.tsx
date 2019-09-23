@@ -157,6 +157,56 @@ export default class MappingView extends React.Component<
         <Navbar />
         <div id="mapping-explorer-container">
           <div id="main-container">
+            <div id="exploration-panel">
+              <InputColumns
+                selectedAttribute={selectedNode.attribute}
+                schema={
+                  selectedNode.source.name
+                    ? this.props.data.sourceSchemas.schemaBySourceName[
+                        selectedNode.source.name
+                      ]
+                    : {}
+                }
+                source={selectedNode.source}
+              />
+              <div id="column-selection">
+                <Tabs
+                  onChange={(tabId: TabId) => {
+                    this.setState({ selectedTabId: tabId });
+                  }}
+                  selectedTabId={selectedTabId}
+                >
+                  <Tab
+                    id="picker"
+                    panel={
+                      <ColumnPickingTab
+                        attribute={selectedNode.attribute}
+                        schema={
+                          selectedNode.source.name
+                            ? this.props.data.sourceSchemas.schemaBySourceName[
+                                selectedNode.source.name
+                              ]
+                            : {}
+                        }
+                        source={selectedNode.source}
+                      />
+                    }
+                    title="Simple Tools"
+                  />
+                  <Tab
+                    id="sql-parser"
+                    panel={<SQLRequestParserTab />}
+                    title="SQL Parser Tool"
+                  />
+                  <Tab
+                    id="mb"
+                    disabled
+                    panel={<ColumnSuggestionTab />}
+                    title="Column Suggestion Tool"
+                  />
+                </Tabs>
+              </div>
+            </div>
             <Query
               fetchPolicy={"network-only"}
               query={availableResources}
@@ -170,7 +220,7 @@ export default class MappingView extends React.Component<
             >
               {({ data, loading }: any) => {
                 return (
-                  <div id="left-part">
+                  <div id="fhir-panel">
                     <div id="fhir-attributes">
                       <div id="resource-selector">
                         <ResourceSelect
@@ -318,56 +368,6 @@ export default class MappingView extends React.Component<
                 );
               }}
             </Query>
-            <div id="right-part">
-              <InputColumns
-                selectedAttribute={selectedNode.attribute}
-                schema={
-                  selectedNode.source.name
-                    ? this.props.data.sourceSchemas.schemaBySourceName[
-                        selectedNode.source.name
-                      ]
-                    : {}
-                }
-                source={selectedNode.source}
-              />
-              <div id="column-selection">
-                <Tabs
-                  onChange={(tabId: TabId) => {
-                    this.setState({ selectedTabId: tabId });
-                  }}
-                  selectedTabId={selectedTabId}
-                >
-                  <Tab
-                    id="picker"
-                    panel={
-                      <ColumnPickingTab
-                        attribute={selectedNode.attribute}
-                        schema={
-                          selectedNode.source.name
-                            ? this.props.data.sourceSchemas.schemaBySourceName[
-                                selectedNode.source.name
-                              ]
-                            : {}
-                        }
-                        source={selectedNode.source}
-                      />
-                    }
-                    title="Simple Tools"
-                  />
-                  <Tab
-                    id="sql-parser"
-                    panel={<SQLRequestParserTab />}
-                    title="SQL Parser Tool"
-                  />
-                  <Tab
-                    id="mb"
-                    disabled
-                    panel={<ColumnSuggestionTab />}
-                    title="Column Suggestion Tool"
-                  />
-                </Tabs>
-              </div>
-            </div>
           </div>
         </div>
       </div>
