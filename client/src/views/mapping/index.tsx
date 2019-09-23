@@ -2,6 +2,7 @@ import {
   Button,
   ControlGroup,
   FormGroup,
+  Icon,
   InputGroup,
   Spinner,
   Tab,
@@ -48,6 +49,7 @@ const allSources = require("../../graphql/queries/allSources.graphql");
 const availableResources = require("../../graphql/queries/availableResources.graphql");
 const resourceAttributeTree = require("../../graphql/queries/resourceAttributeTree.graphql");
 const createResourceTreeInSource = require("../../graphql/mutations/createResourceTreeInSource.graphql");
+const updateResource = require("../../graphql/mutations/updateResource.graphql");
 
 // LOGO
 const arkhnLogoWhite = require("../../assets/img/arkhn_logo_only_white.svg") as string;
@@ -219,27 +221,90 @@ export default class MappingView extends React.Component<
                   <div id="fhir-panel">
                     <div id="fhir-attributes">
                       <div id="resource-selector">
-                        <ResourceSelect
-                          disabled={!selectedNode.source}
-                          icon={"layout-hierarchy"}
-                          inputItem={selectedNode.resource}
-                          intent={"primary"}
-                          items={
-                            data && data.availableResources
-                              ? data.availableResources
-                              : []
-                          }
-                          loading={loading}
-                          onChange={(resource: any) => {
-                            dispatch(
-                              updateFhirResource(resource.id, resource.name)
-                            );
-                            this.updateLocationSearch(
-                              "resourceId",
-                              resource.id
-                            );
-                          }}
-                        />
+                        <FormGroup>
+                          <ControlGroup>
+                            <ResourceSelect
+                              disabled={!selectedNode.source}
+                              icon={"layout-hierarchy"}
+                              inputItem={selectedNode.resource}
+                              intent={"primary"}
+                              items={
+                                data && data.availableResources
+                                  ? data.availableResources
+                                  : []
+                              }
+                              loading={loading}
+                              onChange={(resource: any) => {
+                                dispatch(
+                                  updateFhirResource(
+                                    resource.id,
+                                    resource.fhirResourceName,
+                                    resource.instanceName
+                                  )
+                                );
+                                this.updateLocationSearch(
+                                  "resourceId",
+                                  resource.id
+                                );
+                              }}
+                            />
+                            <Mutation mutation={updateResource}>
+                              {(
+                                updateResourceInstanceName: any,
+                                { data, loading }: any
+                              ) => {
+                                const value =
+                                  selectedNode.resource.instanceName || "";
+
+                                return (
+                                  <InputGroup
+                                    onChange={(
+                                      event: React.ChangeEvent<HTMLInputElement>
+                                    ) => {
+                                      const newValue = event.target.value;
+                                      dispatch(
+                                        updateFhirResource(
+                                          selectedNode.resource.id,
+                                          selectedNode.resource
+                                            .fhirResourceName,
+                                          newValue
+                                        )
+                                      );
+                                    }}
+                                    onKeyPress={event => {
+                                      if (event.key === "Enter") {
+                                        updateResourceInstanceName({
+                                          variables: {
+                                            where: {
+                                              id: selectedNode.resource.id
+                                            },
+                                            data: {
+                                              instanceName: value
+                                            }
+                                          }
+                                        });
+                                      }
+                                    }}
+                                    type="text"
+                                    placeholder="Name..."
+                                    value={value}
+                                    rightElement={
+                                      loading ? (
+                                        <Spinner size={15} />
+                                      ) : data ? (
+                                        <Icon
+                                          icon="small-tick"
+                                          intent="primary"
+                                        />
+                                      ) : null
+                                    }
+                                  />
+                                );
+                              }}
+                            </Mutation>
+                            <Button icon={"trash"} intent="danger" />
+                          </ControlGroup>
+                        </FormGroup>
                       </div>
                       <div id="fhir-resource-tree">
                         {selectedNode.resource.fhirResourceName ? (
