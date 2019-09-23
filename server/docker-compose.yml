@@ -26,12 +26,13 @@ services:
             port: 5432
             user: prisma
             password: prisma
-            migrations: true
     depends_on:
       - postgres-db
   postgres-db:
     image: postgres
     restart: "no"
+    ports:
+      - "9391:5432"
     environment:
       POSTGRES_USER: prisma
       POSTGRES_PASSWORD: prisma
