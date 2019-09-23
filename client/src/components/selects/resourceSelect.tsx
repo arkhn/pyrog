@@ -12,7 +12,8 @@ import TSelect from "./TSelect";
 
 interface IResource {
   id: string;
-  name: string;
+  instanceName: string;
+  fhirResourceName: string;
 }
 
 interface ISelectProps {
@@ -31,7 +32,12 @@ export default class ResourceSelect extends React.Component<ISelectProps, any> {
     { handleClick, modifiers, query }
   ) => {
     return (
-      <MenuItem key={resource.id} onClick={handleClick} text={resource.name} />
+      <MenuItem
+        key={resource.id}
+        onClick={handleClick}
+        text={resource.fhirResourceName}
+        label={resource.instanceName}
+      />
     );
   };
 
@@ -39,7 +45,11 @@ export default class ResourceSelect extends React.Component<ISelectProps, any> {
     query,
     resource: IResource
   ) => {
-    return `${resource.name.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0;
+    return (
+      `${resource.fhirResourceName.toLowerCase()}`.indexOf(
+        query.toLowerCase()
+      ) >= 0
+    );
   };
 
   private sortItems: ItemListPredicate<IResource> = (
@@ -47,8 +57,8 @@ export default class ResourceSelect extends React.Component<ISelectProps, any> {
     resources: IResource[]
   ) => {
     resources.sort((r1, r2) => {
-      const name1 = r1.name.toLowerCase();
-      const name2 = r2.name.toLowerCase();
+      const name1 = r1.fhirResourceName.toLowerCase();
+      const name2 = r2.fhirResourceName.toLowerCase();
       if (name1 < name2) return -1;
       if (name1 > name2) return 1;
       return 0;
@@ -57,7 +67,7 @@ export default class ResourceSelect extends React.Component<ISelectProps, any> {
   };
 
   private displayItem = function(resource: IResource): string {
-    return resource.name ? resource.name : "None";
+    return resource.fhirResourceName ? resource.fhirResourceName : "None";
   };
 
   public render() {

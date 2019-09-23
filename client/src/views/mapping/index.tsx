@@ -29,10 +29,6 @@ import {
 import { availableResourceNames } from "./reducer";
 
 // COMPONENTS
-import ColumnPicker from "../../components/columnPicker";
-import StringSelect from "../../components/selects/stringSelect";
-import TSelect from "../../components/selects/TSelect";
-import SourceSelect from "../../components/selects/sourceSelect";
 import ResourceSelect from "../../components/selects/resourceSelect";
 import AddResourceSelect from "../../components/selects/addResourceSelect";
 import FhirResourceTree from "../../components/fhirResourceTree";
@@ -246,7 +242,7 @@ export default class MappingView extends React.Component<
                         />
                       </div>
                       <div id="fhir-resource-tree">
-                        {selectedNode.resource.name ? (
+                        {selectedNode.resource.fhirResourceName ? (
                           <Query
                             fetchPolicy={"network-only"}
                             query={resourceAttributeTree}
@@ -328,7 +324,8 @@ export default class MappingView extends React.Component<
                                 icon: "layout-hierarchy",
                                 intent: "success",
                                 message: `Ressource ${
-                                  data.createResourceTreeInSource.name
+                                  data.createResourceTreeInSource
+                                    .fhirResourceName
                                 } créée pour ${selectedNode.source.name}.`,
                                 timeout: 4000
                               });

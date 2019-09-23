@@ -29,7 +29,8 @@ export interface ISelectedSource {
 
 export interface ISelectedResource {
   id: string;
-  name: string;
+  instanceName: string;
+  fhirResourceName: string;
 }
 
 export interface ISelectedAttribute {
