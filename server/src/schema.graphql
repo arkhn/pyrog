@@ -34,6 +34,10 @@ type Mutation {
   ): Join!
   deleteJoinAndUpdateInputColumn(inputColumnId: ID!, joinId: ID!): Join!
 
+  updateResource(
+    where: ResourceWhereUniqueInput!
+    data: ResourceUpdateInput
+  ): Resource!
   updateAttribute(id: ID!, data: AttributeUpdateInput): Attribute!
   updateInputColumn(id: ID!, data: InputColumnUpdateInput): InputColumn!
   updateJoin(id: ID!, data: JoinUpdateInput): Join!

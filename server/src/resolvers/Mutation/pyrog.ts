@@ -112,23 +112,10 @@ export const pyrogMutation = {
 
     return join;
   },
+  updateResource: checkAuth(forwardTo("binding")),
   updateAttribute: checkAuth(forwardTo("binding")),
-  async updateInputColumn(parent, { id, data }, context: Context) {
-    getUserId(context);
-
-    return await context.client.updateInputColumn({
-      data,
-      where: { id }
-    });
-  },
-  async updateJoin(parent, { id, data }, context: Context) {
-    getUserId(context);
-
-    return await context.client.updateJoin({
-      data,
-      where: { id }
-    });
-  },
+  updateInputColumn: checkAuth(forwardTo("binding")),
+  updateJoin: checkAuth(forwardTo("binding")),
   async createResourceTreeInSource(
     parent,
     { sourceId, sourceName, resourceName },
