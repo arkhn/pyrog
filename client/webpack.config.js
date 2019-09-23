@@ -1,7 +1,8 @@
-var path = require("path");
-var htmlPlugin = require("html-webpack-plugin");
-var FaviconsWebpackPlugin = require("favicons-webpack-plugin");
 var Dotenv = require("dotenv-webpack");
+var FaviconsWebpackPlugin = require("favicons-webpack-plugin");
+var fs = require("fs");
+var htmlPlugin = require("html-webpack-plugin");
+var path = require("path");
 
 var SRC_DIR = path.join(__dirname, "./src");
 var DIST_DIR = path.join(__dirname, "./dist");
