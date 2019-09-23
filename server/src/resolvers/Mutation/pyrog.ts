@@ -136,19 +136,14 @@ export const pyrogMutation = {
   ) {
     getUserId(context);
 
-    const resourceAlreadyExists = sourceName
-      ? await context.client.$exists.resource({
-          name: resourceName,
-          source: { id: sourceId }
-        })
-      : await context.client.$exists.resource({
-          name: resourceName,
-          source: { name: sourceName }
-        });
-
-    if (resourceAlreadyExists) {
-      throw new CustomError(`${resourceName} already exists for this Source`);
-    }
+    // Count similar fhir resources for the given source
+    let otherFhirResourceIntances = 0;
+    otherFhirResourceIntances = (await context.client.resources({
+      where: {
+        fhirResourceName: resourceName,
+        source: sourceName ? { name: sourceName } : { id: sourceId }
+      }
+    })).length;
 
     return fetch(
       `http://localhost:${
@@ -159,19 +154,24 @@ export const pyrogMutation = {
         return response.json();
       })
       .then((response: any) => {
-        if (sourceName) {
-          return context.client.createResource({
-            source: { connect: { name: sourceName } },
-            name: resourceName,
-            attributes: response["attributes"]
-          });
-        } else {
-          return context.client.createResource({
-            source: { connect: { id: sourceId } },
-            name: resourceName,
-            attributes: response["attributes"]
-          });
+        let newResource = {
+          fhirResourceName: resourceName,
+          attributes: response["attributes"],
+          source: sourceName
+            ? { connect: { name: sourceName } }
+            : { connect: { id: sourceId } }
+        };
+
+        // When similar fhir resources already exist
+        // for the given source, we give this new instance
+        // a defualt instanceName.
+        if (otherFhirResourceIntances) {
+          newResource[
+            "instanceName"
+          ] = `${resourceName}_${otherFhirResourceIntances}`;
         }
+
+        return context.client.createResource(newResource);
       })
       .catch((error: any) => {
         console.log(error);
