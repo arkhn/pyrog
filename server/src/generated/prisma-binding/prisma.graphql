@@ -1,5 +1,5 @@
 # source: http://0.0.0.0:4466
-# timestamp: Tue Apr 23 2019 10:54:09 GMT+0200 (Central European Summer Time)
+# timestamp: Mon Sep 23 2019 11:18:26 GMT+0200 (Central European Summer Time)
 
 type AggregateAttribute {
   count: Int!
@@ -4167,7 +4167,8 @@ type Query {
 
 type Resource implements Node {
   id: ID!
-  name: String!
+  instance_name: String
+  fhirResourceName: String!
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
@@ -4203,7 +4204,8 @@ type ResourceConnection {
 
 input ResourceCreateInput {
   id: ID
-  name: String!
+  instance_name: String
+  fhirResourceName: String!
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
@@ -4223,7 +4225,8 @@ input ResourceCreateOneWithoutAttributesInput {
 
 input ResourceCreateWithoutAttributesInput {
   id: ID
-  name: String!
+  instance_name: String
+  fhirResourceName: String!
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
@@ -4232,7 +4235,8 @@ input ResourceCreateWithoutAttributesInput {
 
 input ResourceCreateWithoutSourceInput {
   id: ID
-  name: String!
+  instance_name: String
+  fhirResourceName: String!
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
@@ -4257,8 +4261,10 @@ type ResourceEdge {
 enum ResourceOrderByInput {
   id_ASC
   id_DESC
-  name_ASC
-  name_DESC
+  instance_name_ASC
+  instance_name_DESC
+  fhirResourceName_ASC
+  fhirResourceName_DESC
   primaryKeyOwner_ASC
   primaryKeyOwner_DESC
   primaryKeyTable_ASC
@@ -4273,7 +4279,8 @@ enum ResourceOrderByInput {
 
 type ResourcePreviousValues {
   id: ID!
-  name: String!
+  instance_name: String
+  fhirResourceName: String!
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
@@ -4362,72 +4369,138 @@ input ResourceScalarWhereInput {
   All values not ending with the given string.
   """
   id_not_ends_with: ID
-  name: String
+  instance_name: String
 
   """
   All values that are not equal to given value.
   """
-  name_not: String
+  instance_name_not: String
 
   """
   All values that are contained in given list.
   """
-  name_in: [String!]
+  instance_name_in: [String!]
 
   """
   All values that are not contained in given list.
   """
-  name_not_in: [String!]
+  instance_name_not_in: [String!]
 
   """
   All values less than the given value.
   """
-  name_lt: String
+  instance_name_lt: String
 
   """
   All values less than or equal the given value.
   """
-  name_lte: String
+  instance_name_lte: String
 
   """
   All values greater than the given value.
   """
-  name_gt: String
+  instance_name_gt: String
 
   """
   All values greater than or equal the given value.
   """
-  name_gte: String
+  instance_name_gte: String
 
   """
   All values containing the given string.
   """
-  name_contains: String
+  instance_name_contains: String
 
   """
   All values not containing the given string.
   """
-  name_not_contains: String
+  instance_name_not_contains: String
 
   """
   All values starting with the given string.
   """
-  name_starts_with: String
+  instance_name_starts_with: String
 
   """
   All values not starting with the given string.
   """
-  name_not_starts_with: String
+  instance_name_not_starts_with: String
 
   """
   All values ending with the given string.
   """
-  name_ends_with: String
+  instance_name_ends_with: String
 
   """
   All values not ending with the given string.
   """
-  name_not_ends_with: String
+  instance_name_not_ends_with: String
+  fhirResourceName: String
+
+  """
+  All values that are not equal to given value.
+  """
+  fhirResourceName_not: String
+
+  """
+  All values that are contained in given list.
+  """
+  fhirResourceName_in: [String!]
+
+  """
+  All values that are not contained in given list.
+  """
+  fhirResourceName_not_in: [String!]
+
+  """
+  All values less than the given value.
+  """
+  fhirResourceName_lt: String
+
+  """
+  All values less than or equal the given value.
+  """
+  fhirResourceName_lte: String
+
+  """
+  All values greater than the given value.
+  """
+  fhirResourceName_gt: String
+
+  """
+  All values greater than or equal the given value.
+  """
+  fhirResourceName_gte: String
+
+  """
+  All values containing the given string.
+  """
+  fhirResourceName_contains: String
+
+  """
+  All values not containing the given string.
+  """
+  fhirResourceName_not_contains: String
+
+  """
+  All values starting with the given string.
+  """
+  fhirResourceName_starts_with: String
+
+  """
+  All values not starting with the given string.
+  """
+  fhirResourceName_not_starts_with: String
+
+  """
+  All values ending with the given string.
+  """
+  fhirResourceName_ends_with: String
+
+  """
+  All values not ending with the given string.
+  """
+  fhirResourceName_not_ends_with: String
   primaryKeyOwner: String
 
   """
@@ -4746,7 +4819,8 @@ input ResourceSubscriptionWhereInput {
 }
 
 input ResourceUpdateInput {
-  name: String
+  instance_name: String
+  fhirResourceName: String
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
@@ -4755,14 +4829,16 @@ input ResourceUpdateInput {
 }
 
 input ResourceUpdateManyDataInput {
-  name: String
+  instance_name: String
+  fhirResourceName: String
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
 }
 
 input ResourceUpdateManyMutationInput {
-  name: String
+  instance_name: String
+  fhirResourceName: String
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
@@ -4795,7 +4871,8 @@ input ResourceUpdateOneWithoutAttributesInput {
 }
 
 input ResourceUpdateWithoutAttributesDataInput {
-  name: String
+  instance_name: String
+  fhirResourceName: String
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
@@ -4803,7 +4880,8 @@ input ResourceUpdateWithoutAttributesDataInput {
 }
 
 input ResourceUpdateWithoutSourceDataInput {
-  name: String
+  instance_name: String
+  fhirResourceName: String
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
@@ -4907,72 +4985,138 @@ input ResourceWhereInput {
   All values not ending with the given string.
   """
   id_not_ends_with: ID
-  name: String
+  instance_name: String
 
   """
   All values that are not equal to given value.
   """
-  name_not: String
+  instance_name_not: String
 
   """
   All values that are contained in given list.
   """
-  name_in: [String!]
+  instance_name_in: [String!]
 
   """
   All values that are not contained in given list.
   """
-  name_not_in: [String!]
+  instance_name_not_in: [String!]
 
   """
   All values less than the given value.
   """
-  name_lt: String
+  instance_name_lt: String
 
   """
   All values less than or equal the given value.
   """
-  name_lte: String
+  instance_name_lte: String
 
   """
   All values greater than the given value.
   """
-  name_gt: String
+  instance_name_gt: String
 
   """
   All values greater than or equal the given value.
   """
-  name_gte: String
+  instance_name_gte: String
 
   """
   All values containing the given string.
   """
-  name_contains: String
+  instance_name_contains: String
 
   """
   All values not containing the given string.
   """
-  name_not_contains: String
+  instance_name_not_contains: String
 
   """
   All values starting with the given string.
   """
-  name_starts_with: String
+  instance_name_starts_with: String
 
   """
   All values not starting with the given string.
   """
-  name_not_starts_with: String
+  instance_name_not_starts_with: String
 
   """
   All values ending with the given string.
   """
-  name_ends_with: String
+  instance_name_ends_with: String
 
   """
   All values not ending with the given string.
   """
-  name_not_ends_with: String
+  instance_name_not_ends_with: String
+  fhirResourceName: String
+
+  """
+  All values that are not equal to given value.
+  """
+  fhirResourceName_not: String
+
+  """
+  All values that are contained in given list.
+  """
+  fhirResourceName_in: [String!]
+
+  """
+  All values that are not contained in given list.
+  """
+  fhirResourceName_not_in: [String!]
+
+  """
+  All values less than the given value.
+  """
+  fhirResourceName_lt: String
+
+  """
+  All values less than or equal the given value.
+  """
+  fhirResourceName_lte: String
+
+  """
+  All values greater than the given value.
+  """
+  fhirResourceName_gt: String
+
+  """
+  All values greater than or equal the given value.
+  """
+  fhirResourceName_gte: String
+
+  """
+  All values containing the given string.
+  """
+  fhirResourceName_contains: String
+
+  """
+  All values not containing the given string.
+  """
+  fhirResourceName_not_contains: String
+
+  """
+  All values starting with the given string.
+  """
+  fhirResourceName_starts_with: String
+
+  """
+  All values not starting with the given string.
+  """
+  fhirResourceName_not_starts_with: String
+
+  """
+  All values ending with the given string.
+  """
+  fhirResourceName_ends_with: String
+
+  """
+  All values not ending with the given string.
+  """
+  fhirResourceName_not_ends_with: String
   primaryKeyOwner: String
 
   """

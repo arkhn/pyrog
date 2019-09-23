@@ -3237,7 +3237,8 @@ type Query {
 
 type Resource implements Node {
   id: ID!
-  name: String!
+  instance_name: String
+  fhirResourceName: String!
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
@@ -3259,7 +3260,8 @@ type ResourceConnection {
 
 input ResourceCreateInput {
   id: ID
-  name: String!
+  instance_name: String
+  fhirResourceName: String!
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
@@ -3279,7 +3281,8 @@ input ResourceCreateOneWithoutAttributesInput {
 
 input ResourceCreateWithoutAttributesInput {
   id: ID
-  name: String!
+  instance_name: String
+  fhirResourceName: String!
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
@@ -3288,7 +3291,8 @@ input ResourceCreateWithoutAttributesInput {
 
 input ResourceCreateWithoutSourceInput {
   id: ID
-  name: String!
+  instance_name: String
+  fhirResourceName: String!
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
@@ -3307,8 +3311,10 @@ type ResourceEdge {
 enum ResourceOrderByInput {
   id_ASC
   id_DESC
-  name_ASC
-  name_DESC
+  instance_name_ASC
+  instance_name_DESC
+  fhirResourceName_ASC
+  fhirResourceName_DESC
   primaryKeyOwner_ASC
   primaryKeyOwner_DESC
   primaryKeyTable_ASC
@@ -3323,7 +3329,8 @@ enum ResourceOrderByInput {
 
 type ResourcePreviousValues {
   id: ID!
-  name: String!
+  instance_name: String
+  fhirResourceName: String!
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
@@ -3380,46 +3387,86 @@ input ResourceScalarWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
-  name: String
+  instance_name: String
 
   """All values that are not equal to given value."""
-  name_not: String
+  instance_name_not: String
 
   """All values that are contained in given list."""
-  name_in: [String!]
+  instance_name_in: [String!]
 
   """All values that are not contained in given list."""
-  name_not_in: [String!]
+  instance_name_not_in: [String!]
 
   """All values less than the given value."""
-  name_lt: String
+  instance_name_lt: String
 
   """All values less than or equal the given value."""
-  name_lte: String
+  instance_name_lte: String
 
   """All values greater than the given value."""
-  name_gt: String
+  instance_name_gt: String
 
   """All values greater than or equal the given value."""
-  name_gte: String
+  instance_name_gte: String
 
   """All values containing the given string."""
-  name_contains: String
+  instance_name_contains: String
 
   """All values not containing the given string."""
-  name_not_contains: String
+  instance_name_not_contains: String
 
   """All values starting with the given string."""
-  name_starts_with: String
+  instance_name_starts_with: String
 
   """All values not starting with the given string."""
-  name_not_starts_with: String
+  instance_name_not_starts_with: String
 
   """All values ending with the given string."""
-  name_ends_with: String
+  instance_name_ends_with: String
 
   """All values not ending with the given string."""
-  name_not_ends_with: String
+  instance_name_not_ends_with: String
+  fhirResourceName: String
+
+  """All values that are not equal to given value."""
+  fhirResourceName_not: String
+
+  """All values that are contained in given list."""
+  fhirResourceName_in: [String!]
+
+  """All values that are not contained in given list."""
+  fhirResourceName_not_in: [String!]
+
+  """All values less than the given value."""
+  fhirResourceName_lt: String
+
+  """All values less than or equal the given value."""
+  fhirResourceName_lte: String
+
+  """All values greater than the given value."""
+  fhirResourceName_gt: String
+
+  """All values greater than or equal the given value."""
+  fhirResourceName_gte: String
+
+  """All values containing the given string."""
+  fhirResourceName_contains: String
+
+  """All values not containing the given string."""
+  fhirResourceName_not_contains: String
+
+  """All values starting with the given string."""
+  fhirResourceName_starts_with: String
+
+  """All values not starting with the given string."""
+  fhirResourceName_not_starts_with: String
+
+  """All values ending with the given string."""
+  fhirResourceName_ends_with: String
+
+  """All values not ending with the given string."""
+  fhirResourceName_not_ends_with: String
   primaryKeyOwner: String
 
   """All values that are not equal to given value."""
@@ -3624,7 +3671,8 @@ input ResourceSubscriptionWhereInput {
 }
 
 input ResourceUpdateInput {
-  name: String
+  instance_name: String
+  fhirResourceName: String
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
@@ -3633,14 +3681,16 @@ input ResourceUpdateInput {
 }
 
 input ResourceUpdateManyDataInput {
-  name: String
+  instance_name: String
+  fhirResourceName: String
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
 }
 
 input ResourceUpdateManyMutationInput {
-  name: String
+  instance_name: String
+  fhirResourceName: String
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
@@ -3673,7 +3723,8 @@ input ResourceUpdateOneWithoutAttributesInput {
 }
 
 input ResourceUpdateWithoutAttributesDataInput {
-  name: String
+  instance_name: String
+  fhirResourceName: String
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
@@ -3681,7 +3732,8 @@ input ResourceUpdateWithoutAttributesDataInput {
 }
 
 input ResourceUpdateWithoutSourceDataInput {
-  name: String
+  instance_name: String
+  fhirResourceName: String
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String
@@ -3753,46 +3805,86 @@ input ResourceWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
-  name: String
+  instance_name: String
 
   """All values that are not equal to given value."""
-  name_not: String
+  instance_name_not: String
 
   """All values that are contained in given list."""
-  name_in: [String!]
+  instance_name_in: [String!]
 
   """All values that are not contained in given list."""
-  name_not_in: [String!]
+  instance_name_not_in: [String!]
 
   """All values less than the given value."""
-  name_lt: String
+  instance_name_lt: String
 
   """All values less than or equal the given value."""
-  name_lte: String
+  instance_name_lte: String
 
   """All values greater than the given value."""
-  name_gt: String
+  instance_name_gt: String
 
   """All values greater than or equal the given value."""
-  name_gte: String
+  instance_name_gte: String
 
   """All values containing the given string."""
-  name_contains: String
+  instance_name_contains: String
 
   """All values not containing the given string."""
-  name_not_contains: String
+  instance_name_not_contains: String
 
   """All values starting with the given string."""
-  name_starts_with: String
+  instance_name_starts_with: String
 
   """All values not starting with the given string."""
-  name_not_starts_with: String
+  instance_name_not_starts_with: String
 
   """All values ending with the given string."""
-  name_ends_with: String
+  instance_name_ends_with: String
 
   """All values not ending with the given string."""
-  name_not_ends_with: String
+  instance_name_not_ends_with: String
+  fhirResourceName: String
+
+  """All values that are not equal to given value."""
+  fhirResourceName_not: String
+
+  """All values that are contained in given list."""
+  fhirResourceName_in: [String!]
+
+  """All values that are not contained in given list."""
+  fhirResourceName_not_in: [String!]
+
+  """All values less than the given value."""
+  fhirResourceName_lt: String
+
+  """All values less than or equal the given value."""
+  fhirResourceName_lte: String
+
+  """All values greater than the given value."""
+  fhirResourceName_gt: String
+
+  """All values greater than or equal the given value."""
+  fhirResourceName_gte: String
+
+  """All values containing the given string."""
+  fhirResourceName_contains: String
+
+  """All values not containing the given string."""
+  fhirResourceName_not_contains: String
+
+  """All values starting with the given string."""
+  fhirResourceName_starts_with: String
+
+  """All values not starting with the given string."""
+  fhirResourceName_not_starts_with: String
+
+  """All values ending with the given string."""
+  fhirResourceName_ends_with: String
+
+  """All values not ending with the given string."""
+  fhirResourceName_not_ends_with: String
   primaryKeyOwner: String
 
   """All values that are not equal to given value."""
@@ -4677,8 +4769,10 @@ export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 export type ResourceOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "name_ASC"
-  | "name_DESC"
+  | "instance_name_ASC"
+  | "instance_name_DESC"
+  | "fhirResourceName_ASC"
+  | "fhirResourceName_DESC"
   | "primaryKeyOwner_ASC"
   | "primaryKeyOwner_DESC"
   | "primaryKeyTable_ASC"
@@ -5978,7 +6072,8 @@ export interface JoinWhereUniqueInput {
 
 export interface ResourceCreateInput {
   id?: ID_Input | null;
-  name: String;
+  instance_name?: String | null;
+  fhirResourceName: String;
   primaryKeyOwner?: String | null;
   primaryKeyTable?: String | null;
   primaryKeyColumn?: String | null;
@@ -6001,7 +6096,8 @@ export interface ResourceCreateOneWithoutAttributesInput {
 
 export interface ResourceCreateWithoutAttributesInput {
   id?: ID_Input | null;
-  name: String;
+  instance_name?: String | null;
+  fhirResourceName: String;
   primaryKeyOwner?: String | null;
   primaryKeyTable?: String | null;
   primaryKeyColumn?: String | null;
@@ -6010,7 +6106,8 @@ export interface ResourceCreateWithoutAttributesInput {
 
 export interface ResourceCreateWithoutSourceInput {
   id?: ID_Input | null;
-  name: String;
+  instance_name?: String | null;
+  fhirResourceName: String;
   primaryKeyOwner?: String | null;
   primaryKeyTable?: String | null;
   primaryKeyColumn?: String | null;
@@ -6035,20 +6132,34 @@ export interface ResourceScalarWhereInput {
   id_not_starts_with?: ID_Input | null;
   id_ends_with?: ID_Input | null;
   id_not_ends_with?: ID_Input | null;
-  name?: String | null;
-  name_not?: String | null;
-  name_in?: String[] | String | null;
-  name_not_in?: String[] | String | null;
-  name_lt?: String | null;
-  name_lte?: String | null;
-  name_gt?: String | null;
-  name_gte?: String | null;
-  name_contains?: String | null;
-  name_not_contains?: String | null;
-  name_starts_with?: String | null;
-  name_not_starts_with?: String | null;
-  name_ends_with?: String | null;
-  name_not_ends_with?: String | null;
+  instance_name?: String | null;
+  instance_name_not?: String | null;
+  instance_name_in?: String[] | String | null;
+  instance_name_not_in?: String[] | String | null;
+  instance_name_lt?: String | null;
+  instance_name_lte?: String | null;
+  instance_name_gt?: String | null;
+  instance_name_gte?: String | null;
+  instance_name_contains?: String | null;
+  instance_name_not_contains?: String | null;
+  instance_name_starts_with?: String | null;
+  instance_name_not_starts_with?: String | null;
+  instance_name_ends_with?: String | null;
+  instance_name_not_ends_with?: String | null;
+  fhirResourceName?: String | null;
+  fhirResourceName_not?: String | null;
+  fhirResourceName_in?: String[] | String | null;
+  fhirResourceName_not_in?: String[] | String | null;
+  fhirResourceName_lt?: String | null;
+  fhirResourceName_lte?: String | null;
+  fhirResourceName_gt?: String | null;
+  fhirResourceName_gte?: String | null;
+  fhirResourceName_contains?: String | null;
+  fhirResourceName_not_contains?: String | null;
+  fhirResourceName_starts_with?: String | null;
+  fhirResourceName_not_starts_with?: String | null;
+  fhirResourceName_ends_with?: String | null;
+  fhirResourceName_not_ends_with?: String | null;
   primaryKeyOwner?: String | null;
   primaryKeyOwner_not?: String | null;
   primaryKeyOwner_in?: String[] | String | null;
@@ -6127,7 +6238,8 @@ export interface ResourceSubscriptionWhereInput {
 }
 
 export interface ResourceUpdateInput {
-  name?: String | null;
+  instance_name?: String | null;
+  fhirResourceName?: String | null;
   primaryKeyOwner?: String | null;
   primaryKeyTable?: String | null;
   primaryKeyColumn?: String | null;
@@ -6136,14 +6248,16 @@ export interface ResourceUpdateInput {
 }
 
 export interface ResourceUpdateManyDataInput {
-  name?: String | null;
+  instance_name?: String | null;
+  fhirResourceName?: String | null;
   primaryKeyOwner?: String | null;
   primaryKeyTable?: String | null;
   primaryKeyColumn?: String | null;
 }
 
 export interface ResourceUpdateManyMutationInput {
-  name?: String | null;
+  instance_name?: String | null;
+  fhirResourceName?: String | null;
   primaryKeyOwner?: String | null;
   primaryKeyTable?: String | null;
   primaryKeyColumn?: String | null;
@@ -6188,7 +6302,8 @@ export interface ResourceUpdateOneWithoutAttributesInput {
 }
 
 export interface ResourceUpdateWithoutAttributesDataInput {
-  name?: String | null;
+  instance_name?: String | null;
+  fhirResourceName?: String | null;
   primaryKeyOwner?: String | null;
   primaryKeyTable?: String | null;
   primaryKeyColumn?: String | null;
@@ -6196,7 +6311,8 @@ export interface ResourceUpdateWithoutAttributesDataInput {
 }
 
 export interface ResourceUpdateWithoutSourceDataInput {
-  name?: String | null;
+  instance_name?: String | null;
+  fhirResourceName?: String | null;
   primaryKeyOwner?: String | null;
   primaryKeyTable?: String | null;
   primaryKeyColumn?: String | null;
@@ -6237,20 +6353,34 @@ export interface ResourceWhereInput {
   id_not_starts_with?: ID_Input | null;
   id_ends_with?: ID_Input | null;
   id_not_ends_with?: ID_Input | null;
-  name?: String | null;
-  name_not?: String | null;
-  name_in?: String[] | String | null;
-  name_not_in?: String[] | String | null;
-  name_lt?: String | null;
-  name_lte?: String | null;
-  name_gt?: String | null;
-  name_gte?: String | null;
-  name_contains?: String | null;
-  name_not_contains?: String | null;
-  name_starts_with?: String | null;
-  name_not_starts_with?: String | null;
-  name_ends_with?: String | null;
-  name_not_ends_with?: String | null;
+  instance_name?: String | null;
+  instance_name_not?: String | null;
+  instance_name_in?: String[] | String | null;
+  instance_name_not_in?: String[] | String | null;
+  instance_name_lt?: String | null;
+  instance_name_lte?: String | null;
+  instance_name_gt?: String | null;
+  instance_name_gte?: String | null;
+  instance_name_contains?: String | null;
+  instance_name_not_contains?: String | null;
+  instance_name_starts_with?: String | null;
+  instance_name_not_starts_with?: String | null;
+  instance_name_ends_with?: String | null;
+  instance_name_not_ends_with?: String | null;
+  fhirResourceName?: String | null;
+  fhirResourceName_not?: String | null;
+  fhirResourceName_in?: String[] | String | null;
+  fhirResourceName_not_in?: String[] | String | null;
+  fhirResourceName_lt?: String | null;
+  fhirResourceName_lte?: String | null;
+  fhirResourceName_gt?: String | null;
+  fhirResourceName_gte?: String | null;
+  fhirResourceName_contains?: String | null;
+  fhirResourceName_not_contains?: String | null;
+  fhirResourceName_starts_with?: String | null;
+  fhirResourceName_not_starts_with?: String | null;
+  fhirResourceName_ends_with?: String | null;
+  fhirResourceName_not_ends_with?: String | null;
   primaryKeyOwner?: String | null;
   primaryKeyOwner_not?: String | null;
   primaryKeyOwner_in?: String[] | String | null;
@@ -6760,7 +6890,8 @@ export interface PageInfo {
 
 export interface Resource extends Node {
   id: ID_Output;
-  name: String;
+  instance_name?: String | null;
+  fhirResourceName: String;
   primaryKeyOwner?: String | null;
   primaryKeyTable?: String | null;
   primaryKeyColumn?: String | null;
@@ -6791,7 +6922,8 @@ export interface ResourceEdge {
 
 export interface ResourcePreviousValues {
   id: ID_Output;
-  name: String;
+  instance_name?: String | null;
+  fhirResourceName: String;
   primaryKeyOwner?: String | null;
   primaryKeyTable?: String | null;
   primaryKeyColumn?: String | null;
@@ -6909,7 +7041,7 @@ export type ID_Input = string | number;
 export type ID_Output = string;
 
 /*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
 */
 export type Int = number;
 
