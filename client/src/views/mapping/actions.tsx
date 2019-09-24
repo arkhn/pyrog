@@ -15,6 +15,12 @@ export const addResource = (): IAction => {
   };
 };
 
+export const deleteResource = (): IAction => {
+  return {
+    type: "DELETE_RESOURCE"
+  };
+};
+
 export const addProfile = (): IAction => {
   return {
     type: "ADD_PROFILE"

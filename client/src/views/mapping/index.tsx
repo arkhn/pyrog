@@ -19,11 +19,13 @@ import {
   addProfile,
   addResource,
   deleteProfile,
+  deleteResource,
   nodeCollapse,
   nodeExpand,
   updateAddResource
 } from "./actions";
 import {
+  deselectFhirResource,
   updateFhirAttribute,
   updateFhirResource
 } from "../../services/selectedNode/actions";
@@ -50,6 +52,7 @@ const availableResources = require("../../graphql/queries/availableResources.gra
 const resourceAttributeTree = require("../../graphql/queries/resourceAttributeTree.graphql");
 const createResourceTreeInSource = require("../../graphql/mutations/createResourceTreeInSource.graphql");
 const updateResource = require("../../graphql/mutations/updateResource.graphql");
+const deleteResourceTreeInSource = require("../../graphql/mutations/deleteResourceTreeInSource.graphql");
 
 // LOGO
 const arkhnLogoWhite = require("../../assets/img/arkhn_logo_only_white.svg") as string;
@@ -254,7 +257,6 @@ export default class MappingView extends React.Component<
                                 { data, loading }: any
                               ) => {
                                 const value = selectedNode.resource.label || "";
-
                                 return (
                                   <InputGroup
                                     onChange={(
@@ -300,7 +302,54 @@ export default class MappingView extends React.Component<
                                 );
                               }}
                             </Mutation>
-                            <Button icon={"trash"} intent="danger" />
+                            <Mutation
+                              mutation={deleteResourceTreeInSource}
+                              onCompleted={(data: any) => {
+                                this.props.toaster.show({
+                                  icon: "layout-hierarchy",
+                                  intent: "success",
+                                  message: `Ressource ${
+                                    data.deleteResourceTreeInSource.name
+                                  } supprimée pour ${
+                                    selectedNode.source.name
+                                  }.`,
+                                  timeout: 4000
+                                });
+
+                                dispatch(deselectFhirResource());
+                                dispatch(deleteResource());
+                              }}
+                              onError={(error: any) => {
+                                this.props.toaster.show({
+                                  icon: "error",
+                                  intent: "danger",
+                                  message: error.message,
+                                  timeout: 4000
+                                });
+                              }}
+                            >
+                              {(
+                                deleteResource: any,
+                                { data, loading }: any
+                              ) => {
+                                return (
+                                  <Button
+                                    disabled={selectedNode.resource.id === null}
+                                    loading={loading}
+                                    icon={"trash"}
+                                    intent={"primary"}
+                                    onClick={() => {
+                                      deleteResource({
+                                        variables: {
+                                          sourceId: selectedNode.source.id,
+                                          resourceId: selectedNode.resource.id
+                                        }
+                                      });
+                                    }}
+                                  />
+                                );
+                              }}
+                            </Mutation>
                           </ControlGroup>
                         </FormGroup>
                       </div>

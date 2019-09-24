@@ -67,6 +67,19 @@ const selectedNodeReducer = (
         }
       };
 
+    case "DESELECTED_FHIR_RESOURCE":
+      return {
+        ...state,
+        resource: {
+          id: null,
+          name: null
+        },
+        attribute: {
+          id: null,
+          name: null
+        }
+      };
+
     case "UPDATE_FHIR_ATTRIBUTE":
       return {
         ...state,
