@@ -231,20 +231,26 @@ describe("Graphql server", () => {
   });
 
   describe("Try Mutations", () => {
-    test("createResourceTreeInSource should not create already existing Resource", async () => {
-      const resourceName = await sendPostRequest(
-        `query { availableResources(sourceName:"Mimic") { id name }}`,
+    test("createResourceTreeInSource should generate a label if fhirType already exists", async () => {
+      const fhirType = await sendPostRequest(
+        `query { availableResources(sourceName:"Mimic") { id label fhirType }}`,
         {},
         token
-      ).then(res => res.data.availableResources[0].name);
+      ).then(res => res.data.availableResources[0].fhirType);
 
       expect(
         await sendPostRequest(
-          `mutation { createResourceTreeInSource(sourceName: "Mimic", resourceName: "${resourceName}") { id name }}`,
+          `mutation { createResourceTreeInSource(sourceName: "Mimic", resourceName: "${fhirType}") { id label fhirType }}`,
           {},
           token
         )
-      ).toHaveProperty("errors");
+      ).toEqual({
+        data: {
+          createResourceTreeInSource: expect.objectContaining({
+            label: expect.stringContaining(fhirType)
+          })
+        }
+      });
     });
 
     test("deleteResourceTreeInSource should fail if trying to delete an already deleted resource", async () => {
@@ -252,7 +258,7 @@ describe("Graphql server", () => {
       await sendPostRequest(
         `query {
           sourceInfo(sourceName:"Mimic") { id }
-          availableResources(sourceName:"Mimic") { id name }
+          availableResources(sourceName:"Mimic") { id label fhirType }
         }`,
         {},
         token
