@@ -1,4 +1,5 @@
 var path = require("path");
+var fs = require("fs");
 var htmlPlugin = require("html-webpack-plugin");
 var FaviconsWebpackPlugin = require("favicons-webpack-plugin");
 var Dotenv = require("dotenv-webpack");

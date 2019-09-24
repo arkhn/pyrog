@@ -197,6 +197,13 @@ const reducer = (
         }
       };
 
+    case "DELETE_RESOURCE":
+      console.warn(action.type, action.payload);
+      return {
+        ...state,
+        createdResources: state.createdResources - 1
+      };
+
     case "ADD_PROFILE":
       return {
         ...state,

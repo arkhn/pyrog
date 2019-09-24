@@ -43,6 +43,7 @@ type Mutation {
     sourceName: String
     resourceName: String!
   ): Resource!
+  deleteResourceTreeInSource(sourceId: ID!, resourceId: ID!): Resource!
   createAttributeProfileInAttribute(
     parentAttributeId: ID!
     attributeName: String!
