@@ -246,6 +246,40 @@ describe("Graphql server", () => {
         )
       ).toHaveProperty("errors");
     });
+
+    test("deleteResourceTreeInSource should fail if trying to delete an already deleted resource", async () => {
+      let sourceId, resourceId;
+      await sendPostRequest(
+        `query {
+          sourceInfo(sourceName:"Mimic") { id }
+          availableResources(sourceName:"Mimic") { id name }
+        }`,
+        {},
+        token
+      ).then(res => {
+        sourceId = res.data.sourceInfo.id;
+        resourceId = res.data.availableResources[0].id;
+      });
+
+      expect(
+        await sendPostRequest(
+          `mutation { deleteResourceTreeInSource(sourceId: "${sourceId}", resourceId: "${resourceId}") { id }}`,
+          {},
+          token
+        )
+      ).toEqual({
+        data: {
+          deleteResourceTreeInSource: { id: resourceId }
+        }
+      });
+      expect(
+        await sendPostRequest(
+          `mutation { deleteResourceTreeInSource(sourceId: "${sourceId}", resourceId: "${resourceId}") { id }}`,
+          {},
+          token
+        )
+      ).toHaveProperty("errors");
+    });
   });
 
   afterAll(() => {
