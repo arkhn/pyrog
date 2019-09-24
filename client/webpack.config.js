@@ -15,7 +15,7 @@ module.exports = (env, argv) => {
     // Where bundles should be emitted
     output: {
       path: DIST_DIR,
-      filename: "fhirball.bundle.js"
+      filename: "pyrog.bundle.js"
     },
     // By default, webpack only handles js and json files.
     // In order to process other types of files, one should use
