@@ -12,8 +12,8 @@ import TSelect from "./TSelect";
 
 interface IResource {
   id: string;
-  instanceName: string;
-  fhirResourceName: string;
+  label: string;
+  fhirType: string;
 }
 
 interface ISelectProps {
@@ -35,8 +35,8 @@ export default class ResourceSelect extends React.Component<ISelectProps, any> {
       <MenuItem
         key={resource.id}
         onClick={handleClick}
-        text={resource.fhirResourceName}
-        label={resource.instanceName}
+        text={resource.fhirType}
+        label={resource.label}
       />
     );
   };
@@ -46,9 +46,7 @@ export default class ResourceSelect extends React.Component<ISelectProps, any> {
     resource: IResource
   ) => {
     return (
-      `${resource.fhirResourceName.toLowerCase()}`.indexOf(
-        query.toLowerCase()
-      ) >= 0
+      `${resource.fhirType.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0
     );
   };
 
@@ -57,8 +55,8 @@ export default class ResourceSelect extends React.Component<ISelectProps, any> {
     resources: IResource[]
   ) => {
     resources.sort((r1, r2) => {
-      const name1 = r1.fhirResourceName.toLowerCase();
-      const name2 = r2.fhirResourceName.toLowerCase();
+      const name1 = r1.fhirType.toLowerCase();
+      const name2 = r2.fhirType.toLowerCase();
       if (name1 < name2) return -1;
       if (name1 > name2) return 1;
       return 0;
@@ -67,7 +65,7 @@ export default class ResourceSelect extends React.Component<ISelectProps, any> {
   };
 
   private displayItem = function(resource: IResource): string {
-    return resource.fhirResourceName ? resource.fhirResourceName : "None";
+    return resource.fhirType ? resource.fhirType : "None";
   };
 
   public render() {

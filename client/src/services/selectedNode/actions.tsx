@@ -124,15 +124,15 @@ export const deselectSource = (): IAction => {
 // Fhir Resource
 export const updateFhirResource = (
   resourceId: string,
-  fhirResourceName: string,
-  instanceName: string
+  fhirType: string,
+  label: string
 ): IAction => {
   return {
     type: "UPDATE_FHIR_RESOURCE",
     payload: {
-      fhirResourceName,
+      fhirType,
       resourceId,
-      instanceName
+      label
     }
   };
 };

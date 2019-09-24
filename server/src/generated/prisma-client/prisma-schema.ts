@@ -1653,8 +1653,8 @@ export const typeDefs = /* GraphQL */ `
 
   type Resource {
     id: ID!
-    instanceName: String
-    fhirResourceName: String!
+    label: String
+    fhirType: String!
     primaryKeyOwner: String
     primaryKeyTable: String
     primaryKeyColumn: String
@@ -1680,8 +1680,8 @@ export const typeDefs = /* GraphQL */ `
 
   input ResourceCreateInput {
     id: ID
-    instanceName: String
-    fhirResourceName: String!
+    label: String
+    fhirType: String!
     primaryKeyOwner: String
     primaryKeyTable: String
     primaryKeyColumn: String
@@ -1701,8 +1701,8 @@ export const typeDefs = /* GraphQL */ `
 
   input ResourceCreateWithoutAttributesInput {
     id: ID
-    instanceName: String
-    fhirResourceName: String!
+    label: String
+    fhirType: String!
     primaryKeyOwner: String
     primaryKeyTable: String
     primaryKeyColumn: String
@@ -1711,8 +1711,8 @@ export const typeDefs = /* GraphQL */ `
 
   input ResourceCreateWithoutSourceInput {
     id: ID
-    instanceName: String
-    fhirResourceName: String!
+    label: String
+    fhirType: String!
     primaryKeyOwner: String
     primaryKeyTable: String
     primaryKeyColumn: String
@@ -1727,10 +1727,10 @@ export const typeDefs = /* GraphQL */ `
   enum ResourceOrderByInput {
     id_ASC
     id_DESC
-    instanceName_ASC
-    instanceName_DESC
-    fhirResourceName_ASC
-    fhirResourceName_DESC
+    label_ASC
+    label_DESC
+    fhirType_ASC
+    fhirType_DESC
     primaryKeyOwner_ASC
     primaryKeyOwner_DESC
     primaryKeyTable_ASC
@@ -1745,8 +1745,8 @@ export const typeDefs = /* GraphQL */ `
 
   type ResourcePreviousValues {
     id: ID!
-    instanceName: String
-    fhirResourceName: String!
+    label: String
+    fhirType: String!
     primaryKeyOwner: String
     primaryKeyTable: String
     primaryKeyColumn: String
@@ -1769,34 +1769,34 @@ export const typeDefs = /* GraphQL */ `
     id_not_starts_with: ID
     id_ends_with: ID
     id_not_ends_with: ID
-    instanceName: String
-    instanceName_not: String
-    instanceName_in: [String!]
-    instanceName_not_in: [String!]
-    instanceName_lt: String
-    instanceName_lte: String
-    instanceName_gt: String
-    instanceName_gte: String
-    instanceName_contains: String
-    instanceName_not_contains: String
-    instanceName_starts_with: String
-    instanceName_not_starts_with: String
-    instanceName_ends_with: String
-    instanceName_not_ends_with: String
-    fhirResourceName: String
-    fhirResourceName_not: String
-    fhirResourceName_in: [String!]
-    fhirResourceName_not_in: [String!]
-    fhirResourceName_lt: String
-    fhirResourceName_lte: String
-    fhirResourceName_gt: String
-    fhirResourceName_gte: String
-    fhirResourceName_contains: String
-    fhirResourceName_not_contains: String
-    fhirResourceName_starts_with: String
-    fhirResourceName_not_starts_with: String
-    fhirResourceName_ends_with: String
-    fhirResourceName_not_ends_with: String
+    label: String
+    label_not: String
+    label_in: [String!]
+    label_not_in: [String!]
+    label_lt: String
+    label_lte: String
+    label_gt: String
+    label_gte: String
+    label_contains: String
+    label_not_contains: String
+    label_starts_with: String
+    label_not_starts_with: String
+    label_ends_with: String
+    label_not_ends_with: String
+    fhirType: String
+    fhirType_not: String
+    fhirType_in: [String!]
+    fhirType_not_in: [String!]
+    fhirType_lt: String
+    fhirType_lte: String
+    fhirType_gt: String
+    fhirType_gte: String
+    fhirType_contains: String
+    fhirType_not_contains: String
+    fhirType_starts_with: String
+    fhirType_not_starts_with: String
+    fhirType_ends_with: String
+    fhirType_not_ends_with: String
     primaryKeyOwner: String
     primaryKeyOwner_not: String
     primaryKeyOwner_in: [String!]
@@ -1879,8 +1879,8 @@ export const typeDefs = /* GraphQL */ `
   }
 
   input ResourceUpdateInput {
-    instanceName: String
-    fhirResourceName: String
+    label: String
+    fhirType: String
     primaryKeyOwner: String
     primaryKeyTable: String
     primaryKeyColumn: String
@@ -1889,16 +1889,16 @@ export const typeDefs = /* GraphQL */ `
   }
 
   input ResourceUpdateManyDataInput {
-    instanceName: String
-    fhirResourceName: String
+    label: String
+    fhirType: String
     primaryKeyOwner: String
     primaryKeyTable: String
     primaryKeyColumn: String
   }
 
   input ResourceUpdateManyMutationInput {
-    instanceName: String
-    fhirResourceName: String
+    label: String
+    fhirType: String
     primaryKeyOwner: String
     primaryKeyTable: String
     primaryKeyColumn: String
@@ -1931,8 +1931,8 @@ export const typeDefs = /* GraphQL */ `
   }
 
   input ResourceUpdateWithoutAttributesDataInput {
-    instanceName: String
-    fhirResourceName: String
+    label: String
+    fhirType: String
     primaryKeyOwner: String
     primaryKeyTable: String
     primaryKeyColumn: String
@@ -1940,8 +1940,8 @@ export const typeDefs = /* GraphQL */ `
   }
 
   input ResourceUpdateWithoutSourceDataInput {
-    instanceName: String
-    fhirResourceName: String
+    label: String
+    fhirType: String
     primaryKeyOwner: String
     primaryKeyTable: String
     primaryKeyColumn: String
@@ -1979,34 +1979,34 @@ export const typeDefs = /* GraphQL */ `
     id_not_starts_with: ID
     id_ends_with: ID
     id_not_ends_with: ID
-    instanceName: String
-    instanceName_not: String
-    instanceName_in: [String!]
-    instanceName_not_in: [String!]
-    instanceName_lt: String
-    instanceName_lte: String
-    instanceName_gt: String
-    instanceName_gte: String
-    instanceName_contains: String
-    instanceName_not_contains: String
-    instanceName_starts_with: String
-    instanceName_not_starts_with: String
-    instanceName_ends_with: String
-    instanceName_not_ends_with: String
-    fhirResourceName: String
-    fhirResourceName_not: String
-    fhirResourceName_in: [String!]
-    fhirResourceName_not_in: [String!]
-    fhirResourceName_lt: String
-    fhirResourceName_lte: String
-    fhirResourceName_gt: String
-    fhirResourceName_gte: String
-    fhirResourceName_contains: String
-    fhirResourceName_not_contains: String
-    fhirResourceName_starts_with: String
-    fhirResourceName_not_starts_with: String
-    fhirResourceName_ends_with: String
-    fhirResourceName_not_ends_with: String
+    label: String
+    label_not: String
+    label_in: [String!]
+    label_not_in: [String!]
+    label_lt: String
+    label_lte: String
+    label_gt: String
+    label_gte: String
+    label_contains: String
+    label_not_contains: String
+    label_starts_with: String
+    label_not_starts_with: String
+    label_ends_with: String
+    label_not_ends_with: String
+    fhirType: String
+    fhirType_not: String
+    fhirType_in: [String!]
+    fhirType_not_in: [String!]
+    fhirType_lt: String
+    fhirType_lte: String
+    fhirType_gt: String
+    fhirType_gte: String
+    fhirType_contains: String
+    fhirType_not_contains: String
+    fhirType_starts_with: String
+    fhirType_not_starts_with: String
+    fhirType_ends_with: String
+    fhirType_not_ends_with: String
     primaryKeyOwner: String
     primaryKeyOwner_not: String
     primaryKeyOwner_in: [String!]

@@ -127,7 +127,7 @@ export const pyrogMutation = {
     let otherFhirResourceIntances = 0;
     otherFhirResourceIntances = (await context.client.resources({
       where: {
-        fhirResourceName: resourceName,
+        fhirType: resourceName,
         source: sourceName ? { name: sourceName } : { id: sourceId }
       }
     })).length;
@@ -142,7 +142,7 @@ export const pyrogMutation = {
       })
       .then((response: any) => {
         let newResource = {
-          fhirResourceName: resourceName,
+          fhirType: resourceName,
           attributes: response["attributes"],
           source: sourceName
             ? { connect: { name: sourceName } }
@@ -151,11 +151,9 @@ export const pyrogMutation = {
 
         // When similar fhir resources already exist
         // for the given source, we give this new instance
-        // a defualt instanceName.
+        // a defualt label.
         if (otherFhirResourceIntances) {
-          newResource[
-            "instanceName"
-          ] = `${resourceName}_${otherFhirResourceIntances}`;
+          newResource["label"] = `${resourceName}_${otherFhirResourceIntances}`;
         }
 
         return context.client.createResource(newResource);

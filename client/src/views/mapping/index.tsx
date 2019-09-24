@@ -238,8 +238,8 @@ export default class MappingView extends React.Component<
                                 dispatch(
                                   updateFhirResource(
                                     resource.id,
-                                    resource.fhirResourceName,
-                                    resource.instanceName
+                                    resource.fhirType,
+                                    resource.label
                                   )
                                 );
                                 this.updateLocationSearch(
@@ -250,11 +250,10 @@ export default class MappingView extends React.Component<
                             />
                             <Mutation mutation={updateResource}>
                               {(
-                                updateResourceInstanceName: any,
+                                updateResourcelabel: any,
                                 { data, loading }: any
                               ) => {
-                                const value =
-                                  selectedNode.resource.instanceName || "";
+                                const value = selectedNode.resource.label || "";
 
                                 return (
                                   <InputGroup
@@ -265,21 +264,20 @@ export default class MappingView extends React.Component<
                                       dispatch(
                                         updateFhirResource(
                                           selectedNode.resource.id,
-                                          selectedNode.resource
-                                            .fhirResourceName,
+                                          selectedNode.resource.fhirType,
                                           newValue
                                         )
                                       );
                                     }}
                                     onKeyPress={event => {
                                       if (event.key === "Enter") {
-                                        updateResourceInstanceName({
+                                        updateResourcelabel({
                                           variables: {
                                             where: {
                                               id: selectedNode.resource.id
                                             },
                                             data: {
-                                              instanceName: value
+                                              label: value
                                             }
                                           }
                                         });
@@ -307,7 +305,7 @@ export default class MappingView extends React.Component<
                         </FormGroup>
                       </div>
                       <div id="fhir-resource-tree">
-                        {selectedNode.resource.fhirResourceName ? (
+                        {selectedNode.resource.fhirType ? (
                           <Query
                             fetchPolicy={"network-only"}
                             query={resourceAttributeTree}
@@ -379,8 +377,7 @@ export default class MappingView extends React.Component<
                                 icon: "layout-hierarchy",
                                 intent: "success",
                                 message: `Ressource ${
-                                  data.createResourceTreeInSource
-                                    .fhirResourceName
+                                  data.createResourceTreeInSource.fhirType
                                 } créée pour ${selectedNode.source.name}.`,
                                 timeout: 4000
                               });

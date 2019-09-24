@@ -9,8 +9,8 @@ type Source {
 
 type Resource {
   id: ID! @unique @id
-  instanceName: String
-  fhirResourceName: String! @rename(oldName: "name")
+  label: String
+  fhirType: String! @rename(oldName: "name")
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String

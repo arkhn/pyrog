@@ -323,10 +323,10 @@ export type AttributeOrderByInput =
 export type ResourceOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "instanceName_ASC"
-  | "instanceName_DESC"
-  | "fhirResourceName_ASC"
-  | "fhirResourceName_DESC"
+  | "label_ASC"
+  | "label_DESC"
+  | "fhirType_ASC"
+  | "fhirType_DESC"
   | "primaryKeyOwner_ASC"
   | "primaryKeyOwner_DESC"
   | "primaryKeyTable_ASC"
@@ -537,34 +537,34 @@ export interface ResourceWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
-  instanceName?: Maybe<String>;
-  instanceName_not?: Maybe<String>;
-  instanceName_in?: Maybe<String[] | String>;
-  instanceName_not_in?: Maybe<String[] | String>;
-  instanceName_lt?: Maybe<String>;
-  instanceName_lte?: Maybe<String>;
-  instanceName_gt?: Maybe<String>;
-  instanceName_gte?: Maybe<String>;
-  instanceName_contains?: Maybe<String>;
-  instanceName_not_contains?: Maybe<String>;
-  instanceName_starts_with?: Maybe<String>;
-  instanceName_not_starts_with?: Maybe<String>;
-  instanceName_ends_with?: Maybe<String>;
-  instanceName_not_ends_with?: Maybe<String>;
-  fhirResourceName?: Maybe<String>;
-  fhirResourceName_not?: Maybe<String>;
-  fhirResourceName_in?: Maybe<String[] | String>;
-  fhirResourceName_not_in?: Maybe<String[] | String>;
-  fhirResourceName_lt?: Maybe<String>;
-  fhirResourceName_lte?: Maybe<String>;
-  fhirResourceName_gt?: Maybe<String>;
-  fhirResourceName_gte?: Maybe<String>;
-  fhirResourceName_contains?: Maybe<String>;
-  fhirResourceName_not_contains?: Maybe<String>;
-  fhirResourceName_starts_with?: Maybe<String>;
-  fhirResourceName_not_starts_with?: Maybe<String>;
-  fhirResourceName_ends_with?: Maybe<String>;
-  fhirResourceName_not_ends_with?: Maybe<String>;
+  label?: Maybe<String>;
+  label_not?: Maybe<String>;
+  label_in?: Maybe<String[] | String>;
+  label_not_in?: Maybe<String[] | String>;
+  label_lt?: Maybe<String>;
+  label_lte?: Maybe<String>;
+  label_gt?: Maybe<String>;
+  label_gte?: Maybe<String>;
+  label_contains?: Maybe<String>;
+  label_not_contains?: Maybe<String>;
+  label_starts_with?: Maybe<String>;
+  label_not_starts_with?: Maybe<String>;
+  label_ends_with?: Maybe<String>;
+  label_not_ends_with?: Maybe<String>;
+  fhirType?: Maybe<String>;
+  fhirType_not?: Maybe<String>;
+  fhirType_in?: Maybe<String[] | String>;
+  fhirType_not_in?: Maybe<String[] | String>;
+  fhirType_lt?: Maybe<String>;
+  fhirType_lte?: Maybe<String>;
+  fhirType_gt?: Maybe<String>;
+  fhirType_gte?: Maybe<String>;
+  fhirType_contains?: Maybe<String>;
+  fhirType_not_contains?: Maybe<String>;
+  fhirType_starts_with?: Maybe<String>;
+  fhirType_not_starts_with?: Maybe<String>;
+  fhirType_ends_with?: Maybe<String>;
+  fhirType_not_ends_with?: Maybe<String>;
   primaryKeyOwner?: Maybe<String>;
   primaryKeyOwner_not?: Maybe<String>;
   primaryKeyOwner_in?: Maybe<String[] | String>;
@@ -1043,8 +1043,8 @@ export interface ResourceCreateOneWithoutAttributesInput {
 
 export interface ResourceCreateWithoutAttributesInput {
   id?: Maybe<ID_Input>;
-  instanceName?: Maybe<String>;
-  fhirResourceName: String;
+  label?: Maybe<String>;
+  fhirType: String;
   primaryKeyOwner?: Maybe<String>;
   primaryKeyTable?: Maybe<String>;
   primaryKeyColumn?: Maybe<String>;
@@ -1159,8 +1159,8 @@ export interface ResourceUpdateOneWithoutAttributesInput {
 }
 
 export interface ResourceUpdateWithoutAttributesDataInput {
-  instanceName?: Maybe<String>;
-  fhirResourceName?: Maybe<String>;
+  label?: Maybe<String>;
+  fhirType?: Maybe<String>;
   primaryKeyOwner?: Maybe<String>;
   primaryKeyTable?: Maybe<String>;
   primaryKeyColumn?: Maybe<String>;
@@ -1869,8 +1869,8 @@ export interface JoinUpdateManyMutationInput {
 
 export interface ResourceCreateInput {
   id?: Maybe<ID_Input>;
-  instanceName?: Maybe<String>;
-  fhirResourceName: String;
+  label?: Maybe<String>;
+  fhirType: String;
   primaryKeyOwner?: Maybe<String>;
   primaryKeyTable?: Maybe<String>;
   primaryKeyColumn?: Maybe<String>;
@@ -1899,8 +1899,8 @@ export interface AttributeCreateWithoutResourceInput {
 }
 
 export interface ResourceUpdateInput {
-  instanceName?: Maybe<String>;
-  fhirResourceName?: Maybe<String>;
+  label?: Maybe<String>;
+  fhirType?: Maybe<String>;
   primaryKeyOwner?: Maybe<String>;
   primaryKeyTable?: Maybe<String>;
   primaryKeyColumn?: Maybe<String>;
@@ -1955,8 +1955,8 @@ export interface AttributeUpsertWithWhereUniqueWithoutResourceInput {
 }
 
 export interface ResourceUpdateManyMutationInput {
-  instanceName?: Maybe<String>;
-  fhirResourceName?: Maybe<String>;
+  label?: Maybe<String>;
+  fhirType?: Maybe<String>;
   primaryKeyOwner?: Maybe<String>;
   primaryKeyTable?: Maybe<String>;
   primaryKeyColumn?: Maybe<String>;
@@ -1978,8 +1978,8 @@ export interface ResourceCreateManyWithoutSourceInput {
 
 export interface ResourceCreateWithoutSourceInput {
   id?: Maybe<ID_Input>;
-  instanceName?: Maybe<String>;
-  fhirResourceName: String;
+  label?: Maybe<String>;
+  fhirType: String;
   primaryKeyOwner?: Maybe<String>;
   primaryKeyTable?: Maybe<String>;
   primaryKeyColumn?: Maybe<String>;
@@ -2021,8 +2021,8 @@ export interface ResourceUpdateWithWhereUniqueWithoutSourceInput {
 }
 
 export interface ResourceUpdateWithoutSourceDataInput {
-  instanceName?: Maybe<String>;
-  fhirResourceName?: Maybe<String>;
+  label?: Maybe<String>;
+  fhirType?: Maybe<String>;
   primaryKeyOwner?: Maybe<String>;
   primaryKeyTable?: Maybe<String>;
   primaryKeyColumn?: Maybe<String>;
@@ -2050,34 +2050,34 @@ export interface ResourceScalarWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
-  instanceName?: Maybe<String>;
-  instanceName_not?: Maybe<String>;
-  instanceName_in?: Maybe<String[] | String>;
-  instanceName_not_in?: Maybe<String[] | String>;
-  instanceName_lt?: Maybe<String>;
-  instanceName_lte?: Maybe<String>;
-  instanceName_gt?: Maybe<String>;
-  instanceName_gte?: Maybe<String>;
-  instanceName_contains?: Maybe<String>;
-  instanceName_not_contains?: Maybe<String>;
-  instanceName_starts_with?: Maybe<String>;
-  instanceName_not_starts_with?: Maybe<String>;
-  instanceName_ends_with?: Maybe<String>;
-  instanceName_not_ends_with?: Maybe<String>;
-  fhirResourceName?: Maybe<String>;
-  fhirResourceName_not?: Maybe<String>;
-  fhirResourceName_in?: Maybe<String[] | String>;
-  fhirResourceName_not_in?: Maybe<String[] | String>;
-  fhirResourceName_lt?: Maybe<String>;
-  fhirResourceName_lte?: Maybe<String>;
-  fhirResourceName_gt?: Maybe<String>;
-  fhirResourceName_gte?: Maybe<String>;
-  fhirResourceName_contains?: Maybe<String>;
-  fhirResourceName_not_contains?: Maybe<String>;
-  fhirResourceName_starts_with?: Maybe<String>;
-  fhirResourceName_not_starts_with?: Maybe<String>;
-  fhirResourceName_ends_with?: Maybe<String>;
-  fhirResourceName_not_ends_with?: Maybe<String>;
+  label?: Maybe<String>;
+  label_not?: Maybe<String>;
+  label_in?: Maybe<String[] | String>;
+  label_not_in?: Maybe<String[] | String>;
+  label_lt?: Maybe<String>;
+  label_lte?: Maybe<String>;
+  label_gt?: Maybe<String>;
+  label_gte?: Maybe<String>;
+  label_contains?: Maybe<String>;
+  label_not_contains?: Maybe<String>;
+  label_starts_with?: Maybe<String>;
+  label_not_starts_with?: Maybe<String>;
+  label_ends_with?: Maybe<String>;
+  label_not_ends_with?: Maybe<String>;
+  fhirType?: Maybe<String>;
+  fhirType_not?: Maybe<String>;
+  fhirType_in?: Maybe<String[] | String>;
+  fhirType_not_in?: Maybe<String[] | String>;
+  fhirType_lt?: Maybe<String>;
+  fhirType_lte?: Maybe<String>;
+  fhirType_gt?: Maybe<String>;
+  fhirType_gte?: Maybe<String>;
+  fhirType_contains?: Maybe<String>;
+  fhirType_not_contains?: Maybe<String>;
+  fhirType_starts_with?: Maybe<String>;
+  fhirType_not_starts_with?: Maybe<String>;
+  fhirType_ends_with?: Maybe<String>;
+  fhirType_not_ends_with?: Maybe<String>;
   primaryKeyOwner?: Maybe<String>;
   primaryKeyOwner_not?: Maybe<String>;
   primaryKeyOwner_in?: Maybe<String[] | String>;
@@ -2147,8 +2147,8 @@ export interface ResourceUpdateManyWithWhereNestedInput {
 }
 
 export interface ResourceUpdateManyDataInput {
-  instanceName?: Maybe<String>;
-  fhirResourceName?: Maybe<String>;
+  label?: Maybe<String>;
+  fhirType?: Maybe<String>;
   primaryKeyOwner?: Maybe<String>;
   primaryKeyTable?: Maybe<String>;
   primaryKeyColumn?: Maybe<String>;
@@ -2381,8 +2381,8 @@ export interface AttributeNullablePromise
 
 export interface Resource {
   id: ID_Output;
-  instanceName?: String;
-  fhirResourceName: String;
+  label?: String;
+  fhirType: String;
   primaryKeyOwner?: String;
   primaryKeyTable?: String;
   primaryKeyColumn?: String;
@@ -2392,8 +2392,8 @@ export interface Resource {
 
 export interface ResourcePromise extends Promise<Resource>, Fragmentable {
   id: () => Promise<ID_Output>;
-  instanceName: () => Promise<String>;
-  fhirResourceName: () => Promise<String>;
+  label: () => Promise<String>;
+  fhirType: () => Promise<String>;
   primaryKeyOwner: () => Promise<String>;
   primaryKeyTable: () => Promise<String>;
   primaryKeyColumn: () => Promise<String>;
@@ -2415,8 +2415,8 @@ export interface ResourceSubscription
   extends Promise<AsyncIterator<Resource>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  instanceName: () => Promise<AsyncIterator<String>>;
-  fhirResourceName: () => Promise<AsyncIterator<String>>;
+  label: () => Promise<AsyncIterator<String>>;
+  fhirType: () => Promise<AsyncIterator<String>>;
   primaryKeyOwner: () => Promise<AsyncIterator<String>>;
   primaryKeyTable: () => Promise<AsyncIterator<String>>;
   primaryKeyColumn: () => Promise<AsyncIterator<String>>;
@@ -2438,8 +2438,8 @@ export interface ResourceNullablePromise
   extends Promise<Resource | null>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  instanceName: () => Promise<String>;
-  fhirResourceName: () => Promise<String>;
+  label: () => Promise<String>;
+  fhirType: () => Promise<String>;
   primaryKeyOwner: () => Promise<String>;
   primaryKeyTable: () => Promise<String>;
   primaryKeyColumn: () => Promise<String>;
@@ -3285,8 +3285,8 @@ export interface ResourceSubscriptionPayloadSubscription
 
 export interface ResourcePreviousValues {
   id: ID_Output;
-  instanceName?: String;
-  fhirResourceName: String;
+  label?: String;
+  fhirType: String;
   primaryKeyOwner?: String;
   primaryKeyTable?: String;
   primaryKeyColumn?: String;
@@ -3298,8 +3298,8 @@ export interface ResourcePreviousValuesPromise
   extends Promise<ResourcePreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  instanceName: () => Promise<String>;
-  fhirResourceName: () => Promise<String>;
+  label: () => Promise<String>;
+  fhirType: () => Promise<String>;
   primaryKeyOwner: () => Promise<String>;
   primaryKeyTable: () => Promise<String>;
   primaryKeyColumn: () => Promise<String>;
@@ -3311,8 +3311,8 @@ export interface ResourcePreviousValuesSubscription
   extends Promise<AsyncIterator<ResourcePreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  instanceName: () => Promise<AsyncIterator<String>>;
-  fhirResourceName: () => Promise<AsyncIterator<String>>;
+  label: () => Promise<AsyncIterator<String>>;
+  fhirType: () => Promise<AsyncIterator<String>>;
   primaryKeyOwner: () => Promise<AsyncIterator<String>>;
   primaryKeyTable: () => Promise<AsyncIterator<String>>;
   primaryKeyColumn: () => Promise<AsyncIterator<String>>;

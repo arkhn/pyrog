@@ -4,7 +4,7 @@ mutation updateResource(
 ) {
   updateResource(where: $where, data: $data) {
     id
-    instanceName
-    fhirResourceName
+    label
+    fhirType
   }
 }

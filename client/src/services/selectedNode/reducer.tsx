@@ -58,8 +58,8 @@ const selectedNodeReducer = (
         ...state,
         resource: {
           id: action.payload.resourceId,
-          fhirResourceName: action.payload.fhirResourceName,
-          instanceName: action.payload.instanceName
+          fhirType: action.payload.fhirType,
+          label: action.payload.label
         },
         attribute: {
           id: null,

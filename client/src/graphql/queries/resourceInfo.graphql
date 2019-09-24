@@ -1,7 +1,7 @@
 query resourceInfo($resourceId: ID!) {
   resourceInfo(resourceId: $resourceId) {
     id
-    instanceName
-    fhirResourceName
+    label
+    fhirType
   }
 }

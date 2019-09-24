@@ -2,8 +2,8 @@
 
 fragment resourceRecAttributes on Resource {
   id
-  instanceName
-  fhirResourceName
+  label
+  fhirType
   attributes {
     ...entireAttribute
     attributes {
