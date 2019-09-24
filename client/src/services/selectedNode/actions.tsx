@@ -51,7 +51,7 @@ export const changeNode = (
                   source.data.sourceInfo,
                   resource
                     ? resource.data.resourceInfo
-                    : { id: null, name: null },
+                    : { id: null, label: null, fhirType: null },
                   attribute
                     ? attribute.data.attributeInfo
                     : { id: null, name: null }

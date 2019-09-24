@@ -286,7 +286,7 @@ export default class MappingView extends React.Component<
                                       }
                                     }}
                                     type="text"
-                                    placeholder="Name..."
+                                    placeholder="Label..."
                                     value={value}
                                     rightElement={
                                       loading ? (
@@ -309,7 +309,7 @@ export default class MappingView extends React.Component<
                                   icon: "layout-hierarchy",
                                   intent: "success",
                                   message: `Ressource ${
-                                    data.deleteResourceTreeInSource.name
+                                    data.deleteResourceTreeInSource.fhirType
                                   } supprimée pour ${
                                     selectedNode.source.name
                                   }.`,
