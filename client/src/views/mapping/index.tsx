@@ -141,6 +141,12 @@ export default class MappingView extends React.Component<
     this.props.history.push({ search: qs });
   };
 
+  private clearLocationSearch = () => {
+    this.props.history.push({
+      search: null
+    });
+  };
+
   public render = () => {
     const {
       createdProfiles,
@@ -315,9 +321,9 @@ export default class MappingView extends React.Component<
                                   }.`,
                                   timeout: 4000
                                 });
-
                                 dispatch(deselectFhirResource());
                                 dispatch(deleteResource());
+                                this.clearLocationSearch();
                               }}
                               onError={(error: any) => {
                                 this.props.toaster.show({
