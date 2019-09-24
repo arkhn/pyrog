@@ -8,6 +8,7 @@ module.exports = {
       tsConfig: "tsconfig.json"
     }
   },
+  setupFilesAfterEnv: ["./jest.setup.js"],
   testEnvironment: "node",
   testPathIgnorePatterns: ["/node_modules/"],
   transform: {
