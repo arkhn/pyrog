@@ -68,7 +68,7 @@ server.use(function(req, res, next) {
   next();
 });
 
-server.post("/upload", upload.single("schema"), function(req, res, next) {
+server.post("/upload", upload.single("schema"), function(req, res) {
   console.log(
     req.file && req.file.originalname
       ? `Uploading ${req.file.originalname}.json...`
@@ -87,8 +87,11 @@ server.post("/upload", upload.single("schema"), function(req, res, next) {
 server.get("/schemas/:filename", function(req, res) {
   res.sendFile(
     `${process.env.STATIC_FILES_DIR}/schemas/${req.params.filename}`,
-    (error: any) => {
-      console.log(error);
+    (err: any) => {
+      if (err) {
+        res.setHeader("Content-Type", "application/json");
+        res.status(err.status).send({ error: err, message: err.message });
+      }
     }
   );
 });
@@ -96,8 +99,11 @@ server.get("/schemas/:filename", function(req, res) {
 server.get("/resource/:filename", function(req, res) {
   res.sendFile(
     `${process.env.STATIC_FILES_DIR}/fhirResources/${req.params.filename}`,
-    (error: any) => {
-      console.log(error);
+    (err: any) => {
+      if (err) {
+        res.setHeader("Content-Type", "application/json");
+        res.status(err.status).send({ error: err, message: err.message });
+      }
     }
   );
 });

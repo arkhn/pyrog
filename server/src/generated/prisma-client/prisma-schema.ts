@@ -1653,7 +1653,8 @@ export const typeDefs = /* GraphQL */ `
 
   type Resource {
     id: ID!
-    name: String!
+    label: String
+    fhirType: String!
     primaryKeyOwner: String
     primaryKeyTable: String
     primaryKeyColumn: String
@@ -1679,7 +1680,8 @@ export const typeDefs = /* GraphQL */ `
 
   input ResourceCreateInput {
     id: ID
-    name: String!
+    label: String
+    fhirType: String!
     primaryKeyOwner: String
     primaryKeyTable: String
     primaryKeyColumn: String
@@ -1699,7 +1701,8 @@ export const typeDefs = /* GraphQL */ `
 
   input ResourceCreateWithoutAttributesInput {
     id: ID
-    name: String!
+    label: String
+    fhirType: String!
     primaryKeyOwner: String
     primaryKeyTable: String
     primaryKeyColumn: String
@@ -1708,7 +1711,8 @@ export const typeDefs = /* GraphQL */ `
 
   input ResourceCreateWithoutSourceInput {
     id: ID
-    name: String!
+    label: String
+    fhirType: String!
     primaryKeyOwner: String
     primaryKeyTable: String
     primaryKeyColumn: String
@@ -1723,8 +1727,10 @@ export const typeDefs = /* GraphQL */ `
   enum ResourceOrderByInput {
     id_ASC
     id_DESC
-    name_ASC
-    name_DESC
+    label_ASC
+    label_DESC
+    fhirType_ASC
+    fhirType_DESC
     primaryKeyOwner_ASC
     primaryKeyOwner_DESC
     primaryKeyTable_ASC
@@ -1739,7 +1745,8 @@ export const typeDefs = /* GraphQL */ `
 
   type ResourcePreviousValues {
     id: ID!
-    name: String!
+    label: String
+    fhirType: String!
     primaryKeyOwner: String
     primaryKeyTable: String
     primaryKeyColumn: String
@@ -1762,20 +1769,34 @@ export const typeDefs = /* GraphQL */ `
     id_not_starts_with: ID
     id_ends_with: ID
     id_not_ends_with: ID
-    name: String
-    name_not: String
-    name_in: [String!]
-    name_not_in: [String!]
-    name_lt: String
-    name_lte: String
-    name_gt: String
-    name_gte: String
-    name_contains: String
-    name_not_contains: String
-    name_starts_with: String
-    name_not_starts_with: String
-    name_ends_with: String
-    name_not_ends_with: String
+    label: String
+    label_not: String
+    label_in: [String!]
+    label_not_in: [String!]
+    label_lt: String
+    label_lte: String
+    label_gt: String
+    label_gte: String
+    label_contains: String
+    label_not_contains: String
+    label_starts_with: String
+    label_not_starts_with: String
+    label_ends_with: String
+    label_not_ends_with: String
+    fhirType: String
+    fhirType_not: String
+    fhirType_in: [String!]
+    fhirType_not_in: [String!]
+    fhirType_lt: String
+    fhirType_lte: String
+    fhirType_gt: String
+    fhirType_gte: String
+    fhirType_contains: String
+    fhirType_not_contains: String
+    fhirType_starts_with: String
+    fhirType_not_starts_with: String
+    fhirType_ends_with: String
+    fhirType_not_ends_with: String
     primaryKeyOwner: String
     primaryKeyOwner_not: String
     primaryKeyOwner_in: [String!]
@@ -1858,7 +1879,8 @@ export const typeDefs = /* GraphQL */ `
   }
 
   input ResourceUpdateInput {
-    name: String
+    label: String
+    fhirType: String
     primaryKeyOwner: String
     primaryKeyTable: String
     primaryKeyColumn: String
@@ -1867,14 +1889,16 @@ export const typeDefs = /* GraphQL */ `
   }
 
   input ResourceUpdateManyDataInput {
-    name: String
+    label: String
+    fhirType: String
     primaryKeyOwner: String
     primaryKeyTable: String
     primaryKeyColumn: String
   }
 
   input ResourceUpdateManyMutationInput {
-    name: String
+    label: String
+    fhirType: String
     primaryKeyOwner: String
     primaryKeyTable: String
     primaryKeyColumn: String
@@ -1907,7 +1931,8 @@ export const typeDefs = /* GraphQL */ `
   }
 
   input ResourceUpdateWithoutAttributesDataInput {
-    name: String
+    label: String
+    fhirType: String
     primaryKeyOwner: String
     primaryKeyTable: String
     primaryKeyColumn: String
@@ -1915,7 +1940,8 @@ export const typeDefs = /* GraphQL */ `
   }
 
   input ResourceUpdateWithoutSourceDataInput {
-    name: String
+    label: String
+    fhirType: String
     primaryKeyOwner: String
     primaryKeyTable: String
     primaryKeyColumn: String
@@ -1953,20 +1979,34 @@ export const typeDefs = /* GraphQL */ `
     id_not_starts_with: ID
     id_ends_with: ID
     id_not_ends_with: ID
-    name: String
-    name_not: String
-    name_in: [String!]
-    name_not_in: [String!]
-    name_lt: String
-    name_lte: String
-    name_gt: String
-    name_gte: String
-    name_contains: String
-    name_not_contains: String
-    name_starts_with: String
-    name_not_starts_with: String
-    name_ends_with: String
-    name_not_ends_with: String
+    label: String
+    label_not: String
+    label_in: [String!]
+    label_not_in: [String!]
+    label_lt: String
+    label_lte: String
+    label_gt: String
+    label_gte: String
+    label_contains: String
+    label_not_contains: String
+    label_starts_with: String
+    label_not_starts_with: String
+    label_ends_with: String
+    label_not_ends_with: String
+    fhirType: String
+    fhirType_not: String
+    fhirType_in: [String!]
+    fhirType_not_in: [String!]
+    fhirType_lt: String
+    fhirType_lte: String
+    fhirType_gt: String
+    fhirType_gte: String
+    fhirType_contains: String
+    fhirType_not_contains: String
+    fhirType_starts_with: String
+    fhirType_not_starts_with: String
+    fhirType_ends_with: String
+    fhirType_not_ends_with: String
     primaryKeyOwner: String
     primaryKeyOwner_not: String
     primaryKeyOwner_in: [String!]

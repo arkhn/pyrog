@@ -319,8 +319,10 @@ export type AttributeOrderByInput =
 export type ResourceOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "name_ASC"
-  | "name_DESC"
+  | "label_ASC"
+  | "label_DESC"
+  | "fhirType_ASC"
+  | "fhirType_DESC"
   | "primaryKeyOwner_ASC"
   | "primaryKeyOwner_DESC"
   | "primaryKeyTable_ASC"
@@ -521,7 +523,8 @@ export interface SourceWhereInput {
 }
 
 export interface ResourceUpdateWithoutAttributesDataInput {
-  name?: String;
+  label?: String;
+  fhirType?: String;
   primaryKeyOwner?: String;
   primaryKeyTable?: String;
   primaryKeyColumn?: String;
@@ -543,20 +546,34 @@ export interface ResourceWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
+  label?: String;
+  label_not?: String;
+  label_in?: String[] | String;
+  label_not_in?: String[] | String;
+  label_lt?: String;
+  label_lte?: String;
+  label_gt?: String;
+  label_gte?: String;
+  label_contains?: String;
+  label_not_contains?: String;
+  label_starts_with?: String;
+  label_not_starts_with?: String;
+  label_ends_with?: String;
+  label_not_ends_with?: String;
+  fhirType?: String;
+  fhirType_not?: String;
+  fhirType_in?: String[] | String;
+  fhirType_not_in?: String[] | String;
+  fhirType_lt?: String;
+  fhirType_lte?: String;
+  fhirType_gt?: String;
+  fhirType_gte?: String;
+  fhirType_contains?: String;
+  fhirType_not_contains?: String;
+  fhirType_starts_with?: String;
+  fhirType_not_starts_with?: String;
+  fhirType_ends_with?: String;
+  fhirType_not_ends_with?: String;
   primaryKeyOwner?: String;
   primaryKeyOwner_not?: String;
   primaryKeyOwner_in?: String[] | String;
@@ -720,7 +737,8 @@ export interface AttributeUpdateWithWhereUniqueWithoutAttributeInput {
 }
 
 export interface ResourceUpdateManyDataInput {
-  name?: String;
+  label?: String;
+  fhirType?: String;
   primaryKeyOwner?: String;
   primaryKeyTable?: String;
   primaryKeyColumn?: String;
@@ -775,7 +793,8 @@ export interface InputColumnUpdateWithWhereUniqueWithoutAttributeInput {
 }
 
 export interface ResourceUpdateWithoutSourceDataInput {
-  name?: String;
+  label?: String;
+  fhirType?: String;
   primaryKeyOwner?: String;
   primaryKeyTable?: String;
   primaryKeyColumn?: String;
@@ -1502,20 +1521,34 @@ export interface ResourceScalarWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
+  label?: String;
+  label_not?: String;
+  label_in?: String[] | String;
+  label_not_in?: String[] | String;
+  label_lt?: String;
+  label_lte?: String;
+  label_gt?: String;
+  label_gte?: String;
+  label_contains?: String;
+  label_not_contains?: String;
+  label_starts_with?: String;
+  label_not_starts_with?: String;
+  label_ends_with?: String;
+  label_not_ends_with?: String;
+  fhirType?: String;
+  fhirType_not?: String;
+  fhirType_in?: String[] | String;
+  fhirType_not_in?: String[] | String;
+  fhirType_lt?: String;
+  fhirType_lte?: String;
+  fhirType_gt?: String;
+  fhirType_gte?: String;
+  fhirType_contains?: String;
+  fhirType_not_contains?: String;
+  fhirType_starts_with?: String;
+  fhirType_not_starts_with?: String;
+  fhirType_ends_with?: String;
+  fhirType_not_ends_with?: String;
   primaryKeyOwner?: String;
   primaryKeyOwner_not?: String;
   primaryKeyOwner_in?: String[] | String;
@@ -1600,7 +1633,8 @@ export interface AttributeUpdateManyMutationInput {
 
 export interface ResourceCreateWithoutSourceInput {
   id?: ID_Input;
-  name: String;
+  label?: String;
+  fhirType: String;
   primaryKeyOwner?: String;
   primaryKeyTable?: String;
   primaryKeyColumn?: String;
@@ -1615,7 +1649,8 @@ export interface AttributeCreateManyWithoutResourceInput {
 }
 
 export interface ResourceUpdateManyMutationInput {
-  name?: String;
+  label?: String;
+  fhirType?: String;
   primaryKeyOwner?: String;
   primaryKeyTable?: String;
   primaryKeyColumn?: String;
@@ -1623,7 +1658,8 @@ export interface ResourceUpdateManyMutationInput {
 
 export interface ResourceCreateInput {
   id?: ID_Input;
-  name: String;
+  label?: String;
+  fhirType: String;
   primaryKeyOwner?: String;
   primaryKeyTable?: String;
   primaryKeyColumn?: String;
@@ -1973,7 +2009,8 @@ export interface JoinCreateInput {
 
 export interface ResourceCreateWithoutAttributesInput {
   id?: ID_Input;
-  name: String;
+  label?: String;
+  fhirType: String;
   primaryKeyOwner?: String;
   primaryKeyTable?: String;
   primaryKeyColumn?: String;
@@ -2168,7 +2205,8 @@ export interface AttributeCreateWithoutAttributeInput {
 }
 
 export interface ResourceUpdateInput {
-  name?: String;
+  label?: String;
+  fhirType?: String;
   primaryKeyOwner?: String;
   primaryKeyTable?: String;
   primaryKeyColumn?: String;
@@ -2981,7 +3019,8 @@ export interface JoinConnectionSubscription
 
 export interface ResourcePreviousValues {
   id: ID_Output;
-  name: String;
+  label?: String;
+  fhirType: String;
   primaryKeyOwner?: String;
   primaryKeyTable?: String;
   primaryKeyColumn?: String;
@@ -2993,7 +3032,8 @@ export interface ResourcePreviousValuesPromise
   extends Promise<ResourcePreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
+  label: () => Promise<String>;
+  fhirType: () => Promise<String>;
   primaryKeyOwner: () => Promise<String>;
   primaryKeyTable: () => Promise<String>;
   primaryKeyColumn: () => Promise<String>;
@@ -3005,7 +3045,8 @@ export interface ResourcePreviousValuesSubscription
   extends Promise<AsyncIterator<ResourcePreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
+  label: () => Promise<AsyncIterator<String>>;
+  fhirType: () => Promise<AsyncIterator<String>>;
   primaryKeyOwner: () => Promise<AsyncIterator<String>>;
   primaryKeyTable: () => Promise<AsyncIterator<String>>;
   primaryKeyColumn: () => Promise<AsyncIterator<String>>;
@@ -3040,7 +3081,8 @@ export interface ResourceSubscriptionPayloadSubscription
 
 export interface Resource {
   id: ID_Output;
-  name: String;
+  label?: String;
+  fhirType: String;
   primaryKeyOwner?: String;
   primaryKeyTable?: String;
   primaryKeyColumn?: String;
@@ -3050,7 +3092,8 @@ export interface Resource {
 
 export interface ResourcePromise extends Promise<Resource>, Fragmentable {
   id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
+  label: () => Promise<String>;
+  fhirType: () => Promise<String>;
   primaryKeyOwner: () => Promise<String>;
   primaryKeyTable: () => Promise<String>;
   primaryKeyColumn: () => Promise<String>;
@@ -3072,7 +3115,8 @@ export interface ResourceSubscription
   extends Promise<AsyncIterator<Resource>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
+  label: () => Promise<AsyncIterator<String>>;
+  fhirType: () => Promise<AsyncIterator<String>>;
   primaryKeyOwner: () => Promise<AsyncIterator<String>>;
   primaryKeyTable: () => Promise<AsyncIterator<String>>;
   primaryKeyColumn: () => Promise<AsyncIterator<String>>;

@@ -9,7 +9,8 @@ type Source {
 
 type Resource {
   id: ID! @unique @id
-  name: String!
+  label: String
+  fhirType: String!
   primaryKeyOwner: String
   primaryKeyTable: String
   primaryKeyColumn: String

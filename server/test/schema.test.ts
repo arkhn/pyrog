@@ -94,7 +94,13 @@ const sendPostRequest = (
       })
     }
   ).then(response => {
-    return response.json();
+    if (response.ok) {
+      return response.json();
+    } else {
+      throw new Error(
+        `${response.status} ${response.url} ${response.statusText}`
+      );
+    }
   });
 };
 
@@ -231,54 +237,62 @@ describe("Graphql server", () => {
   });
 
   describe("Try Mutations", () => {
-    test("createResourceTreeInSource should not create already existing Resource", async () => {
-      const resourceName = await sendPostRequest(
-        `query { availableResources(sourceName:"Mimic") { id name }}`,
+    test("createResourceTreeInSource should generate a label if fhirType already exists", async () => {
+      let fhirType;
+      await sendPostRequest(
+        `query { availableResources(sourceName:"Mimic") { id label fhirType }}`,
         {},
         token
-      ).then(res => res.data.availableResources[0].name);
+      ).then(res => {
+        fhirType = res.data.availableResources[0].fhirType;
+      });
 
-      expect(
-        await sendPostRequest(
-          `mutation { createResourceTreeInSource(sourceName: "Mimic", resourceName: "${resourceName}") { id name }}`,
-          {},
-          token
-        )
-      ).toHaveProperty("errors");
+      return sendPostRequest(
+        `mutation { createResourceTreeInSource(sourceName: "Mimic", resourceName: "${fhirType}") { id label fhirType }}`,
+        {},
+        token
+      ).then(res => {
+        expect(res).toEqual({
+          data: {
+            createResourceTreeInSource: expect.objectContaining({
+              label: expect.stringContaining(fhirType)
+            })
+          }
+        });
+      });
     });
 
-    test("deleteResourceTreeInSource should fail if trying to delete an already deleted resource", async () => {
-      let sourceId, resourceId;
+    test("deleteSource should fail if trying to delete an already deleted resource", async () => {
+      let newResourceId;
       await sendPostRequest(
-        `query {
-          sourceInfo(sourceName:"Mimic") { id }
-          availableResources(sourceName:"Mimic") { id name }
+        `mutation {
+          createResourceTreeInSource(sourceName: "Mimic", resourceName: "Patient") { id }
         }`,
         {},
         token
       ).then(res => {
-        sourceId = res.data.sourceInfo.id;
-        resourceId = res.data.availableResources[0].id;
+        newResourceId = res.data.createResourceTreeInSource.id;
       });
-
-      expect(
-        await sendPostRequest(
-          `mutation { deleteResourceTreeInSource(sourceId: "${sourceId}", resourceId: "${resourceId}") { id }}`,
-          {},
-          token
-        )
-      ).toEqual({
-        data: {
-          deleteResourceTreeInSource: { id: resourceId }
-        }
-      });
-      expect(
-        await sendPostRequest(
-          `mutation { deleteResourceTreeInSource(sourceId: "${sourceId}", resourceId: "${resourceId}") { id }}`,
-          {},
-          token
-        )
-      ).toHaveProperty("errors");
+      await sendPostRequest(
+        `mutation { deleteResourceTreeInSource(resourceId: "${newResourceId}") { id }}`,
+        {},
+        token
+      )
+        .then(res => {
+          expect(res).toEqual({
+            data: {
+              deleteResourceTreeInSource: { id: newResourceId }
+            }
+          });
+          return sendPostRequest(
+            `mutation { deleteResourceTreeInSource(resourceId: "${newResourceId}") { id }}`,
+            {},
+            token
+          );
+        })
+        .then(res => {
+          expect(res).toHaveProperty("errors");
+        });
     });
   });
 

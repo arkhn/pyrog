@@ -10,7 +10,12 @@ jobs:
       - setup_remote_docker
       - run:
           name: Docker compose up pyrog server
-          command: env $([ -f .env.dev.custom ] && cat .env.dev.custom || cat .env.dev.default) docker-compose up --build -d
+          background: true
+          command: |
+            wget https://arkhn.org/pyrog_dev_static.zip
+            unzip -o pyrog_dev_static.zip
+            rm pyrog_dev_static.zip
+            env $([ -f .env.dev.custom ] && cat .env.dev.custom || cat .env.dev.default) docker-compose up --build
       - run:
           name: Build and run docker container for server tests ; Update codecov results
           command: |
