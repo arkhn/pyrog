@@ -188,7 +188,7 @@ describe("Graphql server", () => {
               });
               // or over HTTP.
             } else {
-              expect(await sendPostRequest(query, {})).toEqual(
+              await expect(sendPostRequest(query, {})).resolves.toEqual(
                 expect.objectContaining({
                   errors: expect.arrayContaining([
                     expect.objectContaining({ message: "Not authenticated" })
@@ -204,9 +204,9 @@ describe("Graphql server", () => {
 
   describe("Try Queries", () => {
     test("allSources", async () => {
-      expect(
-        await sendPostRequest(`query { allSources { id name }}`, {}, token)
-      ).toEqual({
+      await expect(
+        sendPostRequest(`query { allSources { id name }}`, {}, token)
+      ).resolves.toEqual({
         data: {
           allSources: expect.arrayContaining([
             expect.objectContaining({ name: "Mimic" })
@@ -232,19 +232,23 @@ describe("Graphql server", () => {
 
   describe("Try Mutations", () => {
     test("createResourceTreeInSource should generate a label if fhirType already exists", async () => {
-      const fhirType = await sendPostRequest(
+      let fhirType;
+      await sendPostRequest(
         `query { availableResources(sourceName:"Mimic") { id label fhirType }}`,
         {},
         token
-      ).then(res => res.data.availableResources[0].fhirType);
+      ).then(res => {
+        console.log(res);
+        fhirType = res.data.availableResources[0].fhirType;
+      });
 
-      expect(
-        await sendPostRequest(
+      await expect(
+        sendPostRequest(
           `mutation { createResourceTreeInSource(sourceName: "Mimic", resourceName: "${fhirType}") { id label fhirType }}`,
           {},
           token
         )
-      ).toEqual({
+      ).resolves.toEqual({
         data: {
           createResourceTreeInSource: expect.objectContaining({
             label: expect.stringContaining(fhirType)
@@ -253,38 +257,33 @@ describe("Graphql server", () => {
       });
     });
 
-    test("deleteResourceTreeInSource should fail if trying to delete an already deleted resource", async () => {
-      let sourceId, resourceId;
-      await sendPostRequest(
-        `query {
-          sourceInfo(sourceName:"Mimic") { id }
-          availableResources(sourceName:"Mimic") { id label fhirType }
+    test("deleteSource should fail if trying to delete an already deleted resource", async () => {
+      const newResourceId = await sendPostRequest(
+        `mutation {
+          createResourceTreeInSource(sourceName: "Mimic", resourceName: "Patient") { id }
         }`,
         {},
         token
-      ).then(res => {
-        sourceId = res.data.sourceInfo.id;
-        resourceId = res.data.availableResources[0].id;
-      });
+      ).then(res => res.data.createResourceTreeInSource.id);
 
-      expect(
-        await sendPostRequest(
-          `mutation { deleteResourceTreeInSource(sourceId: "${sourceId}", resourceId: "${resourceId}") { id }}`,
+      await expect(
+        sendPostRequest(
+          `mutation { deleteResource(resourceId: "${newResourceId}") { id }}`,
           {},
           token
         )
-      ).toEqual({
+      ).resolves.toEqual({
         data: {
-          deleteResourceTreeInSource: { id: resourceId }
+          deleteResource: { id: newResourceId }
         }
       });
-      expect(
-        await sendPostRequest(
-          `mutation { deleteResourceTreeInSource(sourceId: "${sourceId}", resourceId: "${resourceId}") { id }}`,
+      await expect(
+        sendPostRequest(
+          `mutation { deleteResource(resourceId: "${newResourceId}") { id }}`,
           {},
           token
         )
-      ).toHaveProperty("errors");
+      ).resolves.toHaveProperty("errors");
     });
   });
 

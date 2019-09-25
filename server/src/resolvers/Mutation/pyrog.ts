@@ -163,24 +163,9 @@ export const pyrogMutation = {
         throw new ServerError();
       });
   },
-  async deleteResourceTreeInSource(
-    parent,
-    { sourceId, resourceId },
-    context: Context,
-    info
-  ) {
+  deleteResource(parent, { resourceId }, context: Context, info) {
     getUserId(context);
-    // Check request consistency
-    const resourceAlreadyExists = await context.client.$exists.resource({
-      id: resourceId,
-      source: { id: sourceId }
-    });
 
-    if (!resourceAlreadyExists) {
-      throw new CustomError(
-        `${resourceId} doesn't exist in source ${sourceId}`
-      );
-    }
     return context.client.deleteResource({ id: resourceId });
   },
   createAttributeProfileInAttribute(

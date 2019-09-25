@@ -52,7 +52,7 @@ const availableResources = require("../../graphql/queries/availableResources.gra
 const resourceAttributeTree = require("../../graphql/queries/resourceAttributeTree.graphql");
 const createResourceTreeInSource = require("../../graphql/mutations/createResourceTreeInSource.graphql");
 const updateResource = require("../../graphql/mutations/updateResource.graphql");
-const deleteResourceTreeInSource = require("../../graphql/mutations/deleteResourceTreeInSource.graphql");
+const deleteResourceMutation = require("../../graphql/mutations/deleteResource.graphql");
 
 // LOGO
 const arkhnLogoWhite = require("../../assets/img/arkhn_logo_only_white.svg") as string;
@@ -309,21 +309,21 @@ export default class MappingView extends React.Component<
                               }}
                             </Mutation>
                             <Mutation
-                              mutation={deleteResourceTreeInSource}
+                              mutation={deleteResourceMutation}
                               onCompleted={(data: any) => {
                                 this.props.toaster.show({
                                   icon: "layout-hierarchy",
                                   intent: "success",
                                   message: `Ressource ${
-                                    data.deleteResourceTreeInSource.fhirType
+                                    data.deleteResource.fhirType
                                   } supprimée pour ${
                                     selectedNode.source.name
                                   }.`,
                                   timeout: 4000
                                 });
+                                this.clearLocationSearch();
                                 dispatch(deselectFhirResource());
                                 dispatch(deleteResource());
-                                this.clearLocationSearch();
                               }}
                               onError={(error: any) => {
                                 this.props.toaster.show({
@@ -347,7 +347,6 @@ export default class MappingView extends React.Component<
                                     onClick={() => {
                                       deleteResource({
                                         variables: {
-                                          sourceId: selectedNode.source.id,
                                           resourceId: selectedNode.resource.id
                                         }
                                       });
