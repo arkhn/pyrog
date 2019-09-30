@@ -1,6 +1,0 @@
-mutation deleteResourceTreeInSource($sourceId: ID!, $resourceId: ID!) {
-  deleteResourceTreeInSource(sourceId: $sourceId, resourceId: $resourceId) {
-    id
-    name
-  }
-}

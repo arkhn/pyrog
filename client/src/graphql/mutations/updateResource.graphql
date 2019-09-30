@@ -1,0 +1,10 @@
+mutation updateResource(
+  $where: ResourceWhereUniqueInput!
+  $data: ResourceUpdateInput
+) {
+  updateResource(where: $where, data: $data) {
+    id
+    label
+    fhirType
+  }
+}

@@ -2,6 +2,7 @@ import {
   Button,
   ControlGroup,
   FormGroup,
+  Icon,
   InputGroup,
   Spinner,
   Tab,
@@ -31,10 +32,6 @@ import {
 import { availableResourceNames } from "./reducer";
 
 // COMPONENTS
-import ColumnPicker from "../../components/columnPicker";
-import StringSelect from "../../components/selects/stringSelect";
-import TSelect from "../../components/selects/TSelect";
-import SourceSelect from "../../components/selects/sourceSelect";
 import ResourceSelect from "../../components/selects/resourceSelect";
 import AddResourceSelect from "../../components/selects/addResourceSelect";
 import FhirResourceTree from "../../components/fhirResourceTree";
@@ -48,17 +45,14 @@ import SQLRequestParserTab from "./components/tabs/SQLRequestParserTab";
 import { IReduxStore, IView } from "../../types";
 
 import "./style.less";
+import selectedNodeReducer from "../../services/selectedNode/reducer";
 
 // GRAPHQL
-const allSources = require("../../graphql/queries/allSources.graphql");
 const availableResources = require("../../graphql/queries/availableResources.graphql");
 const resourceAttributeTree = require("../../graphql/queries/resourceAttributeTree.graphql");
 const createResourceTreeInSource = require("../../graphql/mutations/createResourceTreeInSource.graphql");
-const deleteResourceTreeInSource = require("../../graphql/mutations/deleteResourceTreeInSource.graphql");
-
-// LOGO
-const arkhnLogoWhite = require("../../assets/img/arkhn_logo_only_white.svg") as string;
-const arkhnLogoBlack = require("../../assets/img/arkhn_logo_only_black.svg") as string;
+const deleteResourceMutation = require("../../graphql/mutations/deleteResource.graphql");
+const updateResource = require("../../graphql/mutations/updateResource.graphql");
 
 export interface IMappingProps {
   createdProfiles: number;
@@ -143,6 +137,13 @@ export default class MappingView extends React.Component<
     this.props.history.push({ search: qs });
   };
 
+  private clearLocationSearch = (keys: string[]) => {
+    let qs = { ...QueryString.parse(this.props.location.search) };
+    keys.forEach(key => delete qs[key]);
+
+    this.props.history.push({ search: QueryString.stringify(qs) });
+  };
+
   public render = () => {
     const {
       createdProfiles,
@@ -160,6 +161,56 @@ export default class MappingView extends React.Component<
         <Navbar />
         <div id="mapping-explorer-container">
           <div id="main-container">
+            <div id="exploration-panel">
+              <InputColumns
+                selectedAttribute={selectedNode.attribute}
+                schema={
+                  selectedNode.source.name
+                    ? this.props.data.sourceSchemas.schemaBySourceName[
+                        selectedNode.source.name
+                      ]
+                    : {}
+                }
+                source={selectedNode.source}
+              />
+              <div id="column-selection">
+                <Tabs
+                  onChange={(tabId: TabId) => {
+                    this.setState({ selectedTabId: tabId });
+                  }}
+                  selectedTabId={selectedTabId}
+                >
+                  <Tab
+                    id="picker"
+                    panel={
+                      <ColumnPickingTab
+                        attribute={selectedNode.attribute}
+                        schema={
+                          selectedNode.source.name
+                            ? this.props.data.sourceSchemas.schemaBySourceName[
+                                selectedNode.source.name
+                              ]
+                            : {}
+                        }
+                        source={selectedNode.source}
+                      />
+                    }
+                    title="Simple Tools"
+                  />
+                  <Tab
+                    id="sql-parser"
+                    panel={<SQLRequestParserTab />}
+                    title="SQL Parser Tool"
+                  />
+                  <Tab
+                    id="mb"
+                    disabled
+                    panel={<ColumnSuggestionTab />}
+                    title="Column Suggestion Tool"
+                  />
+                </Tabs>
+              </div>
+            </div>
             <Query
               fetchPolicy={"network-only"}
               query={availableResources}
@@ -173,10 +224,10 @@ export default class MappingView extends React.Component<
             >
               {({ data, loading }: any) => {
                 return (
-                  <div id="left-part">
+                  <div id="fhir-panel">
                     <div id="fhir-attributes">
                       <div id="resource-selector">
-                        <FormGroup label={"Add Resource"}>
+                        <FormGroup>
                           <ControlGroup>
                             <ResourceSelect
                               disabled={!selectedNode.source}
@@ -191,7 +242,11 @@ export default class MappingView extends React.Component<
                               loading={loading}
                               onChange={(resource: any) => {
                                 dispatch(
-                                  updateFhirResource(resource.id, resource.name)
+                                  updateFhirResource(
+                                    resource.id,
+                                    resource.fhirType,
+                                    resource.label
+                                  )
                                 );
                                 this.updateLocationSearch(
                                   "resourceId",
@@ -199,20 +254,75 @@ export default class MappingView extends React.Component<
                                 );
                               }}
                             />
+
+                            <Mutation mutation={updateResource}>
+                              {(
+                                updateResourceLabel: any,
+                                { data, loading }: any
+                              ) => {
+                                const value = selectedNode.resource.label || "";
+                                return (
+                                  <InputGroup
+                                    onChange={(
+                                      event: React.ChangeEvent<HTMLInputElement>
+                                    ) => {
+                                      const newValue = event.target.value;
+                                      dispatch(
+                                        updateFhirResource(
+                                          selectedNode.resource.id,
+                                          selectedNode.resource.fhirType,
+                                          newValue
+                                        )
+                                      );
+                                    }}
+                                    onKeyPress={event => {
+                                      if (event.key === "Enter") {
+                                        updateResourceLabel({
+                                          variables: {
+                                            where: {
+                                              id: selectedNode.resource.id
+                                            },
+                                            data: {
+                                              label: value
+                                            }
+                                          }
+                                        });
+                                      }
+                                    }}
+                                    type="text"
+                                    placeholder="Label..."
+                                    value={value}
+                                    rightElement={
+                                      loading ? (
+                                        <Spinner size={15} />
+                                      ) : data ? (
+                                        <Icon
+                                          icon="small-tick"
+                                          intent="primary"
+                                        />
+                                      ) : null
+                                    }
+                                  />
+                                );
+                              }}
+                            </Mutation>
                             <Mutation
-                              mutation={deleteResourceTreeInSource}
+                              mutation={deleteResourceMutation}
                               onCompleted={(data: any) => {
                                 this.props.toaster.show({
                                   icon: "layout-hierarchy",
                                   intent: "success",
                                   message: `Ressource ${
-                                    data.deleteResourceTreeInSource.name
+                                    data.deleteResource.fhirType
                                   } supprimée pour ${
                                     selectedNode.source.name
                                   }.`,
                                   timeout: 4000
                                 });
-
+                                this.clearLocationSearch([
+                                  "resourceId",
+                                  "attributeId"
+                                ]);
                                 dispatch(deselectFhirResource());
                                 dispatch(deleteResource());
                               }}
@@ -238,7 +348,6 @@ export default class MappingView extends React.Component<
                                     onClick={() => {
                                       deleteResource({
                                         variables: {
-                                          sourceId: selectedNode.source.id,
                                           resourceId: selectedNode.resource.id
                                         }
                                       });
@@ -251,7 +360,7 @@ export default class MappingView extends React.Component<
                         </FormGroup>
                       </div>
                       <div id="fhir-resource-tree">
-                        {selectedNode.resource.name ? (
+                        {selectedNode.resource.fhirType ? (
                           <Query
                             fetchPolicy={"network-only"}
                             query={resourceAttributeTree}
@@ -311,17 +420,7 @@ export default class MappingView extends React.Component<
                             disabled={!selectedNode.source}
                             intent={null}
                             inputItem={selectedAddResource}
-                            items={availableResourceNames.filter(
-                              (resource: any) => {
-                                return (
-                                  data &&
-                                  data.availableResources &&
-                                  data.availableResources
-                                    .map((resource: any) => resource.name)
-                                    .indexOf(resource.name) < 0
-                                );
-                              }
-                            )}
+                            items={availableResourceNames}
                             onChange={(resource: any) => {
                               dispatch(updateAddResource(resource));
                             }}
@@ -333,7 +432,7 @@ export default class MappingView extends React.Component<
                                 icon: "layout-hierarchy",
                                 intent: "success",
                                 message: `Ressource ${
-                                  data.createResourceTreeInSource.name
+                                  data.createResourceTreeInSource.fhirType
                                 } créée pour ${selectedNode.source.name}.`,
                                 timeout: 4000
                               });
@@ -373,56 +472,6 @@ export default class MappingView extends React.Component<
                 );
               }}
             </Query>
-            <div id="right-part">
-              <InputColumns
-                selectedAttribute={selectedNode.attribute}
-                schema={
-                  selectedNode.source.name
-                    ? this.props.data.sourceSchemas.schemaBySourceName[
-                        selectedNode.source.name
-                      ]
-                    : {}
-                }
-                source={selectedNode.source}
-              />
-              <div id="column-selection">
-                <Tabs
-                  onChange={(tabId: TabId) => {
-                    this.setState({ selectedTabId: tabId });
-                  }}
-                  selectedTabId={selectedTabId}
-                >
-                  <Tab
-                    id="picker"
-                    panel={
-                      <ColumnPickingTab
-                        attribute={selectedNode.attribute}
-                        schema={
-                          selectedNode.source.name
-                            ? this.props.data.sourceSchemas.schemaBySourceName[
-                                selectedNode.source.name
-                              ]
-                            : {}
-                        }
-                        source={selectedNode.source}
-                      />
-                    }
-                    title="Simple Tools"
-                  />
-                  <Tab
-                    id="sql-parser"
-                    panel={<SQLRequestParserTab />}
-                    title="SQL Parser Tool"
-                  />
-                  <Tab
-                    id="mb"
-                    disabled
-                    panel={<ColumnSuggestionTab />}
-                    title="Column Suggestion Tool"
-                  />
-                </Tabs>
-              </div>
-            </div>
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@ export const queries = [
   // QUERIES
   ["inputColumns", { where: { id: "test" } }],
   ["resource", { where: { id: "test" } }],
-  ["resources", { where: { name: "test" } }],
+  ["resources", { where: { fhirType: "test" } }],
   ["sourceInfo", { sourceId: "test" }],
   ["resourceInfo", { resourceId: "test" }],
   ["allSources", null],

@@ -51,7 +51,7 @@ export const changeNode = (
                   source.data.sourceInfo,
                   resource
                     ? resource.data.resourceInfo
-                    : { id: null, name: null },
+                    : { id: null, label: null, fhirType: null },
                   attribute
                     ? attribute.data.attributeInfo
                     : { id: null, name: null }
@@ -124,13 +124,15 @@ export const deselectSource = (): IAction => {
 // Fhir Resource
 export const updateFhirResource = (
   resourceId: string,
-  resourceName: string
+  fhirType: string,
+  label: string
 ): IAction => {
   return {
     type: "UPDATE_FHIR_RESOURCE",
     payload: {
-      resourceName,
-      resourceId
+      fhirType,
+      resourceId,
+      label
     }
   };
 };

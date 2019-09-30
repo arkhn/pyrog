@@ -1,13 +1,6 @@
 import { forwardTo } from "prisma-binding";
 
-import {
-  checkAuth,
-  Context,
-  CustomError,
-  getUserId,
-  PermissionError,
-  ServerError
-} from "../../utils";
+import { checkAuth, Context, getUserId } from "../../utils";
 
 export const pyrogMutation = {
   async createSource(parent, { sourceName, hasOwner }, context: Context) {
@@ -112,6 +105,7 @@ export const pyrogMutation = {
 
     return join;
   },
+  updateResource: checkAuth(forwardTo("binding")),
   updateAttribute: checkAuth(forwardTo("binding")),
   async updateInputColumn(parent, { id, data }, context: Context) {
     getUserId(context);
@@ -136,19 +130,14 @@ export const pyrogMutation = {
   ) {
     getUserId(context);
 
-    const resourceAlreadyExists = sourceName
-      ? await context.client.$exists.resource({
-          name: resourceName,
-          source: { id: sourceId }
-        })
-      : await context.client.$exists.resource({
-          name: resourceName,
-          source: { name: sourceName }
-        });
-
-    if (resourceAlreadyExists) {
-      throw new CustomError(`${resourceName} already exists for this Source`);
-    }
+    // Count similar fhir resources for the given source
+    let otherFhirResourceIntances = 0;
+    otherFhirResourceIntances = (await context.client.resources({
+      where: {
+        fhirType: resourceName,
+        source: sourceName ? { name: sourceName } : { id: sourceId }
+      }
+    })).length;
 
     return fetch(
       `http://localhost:${
@@ -156,46 +145,35 @@ export const pyrogMutation = {
       }/resource/${resourceName}.json`
     )
       .then((response: any) => {
-        return response.json();
-      })
-      .then((response: any) => {
-        if (sourceName) {
-          return context.client.createResource({
-            source: { connect: { name: sourceName } },
-            name: resourceName,
-            attributes: response["attributes"]
-          });
+        if (response.ok) {
+          return response.json();
         } else {
-          return context.client.createResource({
-            source: { connect: { id: sourceId } },
-            name: resourceName,
-            attributes: response["attributes"]
-          });
+          throw new Error(
+            `${response.status} ${response.url} ${response.statusText}`
+          );
         }
       })
-      .catch((error: any) => {
-        console.log(error);
-        throw new ServerError();
+      .then((response: any) => {
+        let newResource = {
+          fhirType: resourceName,
+          attributes: response["attributes"],
+          source: sourceName
+            ? { connect: { name: sourceName } }
+            : { connect: { id: sourceId } }
+        };
+
+        // When similar fhir resources already exist
+        // for the given source, we give this new instance
+        // a default label.
+        if (otherFhirResourceIntances) {
+          newResource["label"] = `${resourceName}_${otherFhirResourceIntances}`;
+        }
+
+        return context.client.createResource(newResource);
       });
   },
-  async deleteResourceTreeInSource(
-    parent,
-    { sourceId, resourceId },
-    context: Context,
-    info
-  ) {
+  async deleteResource(parent, { resourceId }, context: Context, info) {
     getUserId(context);
-    // Check request consistency
-    const resourceAlreadyExists = await context.client.$exists.resource({
-      id: resourceId,
-      source: { id: sourceId }
-    });
-
-    if (!resourceAlreadyExists) {
-      throw new CustomError(
-        `${resourceId} doesn't exist in source ${sourceId}`
-      );
-    }
     return context.client.deleteResource({ id: resourceId });
   },
   createAttributeProfileInAttribute(
@@ -230,11 +208,12 @@ export const pyrogMutation = {
         })
         .catch((error: any) => {
           console.log(error);
-          throw new ServerError();
+          throw new Error(error);
         });
     } catch (error) {
       // TODO: return something consistent
       console.log(error);
+      throw new Error(error);
     }
   },
   async deleteAttribute(parent, { id }, context: Context, info) {

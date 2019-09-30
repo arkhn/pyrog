@@ -34,6 +34,10 @@ type Mutation {
   ): Join!
   deleteJoinAndUpdateInputColumn(inputColumnId: ID!, joinId: ID!): Join!
 
+  updateResource(
+    where: ResourceWhereUniqueInput!
+    data: ResourceUpdateInput
+  ): Resource!
   updateAttribute(id: ID!, data: AttributeUpdateInput): Attribute!
   updateInputColumn(id: ID!, data: InputColumnUpdateInput): InputColumn!
   updateJoin(id: ID!, data: JoinUpdateInput): Join!
@@ -43,7 +47,7 @@ type Mutation {
     sourceName: String
     resourceName: String!
   ): Resource!
-  deleteResourceTreeInSource(sourceId: ID!, resourceId: ID!): Resource!
+  deleteResource(resourceId: ID!): Resource!
   createAttributeProfileInAttribute(
     parentAttributeId: ID!
     attributeName: String!
