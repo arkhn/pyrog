@@ -231,7 +231,7 @@ export const pyrogMutation = {
   },
   async createCredential(
     parent,
-    { login, password, host, port },
+    { login, password, host, port, sourceId },
     context: Context
   ) {
     const userId = getUserId(context);
@@ -243,9 +243,7 @@ export const pyrogMutation = {
       port,
       password: encryptedPassword,
       type: "POSTGRES",
-      users: {
-        connect: [{ id: userId }]
-      }
+      source: { connect: { id: sourceId } }
     });
   }
 };

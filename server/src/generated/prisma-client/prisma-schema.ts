@@ -594,15 +594,15 @@ export const typeDefs = /* GraphQL */ `
     login: String!
     password: String
     type: DatabaseType!
-    users(
-      where: UserWhereInput
-      orderBy: UserOrderByInput
+    source(
+      where: SourceWhereInput
+      orderBy: SourceOrderByInput
       skip: Int
       after: String
       before: String
       first: Int
       last: Int
-    ): [User!]
+    ): [Source!]
   }
 
   type CredentialConnection {
@@ -618,15 +618,20 @@ export const typeDefs = /* GraphQL */ `
     login: String!
     password: String
     type: DatabaseType!
-    users: UserCreateManyWithoutCredentialsInput
+    source: SourceCreateManyWithoutCredentialInput
   }
 
-  input CredentialCreateManyWithoutUsersInput {
-    create: [CredentialCreateWithoutUsersInput!]
+  input CredentialCreateManyInput {
+    create: [CredentialCreateInput!]
     connect: [CredentialWhereUniqueInput!]
   }
 
-  input CredentialCreateWithoutUsersInput {
+  input CredentialCreateOneWithoutSourceInput {
+    create: CredentialCreateWithoutSourceInput
+    connect: CredentialWhereUniqueInput
+  }
+
+  input CredentialCreateWithoutSourceInput {
     id: ID
     host: String!
     port: String!
@@ -762,13 +767,22 @@ export const typeDefs = /* GraphQL */ `
     NOT: [CredentialSubscriptionWhereInput!]
   }
 
+  input CredentialUpdateDataInput {
+    host: String
+    port: String
+    login: String
+    password: String
+    type: DatabaseType
+    source: SourceUpdateManyWithoutCredentialInput
+  }
+
   input CredentialUpdateInput {
     host: String
     port: String
     login: String
     password: String
     type: DatabaseType
-    users: UserUpdateManyWithoutCredentialsInput
+    source: SourceUpdateManyWithoutCredentialInput
   }
 
   input CredentialUpdateManyDataInput {
@@ -779,6 +793,18 @@ export const typeDefs = /* GraphQL */ `
     type: DatabaseType
   }
 
+  input CredentialUpdateManyInput {
+    create: [CredentialCreateInput!]
+    update: [CredentialUpdateWithWhereUniqueNestedInput!]
+    upsert: [CredentialUpsertWithWhereUniqueNestedInput!]
+    delete: [CredentialWhereUniqueInput!]
+    connect: [CredentialWhereUniqueInput!]
+    set: [CredentialWhereUniqueInput!]
+    disconnect: [CredentialWhereUniqueInput!]
+    deleteMany: [CredentialScalarWhereInput!]
+    updateMany: [CredentialUpdateManyWithWhereNestedInput!]
+  }
+
   input CredentialUpdateManyMutationInput {
     host: String
     port: String
@@ -787,24 +813,21 @@ export const typeDefs = /* GraphQL */ `
     type: DatabaseType
   }
 
-  input CredentialUpdateManyWithoutUsersInput {
-    create: [CredentialCreateWithoutUsersInput!]
-    delete: [CredentialWhereUniqueInput!]
-    connect: [CredentialWhereUniqueInput!]
-    set: [CredentialWhereUniqueInput!]
-    disconnect: [CredentialWhereUniqueInput!]
-    update: [CredentialUpdateWithWhereUniqueWithoutUsersInput!]
-    upsert: [CredentialUpsertWithWhereUniqueWithoutUsersInput!]
-    deleteMany: [CredentialScalarWhereInput!]
-    updateMany: [CredentialUpdateManyWithWhereNestedInput!]
-  }
-
   input CredentialUpdateManyWithWhereNestedInput {
     where: CredentialScalarWhereInput!
     data: CredentialUpdateManyDataInput!
   }
 
-  input CredentialUpdateWithoutUsersDataInput {
+  input CredentialUpdateOneWithoutSourceInput {
+    create: CredentialCreateWithoutSourceInput
+    update: CredentialUpdateWithoutSourceDataInput
+    upsert: CredentialUpsertWithoutSourceInput
+    delete: Boolean
+    disconnect: Boolean
+    connect: CredentialWhereUniqueInput
+  }
+
+  input CredentialUpdateWithoutSourceDataInput {
     host: String
     port: String
     login: String
@@ -812,15 +835,20 @@ export const typeDefs = /* GraphQL */ `
     type: DatabaseType
   }
 
-  input CredentialUpdateWithWhereUniqueWithoutUsersInput {
+  input CredentialUpdateWithWhereUniqueNestedInput {
     where: CredentialWhereUniqueInput!
-    data: CredentialUpdateWithoutUsersDataInput!
+    data: CredentialUpdateDataInput!
   }
 
-  input CredentialUpsertWithWhereUniqueWithoutUsersInput {
+  input CredentialUpsertWithoutSourceInput {
+    update: CredentialUpdateWithoutSourceDataInput!
+    create: CredentialCreateWithoutSourceInput!
+  }
+
+  input CredentialUpsertWithWhereUniqueNestedInput {
     where: CredentialWhereUniqueInput!
-    update: CredentialUpdateWithoutUsersDataInput!
-    create: CredentialCreateWithoutUsersInput!
+    update: CredentialUpdateDataInput!
+    create: CredentialCreateInput!
   }
 
   input CredentialWhereInput {
@@ -898,9 +926,9 @@ export const typeDefs = /* GraphQL */ `
     type_not: DatabaseType
     type_in: [DatabaseType!]
     type_not_in: [DatabaseType!]
-    users_every: UserWhereInput
-    users_some: UserWhereInput
-    users_none: UserWhereInput
+    source_every: SourceWhereInput
+    source_some: SourceWhereInput
+    source_none: SourceWhereInput
     AND: [CredentialWhereInput!]
     OR: [CredentialWhereInput!]
     NOT: [CredentialWhereInput!]
@@ -2464,6 +2492,7 @@ export const typeDefs = /* GraphQL */ `
     ): [Resource!]
     updatedAt: DateTime!
     createdAt: DateTime!
+    credential: Credential
   }
 
   type SourceConnection {
@@ -2477,6 +2506,12 @@ export const typeDefs = /* GraphQL */ `
     name: String!
     hasOwner: Boolean
     resources: ResourceCreateManyWithoutSourceInput
+    credential: CredentialCreateOneWithoutSourceInput
+  }
+
+  input SourceCreateManyWithoutCredentialInput {
+    create: [SourceCreateWithoutCredentialInput!]
+    connect: [SourceWhereUniqueInput!]
   }
 
   input SourceCreateOneWithoutResourcesInput {
@@ -2484,10 +2519,18 @@ export const typeDefs = /* GraphQL */ `
     connect: SourceWhereUniqueInput
   }
 
+  input SourceCreateWithoutCredentialInput {
+    id: ID
+    name: String!
+    hasOwner: Boolean
+    resources: ResourceCreateManyWithoutSourceInput
+  }
+
   input SourceCreateWithoutResourcesInput {
     id: ID
     name: String!
     hasOwner: Boolean
+    credential: CredentialCreateOneWithoutSourceInput
   }
 
   type SourceEdge {
@@ -2516,6 +2559,58 @@ export const typeDefs = /* GraphQL */ `
     createdAt: DateTime!
   }
 
+  input SourceScalarWhereInput {
+    id: ID
+    id_not: ID
+    id_in: [ID!]
+    id_not_in: [ID!]
+    id_lt: ID
+    id_lte: ID
+    id_gt: ID
+    id_gte: ID
+    id_contains: ID
+    id_not_contains: ID
+    id_starts_with: ID
+    id_not_starts_with: ID
+    id_ends_with: ID
+    id_not_ends_with: ID
+    name: String
+    name_not: String
+    name_in: [String!]
+    name_not_in: [String!]
+    name_lt: String
+    name_lte: String
+    name_gt: String
+    name_gte: String
+    name_contains: String
+    name_not_contains: String
+    name_starts_with: String
+    name_not_starts_with: String
+    name_ends_with: String
+    name_not_ends_with: String
+    hasOwner: Boolean
+    hasOwner_not: Boolean
+    updatedAt: DateTime
+    updatedAt_not: DateTime
+    updatedAt_in: [DateTime!]
+    updatedAt_not_in: [DateTime!]
+    updatedAt_lt: DateTime
+    updatedAt_lte: DateTime
+    updatedAt_gt: DateTime
+    updatedAt_gte: DateTime
+    createdAt: DateTime
+    createdAt_not: DateTime
+    createdAt_in: [DateTime!]
+    createdAt_not_in: [DateTime!]
+    createdAt_lt: DateTime
+    createdAt_lte: DateTime
+    createdAt_gt: DateTime
+    createdAt_gte: DateTime
+    AND: [SourceScalarWhereInput!]
+    OR: [SourceScalarWhereInput!]
+    NOT: [SourceScalarWhereInput!]
+  }
+
   type SourceSubscriptionPayload {
     mutation: MutationType!
     node: Source
@@ -2538,11 +2633,34 @@ export const typeDefs = /* GraphQL */ `
     name: String
     hasOwner: Boolean
     resources: ResourceUpdateManyWithoutSourceInput
+    credential: CredentialUpdateOneWithoutSourceInput
+  }
+
+  input SourceUpdateManyDataInput {
+    name: String
+    hasOwner: Boolean
   }
 
   input SourceUpdateManyMutationInput {
     name: String
     hasOwner: Boolean
+  }
+
+  input SourceUpdateManyWithoutCredentialInput {
+    create: [SourceCreateWithoutCredentialInput!]
+    delete: [SourceWhereUniqueInput!]
+    connect: [SourceWhereUniqueInput!]
+    set: [SourceWhereUniqueInput!]
+    disconnect: [SourceWhereUniqueInput!]
+    update: [SourceUpdateWithWhereUniqueWithoutCredentialInput!]
+    upsert: [SourceUpsertWithWhereUniqueWithoutCredentialInput!]
+    deleteMany: [SourceScalarWhereInput!]
+    updateMany: [SourceUpdateManyWithWhereNestedInput!]
+  }
+
+  input SourceUpdateManyWithWhereNestedInput {
+    where: SourceScalarWhereInput!
+    data: SourceUpdateManyDataInput!
   }
 
   input SourceUpdateOneRequiredWithoutResourcesInput {
@@ -2552,14 +2670,32 @@ export const typeDefs = /* GraphQL */ `
     connect: SourceWhereUniqueInput
   }
 
+  input SourceUpdateWithoutCredentialDataInput {
+    name: String
+    hasOwner: Boolean
+    resources: ResourceUpdateManyWithoutSourceInput
+  }
+
   input SourceUpdateWithoutResourcesDataInput {
     name: String
     hasOwner: Boolean
+    credential: CredentialUpdateOneWithoutSourceInput
+  }
+
+  input SourceUpdateWithWhereUniqueWithoutCredentialInput {
+    where: SourceWhereUniqueInput!
+    data: SourceUpdateWithoutCredentialDataInput!
   }
 
   input SourceUpsertWithoutResourcesInput {
     update: SourceUpdateWithoutResourcesDataInput!
     create: SourceCreateWithoutResourcesInput!
+  }
+
+  input SourceUpsertWithWhereUniqueWithoutCredentialInput {
+    where: SourceWhereUniqueInput!
+    update: SourceUpdateWithoutCredentialDataInput!
+    create: SourceCreateWithoutCredentialInput!
   }
 
   input SourceWhereInput {
@@ -2612,6 +2748,7 @@ export const typeDefs = /* GraphQL */ `
     createdAt_lte: DateTime
     createdAt_gt: DateTime
     createdAt_gte: DateTime
+    credential: CredentialWhereInput
     AND: [SourceWhereInput!]
     OR: [SourceWhereInput!]
     NOT: [SourceWhereInput!]
@@ -2669,20 +2806,7 @@ export const typeDefs = /* GraphQL */ `
     name: String!
     password: String!
     role: Role
-    credentials: CredentialCreateManyWithoutUsersInput
-  }
-
-  input UserCreateManyWithoutCredentialsInput {
-    create: [UserCreateWithoutCredentialsInput!]
-    connect: [UserWhereUniqueInput!]
-  }
-
-  input UserCreateWithoutCredentialsInput {
-    id: ID
-    email: String!
-    name: String!
-    password: String!
-    role: Role
+    credentials: CredentialCreateManyInput
   }
 
   type UserEdge {
@@ -2717,88 +2841,6 @@ export const typeDefs = /* GraphQL */ `
     createdAt: DateTime!
   }
 
-  input UserScalarWhereInput {
-    id: ID
-    id_not: ID
-    id_in: [ID!]
-    id_not_in: [ID!]
-    id_lt: ID
-    id_lte: ID
-    id_gt: ID
-    id_gte: ID
-    id_contains: ID
-    id_not_contains: ID
-    id_starts_with: ID
-    id_not_starts_with: ID
-    id_ends_with: ID
-    id_not_ends_with: ID
-    email: String
-    email_not: String
-    email_in: [String!]
-    email_not_in: [String!]
-    email_lt: String
-    email_lte: String
-    email_gt: String
-    email_gte: String
-    email_contains: String
-    email_not_contains: String
-    email_starts_with: String
-    email_not_starts_with: String
-    email_ends_with: String
-    email_not_ends_with: String
-    name: String
-    name_not: String
-    name_in: [String!]
-    name_not_in: [String!]
-    name_lt: String
-    name_lte: String
-    name_gt: String
-    name_gte: String
-    name_contains: String
-    name_not_contains: String
-    name_starts_with: String
-    name_not_starts_with: String
-    name_ends_with: String
-    name_not_ends_with: String
-    password: String
-    password_not: String
-    password_in: [String!]
-    password_not_in: [String!]
-    password_lt: String
-    password_lte: String
-    password_gt: String
-    password_gte: String
-    password_contains: String
-    password_not_contains: String
-    password_starts_with: String
-    password_not_starts_with: String
-    password_ends_with: String
-    password_not_ends_with: String
-    role: Role
-    role_not: Role
-    role_in: [Role!]
-    role_not_in: [Role!]
-    updatedAt: DateTime
-    updatedAt_not: DateTime
-    updatedAt_in: [DateTime!]
-    updatedAt_not_in: [DateTime!]
-    updatedAt_lt: DateTime
-    updatedAt_lte: DateTime
-    updatedAt_gt: DateTime
-    updatedAt_gte: DateTime
-    createdAt: DateTime
-    createdAt_not: DateTime
-    createdAt_in: [DateTime!]
-    createdAt_not_in: [DateTime!]
-    createdAt_lt: DateTime
-    createdAt_lte: DateTime
-    createdAt_gt: DateTime
-    createdAt_gte: DateTime
-    AND: [UserScalarWhereInput!]
-    OR: [UserScalarWhereInput!]
-    NOT: [UserScalarWhereInput!]
-  }
-
   type UserSubscriptionPayload {
     mutation: MutationType!
     node: User
@@ -2822,14 +2864,7 @@ export const typeDefs = /* GraphQL */ `
     name: String
     password: String
     role: Role
-    credentials: CredentialUpdateManyWithoutUsersInput
-  }
-
-  input UserUpdateManyDataInput {
-    email: String
-    name: String
-    password: String
-    role: Role
+    credentials: CredentialUpdateManyInput
   }
 
   input UserUpdateManyMutationInput {
@@ -2837,41 +2872,6 @@ export const typeDefs = /* GraphQL */ `
     name: String
     password: String
     role: Role
-  }
-
-  input UserUpdateManyWithoutCredentialsInput {
-    create: [UserCreateWithoutCredentialsInput!]
-    delete: [UserWhereUniqueInput!]
-    connect: [UserWhereUniqueInput!]
-    set: [UserWhereUniqueInput!]
-    disconnect: [UserWhereUniqueInput!]
-    update: [UserUpdateWithWhereUniqueWithoutCredentialsInput!]
-    upsert: [UserUpsertWithWhereUniqueWithoutCredentialsInput!]
-    deleteMany: [UserScalarWhereInput!]
-    updateMany: [UserUpdateManyWithWhereNestedInput!]
-  }
-
-  input UserUpdateManyWithWhereNestedInput {
-    where: UserScalarWhereInput!
-    data: UserUpdateManyDataInput!
-  }
-
-  input UserUpdateWithoutCredentialsDataInput {
-    email: String
-    name: String
-    password: String
-    role: Role
-  }
-
-  input UserUpdateWithWhereUniqueWithoutCredentialsInput {
-    where: UserWhereUniqueInput!
-    data: UserUpdateWithoutCredentialsDataInput!
-  }
-
-  input UserUpsertWithWhereUniqueWithoutCredentialsInput {
-    where: UserWhereUniqueInput!
-    update: UserUpdateWithoutCredentialsDataInput!
-    create: UserCreateWithoutCredentialsInput!
   }
 
   input UserWhereInput {

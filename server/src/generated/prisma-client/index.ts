@@ -339,6 +339,8 @@ export interface ClientConstructor<T> {
  * Types
  */
 
+export type DatabaseType = "POSTGRES";
+
 export type AttributeOrderByInput =
   | "id_ASC"
   | "id_DESC"
@@ -372,6 +374,18 @@ export type ResourceOrderByInput =
   | "primaryKeyTable_DESC"
   | "primaryKeyColumn_ASC"
   | "primaryKeyColumn_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC";
+
+export type SourceOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "hasOwner_ASC"
+  | "hasOwner_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC"
   | "createdAt_ASC"
@@ -415,26 +429,6 @@ export type JoinOrderByInput =
   | "createdAt_ASC"
   | "createdAt_DESC";
 
-export type DatabaseType = "POSTGRES";
-
-export type Role = "ADMIN" | "USER";
-
-export type UserOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "email_ASC"
-  | "email_DESC"
-  | "name_ASC"
-  | "name_DESC"
-  | "password_ASC"
-  | "password_DESC"
-  | "role_ASC"
-  | "role_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC";
-
 export type CredentialOrderByInput =
   | "id_ASC"
   | "id_DESC"
@@ -449,13 +443,19 @@ export type CredentialOrderByInput =
   | "type_ASC"
   | "type_DESC";
 
-export type SourceOrderByInput =
+export type Role = "ADMIN" | "USER";
+
+export type UserOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "email_ASC"
+  | "email_DESC"
   | "name_ASC"
   | "name_DESC"
-  | "hasOwner_ASC"
-  | "hasOwner_DESC"
+  | "password_ASC"
+  | "password_DESC"
+  | "role_ASC"
+  | "role_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC"
   | "createdAt_ASC"
@@ -737,9 +737,93 @@ export interface SourceWhereInput {
   createdAt_lte?: Maybe<DateTimeInput>;
   createdAt_gt?: Maybe<DateTimeInput>;
   createdAt_gte?: Maybe<DateTimeInput>;
+  credential?: Maybe<CredentialWhereInput>;
   AND?: Maybe<SourceWhereInput[] | SourceWhereInput>;
   OR?: Maybe<SourceWhereInput[] | SourceWhereInput>;
   NOT?: Maybe<SourceWhereInput[] | SourceWhereInput>;
+}
+
+export interface CredentialWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  host?: Maybe<String>;
+  host_not?: Maybe<String>;
+  host_in?: Maybe<String[] | String>;
+  host_not_in?: Maybe<String[] | String>;
+  host_lt?: Maybe<String>;
+  host_lte?: Maybe<String>;
+  host_gt?: Maybe<String>;
+  host_gte?: Maybe<String>;
+  host_contains?: Maybe<String>;
+  host_not_contains?: Maybe<String>;
+  host_starts_with?: Maybe<String>;
+  host_not_starts_with?: Maybe<String>;
+  host_ends_with?: Maybe<String>;
+  host_not_ends_with?: Maybe<String>;
+  port?: Maybe<String>;
+  port_not?: Maybe<String>;
+  port_in?: Maybe<String[] | String>;
+  port_not_in?: Maybe<String[] | String>;
+  port_lt?: Maybe<String>;
+  port_lte?: Maybe<String>;
+  port_gt?: Maybe<String>;
+  port_gte?: Maybe<String>;
+  port_contains?: Maybe<String>;
+  port_not_contains?: Maybe<String>;
+  port_starts_with?: Maybe<String>;
+  port_not_starts_with?: Maybe<String>;
+  port_ends_with?: Maybe<String>;
+  port_not_ends_with?: Maybe<String>;
+  login?: Maybe<String>;
+  login_not?: Maybe<String>;
+  login_in?: Maybe<String[] | String>;
+  login_not_in?: Maybe<String[] | String>;
+  login_lt?: Maybe<String>;
+  login_lte?: Maybe<String>;
+  login_gt?: Maybe<String>;
+  login_gte?: Maybe<String>;
+  login_contains?: Maybe<String>;
+  login_not_contains?: Maybe<String>;
+  login_starts_with?: Maybe<String>;
+  login_not_starts_with?: Maybe<String>;
+  login_ends_with?: Maybe<String>;
+  login_not_ends_with?: Maybe<String>;
+  password?: Maybe<String>;
+  password_not?: Maybe<String>;
+  password_in?: Maybe<String[] | String>;
+  password_not_in?: Maybe<String[] | String>;
+  password_lt?: Maybe<String>;
+  password_lte?: Maybe<String>;
+  password_gt?: Maybe<String>;
+  password_gte?: Maybe<String>;
+  password_contains?: Maybe<String>;
+  password_not_contains?: Maybe<String>;
+  password_starts_with?: Maybe<String>;
+  password_not_starts_with?: Maybe<String>;
+  password_ends_with?: Maybe<String>;
+  password_not_ends_with?: Maybe<String>;
+  type?: Maybe<DatabaseType>;
+  type_not?: Maybe<DatabaseType>;
+  type_in?: Maybe<DatabaseType[] | DatabaseType>;
+  type_not_in?: Maybe<DatabaseType[] | DatabaseType>;
+  source_every?: Maybe<SourceWhereInput>;
+  source_some?: Maybe<SourceWhereInput>;
+  source_none?: Maybe<SourceWhereInput>;
+  AND?: Maybe<CredentialWhereInput[] | CredentialWhereInput>;
+  OR?: Maybe<CredentialWhereInput[] | CredentialWhereInput>;
+  NOT?: Maybe<CredentialWhereInput[] | CredentialWhereInput>;
 }
 
 export interface InputColumnWhereInput {
@@ -977,6 +1061,28 @@ export type CredentialWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
 }>;
 
+export type InputColumnWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export type JoinWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export type ResourceWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export type SourceWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+  name?: Maybe<String>;
+}>;
+
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+  email?: Maybe<String>;
+}>;
+
 export interface UserWhereInput {
   id?: Maybe<ID_Input>;
   id_not?: Maybe<ID_Input>;
@@ -1062,111 +1168,6 @@ export interface UserWhereInput {
   NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
 }
 
-export interface CredentialWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  host?: Maybe<String>;
-  host_not?: Maybe<String>;
-  host_in?: Maybe<String[] | String>;
-  host_not_in?: Maybe<String[] | String>;
-  host_lt?: Maybe<String>;
-  host_lte?: Maybe<String>;
-  host_gt?: Maybe<String>;
-  host_gte?: Maybe<String>;
-  host_contains?: Maybe<String>;
-  host_not_contains?: Maybe<String>;
-  host_starts_with?: Maybe<String>;
-  host_not_starts_with?: Maybe<String>;
-  host_ends_with?: Maybe<String>;
-  host_not_ends_with?: Maybe<String>;
-  port?: Maybe<String>;
-  port_not?: Maybe<String>;
-  port_in?: Maybe<String[] | String>;
-  port_not_in?: Maybe<String[] | String>;
-  port_lt?: Maybe<String>;
-  port_lte?: Maybe<String>;
-  port_gt?: Maybe<String>;
-  port_gte?: Maybe<String>;
-  port_contains?: Maybe<String>;
-  port_not_contains?: Maybe<String>;
-  port_starts_with?: Maybe<String>;
-  port_not_starts_with?: Maybe<String>;
-  port_ends_with?: Maybe<String>;
-  port_not_ends_with?: Maybe<String>;
-  login?: Maybe<String>;
-  login_not?: Maybe<String>;
-  login_in?: Maybe<String[] | String>;
-  login_not_in?: Maybe<String[] | String>;
-  login_lt?: Maybe<String>;
-  login_lte?: Maybe<String>;
-  login_gt?: Maybe<String>;
-  login_gte?: Maybe<String>;
-  login_contains?: Maybe<String>;
-  login_not_contains?: Maybe<String>;
-  login_starts_with?: Maybe<String>;
-  login_not_starts_with?: Maybe<String>;
-  login_ends_with?: Maybe<String>;
-  login_not_ends_with?: Maybe<String>;
-  password?: Maybe<String>;
-  password_not?: Maybe<String>;
-  password_in?: Maybe<String[] | String>;
-  password_not_in?: Maybe<String[] | String>;
-  password_lt?: Maybe<String>;
-  password_lte?: Maybe<String>;
-  password_gt?: Maybe<String>;
-  password_gte?: Maybe<String>;
-  password_contains?: Maybe<String>;
-  password_not_contains?: Maybe<String>;
-  password_starts_with?: Maybe<String>;
-  password_not_starts_with?: Maybe<String>;
-  password_ends_with?: Maybe<String>;
-  password_not_ends_with?: Maybe<String>;
-  type?: Maybe<DatabaseType>;
-  type_not?: Maybe<DatabaseType>;
-  type_in?: Maybe<DatabaseType[] | DatabaseType>;
-  type_not_in?: Maybe<DatabaseType[] | DatabaseType>;
-  users_every?: Maybe<UserWhereInput>;
-  users_some?: Maybe<UserWhereInput>;
-  users_none?: Maybe<UserWhereInput>;
-  AND?: Maybe<CredentialWhereInput[] | CredentialWhereInput>;
-  OR?: Maybe<CredentialWhereInput[] | CredentialWhereInput>;
-  NOT?: Maybe<CredentialWhereInput[] | CredentialWhereInput>;
-}
-
-export type InputColumnWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
-
-export type JoinWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
-
-export type ResourceWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
-
-export type SourceWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-  name?: Maybe<String>;
-}>;
-
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-  email?: Maybe<String>;
-}>;
-
 export interface AttributeCreateInput {
   id?: Maybe<ID_Input>;
   name: String;
@@ -1205,6 +1206,21 @@ export interface SourceCreateWithoutResourcesInput {
   id?: Maybe<ID_Input>;
   name: String;
   hasOwner?: Maybe<Boolean>;
+  credential?: Maybe<CredentialCreateOneWithoutSourceInput>;
+}
+
+export interface CredentialCreateOneWithoutSourceInput {
+  create?: Maybe<CredentialCreateWithoutSourceInput>;
+  connect?: Maybe<CredentialWhereUniqueInput>;
+}
+
+export interface CredentialCreateWithoutSourceInput {
+  id?: Maybe<ID_Input>;
+  host: String;
+  port: String;
+  login: String;
+  password?: Maybe<String>;
+  type: DatabaseType;
 }
 
 export interface AttributeCreateManyWithoutAttributeInput {
@@ -1322,6 +1338,29 @@ export interface SourceUpdateOneRequiredWithoutResourcesInput {
 export interface SourceUpdateWithoutResourcesDataInput {
   name?: Maybe<String>;
   hasOwner?: Maybe<Boolean>;
+  credential?: Maybe<CredentialUpdateOneWithoutSourceInput>;
+}
+
+export interface CredentialUpdateOneWithoutSourceInput {
+  create?: Maybe<CredentialCreateWithoutSourceInput>;
+  update?: Maybe<CredentialUpdateWithoutSourceDataInput>;
+  upsert?: Maybe<CredentialUpsertWithoutSourceInput>;
+  delete?: Maybe<Boolean>;
+  disconnect?: Maybe<Boolean>;
+  connect?: Maybe<CredentialWhereUniqueInput>;
+}
+
+export interface CredentialUpdateWithoutSourceDataInput {
+  host?: Maybe<String>;
+  port?: Maybe<String>;
+  login?: Maybe<String>;
+  password?: Maybe<String>;
+  type?: Maybe<DatabaseType>;
+}
+
+export interface CredentialUpsertWithoutSourceInput {
+  update: CredentialUpdateWithoutSourceDataInput;
+  create: CredentialCreateWithoutSourceInput;
 }
 
 export interface SourceUpsertWithoutResourcesInput {
@@ -1882,22 +1921,58 @@ export interface CredentialCreateInput {
   login: String;
   password?: Maybe<String>;
   type: DatabaseType;
-  users?: Maybe<UserCreateManyWithoutCredentialsInput>;
+  source?: Maybe<SourceCreateManyWithoutCredentialInput>;
 }
 
-export interface UserCreateManyWithoutCredentialsInput {
+export interface SourceCreateManyWithoutCredentialInput {
   create?: Maybe<
-    UserCreateWithoutCredentialsInput[] | UserCreateWithoutCredentialsInput
+    SourceCreateWithoutCredentialInput[] | SourceCreateWithoutCredentialInput
   >;
-  connect?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
+  connect?: Maybe<SourceWhereUniqueInput[] | SourceWhereUniqueInput>;
 }
 
-export interface UserCreateWithoutCredentialsInput {
+export interface SourceCreateWithoutCredentialInput {
   id?: Maybe<ID_Input>;
-  email: String;
   name: String;
-  password: String;
-  role?: Maybe<Role>;
+  hasOwner?: Maybe<Boolean>;
+  resources?: Maybe<ResourceCreateManyWithoutSourceInput>;
+}
+
+export interface ResourceCreateManyWithoutSourceInput {
+  create?: Maybe<
+    ResourceCreateWithoutSourceInput[] | ResourceCreateWithoutSourceInput
+  >;
+  connect?: Maybe<ResourceWhereUniqueInput[] | ResourceWhereUniqueInput>;
+}
+
+export interface ResourceCreateWithoutSourceInput {
+  id?: Maybe<ID_Input>;
+  label?: Maybe<String>;
+  fhirType: String;
+  primaryKeyOwner?: Maybe<String>;
+  primaryKeyTable?: Maybe<String>;
+  primaryKeyColumn?: Maybe<String>;
+  attributes?: Maybe<AttributeCreateManyWithoutResourceInput>;
+}
+
+export interface AttributeCreateManyWithoutResourceInput {
+  create?: Maybe<
+    AttributeCreateWithoutResourceInput[] | AttributeCreateWithoutResourceInput
+  >;
+  connect?: Maybe<AttributeWhereUniqueInput[] | AttributeWhereUniqueInput>;
+}
+
+export interface AttributeCreateWithoutResourceInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+  mergingScript?: Maybe<String>;
+  isProfile?: Maybe<Boolean>;
+  type?: Maybe<String>;
+  comment?: Maybe<String>;
+  depth?: Maybe<Int>;
+  attributes?: Maybe<AttributeCreateManyWithoutAttributeInput>;
+  attribute?: Maybe<AttributeCreateOneWithoutAttributesInput>;
+  inputColumns?: Maybe<InputColumnCreateManyWithoutAttributeInput>;
 }
 
 export interface CredentialUpdateInput {
@@ -1906,50 +1981,133 @@ export interface CredentialUpdateInput {
   login?: Maybe<String>;
   password?: Maybe<String>;
   type?: Maybe<DatabaseType>;
-  users?: Maybe<UserUpdateManyWithoutCredentialsInput>;
+  source?: Maybe<SourceUpdateManyWithoutCredentialInput>;
 }
 
-export interface UserUpdateManyWithoutCredentialsInput {
+export interface SourceUpdateManyWithoutCredentialInput {
   create?: Maybe<
-    UserCreateWithoutCredentialsInput[] | UserCreateWithoutCredentialsInput
+    SourceCreateWithoutCredentialInput[] | SourceCreateWithoutCredentialInput
   >;
-  delete?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
-  connect?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
-  set?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
-  disconnect?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
+  delete?: Maybe<SourceWhereUniqueInput[] | SourceWhereUniqueInput>;
+  connect?: Maybe<SourceWhereUniqueInput[] | SourceWhereUniqueInput>;
+  set?: Maybe<SourceWhereUniqueInput[] | SourceWhereUniqueInput>;
+  disconnect?: Maybe<SourceWhereUniqueInput[] | SourceWhereUniqueInput>;
   update?: Maybe<
-    | UserUpdateWithWhereUniqueWithoutCredentialsInput[]
-    | UserUpdateWithWhereUniqueWithoutCredentialsInput
+    | SourceUpdateWithWhereUniqueWithoutCredentialInput[]
+    | SourceUpdateWithWhereUniqueWithoutCredentialInput
   >;
   upsert?: Maybe<
-    | UserUpsertWithWhereUniqueWithoutCredentialsInput[]
-    | UserUpsertWithWhereUniqueWithoutCredentialsInput
+    | SourceUpsertWithWhereUniqueWithoutCredentialInput[]
+    | SourceUpsertWithWhereUniqueWithoutCredentialInput
   >;
-  deleteMany?: Maybe<UserScalarWhereInput[] | UserScalarWhereInput>;
+  deleteMany?: Maybe<SourceScalarWhereInput[] | SourceScalarWhereInput>;
   updateMany?: Maybe<
-    UserUpdateManyWithWhereNestedInput[] | UserUpdateManyWithWhereNestedInput
+    | SourceUpdateManyWithWhereNestedInput[]
+    | SourceUpdateManyWithWhereNestedInput
   >;
 }
 
-export interface UserUpdateWithWhereUniqueWithoutCredentialsInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateWithoutCredentialsDataInput;
+export interface SourceUpdateWithWhereUniqueWithoutCredentialInput {
+  where: SourceWhereUniqueInput;
+  data: SourceUpdateWithoutCredentialDataInput;
 }
 
-export interface UserUpdateWithoutCredentialsDataInput {
-  email?: Maybe<String>;
+export interface SourceUpdateWithoutCredentialDataInput {
   name?: Maybe<String>;
-  password?: Maybe<String>;
-  role?: Maybe<Role>;
+  hasOwner?: Maybe<Boolean>;
+  resources?: Maybe<ResourceUpdateManyWithoutSourceInput>;
 }
 
-export interface UserUpsertWithWhereUniqueWithoutCredentialsInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutCredentialsDataInput;
-  create: UserCreateWithoutCredentialsInput;
+export interface ResourceUpdateManyWithoutSourceInput {
+  create?: Maybe<
+    ResourceCreateWithoutSourceInput[] | ResourceCreateWithoutSourceInput
+  >;
+  delete?: Maybe<ResourceWhereUniqueInput[] | ResourceWhereUniqueInput>;
+  connect?: Maybe<ResourceWhereUniqueInput[] | ResourceWhereUniqueInput>;
+  set?: Maybe<ResourceWhereUniqueInput[] | ResourceWhereUniqueInput>;
+  disconnect?: Maybe<ResourceWhereUniqueInput[] | ResourceWhereUniqueInput>;
+  update?: Maybe<
+    | ResourceUpdateWithWhereUniqueWithoutSourceInput[]
+    | ResourceUpdateWithWhereUniqueWithoutSourceInput
+  >;
+  upsert?: Maybe<
+    | ResourceUpsertWithWhereUniqueWithoutSourceInput[]
+    | ResourceUpsertWithWhereUniqueWithoutSourceInput
+  >;
+  deleteMany?: Maybe<ResourceScalarWhereInput[] | ResourceScalarWhereInput>;
+  updateMany?: Maybe<
+    | ResourceUpdateManyWithWhereNestedInput[]
+    | ResourceUpdateManyWithWhereNestedInput
+  >;
 }
 
-export interface UserScalarWhereInput {
+export interface ResourceUpdateWithWhereUniqueWithoutSourceInput {
+  where: ResourceWhereUniqueInput;
+  data: ResourceUpdateWithoutSourceDataInput;
+}
+
+export interface ResourceUpdateWithoutSourceDataInput {
+  label?: Maybe<String>;
+  fhirType?: Maybe<String>;
+  primaryKeyOwner?: Maybe<String>;
+  primaryKeyTable?: Maybe<String>;
+  primaryKeyColumn?: Maybe<String>;
+  attributes?: Maybe<AttributeUpdateManyWithoutResourceInput>;
+}
+
+export interface AttributeUpdateManyWithoutResourceInput {
+  create?: Maybe<
+    AttributeCreateWithoutResourceInput[] | AttributeCreateWithoutResourceInput
+  >;
+  delete?: Maybe<AttributeWhereUniqueInput[] | AttributeWhereUniqueInput>;
+  connect?: Maybe<AttributeWhereUniqueInput[] | AttributeWhereUniqueInput>;
+  set?: Maybe<AttributeWhereUniqueInput[] | AttributeWhereUniqueInput>;
+  disconnect?: Maybe<AttributeWhereUniqueInput[] | AttributeWhereUniqueInput>;
+  update?: Maybe<
+    | AttributeUpdateWithWhereUniqueWithoutResourceInput[]
+    | AttributeUpdateWithWhereUniqueWithoutResourceInput
+  >;
+  upsert?: Maybe<
+    | AttributeUpsertWithWhereUniqueWithoutResourceInput[]
+    | AttributeUpsertWithWhereUniqueWithoutResourceInput
+  >;
+  deleteMany?: Maybe<AttributeScalarWhereInput[] | AttributeScalarWhereInput>;
+  updateMany?: Maybe<
+    | AttributeUpdateManyWithWhereNestedInput[]
+    | AttributeUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface AttributeUpdateWithWhereUniqueWithoutResourceInput {
+  where: AttributeWhereUniqueInput;
+  data: AttributeUpdateWithoutResourceDataInput;
+}
+
+export interface AttributeUpdateWithoutResourceDataInput {
+  name?: Maybe<String>;
+  mergingScript?: Maybe<String>;
+  isProfile?: Maybe<Boolean>;
+  type?: Maybe<String>;
+  comment?: Maybe<String>;
+  depth?: Maybe<Int>;
+  attributes?: Maybe<AttributeUpdateManyWithoutAttributeInput>;
+  attribute?: Maybe<AttributeUpdateOneWithoutAttributesInput>;
+  inputColumns?: Maybe<InputColumnUpdateManyWithoutAttributeInput>;
+}
+
+export interface AttributeUpsertWithWhereUniqueWithoutResourceInput {
+  where: AttributeWhereUniqueInput;
+  update: AttributeUpdateWithoutResourceDataInput;
+  create: AttributeCreateWithoutResourceInput;
+}
+
+export interface ResourceUpsertWithWhereUniqueWithoutSourceInput {
+  where: ResourceWhereUniqueInput;
+  update: ResourceUpdateWithoutSourceDataInput;
+  create: ResourceCreateWithoutSourceInput;
+}
+
+export interface ResourceScalarWhereInput {
   id?: Maybe<ID_Input>;
   id_not?: Maybe<ID_Input>;
   id_in?: Maybe<ID_Input[] | ID_Input>;
@@ -1964,52 +2122,76 @@ export interface UserScalarWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
-  email?: Maybe<String>;
-  email_not?: Maybe<String>;
-  email_in?: Maybe<String[] | String>;
-  email_not_in?: Maybe<String[] | String>;
-  email_lt?: Maybe<String>;
-  email_lte?: Maybe<String>;
-  email_gt?: Maybe<String>;
-  email_gte?: Maybe<String>;
-  email_contains?: Maybe<String>;
-  email_not_contains?: Maybe<String>;
-  email_starts_with?: Maybe<String>;
-  email_not_starts_with?: Maybe<String>;
-  email_ends_with?: Maybe<String>;
-  email_not_ends_with?: Maybe<String>;
-  name?: Maybe<String>;
-  name_not?: Maybe<String>;
-  name_in?: Maybe<String[] | String>;
-  name_not_in?: Maybe<String[] | String>;
-  name_lt?: Maybe<String>;
-  name_lte?: Maybe<String>;
-  name_gt?: Maybe<String>;
-  name_gte?: Maybe<String>;
-  name_contains?: Maybe<String>;
-  name_not_contains?: Maybe<String>;
-  name_starts_with?: Maybe<String>;
-  name_not_starts_with?: Maybe<String>;
-  name_ends_with?: Maybe<String>;
-  name_not_ends_with?: Maybe<String>;
-  password?: Maybe<String>;
-  password_not?: Maybe<String>;
-  password_in?: Maybe<String[] | String>;
-  password_not_in?: Maybe<String[] | String>;
-  password_lt?: Maybe<String>;
-  password_lte?: Maybe<String>;
-  password_gt?: Maybe<String>;
-  password_gte?: Maybe<String>;
-  password_contains?: Maybe<String>;
-  password_not_contains?: Maybe<String>;
-  password_starts_with?: Maybe<String>;
-  password_not_starts_with?: Maybe<String>;
-  password_ends_with?: Maybe<String>;
-  password_not_ends_with?: Maybe<String>;
-  role?: Maybe<Role>;
-  role_not?: Maybe<Role>;
-  role_in?: Maybe<Role[] | Role>;
-  role_not_in?: Maybe<Role[] | Role>;
+  label?: Maybe<String>;
+  label_not?: Maybe<String>;
+  label_in?: Maybe<String[] | String>;
+  label_not_in?: Maybe<String[] | String>;
+  label_lt?: Maybe<String>;
+  label_lte?: Maybe<String>;
+  label_gt?: Maybe<String>;
+  label_gte?: Maybe<String>;
+  label_contains?: Maybe<String>;
+  label_not_contains?: Maybe<String>;
+  label_starts_with?: Maybe<String>;
+  label_not_starts_with?: Maybe<String>;
+  label_ends_with?: Maybe<String>;
+  label_not_ends_with?: Maybe<String>;
+  fhirType?: Maybe<String>;
+  fhirType_not?: Maybe<String>;
+  fhirType_in?: Maybe<String[] | String>;
+  fhirType_not_in?: Maybe<String[] | String>;
+  fhirType_lt?: Maybe<String>;
+  fhirType_lte?: Maybe<String>;
+  fhirType_gt?: Maybe<String>;
+  fhirType_gte?: Maybe<String>;
+  fhirType_contains?: Maybe<String>;
+  fhirType_not_contains?: Maybe<String>;
+  fhirType_starts_with?: Maybe<String>;
+  fhirType_not_starts_with?: Maybe<String>;
+  fhirType_ends_with?: Maybe<String>;
+  fhirType_not_ends_with?: Maybe<String>;
+  primaryKeyOwner?: Maybe<String>;
+  primaryKeyOwner_not?: Maybe<String>;
+  primaryKeyOwner_in?: Maybe<String[] | String>;
+  primaryKeyOwner_not_in?: Maybe<String[] | String>;
+  primaryKeyOwner_lt?: Maybe<String>;
+  primaryKeyOwner_lte?: Maybe<String>;
+  primaryKeyOwner_gt?: Maybe<String>;
+  primaryKeyOwner_gte?: Maybe<String>;
+  primaryKeyOwner_contains?: Maybe<String>;
+  primaryKeyOwner_not_contains?: Maybe<String>;
+  primaryKeyOwner_starts_with?: Maybe<String>;
+  primaryKeyOwner_not_starts_with?: Maybe<String>;
+  primaryKeyOwner_ends_with?: Maybe<String>;
+  primaryKeyOwner_not_ends_with?: Maybe<String>;
+  primaryKeyTable?: Maybe<String>;
+  primaryKeyTable_not?: Maybe<String>;
+  primaryKeyTable_in?: Maybe<String[] | String>;
+  primaryKeyTable_not_in?: Maybe<String[] | String>;
+  primaryKeyTable_lt?: Maybe<String>;
+  primaryKeyTable_lte?: Maybe<String>;
+  primaryKeyTable_gt?: Maybe<String>;
+  primaryKeyTable_gte?: Maybe<String>;
+  primaryKeyTable_contains?: Maybe<String>;
+  primaryKeyTable_not_contains?: Maybe<String>;
+  primaryKeyTable_starts_with?: Maybe<String>;
+  primaryKeyTable_not_starts_with?: Maybe<String>;
+  primaryKeyTable_ends_with?: Maybe<String>;
+  primaryKeyTable_not_ends_with?: Maybe<String>;
+  primaryKeyColumn?: Maybe<String>;
+  primaryKeyColumn_not?: Maybe<String>;
+  primaryKeyColumn_in?: Maybe<String[] | String>;
+  primaryKeyColumn_not_in?: Maybe<String[] | String>;
+  primaryKeyColumn_lt?: Maybe<String>;
+  primaryKeyColumn_lte?: Maybe<String>;
+  primaryKeyColumn_gt?: Maybe<String>;
+  primaryKeyColumn_gte?: Maybe<String>;
+  primaryKeyColumn_contains?: Maybe<String>;
+  primaryKeyColumn_not_contains?: Maybe<String>;
+  primaryKeyColumn_starts_with?: Maybe<String>;
+  primaryKeyColumn_not_starts_with?: Maybe<String>;
+  primaryKeyColumn_ends_with?: Maybe<String>;
+  primaryKeyColumn_not_ends_with?: Maybe<String>;
   updatedAt?: Maybe<DateTimeInput>;
   updatedAt_not?: Maybe<DateTimeInput>;
   updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -2026,21 +2208,90 @@ export interface UserScalarWhereInput {
   createdAt_lte?: Maybe<DateTimeInput>;
   createdAt_gt?: Maybe<DateTimeInput>;
   createdAt_gte?: Maybe<DateTimeInput>;
-  AND?: Maybe<UserScalarWhereInput[] | UserScalarWhereInput>;
-  OR?: Maybe<UserScalarWhereInput[] | UserScalarWhereInput>;
-  NOT?: Maybe<UserScalarWhereInput[] | UserScalarWhereInput>;
+  AND?: Maybe<ResourceScalarWhereInput[] | ResourceScalarWhereInput>;
+  OR?: Maybe<ResourceScalarWhereInput[] | ResourceScalarWhereInput>;
+  NOT?: Maybe<ResourceScalarWhereInput[] | ResourceScalarWhereInput>;
 }
 
-export interface UserUpdateManyWithWhereNestedInput {
-  where: UserScalarWhereInput;
-  data: UserUpdateManyDataInput;
+export interface ResourceUpdateManyWithWhereNestedInput {
+  where: ResourceScalarWhereInput;
+  data: ResourceUpdateManyDataInput;
 }
 
-export interface UserUpdateManyDataInput {
-  email?: Maybe<String>;
+export interface ResourceUpdateManyDataInput {
+  label?: Maybe<String>;
+  fhirType?: Maybe<String>;
+  primaryKeyOwner?: Maybe<String>;
+  primaryKeyTable?: Maybe<String>;
+  primaryKeyColumn?: Maybe<String>;
+}
+
+export interface SourceUpsertWithWhereUniqueWithoutCredentialInput {
+  where: SourceWhereUniqueInput;
+  update: SourceUpdateWithoutCredentialDataInput;
+  create: SourceCreateWithoutCredentialInput;
+}
+
+export interface SourceScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
   name?: Maybe<String>;
-  password?: Maybe<String>;
-  role?: Maybe<Role>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  hasOwner?: Maybe<Boolean>;
+  hasOwner_not?: Maybe<Boolean>;
+  updatedAt?: Maybe<DateTimeInput>;
+  updatedAt_not?: Maybe<DateTimeInput>;
+  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_lt?: Maybe<DateTimeInput>;
+  updatedAt_lte?: Maybe<DateTimeInput>;
+  updatedAt_gt?: Maybe<DateTimeInput>;
+  updatedAt_gte?: Maybe<DateTimeInput>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  AND?: Maybe<SourceScalarWhereInput[] | SourceScalarWhereInput>;
+  OR?: Maybe<SourceScalarWhereInput[] | SourceScalarWhereInput>;
+  NOT?: Maybe<SourceScalarWhereInput[] | SourceScalarWhereInput>;
+}
+
+export interface SourceUpdateManyWithWhereNestedInput {
+  where: SourceScalarWhereInput;
+  data: SourceUpdateManyDataInput;
+}
+
+export interface SourceUpdateManyDataInput {
+  name?: Maybe<String>;
+  hasOwner?: Maybe<Boolean>;
 }
 
 export interface CredentialUpdateManyMutationInput {
@@ -2199,26 +2450,6 @@ export interface ResourceCreateInput {
   source: SourceCreateOneWithoutResourcesInput;
 }
 
-export interface AttributeCreateManyWithoutResourceInput {
-  create?: Maybe<
-    AttributeCreateWithoutResourceInput[] | AttributeCreateWithoutResourceInput
-  >;
-  connect?: Maybe<AttributeWhereUniqueInput[] | AttributeWhereUniqueInput>;
-}
-
-export interface AttributeCreateWithoutResourceInput {
-  id?: Maybe<ID_Input>;
-  name: String;
-  mergingScript?: Maybe<String>;
-  isProfile?: Maybe<Boolean>;
-  type?: Maybe<String>;
-  comment?: Maybe<String>;
-  depth?: Maybe<Int>;
-  attributes?: Maybe<AttributeCreateManyWithoutAttributeInput>;
-  attribute?: Maybe<AttributeCreateOneWithoutAttributesInput>;
-  inputColumns?: Maybe<InputColumnCreateManyWithoutAttributeInput>;
-}
-
 export interface ResourceUpdateInput {
   label?: Maybe<String>;
   fhirType?: Maybe<String>;
@@ -2227,52 +2458,6 @@ export interface ResourceUpdateInput {
   primaryKeyColumn?: Maybe<String>;
   attributes?: Maybe<AttributeUpdateManyWithoutResourceInput>;
   source?: Maybe<SourceUpdateOneRequiredWithoutResourcesInput>;
-}
-
-export interface AttributeUpdateManyWithoutResourceInput {
-  create?: Maybe<
-    AttributeCreateWithoutResourceInput[] | AttributeCreateWithoutResourceInput
-  >;
-  delete?: Maybe<AttributeWhereUniqueInput[] | AttributeWhereUniqueInput>;
-  connect?: Maybe<AttributeWhereUniqueInput[] | AttributeWhereUniqueInput>;
-  set?: Maybe<AttributeWhereUniqueInput[] | AttributeWhereUniqueInput>;
-  disconnect?: Maybe<AttributeWhereUniqueInput[] | AttributeWhereUniqueInput>;
-  update?: Maybe<
-    | AttributeUpdateWithWhereUniqueWithoutResourceInput[]
-    | AttributeUpdateWithWhereUniqueWithoutResourceInput
-  >;
-  upsert?: Maybe<
-    | AttributeUpsertWithWhereUniqueWithoutResourceInput[]
-    | AttributeUpsertWithWhereUniqueWithoutResourceInput
-  >;
-  deleteMany?: Maybe<AttributeScalarWhereInput[] | AttributeScalarWhereInput>;
-  updateMany?: Maybe<
-    | AttributeUpdateManyWithWhereNestedInput[]
-    | AttributeUpdateManyWithWhereNestedInput
-  >;
-}
-
-export interface AttributeUpdateWithWhereUniqueWithoutResourceInput {
-  where: AttributeWhereUniqueInput;
-  data: AttributeUpdateWithoutResourceDataInput;
-}
-
-export interface AttributeUpdateWithoutResourceDataInput {
-  name?: Maybe<String>;
-  mergingScript?: Maybe<String>;
-  isProfile?: Maybe<Boolean>;
-  type?: Maybe<String>;
-  comment?: Maybe<String>;
-  depth?: Maybe<Int>;
-  attributes?: Maybe<AttributeUpdateManyWithoutAttributeInput>;
-  attribute?: Maybe<AttributeUpdateOneWithoutAttributesInput>;
-  inputColumns?: Maybe<InputColumnUpdateManyWithoutAttributeInput>;
-}
-
-export interface AttributeUpsertWithWhereUniqueWithoutResourceInput {
-  where: AttributeWhereUniqueInput;
-  update: AttributeUpdateWithoutResourceDataInput;
-  create: AttributeCreateWithoutResourceInput;
 }
 
 export interface ResourceUpdateManyMutationInput {
@@ -2288,191 +2473,14 @@ export interface SourceCreateInput {
   name: String;
   hasOwner?: Maybe<Boolean>;
   resources?: Maybe<ResourceCreateManyWithoutSourceInput>;
-}
-
-export interface ResourceCreateManyWithoutSourceInput {
-  create?: Maybe<
-    ResourceCreateWithoutSourceInput[] | ResourceCreateWithoutSourceInput
-  >;
-  connect?: Maybe<ResourceWhereUniqueInput[] | ResourceWhereUniqueInput>;
-}
-
-export interface ResourceCreateWithoutSourceInput {
-  id?: Maybe<ID_Input>;
-  label?: Maybe<String>;
-  fhirType: String;
-  primaryKeyOwner?: Maybe<String>;
-  primaryKeyTable?: Maybe<String>;
-  primaryKeyColumn?: Maybe<String>;
-  attributes?: Maybe<AttributeCreateManyWithoutResourceInput>;
+  credential?: Maybe<CredentialCreateOneWithoutSourceInput>;
 }
 
 export interface SourceUpdateInput {
   name?: Maybe<String>;
   hasOwner?: Maybe<Boolean>;
   resources?: Maybe<ResourceUpdateManyWithoutSourceInput>;
-}
-
-export interface ResourceUpdateManyWithoutSourceInput {
-  create?: Maybe<
-    ResourceCreateWithoutSourceInput[] | ResourceCreateWithoutSourceInput
-  >;
-  delete?: Maybe<ResourceWhereUniqueInput[] | ResourceWhereUniqueInput>;
-  connect?: Maybe<ResourceWhereUniqueInput[] | ResourceWhereUniqueInput>;
-  set?: Maybe<ResourceWhereUniqueInput[] | ResourceWhereUniqueInput>;
-  disconnect?: Maybe<ResourceWhereUniqueInput[] | ResourceWhereUniqueInput>;
-  update?: Maybe<
-    | ResourceUpdateWithWhereUniqueWithoutSourceInput[]
-    | ResourceUpdateWithWhereUniqueWithoutSourceInput
-  >;
-  upsert?: Maybe<
-    | ResourceUpsertWithWhereUniqueWithoutSourceInput[]
-    | ResourceUpsertWithWhereUniqueWithoutSourceInput
-  >;
-  deleteMany?: Maybe<ResourceScalarWhereInput[] | ResourceScalarWhereInput>;
-  updateMany?: Maybe<
-    | ResourceUpdateManyWithWhereNestedInput[]
-    | ResourceUpdateManyWithWhereNestedInput
-  >;
-}
-
-export interface ResourceUpdateWithWhereUniqueWithoutSourceInput {
-  where: ResourceWhereUniqueInput;
-  data: ResourceUpdateWithoutSourceDataInput;
-}
-
-export interface ResourceUpdateWithoutSourceDataInput {
-  label?: Maybe<String>;
-  fhirType?: Maybe<String>;
-  primaryKeyOwner?: Maybe<String>;
-  primaryKeyTable?: Maybe<String>;
-  primaryKeyColumn?: Maybe<String>;
-  attributes?: Maybe<AttributeUpdateManyWithoutResourceInput>;
-}
-
-export interface ResourceUpsertWithWhereUniqueWithoutSourceInput {
-  where: ResourceWhereUniqueInput;
-  update: ResourceUpdateWithoutSourceDataInput;
-  create: ResourceCreateWithoutSourceInput;
-}
-
-export interface ResourceScalarWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  label?: Maybe<String>;
-  label_not?: Maybe<String>;
-  label_in?: Maybe<String[] | String>;
-  label_not_in?: Maybe<String[] | String>;
-  label_lt?: Maybe<String>;
-  label_lte?: Maybe<String>;
-  label_gt?: Maybe<String>;
-  label_gte?: Maybe<String>;
-  label_contains?: Maybe<String>;
-  label_not_contains?: Maybe<String>;
-  label_starts_with?: Maybe<String>;
-  label_not_starts_with?: Maybe<String>;
-  label_ends_with?: Maybe<String>;
-  label_not_ends_with?: Maybe<String>;
-  fhirType?: Maybe<String>;
-  fhirType_not?: Maybe<String>;
-  fhirType_in?: Maybe<String[] | String>;
-  fhirType_not_in?: Maybe<String[] | String>;
-  fhirType_lt?: Maybe<String>;
-  fhirType_lte?: Maybe<String>;
-  fhirType_gt?: Maybe<String>;
-  fhirType_gte?: Maybe<String>;
-  fhirType_contains?: Maybe<String>;
-  fhirType_not_contains?: Maybe<String>;
-  fhirType_starts_with?: Maybe<String>;
-  fhirType_not_starts_with?: Maybe<String>;
-  fhirType_ends_with?: Maybe<String>;
-  fhirType_not_ends_with?: Maybe<String>;
-  primaryKeyOwner?: Maybe<String>;
-  primaryKeyOwner_not?: Maybe<String>;
-  primaryKeyOwner_in?: Maybe<String[] | String>;
-  primaryKeyOwner_not_in?: Maybe<String[] | String>;
-  primaryKeyOwner_lt?: Maybe<String>;
-  primaryKeyOwner_lte?: Maybe<String>;
-  primaryKeyOwner_gt?: Maybe<String>;
-  primaryKeyOwner_gte?: Maybe<String>;
-  primaryKeyOwner_contains?: Maybe<String>;
-  primaryKeyOwner_not_contains?: Maybe<String>;
-  primaryKeyOwner_starts_with?: Maybe<String>;
-  primaryKeyOwner_not_starts_with?: Maybe<String>;
-  primaryKeyOwner_ends_with?: Maybe<String>;
-  primaryKeyOwner_not_ends_with?: Maybe<String>;
-  primaryKeyTable?: Maybe<String>;
-  primaryKeyTable_not?: Maybe<String>;
-  primaryKeyTable_in?: Maybe<String[] | String>;
-  primaryKeyTable_not_in?: Maybe<String[] | String>;
-  primaryKeyTable_lt?: Maybe<String>;
-  primaryKeyTable_lte?: Maybe<String>;
-  primaryKeyTable_gt?: Maybe<String>;
-  primaryKeyTable_gte?: Maybe<String>;
-  primaryKeyTable_contains?: Maybe<String>;
-  primaryKeyTable_not_contains?: Maybe<String>;
-  primaryKeyTable_starts_with?: Maybe<String>;
-  primaryKeyTable_not_starts_with?: Maybe<String>;
-  primaryKeyTable_ends_with?: Maybe<String>;
-  primaryKeyTable_not_ends_with?: Maybe<String>;
-  primaryKeyColumn?: Maybe<String>;
-  primaryKeyColumn_not?: Maybe<String>;
-  primaryKeyColumn_in?: Maybe<String[] | String>;
-  primaryKeyColumn_not_in?: Maybe<String[] | String>;
-  primaryKeyColumn_lt?: Maybe<String>;
-  primaryKeyColumn_lte?: Maybe<String>;
-  primaryKeyColumn_gt?: Maybe<String>;
-  primaryKeyColumn_gte?: Maybe<String>;
-  primaryKeyColumn_contains?: Maybe<String>;
-  primaryKeyColumn_not_contains?: Maybe<String>;
-  primaryKeyColumn_starts_with?: Maybe<String>;
-  primaryKeyColumn_not_starts_with?: Maybe<String>;
-  primaryKeyColumn_ends_with?: Maybe<String>;
-  primaryKeyColumn_not_ends_with?: Maybe<String>;
-  updatedAt?: Maybe<DateTimeInput>;
-  updatedAt_not?: Maybe<DateTimeInput>;
-  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  updatedAt_lt?: Maybe<DateTimeInput>;
-  updatedAt_lte?: Maybe<DateTimeInput>;
-  updatedAt_gt?: Maybe<DateTimeInput>;
-  updatedAt_gte?: Maybe<DateTimeInput>;
-  createdAt?: Maybe<DateTimeInput>;
-  createdAt_not?: Maybe<DateTimeInput>;
-  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_lt?: Maybe<DateTimeInput>;
-  createdAt_lte?: Maybe<DateTimeInput>;
-  createdAt_gt?: Maybe<DateTimeInput>;
-  createdAt_gte?: Maybe<DateTimeInput>;
-  AND?: Maybe<ResourceScalarWhereInput[] | ResourceScalarWhereInput>;
-  OR?: Maybe<ResourceScalarWhereInput[] | ResourceScalarWhereInput>;
-  NOT?: Maybe<ResourceScalarWhereInput[] | ResourceScalarWhereInput>;
-}
-
-export interface ResourceUpdateManyWithWhereNestedInput {
-  where: ResourceScalarWhereInput;
-  data: ResourceUpdateManyDataInput;
-}
-
-export interface ResourceUpdateManyDataInput {
-  label?: Maybe<String>;
-  fhirType?: Maybe<String>;
-  primaryKeyOwner?: Maybe<String>;
-  primaryKeyTable?: Maybe<String>;
-  primaryKeyColumn?: Maybe<String>;
+  credential?: Maybe<CredentialUpdateOneWithoutSourceInput>;
 }
 
 export interface SourceUpdateManyMutationInput {
@@ -2486,23 +2494,12 @@ export interface UserCreateInput {
   name: String;
   password: String;
   role?: Maybe<Role>;
-  credentials?: Maybe<CredentialCreateManyWithoutUsersInput>;
+  credentials?: Maybe<CredentialCreateManyInput>;
 }
 
-export interface CredentialCreateManyWithoutUsersInput {
-  create?: Maybe<
-    CredentialCreateWithoutUsersInput[] | CredentialCreateWithoutUsersInput
-  >;
+export interface CredentialCreateManyInput {
+  create?: Maybe<CredentialCreateInput[] | CredentialCreateInput>;
   connect?: Maybe<CredentialWhereUniqueInput[] | CredentialWhereUniqueInput>;
-}
-
-export interface CredentialCreateWithoutUsersInput {
-  id?: Maybe<ID_Input>;
-  host: String;
-  port: String;
-  login: String;
-  password?: Maybe<String>;
-  type: DatabaseType;
 }
 
 export interface UserUpdateInput {
@@ -2510,25 +2507,23 @@ export interface UserUpdateInput {
   name?: Maybe<String>;
   password?: Maybe<String>;
   role?: Maybe<Role>;
-  credentials?: Maybe<CredentialUpdateManyWithoutUsersInput>;
+  credentials?: Maybe<CredentialUpdateManyInput>;
 }
 
-export interface CredentialUpdateManyWithoutUsersInput {
-  create?: Maybe<
-    CredentialCreateWithoutUsersInput[] | CredentialCreateWithoutUsersInput
+export interface CredentialUpdateManyInput {
+  create?: Maybe<CredentialCreateInput[] | CredentialCreateInput>;
+  update?: Maybe<
+    | CredentialUpdateWithWhereUniqueNestedInput[]
+    | CredentialUpdateWithWhereUniqueNestedInput
+  >;
+  upsert?: Maybe<
+    | CredentialUpsertWithWhereUniqueNestedInput[]
+    | CredentialUpsertWithWhereUniqueNestedInput
   >;
   delete?: Maybe<CredentialWhereUniqueInput[] | CredentialWhereUniqueInput>;
   connect?: Maybe<CredentialWhereUniqueInput[] | CredentialWhereUniqueInput>;
   set?: Maybe<CredentialWhereUniqueInput[] | CredentialWhereUniqueInput>;
   disconnect?: Maybe<CredentialWhereUniqueInput[] | CredentialWhereUniqueInput>;
-  update?: Maybe<
-    | CredentialUpdateWithWhereUniqueWithoutUsersInput[]
-    | CredentialUpdateWithWhereUniqueWithoutUsersInput
-  >;
-  upsert?: Maybe<
-    | CredentialUpsertWithWhereUniqueWithoutUsersInput[]
-    | CredentialUpsertWithWhereUniqueWithoutUsersInput
-  >;
   deleteMany?: Maybe<CredentialScalarWhereInput[] | CredentialScalarWhereInput>;
   updateMany?: Maybe<
     | CredentialUpdateManyWithWhereNestedInput[]
@@ -2536,23 +2531,24 @@ export interface CredentialUpdateManyWithoutUsersInput {
   >;
 }
 
-export interface CredentialUpdateWithWhereUniqueWithoutUsersInput {
+export interface CredentialUpdateWithWhereUniqueNestedInput {
   where: CredentialWhereUniqueInput;
-  data: CredentialUpdateWithoutUsersDataInput;
+  data: CredentialUpdateDataInput;
 }
 
-export interface CredentialUpdateWithoutUsersDataInput {
+export interface CredentialUpdateDataInput {
   host?: Maybe<String>;
   port?: Maybe<String>;
   login?: Maybe<String>;
   password?: Maybe<String>;
   type?: Maybe<DatabaseType>;
+  source?: Maybe<SourceUpdateManyWithoutCredentialInput>;
 }
 
-export interface CredentialUpsertWithWhereUniqueWithoutUsersInput {
+export interface CredentialUpsertWithWhereUniqueNestedInput {
   where: CredentialWhereUniqueInput;
-  update: CredentialUpdateWithoutUsersDataInput;
-  create: CredentialCreateWithoutUsersInput;
+  update: CredentialUpdateDataInput;
+  create: CredentialCreateInput;
 }
 
 export interface CredentialScalarWhereInput {
@@ -2971,6 +2967,7 @@ export interface SourcePromise extends Promise<Source>, Fragmentable {
   }) => T;
   updatedAt: () => Promise<DateTimeOutput>;
   createdAt: () => Promise<DateTimeOutput>;
+  credential: <T = CredentialPromise>() => T;
 }
 
 export interface SourceSubscription
@@ -2990,6 +2987,7 @@ export interface SourceSubscription
   }) => T;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  credential: <T = CredentialSubscription>() => T;
 }
 
 export interface SourceNullablePromise
@@ -3009,6 +3007,74 @@ export interface SourceNullablePromise
   }) => T;
   updatedAt: () => Promise<DateTimeOutput>;
   createdAt: () => Promise<DateTimeOutput>;
+  credential: <T = CredentialPromise>() => T;
+}
+
+export interface Credential {
+  id: ID_Output;
+  host: String;
+  port: String;
+  login: String;
+  password?: String;
+  type: DatabaseType;
+}
+
+export interface CredentialPromise extends Promise<Credential>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  host: () => Promise<String>;
+  port: () => Promise<String>;
+  login: () => Promise<String>;
+  password: () => Promise<String>;
+  type: () => Promise<DatabaseType>;
+  source: <T = FragmentableArray<Source>>(args?: {
+    where?: SourceWhereInput;
+    orderBy?: SourceOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface CredentialSubscription
+  extends Promise<AsyncIterator<Credential>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  host: () => Promise<AsyncIterator<String>>;
+  port: () => Promise<AsyncIterator<String>>;
+  login: () => Promise<AsyncIterator<String>>;
+  password: () => Promise<AsyncIterator<String>>;
+  type: () => Promise<AsyncIterator<DatabaseType>>;
+  source: <T = Promise<AsyncIterator<SourceSubscription>>>(args?: {
+    where?: SourceWhereInput;
+    orderBy?: SourceOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface CredentialNullablePromise
+  extends Promise<Credential | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  host: () => Promise<String>;
+  port: () => Promise<String>;
+  login: () => Promise<String>;
+  password: () => Promise<String>;
+  type: () => Promise<DatabaseType>;
+  source: <T = FragmentableArray<Source>>(args?: {
+    where?: SourceWhereInput;
+    orderBy?: SourceOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
 export interface InputColumn {
@@ -3221,144 +3287,6 @@ export interface AggregateAttributeSubscription
   extends Promise<AsyncIterator<AggregateAttribute>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface Credential {
-  id: ID_Output;
-  host: String;
-  port: String;
-  login: String;
-  password?: String;
-  type: DatabaseType;
-}
-
-export interface CredentialPromise extends Promise<Credential>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  host: () => Promise<String>;
-  port: () => Promise<String>;
-  login: () => Promise<String>;
-  password: () => Promise<String>;
-  type: () => Promise<DatabaseType>;
-  users: <T = FragmentableArray<User>>(args?: {
-    where?: UserWhereInput;
-    orderBy?: UserOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-}
-
-export interface CredentialSubscription
-  extends Promise<AsyncIterator<Credential>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  host: () => Promise<AsyncIterator<String>>;
-  port: () => Promise<AsyncIterator<String>>;
-  login: () => Promise<AsyncIterator<String>>;
-  password: () => Promise<AsyncIterator<String>>;
-  type: () => Promise<AsyncIterator<DatabaseType>>;
-  users: <T = Promise<AsyncIterator<UserSubscription>>>(args?: {
-    where?: UserWhereInput;
-    orderBy?: UserOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-}
-
-export interface CredentialNullablePromise
-  extends Promise<Credential | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  host: () => Promise<String>;
-  port: () => Promise<String>;
-  login: () => Promise<String>;
-  password: () => Promise<String>;
-  type: () => Promise<DatabaseType>;
-  users: <T = FragmentableArray<User>>(args?: {
-    where?: UserWhereInput;
-    orderBy?: UserOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-}
-
-export interface User {
-  id: ID_Output;
-  email: String;
-  name: String;
-  password: String;
-  role?: Role;
-  updatedAt: DateTimeOutput;
-  createdAt: DateTimeOutput;
-}
-
-export interface UserPromise extends Promise<User>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  email: () => Promise<String>;
-  name: () => Promise<String>;
-  password: () => Promise<String>;
-  role: () => Promise<Role>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  createdAt: () => Promise<DateTimeOutput>;
-  credentials: <T = FragmentableArray<Credential>>(args?: {
-    where?: CredentialWhereInput;
-    orderBy?: CredentialOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-}
-
-export interface UserSubscription
-  extends Promise<AsyncIterator<User>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  email: () => Promise<AsyncIterator<String>>;
-  name: () => Promise<AsyncIterator<String>>;
-  password: () => Promise<AsyncIterator<String>>;
-  role: () => Promise<AsyncIterator<Role>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  credentials: <T = Promise<AsyncIterator<CredentialSubscription>>>(args?: {
-    where?: CredentialWhereInput;
-    orderBy?: CredentialOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-}
-
-export interface UserNullablePromise
-  extends Promise<User | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  email: () => Promise<String>;
-  name: () => Promise<String>;
-  password: () => Promise<String>;
-  role: () => Promise<Role>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  createdAt: () => Promise<DateTimeOutput>;
-  credentials: <T = FragmentableArray<Credential>>(args?: {
-    where?: CredentialWhereInput;
-    orderBy?: CredentialOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
 }
 
 export interface CredentialConnection {
@@ -3635,6 +3563,77 @@ export interface AggregateSourceSubscription
   extends Promise<AsyncIterator<AggregateSource>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface User {
+  id: ID_Output;
+  email: String;
+  name: String;
+  password: String;
+  role?: Role;
+  updatedAt: DateTimeOutput;
+  createdAt: DateTimeOutput;
+}
+
+export interface UserPromise extends Promise<User>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  email: () => Promise<String>;
+  name: () => Promise<String>;
+  password: () => Promise<String>;
+  role: () => Promise<Role>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+  credentials: <T = FragmentableArray<Credential>>(args?: {
+    where?: CredentialWhereInput;
+    orderBy?: CredentialOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface UserSubscription
+  extends Promise<AsyncIterator<User>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  email: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+  password: () => Promise<AsyncIterator<String>>;
+  role: () => Promise<AsyncIterator<Role>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  credentials: <T = Promise<AsyncIterator<CredentialSubscription>>>(args?: {
+    where?: CredentialWhereInput;
+    orderBy?: CredentialOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface UserNullablePromise
+  extends Promise<User | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  email: () => Promise<String>;
+  name: () => Promise<String>;
+  password: () => Promise<String>;
+  role: () => Promise<Role>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+  credentials: <T = FragmentableArray<Credential>>(args?: {
+    where?: CredentialWhereInput;
+    orderBy?: CredentialOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
 export interface UserConnection {
@@ -4172,6 +4171,14 @@ export const models: Model[] = [
     embedded: false
   },
   {
+    name: "DatabaseType",
+    embedded: false
+  },
+  {
+    name: "Credential",
+    embedded: false
+  },
+  {
     name: "Resource",
     embedded: false
   },
@@ -4193,14 +4200,6 @@ export const models: Model[] = [
   },
   {
     name: "User",
-    embedded: false
-  },
-  {
-    name: "DatabaseType",
-    embedded: false
-  },
-  {
-    name: "Credential",
     embedded: false
   }
 ];

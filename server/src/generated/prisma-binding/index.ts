@@ -1529,7 +1529,7 @@ type Credential implements Node {
   login: String!
   password: String
   type: DatabaseType!
-  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  source(where: SourceWhereInput, orderBy: SourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Source!]
 }
 
 """A connection to a list of items."""
@@ -1549,15 +1549,20 @@ input CredentialCreateInput {
   login: String!
   password: String
   type: DatabaseType!
-  users: UserCreateManyWithoutCredentialsInput
+  source: SourceCreateManyWithoutCredentialInput
 }
 
-input CredentialCreateManyWithoutUsersInput {
-  create: [CredentialCreateWithoutUsersInput!]
+input CredentialCreateManyInput {
+  create: [CredentialCreateInput!]
   connect: [CredentialWhereUniqueInput!]
 }
 
-input CredentialCreateWithoutUsersInput {
+input CredentialCreateOneWithoutSourceInput {
+  create: CredentialCreateWithoutSourceInput
+  connect: CredentialWhereUniqueInput
+}
+
+input CredentialCreateWithoutSourceInput {
   id: ID
   host: String!
   port: String!
@@ -1857,13 +1862,22 @@ input CredentialSubscriptionWhereInput {
   node: CredentialWhereInput
 }
 
+input CredentialUpdateDataInput {
+  host: String
+  port: String
+  login: String
+  password: String
+  type: DatabaseType
+  source: SourceUpdateManyWithoutCredentialInput
+}
+
 input CredentialUpdateInput {
   host: String
   port: String
   login: String
   password: String
   type: DatabaseType
-  users: UserUpdateManyWithoutCredentialsInput
+  source: SourceUpdateManyWithoutCredentialInput
 }
 
 input CredentialUpdateManyDataInput {
@@ -1874,6 +1888,18 @@ input CredentialUpdateManyDataInput {
   type: DatabaseType
 }
 
+input CredentialUpdateManyInput {
+  create: [CredentialCreateInput!]
+  connect: [CredentialWhereUniqueInput!]
+  set: [CredentialWhereUniqueInput!]
+  disconnect: [CredentialWhereUniqueInput!]
+  delete: [CredentialWhereUniqueInput!]
+  update: [CredentialUpdateWithWhereUniqueNestedInput!]
+  updateMany: [CredentialUpdateManyWithWhereNestedInput!]
+  deleteMany: [CredentialScalarWhereInput!]
+  upsert: [CredentialUpsertWithWhereUniqueNestedInput!]
+}
+
 input CredentialUpdateManyMutationInput {
   host: String
   port: String
@@ -1882,24 +1908,21 @@ input CredentialUpdateManyMutationInput {
   type: DatabaseType
 }
 
-input CredentialUpdateManyWithoutUsersInput {
-  create: [CredentialCreateWithoutUsersInput!]
-  connect: [CredentialWhereUniqueInput!]
-  set: [CredentialWhereUniqueInput!]
-  disconnect: [CredentialWhereUniqueInput!]
-  delete: [CredentialWhereUniqueInput!]
-  update: [CredentialUpdateWithWhereUniqueWithoutUsersInput!]
-  updateMany: [CredentialUpdateManyWithWhereNestedInput!]
-  deleteMany: [CredentialScalarWhereInput!]
-  upsert: [CredentialUpsertWithWhereUniqueWithoutUsersInput!]
-}
-
 input CredentialUpdateManyWithWhereNestedInput {
   where: CredentialScalarWhereInput!
   data: CredentialUpdateManyDataInput!
 }
 
-input CredentialUpdateWithoutUsersDataInput {
+input CredentialUpdateOneWithoutSourceInput {
+  create: CredentialCreateWithoutSourceInput
+  connect: CredentialWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: CredentialUpdateWithoutSourceDataInput
+  upsert: CredentialUpsertWithoutSourceInput
+}
+
+input CredentialUpdateWithoutSourceDataInput {
   host: String
   port: String
   login: String
@@ -1907,15 +1930,20 @@ input CredentialUpdateWithoutUsersDataInput {
   type: DatabaseType
 }
 
-input CredentialUpdateWithWhereUniqueWithoutUsersInput {
+input CredentialUpdateWithWhereUniqueNestedInput {
   where: CredentialWhereUniqueInput!
-  data: CredentialUpdateWithoutUsersDataInput!
+  data: CredentialUpdateDataInput!
 }
 
-input CredentialUpsertWithWhereUniqueWithoutUsersInput {
+input CredentialUpsertWithoutSourceInput {
+  update: CredentialUpdateWithoutSourceDataInput!
+  create: CredentialCreateWithoutSourceInput!
+}
+
+input CredentialUpsertWithWhereUniqueNestedInput {
   where: CredentialWhereUniqueInput!
-  update: CredentialUpdateWithoutUsersDataInput!
-  create: CredentialCreateWithoutUsersInput!
+  update: CredentialUpdateDataInput!
+  create: CredentialCreateInput!
 }
 
 input CredentialWhereInput {
@@ -2137,9 +2165,9 @@ input CredentialWhereInput {
 
   """All values that are not contained in given list."""
   type_not_in: [DatabaseType!]
-  users_every: UserWhereInput
-  users_some: UserWhereInput
-  users_none: UserWhereInput
+  source_every: SourceWhereInput
+  source_some: SourceWhereInput
+  source_none: SourceWhereInput
 }
 
 input CredentialWhereUniqueInput {
@@ -4786,6 +4814,7 @@ type Source implements Node {
   resources(where: ResourceWhereInput, orderBy: ResourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Resource!]
   updatedAt: DateTime!
   createdAt: DateTime!
+  credential: Credential
 }
 
 """A connection to a list of items."""
@@ -4803,6 +4832,12 @@ input SourceCreateInput {
   name: String!
   hasOwner: Boolean
   resources: ResourceCreateManyWithoutSourceInput
+  credential: CredentialCreateOneWithoutSourceInput
+}
+
+input SourceCreateManyWithoutCredentialInput {
+  create: [SourceCreateWithoutCredentialInput!]
+  connect: [SourceWhereUniqueInput!]
 }
 
 input SourceCreateOneWithoutResourcesInput {
@@ -4810,10 +4845,18 @@ input SourceCreateOneWithoutResourcesInput {
   connect: SourceWhereUniqueInput
 }
 
+input SourceCreateWithoutCredentialInput {
+  id: ID
+  name: String!
+  hasOwner: Boolean
+  resources: ResourceCreateManyWithoutSourceInput
+}
+
 input SourceCreateWithoutResourcesInput {
   id: ID
   name: String!
   hasOwner: Boolean
+  credential: CredentialCreateOneWithoutSourceInput
 }
 
 """An edge in a connection."""
@@ -4844,6 +4887,145 @@ type SourcePreviousValues {
   hasOwner: Boolean!
   updatedAt: DateTime!
   createdAt: DateTime!
+}
+
+input SourceScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [SourceScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [SourceScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [SourceScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  hasOwner: Boolean
+
+  """All values that are not equal to given value."""
+  hasOwner_not: Boolean
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
 }
 
 type SourceSubscriptionPayload {
@@ -4887,11 +5069,34 @@ input SourceUpdateInput {
   name: String
   hasOwner: Boolean
   resources: ResourceUpdateManyWithoutSourceInput
+  credential: CredentialUpdateOneWithoutSourceInput
+}
+
+input SourceUpdateManyDataInput {
+  name: String
+  hasOwner: Boolean
 }
 
 input SourceUpdateManyMutationInput {
   name: String
   hasOwner: Boolean
+}
+
+input SourceUpdateManyWithoutCredentialInput {
+  create: [SourceCreateWithoutCredentialInput!]
+  connect: [SourceWhereUniqueInput!]
+  set: [SourceWhereUniqueInput!]
+  disconnect: [SourceWhereUniqueInput!]
+  delete: [SourceWhereUniqueInput!]
+  update: [SourceUpdateWithWhereUniqueWithoutCredentialInput!]
+  updateMany: [SourceUpdateManyWithWhereNestedInput!]
+  deleteMany: [SourceScalarWhereInput!]
+  upsert: [SourceUpsertWithWhereUniqueWithoutCredentialInput!]
+}
+
+input SourceUpdateManyWithWhereNestedInput {
+  where: SourceScalarWhereInput!
+  data: SourceUpdateManyDataInput!
 }
 
 input SourceUpdateOneRequiredWithoutResourcesInput {
@@ -4901,14 +5106,32 @@ input SourceUpdateOneRequiredWithoutResourcesInput {
   upsert: SourceUpsertWithoutResourcesInput
 }
 
+input SourceUpdateWithoutCredentialDataInput {
+  name: String
+  hasOwner: Boolean
+  resources: ResourceUpdateManyWithoutSourceInput
+}
+
 input SourceUpdateWithoutResourcesDataInput {
   name: String
   hasOwner: Boolean
+  credential: CredentialUpdateOneWithoutSourceInput
+}
+
+input SourceUpdateWithWhereUniqueWithoutCredentialInput {
+  where: SourceWhereUniqueInput!
+  data: SourceUpdateWithoutCredentialDataInput!
 }
 
 input SourceUpsertWithoutResourcesInput {
   update: SourceUpdateWithoutResourcesDataInput!
   create: SourceCreateWithoutResourcesInput!
+}
+
+input SourceUpsertWithWhereUniqueWithoutCredentialInput {
+  where: SourceWhereUniqueInput!
+  update: SourceUpdateWithoutCredentialDataInput!
+  create: SourceCreateWithoutCredentialInput!
 }
 
 input SourceWhereInput {
@@ -5051,6 +5274,7 @@ input SourceWhereInput {
   resources_every: ResourceWhereInput
   resources_some: ResourceWhereInput
   resources_none: ResourceWhereInput
+  credential: CredentialWhereInput
 }
 
 input SourceWhereUniqueInput {
@@ -5095,20 +5319,7 @@ input UserCreateInput {
   name: String!
   password: String!
   role: Role
-  credentials: CredentialCreateManyWithoutUsersInput
-}
-
-input UserCreateManyWithoutCredentialsInput {
-  create: [UserCreateWithoutCredentialsInput!]
-  connect: [UserWhereUniqueInput!]
-}
-
-input UserCreateWithoutCredentialsInput {
-  id: ID
-  email: String!
-  name: String!
-  password: String!
-  role: Role
+  credentials: CredentialCreateManyInput
 }
 
 """An edge in a connection."""
@@ -5145,231 +5356,6 @@ type UserPreviousValues {
   role: Role
   updatedAt: DateTime!
   createdAt: DateTime!
-}
-
-input UserScalarWhereInput {
-  """Logical AND on all given filters."""
-  AND: [UserScalarWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [UserScalarWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [UserScalarWhereInput!]
-  id: ID
-
-  """All values that are not equal to given value."""
-  id_not: ID
-
-  """All values that are contained in given list."""
-  id_in: [ID!]
-
-  """All values that are not contained in given list."""
-  id_not_in: [ID!]
-
-  """All values less than the given value."""
-  id_lt: ID
-
-  """All values less than or equal the given value."""
-  id_lte: ID
-
-  """All values greater than the given value."""
-  id_gt: ID
-
-  """All values greater than or equal the given value."""
-  id_gte: ID
-
-  """All values containing the given string."""
-  id_contains: ID
-
-  """All values not containing the given string."""
-  id_not_contains: ID
-
-  """All values starting with the given string."""
-  id_starts_with: ID
-
-  """All values not starting with the given string."""
-  id_not_starts_with: ID
-
-  """All values ending with the given string."""
-  id_ends_with: ID
-
-  """All values not ending with the given string."""
-  id_not_ends_with: ID
-  email: String
-
-  """All values that are not equal to given value."""
-  email_not: String
-
-  """All values that are contained in given list."""
-  email_in: [String!]
-
-  """All values that are not contained in given list."""
-  email_not_in: [String!]
-
-  """All values less than the given value."""
-  email_lt: String
-
-  """All values less than or equal the given value."""
-  email_lte: String
-
-  """All values greater than the given value."""
-  email_gt: String
-
-  """All values greater than or equal the given value."""
-  email_gte: String
-
-  """All values containing the given string."""
-  email_contains: String
-
-  """All values not containing the given string."""
-  email_not_contains: String
-
-  """All values starting with the given string."""
-  email_starts_with: String
-
-  """All values not starting with the given string."""
-  email_not_starts_with: String
-
-  """All values ending with the given string."""
-  email_ends_with: String
-
-  """All values not ending with the given string."""
-  email_not_ends_with: String
-  name: String
-
-  """All values that are not equal to given value."""
-  name_not: String
-
-  """All values that are contained in given list."""
-  name_in: [String!]
-
-  """All values that are not contained in given list."""
-  name_not_in: [String!]
-
-  """All values less than the given value."""
-  name_lt: String
-
-  """All values less than or equal the given value."""
-  name_lte: String
-
-  """All values greater than the given value."""
-  name_gt: String
-
-  """All values greater than or equal the given value."""
-  name_gte: String
-
-  """All values containing the given string."""
-  name_contains: String
-
-  """All values not containing the given string."""
-  name_not_contains: String
-
-  """All values starting with the given string."""
-  name_starts_with: String
-
-  """All values not starting with the given string."""
-  name_not_starts_with: String
-
-  """All values ending with the given string."""
-  name_ends_with: String
-
-  """All values not ending with the given string."""
-  name_not_ends_with: String
-  password: String
-
-  """All values that are not equal to given value."""
-  password_not: String
-
-  """All values that are contained in given list."""
-  password_in: [String!]
-
-  """All values that are not contained in given list."""
-  password_not_in: [String!]
-
-  """All values less than the given value."""
-  password_lt: String
-
-  """All values less than or equal the given value."""
-  password_lte: String
-
-  """All values greater than the given value."""
-  password_gt: String
-
-  """All values greater than or equal the given value."""
-  password_gte: String
-
-  """All values containing the given string."""
-  password_contains: String
-
-  """All values not containing the given string."""
-  password_not_contains: String
-
-  """All values starting with the given string."""
-  password_starts_with: String
-
-  """All values not starting with the given string."""
-  password_not_starts_with: String
-
-  """All values ending with the given string."""
-  password_ends_with: String
-
-  """All values not ending with the given string."""
-  password_not_ends_with: String
-  role: Role
-
-  """All values that are not equal to given value."""
-  role_not: Role
-
-  """All values that are contained in given list."""
-  role_in: [Role!]
-
-  """All values that are not contained in given list."""
-  role_not_in: [Role!]
-  updatedAt: DateTime
-
-  """All values that are not equal to given value."""
-  updatedAt_not: DateTime
-
-  """All values that are contained in given list."""
-  updatedAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  updatedAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  updatedAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  updatedAt_lte: DateTime
-
-  """All values greater than the given value."""
-  updatedAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  updatedAt_gte: DateTime
-  createdAt: DateTime
-
-  """All values that are not equal to given value."""
-  createdAt_not: DateTime
-
-  """All values that are contained in given list."""
-  createdAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  createdAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  createdAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  createdAt_lte: DateTime
-
-  """All values greater than the given value."""
-  createdAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  createdAt_gte: DateTime
 }
 
 type UserSubscriptionPayload {
@@ -5414,14 +5400,7 @@ input UserUpdateInput {
   name: String
   password: String
   role: Role
-  credentials: CredentialUpdateManyWithoutUsersInput
-}
-
-input UserUpdateManyDataInput {
-  email: String
-  name: String
-  password: String
-  role: Role
+  credentials: CredentialUpdateManyInput
 }
 
 input UserUpdateManyMutationInput {
@@ -5429,41 +5408,6 @@ input UserUpdateManyMutationInput {
   name: String
   password: String
   role: Role
-}
-
-input UserUpdateManyWithoutCredentialsInput {
-  create: [UserCreateWithoutCredentialsInput!]
-  connect: [UserWhereUniqueInput!]
-  set: [UserWhereUniqueInput!]
-  disconnect: [UserWhereUniqueInput!]
-  delete: [UserWhereUniqueInput!]
-  update: [UserUpdateWithWhereUniqueWithoutCredentialsInput!]
-  updateMany: [UserUpdateManyWithWhereNestedInput!]
-  deleteMany: [UserScalarWhereInput!]
-  upsert: [UserUpsertWithWhereUniqueWithoutCredentialsInput!]
-}
-
-input UserUpdateManyWithWhereNestedInput {
-  where: UserScalarWhereInput!
-  data: UserUpdateManyDataInput!
-}
-
-input UserUpdateWithoutCredentialsDataInput {
-  email: String
-  name: String
-  password: String
-  role: Role
-}
-
-input UserUpdateWithWhereUniqueWithoutCredentialsInput {
-  where: UserWhereUniqueInput!
-  data: UserUpdateWithoutCredentialsDataInput!
-}
-
-input UserUpsertWithWhereUniqueWithoutCredentialsInput {
-  where: UserWhereUniqueInput!
-  update: UserUpdateWithoutCredentialsDataInput!
-  create: UserCreateWithoutCredentialsInput!
 }
 
 input UserWhereInput {
@@ -6347,18 +6291,20 @@ export interface CredentialCreateInput {
   login: String;
   password?: String | null;
   type: DatabaseType;
-  users?: UserCreateManyWithoutCredentialsInput | null;
+  source?: SourceCreateManyWithoutCredentialInput | null;
 }
 
-export interface CredentialCreateManyWithoutUsersInput {
-  create?:
-    | CredentialCreateWithoutUsersInput[]
-    | CredentialCreateWithoutUsersInput
-    | null;
+export interface CredentialCreateManyInput {
+  create?: CredentialCreateInput[] | CredentialCreateInput | null;
   connect?: CredentialWhereUniqueInput[] | CredentialWhereUniqueInput | null;
 }
 
-export interface CredentialCreateWithoutUsersInput {
+export interface CredentialCreateOneWithoutSourceInput {
+  create?: CredentialCreateWithoutSourceInput | null;
+  connect?: CredentialWhereUniqueInput | null;
+}
+
+export interface CredentialCreateWithoutSourceInput {
   id?: ID_Input | null;
   host: String;
   port: String;
@@ -6467,13 +6413,22 @@ export interface CredentialSubscriptionWhereInput {
   node?: CredentialWhereInput | null;
 }
 
+export interface CredentialUpdateDataInput {
+  host?: String | null;
+  port?: String | null;
+  login?: String | null;
+  password?: String | null;
+  type?: DatabaseType | null;
+  source?: SourceUpdateManyWithoutCredentialInput | null;
+}
+
 export interface CredentialUpdateInput {
   host?: String | null;
   port?: String | null;
   login?: String | null;
   password?: String | null;
   type?: DatabaseType | null;
-  users?: UserUpdateManyWithoutCredentialsInput | null;
+  source?: SourceUpdateManyWithoutCredentialInput | null;
 }
 
 export interface CredentialUpdateManyDataInput {
@@ -6484,6 +6439,27 @@ export interface CredentialUpdateManyDataInput {
   type?: DatabaseType | null;
 }
 
+export interface CredentialUpdateManyInput {
+  create?: CredentialCreateInput[] | CredentialCreateInput | null;
+  connect?: CredentialWhereUniqueInput[] | CredentialWhereUniqueInput | null;
+  set?: CredentialWhereUniqueInput[] | CredentialWhereUniqueInput | null;
+  disconnect?: CredentialWhereUniqueInput[] | CredentialWhereUniqueInput | null;
+  delete?: CredentialWhereUniqueInput[] | CredentialWhereUniqueInput | null;
+  update?:
+    | CredentialUpdateWithWhereUniqueNestedInput[]
+    | CredentialUpdateWithWhereUniqueNestedInput
+    | null;
+  updateMany?:
+    | CredentialUpdateManyWithWhereNestedInput[]
+    | CredentialUpdateManyWithWhereNestedInput
+    | null;
+  deleteMany?: CredentialScalarWhereInput[] | CredentialScalarWhereInput | null;
+  upsert?:
+    | CredentialUpsertWithWhereUniqueNestedInput[]
+    | CredentialUpsertWithWhereUniqueNestedInput
+    | null;
+}
+
 export interface CredentialUpdateManyMutationInput {
   host?: String | null;
   port?: String | null;
@@ -6492,36 +6468,21 @@ export interface CredentialUpdateManyMutationInput {
   type?: DatabaseType | null;
 }
 
-export interface CredentialUpdateManyWithoutUsersInput {
-  create?:
-    | CredentialCreateWithoutUsersInput[]
-    | CredentialCreateWithoutUsersInput
-    | null;
-  connect?: CredentialWhereUniqueInput[] | CredentialWhereUniqueInput | null;
-  set?: CredentialWhereUniqueInput[] | CredentialWhereUniqueInput | null;
-  disconnect?: CredentialWhereUniqueInput[] | CredentialWhereUniqueInput | null;
-  delete?: CredentialWhereUniqueInput[] | CredentialWhereUniqueInput | null;
-  update?:
-    | CredentialUpdateWithWhereUniqueWithoutUsersInput[]
-    | CredentialUpdateWithWhereUniqueWithoutUsersInput
-    | null;
-  updateMany?:
-    | CredentialUpdateManyWithWhereNestedInput[]
-    | CredentialUpdateManyWithWhereNestedInput
-    | null;
-  deleteMany?: CredentialScalarWhereInput[] | CredentialScalarWhereInput | null;
-  upsert?:
-    | CredentialUpsertWithWhereUniqueWithoutUsersInput[]
-    | CredentialUpsertWithWhereUniqueWithoutUsersInput
-    | null;
-}
-
 export interface CredentialUpdateManyWithWhereNestedInput {
   where: CredentialScalarWhereInput;
   data: CredentialUpdateManyDataInput;
 }
 
-export interface CredentialUpdateWithoutUsersDataInput {
+export interface CredentialUpdateOneWithoutSourceInput {
+  create?: CredentialCreateWithoutSourceInput | null;
+  connect?: CredentialWhereUniqueInput | null;
+  disconnect?: Boolean | null;
+  delete?: Boolean | null;
+  update?: CredentialUpdateWithoutSourceDataInput | null;
+  upsert?: CredentialUpsertWithoutSourceInput | null;
+}
+
+export interface CredentialUpdateWithoutSourceDataInput {
   host?: String | null;
   port?: String | null;
   login?: String | null;
@@ -6529,15 +6490,20 @@ export interface CredentialUpdateWithoutUsersDataInput {
   type?: DatabaseType | null;
 }
 
-export interface CredentialUpdateWithWhereUniqueWithoutUsersInput {
+export interface CredentialUpdateWithWhereUniqueNestedInput {
   where: CredentialWhereUniqueInput;
-  data: CredentialUpdateWithoutUsersDataInput;
+  data: CredentialUpdateDataInput;
 }
 
-export interface CredentialUpsertWithWhereUniqueWithoutUsersInput {
+export interface CredentialUpsertWithoutSourceInput {
+  update: CredentialUpdateWithoutSourceDataInput;
+  create: CredentialCreateWithoutSourceInput;
+}
+
+export interface CredentialUpsertWithWhereUniqueNestedInput {
   where: CredentialWhereUniqueInput;
-  update: CredentialUpdateWithoutUsersDataInput;
-  create: CredentialCreateWithoutUsersInput;
+  update: CredentialUpdateDataInput;
+  create: CredentialCreateInput;
 }
 
 export interface CredentialWhereInput {
@@ -6618,9 +6584,9 @@ export interface CredentialWhereInput {
   type_not?: DatabaseType | null;
   type_in?: DatabaseType[] | DatabaseType | null;
   type_not_in?: DatabaseType[] | DatabaseType | null;
-  users_every?: UserWhereInput | null;
-  users_some?: UserWhereInput | null;
-  users_none?: UserWhereInput | null;
+  source_every?: SourceWhereInput | null;
+  source_some?: SourceWhereInput | null;
+  source_none?: SourceWhereInput | null;
 }
 
 export interface CredentialWhereUniqueInput {
@@ -7759,6 +7725,15 @@ export interface SourceCreateInput {
   name: String;
   hasOwner?: Boolean | null;
   resources?: ResourceCreateManyWithoutSourceInput | null;
+  credential?: CredentialCreateOneWithoutSourceInput | null;
+}
+
+export interface SourceCreateManyWithoutCredentialInput {
+  create?:
+    | SourceCreateWithoutCredentialInput[]
+    | SourceCreateWithoutCredentialInput
+    | null;
+  connect?: SourceWhereUniqueInput[] | SourceWhereUniqueInput | null;
 }
 
 export interface SourceCreateOneWithoutResourcesInput {
@@ -7766,10 +7741,70 @@ export interface SourceCreateOneWithoutResourcesInput {
   connect?: SourceWhereUniqueInput | null;
 }
 
+export interface SourceCreateWithoutCredentialInput {
+  id?: ID_Input | null;
+  name: String;
+  hasOwner?: Boolean | null;
+  resources?: ResourceCreateManyWithoutSourceInput | null;
+}
+
 export interface SourceCreateWithoutResourcesInput {
   id?: ID_Input | null;
   name: String;
   hasOwner?: Boolean | null;
+  credential?: CredentialCreateOneWithoutSourceInput | null;
+}
+
+export interface SourceScalarWhereInput {
+  AND?: SourceScalarWhereInput[] | SourceScalarWhereInput | null;
+  OR?: SourceScalarWhereInput[] | SourceScalarWhereInput | null;
+  NOT?: SourceScalarWhereInput[] | SourceScalarWhereInput | null;
+  id?: ID_Input | null;
+  id_not?: ID_Input | null;
+  id_in?: ID_Output[] | ID_Output | null;
+  id_not_in?: ID_Output[] | ID_Output | null;
+  id_lt?: ID_Input | null;
+  id_lte?: ID_Input | null;
+  id_gt?: ID_Input | null;
+  id_gte?: ID_Input | null;
+  id_contains?: ID_Input | null;
+  id_not_contains?: ID_Input | null;
+  id_starts_with?: ID_Input | null;
+  id_not_starts_with?: ID_Input | null;
+  id_ends_with?: ID_Input | null;
+  id_not_ends_with?: ID_Input | null;
+  name?: String | null;
+  name_not?: String | null;
+  name_in?: String[] | String | null;
+  name_not_in?: String[] | String | null;
+  name_lt?: String | null;
+  name_lte?: String | null;
+  name_gt?: String | null;
+  name_gte?: String | null;
+  name_contains?: String | null;
+  name_not_contains?: String | null;
+  name_starts_with?: String | null;
+  name_not_starts_with?: String | null;
+  name_ends_with?: String | null;
+  name_not_ends_with?: String | null;
+  hasOwner?: Boolean | null;
+  hasOwner_not?: Boolean | null;
+  updatedAt?: DateTime | null;
+  updatedAt_not?: DateTime | null;
+  updatedAt_in?: DateTime[] | DateTime | null;
+  updatedAt_not_in?: DateTime[] | DateTime | null;
+  updatedAt_lt?: DateTime | null;
+  updatedAt_lte?: DateTime | null;
+  updatedAt_gt?: DateTime | null;
+  updatedAt_gte?: DateTime | null;
+  createdAt?: DateTime | null;
+  createdAt_not?: DateTime | null;
+  createdAt_in?: DateTime[] | DateTime | null;
+  createdAt_not_in?: DateTime[] | DateTime | null;
+  createdAt_lt?: DateTime | null;
+  createdAt_lte?: DateTime | null;
+  createdAt_gt?: DateTime | null;
+  createdAt_gte?: DateTime | null;
 }
 
 export interface SourceSubscriptionWhereInput {
@@ -7787,11 +7822,46 @@ export interface SourceUpdateInput {
   name?: String | null;
   hasOwner?: Boolean | null;
   resources?: ResourceUpdateManyWithoutSourceInput | null;
+  credential?: CredentialUpdateOneWithoutSourceInput | null;
+}
+
+export interface SourceUpdateManyDataInput {
+  name?: String | null;
+  hasOwner?: Boolean | null;
 }
 
 export interface SourceUpdateManyMutationInput {
   name?: String | null;
   hasOwner?: Boolean | null;
+}
+
+export interface SourceUpdateManyWithoutCredentialInput {
+  create?:
+    | SourceCreateWithoutCredentialInput[]
+    | SourceCreateWithoutCredentialInput
+    | null;
+  connect?: SourceWhereUniqueInput[] | SourceWhereUniqueInput | null;
+  set?: SourceWhereUniqueInput[] | SourceWhereUniqueInput | null;
+  disconnect?: SourceWhereUniqueInput[] | SourceWhereUniqueInput | null;
+  delete?: SourceWhereUniqueInput[] | SourceWhereUniqueInput | null;
+  update?:
+    | SourceUpdateWithWhereUniqueWithoutCredentialInput[]
+    | SourceUpdateWithWhereUniqueWithoutCredentialInput
+    | null;
+  updateMany?:
+    | SourceUpdateManyWithWhereNestedInput[]
+    | SourceUpdateManyWithWhereNestedInput
+    | null;
+  deleteMany?: SourceScalarWhereInput[] | SourceScalarWhereInput | null;
+  upsert?:
+    | SourceUpsertWithWhereUniqueWithoutCredentialInput[]
+    | SourceUpsertWithWhereUniqueWithoutCredentialInput
+    | null;
+}
+
+export interface SourceUpdateManyWithWhereNestedInput {
+  where: SourceScalarWhereInput;
+  data: SourceUpdateManyDataInput;
 }
 
 export interface SourceUpdateOneRequiredWithoutResourcesInput {
@@ -7801,14 +7871,32 @@ export interface SourceUpdateOneRequiredWithoutResourcesInput {
   upsert?: SourceUpsertWithoutResourcesInput | null;
 }
 
+export interface SourceUpdateWithoutCredentialDataInput {
+  name?: String | null;
+  hasOwner?: Boolean | null;
+  resources?: ResourceUpdateManyWithoutSourceInput | null;
+}
+
 export interface SourceUpdateWithoutResourcesDataInput {
   name?: String | null;
   hasOwner?: Boolean | null;
+  credential?: CredentialUpdateOneWithoutSourceInput | null;
+}
+
+export interface SourceUpdateWithWhereUniqueWithoutCredentialInput {
+  where: SourceWhereUniqueInput;
+  data: SourceUpdateWithoutCredentialDataInput;
 }
 
 export interface SourceUpsertWithoutResourcesInput {
   update: SourceUpdateWithoutResourcesDataInput;
   create: SourceCreateWithoutResourcesInput;
+}
+
+export interface SourceUpsertWithWhereUniqueWithoutCredentialInput {
+  where: SourceWhereUniqueInput;
+  update: SourceUpdateWithoutCredentialDataInput;
+  create: SourceCreateWithoutCredentialInput;
 }
 
 export interface SourceWhereInput {
@@ -7864,6 +7952,7 @@ export interface SourceWhereInput {
   resources_every?: ResourceWhereInput | null;
   resources_some?: ResourceWhereInput | null;
   resources_none?: ResourceWhereInput | null;
+  credential?: CredentialWhereInput | null;
 }
 
 export interface SourceWhereUniqueInput {
@@ -7877,105 +7966,7 @@ export interface UserCreateInput {
   name: String;
   password: String;
   role?: Role | null;
-  credentials?: CredentialCreateManyWithoutUsersInput | null;
-}
-
-export interface UserCreateManyWithoutCredentialsInput {
-  create?:
-    | UserCreateWithoutCredentialsInput[]
-    | UserCreateWithoutCredentialsInput
-    | null;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput | null;
-}
-
-export interface UserCreateWithoutCredentialsInput {
-  id?: ID_Input | null;
-  email: String;
-  name: String;
-  password: String;
-  role?: Role | null;
-}
-
-export interface UserScalarWhereInput {
-  AND?: UserScalarWhereInput[] | UserScalarWhereInput | null;
-  OR?: UserScalarWhereInput[] | UserScalarWhereInput | null;
-  NOT?: UserScalarWhereInput[] | UserScalarWhereInput | null;
-  id?: ID_Input | null;
-  id_not?: ID_Input | null;
-  id_in?: ID_Output[] | ID_Output | null;
-  id_not_in?: ID_Output[] | ID_Output | null;
-  id_lt?: ID_Input | null;
-  id_lte?: ID_Input | null;
-  id_gt?: ID_Input | null;
-  id_gte?: ID_Input | null;
-  id_contains?: ID_Input | null;
-  id_not_contains?: ID_Input | null;
-  id_starts_with?: ID_Input | null;
-  id_not_starts_with?: ID_Input | null;
-  id_ends_with?: ID_Input | null;
-  id_not_ends_with?: ID_Input | null;
-  email?: String | null;
-  email_not?: String | null;
-  email_in?: String[] | String | null;
-  email_not_in?: String[] | String | null;
-  email_lt?: String | null;
-  email_lte?: String | null;
-  email_gt?: String | null;
-  email_gte?: String | null;
-  email_contains?: String | null;
-  email_not_contains?: String | null;
-  email_starts_with?: String | null;
-  email_not_starts_with?: String | null;
-  email_ends_with?: String | null;
-  email_not_ends_with?: String | null;
-  name?: String | null;
-  name_not?: String | null;
-  name_in?: String[] | String | null;
-  name_not_in?: String[] | String | null;
-  name_lt?: String | null;
-  name_lte?: String | null;
-  name_gt?: String | null;
-  name_gte?: String | null;
-  name_contains?: String | null;
-  name_not_contains?: String | null;
-  name_starts_with?: String | null;
-  name_not_starts_with?: String | null;
-  name_ends_with?: String | null;
-  name_not_ends_with?: String | null;
-  password?: String | null;
-  password_not?: String | null;
-  password_in?: String[] | String | null;
-  password_not_in?: String[] | String | null;
-  password_lt?: String | null;
-  password_lte?: String | null;
-  password_gt?: String | null;
-  password_gte?: String | null;
-  password_contains?: String | null;
-  password_not_contains?: String | null;
-  password_starts_with?: String | null;
-  password_not_starts_with?: String | null;
-  password_ends_with?: String | null;
-  password_not_ends_with?: String | null;
-  role?: Role | null;
-  role_not?: Role | null;
-  role_in?: Role[] | Role | null;
-  role_not_in?: Role[] | Role | null;
-  updatedAt?: DateTime | null;
-  updatedAt_not?: DateTime | null;
-  updatedAt_in?: DateTime[] | DateTime | null;
-  updatedAt_not_in?: DateTime[] | DateTime | null;
-  updatedAt_lt?: DateTime | null;
-  updatedAt_lte?: DateTime | null;
-  updatedAt_gt?: DateTime | null;
-  updatedAt_gte?: DateTime | null;
-  createdAt?: DateTime | null;
-  createdAt_not?: DateTime | null;
-  createdAt_in?: DateTime[] | DateTime | null;
-  createdAt_not_in?: DateTime[] | DateTime | null;
-  createdAt_lt?: DateTime | null;
-  createdAt_lte?: DateTime | null;
-  createdAt_gt?: DateTime | null;
-  createdAt_gte?: DateTime | null;
+  credentials?: CredentialCreateManyInput | null;
 }
 
 export interface UserSubscriptionWhereInput {
@@ -7994,14 +7985,7 @@ export interface UserUpdateInput {
   name?: String | null;
   password?: String | null;
   role?: Role | null;
-  credentials?: CredentialUpdateManyWithoutUsersInput | null;
-}
-
-export interface UserUpdateManyDataInput {
-  email?: String | null;
-  name?: String | null;
-  password?: String | null;
-  role?: Role | null;
+  credentials?: CredentialUpdateManyInput | null;
 }
 
 export interface UserUpdateManyMutationInput {
@@ -8009,53 +7993,6 @@ export interface UserUpdateManyMutationInput {
   name?: String | null;
   password?: String | null;
   role?: Role | null;
-}
-
-export interface UserUpdateManyWithoutCredentialsInput {
-  create?:
-    | UserCreateWithoutCredentialsInput[]
-    | UserCreateWithoutCredentialsInput
-    | null;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput | null;
-  set?: UserWhereUniqueInput[] | UserWhereUniqueInput | null;
-  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput | null;
-  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput | null;
-  update?:
-    | UserUpdateWithWhereUniqueWithoutCredentialsInput[]
-    | UserUpdateWithWhereUniqueWithoutCredentialsInput
-    | null;
-  updateMany?:
-    | UserUpdateManyWithWhereNestedInput[]
-    | UserUpdateManyWithWhereNestedInput
-    | null;
-  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput | null;
-  upsert?:
-    | UserUpsertWithWhereUniqueWithoutCredentialsInput[]
-    | UserUpsertWithWhereUniqueWithoutCredentialsInput
-    | null;
-}
-
-export interface UserUpdateManyWithWhereNestedInput {
-  where: UserScalarWhereInput;
-  data: UserUpdateManyDataInput;
-}
-
-export interface UserUpdateWithoutCredentialsDataInput {
-  email?: String | null;
-  name?: String | null;
-  password?: String | null;
-  role?: Role | null;
-}
-
-export interface UserUpdateWithWhereUniqueWithoutCredentialsInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateWithoutCredentialsDataInput;
-}
-
-export interface UserUpsertWithWhereUniqueWithoutCredentialsInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutCredentialsDataInput;
-  create: UserCreateWithoutCredentialsInput;
 }
 
 export interface UserWhereInput {
@@ -8249,7 +8186,7 @@ export interface Credential extends Node {
   login: String;
   password?: String | null;
   type: DatabaseType;
-  users?: Array<User> | null;
+  source?: Array<Source> | null;
 }
 
 /*
@@ -8456,6 +8393,7 @@ export interface Source extends Node {
   resources?: Array<Resource> | null;
   updatedAt: DateTime;
   createdAt: DateTime;
+  credential?: Credential | null;
 }
 
 /*

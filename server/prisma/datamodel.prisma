@@ -5,6 +5,21 @@ type Source {
   resources: [Resource!]! @relation(link: TABLE, name: "SourceToResource", onDelete: CASCADE)
   updatedAt: DateTime! @updatedAt
   createdAt: DateTime! @createdAt
+  credential: Credential
+}
+
+enum DatabaseType {
+  POSTGRES
+}
+
+type Credential {
+  id: ID! @unique @id
+  host: String!
+  port: String!
+  login: String!
+  password: String
+  type: DatabaseType!
+  source: [Source!]!
 }
 
 type Resource {
@@ -83,18 +98,4 @@ type User {
   updatedAt: DateTime! @updatedAt
   createdAt: DateTime! @createdAt
   credentials: [Credential!]! @relation(name: "CredentialToUsers")
-}
-
-enum DatabaseType {
-  POSTGRES
-}
-
-type Credential {
-  id: ID! @unique @id
-  host: String!
-  port: String!
-  login: String!
-  password: String
-  type: DatabaseType!
-  users: [User] @relation(link: TABLE, name: "CredentialToUsers")
 }
