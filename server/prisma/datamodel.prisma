@@ -82,4 +82,19 @@ type User {
   role: Role @default(value: USER)
   updatedAt: DateTime! @updatedAt
   createdAt: DateTime! @createdAt
+  credentials: [Credential!]! @relation(name: "CredentialToUsers")
+}
+
+enum DatabaseType {
+  POSTGRES
+}
+
+type Credential {
+  id: ID! @unique @id
+  host: String!
+  port: String!
+  login: String!
+  password: String
+  type: DatabaseType!
+  users: [User] @relation(link: TABLE, name: "CredentialToUsers")
 }

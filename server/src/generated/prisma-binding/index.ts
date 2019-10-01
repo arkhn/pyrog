@@ -82,6 +82,19 @@ export interface Query {
     info?: GraphQLResolveInfo | string,
     options?: Options
   ) => Promise<T>;
+  credentials: <T = Array<Credential | null>>(
+    args: {
+      where?: CredentialWhereInput | null;
+      orderBy?: CredentialOrderByInput | null;
+      skip?: Int | null;
+      after?: String | null;
+      before?: String | null;
+      first?: Int | null;
+      last?: Int | null;
+    },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
   source: <T = Source | null>(
     args: { where: SourceWhereUniqueInput },
     info?: GraphQLResolveInfo | string,
@@ -109,6 +122,11 @@ export interface Query {
   ) => Promise<T | null>;
   user: <T = User | null>(
     args: { where: UserWhereUniqueInput },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T | null>;
+  credential: <T = Credential | null>(
+    args: { where: CredentialWhereUniqueInput },
     info?: GraphQLResolveInfo | string,
     options?: Options
   ) => Promise<T | null>;
@@ -190,6 +208,19 @@ export interface Query {
     info?: GraphQLResolveInfo | string,
     options?: Options
   ) => Promise<T>;
+  credentialsConnection: <T = CredentialConnection>(
+    args: {
+      where?: CredentialWhereInput | null;
+      orderBy?: CredentialOrderByInput | null;
+      skip?: Int | null;
+      after?: String | null;
+      before?: String | null;
+      first?: Int | null;
+      last?: Int | null;
+    },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
   node: <T = Node | null>(
     args: { id: ID_Output },
     info?: GraphQLResolveInfo | string,
@@ -228,6 +259,11 @@ export interface Mutation {
     info?: GraphQLResolveInfo | string,
     options?: Options
   ) => Promise<T>;
+  createCredential: <T = Credential>(
+    args: { data: CredentialCreateInput },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
   updateSource: <T = Source | null>(
     args: { data: SourceUpdateInput; where: SourceWhereUniqueInput },
     info?: GraphQLResolveInfo | string,
@@ -258,6 +294,11 @@ export interface Mutation {
     info?: GraphQLResolveInfo | string,
     options?: Options
   ) => Promise<T | null>;
+  updateCredential: <T = Credential | null>(
+    args: { data: CredentialUpdateInput; where: CredentialWhereUniqueInput },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T | null>;
   deleteSource: <T = Source | null>(
     args: { where: SourceWhereUniqueInput },
     info?: GraphQLResolveInfo | string,
@@ -285,6 +326,11 @@ export interface Mutation {
   ) => Promise<T | null>;
   deleteUser: <T = User | null>(
     args: { where: UserWhereUniqueInput },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T | null>;
+  deleteCredential: <T = Credential | null>(
+    args: { where: CredentialWhereUniqueInput },
     info?: GraphQLResolveInfo | string,
     options?: Options
   ) => Promise<T | null>;
@@ -342,6 +388,15 @@ export interface Mutation {
     info?: GraphQLResolveInfo | string,
     options?: Options
   ) => Promise<T>;
+  upsertCredential: <T = Credential>(
+    args: {
+      where: CredentialWhereUniqueInput;
+      create: CredentialCreateInput;
+      update: CredentialUpdateInput;
+    },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
   updateManySources: <T = BatchPayload>(
     args: {
       data: SourceUpdateManyMutationInput;
@@ -384,6 +439,14 @@ export interface Mutation {
     info?: GraphQLResolveInfo | string,
     options?: Options
   ) => Promise<T>;
+  updateManyCredentials: <T = BatchPayload>(
+    args: {
+      data: CredentialUpdateManyMutationInput;
+      where?: CredentialWhereInput | null;
+    },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
   deleteManySources: <T = BatchPayload>(
     args: { where?: SourceWhereInput | null },
     info?: GraphQLResolveInfo | string,
@@ -411,6 +474,11 @@ export interface Mutation {
   ) => Promise<T>;
   deleteManyUsers: <T = BatchPayload>(
     args: { where?: UserWhereInput | null },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<T>;
+  deleteManyCredentials: <T = BatchPayload>(
+    args: { where?: CredentialWhereInput | null },
     info?: GraphQLResolveInfo | string,
     options?: Options
   ) => Promise<T>;
@@ -447,6 +515,11 @@ export interface Subscription {
     info?: GraphQLResolveInfo | string,
     options?: Options
   ) => Promise<AsyncIterator<T | null>>;
+  credential: <T = CredentialSubscriptionPayload | null>(
+    args: { where?: CredentialSubscriptionWhereInput | null },
+    info?: GraphQLResolveInfo | string,
+    options?: Options
+  ) => Promise<AsyncIterator<T | null>>;
 }
 
 export interface Exists {
@@ -456,6 +529,7 @@ export interface Exists {
   InputColumn: (where?: InputColumnWhereInput) => Promise<boolean>;
   Join: (where?: JoinWhereInput) => Promise<boolean>;
   User: (where?: UserWhereInput) => Promise<boolean>;
+  Credential: (where?: CredentialWhereInput) => Promise<boolean>;
 }
 
 export interface Prisma {
@@ -495,6 +569,10 @@ export interface BindingConstructor<T> {
  */
 
 const typeDefs = `type AggregateAttribute {
+  count: Int!
+}
+
+type AggregateCredential {
   count: Int!
 }
 
@@ -1442,6 +1520,634 @@ input AttributeWhereUniqueInput {
 type BatchPayload {
   """The number of nodes that have been affected by the Batch operation."""
   count: Long!
+}
+
+type Credential implements Node {
+  id: ID!
+  host: String!
+  port: String!
+  login: String!
+  password: String
+  type: DatabaseType!
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+}
+
+"""A connection to a list of items."""
+type CredentialConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [CredentialEdge]!
+  aggregate: AggregateCredential!
+}
+
+input CredentialCreateInput {
+  id: ID
+  host: String!
+  port: String!
+  login: String!
+  password: String
+  type: DatabaseType!
+  users: UserCreateManyWithoutCredentialsInput
+}
+
+input CredentialCreateManyWithoutUsersInput {
+  create: [CredentialCreateWithoutUsersInput!]
+  connect: [CredentialWhereUniqueInput!]
+}
+
+input CredentialCreateWithoutUsersInput {
+  id: ID
+  host: String!
+  port: String!
+  login: String!
+  password: String
+  type: DatabaseType!
+}
+
+"""An edge in a connection."""
+type CredentialEdge {
+  """The item at the end of the edge."""
+  node: Credential!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum CredentialOrderByInput {
+  id_ASC
+  id_DESC
+  host_ASC
+  host_DESC
+  port_ASC
+  port_DESC
+  login_ASC
+  login_DESC
+  password_ASC
+  password_DESC
+  type_ASC
+  type_DESC
+}
+
+type CredentialPreviousValues {
+  id: ID!
+  host: String!
+  port: String!
+  login: String!
+  password: String
+  type: DatabaseType!
+}
+
+input CredentialScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [CredentialScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [CredentialScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [CredentialScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  host: String
+
+  """All values that are not equal to given value."""
+  host_not: String
+
+  """All values that are contained in given list."""
+  host_in: [String!]
+
+  """All values that are not contained in given list."""
+  host_not_in: [String!]
+
+  """All values less than the given value."""
+  host_lt: String
+
+  """All values less than or equal the given value."""
+  host_lte: String
+
+  """All values greater than the given value."""
+  host_gt: String
+
+  """All values greater than or equal the given value."""
+  host_gte: String
+
+  """All values containing the given string."""
+  host_contains: String
+
+  """All values not containing the given string."""
+  host_not_contains: String
+
+  """All values starting with the given string."""
+  host_starts_with: String
+
+  """All values not starting with the given string."""
+  host_not_starts_with: String
+
+  """All values ending with the given string."""
+  host_ends_with: String
+
+  """All values not ending with the given string."""
+  host_not_ends_with: String
+  port: String
+
+  """All values that are not equal to given value."""
+  port_not: String
+
+  """All values that are contained in given list."""
+  port_in: [String!]
+
+  """All values that are not contained in given list."""
+  port_not_in: [String!]
+
+  """All values less than the given value."""
+  port_lt: String
+
+  """All values less than or equal the given value."""
+  port_lte: String
+
+  """All values greater than the given value."""
+  port_gt: String
+
+  """All values greater than or equal the given value."""
+  port_gte: String
+
+  """All values containing the given string."""
+  port_contains: String
+
+  """All values not containing the given string."""
+  port_not_contains: String
+
+  """All values starting with the given string."""
+  port_starts_with: String
+
+  """All values not starting with the given string."""
+  port_not_starts_with: String
+
+  """All values ending with the given string."""
+  port_ends_with: String
+
+  """All values not ending with the given string."""
+  port_not_ends_with: String
+  login: String
+
+  """All values that are not equal to given value."""
+  login_not: String
+
+  """All values that are contained in given list."""
+  login_in: [String!]
+
+  """All values that are not contained in given list."""
+  login_not_in: [String!]
+
+  """All values less than the given value."""
+  login_lt: String
+
+  """All values less than or equal the given value."""
+  login_lte: String
+
+  """All values greater than the given value."""
+  login_gt: String
+
+  """All values greater than or equal the given value."""
+  login_gte: String
+
+  """All values containing the given string."""
+  login_contains: String
+
+  """All values not containing the given string."""
+  login_not_contains: String
+
+  """All values starting with the given string."""
+  login_starts_with: String
+
+  """All values not starting with the given string."""
+  login_not_starts_with: String
+
+  """All values ending with the given string."""
+  login_ends_with: String
+
+  """All values not ending with the given string."""
+  login_not_ends_with: String
+  password: String
+
+  """All values that are not equal to given value."""
+  password_not: String
+
+  """All values that are contained in given list."""
+  password_in: [String!]
+
+  """All values that are not contained in given list."""
+  password_not_in: [String!]
+
+  """All values less than the given value."""
+  password_lt: String
+
+  """All values less than or equal the given value."""
+  password_lte: String
+
+  """All values greater than the given value."""
+  password_gt: String
+
+  """All values greater than or equal the given value."""
+  password_gte: String
+
+  """All values containing the given string."""
+  password_contains: String
+
+  """All values not containing the given string."""
+  password_not_contains: String
+
+  """All values starting with the given string."""
+  password_starts_with: String
+
+  """All values not starting with the given string."""
+  password_not_starts_with: String
+
+  """All values ending with the given string."""
+  password_ends_with: String
+
+  """All values not ending with the given string."""
+  password_not_ends_with: String
+  type: DatabaseType
+
+  """All values that are not equal to given value."""
+  type_not: DatabaseType
+
+  """All values that are contained in given list."""
+  type_in: [DatabaseType!]
+
+  """All values that are not contained in given list."""
+  type_not_in: [DatabaseType!]
+}
+
+type CredentialSubscriptionPayload {
+  mutation: MutationType!
+  node: Credential
+  updatedFields: [String!]
+  previousValues: CredentialPreviousValues
+}
+
+input CredentialSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [CredentialSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [CredentialSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [CredentialSubscriptionWhereInput!]
+
+  """The subscription event gets dispatched when it's listed in mutation_in"""
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: CredentialWhereInput
+}
+
+input CredentialUpdateInput {
+  host: String
+  port: String
+  login: String
+  password: String
+  type: DatabaseType
+  users: UserUpdateManyWithoutCredentialsInput
+}
+
+input CredentialUpdateManyDataInput {
+  host: String
+  port: String
+  login: String
+  password: String
+  type: DatabaseType
+}
+
+input CredentialUpdateManyMutationInput {
+  host: String
+  port: String
+  login: String
+  password: String
+  type: DatabaseType
+}
+
+input CredentialUpdateManyWithoutUsersInput {
+  create: [CredentialCreateWithoutUsersInput!]
+  connect: [CredentialWhereUniqueInput!]
+  set: [CredentialWhereUniqueInput!]
+  disconnect: [CredentialWhereUniqueInput!]
+  delete: [CredentialWhereUniqueInput!]
+  update: [CredentialUpdateWithWhereUniqueWithoutUsersInput!]
+  updateMany: [CredentialUpdateManyWithWhereNestedInput!]
+  deleteMany: [CredentialScalarWhereInput!]
+  upsert: [CredentialUpsertWithWhereUniqueWithoutUsersInput!]
+}
+
+input CredentialUpdateManyWithWhereNestedInput {
+  where: CredentialScalarWhereInput!
+  data: CredentialUpdateManyDataInput!
+}
+
+input CredentialUpdateWithoutUsersDataInput {
+  host: String
+  port: String
+  login: String
+  password: String
+  type: DatabaseType
+}
+
+input CredentialUpdateWithWhereUniqueWithoutUsersInput {
+  where: CredentialWhereUniqueInput!
+  data: CredentialUpdateWithoutUsersDataInput!
+}
+
+input CredentialUpsertWithWhereUniqueWithoutUsersInput {
+  where: CredentialWhereUniqueInput!
+  update: CredentialUpdateWithoutUsersDataInput!
+  create: CredentialCreateWithoutUsersInput!
+}
+
+input CredentialWhereInput {
+  """Logical AND on all given filters."""
+  AND: [CredentialWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [CredentialWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [CredentialWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  host: String
+
+  """All values that are not equal to given value."""
+  host_not: String
+
+  """All values that are contained in given list."""
+  host_in: [String!]
+
+  """All values that are not contained in given list."""
+  host_not_in: [String!]
+
+  """All values less than the given value."""
+  host_lt: String
+
+  """All values less than or equal the given value."""
+  host_lte: String
+
+  """All values greater than the given value."""
+  host_gt: String
+
+  """All values greater than or equal the given value."""
+  host_gte: String
+
+  """All values containing the given string."""
+  host_contains: String
+
+  """All values not containing the given string."""
+  host_not_contains: String
+
+  """All values starting with the given string."""
+  host_starts_with: String
+
+  """All values not starting with the given string."""
+  host_not_starts_with: String
+
+  """All values ending with the given string."""
+  host_ends_with: String
+
+  """All values not ending with the given string."""
+  host_not_ends_with: String
+  port: String
+
+  """All values that are not equal to given value."""
+  port_not: String
+
+  """All values that are contained in given list."""
+  port_in: [String!]
+
+  """All values that are not contained in given list."""
+  port_not_in: [String!]
+
+  """All values less than the given value."""
+  port_lt: String
+
+  """All values less than or equal the given value."""
+  port_lte: String
+
+  """All values greater than the given value."""
+  port_gt: String
+
+  """All values greater than or equal the given value."""
+  port_gte: String
+
+  """All values containing the given string."""
+  port_contains: String
+
+  """All values not containing the given string."""
+  port_not_contains: String
+
+  """All values starting with the given string."""
+  port_starts_with: String
+
+  """All values not starting with the given string."""
+  port_not_starts_with: String
+
+  """All values ending with the given string."""
+  port_ends_with: String
+
+  """All values not ending with the given string."""
+  port_not_ends_with: String
+  login: String
+
+  """All values that are not equal to given value."""
+  login_not: String
+
+  """All values that are contained in given list."""
+  login_in: [String!]
+
+  """All values that are not contained in given list."""
+  login_not_in: [String!]
+
+  """All values less than the given value."""
+  login_lt: String
+
+  """All values less than or equal the given value."""
+  login_lte: String
+
+  """All values greater than the given value."""
+  login_gt: String
+
+  """All values greater than or equal the given value."""
+  login_gte: String
+
+  """All values containing the given string."""
+  login_contains: String
+
+  """All values not containing the given string."""
+  login_not_contains: String
+
+  """All values starting with the given string."""
+  login_starts_with: String
+
+  """All values not starting with the given string."""
+  login_not_starts_with: String
+
+  """All values ending with the given string."""
+  login_ends_with: String
+
+  """All values not ending with the given string."""
+  login_not_ends_with: String
+  password: String
+
+  """All values that are not equal to given value."""
+  password_not: String
+
+  """All values that are contained in given list."""
+  password_in: [String!]
+
+  """All values that are not contained in given list."""
+  password_not_in: [String!]
+
+  """All values less than the given value."""
+  password_lt: String
+
+  """All values less than or equal the given value."""
+  password_lte: String
+
+  """All values greater than the given value."""
+  password_gt: String
+
+  """All values greater than or equal the given value."""
+  password_gte: String
+
+  """All values containing the given string."""
+  password_contains: String
+
+  """All values not containing the given string."""
+  password_not_contains: String
+
+  """All values starting with the given string."""
+  password_starts_with: String
+
+  """All values not starting with the given string."""
+  password_not_starts_with: String
+
+  """All values ending with the given string."""
+  password_ends_with: String
+
+  """All values not ending with the given string."""
+  password_not_ends_with: String
+  type: DatabaseType
+
+  """All values that are not equal to given value."""
+  type_not: DatabaseType
+
+  """All values that are contained in given list."""
+  type_in: [DatabaseType!]
+
+  """All values that are not contained in given list."""
+  type_not_in: [DatabaseType!]
+  users_every: UserWhereInput
+  users_some: UserWhereInput
+  users_none: UserWhereInput
+}
+
+input CredentialWhereUniqueInput {
+  id: ID
+}
+
+enum DatabaseType {
+  POSTGRES
 }
 
 scalar DateTime
@@ -3149,36 +3855,42 @@ type Mutation {
   createInputColumn(data: InputColumnCreateInput!): InputColumn!
   createJoin(data: JoinCreateInput!): Join!
   createUser(data: UserCreateInput!): User!
+  createCredential(data: CredentialCreateInput!): Credential!
   updateSource(data: SourceUpdateInput!, where: SourceWhereUniqueInput!): Source
   updateResource(data: ResourceUpdateInput!, where: ResourceWhereUniqueInput!): Resource
   updateAttribute(data: AttributeUpdateInput!, where: AttributeWhereUniqueInput!): Attribute
   updateInputColumn(data: InputColumnUpdateInput!, where: InputColumnWhereUniqueInput!): InputColumn
   updateJoin(data: JoinUpdateInput!, where: JoinWhereUniqueInput!): Join
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  updateCredential(data: CredentialUpdateInput!, where: CredentialWhereUniqueInput!): Credential
   deleteSource(where: SourceWhereUniqueInput!): Source
   deleteResource(where: ResourceWhereUniqueInput!): Resource
   deleteAttribute(where: AttributeWhereUniqueInput!): Attribute
   deleteInputColumn(where: InputColumnWhereUniqueInput!): InputColumn
   deleteJoin(where: JoinWhereUniqueInput!): Join
   deleteUser(where: UserWhereUniqueInput!): User
+  deleteCredential(where: CredentialWhereUniqueInput!): Credential
   upsertSource(where: SourceWhereUniqueInput!, create: SourceCreateInput!, update: SourceUpdateInput!): Source!
   upsertResource(where: ResourceWhereUniqueInput!, create: ResourceCreateInput!, update: ResourceUpdateInput!): Resource!
   upsertAttribute(where: AttributeWhereUniqueInput!, create: AttributeCreateInput!, update: AttributeUpdateInput!): Attribute!
   upsertInputColumn(where: InputColumnWhereUniqueInput!, create: InputColumnCreateInput!, update: InputColumnUpdateInput!): InputColumn!
   upsertJoin(where: JoinWhereUniqueInput!, create: JoinCreateInput!, update: JoinUpdateInput!): Join!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  upsertCredential(where: CredentialWhereUniqueInput!, create: CredentialCreateInput!, update: CredentialUpdateInput!): Credential!
   updateManySources(data: SourceUpdateManyMutationInput!, where: SourceWhereInput): BatchPayload!
   updateManyResources(data: ResourceUpdateManyMutationInput!, where: ResourceWhereInput): BatchPayload!
   updateManyAttributes(data: AttributeUpdateManyMutationInput!, where: AttributeWhereInput): BatchPayload!
   updateManyInputColumns(data: InputColumnUpdateManyMutationInput!, where: InputColumnWhereInput): BatchPayload!
   updateManyJoins(data: JoinUpdateManyMutationInput!, where: JoinWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
+  updateManyCredentials(data: CredentialUpdateManyMutationInput!, where: CredentialWhereInput): BatchPayload!
   deleteManySources(where: SourceWhereInput): BatchPayload!
   deleteManyResources(where: ResourceWhereInput): BatchPayload!
   deleteManyAttributes(where: AttributeWhereInput): BatchPayload!
   deleteManyInputColumns(where: InputColumnWhereInput): BatchPayload!
   deleteManyJoins(where: JoinWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
+  deleteManyCredentials(where: CredentialWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -3215,18 +3927,21 @@ type Query {
   inputColumns(where: InputColumnWhereInput, orderBy: InputColumnOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [InputColumn]!
   joins(where: JoinWhereInput, orderBy: JoinOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Join]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  credentials(where: CredentialWhereInput, orderBy: CredentialOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Credential]!
   source(where: SourceWhereUniqueInput!): Source
   resource(where: ResourceWhereUniqueInput!): Resource
   attribute(where: AttributeWhereUniqueInput!): Attribute
   inputColumn(where: InputColumnWhereUniqueInput!): InputColumn
   join(where: JoinWhereUniqueInput!): Join
   user(where: UserWhereUniqueInput!): User
+  credential(where: CredentialWhereUniqueInput!): Credential
   sourcesConnection(where: SourceWhereInput, orderBy: SourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SourceConnection!
   resourcesConnection(where: ResourceWhereInput, orderBy: ResourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ResourceConnection!
   attributesConnection(where: AttributeWhereInput, orderBy: AttributeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AttributeConnection!
   inputColumnsConnection(where: InputColumnWhereInput, orderBy: InputColumnOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): InputColumnConnection!
   joinsConnection(where: JoinWhereInput, orderBy: JoinOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): JoinConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  credentialsConnection(where: CredentialWhereInput, orderBy: CredentialOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CredentialConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -4350,6 +5065,7 @@ type Subscription {
   inputColumn(where: InputColumnSubscriptionWhereInput): InputColumnSubscriptionPayload
   join(where: JoinSubscriptionWhereInput): JoinSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  credential(where: CredentialSubscriptionWhereInput): CredentialSubscriptionPayload
 }
 
 type User implements Node {
@@ -4360,6 +5076,7 @@ type User implements Node {
   role: Role
   updatedAt: DateTime!
   createdAt: DateTime!
+  credentials(where: CredentialWhereInput, orderBy: CredentialOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Credential!]
 }
 
 """A connection to a list of items."""
@@ -4373,6 +5090,20 @@ type UserConnection {
 }
 
 input UserCreateInput {
+  id: ID
+  email: String!
+  name: String!
+  password: String!
+  role: Role
+  credentials: CredentialCreateManyWithoutUsersInput
+}
+
+input UserCreateManyWithoutCredentialsInput {
+  create: [UserCreateWithoutCredentialsInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateWithoutCredentialsInput {
   id: ID
   email: String!
   name: String!
@@ -4414,6 +5145,231 @@ type UserPreviousValues {
   role: Role
   updatedAt: DateTime!
   createdAt: DateTime!
+}
+
+input UserScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [UserScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [UserScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [UserScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  email: String
+
+  """All values that are not equal to given value."""
+  email_not: String
+
+  """All values that are contained in given list."""
+  email_in: [String!]
+
+  """All values that are not contained in given list."""
+  email_not_in: [String!]
+
+  """All values less than the given value."""
+  email_lt: String
+
+  """All values less than or equal the given value."""
+  email_lte: String
+
+  """All values greater than the given value."""
+  email_gt: String
+
+  """All values greater than or equal the given value."""
+  email_gte: String
+
+  """All values containing the given string."""
+  email_contains: String
+
+  """All values not containing the given string."""
+  email_not_contains: String
+
+  """All values starting with the given string."""
+  email_starts_with: String
+
+  """All values not starting with the given string."""
+  email_not_starts_with: String
+
+  """All values ending with the given string."""
+  email_ends_with: String
+
+  """All values not ending with the given string."""
+  email_not_ends_with: String
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  password: String
+
+  """All values that are not equal to given value."""
+  password_not: String
+
+  """All values that are contained in given list."""
+  password_in: [String!]
+
+  """All values that are not contained in given list."""
+  password_not_in: [String!]
+
+  """All values less than the given value."""
+  password_lt: String
+
+  """All values less than or equal the given value."""
+  password_lte: String
+
+  """All values greater than the given value."""
+  password_gt: String
+
+  """All values greater than or equal the given value."""
+  password_gte: String
+
+  """All values containing the given string."""
+  password_contains: String
+
+  """All values not containing the given string."""
+  password_not_contains: String
+
+  """All values starting with the given string."""
+  password_starts_with: String
+
+  """All values not starting with the given string."""
+  password_not_starts_with: String
+
+  """All values ending with the given string."""
+  password_ends_with: String
+
+  """All values not ending with the given string."""
+  password_not_ends_with: String
+  role: Role
+
+  """All values that are not equal to given value."""
+  role_not: Role
+
+  """All values that are contained in given list."""
+  role_in: [Role!]
+
+  """All values that are not contained in given list."""
+  role_not_in: [Role!]
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
 }
 
 type UserSubscriptionPayload {
@@ -4458,6 +5414,14 @@ input UserUpdateInput {
   name: String
   password: String
   role: Role
+  credentials: CredentialUpdateManyWithoutUsersInput
+}
+
+input UserUpdateManyDataInput {
+  email: String
+  name: String
+  password: String
+  role: Role
 }
 
 input UserUpdateManyMutationInput {
@@ -4465,6 +5429,41 @@ input UserUpdateManyMutationInput {
   name: String
   password: String
   role: Role
+}
+
+input UserUpdateManyWithoutCredentialsInput {
+  create: [UserCreateWithoutCredentialsInput!]
+  connect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutCredentialsInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+  deleteMany: [UserScalarWhereInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutCredentialsInput!]
+}
+
+input UserUpdateManyWithWhereNestedInput {
+  where: UserScalarWhereInput!
+  data: UserUpdateManyDataInput!
+}
+
+input UserUpdateWithoutCredentialsDataInput {
+  email: String
+  name: String
+  password: String
+  role: Role
+}
+
+input UserUpdateWithWhereUniqueWithoutCredentialsInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutCredentialsDataInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutCredentialsInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutCredentialsDataInput!
+  create: UserCreateWithoutCredentialsInput!
 }
 
 input UserWhereInput {
@@ -4690,6 +5689,9 @@ input UserWhereInput {
 
   """All values greater than or equal the given value."""
   createdAt_gte: DateTime
+  credentials_every: CredentialWhereInput
+  credentials_some: CredentialWhereInput
+  credentials_none: CredentialWhereInput
 }
 
 input UserWhereUniqueInput {
@@ -4725,6 +5727,22 @@ export type AttributeOrderByInput =
   | "updatedAt_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC";
+
+export type CredentialOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "host_ASC"
+  | "host_DESC"
+  | "port_ASC"
+  | "port_DESC"
+  | "login_ASC"
+  | "login_DESC"
+  | "password_ASC"
+  | "password_DESC"
+  | "type_ASC"
+  | "type_DESC";
+
+export type DatabaseType = "POSTGRES";
 
 export type InputColumnOrderByInput =
   | "id_ASC"
@@ -5319,6 +6337,293 @@ export interface AttributeWhereInput {
 }
 
 export interface AttributeWhereUniqueInput {
+  id?: ID_Input | null;
+}
+
+export interface CredentialCreateInput {
+  id?: ID_Input | null;
+  host: String;
+  port: String;
+  login: String;
+  password?: String | null;
+  type: DatabaseType;
+  users?: UserCreateManyWithoutCredentialsInput | null;
+}
+
+export interface CredentialCreateManyWithoutUsersInput {
+  create?:
+    | CredentialCreateWithoutUsersInput[]
+    | CredentialCreateWithoutUsersInput
+    | null;
+  connect?: CredentialWhereUniqueInput[] | CredentialWhereUniqueInput | null;
+}
+
+export interface CredentialCreateWithoutUsersInput {
+  id?: ID_Input | null;
+  host: String;
+  port: String;
+  login: String;
+  password?: String | null;
+  type: DatabaseType;
+}
+
+export interface CredentialScalarWhereInput {
+  AND?: CredentialScalarWhereInput[] | CredentialScalarWhereInput | null;
+  OR?: CredentialScalarWhereInput[] | CredentialScalarWhereInput | null;
+  NOT?: CredentialScalarWhereInput[] | CredentialScalarWhereInput | null;
+  id?: ID_Input | null;
+  id_not?: ID_Input | null;
+  id_in?: ID_Output[] | ID_Output | null;
+  id_not_in?: ID_Output[] | ID_Output | null;
+  id_lt?: ID_Input | null;
+  id_lte?: ID_Input | null;
+  id_gt?: ID_Input | null;
+  id_gte?: ID_Input | null;
+  id_contains?: ID_Input | null;
+  id_not_contains?: ID_Input | null;
+  id_starts_with?: ID_Input | null;
+  id_not_starts_with?: ID_Input | null;
+  id_ends_with?: ID_Input | null;
+  id_not_ends_with?: ID_Input | null;
+  host?: String | null;
+  host_not?: String | null;
+  host_in?: String[] | String | null;
+  host_not_in?: String[] | String | null;
+  host_lt?: String | null;
+  host_lte?: String | null;
+  host_gt?: String | null;
+  host_gte?: String | null;
+  host_contains?: String | null;
+  host_not_contains?: String | null;
+  host_starts_with?: String | null;
+  host_not_starts_with?: String | null;
+  host_ends_with?: String | null;
+  host_not_ends_with?: String | null;
+  port?: String | null;
+  port_not?: String | null;
+  port_in?: String[] | String | null;
+  port_not_in?: String[] | String | null;
+  port_lt?: String | null;
+  port_lte?: String | null;
+  port_gt?: String | null;
+  port_gte?: String | null;
+  port_contains?: String | null;
+  port_not_contains?: String | null;
+  port_starts_with?: String | null;
+  port_not_starts_with?: String | null;
+  port_ends_with?: String | null;
+  port_not_ends_with?: String | null;
+  login?: String | null;
+  login_not?: String | null;
+  login_in?: String[] | String | null;
+  login_not_in?: String[] | String | null;
+  login_lt?: String | null;
+  login_lte?: String | null;
+  login_gt?: String | null;
+  login_gte?: String | null;
+  login_contains?: String | null;
+  login_not_contains?: String | null;
+  login_starts_with?: String | null;
+  login_not_starts_with?: String | null;
+  login_ends_with?: String | null;
+  login_not_ends_with?: String | null;
+  password?: String | null;
+  password_not?: String | null;
+  password_in?: String[] | String | null;
+  password_not_in?: String[] | String | null;
+  password_lt?: String | null;
+  password_lte?: String | null;
+  password_gt?: String | null;
+  password_gte?: String | null;
+  password_contains?: String | null;
+  password_not_contains?: String | null;
+  password_starts_with?: String | null;
+  password_not_starts_with?: String | null;
+  password_ends_with?: String | null;
+  password_not_ends_with?: String | null;
+  type?: DatabaseType | null;
+  type_not?: DatabaseType | null;
+  type_in?: DatabaseType[] | DatabaseType | null;
+  type_not_in?: DatabaseType[] | DatabaseType | null;
+}
+
+export interface CredentialSubscriptionWhereInput {
+  AND?:
+    | CredentialSubscriptionWhereInput[]
+    | CredentialSubscriptionWhereInput
+    | null;
+  OR?:
+    | CredentialSubscriptionWhereInput[]
+    | CredentialSubscriptionWhereInput
+    | null;
+  NOT?:
+    | CredentialSubscriptionWhereInput[]
+    | CredentialSubscriptionWhereInput
+    | null;
+  mutation_in?: MutationType[] | MutationType | null;
+  updatedFields_contains?: String | null;
+  updatedFields_contains_every?: String[] | String | null;
+  updatedFields_contains_some?: String[] | String | null;
+  node?: CredentialWhereInput | null;
+}
+
+export interface CredentialUpdateInput {
+  host?: String | null;
+  port?: String | null;
+  login?: String | null;
+  password?: String | null;
+  type?: DatabaseType | null;
+  users?: UserUpdateManyWithoutCredentialsInput | null;
+}
+
+export interface CredentialUpdateManyDataInput {
+  host?: String | null;
+  port?: String | null;
+  login?: String | null;
+  password?: String | null;
+  type?: DatabaseType | null;
+}
+
+export interface CredentialUpdateManyMutationInput {
+  host?: String | null;
+  port?: String | null;
+  login?: String | null;
+  password?: String | null;
+  type?: DatabaseType | null;
+}
+
+export interface CredentialUpdateManyWithoutUsersInput {
+  create?:
+    | CredentialCreateWithoutUsersInput[]
+    | CredentialCreateWithoutUsersInput
+    | null;
+  connect?: CredentialWhereUniqueInput[] | CredentialWhereUniqueInput | null;
+  set?: CredentialWhereUniqueInput[] | CredentialWhereUniqueInput | null;
+  disconnect?: CredentialWhereUniqueInput[] | CredentialWhereUniqueInput | null;
+  delete?: CredentialWhereUniqueInput[] | CredentialWhereUniqueInput | null;
+  update?:
+    | CredentialUpdateWithWhereUniqueWithoutUsersInput[]
+    | CredentialUpdateWithWhereUniqueWithoutUsersInput
+    | null;
+  updateMany?:
+    | CredentialUpdateManyWithWhereNestedInput[]
+    | CredentialUpdateManyWithWhereNestedInput
+    | null;
+  deleteMany?: CredentialScalarWhereInput[] | CredentialScalarWhereInput | null;
+  upsert?:
+    | CredentialUpsertWithWhereUniqueWithoutUsersInput[]
+    | CredentialUpsertWithWhereUniqueWithoutUsersInput
+    | null;
+}
+
+export interface CredentialUpdateManyWithWhereNestedInput {
+  where: CredentialScalarWhereInput;
+  data: CredentialUpdateManyDataInput;
+}
+
+export interface CredentialUpdateWithoutUsersDataInput {
+  host?: String | null;
+  port?: String | null;
+  login?: String | null;
+  password?: String | null;
+  type?: DatabaseType | null;
+}
+
+export interface CredentialUpdateWithWhereUniqueWithoutUsersInput {
+  where: CredentialWhereUniqueInput;
+  data: CredentialUpdateWithoutUsersDataInput;
+}
+
+export interface CredentialUpsertWithWhereUniqueWithoutUsersInput {
+  where: CredentialWhereUniqueInput;
+  update: CredentialUpdateWithoutUsersDataInput;
+  create: CredentialCreateWithoutUsersInput;
+}
+
+export interface CredentialWhereInput {
+  AND?: CredentialWhereInput[] | CredentialWhereInput | null;
+  OR?: CredentialWhereInput[] | CredentialWhereInput | null;
+  NOT?: CredentialWhereInput[] | CredentialWhereInput | null;
+  id?: ID_Input | null;
+  id_not?: ID_Input | null;
+  id_in?: ID_Output[] | ID_Output | null;
+  id_not_in?: ID_Output[] | ID_Output | null;
+  id_lt?: ID_Input | null;
+  id_lte?: ID_Input | null;
+  id_gt?: ID_Input | null;
+  id_gte?: ID_Input | null;
+  id_contains?: ID_Input | null;
+  id_not_contains?: ID_Input | null;
+  id_starts_with?: ID_Input | null;
+  id_not_starts_with?: ID_Input | null;
+  id_ends_with?: ID_Input | null;
+  id_not_ends_with?: ID_Input | null;
+  host?: String | null;
+  host_not?: String | null;
+  host_in?: String[] | String | null;
+  host_not_in?: String[] | String | null;
+  host_lt?: String | null;
+  host_lte?: String | null;
+  host_gt?: String | null;
+  host_gte?: String | null;
+  host_contains?: String | null;
+  host_not_contains?: String | null;
+  host_starts_with?: String | null;
+  host_not_starts_with?: String | null;
+  host_ends_with?: String | null;
+  host_not_ends_with?: String | null;
+  port?: String | null;
+  port_not?: String | null;
+  port_in?: String[] | String | null;
+  port_not_in?: String[] | String | null;
+  port_lt?: String | null;
+  port_lte?: String | null;
+  port_gt?: String | null;
+  port_gte?: String | null;
+  port_contains?: String | null;
+  port_not_contains?: String | null;
+  port_starts_with?: String | null;
+  port_not_starts_with?: String | null;
+  port_ends_with?: String | null;
+  port_not_ends_with?: String | null;
+  login?: String | null;
+  login_not?: String | null;
+  login_in?: String[] | String | null;
+  login_not_in?: String[] | String | null;
+  login_lt?: String | null;
+  login_lte?: String | null;
+  login_gt?: String | null;
+  login_gte?: String | null;
+  login_contains?: String | null;
+  login_not_contains?: String | null;
+  login_starts_with?: String | null;
+  login_not_starts_with?: String | null;
+  login_ends_with?: String | null;
+  login_not_ends_with?: String | null;
+  password?: String | null;
+  password_not?: String | null;
+  password_in?: String[] | String | null;
+  password_not_in?: String[] | String | null;
+  password_lt?: String | null;
+  password_lte?: String | null;
+  password_gt?: String | null;
+  password_gte?: String | null;
+  password_contains?: String | null;
+  password_not_contains?: String | null;
+  password_starts_with?: String | null;
+  password_not_starts_with?: String | null;
+  password_ends_with?: String | null;
+  password_not_ends_with?: String | null;
+  type?: DatabaseType | null;
+  type_not?: DatabaseType | null;
+  type_in?: DatabaseType[] | DatabaseType | null;
+  type_not_in?: DatabaseType[] | DatabaseType | null;
+  users_every?: UserWhereInput | null;
+  users_some?: UserWhereInput | null;
+  users_none?: UserWhereInput | null;
+}
+
+export interface CredentialWhereUniqueInput {
   id?: ID_Input | null;
 }
 
@@ -6572,6 +7877,105 @@ export interface UserCreateInput {
   name: String;
   password: String;
   role?: Role | null;
+  credentials?: CredentialCreateManyWithoutUsersInput | null;
+}
+
+export interface UserCreateManyWithoutCredentialsInput {
+  create?:
+    | UserCreateWithoutCredentialsInput[]
+    | UserCreateWithoutCredentialsInput
+    | null;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput | null;
+}
+
+export interface UserCreateWithoutCredentialsInput {
+  id?: ID_Input | null;
+  email: String;
+  name: String;
+  password: String;
+  role?: Role | null;
+}
+
+export interface UserScalarWhereInput {
+  AND?: UserScalarWhereInput[] | UserScalarWhereInput | null;
+  OR?: UserScalarWhereInput[] | UserScalarWhereInput | null;
+  NOT?: UserScalarWhereInput[] | UserScalarWhereInput | null;
+  id?: ID_Input | null;
+  id_not?: ID_Input | null;
+  id_in?: ID_Output[] | ID_Output | null;
+  id_not_in?: ID_Output[] | ID_Output | null;
+  id_lt?: ID_Input | null;
+  id_lte?: ID_Input | null;
+  id_gt?: ID_Input | null;
+  id_gte?: ID_Input | null;
+  id_contains?: ID_Input | null;
+  id_not_contains?: ID_Input | null;
+  id_starts_with?: ID_Input | null;
+  id_not_starts_with?: ID_Input | null;
+  id_ends_with?: ID_Input | null;
+  id_not_ends_with?: ID_Input | null;
+  email?: String | null;
+  email_not?: String | null;
+  email_in?: String[] | String | null;
+  email_not_in?: String[] | String | null;
+  email_lt?: String | null;
+  email_lte?: String | null;
+  email_gt?: String | null;
+  email_gte?: String | null;
+  email_contains?: String | null;
+  email_not_contains?: String | null;
+  email_starts_with?: String | null;
+  email_not_starts_with?: String | null;
+  email_ends_with?: String | null;
+  email_not_ends_with?: String | null;
+  name?: String | null;
+  name_not?: String | null;
+  name_in?: String[] | String | null;
+  name_not_in?: String[] | String | null;
+  name_lt?: String | null;
+  name_lte?: String | null;
+  name_gt?: String | null;
+  name_gte?: String | null;
+  name_contains?: String | null;
+  name_not_contains?: String | null;
+  name_starts_with?: String | null;
+  name_not_starts_with?: String | null;
+  name_ends_with?: String | null;
+  name_not_ends_with?: String | null;
+  password?: String | null;
+  password_not?: String | null;
+  password_in?: String[] | String | null;
+  password_not_in?: String[] | String | null;
+  password_lt?: String | null;
+  password_lte?: String | null;
+  password_gt?: String | null;
+  password_gte?: String | null;
+  password_contains?: String | null;
+  password_not_contains?: String | null;
+  password_starts_with?: String | null;
+  password_not_starts_with?: String | null;
+  password_ends_with?: String | null;
+  password_not_ends_with?: String | null;
+  role?: Role | null;
+  role_not?: Role | null;
+  role_in?: Role[] | Role | null;
+  role_not_in?: Role[] | Role | null;
+  updatedAt?: DateTime | null;
+  updatedAt_not?: DateTime | null;
+  updatedAt_in?: DateTime[] | DateTime | null;
+  updatedAt_not_in?: DateTime[] | DateTime | null;
+  updatedAt_lt?: DateTime | null;
+  updatedAt_lte?: DateTime | null;
+  updatedAt_gt?: DateTime | null;
+  updatedAt_gte?: DateTime | null;
+  createdAt?: DateTime | null;
+  createdAt_not?: DateTime | null;
+  createdAt_in?: DateTime[] | DateTime | null;
+  createdAt_not_in?: DateTime[] | DateTime | null;
+  createdAt_lt?: DateTime | null;
+  createdAt_lte?: DateTime | null;
+  createdAt_gt?: DateTime | null;
+  createdAt_gte?: DateTime | null;
 }
 
 export interface UserSubscriptionWhereInput {
@@ -6590,6 +7994,14 @@ export interface UserUpdateInput {
   name?: String | null;
   password?: String | null;
   role?: Role | null;
+  credentials?: CredentialUpdateManyWithoutUsersInput | null;
+}
+
+export interface UserUpdateManyDataInput {
+  email?: String | null;
+  name?: String | null;
+  password?: String | null;
+  role?: Role | null;
 }
 
 export interface UserUpdateManyMutationInput {
@@ -6597,6 +8009,53 @@ export interface UserUpdateManyMutationInput {
   name?: String | null;
   password?: String | null;
   role?: Role | null;
+}
+
+export interface UserUpdateManyWithoutCredentialsInput {
+  create?:
+    | UserCreateWithoutCredentialsInput[]
+    | UserCreateWithoutCredentialsInput
+    | null;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput | null;
+  set?: UserWhereUniqueInput[] | UserWhereUniqueInput | null;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput | null;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput | null;
+  update?:
+    | UserUpdateWithWhereUniqueWithoutCredentialsInput[]
+    | UserUpdateWithWhereUniqueWithoutCredentialsInput
+    | null;
+  updateMany?:
+    | UserUpdateManyWithWhereNestedInput[]
+    | UserUpdateManyWithWhereNestedInput
+    | null;
+  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput | null;
+  upsert?:
+    | UserUpsertWithWhereUniqueWithoutCredentialsInput[]
+    | UserUpsertWithWhereUniqueWithoutCredentialsInput
+    | null;
+}
+
+export interface UserUpdateManyWithWhereNestedInput {
+  where: UserScalarWhereInput;
+  data: UserUpdateManyDataInput;
+}
+
+export interface UserUpdateWithoutCredentialsDataInput {
+  email?: String | null;
+  name?: String | null;
+  password?: String | null;
+  role?: Role | null;
+}
+
+export interface UserUpdateWithWhereUniqueWithoutCredentialsInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutCredentialsDataInput;
+}
+
+export interface UserUpsertWithWhereUniqueWithoutCredentialsInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutCredentialsDataInput;
+  create: UserCreateWithoutCredentialsInput;
 }
 
 export interface UserWhereInput {
@@ -6679,6 +8138,9 @@ export interface UserWhereInput {
   createdAt_lte?: DateTime | null;
   createdAt_gt?: DateTime | null;
   createdAt_gte?: DateTime | null;
+  credentials_every?: CredentialWhereInput | null;
+  credentials_some?: CredentialWhereInput | null;
+  credentials_none?: CredentialWhereInput | null;
 }
 
 export interface UserWhereUniqueInput {
@@ -6695,6 +8157,10 @@ export interface Node {
 }
 
 export interface AggregateAttribute {
+  count: Int;
+}
+
+export interface AggregateCredential {
   count: Int;
 }
 
@@ -6774,6 +8240,51 @@ export interface AttributeSubscriptionPayload {
 
 export interface BatchPayload {
   count: Long;
+}
+
+export interface Credential extends Node {
+  id: ID_Output;
+  host: String;
+  port: String;
+  login: String;
+  password?: String | null;
+  type: DatabaseType;
+  users?: Array<User> | null;
+}
+
+/*
+ * A connection to a list of items.
+
+ */
+export interface CredentialConnection {
+  pageInfo: PageInfo;
+  edges: Array<CredentialEdge | null>;
+  aggregate: AggregateCredential;
+}
+
+/*
+ * An edge in a connection.
+
+ */
+export interface CredentialEdge {
+  node: Credential;
+  cursor: String;
+}
+
+export interface CredentialPreviousValues {
+  id: ID_Output;
+  host: String;
+  port: String;
+  login: String;
+  password?: String | null;
+  type: DatabaseType;
+}
+
+export interface CredentialSubscriptionPayload {
+  mutation: MutationType;
+  node?: Credential | null;
+  updatedFields?: Array<String> | null;
+  previousValues?: CredentialPreviousValues | null;
 }
 
 export interface InputColumn extends Node {
@@ -6989,6 +8500,7 @@ export interface User extends Node {
   role?: Role | null;
   updatedAt: DateTime;
   createdAt: DateTime;
+  credentials?: Array<Credential> | null;
 }
 
 /*
