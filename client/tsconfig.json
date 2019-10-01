@@ -4,6 +4,7 @@
     "module": "commonjs",
     "noImplicitAny": true,
     "experimentalDecorators": true,
+    "esModuleInterop": true,
     "target": "es6",
     "allowJs": true,
     "lib": ["es6", "dom", "esnext"]
