@@ -13,7 +13,7 @@ import { Mutation, Query, Subscription } from "react-apollo";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 
-import Navbar from "../../components/navbar";
+import Navbar from "../../components/Navbar";
 
 import { login as loginAction } from "../../services/user/actions";
 
