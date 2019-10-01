@@ -1,3 +1,4 @@
+import * as bcrypt from "bcryptjs";
 import { forwardTo } from "prisma-binding";
 
 import { checkAuth, Context, getUserId } from "../../utils";
@@ -227,5 +228,24 @@ export const pyrogMutation = {
     //     throw new PermissionError()
     // }
     return context.client.deleteAttribute({ id: id });
+  },
+  async createCredential(
+    parent,
+    { login, password, host, port },
+    context: Context
+  ) {
+    const userId = getUserId(context);
+    const encryptedPassword = await bcrypt.hash(password, 10);
+
+    return context.client.createCredential({
+      login,
+      host,
+      port,
+      password: encryptedPassword,
+      type: "POSTGRES",
+      users: {
+        connect: [{ id: userId }]
+      }
+    });
   }
 };

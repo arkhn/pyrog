@@ -55,6 +55,14 @@ type Mutation {
   ): Attribute!
   deleteAttribute(id: ID!): Attribute!
 
+  # Credentials
+  createCredential(
+    login: String
+    password: String!
+    host: String!
+    port: String!
+  ): Credential!
+
   signup(email: String!, password: String!, name: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
 }
