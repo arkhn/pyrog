@@ -131,5 +131,9 @@ export const pyrogQuery = {
     );
 
     return [numberMappedRessources, numberMappedAttributes];
+  },
+  async credential(parent, { sourceId }, context: Context) {
+    getUserId(context);
+    return context.client.source({ id: sourceId }).credential();
   }
 };

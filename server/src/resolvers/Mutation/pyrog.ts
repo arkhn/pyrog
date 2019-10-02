@@ -229,21 +229,40 @@ export const pyrogMutation = {
     // }
     return context.client.deleteAttribute({ id: id });
   },
-  async createCredential(
+  async upsertCredential(
     parent,
-    { login, password, host, port, sourceId },
+    { login, password, host, port, type, database, sourceId },
     context: Context
   ) {
-    const userId = getUserId(context);
+    getUserId(context);
     const encryptedPassword = await bcrypt.hash(password, 10);
+    const credential = await context.client
+      .source({ id: sourceId })
+      .credential();
+    console.log(credential);
 
-    return context.client.createCredential({
-      login,
-      host,
-      port,
-      password: encryptedPassword,
-      type: "POSTGRES",
-      source: { connect: { id: sourceId } }
-    });
+    if (credential) {
+      return context.client.updateCredential({
+        where: { id: credential.id },
+        data: {
+          host,
+          port,
+          type,
+          database,
+          password: encryptedPassword,
+          login
+        }
+      });
+    } else {
+      return context.client.createCredential({
+        source: { connect: { id: sourceId } },
+        login,
+        password: encryptedPassword,
+        host,
+        port,
+        type,
+        database
+      });
+    }
   }
 };
