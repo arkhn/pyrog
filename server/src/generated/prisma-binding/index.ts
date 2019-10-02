@@ -1526,10 +1526,11 @@ type Credential implements Node {
   id: ID!
   host: String!
   port: String!
+  database: String!
   login: String!
   password: String
   type: DatabaseType!
-  source(where: SourceWhereInput, orderBy: SourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Source!]
+  source: Source!
 }
 
 """A connection to a list of items."""
@@ -1546,10 +1547,11 @@ input CredentialCreateInput {
   id: ID
   host: String!
   port: String!
+  database: String!
   login: String!
   password: String
   type: DatabaseType!
-  source: SourceCreateManyWithoutCredentialInput
+  source: SourceCreateOneWithoutCredentialInput!
 }
 
 input CredentialCreateManyInput {
@@ -1566,6 +1568,7 @@ input CredentialCreateWithoutSourceInput {
   id: ID
   host: String!
   port: String!
+  database: String!
   login: String!
   password: String
   type: DatabaseType!
@@ -1587,6 +1590,8 @@ enum CredentialOrderByInput {
   host_DESC
   port_ASC
   port_DESC
+  database_ASC
+  database_DESC
   login_ASC
   login_DESC
   password_ASC
@@ -1599,6 +1604,7 @@ type CredentialPreviousValues {
   id: ID!
   host: String!
   port: String!
+  database: String!
   login: String!
   password: String
   type: DatabaseType!
@@ -1733,6 +1739,46 @@ input CredentialScalarWhereInput {
 
   """All values not ending with the given string."""
   port_not_ends_with: String
+  database: String
+
+  """All values that are not equal to given value."""
+  database_not: String
+
+  """All values that are contained in given list."""
+  database_in: [String!]
+
+  """All values that are not contained in given list."""
+  database_not_in: [String!]
+
+  """All values less than the given value."""
+  database_lt: String
+
+  """All values less than or equal the given value."""
+  database_lte: String
+
+  """All values greater than the given value."""
+  database_gt: String
+
+  """All values greater than or equal the given value."""
+  database_gte: String
+
+  """All values containing the given string."""
+  database_contains: String
+
+  """All values not containing the given string."""
+  database_not_contains: String
+
+  """All values starting with the given string."""
+  database_starts_with: String
+
+  """All values not starting with the given string."""
+  database_not_starts_with: String
+
+  """All values ending with the given string."""
+  database_ends_with: String
+
+  """All values not ending with the given string."""
+  database_not_ends_with: String
   login: String
 
   """All values that are not equal to given value."""
@@ -1865,24 +1911,27 @@ input CredentialSubscriptionWhereInput {
 input CredentialUpdateDataInput {
   host: String
   port: String
+  database: String
   login: String
   password: String
   type: DatabaseType
-  source: SourceUpdateManyWithoutCredentialInput
+  source: SourceUpdateOneRequiredWithoutCredentialInput
 }
 
 input CredentialUpdateInput {
   host: String
   port: String
+  database: String
   login: String
   password: String
   type: DatabaseType
-  source: SourceUpdateManyWithoutCredentialInput
+  source: SourceUpdateOneRequiredWithoutCredentialInput
 }
 
 input CredentialUpdateManyDataInput {
   host: String
   port: String
+  database: String
   login: String
   password: String
   type: DatabaseType
@@ -1903,6 +1952,7 @@ input CredentialUpdateManyInput {
 input CredentialUpdateManyMutationInput {
   host: String
   port: String
+  database: String
   login: String
   password: String
   type: DatabaseType
@@ -1925,6 +1975,7 @@ input CredentialUpdateOneWithoutSourceInput {
 input CredentialUpdateWithoutSourceDataInput {
   host: String
   port: String
+  database: String
   login: String
   password: String
   type: DatabaseType
@@ -2075,6 +2126,46 @@ input CredentialWhereInput {
 
   """All values not ending with the given string."""
   port_not_ends_with: String
+  database: String
+
+  """All values that are not equal to given value."""
+  database_not: String
+
+  """All values that are contained in given list."""
+  database_in: [String!]
+
+  """All values that are not contained in given list."""
+  database_not_in: [String!]
+
+  """All values less than the given value."""
+  database_lt: String
+
+  """All values less than or equal the given value."""
+  database_lte: String
+
+  """All values greater than the given value."""
+  database_gt: String
+
+  """All values greater than or equal the given value."""
+  database_gte: String
+
+  """All values containing the given string."""
+  database_contains: String
+
+  """All values not containing the given string."""
+  database_not_contains: String
+
+  """All values starting with the given string."""
+  database_starts_with: String
+
+  """All values not starting with the given string."""
+  database_not_starts_with: String
+
+  """All values ending with the given string."""
+  database_ends_with: String
+
+  """All values not ending with the given string."""
+  database_not_ends_with: String
   login: String
 
   """All values that are not equal to given value."""
@@ -2165,9 +2256,7 @@ input CredentialWhereInput {
 
   """All values that are not contained in given list."""
   type_not_in: [DatabaseType!]
-  source_every: SourceWhereInput
-  source_some: SourceWhereInput
-  source_none: SourceWhereInput
+  source: SourceWhereInput
 }
 
 input CredentialWhereUniqueInput {
@@ -4835,9 +4924,9 @@ input SourceCreateInput {
   credential: CredentialCreateOneWithoutSourceInput
 }
 
-input SourceCreateManyWithoutCredentialInput {
-  create: [SourceCreateWithoutCredentialInput!]
-  connect: [SourceWhereUniqueInput!]
+input SourceCreateOneWithoutCredentialInput {
+  create: SourceCreateWithoutCredentialInput
+  connect: SourceWhereUniqueInput
 }
 
 input SourceCreateOneWithoutResourcesInput {
@@ -4889,145 +4978,6 @@ type SourcePreviousValues {
   createdAt: DateTime!
 }
 
-input SourceScalarWhereInput {
-  """Logical AND on all given filters."""
-  AND: [SourceScalarWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [SourceScalarWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [SourceScalarWhereInput!]
-  id: ID
-
-  """All values that are not equal to given value."""
-  id_not: ID
-
-  """All values that are contained in given list."""
-  id_in: [ID!]
-
-  """All values that are not contained in given list."""
-  id_not_in: [ID!]
-
-  """All values less than the given value."""
-  id_lt: ID
-
-  """All values less than or equal the given value."""
-  id_lte: ID
-
-  """All values greater than the given value."""
-  id_gt: ID
-
-  """All values greater than or equal the given value."""
-  id_gte: ID
-
-  """All values containing the given string."""
-  id_contains: ID
-
-  """All values not containing the given string."""
-  id_not_contains: ID
-
-  """All values starting with the given string."""
-  id_starts_with: ID
-
-  """All values not starting with the given string."""
-  id_not_starts_with: ID
-
-  """All values ending with the given string."""
-  id_ends_with: ID
-
-  """All values not ending with the given string."""
-  id_not_ends_with: ID
-  name: String
-
-  """All values that are not equal to given value."""
-  name_not: String
-
-  """All values that are contained in given list."""
-  name_in: [String!]
-
-  """All values that are not contained in given list."""
-  name_not_in: [String!]
-
-  """All values less than the given value."""
-  name_lt: String
-
-  """All values less than or equal the given value."""
-  name_lte: String
-
-  """All values greater than the given value."""
-  name_gt: String
-
-  """All values greater than or equal the given value."""
-  name_gte: String
-
-  """All values containing the given string."""
-  name_contains: String
-
-  """All values not containing the given string."""
-  name_not_contains: String
-
-  """All values starting with the given string."""
-  name_starts_with: String
-
-  """All values not starting with the given string."""
-  name_not_starts_with: String
-
-  """All values ending with the given string."""
-  name_ends_with: String
-
-  """All values not ending with the given string."""
-  name_not_ends_with: String
-  hasOwner: Boolean
-
-  """All values that are not equal to given value."""
-  hasOwner_not: Boolean
-  updatedAt: DateTime
-
-  """All values that are not equal to given value."""
-  updatedAt_not: DateTime
-
-  """All values that are contained in given list."""
-  updatedAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  updatedAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  updatedAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  updatedAt_lte: DateTime
-
-  """All values greater than the given value."""
-  updatedAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  updatedAt_gte: DateTime
-  createdAt: DateTime
-
-  """All values that are not equal to given value."""
-  createdAt_not: DateTime
-
-  """All values that are contained in given list."""
-  createdAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  createdAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  createdAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  createdAt_lte: DateTime
-
-  """All values greater than the given value."""
-  createdAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  createdAt_gte: DateTime
-}
-
 type SourceSubscriptionPayload {
   mutation: MutationType!
   node: Source
@@ -5072,31 +5022,16 @@ input SourceUpdateInput {
   credential: CredentialUpdateOneWithoutSourceInput
 }
 
-input SourceUpdateManyDataInput {
-  name: String
-  hasOwner: Boolean
-}
-
 input SourceUpdateManyMutationInput {
   name: String
   hasOwner: Boolean
 }
 
-input SourceUpdateManyWithoutCredentialInput {
-  create: [SourceCreateWithoutCredentialInput!]
-  connect: [SourceWhereUniqueInput!]
-  set: [SourceWhereUniqueInput!]
-  disconnect: [SourceWhereUniqueInput!]
-  delete: [SourceWhereUniqueInput!]
-  update: [SourceUpdateWithWhereUniqueWithoutCredentialInput!]
-  updateMany: [SourceUpdateManyWithWhereNestedInput!]
-  deleteMany: [SourceScalarWhereInput!]
-  upsert: [SourceUpsertWithWhereUniqueWithoutCredentialInput!]
-}
-
-input SourceUpdateManyWithWhereNestedInput {
-  where: SourceScalarWhereInput!
-  data: SourceUpdateManyDataInput!
+input SourceUpdateOneRequiredWithoutCredentialInput {
+  create: SourceCreateWithoutCredentialInput
+  connect: SourceWhereUniqueInput
+  update: SourceUpdateWithoutCredentialDataInput
+  upsert: SourceUpsertWithoutCredentialInput
 }
 
 input SourceUpdateOneRequiredWithoutResourcesInput {
@@ -5118,20 +5053,14 @@ input SourceUpdateWithoutResourcesDataInput {
   credential: CredentialUpdateOneWithoutSourceInput
 }
 
-input SourceUpdateWithWhereUniqueWithoutCredentialInput {
-  where: SourceWhereUniqueInput!
-  data: SourceUpdateWithoutCredentialDataInput!
+input SourceUpsertWithoutCredentialInput {
+  update: SourceUpdateWithoutCredentialDataInput!
+  create: SourceCreateWithoutCredentialInput!
 }
 
 input SourceUpsertWithoutResourcesInput {
   update: SourceUpdateWithoutResourcesDataInput!
   create: SourceCreateWithoutResourcesInput!
-}
-
-input SourceUpsertWithWhereUniqueWithoutCredentialInput {
-  where: SourceWhereUniqueInput!
-  update: SourceUpdateWithoutCredentialDataInput!
-  create: SourceCreateWithoutCredentialInput!
 }
 
 input SourceWhereInput {
@@ -5679,6 +5608,8 @@ export type CredentialOrderByInput =
   | "host_DESC"
   | "port_ASC"
   | "port_DESC"
+  | "database_ASC"
+  | "database_DESC"
   | "login_ASC"
   | "login_DESC"
   | "password_ASC"
@@ -6288,10 +6219,11 @@ export interface CredentialCreateInput {
   id?: ID_Input | null;
   host: String;
   port: String;
+  database: String;
   login: String;
   password?: String | null;
   type: DatabaseType;
-  source?: SourceCreateManyWithoutCredentialInput | null;
+  source: SourceCreateOneWithoutCredentialInput;
 }
 
 export interface CredentialCreateManyInput {
@@ -6308,6 +6240,7 @@ export interface CredentialCreateWithoutSourceInput {
   id?: ID_Input | null;
   host: String;
   port: String;
+  database: String;
   login: String;
   password?: String | null;
   type: DatabaseType;
@@ -6359,6 +6292,20 @@ export interface CredentialScalarWhereInput {
   port_not_starts_with?: String | null;
   port_ends_with?: String | null;
   port_not_ends_with?: String | null;
+  database?: String | null;
+  database_not?: String | null;
+  database_in?: String[] | String | null;
+  database_not_in?: String[] | String | null;
+  database_lt?: String | null;
+  database_lte?: String | null;
+  database_gt?: String | null;
+  database_gte?: String | null;
+  database_contains?: String | null;
+  database_not_contains?: String | null;
+  database_starts_with?: String | null;
+  database_not_starts_with?: String | null;
+  database_ends_with?: String | null;
+  database_not_ends_with?: String | null;
   login?: String | null;
   login_not?: String | null;
   login_in?: String[] | String | null;
@@ -6416,24 +6363,27 @@ export interface CredentialSubscriptionWhereInput {
 export interface CredentialUpdateDataInput {
   host?: String | null;
   port?: String | null;
+  database?: String | null;
   login?: String | null;
   password?: String | null;
   type?: DatabaseType | null;
-  source?: SourceUpdateManyWithoutCredentialInput | null;
+  source?: SourceUpdateOneRequiredWithoutCredentialInput | null;
 }
 
 export interface CredentialUpdateInput {
   host?: String | null;
   port?: String | null;
+  database?: String | null;
   login?: String | null;
   password?: String | null;
   type?: DatabaseType | null;
-  source?: SourceUpdateManyWithoutCredentialInput | null;
+  source?: SourceUpdateOneRequiredWithoutCredentialInput | null;
 }
 
 export interface CredentialUpdateManyDataInput {
   host?: String | null;
   port?: String | null;
+  database?: String | null;
   login?: String | null;
   password?: String | null;
   type?: DatabaseType | null;
@@ -6463,6 +6413,7 @@ export interface CredentialUpdateManyInput {
 export interface CredentialUpdateManyMutationInput {
   host?: String | null;
   port?: String | null;
+  database?: String | null;
   login?: String | null;
   password?: String | null;
   type?: DatabaseType | null;
@@ -6485,6 +6436,7 @@ export interface CredentialUpdateOneWithoutSourceInput {
 export interface CredentialUpdateWithoutSourceDataInput {
   host?: String | null;
   port?: String | null;
+  database?: String | null;
   login?: String | null;
   password?: String | null;
   type?: DatabaseType | null;
@@ -6552,6 +6504,20 @@ export interface CredentialWhereInput {
   port_not_starts_with?: String | null;
   port_ends_with?: String | null;
   port_not_ends_with?: String | null;
+  database?: String | null;
+  database_not?: String | null;
+  database_in?: String[] | String | null;
+  database_not_in?: String[] | String | null;
+  database_lt?: String | null;
+  database_lte?: String | null;
+  database_gt?: String | null;
+  database_gte?: String | null;
+  database_contains?: String | null;
+  database_not_contains?: String | null;
+  database_starts_with?: String | null;
+  database_not_starts_with?: String | null;
+  database_ends_with?: String | null;
+  database_not_ends_with?: String | null;
   login?: String | null;
   login_not?: String | null;
   login_in?: String[] | String | null;
@@ -6584,9 +6550,7 @@ export interface CredentialWhereInput {
   type_not?: DatabaseType | null;
   type_in?: DatabaseType[] | DatabaseType | null;
   type_not_in?: DatabaseType[] | DatabaseType | null;
-  source_every?: SourceWhereInput | null;
-  source_some?: SourceWhereInput | null;
-  source_none?: SourceWhereInput | null;
+  source?: SourceWhereInput | null;
 }
 
 export interface CredentialWhereUniqueInput {
@@ -7728,12 +7692,9 @@ export interface SourceCreateInput {
   credential?: CredentialCreateOneWithoutSourceInput | null;
 }
 
-export interface SourceCreateManyWithoutCredentialInput {
-  create?:
-    | SourceCreateWithoutCredentialInput[]
-    | SourceCreateWithoutCredentialInput
-    | null;
-  connect?: SourceWhereUniqueInput[] | SourceWhereUniqueInput | null;
+export interface SourceCreateOneWithoutCredentialInput {
+  create?: SourceCreateWithoutCredentialInput | null;
+  connect?: SourceWhereUniqueInput | null;
 }
 
 export interface SourceCreateOneWithoutResourcesInput {
@@ -7755,58 +7716,6 @@ export interface SourceCreateWithoutResourcesInput {
   credential?: CredentialCreateOneWithoutSourceInput | null;
 }
 
-export interface SourceScalarWhereInput {
-  AND?: SourceScalarWhereInput[] | SourceScalarWhereInput | null;
-  OR?: SourceScalarWhereInput[] | SourceScalarWhereInput | null;
-  NOT?: SourceScalarWhereInput[] | SourceScalarWhereInput | null;
-  id?: ID_Input | null;
-  id_not?: ID_Input | null;
-  id_in?: ID_Output[] | ID_Output | null;
-  id_not_in?: ID_Output[] | ID_Output | null;
-  id_lt?: ID_Input | null;
-  id_lte?: ID_Input | null;
-  id_gt?: ID_Input | null;
-  id_gte?: ID_Input | null;
-  id_contains?: ID_Input | null;
-  id_not_contains?: ID_Input | null;
-  id_starts_with?: ID_Input | null;
-  id_not_starts_with?: ID_Input | null;
-  id_ends_with?: ID_Input | null;
-  id_not_ends_with?: ID_Input | null;
-  name?: String | null;
-  name_not?: String | null;
-  name_in?: String[] | String | null;
-  name_not_in?: String[] | String | null;
-  name_lt?: String | null;
-  name_lte?: String | null;
-  name_gt?: String | null;
-  name_gte?: String | null;
-  name_contains?: String | null;
-  name_not_contains?: String | null;
-  name_starts_with?: String | null;
-  name_not_starts_with?: String | null;
-  name_ends_with?: String | null;
-  name_not_ends_with?: String | null;
-  hasOwner?: Boolean | null;
-  hasOwner_not?: Boolean | null;
-  updatedAt?: DateTime | null;
-  updatedAt_not?: DateTime | null;
-  updatedAt_in?: DateTime[] | DateTime | null;
-  updatedAt_not_in?: DateTime[] | DateTime | null;
-  updatedAt_lt?: DateTime | null;
-  updatedAt_lte?: DateTime | null;
-  updatedAt_gt?: DateTime | null;
-  updatedAt_gte?: DateTime | null;
-  createdAt?: DateTime | null;
-  createdAt_not?: DateTime | null;
-  createdAt_in?: DateTime[] | DateTime | null;
-  createdAt_not_in?: DateTime[] | DateTime | null;
-  createdAt_lt?: DateTime | null;
-  createdAt_lte?: DateTime | null;
-  createdAt_gt?: DateTime | null;
-  createdAt_gte?: DateTime | null;
-}
-
 export interface SourceSubscriptionWhereInput {
   AND?: SourceSubscriptionWhereInput[] | SourceSubscriptionWhereInput | null;
   OR?: SourceSubscriptionWhereInput[] | SourceSubscriptionWhereInput | null;
@@ -7825,43 +7734,16 @@ export interface SourceUpdateInput {
   credential?: CredentialUpdateOneWithoutSourceInput | null;
 }
 
-export interface SourceUpdateManyDataInput {
-  name?: String | null;
-  hasOwner?: Boolean | null;
-}
-
 export interface SourceUpdateManyMutationInput {
   name?: String | null;
   hasOwner?: Boolean | null;
 }
 
-export interface SourceUpdateManyWithoutCredentialInput {
-  create?:
-    | SourceCreateWithoutCredentialInput[]
-    | SourceCreateWithoutCredentialInput
-    | null;
-  connect?: SourceWhereUniqueInput[] | SourceWhereUniqueInput | null;
-  set?: SourceWhereUniqueInput[] | SourceWhereUniqueInput | null;
-  disconnect?: SourceWhereUniqueInput[] | SourceWhereUniqueInput | null;
-  delete?: SourceWhereUniqueInput[] | SourceWhereUniqueInput | null;
-  update?:
-    | SourceUpdateWithWhereUniqueWithoutCredentialInput[]
-    | SourceUpdateWithWhereUniqueWithoutCredentialInput
-    | null;
-  updateMany?:
-    | SourceUpdateManyWithWhereNestedInput[]
-    | SourceUpdateManyWithWhereNestedInput
-    | null;
-  deleteMany?: SourceScalarWhereInput[] | SourceScalarWhereInput | null;
-  upsert?:
-    | SourceUpsertWithWhereUniqueWithoutCredentialInput[]
-    | SourceUpsertWithWhereUniqueWithoutCredentialInput
-    | null;
-}
-
-export interface SourceUpdateManyWithWhereNestedInput {
-  where: SourceScalarWhereInput;
-  data: SourceUpdateManyDataInput;
+export interface SourceUpdateOneRequiredWithoutCredentialInput {
+  create?: SourceCreateWithoutCredentialInput | null;
+  connect?: SourceWhereUniqueInput | null;
+  update?: SourceUpdateWithoutCredentialDataInput | null;
+  upsert?: SourceUpsertWithoutCredentialInput | null;
 }
 
 export interface SourceUpdateOneRequiredWithoutResourcesInput {
@@ -7883,20 +7765,14 @@ export interface SourceUpdateWithoutResourcesDataInput {
   credential?: CredentialUpdateOneWithoutSourceInput | null;
 }
 
-export interface SourceUpdateWithWhereUniqueWithoutCredentialInput {
-  where: SourceWhereUniqueInput;
-  data: SourceUpdateWithoutCredentialDataInput;
+export interface SourceUpsertWithoutCredentialInput {
+  update: SourceUpdateWithoutCredentialDataInput;
+  create: SourceCreateWithoutCredentialInput;
 }
 
 export interface SourceUpsertWithoutResourcesInput {
   update: SourceUpdateWithoutResourcesDataInput;
   create: SourceCreateWithoutResourcesInput;
-}
-
-export interface SourceUpsertWithWhereUniqueWithoutCredentialInput {
-  where: SourceWhereUniqueInput;
-  update: SourceUpdateWithoutCredentialDataInput;
-  create: SourceCreateWithoutCredentialInput;
 }
 
 export interface SourceWhereInput {
@@ -8183,10 +8059,11 @@ export interface Credential extends Node {
   id: ID_Output;
   host: String;
   port: String;
+  database: String;
   login: String;
   password?: String | null;
   type: DatabaseType;
-  source?: Array<Source> | null;
+  source: Source;
 }
 
 /*
@@ -8212,6 +8089,7 @@ export interface CredentialPreviousValues {
   id: ID_Output;
   host: String;
   port: String;
+  database: String;
   login: String;
   password?: String | null;
   type: DatabaseType;

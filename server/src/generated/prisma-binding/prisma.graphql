@@ -1,5 +1,5 @@
 # source: http://0.0.0.0:4466
-# timestamp: Tue Oct 01 2019 16:08:21 GMT+0200 (Central European Summer Time)
+# timestamp: Wed Oct 02 2019 22:41:31 GMT+0200 (Central European Summer Time)
 
 type AggregateAttribute {
   count: Int!
@@ -1357,18 +1357,11 @@ type Credential implements Node {
   id: ID!
   host: String!
   port: String!
+  database: String!
   login: String!
   password: String
   type: DatabaseType!
-  source(
-    where: SourceWhereInput
-    orderBy: SourceOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Source!]
+  source: Source!
 }
 
 """
@@ -1391,10 +1384,11 @@ input CredentialCreateInput {
   id: ID
   host: String!
   port: String!
+  database: String!
   login: String!
   password: String
   type: DatabaseType!
-  source: SourceCreateManyWithoutCredentialInput
+  source: SourceCreateOneWithoutCredentialInput!
 }
 
 input CredentialCreateManyInput {
@@ -1411,6 +1405,7 @@ input CredentialCreateWithoutSourceInput {
   id: ID
   host: String!
   port: String!
+  database: String!
   login: String!
   password: String
   type: DatabaseType!
@@ -1438,6 +1433,8 @@ enum CredentialOrderByInput {
   host_DESC
   port_ASC
   port_DESC
+  database_ASC
+  database_DESC
   login_ASC
   login_DESC
   password_ASC
@@ -1450,6 +1447,7 @@ type CredentialPreviousValues {
   id: ID!
   host: String!
   port: String!
+  database: String!
   login: String!
   password: String
   type: DatabaseType!
@@ -1668,6 +1666,72 @@ input CredentialScalarWhereInput {
   All values not ending with the given string.
   """
   port_not_ends_with: String
+  database: String
+
+  """
+  All values that are not equal to given value.
+  """
+  database_not: String
+
+  """
+  All values that are contained in given list.
+  """
+  database_in: [String!]
+
+  """
+  All values that are not contained in given list.
+  """
+  database_not_in: [String!]
+
+  """
+  All values less than the given value.
+  """
+  database_lt: String
+
+  """
+  All values less than or equal the given value.
+  """
+  database_lte: String
+
+  """
+  All values greater than the given value.
+  """
+  database_gt: String
+
+  """
+  All values greater than or equal the given value.
+  """
+  database_gte: String
+
+  """
+  All values containing the given string.
+  """
+  database_contains: String
+
+  """
+  All values not containing the given string.
+  """
+  database_not_contains: String
+
+  """
+  All values starting with the given string.
+  """
+  database_starts_with: String
+
+  """
+  All values not starting with the given string.
+  """
+  database_not_starts_with: String
+
+  """
+  All values ending with the given string.
+  """
+  database_ends_with: String
+
+  """
+  All values not ending with the given string.
+  """
+  database_not_ends_with: String
   login: String
 
   """
@@ -1866,24 +1930,27 @@ input CredentialSubscriptionWhereInput {
 input CredentialUpdateDataInput {
   host: String
   port: String
+  database: String
   login: String
   password: String
   type: DatabaseType
-  source: SourceUpdateManyWithoutCredentialInput
+  source: SourceUpdateOneRequiredWithoutCredentialInput
 }
 
 input CredentialUpdateInput {
   host: String
   port: String
+  database: String
   login: String
   password: String
   type: DatabaseType
-  source: SourceUpdateManyWithoutCredentialInput
+  source: SourceUpdateOneRequiredWithoutCredentialInput
 }
 
 input CredentialUpdateManyDataInput {
   host: String
   port: String
+  database: String
   login: String
   password: String
   type: DatabaseType
@@ -1904,6 +1971,7 @@ input CredentialUpdateManyInput {
 input CredentialUpdateManyMutationInput {
   host: String
   port: String
+  database: String
   login: String
   password: String
   type: DatabaseType
@@ -1926,6 +1994,7 @@ input CredentialUpdateOneWithoutSourceInput {
 input CredentialUpdateWithoutSourceDataInput {
   host: String
   port: String
+  database: String
   login: String
   password: String
   type: DatabaseType
@@ -2160,6 +2229,72 @@ input CredentialWhereInput {
   All values not ending with the given string.
   """
   port_not_ends_with: String
+  database: String
+
+  """
+  All values that are not equal to given value.
+  """
+  database_not: String
+
+  """
+  All values that are contained in given list.
+  """
+  database_in: [String!]
+
+  """
+  All values that are not contained in given list.
+  """
+  database_not_in: [String!]
+
+  """
+  All values less than the given value.
+  """
+  database_lt: String
+
+  """
+  All values less than or equal the given value.
+  """
+  database_lte: String
+
+  """
+  All values greater than the given value.
+  """
+  database_gt: String
+
+  """
+  All values greater than or equal the given value.
+  """
+  database_gte: String
+
+  """
+  All values containing the given string.
+  """
+  database_contains: String
+
+  """
+  All values not containing the given string.
+  """
+  database_not_contains: String
+
+  """
+  All values starting with the given string.
+  """
+  database_starts_with: String
+
+  """
+  All values not starting with the given string.
+  """
+  database_not_starts_with: String
+
+  """
+  All values ending with the given string.
+  """
+  database_ends_with: String
+
+  """
+  All values not ending with the given string.
+  """
+  database_not_ends_with: String
   login: String
 
   """
@@ -2308,9 +2443,7 @@ input CredentialWhereInput {
   All values that are not contained in given list.
   """
   type_not_in: [DatabaseType!]
-  source_every: SourceWhereInput
-  source_some: SourceWhereInput
-  source_none: SourceWhereInput
+  source: SourceWhereInput
 }
 
 input CredentialWhereUniqueInput {
@@ -6451,9 +6584,9 @@ input SourceCreateInput {
   credential: CredentialCreateOneWithoutSourceInput
 }
 
-input SourceCreateManyWithoutCredentialInput {
-  create: [SourceCreateWithoutCredentialInput!]
-  connect: [SourceWhereUniqueInput!]
+input SourceCreateOneWithoutCredentialInput {
+  create: SourceCreateWithoutCredentialInput
+  connect: SourceWhereUniqueInput
 }
 
 input SourceCreateOneWithoutResourcesInput {
@@ -6511,233 +6644,6 @@ type SourcePreviousValues {
   createdAt: DateTime!
 }
 
-input SourceScalarWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [SourceScalarWhereInput!]
-
-  """
-  Logical OR on all given filters.
-  """
-  OR: [SourceScalarWhereInput!]
-
-  """
-  Logical NOT on all given filters combined by AND.
-  """
-  NOT: [SourceScalarWhereInput!]
-  id: ID
-
-  """
-  All values that are not equal to given value.
-  """
-  id_not: ID
-
-  """
-  All values that are contained in given list.
-  """
-  id_in: [ID!]
-
-  """
-  All values that are not contained in given list.
-  """
-  id_not_in: [ID!]
-
-  """
-  All values less than the given value.
-  """
-  id_lt: ID
-
-  """
-  All values less than or equal the given value.
-  """
-  id_lte: ID
-
-  """
-  All values greater than the given value.
-  """
-  id_gt: ID
-
-  """
-  All values greater than or equal the given value.
-  """
-  id_gte: ID
-
-  """
-  All values containing the given string.
-  """
-  id_contains: ID
-
-  """
-  All values not containing the given string.
-  """
-  id_not_contains: ID
-
-  """
-  All values starting with the given string.
-  """
-  id_starts_with: ID
-
-  """
-  All values not starting with the given string.
-  """
-  id_not_starts_with: ID
-
-  """
-  All values ending with the given string.
-  """
-  id_ends_with: ID
-
-  """
-  All values not ending with the given string.
-  """
-  id_not_ends_with: ID
-  name: String
-
-  """
-  All values that are not equal to given value.
-  """
-  name_not: String
-
-  """
-  All values that are contained in given list.
-  """
-  name_in: [String!]
-
-  """
-  All values that are not contained in given list.
-  """
-  name_not_in: [String!]
-
-  """
-  All values less than the given value.
-  """
-  name_lt: String
-
-  """
-  All values less than or equal the given value.
-  """
-  name_lte: String
-
-  """
-  All values greater than the given value.
-  """
-  name_gt: String
-
-  """
-  All values greater than or equal the given value.
-  """
-  name_gte: String
-
-  """
-  All values containing the given string.
-  """
-  name_contains: String
-
-  """
-  All values not containing the given string.
-  """
-  name_not_contains: String
-
-  """
-  All values starting with the given string.
-  """
-  name_starts_with: String
-
-  """
-  All values not starting with the given string.
-  """
-  name_not_starts_with: String
-
-  """
-  All values ending with the given string.
-  """
-  name_ends_with: String
-
-  """
-  All values not ending with the given string.
-  """
-  name_not_ends_with: String
-  hasOwner: Boolean
-
-  """
-  All values that are not equal to given value.
-  """
-  hasOwner_not: Boolean
-  updatedAt: DateTime
-
-  """
-  All values that are not equal to given value.
-  """
-  updatedAt_not: DateTime
-
-  """
-  All values that are contained in given list.
-  """
-  updatedAt_in: [DateTime!]
-
-  """
-  All values that are not contained in given list.
-  """
-  updatedAt_not_in: [DateTime!]
-
-  """
-  All values less than the given value.
-  """
-  updatedAt_lt: DateTime
-
-  """
-  All values less than or equal the given value.
-  """
-  updatedAt_lte: DateTime
-
-  """
-  All values greater than the given value.
-  """
-  updatedAt_gt: DateTime
-
-  """
-  All values greater than or equal the given value.
-  """
-  updatedAt_gte: DateTime
-  createdAt: DateTime
-
-  """
-  All values that are not equal to given value.
-  """
-  createdAt_not: DateTime
-
-  """
-  All values that are contained in given list.
-  """
-  createdAt_in: [DateTime!]
-
-  """
-  All values that are not contained in given list.
-  """
-  createdAt_not_in: [DateTime!]
-
-  """
-  All values less than the given value.
-  """
-  createdAt_lt: DateTime
-
-  """
-  All values less than or equal the given value.
-  """
-  createdAt_lte: DateTime
-
-  """
-  All values greater than the given value.
-  """
-  createdAt_gt: DateTime
-
-  """
-  All values greater than or equal the given value.
-  """
-  createdAt_gte: DateTime
-}
-
 type SourceSubscriptionPayload {
   mutation: MutationType!
   node: Source
@@ -6790,31 +6696,16 @@ input SourceUpdateInput {
   credential: CredentialUpdateOneWithoutSourceInput
 }
 
-input SourceUpdateManyDataInput {
-  name: String
-  hasOwner: Boolean
-}
-
 input SourceUpdateManyMutationInput {
   name: String
   hasOwner: Boolean
 }
 
-input SourceUpdateManyWithoutCredentialInput {
-  create: [SourceCreateWithoutCredentialInput!]
-  connect: [SourceWhereUniqueInput!]
-  set: [SourceWhereUniqueInput!]
-  disconnect: [SourceWhereUniqueInput!]
-  delete: [SourceWhereUniqueInput!]
-  update: [SourceUpdateWithWhereUniqueWithoutCredentialInput!]
-  updateMany: [SourceUpdateManyWithWhereNestedInput!]
-  deleteMany: [SourceScalarWhereInput!]
-  upsert: [SourceUpsertWithWhereUniqueWithoutCredentialInput!]
-}
-
-input SourceUpdateManyWithWhereNestedInput {
-  where: SourceScalarWhereInput!
-  data: SourceUpdateManyDataInput!
+input SourceUpdateOneRequiredWithoutCredentialInput {
+  create: SourceCreateWithoutCredentialInput
+  connect: SourceWhereUniqueInput
+  update: SourceUpdateWithoutCredentialDataInput
+  upsert: SourceUpsertWithoutCredentialInput
 }
 
 input SourceUpdateOneRequiredWithoutResourcesInput {
@@ -6836,20 +6727,14 @@ input SourceUpdateWithoutResourcesDataInput {
   credential: CredentialUpdateOneWithoutSourceInput
 }
 
-input SourceUpdateWithWhereUniqueWithoutCredentialInput {
-  where: SourceWhereUniqueInput!
-  data: SourceUpdateWithoutCredentialDataInput!
+input SourceUpsertWithoutCredentialInput {
+  update: SourceUpdateWithoutCredentialDataInput!
+  create: SourceCreateWithoutCredentialInput!
 }
 
 input SourceUpsertWithoutResourcesInput {
   update: SourceUpdateWithoutResourcesDataInput!
   create: SourceCreateWithoutResourcesInput!
-}
-
-input SourceUpsertWithWhereUniqueWithoutCredentialInput {
-  where: SourceWhereUniqueInput!
-  update: SourceUpdateWithoutCredentialDataInput!
-  create: SourceCreateWithoutCredentialInput!
 }
 
 input SourceWhereInput {

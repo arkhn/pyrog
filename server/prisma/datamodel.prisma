@@ -5,7 +5,7 @@ type Source {
   resources: [Resource!]! @relation(link: TABLE, name: "SourceToResource", onDelete: CASCADE)
   updatedAt: DateTime! @updatedAt
   createdAt: DateTime! @createdAt
-  credential: Credential
+  credential: Credential @relation(link: INLINE, name: "SourceToCredential", onDelete: CASCADE)
 }
 
 enum DatabaseType {
@@ -16,10 +16,11 @@ type Credential {
   id: ID! @unique @id
   host: String!
   port: String!
+  database: String!
   login: String!
   password: String
   type: DatabaseType!
-  source: [Source!]!
+  source: Source! @relation(name: "SourceToCredential")
 }
 
 type Resource {

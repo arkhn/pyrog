@@ -591,18 +591,11 @@ export const typeDefs = /* GraphQL */ `
     id: ID!
     host: String!
     port: String!
+    database: String!
     login: String!
     password: String
     type: DatabaseType!
-    source(
-      where: SourceWhereInput
-      orderBy: SourceOrderByInput
-      skip: Int
-      after: String
-      before: String
-      first: Int
-      last: Int
-    ): [Source!]
+    source: Source!
   }
 
   type CredentialConnection {
@@ -615,10 +608,11 @@ export const typeDefs = /* GraphQL */ `
     id: ID
     host: String!
     port: String!
+    database: String!
     login: String!
     password: String
     type: DatabaseType!
-    source: SourceCreateManyWithoutCredentialInput
+    source: SourceCreateOneWithoutCredentialInput!
   }
 
   input CredentialCreateManyInput {
@@ -635,6 +629,7 @@ export const typeDefs = /* GraphQL */ `
     id: ID
     host: String!
     port: String!
+    database: String!
     login: String!
     password: String
     type: DatabaseType!
@@ -652,6 +647,8 @@ export const typeDefs = /* GraphQL */ `
     host_DESC
     port_ASC
     port_DESC
+    database_ASC
+    database_DESC
     login_ASC
     login_DESC
     password_ASC
@@ -664,6 +661,7 @@ export const typeDefs = /* GraphQL */ `
     id: ID!
     host: String!
     port: String!
+    database: String!
     login: String!
     password: String
     type: DatabaseType!
@@ -712,6 +710,20 @@ export const typeDefs = /* GraphQL */ `
     port_not_starts_with: String
     port_ends_with: String
     port_not_ends_with: String
+    database: String
+    database_not: String
+    database_in: [String!]
+    database_not_in: [String!]
+    database_lt: String
+    database_lte: String
+    database_gt: String
+    database_gte: String
+    database_contains: String
+    database_not_contains: String
+    database_starts_with: String
+    database_not_starts_with: String
+    database_ends_with: String
+    database_not_ends_with: String
     login: String
     login_not: String
     login_in: [String!]
@@ -770,24 +782,27 @@ export const typeDefs = /* GraphQL */ `
   input CredentialUpdateDataInput {
     host: String
     port: String
+    database: String
     login: String
     password: String
     type: DatabaseType
-    source: SourceUpdateManyWithoutCredentialInput
+    source: SourceUpdateOneRequiredWithoutCredentialInput
   }
 
   input CredentialUpdateInput {
     host: String
     port: String
+    database: String
     login: String
     password: String
     type: DatabaseType
-    source: SourceUpdateManyWithoutCredentialInput
+    source: SourceUpdateOneRequiredWithoutCredentialInput
   }
 
   input CredentialUpdateManyDataInput {
     host: String
     port: String
+    database: String
     login: String
     password: String
     type: DatabaseType
@@ -808,6 +823,7 @@ export const typeDefs = /* GraphQL */ `
   input CredentialUpdateManyMutationInput {
     host: String
     port: String
+    database: String
     login: String
     password: String
     type: DatabaseType
@@ -830,6 +846,7 @@ export const typeDefs = /* GraphQL */ `
   input CredentialUpdateWithoutSourceDataInput {
     host: String
     port: String
+    database: String
     login: String
     password: String
     type: DatabaseType
@@ -894,6 +911,20 @@ export const typeDefs = /* GraphQL */ `
     port_not_starts_with: String
     port_ends_with: String
     port_not_ends_with: String
+    database: String
+    database_not: String
+    database_in: [String!]
+    database_not_in: [String!]
+    database_lt: String
+    database_lte: String
+    database_gt: String
+    database_gte: String
+    database_contains: String
+    database_not_contains: String
+    database_starts_with: String
+    database_not_starts_with: String
+    database_ends_with: String
+    database_not_ends_with: String
     login: String
     login_not: String
     login_in: [String!]
@@ -926,9 +957,7 @@ export const typeDefs = /* GraphQL */ `
     type_not: DatabaseType
     type_in: [DatabaseType!]
     type_not_in: [DatabaseType!]
-    source_every: SourceWhereInput
-    source_some: SourceWhereInput
-    source_none: SourceWhereInput
+    source: SourceWhereInput
     AND: [CredentialWhereInput!]
     OR: [CredentialWhereInput!]
     NOT: [CredentialWhereInput!]
@@ -2509,9 +2538,9 @@ export const typeDefs = /* GraphQL */ `
     credential: CredentialCreateOneWithoutSourceInput
   }
 
-  input SourceCreateManyWithoutCredentialInput {
-    create: [SourceCreateWithoutCredentialInput!]
-    connect: [SourceWhereUniqueInput!]
+  input SourceCreateOneWithoutCredentialInput {
+    create: SourceCreateWithoutCredentialInput
+    connect: SourceWhereUniqueInput
   }
 
   input SourceCreateOneWithoutResourcesInput {
@@ -2559,58 +2588,6 @@ export const typeDefs = /* GraphQL */ `
     createdAt: DateTime!
   }
 
-  input SourceScalarWhereInput {
-    id: ID
-    id_not: ID
-    id_in: [ID!]
-    id_not_in: [ID!]
-    id_lt: ID
-    id_lte: ID
-    id_gt: ID
-    id_gte: ID
-    id_contains: ID
-    id_not_contains: ID
-    id_starts_with: ID
-    id_not_starts_with: ID
-    id_ends_with: ID
-    id_not_ends_with: ID
-    name: String
-    name_not: String
-    name_in: [String!]
-    name_not_in: [String!]
-    name_lt: String
-    name_lte: String
-    name_gt: String
-    name_gte: String
-    name_contains: String
-    name_not_contains: String
-    name_starts_with: String
-    name_not_starts_with: String
-    name_ends_with: String
-    name_not_ends_with: String
-    hasOwner: Boolean
-    hasOwner_not: Boolean
-    updatedAt: DateTime
-    updatedAt_not: DateTime
-    updatedAt_in: [DateTime!]
-    updatedAt_not_in: [DateTime!]
-    updatedAt_lt: DateTime
-    updatedAt_lte: DateTime
-    updatedAt_gt: DateTime
-    updatedAt_gte: DateTime
-    createdAt: DateTime
-    createdAt_not: DateTime
-    createdAt_in: [DateTime!]
-    createdAt_not_in: [DateTime!]
-    createdAt_lt: DateTime
-    createdAt_lte: DateTime
-    createdAt_gt: DateTime
-    createdAt_gte: DateTime
-    AND: [SourceScalarWhereInput!]
-    OR: [SourceScalarWhereInput!]
-    NOT: [SourceScalarWhereInput!]
-  }
-
   type SourceSubscriptionPayload {
     mutation: MutationType!
     node: Source
@@ -2636,31 +2613,16 @@ export const typeDefs = /* GraphQL */ `
     credential: CredentialUpdateOneWithoutSourceInput
   }
 
-  input SourceUpdateManyDataInput {
-    name: String
-    hasOwner: Boolean
-  }
-
   input SourceUpdateManyMutationInput {
     name: String
     hasOwner: Boolean
   }
 
-  input SourceUpdateManyWithoutCredentialInput {
-    create: [SourceCreateWithoutCredentialInput!]
-    delete: [SourceWhereUniqueInput!]
-    connect: [SourceWhereUniqueInput!]
-    set: [SourceWhereUniqueInput!]
-    disconnect: [SourceWhereUniqueInput!]
-    update: [SourceUpdateWithWhereUniqueWithoutCredentialInput!]
-    upsert: [SourceUpsertWithWhereUniqueWithoutCredentialInput!]
-    deleteMany: [SourceScalarWhereInput!]
-    updateMany: [SourceUpdateManyWithWhereNestedInput!]
-  }
-
-  input SourceUpdateManyWithWhereNestedInput {
-    where: SourceScalarWhereInput!
-    data: SourceUpdateManyDataInput!
+  input SourceUpdateOneRequiredWithoutCredentialInput {
+    create: SourceCreateWithoutCredentialInput
+    update: SourceUpdateWithoutCredentialDataInput
+    upsert: SourceUpsertWithoutCredentialInput
+    connect: SourceWhereUniqueInput
   }
 
   input SourceUpdateOneRequiredWithoutResourcesInput {
@@ -2682,20 +2644,14 @@ export const typeDefs = /* GraphQL */ `
     credential: CredentialUpdateOneWithoutSourceInput
   }
 
-  input SourceUpdateWithWhereUniqueWithoutCredentialInput {
-    where: SourceWhereUniqueInput!
-    data: SourceUpdateWithoutCredentialDataInput!
+  input SourceUpsertWithoutCredentialInput {
+    update: SourceUpdateWithoutCredentialDataInput!
+    create: SourceCreateWithoutCredentialInput!
   }
 
   input SourceUpsertWithoutResourcesInput {
     update: SourceUpdateWithoutResourcesDataInput!
     create: SourceCreateWithoutResourcesInput!
-  }
-
-  input SourceUpsertWithWhereUniqueWithoutCredentialInput {
-    where: SourceWhereUniqueInput!
-    update: SourceUpdateWithoutCredentialDataInput!
-    create: SourceCreateWithoutCredentialInput!
   }
 
   input SourceWhereInput {
