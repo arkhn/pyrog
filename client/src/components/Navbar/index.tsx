@@ -88,7 +88,11 @@ const Navbar = () => {
       </BPNavbar.Group>
 
       <Drawer
-        title={"test"}
+        title={
+          selectedNode && selectedNode.source.name
+            ? selectedNode.source.name
+            : ""
+        }
         isOpen={drawerIsOpen}
         onClose={() => {
           setDrawerIsOpen(false);
