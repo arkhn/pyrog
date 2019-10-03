@@ -2,7 +2,7 @@ import { ControlGroup, FormGroup, InputGroup, Switch } from "@blueprintjs/core";
 import * as React from "react";
 
 import StringSelect from "../../../../components/selects/stringSelect";
-import { ISourceColumn, ISourceSchema } from "../../../../types";
+import { ISourceSchema } from "../../../../types";
 
 export interface IProps {
   ownerChangeCallback?: any;
