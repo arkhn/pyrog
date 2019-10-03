@@ -7,12 +7,12 @@ import {
   InputGroup
 } from "@blueprintjs/core";
 import * as React from "react";
-import { Mutation, Query, Subscription } from "react-apollo";
+import { Mutation } from "react-apollo";
 
 import { ISelectedSource } from "../../../../types";
 
-// COMPONENTS
 import ColumnPicker from "../ColumnPicker";
+import TableViewer from "../TableViewer";
 
 // GRAPHQL
 const createInputColumnAndUpdateAttribute = require("../../../../graphql/mutations/createInputColumnAndUpdateAttribute.graphql");
@@ -126,6 +126,10 @@ const TabColumnPicking = ({ attribute, schema, source }: IProps) => {
           </ControlGroup>
         </FormGroup>
       </Card>
+      <TableViewer
+        headers={["ID", "NAME"]}
+        rows={[["123", "Corto Maltese"], ["456", "Stéphane Mallarmé"]]}
+      />
     </div>
   );
 };
