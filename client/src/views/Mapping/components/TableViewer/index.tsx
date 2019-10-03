@@ -4,28 +4,32 @@ import * as React from "react";
 import "./style.less";
 
 interface IProps {
-  headers: string[];
+  fields: string[];
   rows: any[];
 }
 
-const TableViewer = ({ rows, headers }: IProps) => {
-  const getCellRenderer = (index: number) => {
+const TableViewer = ({ rows, fields }: IProps) => {
+  const getCellRenderer = (fieldName: string) => {
     return (rowIndex: number) => {
-      return <Cell>{rows[rowIndex][index]}</Cell>;
+      return <Cell>{rows[rowIndex][fieldName]}</Cell>;
     };
   };
 
-  const [columns, setColumns] = React.useState(
-    rows.map((row: any, index: number) => {
-      return (
-        <Column
-          key={index}
-          name={headers[index]}
-          cellRenderer={getCellRenderer(index)}
-        />
-      );
-    })
-  );
+  const [columns, setColumns] = React.useState([]);
+
+  React.useEffect(() => {
+    setColumns(
+      fields.map((field: string, index: number) => {
+        return (
+          <Column
+            key={index}
+            name={field}
+            cellRenderer={getCellRenderer(field)}
+          />
+        );
+      })
+    );
+  }, [rows, fields]);
 
   const handleColumnsReordered = (
     oldIndex: number,

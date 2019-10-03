@@ -6,13 +6,16 @@ import {
   FormGroup,
   InputGroup
 } from "@blueprintjs/core";
+import axios from "axios";
 import * as React from "react";
 import { Mutation } from "react-apollo";
+import { useSelector } from "react-redux";
 
-import { ISelectedSource } from "../../../../types";
+import { ISelectedSource, IReduxStore } from "../../../../types";
 
 import ColumnPicker from "../ColumnPicker";
 import TableViewer from "../TableViewer";
+import StaticColumnPicker from "./components/StaticColumnPicker";
 
 // GRAPHQL
 const createInputColumnAndUpdateAttribute = require("../../../../graphql/mutations/createInputColumnAndUpdateAttribute.graphql");
@@ -30,10 +33,32 @@ const TabColumnPicking = ({ attribute, schema, source }: IProps) => {
   const [owner, setOwner] = React.useState(null);
   const [table, setTable] = React.useState(null);
   const [column, setColumn] = React.useState(null);
-  const [staticValue, setStaticValue] = React.useState("");
+  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
+  const [rows, setRows] = React.useState([]);
+  const [fields, setFields] = React.useState([]);
+
+  React.useEffect(() => {
+    if (selectedNode.source && selectedNode.source.id) {
+      axios
+        .get(
+          `${process.env.HTTP_BACKEND_URL}/tableview/${
+            selectedNode.source.id
+          }/patients`
+        )
+        .then((res: any) => {
+          console.log("RES", res);
+          setRows(res.data.rows);
+          setFields(res.data.fields.map((field: any) => field.name));
+        })
+        .catch((err: any) => {
+          console.log("ERR", err);
+        });
+    }
+  }, [selectedNode]);
 
   return (
-    <div id={"column-picker"}>
+    <div id={"column-picker"} style={{ maxWidth: "100%" }}>
+      <StaticColumnPicker attribute={attribute} />
       <Card elevation={Elevation.ONE}>
         <FormGroup
           label={<h3>Column Picker</h3>}
@@ -86,50 +111,7 @@ const TabColumnPicking = ({ attribute, schema, source }: IProps) => {
           </ControlGroup>
         </FormGroup>
       </Card>
-      <Card elevation={Elevation.ONE}>
-        <FormGroup
-          label={<h3>Column With Static Value</h3>}
-          labelFor="text-input"
-          inline={true}
-        >
-          <ControlGroup>
-            <InputGroup
-              id="static-value-input"
-              onChange={(event: React.FormEvent<HTMLElement>) => {
-                const target = event.target as HTMLInputElement;
-                setStaticValue(target.value);
-              }}
-              placeholder="Column static value"
-              value={staticValue}
-            />
-            <Mutation mutation={createInputColumnAndUpdateAttribute}>
-              {(createInputColumn: any, { data, loading }: any) => {
-                return (
-                  <Button
-                    disabled={!attribute.id || staticValue.length == 0}
-                    icon={"add"}
-                    loading={loading}
-                    onClick={() =>
-                      createInputColumn({
-                        variables: {
-                          attributeId: attribute.id,
-                          data: {
-                            staticValue: staticValue
-                          }
-                        }
-                      })
-                    }
-                  />
-                );
-              }}
-            </Mutation>
-          </ControlGroup>
-        </FormGroup>
-      </Card>
-      <TableViewer
-        headers={["ID", "NAME"]}
-        rows={[["123", "Corto Maltese"], ["456", "Stéphane Mallarmé"]]}
-      />
+      <TableViewer fields={fields} rows={rows} />
     </div>
   );
 };
