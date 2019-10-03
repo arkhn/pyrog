@@ -11,9 +11,9 @@ import * as React from "react";
 
 const sqlParser = require("js-sql-parser");
 
-import SQLRequestParser from "../../SQLRequestParser";
+import SQLRequestParser from "../SQLRequestParser";
 
-const SQLRequestParserTab = () => {
+const TabSQLParser = () => {
   const [table, setTable] = React.useState(null);
   const [columns, setColumns] = React.useState([]);
 
@@ -100,4 +100,4 @@ const inputColumnComponent = (column: any, table: any, index: number) => (
   </div>
 );
 
-export default SQLRequestParserTab;
+export default TabSQLParser;

@@ -9,17 +9,17 @@ import {
 import * as React from "react";
 import { Mutation, Subscription } from "react-apollo";
 
-import { ISelectedSource } from "../../../types";
+import { ISelectedSource } from "../../../../types";
 
 // COMPONENTS
-import StringSelect from "../../../components/selects/stringSelect";
-import Join from "./join";
+import StringSelect from "../../../../components/selects/stringSelect";
+import Join from "./../Join";
 
 // GRAPHQL
-const updateInputColumn = require("../../../graphql/mutations/updateInputColumn.graphql");
-const deleteInputColumnAndUpdateAttribute = require("../../../graphql/mutations/deleteInputColumnAndUpdateAttribute.graphql");
-const createJoinAndUpdateInputColumn = require("../../../graphql/mutations/createJoinAndUpdateInputColumn.graphql");
-const subscribeJoin = require("../../../graphql/subscriptions/join.graphql");
+const updateInputColumn = require("../../../../graphql/mutations/updateInputColumn.graphql");
+const deleteInputColumnAndUpdateAttribute = require("../../../../graphql/mutations/deleteInputColumnAndUpdateAttribute.graphql");
+const createJoinAndUpdateInputColumn = require("../../../../graphql/mutations/createJoinAndUpdateInputColumn.graphql");
+const subscribeJoin = require("../../../../graphql/subscriptions/join.graphql");
 
 interface IProps {
   attribute: {

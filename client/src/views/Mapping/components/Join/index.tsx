@@ -2,14 +2,14 @@ import { Button } from "@blueprintjs/core";
 import * as React from "react";
 import { Mutation } from "react-apollo";
 
-import { ISelectedSource } from "../../../types";
+import { ISelectedSource } from "../../../../types";
 
 // COMPONENTS
-import JoinColumns from "./joinColumns";
+import JoinColumns from "./../JoinColumns";
 
 // GRAPHQL
-const deleteJoinAndUpdateInputColumn = require("../../../graphql/mutations/deleteJoinAndUpdateInputColumn.graphql");
-const updateJoin = require("../../../graphql/mutations/updateJoin.graphql");
+const deleteJoinAndUpdateInputColumn = require("../../../../graphql/mutations/deleteJoinAndUpdateInputColumn.graphql");
+const updateJoin = require("../../../../graphql/mutations/updateJoin.graphql");
 
 interface IProps {
   column: any;

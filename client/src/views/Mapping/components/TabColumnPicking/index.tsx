@@ -12,7 +12,7 @@ import { Mutation, Query, Subscription } from "react-apollo";
 import { ISelectedSource } from "../../../../types";
 
 // COMPONENTS
-import ColumnPicker from "../../../../components/columnPicker";
+import ColumnPicker from "../ColumnPicker";
 
 // GRAPHQL
 const createInputColumnAndUpdateAttribute = require("../../../../graphql/mutations/createInputColumnAndUpdateAttribute.graphql");
@@ -26,7 +26,7 @@ interface IProps {
   source: ISelectedSource;
 }
 
-const ColumnSuggestionTab = ({ attribute, schema, source }: IProps) => {
+const TabColumnPicking = ({ attribute, schema, source }: IProps) => {
   const [owner, setOwner] = React.useState(null);
   const [table, setTable] = React.useState(null);
   const [column, setColumn] = React.useState(null);
@@ -130,4 +130,4 @@ const ColumnSuggestionTab = ({ attribute, schema, source }: IProps) => {
   );
 };
 
-export default ColumnSuggestionTab;
+export default TabColumnPicking;

@@ -3,10 +3,10 @@ import * as React from "react";
 import { useSelector } from "react-redux";
 
 import Navbar from "../../components/Navbar";
-import InputColumns from "./components/inputColumns";
-import ColumnSuggestionTab from "./components/tabs/columnSuggestionTab";
-import ColumnPickingTab from "./components/tabs/columnPickingTab";
-import SQLRequestParserTab from "./components/tabs/SQLRequestParserTab";
+import InputColumns from "./components/InputColumns";
+import TabColumnSuggestion from "./components/TabColumnSuggestion";
+import TabColumnPicking from "./components/TabColumnPicking";
+import TabSQLParser from "./components/TabSQLParser";
 import FhirMappingPanel from "./components/FhirMappingPanel";
 
 // Import types
@@ -46,7 +46,7 @@ const MappingView = () => {
                 <Tab
                   id="picker"
                   panel={
-                    <ColumnPickingTab
+                    <TabColumnPicking
                       attribute={selectedNode.attribute}
                       schema={
                         selectedNode.source.name
@@ -62,13 +62,13 @@ const MappingView = () => {
                 />
                 <Tab
                   id="sql-parser"
-                  panel={<SQLRequestParserTab />}
+                  panel={<TabSQLParser />}
                   title="SQL Parser Tool"
                 />
                 <Tab
                   id="mb"
                   disabled
-                  panel={<ColumnSuggestionTab />}
+                  panel={<TabColumnSuggestion />}
                   title="Column Suggestion Tool"
                 />
               </Tabs>
