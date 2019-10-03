@@ -7,7 +7,7 @@ import {
   Tag
 } from "@blueprintjs/core";
 import * as React from "react";
-import { Mutation, Query, Subscription } from "react-apollo";
+import { Mutation, Subscription } from "react-apollo";
 
 import { ISelectedSource } from "../../../types";
 
@@ -34,7 +34,7 @@ interface IProps {
 const InputColumn = ({ attribute, column, schema, source }: IProps) => (
   <div className="input-column">
     <Mutation mutation={deleteInputColumnAndUpdateAttribute}>
-      {(deleteInputColumn: any, { data, loading, error }: any) => {
+      {(deleteInputColumn: any, { loading }: any) => {
         return (
           <Button
             icon={"trash"}

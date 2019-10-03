@@ -1,6 +1,6 @@
 import { Button } from "@blueprintjs/core";
 import * as React from "react";
-import { Mutation, Query, Subscription } from "react-apollo";
+import { Mutation } from "react-apollo";
 
 import { ISelectedSource } from "../../../types";
 
