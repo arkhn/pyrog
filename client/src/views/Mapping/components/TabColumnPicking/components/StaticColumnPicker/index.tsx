@@ -23,11 +23,8 @@ const StaticColumnPicker = ({ attribute }: IProps) => {
 
   return (
     <Card elevation={Elevation.ONE}>
-      <FormGroup
-        label={<h3>Column With Static Value</h3>}
-        labelFor="text-input"
-        inline={true}
-      >
+      <div className="card-tag">Static</div>
+      <FormGroup labelFor="text-input" inline={true}>
         <ControlGroup>
           <InputGroup
             id="static-value-input"

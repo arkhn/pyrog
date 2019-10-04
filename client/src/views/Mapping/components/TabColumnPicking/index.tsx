@@ -14,6 +14,8 @@ interface IProps {
   source: ISelectedSource;
 }
 
+import "./style.less";
+
 const TabColumnPicking = ({ attribute, schema, source }: IProps) => {
   return (
     <div id={"column-picker"}>

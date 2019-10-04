@@ -55,11 +55,8 @@ const DynamicColumnPicker = ({ attribute, schema, source }: IProps) => {
 
   return (
     <Card elevation={Elevation.ONE}>
-      <FormGroup
-        label={<h3>Column Picker</h3>}
-        labelFor="text-input"
-        inline={true}
-      >
+      <div className="card-tag">Dynamic</div>
+      <FormGroup labelFor="text-input" inline={true}>
         <ControlGroup>
           <ColumnPicker
             hasOwner={source.hasOwner}
