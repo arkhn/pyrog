@@ -78,7 +78,7 @@ const Drawer = ({ title, isOpen, onClose }: IProps) => {
       title={title}
       isOpen={isOpen}
       onClose={onClose}
-      size={"30%"}
+      size={BPDrawer.SIZE_SMALL}
     >
       <div className={Classes.DRAWER_BODY}>
         <div className={Classes.DIALOG_BODY}>
