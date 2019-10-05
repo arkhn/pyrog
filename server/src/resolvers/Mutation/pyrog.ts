@@ -1,4 +1,4 @@
-import * as bcrypt from "bcryptjs";
+import { hash } from "bcryptjs";
 import { forwardTo } from "prisma-binding";
 
 import { checkAuth, Context, getUserId } from "../../utils";
@@ -235,7 +235,7 @@ export const pyrogMutation = {
     context: Context
   ) {
     getUserId(context);
-    const encryptedPassword = await bcrypt.hash(password, 10);
+    const encryptedPassword = await hash(password, 10);
     const credential = await context.client
       .source({ id: sourceId })
       .credential();
