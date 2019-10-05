@@ -44,7 +44,6 @@ const Drawer = ({ title, isOpen, onClose }: IProps) => {
   const client = useApolloClient();
 
   React.useEffect(() => {
-    console.log("USE EFFECT", selectedNode);
     if (selectedNode.source.id) {
       client
         .query({

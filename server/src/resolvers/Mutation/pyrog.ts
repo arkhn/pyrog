@@ -239,7 +239,6 @@ export const pyrogMutation = {
     const credential = await context.client
       .source({ id: sourceId })
       .credential();
-    console.log(credential);
 
     if (credential) {
       return context.client.updateCredential({
