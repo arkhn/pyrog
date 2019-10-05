@@ -1,4 +1,10 @@
-import { Table, Column, Cell, Utils } from "@blueprintjs/table";
+import {
+  Table,
+  Column,
+  Cell,
+  Utils,
+  TableLoadingOption
+} from "@blueprintjs/table";
 import * as React from "react";
 
 import "./style.less";
@@ -6,9 +12,10 @@ import "./style.less";
 interface IProps {
   fields: string[];
   rows: any[];
+  isLoading: boolean;
 }
 
-const TableViewer = ({ rows, fields }: IProps) => {
+const TableViewer = ({ rows, fields, isLoading }: IProps) => {
   const getCellRenderer = (fieldName: string) => {
     return (rowIndex: number) => {
       return <Cell>{rows[rowIndex][fieldName]}</Cell>;
@@ -53,6 +60,15 @@ const TableViewer = ({ rows, fields }: IProps) => {
       numRows={rows.length}
       enableColumnReordering={true}
       onColumnsReordered={handleColumnsReordered}
+      loadingOptions={
+        isLoading
+          ? [
+              TableLoadingOption.CELLS,
+              TableLoadingOption.COLUMN_HEADERS,
+              TableLoadingOption.ROW_HEADERS
+            ]
+          : []
+      }
     >
       {columns}
     </Table>

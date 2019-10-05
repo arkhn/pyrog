@@ -58,18 +58,18 @@ const MappingView = () => {
                       source={selectedNode.source}
                     />
                   }
-                  title="Simple Tools"
+                  title="Column Selection"
                 />
                 <Tab
                   id="sql-parser"
                   panel={<TabSQLParser />}
-                  title="SQL Parser Tool"
+                  title="SQL Parser"
                 />
                 <Tab
                   id="mb"
                   disabled
                   panel={<TabColumnSuggestion />}
-                  title="Column Suggestion Tool"
+                  title="Column Suggestion"
                 />
               </Tabs>
             </div>

@@ -30,6 +30,7 @@ const DynamicColumnPicker = ({ attribute, schema, source }: IProps) => {
   const [owner, setOwner] = React.useState(null);
   const [table, setTable] = React.useState(null);
   const [column, setColumn] = React.useState(null);
+  const [tableIsLoading, setTableIsLoading] = React.useState(false);
   const [rows, setRows] = React.useState([]);
   const [fields, setFields] = React.useState([]);
 
@@ -37,21 +38,24 @@ const DynamicColumnPicker = ({ attribute, schema, source }: IProps) => {
 
   React.useEffect(() => {
     if (selectedNode.source && selectedNode.source.id) {
+      setTableIsLoading(true);
       axios
         .get(
           `${process.env.HTTP_BACKEND_URL}/tableview/${
             selectedNode.source.id
-          }/patients`
+          }/${table}`
         )
         .then((res: any) => {
+          setTableIsLoading(false);
           setRows(res.data.rows);
           setFields(res.data.fields.map((field: any) => field.name));
         })
         .catch((err: any) => {
+          setTableIsLoading(false);
           console.log(err);
         });
     }
-  }, [selectedNode]);
+  }, [table]);
 
   return (
     <Card elevation={Elevation.ONE}>
@@ -102,7 +106,7 @@ const DynamicColumnPicker = ({ attribute, schema, source }: IProps) => {
           </Mutation>
         </ControlGroup>
       </FormGroup>
-      <TableViewer fields={fields} rows={rows} />
+      <TableViewer fields={fields} rows={rows} isLoading={tableIsLoading} />
     </Card>
   );
 };
