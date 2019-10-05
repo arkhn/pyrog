@@ -1,4 +1,4 @@
-import * as bcrypt from "bcryptjs";
+import { hash } from "bcryptjs";
 import { forwardTo } from "prisma-binding";
 const crypto = require("crypto");
 
@@ -244,8 +244,6 @@ export const pyrogMutation = {
     const credential = await context.client
       .source({ id: sourceId })
       .credential();
-
-    console.log(credential);
 
     if (credential) {
       return context.client.updateCredential({
