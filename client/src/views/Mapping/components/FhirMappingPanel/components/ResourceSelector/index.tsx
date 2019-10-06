@@ -1,20 +1,13 @@
-import {
-  FormGroup,
-  ControlGroup,
-  Button,
-  InputGroup,
-  Spinner,
-  Icon
-} from "@blueprintjs/core";
-import * as QueryString from "query-string";
+import { FormGroup, ControlGroup, Button } from "@blueprintjs/core";
 import * as React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import useReactRouter from "use-react-router";
 
-import { updateFhirResource } from "../../../../../../services/selectedNode/actions";
+import { updateLocationParams } from "src/services/urlState";
+import { updateFhirResource } from "src/services/selectedNode/actions";
+import { IReduxStore } from "src/types";
 
-import ResourceSelect from "../../../../../../components/selects/resourceSelect";
-import { IReduxStore } from "../../../../../../types";
+import ResourceSelect from "src/components/selects/resourceSelect";
 
 import Drawer from "../Drawer";
 
@@ -33,15 +26,6 @@ const ResourceSelector = ({
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
   const { history, location } = useReactRouter();
   const [drawerIsOpen, setDrawerIsOpen] = React.useState(false);
-
-  const updateLocationSearch = (key: string, value: string) => {
-    const qs = QueryString.stringify({
-      ...QueryString.parse(location.search),
-      [key]: value
-    });
-
-    history.push({ search: qs });
-  };
 
   return (
     <>
@@ -62,7 +46,12 @@ const ResourceSelector = ({
                   resource.label
                 )
               );
-              updateLocationSearch("resourceId", resource.id);
+              updateLocationParams(
+                history,
+                location,
+                "resourceId",
+                resource.id
+              );
             }}
           />
         </ControlGroup>

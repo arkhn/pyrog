@@ -1,23 +1,24 @@
 import { Spinner } from "@blueprintjs/core";
-import * as QueryString from "query-string";
 import * as React from "react";
 import { Query } from "react-apollo";
 import { useSelector, useDispatch } from "react-redux";
 import useReactRouter from "use-react-router";
 
 // ACTIONS
-import { updateFhirAttribute } from "../../../../services/selectedNode/actions";
+import { updateFhirAttribute } from "src/services/selectedNode/actions";
 
 // COMPONENTS
 import AddResource from "./components/AddResource";
 import FhirResourceTree from "./components/FhirResourceTree";
 import ResourceSelector from "./components/ResourceSelector";
 
-import { IReduxStore } from "../../../../types";
+import { IReduxStore } from "src/types";
+
+import { updateLocationParams } from "src/services/urlState";
 
 // GRAPHQL
-const availableResources = require("../../../../graphql/queries/availableResources.graphql");
-const resourceAttributeTree = require("../../../../graphql/queries/resourceAttributeTree.graphql");
+const availableResources = require("src/graphql/queries/availableResources.graphql");
+const resourceAttributeTree = require("src/graphql/queries/resourceAttributeTree.graphql");
 
 const FhirMappingPanel = () => {
   const dispatch = useDispatch();
@@ -30,18 +31,6 @@ const FhirMappingPanel = () => {
   ] = React.useState([]);
   const [createdResources, setCreatedResources] = React.useState(0);
   const [createdProfiles, setCreatedProfiles] = React.useState(0);
-
-  // This function updates the current url with new information.
-  // Before: url/pathname?attr1=value1
-  // After: url/pathname?attr1=value1&key=value
-  const updateLocationSearch = (key: string, value: string) => {
-    const qs = QueryString.stringify({
-      ...QueryString.parse(location.search),
-      [key]: value
-    });
-
-    history.push({ search: qs });
-  };
 
   return (
     <Query
@@ -109,7 +98,12 @@ const FhirMappingPanel = () => {
                             dispatch(
                               updateFhirAttribute(nodeData.id, nodeData.name)
                             );
-                            updateLocationSearch("attributeId", nodeData.id);
+                            updateLocationParams(
+                              history,
+                              location,
+                              "attributeId",
+                              nodeData.id
+                            );
                           }}
                           selectedNodeId={selectedNode.attribute.id}
                         />

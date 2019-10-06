@@ -7,7 +7,6 @@ import {
   ControlGroup,
   Position
 } from "@blueprintjs/core";
-import * as QueryString from "query-string";
 import * as React from "react";
 import { Mutation } from "react-apollo";
 import { useApolloClient } from "react-apollo-hooks";
@@ -24,6 +23,8 @@ import {
   updateFhirResource,
   deselectFhirResource
 } from "src/services/selectedNode/actions";
+
+import { deleteLocationParams } from "src/services/urlState";
 
 const resourceInfo = require("src/graphql/queries/resourceInfo.graphql");
 const deleteResourceMutation = require("src/graphql/mutations/deleteResource.graphql");
@@ -80,13 +81,6 @@ const Drawer = ({
       );
     }
   }, [client, selectedNode, store]);
-
-  const clearLocationSearch = (keys: string[]) => {
-    let qs = { ...QueryString.parse(location.search) };
-    keys.forEach(key => delete qs[key]);
-
-    history.push({ search: QueryString.stringify(qs) });
-  };
 
   return (
     <BPDrawer
@@ -221,7 +215,10 @@ const Drawer = ({
               } supprimée pour ${selectedNode.source.name}.`,
               timeout: 4000
             });
-            clearLocationSearch(["resourceId", "attributeId"]);
+            deleteLocationParams(history, location, [
+              "resourceId",
+              "attributeId"
+            ]);
             dispatch(deselectFhirResource());
             deleteResourceCallback();
           }}
