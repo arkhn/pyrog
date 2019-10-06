@@ -1,3 +1,4 @@
+import { useApolloClient } from "@apollo/react-hooks";
 import {
   InputGroup,
   FormGroup,
@@ -9,7 +10,6 @@ import {
 } from "@blueprintjs/core";
 import * as React from "react";
 import { Mutation } from "react-apollo";
-import { useApolloClient } from "react-apollo-hooks";
 import { useSelector, useDispatch, useStore } from "react-redux";
 import useReactRouter from "use-react-router";
 
@@ -26,6 +26,7 @@ import {
 
 import { deleteLocationParams } from "src/services/urlState";
 
+// import * as resourceInfo from "src/graphql/queries/resourceInfo";
 const resourceInfo = require("src/graphql/queries/resourceInfo.graphql");
 const deleteResourceMutation = require("src/graphql/mutations/deleteResource.graphql");
 const updateResource = require("src/graphql/mutations/updateResource.graphql");
@@ -33,8 +34,8 @@ const updateResource = require("src/graphql/mutations/updateResource.graphql");
 interface IProps {
   title: string;
   isOpen: boolean;
-  deleteResourceCallback: any;
-  onCloseCallback: any;
+  deleteResourceCallback?: () => void;
+  onCloseCallback?: () => void;
 }
 
 const Drawer = ({
@@ -55,6 +56,76 @@ const Drawer = ({
   const [pkOwner, setPkOwner] = React.useState("");
   const [pkTable, setPkTable] = React.useState("");
   const [pkColumn, setPkColumn] = React.useState("");
+
+  const onFormSubmit = (updateResource: any) => {
+    return (e: React.FormEvent<HTMLElement>) => {
+      e.preventDefault();
+
+      updateResource({
+        variables: {
+          where: {
+            id: selectedNode.resource.id
+          },
+          data: {
+            label,
+            primaryKeyOwner: pkOwner,
+            primaryKeyTable: pkTable,
+            primaryKeyColumn: pkColumn
+          }
+        }
+      });
+    };
+  };
+
+  const onUpdateCompleted = () => {
+    toaster.show({
+      message: `Successfully updated ${
+        selectedNode.resource.fhirType
+      } properties`,
+      intent: "success",
+      icon: "properties"
+    });
+
+    dispatch(
+      updateFhirResource(
+        selectedNode.resource.id,
+        selectedNode.resource.fhirType,
+        label
+      )
+    );
+  };
+
+  const onUpdateError = (error: any) => {
+    toaster.show({
+      message: "An error occurred while updating properties",
+      intent: "danger",
+      icon: "properties"
+    });
+  };
+
+  const onDeletionCompleted = (data: any) => {
+    toaster.show({
+      icon: "layout-hierarchy",
+      intent: "success",
+      message: `Ressource ${data.deleteResource.fhirType} supprimée pour ${
+        selectedNode.source.name
+      }.`,
+      timeout: 4000
+    });
+    deleteLocationParams(history, location, ["resourceId", "attributeId"]);
+    dispatch(deselectFhirResource());
+    deleteResourceCallback();
+  };
+
+  const onDeletionError = (error: any) => {
+    toaster.show({
+      icon: "error",
+      intent: "danger",
+      message: error.message,
+      timeout: 4000
+    });
+    deleteResourceCallback();
+  };
 
   React.useEffect(() => {
     if (selectedNode.resource.id) {
@@ -94,53 +165,12 @@ const Drawer = ({
         <div className={Classes.DIALOG_BODY}>
           <Mutation
             mutation={updateResource}
-            onCompleted={() => {
-              toaster.show({
-                message: `Successfully updated ${
-                  selectedNode.resource.fhirType
-                } properties`,
-                intent: "success",
-                icon: "properties"
-              });
-
-              dispatch(
-                updateFhirResource(
-                  selectedNode.resource.id,
-                  selectedNode.resource.fhirType,
-                  label
-                )
-              );
-            }}
-            onError={(error: any) => {
-              console.log(error);
-              toaster.show({
-                message: "An error occurred while updating properties",
-                intent: "danger",
-                icon: "properties"
-              });
-            }}
+            onCompleted={onUpdateCompleted}
+            onError={onUpdateError}
           >
             {(updateResource: any, { loading }: any) => {
               return (
-                <form
-                  onSubmit={(e: React.FormEvent<HTMLElement>) => {
-                    e.preventDefault();
-
-                    updateResource({
-                      variables: {
-                        where: {
-                          id: selectedNode.resource.id
-                        },
-                        data: {
-                          label,
-                          primaryKeyOwner: pkOwner,
-                          primaryKeyTable: pkTable,
-                          primaryKeyColumn: pkColumn
-                        }
-                      }
-                    });
-                  }}
-                >
+                <form onSubmit={onFormSubmit(updateResource)}>
                   <FormGroup
                     label="Resource Label"
                     className="resource-info"
@@ -206,30 +236,8 @@ const Drawer = ({
       <div className={Classes.DRAWER_FOOTER}>
         <Mutation
           mutation={deleteResourceMutation}
-          onCompleted={(data: any) => {
-            toaster.show({
-              icon: "layout-hierarchy",
-              intent: "success",
-              message: `Ressource ${
-                data.deleteResource.fhirType
-              } supprimée pour ${selectedNode.source.name}.`,
-              timeout: 4000
-            });
-            deleteLocationParams(history, location, [
-              "resourceId",
-              "attributeId"
-            ]);
-            dispatch(deselectFhirResource());
-            deleteResourceCallback();
-          }}
-          onError={(error: any) => {
-            toaster.show({
-              icon: "error",
-              intent: "danger",
-              message: error.message,
-              timeout: 4000
-            });
-          }}
+          onCompleted={onDeletionCompleted}
+          onError={onDeletionError}
         >
           {(deleteResource: any, { loading }: any) => (
             <ControlGroup fill={true}>
