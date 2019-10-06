@@ -102,7 +102,9 @@ body {
     overflow: hidden;
 
     #fhir-attributes {
-      overflow-y: scroll;
+      overflow-y: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
     #resource-add {
@@ -208,6 +210,8 @@ body {
 }
 
 #fhir-resource-tree {
+  overflow-y: scroll;
+
   .bp3-tree {
     box-shadow: none;
 
