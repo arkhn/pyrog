@@ -1,3 +1,4 @@
+import { useApolloClient } from "@apollo/react-hooks";
 import {
   Alignment,
   Button,
@@ -9,7 +10,6 @@ import * as React from "react";
 import { Query } from "react-apollo";
 import { useDispatch, useSelector } from "react-redux";
 import useReactRouter from "use-react-router";
-import { useApolloClient } from "react-apollo-hooks";
 
 import Drawer from "./components/Drawer";
 import Header from "./components/Header";

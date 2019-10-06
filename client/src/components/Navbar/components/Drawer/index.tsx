@@ -1,3 +1,4 @@
+import { useApolloClient } from "@apollo/react-hooks";
 import {
   Button,
   Classes,
@@ -11,7 +12,6 @@ import {
 import * as React from "react";
 import { Mutation } from "react-apollo";
 import { useSelector } from "react-redux";
-import { useApolloClient } from "react-apollo-hooks";
 
 import "./style.less";
 import StringSelect from "src/components/selects/stringSelect";
