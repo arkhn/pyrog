@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Button, MenuItem, Intent } from "@blueprintjs/core";
+import { MenuItem, Intent, IPopoverProps } from "@blueprintjs/core";
+
 import {
   Select,
   ItemPredicate,
@@ -19,6 +20,7 @@ interface ISelectProps {
   loading?: boolean;
   filterable?: boolean;
   onChange: any;
+  popoverProps?: IPopoverProps;
 }
 
 export default class StringSelect extends React.Component<ISelectProps, any> {
@@ -60,7 +62,8 @@ export default class StringSelect extends React.Component<ISelectProps, any> {
       items,
       loading,
       onChange,
-      filterable
+      filterable,
+      popoverProps
     } = this.props;
 
     return (
@@ -77,6 +80,7 @@ export default class StringSelect extends React.Component<ISelectProps, any> {
         items={items}
         onChange={onChange}
         renderItem={this.renderItem}
+        popoverProps={popoverProps}
       />
     );
   }

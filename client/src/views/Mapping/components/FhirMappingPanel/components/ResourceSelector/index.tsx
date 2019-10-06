@@ -19,20 +19,20 @@ import { IReduxStore } from "../../../../../../types";
 import Drawer from "../Drawer";
 
 interface IProps {
-  data: any;
+  availableResources: any;
   loading: boolean;
   deleteResourceCallback: any;
 }
 
 const ResourceSelector = ({
-  data,
+  availableResources,
   loading,
   deleteResourceCallback
 }: IProps) => {
   const dispatch = useDispatch();
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
   const { history, location } = useReactRouter();
-  const [drawerIsOpen, setDrawerIsOpen] = React.useState(true);
+  const [drawerIsOpen, setDrawerIsOpen] = React.useState(false);
 
   const updateLocationSearch = (key: string, value: string) => {
     const qs = QueryString.stringify({
@@ -52,9 +52,7 @@ const ResourceSelector = ({
             icon={"layout-hierarchy"}
             inputItem={selectedNode.resource}
             intent={"primary"}
-            items={
-              data && data.availableResources ? data.availableResources : []
-            }
+            items={availableResources}
             loading={loading}
             onChange={(resource: any) => {
               dispatch(
@@ -70,6 +68,7 @@ const ResourceSelector = ({
         </ControlGroup>
         <Button
           icon="more"
+          disabled={selectedNode.resource.id === null}
           minimal
           onClick={() => {
             setDrawerIsOpen(true);

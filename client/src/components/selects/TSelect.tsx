@@ -1,4 +1,4 @@
-import { Button, Intent, MenuItem } from "@blueprintjs/core";
+import { Button, Intent, MenuItem, IPopoverProps } from "@blueprintjs/core";
 import { IconName } from "@blueprintjs/icons";
 import {
   ItemPredicate,
@@ -20,7 +20,7 @@ interface ISelectProps<T> {
   intent?: Intent;
   loading?: boolean;
   onChange: any;
-  popoverProps?: any;
+  popoverProps?: IPopoverProps;
   renderItem: ItemRenderer<T>;
 }
 
