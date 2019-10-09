@@ -8,7 +8,7 @@ import {
   ControlGroup,
   Position
 } from "@blueprintjs/core";
-import * as React from "react";
+import React from "react";
 import { Mutation } from "react-apollo";
 import { useSelector, useDispatch, useStore } from "react-redux";
 import useReactRouter from "use-react-router";
@@ -26,7 +26,6 @@ import {
 
 import { deleteLocationParams } from "src/services/urlState";
 
-// import * as resourceInfo from "src/graphql/queries/resourceInfo";
 const resourceInfo = require("src/graphql/queries/resourceInfo.graphql");
 const deleteResourceMutation = require("src/graphql/mutations/deleteResource.graphql");
 const updateResource = require("src/graphql/mutations/updateResource.graphql");

@@ -1,5 +1,5 @@
 import { FormGroup, ControlGroup, Button } from "@blueprintjs/core";
-import * as React from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import useReactRouter from "use-react-router";
 

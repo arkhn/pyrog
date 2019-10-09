@@ -11,7 +11,7 @@ import {
 } from "@blueprintjs/core";
 import { ApolloClient } from "apollo-client";
 import { withApollo } from "react-apollo";
-import * as React from "react";
+import React from "react";
 
 const createAttributeProfileInAttribute = require("../../../../../../graphql/mutations/createAttributeProfileInAttribute.graphql");
 const deleteAttribute = require("../../../../../../graphql/mutations/deleteAttribute.graphql");
