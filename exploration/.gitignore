@@ -1,2 +1,3 @@
 venv
 conf.custom.yml
+**/__pycache__
