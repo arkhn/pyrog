@@ -1,17 +1,11 @@
 ## SQL Exploration API 
 
-Implementation of the API
+A flask API for running nlp scripts. 
  
 ## Usage
 
-### Create a resource
+API should be launched from the main folder with the following command. 
 
+`python api/app.py`
 
-## Development
-
-### Requirements
-
-### Running the slack
-
-### Tests
 
