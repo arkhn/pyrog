@@ -1,10 +1,9 @@
 import * as React from "react";
-import { Mutation, Query, Subscription } from "react-apollo";
 
-import { ISelectedSource } from "../../../types";
+import { ISelectedSource } from "../../../../types";
 
 // COMPONENTS
-import ColumnPicker from "../../../components/columnPicker";
+import ColumnPicker from "../../../../components/columnPicker";
 
 interface IProps {
   join: any;
