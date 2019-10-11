@@ -4,7 +4,7 @@ import * as React from "react";
 
 import { Mutation } from "react-apollo";
 
-import StringSelect from "../../../../components/selects/stringSelect";
+import ScriptSelect from "../../../../components/selects/scriptSelect";
 
 const updateInputColumn = require("../../../../graphql/mutations/updateInputColumn.graphql");
 
@@ -18,18 +18,14 @@ const InputColumnScriptTag = ({ column }: IProps) => (
       return (
         <div className="stacked-tags">
           <Tag>SCRIPT</Tag>
-          <StringSelect
-            disabled={true}
-            inputItem={column.script}
-            items={["script1.py", "script2.py"]}
+          <ScriptSelect
             loading={loading}
-            onChange={(e: string) => {
+            selectedScript={column.script}
+            onChange={(script: string) => {
               updateInputColumn({
                 variables: {
                   id: column.id,
-                  data: {
-                    script: e
-                  }
+                  data: { script }
                 }
               });
             }}

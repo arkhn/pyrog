@@ -6,6 +6,7 @@ import { createLogger } from "redux-logger";
 
 import { HttpLink, InMemoryCache, ApolloClient } from "apollo-client-preset";
 import { ApolloLink, split } from "apollo-link";
+import { RestLink } from "apollo-link-rest";
 import { onError } from "apollo-link-error";
 import { getMainDefinition } from "apollo-utilities";
 import { WebSocketLink } from "apollo-link-ws";
@@ -126,14 +127,25 @@ const link = split(
   wsLink,
   httpLinkAuth
 );
+const links = [];
+if (process.env.NODE_ENV === "development") {
+  links.push(errorLink);
+}
+links.push(
+  new RestLink({
+    uri: "http://127.0.0.1:5000/",
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }),
+  link
+);
 
 // Client
 export const client = new ApolloClient({
   cache: new InMemoryCache(),
   connectToDevTools: true,
-  link: ApolloLink.from(
-    process.env.NODE_ENV === "development" ? [errorLink, link] : [link]
-  )
+  link: ApolloLink.from(links)
 });
 
 const token = localStorage.getItem(process.env.AUTH_TOKEN);
