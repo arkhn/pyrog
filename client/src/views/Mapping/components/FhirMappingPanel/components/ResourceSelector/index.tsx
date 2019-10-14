@@ -7,9 +7,8 @@ import { updateLocationParams } from "src/services/urlState";
 import { updateFhirResource } from "src/services/selectedNode/actions";
 import { IReduxStore } from "src/types";
 
+import Drawer from "./Drawer";
 import ResourceSelect from "src/components/selects/resourceSelect";
-
-import Drawer from "../Drawer";
 
 interface IProps {
   availableResources: any;
