@@ -1,8 +1,8 @@
-import { ControlGroup, FormGroup, InputGroup, Switch } from "@blueprintjs/core";
+import { ControlGroup, FormGroup, IPopoverProps } from "@blueprintjs/core";
 import * as React from "react";
 
-import StringSelect from "../../../../components/selects/stringSelect";
-import { ISourceSchema } from "../../../../types";
+import StringSelect from "src/components/selects/stringSelect";
+import { ISourceSchema } from "src/types";
 
 export interface IProps {
   ownerChangeCallback?: any;
@@ -17,6 +17,9 @@ export interface IProps {
   sourceSchema: ISourceSchema;
   label?: string;
   vertical?: boolean;
+  fill?: boolean;
+  popoverProps?: IPopoverProps;
+  disabled?: boolean;
 }
 
 export interface IState {
@@ -85,7 +88,15 @@ export default class ColumnPicker extends React.Component<IProps, IState> {
   }
 
   public render() {
-    let { hasOwner, sourceSchema, label, vertical } = this.props;
+    let {
+      hasOwner,
+      sourceSchema,
+      label,
+      vertical,
+      fill,
+      popoverProps,
+      disabled
+    } = this.props;
 
     let { owner, table, column } = this.state;
 
@@ -106,28 +117,32 @@ export default class ColumnPicker extends React.Component<IProps, IState> {
       : [];
 
     let controlGroup = (
-      <ControlGroup fill={false} vertical={vertical || false}>
+      <ControlGroup vertical={vertical || false} fill={fill || false}>
         {hasOwner ? (
           <StringSelect
             icon={"group-objects"}
             inputItem={owner}
             items={owners}
             onChange={this.changeOwner}
+            popoverProps={popoverProps || {}}
+            disabled={disabled}
           />
         ) : null}
         <StringSelect
-          disabled={hasOwner && !owner}
+          disabled={disabled || (hasOwner && !owner)}
           icon={"th"}
           inputItem={table}
           items={tables}
           onChange={this.changeTable}
+          popoverProps={popoverProps || {}}
         />
         <StringSelect
-          disabled={!table}
+          disabled={disabled || !table}
           icon={"column-layout"}
           inputItem={column}
           items={columns}
           onChange={this.changeColumn}
+          popoverProps={popoverProps || {}}
         />
       </ControlGroup>
     );

@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import { createStore, applyMiddleware } from "redux";
+import { combineReducers, createStore, applyMiddleware } from "redux";
 import { createLogger } from "redux-logger";
 
 import { HttpLink, InMemoryCache, ApolloClient } from "apollo-client-preset";
@@ -10,8 +10,6 @@ import { onError } from "apollo-link-error";
 import { getMainDefinition } from "apollo-utilities";
 import { WebSocketLink } from "apollo-link-ws";
 import { ApolloProvider } from "react-apollo";
-import { ApolloProvider as ApolloHooksProvider } from "react-apollo-hooks";
-import { combineReducers } from "redux";
 
 import "./style.less";
 import Routes from "./routes";
@@ -74,7 +72,8 @@ const store = finalCreateStore(mainReducer);
 
 // HttpLink
 const httpLink = new HttpLink({
-  uri: process.env.HTTP_BACKEND_URL
+  uri: process.env.HTTP_BACKEND_URL,
+  fetch: fetch
 });
 
 const middlewareLink = new ApolloLink((operation, forward) => {
@@ -140,10 +139,9 @@ const token = localStorage.getItem(process.env.AUTH_TOKEN);
 ReactDOM.render(
   <Provider store={store}>
     <ApolloProvider client={client}>
-      <ApolloHooksProvider client={client}>
-        <Routes />
-      </ApolloHooksProvider>
+      <Routes />
     </ApolloProvider>
   </Provider>,
-  document.getElementById("application-wrapper")
+  document.getElementById("application-wrapper") ||
+    document.createElement("div")
 );

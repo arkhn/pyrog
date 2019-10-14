@@ -1,13 +1,13 @@
 import { Button, FormGroup, ControlGroup } from "@blueprintjs/core";
-import * as React from "react";
+import React from "react";
 import { Mutation } from "react-apollo";
 import { useSelector } from "react-redux";
 
-import { IReduxStore } from "../../../../../../types";
+import { IReduxStore } from "src/types";
 import { availableResourceNames } from "./resourceNames";
-import AddResourceSelect from "../../../../../../components/selects/addResourceSelect";
+import AddResourceSelect from "src/components/selects/addResourceSelect";
 
-const createResourceTreeInSource = require("../../../../../../graphql/mutations/createResourceTreeInSource.graphql");
+const createResourceTreeInSource = require("src/graphql/mutations/createResourceTreeInSource.graphql");
 
 interface IProps {
   callback: any;
