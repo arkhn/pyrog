@@ -2,17 +2,17 @@ import { Tag, Spinner } from "@blueprintjs/core";
 import * as React from "react";
 import { Mutation, Query, Subscription } from "react-apollo";
 
-import { ISelectedSource } from "../../../types";
+import { ISelectedSource } from "../../../../types";
 
 // COMPONENTS
-import StringSelect from "../../../components/selects/stringSelect";
-import InputColumn from "./inputColumn";
+import StringSelect from "../../../../components/selects/stringSelect";
+import InputColumn from "./../InputColumn";
 
 // GRAPHQL
-const inputColumns = require("../../../graphql/queries/inputColumns.graphql");
-const updateAttribute = require("../../../graphql/mutations/updateAttribute.graphql");
-const subscribeAttribute = require("../../../graphql/subscriptions/attribute.graphql");
-const subscribeInputColumn = require("../../../graphql/subscriptions/inputColumn.graphql");
+const inputColumns = require("../../../../graphql/queries/inputColumns.graphql");
+const updateAttribute = require("../../../../graphql/mutations/updateAttribute.graphql");
+const subscribeAttribute = require("../../../../graphql/subscriptions/attribute.graphql");
+const subscribeInputColumn = require("../../../../graphql/subscriptions/inputColumn.graphql");
 
 interface IProps {
   schema: any;

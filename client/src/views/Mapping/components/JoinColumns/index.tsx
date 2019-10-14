@@ -1,9 +1,9 @@
 import * as React from "react";
 
-import { ISelectedSource } from "../../../types";
+import { ISelectedSource } from "../../../../types";
 
 // COMPONENTS
-import ColumnPicker from "../../../components/columnPicker";
+import ColumnPicker from "../ColumnPicker";
 
 interface IProps {
   join: any;

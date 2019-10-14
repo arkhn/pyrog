@@ -14,8 +14,8 @@ import { useSelector } from "react-redux";
 import { useApolloClient } from "react-apollo-hooks";
 
 import "./style.less";
-import StringSelect from "src/components/selects/stringSelect";
-import { IReduxStore } from "src/types";
+import StringSelect from "../../../selects/stringSelect";
+import { IReduxStore } from "../../../../types";
 
 const credential = require("src/graphql/queries/credential.graphql");
 const upsertCredential = require("src/graphql/mutations/upsertCredential.graphql");

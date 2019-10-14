@@ -1,11 +1,17 @@
+import * as bcrypt from "bcryptjs";
 import * as fs from "fs";
 import { GraphQLServer } from "graphql-yoga";
 import * as multer from "multer";
 import "graphql-import-node";
+import { Client as PgClient } from "pg";
+const crypto = require("crypto");
 
 import * as Schema from "./schema.graphql";
 
-import { Prisma as PrismaClient } from "./generated/prisma-client";
+import {
+  Prisma as PrismaClient,
+  prisma as prismaClient
+} from "./generated/prisma-client";
 import { Prisma as PrismaBinding } from "./generated/prisma-binding";
 import resolvers from "./resolvers";
 
@@ -107,6 +113,60 @@ server.get("/resource/:filename", function(req, res) {
       }
     }
   );
+});
+
+server.get("/tableview/:sourceId/:tableName", async (req: any, res: any) => {
+  // TODO
+  // check authentication + user should be ADMIN
+
+  // Load Source Crenditials and decipher password
+  const cred = await prismaClient
+    .source({ id: req.params.sourceId })
+    .credential();
+  console.log("CRED", cred);
+  const decipher = crypto.createDecipher("aes256", process.env.APP_SECRET);
+  const decryptedPassword =
+    decipher.update(cred.password, "hex", "utf8") + decipher.final("utf8");
+  console.log("DECR", decryptedPassword);
+
+  // Connect to distant database
+  const pgClient = new PgClient({
+    host: cred.host,
+    port: cred.port,
+    database: cred.database,
+    user: cred.login,
+    password: decryptedPassword
+  });
+
+  console.log("PG CLIENT OK");
+
+  pgClient.connect();
+  console.log("PGCLIENT CONNECTED");
+
+  // Query table and send results
+  pgClient
+    .query(`SELECT * FROM ${req.params.tableName} LIMIT 10;`)
+    .then((data: any) => {
+      console.log("RES OK", data);
+
+      res.send({
+        rows: data.rows,
+        fields: data.fields
+      });
+
+      pgClient.end();
+    })
+    .catch((err: any) => {
+      console.log("ERR", err);
+
+      res.status(500).send({
+        error: err,
+        message: err.message
+      });
+
+      pgClient.end();
+      throw new Error(err);
+    });
 });
 
 const serverOptions = {
