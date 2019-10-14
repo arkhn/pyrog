@@ -137,12 +137,10 @@ export const client = new ApolloClient({
 
 const token = localStorage.getItem(process.env.AUTH_TOKEN);
 
-// Render React app in DOM
-// TODO: fix bad type cast
 ReactDOM.render(
   <Provider store={store}>
-    <ApolloProvider client={client as any}>
-      <ApolloHooksProvider client={client as any}>
+    <ApolloProvider client={client}>
+      <ApolloHooksProvider client={client}>
         <Routes />
       </ApolloHooksProvider>
     </ApolloProvider>

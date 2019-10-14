@@ -17,8 +17,8 @@ import "./style.less";
 import StringSelect from "../../../selects/stringSelect";
 import { IReduxStore } from "../../../../types";
 
-const credential = require("../../../../graphql/queries/credential.graphql");
-const upsertCredential = require("../../../../graphql/mutations/upsertCredential.graphql");
+const credential = require("src/graphql/queries/credential.graphql");
+const upsertCredential = require("src/graphql/mutations/upsertCredential.graphql");
 
 interface IProps {
   title: string;
