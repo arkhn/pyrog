@@ -45,7 +45,6 @@ import toasterReducer from "./services/toaster/reducer";
 import userReducer from "./services/user/reducer";
 
 // View reducers
-import mapping from "./views/mapping/reducer";
 import mimic from "./views/mimic/reducer";
 
 // Data reducer (also called canonical state)
@@ -56,7 +55,6 @@ const dataReducer = combineReducers({
 
 // View reducer
 const viewReducer = combineReducers({
-  mapping,
   mimic
 });
 

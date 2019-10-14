@@ -1,28 +1,20 @@
 import {
-  Button,
   Classes,
   ContextMenu,
-  ContextMenuTarget,
-  ControlGroup,
   Icon,
-  InputGroup,
   ITreeNode,
   Menu,
   MenuDivider,
   MenuItem,
-  Popover,
-  Position,
   Tooltip,
   Tree
 } from "@blueprintjs/core";
 import { ApolloClient } from "apollo-client";
-import { Mutation, withApollo } from "react-apollo";
+import { withApollo } from "react-apollo";
 import * as React from "react";
 
-import { isNullOrUndefined } from "util";
-
-const createAttributeProfileInAttribute = require("../../graphql/mutations/createAttributeProfileInAttribute.graphql");
-const deleteAttribute = require("../../graphql/mutations/deleteAttribute.graphql");
+const createAttributeProfileInAttribute = require("../../../../../../graphql/mutations/createAttributeProfileInAttribute.graphql");
+const deleteAttribute = require("../../../../../../graphql/mutations/deleteAttribute.graphql");
 
 interface INodeData {
   comment: string;
