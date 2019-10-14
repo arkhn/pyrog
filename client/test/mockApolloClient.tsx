@@ -3,7 +3,6 @@ import { ApolloLink, split } from "apollo-link";
 import { onError } from "apollo-link-error";
 import { getMainDefinition } from "apollo-utilities";
 import { WebSocketLink } from "apollo-link-ws";
-import fetch from "unfetch";
 
 const httpLink = new HttpLink({
   uri: process.env.HTTP_BACKEND_URL,
