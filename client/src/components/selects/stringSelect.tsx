@@ -17,6 +17,7 @@ interface ISelectProps {
   intent?: Intent;
   items: string[];
   loading?: boolean;
+  filterable?: boolean;
   onChange: any;
 }
 
@@ -58,7 +59,8 @@ export default class StringSelect extends React.Component<ISelectProps, any> {
       intent,
       items,
       loading,
-      onChange
+      onChange,
+      filterable
     } = this.props;
 
     return (
@@ -67,6 +69,7 @@ export default class StringSelect extends React.Component<ISelectProps, any> {
         displayItem={this.displayItem}
         sortItems={this.sortItems}
         filterItems={this.filterByName}
+        filterable={filterable}
         loading={loading}
         icon={icon}
         inputItem={inputItem}

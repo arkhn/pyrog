@@ -7,6 +7,10 @@ export const typeDefs = /* GraphQL */ `
     count: Int!
   }
 
+  type AggregateCredential {
+    count: Int!
+  }
+
   type AggregateInputColumn {
     count: Int!
   }
@@ -581,6 +585,390 @@ export const typeDefs = /* GraphQL */ `
 
   type BatchPayload {
     count: Long!
+  }
+
+  type Credential {
+    id: ID!
+    host: String!
+    port: String!
+    database: String!
+    login: String!
+    password: String
+    type: DatabaseType!
+    source: Source!
+  }
+
+  type CredentialConnection {
+    pageInfo: PageInfo!
+    edges: [CredentialEdge]!
+    aggregate: AggregateCredential!
+  }
+
+  input CredentialCreateInput {
+    id: ID
+    host: String!
+    port: String!
+    database: String!
+    login: String!
+    password: String
+    type: DatabaseType!
+    source: SourceCreateOneWithoutCredentialInput!
+  }
+
+  input CredentialCreateManyInput {
+    create: [CredentialCreateInput!]
+    connect: [CredentialWhereUniqueInput!]
+  }
+
+  input CredentialCreateOneWithoutSourceInput {
+    create: CredentialCreateWithoutSourceInput
+    connect: CredentialWhereUniqueInput
+  }
+
+  input CredentialCreateWithoutSourceInput {
+    id: ID
+    host: String!
+    port: String!
+    database: String!
+    login: String!
+    password: String
+    type: DatabaseType!
+  }
+
+  type CredentialEdge {
+    node: Credential!
+    cursor: String!
+  }
+
+  enum CredentialOrderByInput {
+    id_ASC
+    id_DESC
+    host_ASC
+    host_DESC
+    port_ASC
+    port_DESC
+    database_ASC
+    database_DESC
+    login_ASC
+    login_DESC
+    password_ASC
+    password_DESC
+    type_ASC
+    type_DESC
+  }
+
+  type CredentialPreviousValues {
+    id: ID!
+    host: String!
+    port: String!
+    database: String!
+    login: String!
+    password: String
+    type: DatabaseType!
+  }
+
+  input CredentialScalarWhereInput {
+    id: ID
+    id_not: ID
+    id_in: [ID!]
+    id_not_in: [ID!]
+    id_lt: ID
+    id_lte: ID
+    id_gt: ID
+    id_gte: ID
+    id_contains: ID
+    id_not_contains: ID
+    id_starts_with: ID
+    id_not_starts_with: ID
+    id_ends_with: ID
+    id_not_ends_with: ID
+    host: String
+    host_not: String
+    host_in: [String!]
+    host_not_in: [String!]
+    host_lt: String
+    host_lte: String
+    host_gt: String
+    host_gte: String
+    host_contains: String
+    host_not_contains: String
+    host_starts_with: String
+    host_not_starts_with: String
+    host_ends_with: String
+    host_not_ends_with: String
+    port: String
+    port_not: String
+    port_in: [String!]
+    port_not_in: [String!]
+    port_lt: String
+    port_lte: String
+    port_gt: String
+    port_gte: String
+    port_contains: String
+    port_not_contains: String
+    port_starts_with: String
+    port_not_starts_with: String
+    port_ends_with: String
+    port_not_ends_with: String
+    database: String
+    database_not: String
+    database_in: [String!]
+    database_not_in: [String!]
+    database_lt: String
+    database_lte: String
+    database_gt: String
+    database_gte: String
+    database_contains: String
+    database_not_contains: String
+    database_starts_with: String
+    database_not_starts_with: String
+    database_ends_with: String
+    database_not_ends_with: String
+    login: String
+    login_not: String
+    login_in: [String!]
+    login_not_in: [String!]
+    login_lt: String
+    login_lte: String
+    login_gt: String
+    login_gte: String
+    login_contains: String
+    login_not_contains: String
+    login_starts_with: String
+    login_not_starts_with: String
+    login_ends_with: String
+    login_not_ends_with: String
+    password: String
+    password_not: String
+    password_in: [String!]
+    password_not_in: [String!]
+    password_lt: String
+    password_lte: String
+    password_gt: String
+    password_gte: String
+    password_contains: String
+    password_not_contains: String
+    password_starts_with: String
+    password_not_starts_with: String
+    password_ends_with: String
+    password_not_ends_with: String
+    type: DatabaseType
+    type_not: DatabaseType
+    type_in: [DatabaseType!]
+    type_not_in: [DatabaseType!]
+    AND: [CredentialScalarWhereInput!]
+    OR: [CredentialScalarWhereInput!]
+    NOT: [CredentialScalarWhereInput!]
+  }
+
+  type CredentialSubscriptionPayload {
+    mutation: MutationType!
+    node: Credential
+    updatedFields: [String!]
+    previousValues: CredentialPreviousValues
+  }
+
+  input CredentialSubscriptionWhereInput {
+    mutation_in: [MutationType!]
+    updatedFields_contains: String
+    updatedFields_contains_every: [String!]
+    updatedFields_contains_some: [String!]
+    node: CredentialWhereInput
+    AND: [CredentialSubscriptionWhereInput!]
+    OR: [CredentialSubscriptionWhereInput!]
+    NOT: [CredentialSubscriptionWhereInput!]
+  }
+
+  input CredentialUpdateDataInput {
+    host: String
+    port: String
+    database: String
+    login: String
+    password: String
+    type: DatabaseType
+    source: SourceUpdateOneRequiredWithoutCredentialInput
+  }
+
+  input CredentialUpdateInput {
+    host: String
+    port: String
+    database: String
+    login: String
+    password: String
+    type: DatabaseType
+    source: SourceUpdateOneRequiredWithoutCredentialInput
+  }
+
+  input CredentialUpdateManyDataInput {
+    host: String
+    port: String
+    database: String
+    login: String
+    password: String
+    type: DatabaseType
+  }
+
+  input CredentialUpdateManyInput {
+    create: [CredentialCreateInput!]
+    update: [CredentialUpdateWithWhereUniqueNestedInput!]
+    upsert: [CredentialUpsertWithWhereUniqueNestedInput!]
+    delete: [CredentialWhereUniqueInput!]
+    connect: [CredentialWhereUniqueInput!]
+    set: [CredentialWhereUniqueInput!]
+    disconnect: [CredentialWhereUniqueInput!]
+    deleteMany: [CredentialScalarWhereInput!]
+    updateMany: [CredentialUpdateManyWithWhereNestedInput!]
+  }
+
+  input CredentialUpdateManyMutationInput {
+    host: String
+    port: String
+    database: String
+    login: String
+    password: String
+    type: DatabaseType
+  }
+
+  input CredentialUpdateManyWithWhereNestedInput {
+    where: CredentialScalarWhereInput!
+    data: CredentialUpdateManyDataInput!
+  }
+
+  input CredentialUpdateOneWithoutSourceInput {
+    create: CredentialCreateWithoutSourceInput
+    update: CredentialUpdateWithoutSourceDataInput
+    upsert: CredentialUpsertWithoutSourceInput
+    delete: Boolean
+    disconnect: Boolean
+    connect: CredentialWhereUniqueInput
+  }
+
+  input CredentialUpdateWithoutSourceDataInput {
+    host: String
+    port: String
+    database: String
+    login: String
+    password: String
+    type: DatabaseType
+  }
+
+  input CredentialUpdateWithWhereUniqueNestedInput {
+    where: CredentialWhereUniqueInput!
+    data: CredentialUpdateDataInput!
+  }
+
+  input CredentialUpsertWithoutSourceInput {
+    update: CredentialUpdateWithoutSourceDataInput!
+    create: CredentialCreateWithoutSourceInput!
+  }
+
+  input CredentialUpsertWithWhereUniqueNestedInput {
+    where: CredentialWhereUniqueInput!
+    update: CredentialUpdateDataInput!
+    create: CredentialCreateInput!
+  }
+
+  input CredentialWhereInput {
+    id: ID
+    id_not: ID
+    id_in: [ID!]
+    id_not_in: [ID!]
+    id_lt: ID
+    id_lte: ID
+    id_gt: ID
+    id_gte: ID
+    id_contains: ID
+    id_not_contains: ID
+    id_starts_with: ID
+    id_not_starts_with: ID
+    id_ends_with: ID
+    id_not_ends_with: ID
+    host: String
+    host_not: String
+    host_in: [String!]
+    host_not_in: [String!]
+    host_lt: String
+    host_lte: String
+    host_gt: String
+    host_gte: String
+    host_contains: String
+    host_not_contains: String
+    host_starts_with: String
+    host_not_starts_with: String
+    host_ends_with: String
+    host_not_ends_with: String
+    port: String
+    port_not: String
+    port_in: [String!]
+    port_not_in: [String!]
+    port_lt: String
+    port_lte: String
+    port_gt: String
+    port_gte: String
+    port_contains: String
+    port_not_contains: String
+    port_starts_with: String
+    port_not_starts_with: String
+    port_ends_with: String
+    port_not_ends_with: String
+    database: String
+    database_not: String
+    database_in: [String!]
+    database_not_in: [String!]
+    database_lt: String
+    database_lte: String
+    database_gt: String
+    database_gte: String
+    database_contains: String
+    database_not_contains: String
+    database_starts_with: String
+    database_not_starts_with: String
+    database_ends_with: String
+    database_not_ends_with: String
+    login: String
+    login_not: String
+    login_in: [String!]
+    login_not_in: [String!]
+    login_lt: String
+    login_lte: String
+    login_gt: String
+    login_gte: String
+    login_contains: String
+    login_not_contains: String
+    login_starts_with: String
+    login_not_starts_with: String
+    login_ends_with: String
+    login_not_ends_with: String
+    password: String
+    password_not: String
+    password_in: [String!]
+    password_not_in: [String!]
+    password_lt: String
+    password_lte: String
+    password_gt: String
+    password_gte: String
+    password_contains: String
+    password_not_contains: String
+    password_starts_with: String
+    password_not_starts_with: String
+    password_ends_with: String
+    password_not_ends_with: String
+    type: DatabaseType
+    type_not: DatabaseType
+    type_in: [DatabaseType!]
+    type_not_in: [DatabaseType!]
+    source: SourceWhereInput
+    AND: [CredentialWhereInput!]
+    OR: [CredentialWhereInput!]
+    NOT: [CredentialWhereInput!]
+  }
+
+  input CredentialWhereUniqueInput {
+    id: ID
+  }
+
+  enum DatabaseType {
+    POSTGRES
   }
 
   scalar DateTime
@@ -1440,6 +1828,22 @@ export const typeDefs = /* GraphQL */ `
     ): Attribute!
     deleteAttribute(where: AttributeWhereUniqueInput!): Attribute
     deleteManyAttributes(where: AttributeWhereInput): BatchPayload!
+    createCredential(data: CredentialCreateInput!): Credential!
+    updateCredential(
+      data: CredentialUpdateInput!
+      where: CredentialWhereUniqueInput!
+    ): Credential
+    updateManyCredentials(
+      data: CredentialUpdateManyMutationInput!
+      where: CredentialWhereInput
+    ): BatchPayload!
+    upsertCredential(
+      where: CredentialWhereUniqueInput!
+      create: CredentialCreateInput!
+      update: CredentialUpdateInput!
+    ): Credential!
+    deleteCredential(where: CredentialWhereUniqueInput!): Credential
+    deleteManyCredentials(where: CredentialWhereInput): BatchPayload!
     createInputColumn(data: InputColumnCreateInput!): InputColumn!
     updateInputColumn(
       data: InputColumnUpdateInput!
@@ -1553,6 +1957,25 @@ export const typeDefs = /* GraphQL */ `
       first: Int
       last: Int
     ): AttributeConnection!
+    credential(where: CredentialWhereUniqueInput!): Credential
+    credentials(
+      where: CredentialWhereInput
+      orderBy: CredentialOrderByInput
+      skip: Int
+      after: String
+      before: String
+      first: Int
+      last: Int
+    ): [Credential]!
+    credentialsConnection(
+      where: CredentialWhereInput
+      orderBy: CredentialOrderByInput
+      skip: Int
+      after: String
+      before: String
+      first: Int
+      last: Int
+    ): CredentialConnection!
     inputColumn(where: InputColumnWhereUniqueInput!): InputColumn
     inputColumns(
       where: InputColumnWhereInput
@@ -2098,6 +2521,7 @@ export const typeDefs = /* GraphQL */ `
     ): [Resource!]
     updatedAt: DateTime!
     createdAt: DateTime!
+    credential: Credential
   }
 
   type SourceConnection {
@@ -2111,6 +2535,12 @@ export const typeDefs = /* GraphQL */ `
     name: String!
     hasOwner: Boolean
     resources: ResourceCreateManyWithoutSourceInput
+    credential: CredentialCreateOneWithoutSourceInput
+  }
+
+  input SourceCreateOneWithoutCredentialInput {
+    create: SourceCreateWithoutCredentialInput
+    connect: SourceWhereUniqueInput
   }
 
   input SourceCreateOneWithoutResourcesInput {
@@ -2118,10 +2548,18 @@ export const typeDefs = /* GraphQL */ `
     connect: SourceWhereUniqueInput
   }
 
+  input SourceCreateWithoutCredentialInput {
+    id: ID
+    name: String!
+    hasOwner: Boolean
+    resources: ResourceCreateManyWithoutSourceInput
+  }
+
   input SourceCreateWithoutResourcesInput {
     id: ID
     name: String!
     hasOwner: Boolean
+    credential: CredentialCreateOneWithoutSourceInput
   }
 
   type SourceEdge {
@@ -2172,11 +2610,19 @@ export const typeDefs = /* GraphQL */ `
     name: String
     hasOwner: Boolean
     resources: ResourceUpdateManyWithoutSourceInput
+    credential: CredentialUpdateOneWithoutSourceInput
   }
 
   input SourceUpdateManyMutationInput {
     name: String
     hasOwner: Boolean
+  }
+
+  input SourceUpdateOneRequiredWithoutCredentialInput {
+    create: SourceCreateWithoutCredentialInput
+    update: SourceUpdateWithoutCredentialDataInput
+    upsert: SourceUpsertWithoutCredentialInput
+    connect: SourceWhereUniqueInput
   }
 
   input SourceUpdateOneRequiredWithoutResourcesInput {
@@ -2186,9 +2632,21 @@ export const typeDefs = /* GraphQL */ `
     connect: SourceWhereUniqueInput
   }
 
+  input SourceUpdateWithoutCredentialDataInput {
+    name: String
+    hasOwner: Boolean
+    resources: ResourceUpdateManyWithoutSourceInput
+  }
+
   input SourceUpdateWithoutResourcesDataInput {
     name: String
     hasOwner: Boolean
+    credential: CredentialUpdateOneWithoutSourceInput
+  }
+
+  input SourceUpsertWithoutCredentialInput {
+    update: SourceUpdateWithoutCredentialDataInput!
+    create: SourceCreateWithoutCredentialInput!
   }
 
   input SourceUpsertWithoutResourcesInput {
@@ -2246,6 +2704,7 @@ export const typeDefs = /* GraphQL */ `
     createdAt_lte: DateTime
     createdAt_gt: DateTime
     createdAt_gte: DateTime
+    credential: CredentialWhereInput
     AND: [SourceWhereInput!]
     OR: [SourceWhereInput!]
     NOT: [SourceWhereInput!]
@@ -2260,6 +2719,9 @@ export const typeDefs = /* GraphQL */ `
     attribute(
       where: AttributeSubscriptionWhereInput
     ): AttributeSubscriptionPayload
+    credential(
+      where: CredentialSubscriptionWhereInput
+    ): CredentialSubscriptionPayload
     inputColumn(
       where: InputColumnSubscriptionWhereInput
     ): InputColumnSubscriptionPayload
@@ -2277,6 +2739,15 @@ export const typeDefs = /* GraphQL */ `
     role: Role
     updatedAt: DateTime!
     createdAt: DateTime!
+    credentials(
+      where: CredentialWhereInput
+      orderBy: CredentialOrderByInput
+      skip: Int
+      after: String
+      before: String
+      first: Int
+      last: Int
+    ): [Credential!]
   }
 
   type UserConnection {
@@ -2291,6 +2762,7 @@ export const typeDefs = /* GraphQL */ `
     name: String!
     password: String!
     role: Role
+    credentials: CredentialCreateManyInput
   }
 
   type UserEdge {
@@ -2348,6 +2820,7 @@ export const typeDefs = /* GraphQL */ `
     name: String
     password: String
     role: Role
+    credentials: CredentialUpdateManyInput
   }
 
   input UserUpdateManyMutationInput {
@@ -2434,6 +2907,9 @@ export const typeDefs = /* GraphQL */ `
     createdAt_lte: DateTime
     createdAt_gt: DateTime
     createdAt_gte: DateTime
+    credentials_every: CredentialWhereInput
+    credentials_some: CredentialWhereInput
+    credentials_none: CredentialWhereInput
     AND: [UserWhereInput!]
     OR: [UserWhereInput!]
     NOT: [UserWhereInput!]

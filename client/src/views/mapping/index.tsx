@@ -35,7 +35,7 @@ import { availableResourceNames } from "./reducer";
 import ResourceSelect from "../../components/selects/resourceSelect";
 import AddResourceSelect from "../../components/selects/addResourceSelect";
 import FhirResourceTree from "../../components/fhirResourceTree";
-import Navbar from "../../components/navbar";
+import Navbar from "../../components/Navbar";
 import InputColumns from "./components/inputColumns";
 import ColumnSuggestionTab from "./components/tabs/columnSuggestionTab";
 import ColumnPickingTab from "./components/tabs/columnPickingTab";

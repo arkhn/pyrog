@@ -16,6 +16,7 @@ type Query {
   me: User
   isAuthenticated: Boolean!
   computeSourceMappingProgress(sourceId: ID!): [Int!]
+  credential(sourceId: ID!): Credential!
 }
 
 type Mutation {
@@ -54,6 +55,17 @@ type Mutation {
     attributeType: String!
   ): Attribute!
   deleteAttribute(id: ID!): Attribute!
+
+  # Credentials
+  upsertCredential(
+    sourceId: ID!
+    login: String
+    password: String!
+    host: String!
+    port: String!
+    database: String!
+    type: String!
+  ): Credential!
 
   signup(email: String!, password: String!, name: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!

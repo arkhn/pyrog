@@ -13,6 +13,7 @@ interface ISelectProps<T> {
   displayItem: (item: any) => string;
   sortItems?: ItemListPredicate<T>;
   filterItems: ItemPredicate<T>;
+  filterable?: boolean;
   items: T[];
   icon?: IconName;
   inputItem: T;
@@ -40,6 +41,7 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
       displayItem,
       sortItems,
       filterItems,
+      filterable,
       icon,
       inputItem,
       intent,
@@ -52,6 +54,7 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
     return (
       <this.CustomSelect
         disabled={disabled}
+        filterable={filterable}
         items={items}
         itemListPredicate={sortItems}
         itemPredicate={filterItems}

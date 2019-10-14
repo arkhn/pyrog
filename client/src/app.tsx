@@ -10,6 +10,7 @@ import { onError } from "apollo-link-error";
 import { getMainDefinition } from "apollo-utilities";
 import { WebSocketLink } from "apollo-link-ws";
 import { ApolloProvider } from "react-apollo";
+import { ApolloProvider as ApolloHooksProvider } from "react-apollo-hooks";
 import { combineReducers } from "redux";
 
 import "./style.less";
@@ -138,12 +139,12 @@ export const client = new ApolloClient({
 
 const token = localStorage.getItem(process.env.AUTH_TOKEN);
 
-// Render React app in DOM
-// TODO: fix bad type cast
 ReactDOM.render(
   <Provider store={store}>
-    <ApolloProvider client={client as any}>
-      <Routes />
+    <ApolloProvider client={client}>
+      <ApolloHooksProvider client={client}>
+        <Routes />
+      </ApolloHooksProvider>
     </ApolloProvider>
   </Provider>,
   document.getElementById("application-wrapper")
