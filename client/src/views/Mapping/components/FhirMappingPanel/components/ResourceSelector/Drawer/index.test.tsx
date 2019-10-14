@@ -1,5 +1,5 @@
 import { mount, shallow } from "enzyme";
-import * as React from "react";
+import React from "react";
 import { ApolloProvider } from "react-apollo";
 import { Provider } from "react-redux";
 import { MemoryRouter } from "react-router";
