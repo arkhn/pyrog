@@ -3,6 +3,7 @@ var FaviconsWebpackPlugin = require("favicons-webpack-plugin");
 var fs = require("fs");
 var htmlPlugin = require("html-webpack-plugin");
 var path = require("path");
+var { TsConfigPathsPlugin } = require("awesome-typescript-loader");
 
 var SRC_DIR = path.join(__dirname, "./src");
 var DIST_DIR = path.join(__dirname, "./dist");
@@ -67,6 +68,7 @@ module.exports = (env, argv) => {
     // This allows to write `import * from './module'` instead of
     // `import * from './module.tsx'`
     resolve: {
+      plugins: [new TsConfigPathsPlugin()],
       extensions: [".js", ".ts", ".tsx", ".json"]
     },
     // Run optimisation scripts depending on the `mode` (dev or prod).

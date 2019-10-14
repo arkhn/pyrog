@@ -14,12 +14,11 @@ import { useSelector } from "react-redux";
 import { useApolloClient } from "react-apollo-hooks";
 
 import "./style.less";
-import StringSelect from "../../../selects/stringSelect";
-import { IReduxStore } from "../../../../types";
-import sourceSchemas from "../../../../services/selectedNode/sourceSchemas/reducer";
+import StringSelect from "src/components/selects/stringSelect";
+import { IReduxStore } from "src/types";
 
-const credential = require("../../../../graphql/queries/credential.graphql");
-const upsertCredential = require("../../../../graphql/mutations/upsertCredential.graphql");
+const credential = require("src/graphql/queries/credential.graphql");
+const upsertCredential = require("src/graphql/mutations/upsertCredential.graphql");
 
 interface IProps {
   title: string;
@@ -45,7 +44,6 @@ const Drawer = ({ title, isOpen, onClose }: IProps) => {
   const client = useApolloClient();
 
   React.useEffect(() => {
-    console.log("USE EFFECT", selectedNode);
     if (selectedNode.source.id) {
       client
         .query({
