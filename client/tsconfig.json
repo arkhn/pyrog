@@ -10,7 +10,7 @@
     "lib": ["es6", "dom", "esnext"],
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": ["src/*"]
     }
   },
   "include": ["**/*.tsx"],

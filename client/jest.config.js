@@ -9,6 +9,9 @@ module.exports = {
     }
   },
   modulePaths: ["<rootDir>/"],
+  moduleNameMapper: {
+    "~/(.*)": "<rootDir>/src/$1"
+  },
   setupFiles: ["<rootDir>/test/setup.js"],
   testEnvironment: "node",
   testPathIgnorePatterns: ["/node_modules/"],
