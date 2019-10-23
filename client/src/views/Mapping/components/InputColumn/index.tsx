@@ -14,6 +14,7 @@ import { ISelectedSource } from "../../../../types";
 // COMPONENTS
 import StringSelect from "../../../../components/selects/stringSelect";
 import Join from "./../Join";
+import ScriptSelect from "../../../../components/selects/scriptSelect";
 
 // GRAPHQL
 const updateInputColumn = require("../../../../graphql/mutations/updateInputColumn.graphql");
@@ -130,18 +131,22 @@ const InputColumn = ({ attribute, column, schema, source }: IProps) => (
                 return (
                   <div className="stacked-tags">
                     <Tag>SCRIPT</Tag>
-                    <StringSelect
-                      disabled={true}
-                      inputItem={column.script}
-                      items={["script1.py", "script2.py"]}
+                    <ScriptSelect
                       loading={loading}
-                      onChange={(e: string) => {
+                      selectedScript={column.script}
+                      onChange={(script: string) => {
                         updateInputColumn({
                           variables: {
                             id: column.id,
-                            data: {
-                              script: e
-                            }
+                            data: { script }
+                          }
+                        });
+                      }}
+                      onClear={(): any => {
+                        updateInputColumn({
+                          variables: {
+                            id: column.id,
+                            data: { script: null }
                           }
                         });
                       }}

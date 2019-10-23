@@ -28,9 +28,10 @@ yarn start
 
 ```
 AUTH_TOKEN="ARKHN_TOKEN"
-ENGINE_BACKEND_URL="https://engine.arkhn.org"
-HTTP_BACKEND_URL="https://graphql.pyrog.staging.arkhn.org"
-WS_BACKEND_URL="wss://graphql.pyrog.staging.arkhn.org"
+ENGINE_BACKEND_URL=https://engine.arkhn.org
+HTTP_BACKEND_URL=https://graphql.pyrog.staging.arkhn.org
+WS_BACKEND_URL=ws://graphql.pyrog.staging.arkhn.org
+CLEANING_SCRIPTS_URI=http://localhost:5000
 ```
 
 ### Install dependencies
