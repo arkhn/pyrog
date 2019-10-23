@@ -12,7 +12,6 @@ import { Mutation, Subscription } from "react-apollo";
 import { ISelectedSource } from "../../../../types";
 
 // COMPONENTS
-import StringSelect from "../../../../components/selects/stringSelect";
 import Join from "./../Join";
 import ScriptSelect from "../../../../components/selects/scriptSelect";
 

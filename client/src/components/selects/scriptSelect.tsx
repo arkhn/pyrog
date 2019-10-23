@@ -7,9 +7,9 @@ import { MenuItem, Button, ButtonGroup } from "@blueprintjs/core";
 import * as React from "react";
 
 import TSelect from "./TSelect";
-import { Query } from "react-apollo";
+import { useQuery } from "react-apollo";
 
-const cleaningScripts = require("../../graphql/queries/cleaningScripts.graphql");
+const cleaningScripts = require("~/graphql/queries/cleaningScripts.graphql");
 
 interface IOnChange {
   (script: String): any;
@@ -62,34 +62,29 @@ const ScriptSelect = ({
   onChange,
   onClear
 }: IProps) => {
+  const { loading: queryLoading, error, data } = useQuery(cleaningScripts);
+  let items: IScript[] = [];
+  if (data && data.cleaningScripts) {
+    items = data.cleaningScripts.scripts;
+  }
   return (
     <ButtonGroup>
-      <Query query={cleaningScripts}>
-        {({ data, loading: queryLoading }: any) => {
-          let items: IScript[] = [];
-          if (data && data.cleaningScripts) {
-            items = data.cleaningScripts.scripts;
-          }
-          return (
-            <TSelect<IScript>
-              disabled={false}
-              displayItem={(item: any) => {
-                return item.code || "None";
-              }}
-              sortItems={sortItems}
-              filterItems={filterByCode}
-              loading={loading || queryLoading}
-              inputItem={{ code: selectedScript }}
-              items={items}
-              onChange={(script: IScript) => onChange(script.code)}
-              renderItem={renderItem}
-            />
-          );
+      <TSelect<IScript>
+        disabled={false}
+        displayItem={(item: any) => {
+          return item.code || "None";
         }}
-      </Query>
+        sortItems={sortItems}
+        filterItems={filterByCode}
+        loading={loading || queryLoading}
+        inputItem={{ code: selectedScript }}
+        items={items}
+        onChange={(script: IScript) => onChange(script.code)}
+        renderItem={renderItem}
+      />
       <Button
         disabled={!selectedScript}
-        loading={loading}
+        loading={loading || queryLoading}
         icon={"cross"}
         minimal={true}
         onClick={() => onClear()}
