@@ -9,6 +9,10 @@ module.exports = {
     }
   },
   modulePaths: ["<rootDir>/"],
+  moduleNameMapper: {
+    // Allow jest to understand the aliases (paths) defined in tsconfig.json
+    "~/(.*)": "<rootDir>/src/$1"
+  },
   setupFiles: ["<rootDir>/test/setup.js"],
   testEnvironment: "node",
   testPathIgnorePatterns: ["/node_modules/"],

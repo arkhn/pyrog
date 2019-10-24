@@ -259,9 +259,10 @@ SELECT OWNER, TABLE_NAME, COLUMN_NAME, DATA_TYPE FROM all_tab_columns;
         <div id="main-container-newsource">
           <Query fetchPolicy="network-only" query={allSources}>
             {({ data, loading }: any) => {
-              const sourceNames = data.allSources
-                ? data.allSources.map((source: ISource) => source.name)
-                : null;
+              const sourceNames =
+                data && data.allSources
+                  ? data.allSources.map((source: ISource) => source.name)
+                  : null;
 
               return (
                 <form onSubmit={this.onFormSubmit}>

@@ -8,7 +8,11 @@
     "target": "es6",
     "allowJs": true,
     "lib": ["es6", "dom", "esnext"],
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      // Add an alias for the src directory: `import ... from ~/graphql`
+      "~/*": ["src/*"]
+    }
   },
   "include": ["**/*.tsx"],
   "exclude": ["node_modules"]

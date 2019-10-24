@@ -6,6 +6,7 @@ import { createLogger } from "redux-logger";
 
 import { HttpLink, InMemoryCache, ApolloClient } from "apollo-client-preset";
 import { ApolloLink, split } from "apollo-link";
+import { RestLink } from "apollo-link-rest";
 import { onError } from "apollo-link-error";
 import { getMainDefinition } from "apollo-utilities";
 import { WebSocketLink } from "apollo-link-ws";
@@ -112,7 +113,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (networkError) console.log(`[Network error]: ${networkError}`);
 });
 
-const link = split(
+const coreLink = split(
   // Split based on operation type
   ({ query }) => {
     const definition = getMainDefinition(query);
@@ -125,16 +126,29 @@ const link = split(
   httpLinkAuth
 );
 
+// Aggregate all links
+const links = [];
+if (process.env.NODE_ENV === "development") {
+  links.push(errorLink);
+}
+if (process.env.CLEANING_SCRIPTS_URI) {
+  links.push(
+    new RestLink({
+      uri: process.env.CLEANING_SCRIPTS_URI + "/",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+  );
+}
+links.push(coreLink);
+
 // Client
 export const client = new ApolloClient({
   cache: new InMemoryCache(),
   connectToDevTools: true,
-  link: ApolloLink.from(
-    process.env.NODE_ENV === "development" ? [errorLink, link] : [link]
-  )
+  link: ApolloLink.from(links)
 });
-
-const token = localStorage.getItem(process.env.AUTH_TOKEN);
 
 ReactDOM.render(
   <Provider store={store}>
