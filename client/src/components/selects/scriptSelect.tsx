@@ -71,8 +71,8 @@ const ScriptSelect = ({
     <ButtonGroup>
       <TSelect<IScript>
         disabled={false}
-        displayItem={(item: any) => {
-          return item.code || "None";
+        displayItem={({ code }: IScript) => {
+          return code || "None";
         }}
         sortItems={sortItems}
         filterItems={filterByCode}

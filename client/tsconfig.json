@@ -10,6 +10,7 @@
     "lib": ["es6", "dom", "esnext"],
     "baseUrl": ".",
     "paths": {
+      // Add an alias for the src directory: `import ... from ~/graphql`
       "~/*": ["src/*"]
     }
   },
