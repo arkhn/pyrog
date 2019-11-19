@@ -19,9 +19,9 @@ This is a web server for [Pyrog](https://github.com/arkhn/pyrog-client).
 yarn install
 env $(cat .env.dev.default) docker-compose up -d prisma
 yarn run prisma deploy -e .env.dev.default
-wget https://arkhn.org/pyrog_static.zip
-unzip pyrog_static.zip
-rm pyrog_static.zip
+wget https://arkhn.org/pyrog_dev_static.zip
+unzip pyrog_dev_static.zip
+rm pyrog_dev_static.zip
 yarn start
 ```
 
