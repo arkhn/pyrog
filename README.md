@@ -5,9 +5,9 @@
 ![CircleCI branch](https://img.shields.io/circleci/project/github/arkhn/pyrog/master.svg?style=for-the-badge&logo=circleci)
 [![Codecov branch](https://img.shields.io/codecov/c/github/arkhn/pyrog/master.svg?style=for-the-badge&logo=codecov)](https://codecov.io/gh/arkhn/pyrog/branch/master)
 
-Pyrog is a web application intended to help standardizing healthcare data collected through various softwares. Our main goal is to build a community tool so as to share ETLs for all these softwares. Moreover, we want to make it easy for healthcare facilities to convert their ETL into [FHIR](https://www.hl7.org/fhir/) and publish it.
+Pyrog is a web application which helps you standardizing healthcare data collected from various sources like medical softwares. This is a community tool and it aims at sharing ETLs for all these softwares to extract data and convert it into [FHIR](https://www.hl7.org/fhir/).
 
-This project comprises a `server` built with Prisma (GraphQL) and `client` which consists of a React application.
+This project comprises a `server` built with Prisma (GraphQL), a `client` which consists of a React application and an `exploration` module which provides AI tools to dive in databases.
 
 **Want to see what our project looks like?
 Checkout our staging client and dive into our staging GraphQL server (playground):**
@@ -17,7 +17,7 @@ Checkout our staging client and dive into our staging GraphQL server (playground
 
 ## Installation
 
-Installation instructions can be found in `./client` and `./server`.
+Installation instructions can be found in the `README.md` in `./client` and `./server`.
 
 ## Start contributing
 
