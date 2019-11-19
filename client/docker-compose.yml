@@ -1,0 +1,9 @@
+version: "3"
+services:
+  pyrog_client:
+    build:
+      context: .
+    image: arkhn/pyrogclient:latest
+    ports:
+      - "$CLIENT_PORT:$CLIENT_PORT"
+    restart: "no"
