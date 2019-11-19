@@ -19,6 +19,8 @@ Checkout our staging client and dive into our staging GraphQL server (playground
 
 Installation instructions can be found in the `README.md` in `./client` and `./server`.
 
+_Note:_ you should also run [our cleaning script API](https://github.com/arkhn/cleaning-scripts) to benefit from the cleaning scripts functionality in Pyrog, namely to choose among a full library of scripts to clean several fields like addresses, dates, phone numbers, etc.
+
 ## Start contributing
 
 We have reported several issues with the label `Good first issue` which can be a good way to start! You can also join our [Slack](https://join.slack.com/t/arkhn/shared_invite/enQtNTc1NDE5MDIxMDU3LWZmMzUwYWIwN2U0NGI1ZjM2MjcwNTAyZDZhNzcyMWFiYjJhNTIxNWQ1MWY4YmRiM2VhMDY4MDkzNGU5MTQ4ZWM) to contact us if you have trouble or questions :)
