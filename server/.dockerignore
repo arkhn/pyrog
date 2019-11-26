@@ -1,0 +1,10 @@
+# ignore everything
+**/*
+
+# except
+!.dockerignore
+!Dockerfile
+!yarn.lock
+!package.json
+!src
+!tsconfig.json

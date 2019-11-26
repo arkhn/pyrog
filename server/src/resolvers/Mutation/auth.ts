@@ -1,6 +1,6 @@
-import * as bcrypt from "bcryptjs";
-import * as jwt from "jsonwebtoken";
-import { Context } from "../../utils";
+import * as bcrypt from 'bcryptjs';
+import * as jwt from 'jsonwebtoken';
+import { Context } from '../../utils';
 
 export const authMutation = {
   async signup(parent, args, context: Context) {
@@ -24,7 +24,7 @@ export const authMutation = {
 
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) {
-      throw new Error("Invalid password");
+      throw new Error('Invalid password');
     }
 
     return {

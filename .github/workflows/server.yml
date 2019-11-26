@@ -1,0 +1,81 @@
+name: pyrog-server
+
+on: [push]
+
+jobs:
+  build:
+    name: Build Pyrog server
+    runs-on: ubuntu-18.04
+
+    strategy:
+      matrix:
+        node-version: [8.x, 10.x, 12.x]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: server/node_modules
+          key: ${{ runner.OS }}-${{ matrix.node-version}}-node-modules-${{ hashFiles('server/yarn.lock') }}
+
+      - name: Cache build
+        uses: actions/cache@v1
+        with:
+          path: server/dist
+          key: ${{ runner.OS }}-${{ matrix.node-version}}-dist-${{ hashFiles('server/yarn.lock') }}
+
+      - name: Install Dependencies
+        run: |
+          cd server
+          yarn install
+
+      - name: Build
+        run: |
+          cd server
+          yarn build
+
+      - name: Lint
+        run: |
+          cd server
+          yarn lint
+
+  publish:
+    name: Build and publish
+    env:
+      GITHUB_REGISTRY: docker.pkg.github.com
+      IMAGE: arkhn/pyrog
+      TAG: latest
+    runs-on: ubuntu-18.04
+    needs: build
+    # if: github.ref == 'ref/heads/master'
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - name: Get cached build
+        uses: actions/cache@v1
+        with:
+          path: server/dist
+          key: ${{ runner.OS }}-dist-${{ hashFiles('server/yarn.lock') }}
+
+      - name: Build
+        run: docker build -t $IMAGE:$TAG -f server/Dockerfile server/
+
+      - name: Publish to the docker hub
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" |  docker login -u ${{ secrets.DOCKER_LOGIN }} --password-stdin
+          docker push $IMAGE:$TAG
+
+      - name: Publish to Github Packages
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login $GITHUB_REGISTRY -u ${{ github.actor }} --password-stdin
+          docker tag $IMAGE:$TAG $GITHUB_REGISTRY/${{ github.repository }}/server:$TAG
+          docker push $GITHUB_REGISTRY/${{ github.repository }}/server:$TAG

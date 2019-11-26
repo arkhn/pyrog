@@ -1,8 +1,8 @@
-import { hash } from "bcryptjs";
-import { forwardTo } from "prisma-binding";
-const crypto = require("crypto");
+import { hash } from 'bcryptjs';
+import { forwardTo } from 'prisma-binding';
+const crypto = require('crypto');
 
-import { checkAuth, Context, getUserId } from "../../utils";
+import { checkAuth, Context, getUserId } from '../../utils';
 
 export const pyrogMutation = {
   async createSource(parent, { sourceName, hasOwner }, context: Context) {
@@ -10,7 +10,7 @@ export const pyrogMutation = {
 
     return await context.client.createSource({
       name: sourceName,
-      hasOwner: hasOwner
+      hasOwner
     });
   },
   // createInputColumnViaAttribute et deleteInputColumnViaAttribute
@@ -107,8 +107,8 @@ export const pyrogMutation = {
 
     return join;
   },
-  updateResource: checkAuth(forwardTo("binding")),
-  updateAttribute: checkAuth(forwardTo("binding")),
+  updateResource: checkAuth(forwardTo('binding')),
+  updateAttribute: checkAuth(forwardTo('binding')),
   async updateInputColumn(parent, { id, data }, context: Context) {
     getUserId(context);
 
@@ -158,7 +158,7 @@ export const pyrogMutation = {
       .then((response: any) => {
         let newResource = {
           fhirType: resourceName,
-          attributes: response["attributes"],
+          attributes: response['attributes'],
           source: sourceName
             ? { connect: { name: sourceName } }
             : { connect: { id: sourceId } }
@@ -168,7 +168,7 @@ export const pyrogMutation = {
         // for the given source, we give this new instance
         // a default label.
         if (otherFhirResourceIntances) {
-          newResource["label"] = `${resourceName}_${otherFhirResourceIntances}`;
+          newResource['label'] = `${resourceName}_${otherFhirResourceIntances}`;
         }
 
         return context.client.createResource(newResource);
@@ -205,7 +205,7 @@ export const pyrogMutation = {
             isProfile: true,
             name: attributeName,
             type: attributeType,
-            attributes: response["attributes"]
+            attributes: response['attributes']
           });
         })
         .catch((error: any) => {
@@ -228,7 +228,7 @@ export const pyrogMutation = {
     // } else {
     //     throw new PermissionError()
     // }
-    return context.client.deleteAttribute({ id: id });
+    return context.client.deleteAttribute({ id });
   },
   async upsertCredential(
     parent,
@@ -237,9 +237,9 @@ export const pyrogMutation = {
   ) {
     getUserId(context);
 
-    const cipher = crypto.createCipher("aes256", process.env.APP_SECRET);
+    const cipher = crypto.createCipher('aes256', process.env.APP_SECRET);
     const encryptedPassword =
-      cipher.update(password, "utf8", "hex") + cipher.final("hex");
+      cipher.update(password, 'utf8', 'hex') + cipher.final('hex');
 
     const credential = await context.client
       .source({ id: sourceId })
