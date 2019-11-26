@@ -9,21 +9,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
+
       - name: Use Node.js 12.x
         uses: actions/setup-node@v1
         with:
           node-version: 12.x
+
       - name: Cache node modules
         uses: actions/cache@v1
         with:
           path: client/node_modules
           key: ${{ runner.OS }}-node-modules-${{ hashFiles('client/yarn.lock') }}
-
-      - name: Cache build
-        uses: actions/cache@v1
-        with:
-          path: client/dist
-          key: ${{ runner.OS }}-dist-${{ hashFiles('client/yarn.lock') }}
 
       - name: Install Dependencies
         run: |
