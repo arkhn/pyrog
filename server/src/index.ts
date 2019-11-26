@@ -1,4 +1,3 @@
-import * as bcrypt from 'bcryptjs';
 import * as fs from 'fs';
 import { GraphQLServer } from 'graphql-yoga';
 import * as multer from 'multer';

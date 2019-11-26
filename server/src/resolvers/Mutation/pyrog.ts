@@ -1,4 +1,3 @@
-import { hash } from 'bcryptjs';
 import { forwardTo } from 'prisma-binding';
 const crypto = require('crypto');
 
@@ -39,13 +38,14 @@ export const pyrogMutation = {
     // On update manuellement l'Attribut, sans rien modifier
     // ce qui permet de déclencher un évènement
     // pour les souscripteurs.
-    const attribute = await context.client.updateAttribute({
+    await context.client.updateAttribute({
       data: {},
       where: { id: attributeId }
     });
 
     return inputColumn;
   },
+
   async deleteInputColumnAndUpdateAttribute(
     parent,
     { attributeId, inputColumnId },
@@ -58,7 +58,7 @@ export const pyrogMutation = {
       id: inputColumnId
     });
 
-    const attribute = await context.client.updateAttribute({
+    await context.client.updateAttribute({
       data: {},
       where: { id: attributeId }
     });
@@ -81,13 +81,14 @@ export const pyrogMutation = {
       }
     });
 
-    const inputColumn = await context.client.updateInputColumn({
+    await context.client.updateInputColumn({
       data: {},
       where: { id: inputColumnId }
     });
 
     return join;
   },
+
   async deleteJoinAndUpdateInputColumn(
     parent,
     { inputColumnId, joinId },
@@ -100,15 +101,18 @@ export const pyrogMutation = {
       id: joinId
     });
 
-    const inputColumn = await context.client.updateInputColumn({
+    await context.client.updateInputColumn({
       data: {},
       where: { id: inputColumnId }
     });
 
     return join;
   },
+
   updateResource: checkAuth(forwardTo('binding')),
+
   updateAttribute: checkAuth(forwardTo('binding')),
+
   async updateInputColumn(parent, { id, data }, context: Context) {
     getUserId(context);
 
@@ -117,6 +121,7 @@ export const pyrogMutation = {
       where: { id }
     });
   },
+
   async updateJoin(parent, { id, data }, context: Context) {
     getUserId(context);
 
@@ -174,15 +179,16 @@ export const pyrogMutation = {
         return context.client.createResource(newResource);
       });
   },
-  async deleteResource(parent, { resourceId }, context: Context, info) {
+
+  async deleteResource(parent, { resourceId }, context: Context) {
     getUserId(context);
     return context.client.deleteResource({ id: resourceId });
   },
+
   createAttributeProfileInAttribute(
     parent,
     { parentAttributeId, attributeName, attributeType },
-    context: Context,
-    info
+    context: Context
   ) {
     getUserId(context);
 
@@ -218,9 +224,9 @@ export const pyrogMutation = {
       throw new Error(error);
     }
   },
-  async deleteAttribute(parent, { id }, context: Context, info) {
+  async deleteAttribute(parent, { id }, context: Context) {
     const userId = getUserId(context);
-    const user = await context.client.user({ id: userId });
+    await context.client.user({ id: userId });
 
     // TODO: check role
     // if (user.role == "ADMIN") {

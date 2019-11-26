@@ -78,7 +78,7 @@ export const pyrogQuery = {
       const token = Authorization.replace('Bearer ', '');
 
       try {
-        const { userId } = jwt.verify(token, process.env.APP_SECRET) as {
+        jwt.verify(token, process.env.APP_SECRET) as {
           userId: string;
         };
       } catch (e) {

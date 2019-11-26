@@ -1,6 +1,6 @@
 import { forwardTo } from 'prisma-binding';
 
-import { checkAuth, Context, getUserId } from '../../utils';
+import { checkAuth } from '../../utils';
 
 export const pyrogSubscription = {
   attribute: {
