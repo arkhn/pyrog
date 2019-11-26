@@ -14,10 +14,7 @@ import {
 import { Prisma as PrismaBinding } from './generated/prisma-binding';
 import resolvers from './resolvers';
 
-const endpoint =
-  process.env.NODE_ENV == 'docker'
-    ? 'http://prisma:4466'
-    : process.env.PRISMA_ENDPOINT;
+const endpoint = process.env.PRISMA_ENDPOINT;
 
 const SCHEMAS_DEST = `${process.env.STATIC_FILES_DIR}/schemas`;
 
