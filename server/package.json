@@ -5,7 +5,7 @@
     "build": "rimraf dist && tsc && yarn copy-schemas",
     "copy-schemas": "cpx src/**/*.graphql dist",
     "debug": "dotenv -e $([ -f .env.dev.custom ] && echo \".env.dev.custom\" || echo \".env.dev.default\") -- nodemon --ext ts,graphql --exec ts-node --inspect src/index.ts",
-    "lint": "eslint ./src/**/*.ts",
+    "lint": "eslint './src/**/*.ts'",
     "playground": "graphql playground",
     "start": "dotenv -e $([ -f .env.dev.custom ] && echo \".env.dev.custom\" || echo \".env.dev.default\") -- nodemon --ext ts,graphql --exec ts-node src/index.ts",
     "start:docker": "NODE_PATH=dist node ./dist/index.js",

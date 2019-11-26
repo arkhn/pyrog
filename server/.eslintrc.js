@@ -20,7 +20,7 @@ module.exports = {
   rules: {
     'no-underscore-dangle': 0,
     'no-debugger': 1,
-    'no-console': ['error', { allow: ['warn', 'error'] }],
+    'no-console': ['warn', { allow: ['warn', 'error'] }],
     'object-shorthand': 1,
     'class-methods-use-this': 1,
     'no-param-reassign': [
@@ -39,7 +39,6 @@ module.exports = {
     /**
      * Newly added
      */
-    'no-unused-vars': 2,
     '@typescript-eslint/no-unused-vars': 2,
     'import/no-named-as-default-member': 0,
     'import/no-named-default': 0,
