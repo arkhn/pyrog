@@ -50,8 +50,8 @@ jobs:
           env $([ -f .env.dev.custom ] && cat .env.dev.custom || cat .env.dev.default) docker-compose up --build -d
           yarn run wait-on http://localhost:4000
           yarn run wait-on http://localhost:4466
-          yarn run prisma deploy
-          yarn run prisma import --data ./static/pyrog_mimic_mapping.zip
+          PRISMA_ENDPOINT=http://localhost:4466 yarn run prisma deploy
+          PRISMA_ENDPOINT=http://localhost:4466 yarn run prisma import --data ./static/pyrog_mimic_mapping.zip
           yarn test
           bash <(curl -s https://codecov.io/bash) -F server
 
