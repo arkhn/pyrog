@@ -48,10 +48,11 @@ jobs:
           unzip -o pyrog_dev_static.zip
           rm pyrog_dev_static.zip
           env $([ -f .env.dev.custom ] && cat .env.dev.custom || cat .env.dev.default) docker-compose up --build -d
-          docker build -f Dockerfile.test --network server_default -t arkhn/pyrog_server_test:latest .
-          sleep 10
-          docker run --name server_test --network server_default arkhn/pyrog_server_test:latest
-          docker cp server_test:/usr/src/app/coverage .
+          yarn run wait-on http://localhost:4000
+          yarn run wait-on http://localhost:4466
+          yarn run prisma deploy
+          yarn run prisma import --data ./static/pyrog_mimic_mapping.zip
+          yarn test
           bash <(curl -s https://codecov.io/bash) -F server
 
   publish:
