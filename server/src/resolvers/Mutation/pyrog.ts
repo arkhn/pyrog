@@ -130,6 +130,7 @@ export const pyrogMutation = {
       where: { id }
     });
   },
+
   async createResourceTreeInSource(
     parent,
     { sourceId, sourceName, resourceName },

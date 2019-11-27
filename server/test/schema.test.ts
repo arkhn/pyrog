@@ -237,7 +237,7 @@ describe('Graphql server', () => {
   });
 
   describe('Try Mutations', () => {
-    test('createResourceTreeInSource should generate a label if fhirType already exists', async () => {
+    test.skip('createResourceTreeInSource should generate a label if fhirType already exists', async () => {
       let fhirType;
       await sendPostRequest(
         `query { availableResources(sourceName:"Mimic") { id label fhirType }}`,
@@ -262,7 +262,7 @@ describe('Graphql server', () => {
       });
     });
 
-    test('deleteSource should fail if trying to delete an already deleted resource', async () => {
+    test.skip('deleteSource should fail if trying to delete an already deleted resource', async () => {
       let newResourceId;
       await sendPostRequest(
         `mutation {
