@@ -1,8 +1,8 @@
-import { GraphQLResolveInfo } from "graphql";
-import * as jwt from "jsonwebtoken";
+import { GraphQLResolveInfo } from 'graphql';
+import * as jwt from 'jsonwebtoken';
 
-import { Prisma as PrismaClient } from "./generated/prisma-client";
-import { Prisma as PrismaBinding } from "./generated/prisma-binding";
+import { Prisma as PrismaClient } from './generated/prisma-client';
+import { Prisma as PrismaBinding } from './generated/prisma-binding';
 
 export interface Context {
   binding: PrismaBinding;
@@ -45,7 +45,7 @@ export const checkIsAdmin = (
     const userId = getUserId(context);
     const user = await context.client.user({ id: userId });
 
-    if (user.role != "ADMIN") {
+    if (user.role != 'ADMIN') {
       throw new PermissionError();
     }
 
@@ -57,11 +57,11 @@ export const getUserId = (context: Context) => {
   // Token appears in different places depending
   // on whether the request is HTTP or WS
   const Authorization = context.request
-    ? context.request.get("Authorization")
+    ? context.request.get('Authorization')
     : context.connection.context.Authorization || null;
 
   if (Authorization) {
-    const token = Authorization.replace("Bearer ", "");
+    const token = Authorization.replace('Bearer ', '');
     const { userId } = jwt.verify(token, process.env.APP_SECRET) as {
       userId: string;
     };
@@ -73,19 +73,19 @@ export const getUserId = (context: Context) => {
 
 export class AuthError extends Error {
   constructor() {
-    super("Not authenticated");
+    super('Not authenticated');
   }
 }
 
 export class PermissionError extends Error {
   constructor() {
-    super("Not authorized");
+    super('Not authorized');
   }
 }
 
 export class ServerError extends Error {
   constructor() {
-    super("Internal Error");
+    super('Internal Error');
   }
 }
 
@@ -163,7 +163,7 @@ export const recAttributeCreation = async (
     };
 
     if (attributePath.length > 0) {
-      attribute["attributes"] = {
+      attribute['attributes'] = {
         create: [recData(attributePath)]
       };
     }

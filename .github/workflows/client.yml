@@ -1,0 +1,32 @@
+name: pyrog-client
+
+on: [push]
+
+jobs:
+  build:
+    name: Build Pyrog UI
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: client/node_modules
+          key: ${{ runner.OS }}-node-modules-${{ hashFiles('client/yarn.lock') }}
+
+      - name: Install Dependencies
+        run: |
+          cd client
+          yarn install
+
+      - name: Build
+        run: |
+          cd client
+          yarn build

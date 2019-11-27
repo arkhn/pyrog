@@ -1,7 +1,7 @@
-import { GraphQLResolveInfo, GraphQLSchema } from "graphql";
-import { IResolvers } from "graphql-tools/dist/Interfaces";
-import { Options } from "graphql-binding";
-import { makePrismaBindingClass, BasePrismaOptions } from "prisma-binding";
+import { GraphQLResolveInfo, GraphQLSchema } from 'graphql';
+import { IResolvers } from 'graphql-tools/dist/Interfaces';
+import { Options } from 'graphql-binding';
+import { makePrismaBindingClass, BasePrismaOptions } from 'prisma-binding';
 
 export interface Query {
   sources: <T = Array<Source | null>>(
@@ -542,7 +542,7 @@ export interface Prisma {
     variables?: { [key: string]: any }
   ) => Promise<T>;
   delegate(
-    operation: "query" | "mutation",
+    operation: 'query' | 'mutation',
     fieldName: string,
     args: {
       [key: string]: any;
@@ -5582,130 +5582,130 @@ export const Prisma = makePrismaBindingClass<BindingConstructor<Prisma>>({
  */
 
 export type AttributeOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "name_ASC"
-  | "name_DESC"
-  | "mergingScript_ASC"
-  | "mergingScript_DESC"
-  | "isProfile_ASC"
-  | "isProfile_DESC"
-  | "type_ASC"
-  | "type_DESC"
-  | "comment_ASC"
-  | "comment_DESC"
-  | "depth_ASC"
-  | "depth_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC";
+  | 'id_ASC'
+  | 'id_DESC'
+  | 'name_ASC'
+  | 'name_DESC'
+  | 'mergingScript_ASC'
+  | 'mergingScript_DESC'
+  | 'isProfile_ASC'
+  | 'isProfile_DESC'
+  | 'type_ASC'
+  | 'type_DESC'
+  | 'comment_ASC'
+  | 'comment_DESC'
+  | 'depth_ASC'
+  | 'depth_DESC'
+  | 'updatedAt_ASC'
+  | 'updatedAt_DESC'
+  | 'createdAt_ASC'
+  | 'createdAt_DESC';
 
 export type CredentialOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "host_ASC"
-  | "host_DESC"
-  | "port_ASC"
-  | "port_DESC"
-  | "database_ASC"
-  | "database_DESC"
-  | "login_ASC"
-  | "login_DESC"
-  | "password_ASC"
-  | "password_DESC"
-  | "type_ASC"
-  | "type_DESC";
+  | 'id_ASC'
+  | 'id_DESC'
+  | 'host_ASC'
+  | 'host_DESC'
+  | 'port_ASC'
+  | 'port_DESC'
+  | 'database_ASC'
+  | 'database_DESC'
+  | 'login_ASC'
+  | 'login_DESC'
+  | 'password_ASC'
+  | 'password_DESC'
+  | 'type_ASC'
+  | 'type_DESC';
 
-export type DatabaseType = "POSTGRES";
+export type DatabaseType = 'POSTGRES';
 
 export type InputColumnOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "owner_ASC"
-  | "owner_DESC"
-  | "table_ASC"
-  | "table_DESC"
-  | "column_ASC"
-  | "column_DESC"
-  | "script_ASC"
-  | "script_DESC"
-  | "staticValue_ASC"
-  | "staticValue_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC";
+  | 'id_ASC'
+  | 'id_DESC'
+  | 'owner_ASC'
+  | 'owner_DESC'
+  | 'table_ASC'
+  | 'table_DESC'
+  | 'column_ASC'
+  | 'column_DESC'
+  | 'script_ASC'
+  | 'script_DESC'
+  | 'staticValue_ASC'
+  | 'staticValue_DESC'
+  | 'updatedAt_ASC'
+  | 'updatedAt_DESC'
+  | 'createdAt_ASC'
+  | 'createdAt_DESC';
 
 export type JoinOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "sourceOwner_ASC"
-  | "sourceOwner_DESC"
-  | "sourceTable_ASC"
-  | "sourceTable_DESC"
-  | "sourceColumn_ASC"
-  | "sourceColumn_DESC"
-  | "targetOwner_ASC"
-  | "targetOwner_DESC"
-  | "targetTable_ASC"
-  | "targetTable_DESC"
-  | "targetColumn_ASC"
-  | "targetColumn_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC";
+  | 'id_ASC'
+  | 'id_DESC'
+  | 'sourceOwner_ASC'
+  | 'sourceOwner_DESC'
+  | 'sourceTable_ASC'
+  | 'sourceTable_DESC'
+  | 'sourceColumn_ASC'
+  | 'sourceColumn_DESC'
+  | 'targetOwner_ASC'
+  | 'targetOwner_DESC'
+  | 'targetTable_ASC'
+  | 'targetTable_DESC'
+  | 'targetColumn_ASC'
+  | 'targetColumn_DESC'
+  | 'updatedAt_ASC'
+  | 'updatedAt_DESC'
+  | 'createdAt_ASC'
+  | 'createdAt_DESC';
 
-export type MutationType = "CREATED" | "UPDATED" | "DELETED";
+export type MutationType = 'CREATED' | 'UPDATED' | 'DELETED';
 
 export type ResourceOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "label_ASC"
-  | "label_DESC"
-  | "fhirType_ASC"
-  | "fhirType_DESC"
-  | "primaryKeyOwner_ASC"
-  | "primaryKeyOwner_DESC"
-  | "primaryKeyTable_ASC"
-  | "primaryKeyTable_DESC"
-  | "primaryKeyColumn_ASC"
-  | "primaryKeyColumn_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC";
+  | 'id_ASC'
+  | 'id_DESC'
+  | 'label_ASC'
+  | 'label_DESC'
+  | 'fhirType_ASC'
+  | 'fhirType_DESC'
+  | 'primaryKeyOwner_ASC'
+  | 'primaryKeyOwner_DESC'
+  | 'primaryKeyTable_ASC'
+  | 'primaryKeyTable_DESC'
+  | 'primaryKeyColumn_ASC'
+  | 'primaryKeyColumn_DESC'
+  | 'updatedAt_ASC'
+  | 'updatedAt_DESC'
+  | 'createdAt_ASC'
+  | 'createdAt_DESC';
 
-export type Role = "ADMIN" | "USER";
+export type Role = 'ADMIN' | 'USER';
 
 export type SourceOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "name_ASC"
-  | "name_DESC"
-  | "hasOwner_ASC"
-  | "hasOwner_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC";
+  | 'id_ASC'
+  | 'id_DESC'
+  | 'name_ASC'
+  | 'name_DESC'
+  | 'hasOwner_ASC'
+  | 'hasOwner_DESC'
+  | 'updatedAt_ASC'
+  | 'updatedAt_DESC'
+  | 'createdAt_ASC'
+  | 'createdAt_DESC';
 
 export type UserOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "email_ASC"
-  | "email_DESC"
-  | "name_ASC"
-  | "name_DESC"
-  | "password_ASC"
-  | "password_DESC"
-  | "role_ASC"
-  | "role_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC";
+  | 'id_ASC'
+  | 'id_DESC'
+  | 'email_ASC'
+  | 'email_DESC'
+  | 'name_ASC'
+  | 'name_DESC'
+  | 'password_ASC'
+  | 'password_DESC'
+  | 'role_ASC'
+  | 'role_DESC'
+  | 'updatedAt_ASC'
+  | 'updatedAt_DESC'
+  | 'createdAt_ASC'
+  | 'createdAt_DESC';
 
 export interface AttributeCreateInput {
   id?: ID_Input | null;

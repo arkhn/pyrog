@@ -1,0 +1,82 @@
+name: pyrog-server
+
+on: [push]
+
+jobs:
+  build:
+    name: Build Pyrog server
+    runs-on: ubuntu-18.04
+
+    strategy:
+      matrix:
+        node-version: [8.x, 10.x, 12.x]
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: server/node_modules
+          key: ${{ runner.OS }}-${{ matrix.node-version}}-node-modules-${{ hashFiles('server/yarn.lock') }}
+
+      - name: Install Dependencies
+        run: |
+          cd server
+          yarn install
+
+      - name: Build
+        run: |
+          cd server
+          yarn build
+
+      - name: Lint
+        run: |
+          cd server
+          yarn lint
+
+      - name: Tests
+        run: |
+          cd server
+          yarn lint
+          wget https://arkhn.org/pyrog_dev_static.zip
+          unzip -o pyrog_dev_static.zip
+          rm pyrog_dev_static.zip
+          env $([ -f .env.dev.custom ] && cat .env.dev.custom || cat .env.dev.default) docker-compose up --build -d
+          yarn run wait-on http://localhost:4000
+          yarn run wait-on http://localhost:4466
+          PRISMA_ENDPOINT=http://localhost:4466 yarn run prisma deploy
+          PRISMA_ENDPOINT=http://localhost:4466 yarn run prisma import --data ./static/pyrog_mimic_mapping.zip
+          yarn test
+          bash <(curl -s https://codecov.io/bash) -F server
+
+  publish:
+    name: Build and publish
+    env:
+      GITHUB_REGISTRY: docker.pkg.github.com
+      IMAGE: arkhn/pyrog
+      TAG: latest
+    runs-on: ubuntu-18.04
+    needs: build
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Build
+        run: docker build -t $IMAGE:$TAG -f server/Dockerfile server/
+
+      - name: Publish to the docker hub
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" |  docker login -u ${{ secrets.DOCKER_LOGIN }} --password-stdin
+          docker push $IMAGE:$TAG
+
+      - name: Publish to Github Packages
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login $GITHUB_REGISTRY -u ${{ github.actor }} --password-stdin
+          docker tag $IMAGE:$TAG $GITHUB_REGISTRY/${{ github.repository }}/server:$TAG
+          docker push $GITHUB_REGISTRY/${{ github.repository }}/server:$TAG

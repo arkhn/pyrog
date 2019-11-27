@@ -1,5 +1,5 @@
-import * as jwt from "jsonwebtoken";
-import { forwardTo } from "prisma-binding";
+import * as jwt from 'jsonwebtoken';
+import { forwardTo } from 'prisma-binding';
 
 import {
   checkAuth,
@@ -7,13 +7,13 @@ import {
   Context,
   getUserId,
   getRecAttribute
-} from "../../utils";
+} from '../../utils';
 
 export const pyrogQuery = {
   // BINDING QUERIES
-  inputColumns: checkAuth(forwardTo("binding")),
-  resource: checkAuth(forwardTo("binding")),
-  resources: checkIsAdmin(forwardTo("binding")),
+  inputColumns: checkAuth(forwardTo('binding')),
+  resource: checkAuth(forwardTo('binding')),
+  resources: checkIsAdmin(forwardTo('binding')),
 
   // CLIENT QUERIES
   // Information queries
@@ -69,16 +69,16 @@ export const pyrogQuery = {
     return context.client.user({ id });
   },
   isAuthenticated(parent, args, context: Context) {
-    console.log("isAuthenticated");
+    console.log('isAuthenticated');
     const Authorization = context.request
-      ? context.request.get("Authorization")
+      ? context.request.get('Authorization')
       : context.connection.context.Authorization || null;
 
     if (Authorization) {
-      const token = Authorization.replace("Bearer ", "");
+      const token = Authorization.replace('Bearer ', '');
 
       try {
-        const { userId } = jwt.verify(token, process.env.APP_SECRET) as {
+        jwt.verify(token, process.env.APP_SECRET) as {
           userId: string;
         };
       } catch (e) {
@@ -100,17 +100,17 @@ export const pyrogQuery = {
         '"})  { id name resources{ id fhirType label attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } attributes{ id name inputColumns{ id } } } } } } } } } } } } } } } } } } } } }'
     );
 
-    const resources = mysource["data"]["source"]["resources"];
+    const resources = mysource['data']['source']['resources'];
 
     const numberMappedRessources = resources.length;
 
     const recFunction = attribute => {
-      const inputColumns = attribute["inputColumns"];
+      const inputColumns = attribute['inputColumns'];
 
       if (inputColumns.length > 0) {
         return 1;
       } else {
-        const attributes = attribute["attributes"];
+        const attributes = attribute['attributes'];
 
         return attributes.reduce(
           (accumulator, attribute) => accumulator + recFunction(attribute),
@@ -123,7 +123,7 @@ export const pyrogQuery = {
     const numberMappedAttributes = resources.reduce(
       (accumulator, resource) =>
         accumulator +
-        resource["attributes"].reduce(
+        resource['attributes'].reduce(
           (accumulator, attribute) => accumulator + recFunction(attribute),
           0
         ),

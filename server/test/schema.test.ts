@@ -1,23 +1,23 @@
-const stringifyObject = require("stringify-object");
-const ws = require("ws");
-const waitForExpect = require("wait-for-expect");
+const stringifyObject = require('stringify-object');
+const ws = require('ws');
+const waitForExpect = require('wait-for-expect');
 
-import { Prisma as PrismaClient } from "../src/generated/prisma-client";
-import { Prisma as PrismaBinding } from "../src/generated/prisma-binding";
+import { Prisma as PrismaClient } from '../src/generated/prisma-client';
+import { Prisma as PrismaBinding } from '../src/generated/prisma-binding';
 
-import { queries, mutations, subscriptions } from "./useCases";
+import { queries, mutations, subscriptions } from './useCases';
 
 const prismaServerEndpoint =
-  process.env.NODE_ENV === "docker"
-    ? "http://prisma:4466"
+  process.env.NODE_ENV === 'docker'
+    ? 'http://prisma:4466'
     : process.env.PRISMA_ENDPOINT;
 
 const wsEndpoint =
-  process.env.NODE_ENV === "docker" ? "ws://pyrog:4000" : "ws://localhost:4000";
+  process.env.NODE_ENV === 'docker' ? 'ws://pyrog:4000' : 'ws://localhost:4000';
 
 const debug = false;
 
-describe("Prisma binding", () => {
+describe('Prisma binding', () => {
   const prismaBindingInstance = () => {
     return new PrismaBinding({
       endpoint: prismaServerEndpoint,
@@ -25,41 +25,41 @@ describe("Prisma binding", () => {
     });
   };
 
-  test("Send direct request", async () => {
+  test('Send direct request', async () => {
     expect(
       await prismaBindingInstance().request(`query { sources { name } }`, {})
     ).toEqual({
       data: {
         sources: expect.arrayContaining([
-          expect.objectContaining({ name: "Mimic" })
+          expect.objectContaining({ name: 'Mimic' })
         ])
       }
     });
   });
 
-  test("Use `query` method", async () => {
+  test('Use `query` method', async () => {
     expect(await prismaBindingInstance().query.sources({}, `{name}`)).toEqual(
-      expect.arrayContaining([expect.objectContaining({ name: "Mimic" })])
+      expect.arrayContaining([expect.objectContaining({ name: 'Mimic' })])
     );
   });
 });
 
-describe("Prisma client", () => {
+describe('Prisma client', () => {
   const prismaClientInstance = new PrismaClient({
     endpoint: prismaServerEndpoint,
     debug
   });
 
-  describe("Queries", () => {
-    test("source", async () => {
-      expect(await prismaClientInstance.source({ name: "Mimic" })).toEqual(
-        expect.objectContaining({ name: "Mimic" })
+  describe('Queries', () => {
+    test('source', async () => {
+      expect(await prismaClientInstance.source({ name: 'Mimic' })).toEqual(
+        expect.objectContaining({ name: 'Mimic' })
       );
     });
 
-    test("sources", async () => {
+    test('sources', async () => {
       expect(await prismaClientInstance.sources()).toEqual(
-        expect.arrayContaining([expect.objectContaining({ name: "Mimic" })])
+        expect.arrayContaining([expect.objectContaining({ name: 'Mimic' })])
       );
     });
   });
@@ -73,20 +73,20 @@ const sendPostRequest = (
   socket = null
 ) => {
   let headers = {
-    "Content-Type": "application/json",
-    Accept: "application/json"
+    'Content-Type': 'application/json',
+    Accept: 'application/json'
   };
 
   if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
+    headers['Authorization'] = `Bearer ${token}`;
   }
 
   return fetch(
-    `http://${process.env.NODE_ENV === "docker" ? "pyrog" : "0.0.0.0"}:${
+    `http://${process.env.NODE_ENV === 'docker' ? 'pyrog' : 'localhost'}:${
       process.env.SERVER_PORT
     }`,
     {
-      method: "POST",
+      method: 'POST',
       headers,
       body: JSON.stringify({
         query,
@@ -106,7 +106,7 @@ const sendPostRequest = (
 
 const sendWS = (query, variables, socket) => {
   const request = {
-    type: "start",
+    type: 'start',
     id: new Date(),
     payload: {
       query: query
@@ -116,7 +116,7 @@ const sendWS = (query, variables, socket) => {
   return socket.send(JSON.stringify(request));
 };
 
-describe("Graphql server", () => {
+describe('Graphql server', () => {
   let token;
   let socket;
   let wsResponse;
@@ -129,26 +129,26 @@ describe("Graphql server", () => {
     ).then(res => res.data.login.token);
 
     // Instantiate WebSocket
-    socket = new ws(wsEndpoint, "graphql-ws");
+    socket = new ws(wsEndpoint, 'graphql-ws');
 
-    socket.addEventListener("message", event => {
+    socket.addEventListener('message', event => {
       let data = JSON.parse(event.data);
       // Different types of messages arrive from
       // the websocket server: some are data,
       // some indicate that the transaction is completed.
       // We filter for the first ones.
-      if (data.type == "data") {
+      if (data.type == 'data') {
         wsResponse = data.payload;
       }
     });
   });
 
   describe.each([
-    ["Queries", "query", queries, false],
-    ["Mutations", "mutation", mutations, false],
-    ["Subscriptions", "subscription", subscriptions, true]
+    ['Queries', 'query', queries, false],
+    ['Mutations', 'mutation', mutations, false],
+    ['Subscriptions', 'subscription', subscriptions, true]
   ])(
-    "All end points should ask for authentication",
+    'All end points should ask for authentication',
     (operationType, operator, endpoints, shouldWs) => {
       describe.each(endpoints)(
         operationType,
@@ -161,15 +161,15 @@ describe("Graphql server", () => {
             const query = `${operator} { ${queryName} ${
               queryAttr
                 ? `(${queryAttributes.slice(1, queryAttributes.length - 1)})`
-                : ""
-            } ${querySelection !== undefined ? querySelection : "{ id }"}}`;
+                : ''
+            } ${querySelection !== undefined ? querySelection : '{ id }'}}`;
 
             // If request should be send to a WebSocket...
             if (shouldWs) {
               // Send the request
               socket.send(
                 JSON.stringify({
-                  type: "start",
+                  type: 'start',
                   id: new Date(),
                   payload: {
                     query: query
@@ -182,7 +182,7 @@ describe("Graphql server", () => {
                 expect(wsResponse).toEqual(
                   expect.objectContaining({
                     errors: expect.arrayContaining([
-                      expect.objectContaining({ message: "Not authenticated" })
+                      expect.objectContaining({ message: 'Not authenticated' })
                     ])
                   })
                 );
@@ -197,7 +197,7 @@ describe("Graphql server", () => {
               expect(await sendPostRequest(query, {})).toEqual(
                 expect.objectContaining({
                   errors: expect.arrayContaining([
-                    expect.objectContaining({ message: "Not authenticated" })
+                    expect.objectContaining({ message: 'Not authenticated' })
                   ])
                 })
               );
@@ -208,20 +208,20 @@ describe("Graphql server", () => {
     }
   );
 
-  describe("Try Queries", () => {
-    test("allSources", async () => {
+  describe('Try Queries', () => {
+    test('allSources', async () => {
       expect(
         await sendPostRequest(`query { allSources { id name }}`, {}, token)
       ).toEqual({
         data: {
           allSources: expect.arrayContaining([
-            expect.objectContaining({ name: "Mimic" })
+            expect.objectContaining({ name: 'Mimic' })
           ])
         }
       });
     });
 
-    test("sourceInfo", async () => {
+    test('sourceInfo', async () => {
       expect(
         await sendPostRequest(
           `query { sourceInfo(sourceName: "Mimic") { id name }}`,
@@ -230,14 +230,14 @@ describe("Graphql server", () => {
         )
       ).toEqual({
         data: {
-          sourceInfo: expect.objectContaining({ name: "Mimic" })
+          sourceInfo: expect.objectContaining({ name: 'Mimic' })
         }
       });
     });
   });
 
-  describe("Try Mutations", () => {
-    test("createResourceTreeInSource should generate a label if fhirType already exists", async () => {
+  describe('Try Mutations', () => {
+    test.skip('createResourceTreeInSource should generate a label if fhirType already exists', async () => {
       let fhirType;
       await sendPostRequest(
         `query { availableResources(sourceName:"Mimic") { id label fhirType }}`,
@@ -262,7 +262,7 @@ describe("Graphql server", () => {
       });
     });
 
-    test("deleteSource should fail if trying to delete an already deleted resource", async () => {
+    test.skip('deleteSource should fail if trying to delete an already deleted resource', async () => {
       let newResourceId;
       await sendPostRequest(
         `mutation {
@@ -291,7 +291,7 @@ describe("Graphql server", () => {
           );
         })
         .then(res => {
-          expect(res).toHaveProperty("errors");
+          expect(res).toHaveProperty('errors');
         });
     });
   });
