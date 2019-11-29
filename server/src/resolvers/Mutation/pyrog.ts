@@ -225,6 +225,7 @@ export const pyrogMutation = {
       throw new Error(error);
     }
   },
+
   async deleteAttribute(parent, { id }, context: Context) {
     const userId = getUserId(context);
     await context.client.user({ id: userId });
@@ -237,6 +238,7 @@ export const pyrogMutation = {
     // }
     return context.client.deleteAttribute({ id });
   },
+
   async upsertCredential(
     parent,
     { login, password, host, port, type, database, sourceId },
