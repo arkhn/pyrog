@@ -1,0 +1,123 @@
+generator photon {
+  provider = "photonjs"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://prisma:prisma@localhost:5432/prisma?schema=pyrog"
+}
+
+model Source {
+  id       String  @default(cuid()) @id
+  name     String  @unique
+  hasOwner Boolean @default(false)
+
+  resources  Resource[]  @relation(name: "SourceToResource", onDelete: CASCADE)
+  credential Credential? @relation(name: "SourceToCredential", onDelete: CASCADE)
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}
+
+enum DatabaseType {
+  POSTGRES
+}
+
+model Credential {
+  id       String       @default(cuid()) @id
+  host     String
+  port     String
+  database String
+  login    String
+  password String
+  model    DatabaseType
+  source   Source       @relation(name: "SourceToCredential")
+}
+
+model Resource {
+  id               String  @default(cuid()) @id
+  label            String
+  fhirType         String
+  primaryKeyOwner  String?
+  primaryKeyTable  String?
+  primaryKeyColumn String?
+
+  attributes Attribute[] @relation(name: "ResourceToAttributes", onDelete: CASCADE)
+  source     Source      @relation(name: "SourceToResource")
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}
+
+model Attribute {
+  id            String   @default(cuid()) @id
+  name          String
+  mergingScript String?
+  isProfile     Boolean?
+  model         String?
+  comment       String?
+  depth         Int?
+
+  // Parent resource
+  resource     Resource?     @relation(name: "ResourceToAttributes")
+  // Children attributes
+  attributes   Attribute[]   @relation(name: "AttributeToAttributes", onDelete: CASCADE)
+  // Parent attribute
+  attribute    Attribute?    @relation(name: "AttributeToAttributes")
+  // Children input columns
+  inputColumns InputColumn[] @relation(name: "AttributeToInputColumns", onDelete: CASCADE)
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}
+
+model InputColumn {
+  id          String @default(cuid()) @id
+  owner       String
+  table       String
+  column      String
+  script      String
+  staticValue String
+
+  // Children joins
+  joins     Join[]    @relation(name: "InputColumnToJoins", onDelete: CASCADE)
+  // Parent attribute
+  attribute Attribute @relation(name: "AttributeToInputColumns")
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}
+
+model Join {
+  id           String @default(cuid()) @id
+  sourceOwner  String
+  sourceTable  String
+  sourceColumn String
+  targetOwner  String
+  targetTable  String
+  targetColumn String
+
+  // Parent input column
+  inputColumn InputColumn @relation(name: "InputColumnToJoins")
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model User {
+  id       String @default(cuid()) @id
+  email    String @unique
+  name     String
+  password String
+  role     Role   @default(USER)
+
+  credentials Credential[]
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}
