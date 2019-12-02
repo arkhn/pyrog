@@ -1,8 +1,6 @@
 import { idArg, queryType, stringArg } from 'nexus'
-import { getUserId } from '../utils'
-import { Photon } from '@prisma/photon'
 
-const photon = new Photon()
+import { getUserId } from 'utils'
 
 export const Query = queryType({
   definition(t) {
@@ -23,6 +21,36 @@ export const Query = queryType({
       type: 'Source',
       nullable: true,
       resolve: (parent, args, ctx) => ctx.photon.sources(),
+    })
+
+    t.field('source', {
+      type: 'Source',
+      args: {
+        sourceId: idArg({ nullable: false }),
+      },
+      nullable: true,
+      resolve: (parent, { sourceId }, ctx) =>
+        ctx.photon.sources.findOne({ where: { id: sourceId } }),
+    })
+
+    t.field('resource', {
+      type: 'Resource',
+      args: {
+        resourceId: idArg({ nullable: false }),
+      },
+      nullable: true,
+      resolve: (parent, { resourceId }, ctx) =>
+        ctx.photon.resources.findOne({ where: { id: resourceId } }),
+    })
+
+    t.field('attribute', {
+      type: 'Attribute',
+      args: {
+        attributeId: idArg({ nullable: false }),
+      },
+      nullable: true,
+      resolve: (parent, { attributeId }, ctx) =>
+        ctx.photon.attributes.findOne({ where: { id: attributeId } }),
     })
   },
 })

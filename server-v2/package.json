@@ -7,9 +7,9 @@
     "build": "yarn -s run clean && yarn -s run generate && tsc",
     "generate": "yarn -s run generate:prisma && yarn -s run generate:nexus",
     "generate:prisma": "prisma2 generate",
-    "generate:nexus": "ts-node --transpile-only src/schema",
+    "generate:nexus": "ts-node -r tsconfig-paths/register --transpile-only src/schema",
     "postinstall": "yarn -s run generate",
-    "dev": "ts-node-dev --no-notify --respawn --transpileOnly src/server",
+    "dev": "ts-node-dev -r tsconfig-paths/register --no-notify --respawn --transpileOnly src/server",
     "seed": "ts-node prisma/seed"
   },
   "dependencies": {
@@ -31,6 +31,7 @@
     "prisma2": "2.0.0-preview017.2",
     "ts-node": "8.5.4",
     "ts-node-dev": "1.0.0-pre.44",
+    "tsconfig-paths": "^3.9.0",
     "typescript": "3.7.2"
   },
   "prettier": {

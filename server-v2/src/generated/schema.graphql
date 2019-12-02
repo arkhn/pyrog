@@ -78,14 +78,19 @@ type Join {
 }
 
 type Mutation {
+  createResource(resourceName: String!, sourceId: ID!): Resource!
   createSource(hasOwner: Boolean!, name: String!): Source!
+  deleteResource(resourceId: ID!): Resource!
   deleteSource(name: String!): Source!
   login(email: String!, password: String!): AuthPayload!
   signup(email: String!, name: String!, password: String!): AuthPayload!
 }
 
 type Query {
+  attribute(attributeId: ID!): Attribute
   me: User
+  resource(resourceId: ID!): Resource
+  source(sourceId: ID!): Source
   sources: [Source!]
 }
 
@@ -100,7 +105,7 @@ type Resource {
   createdAt: DateTime!
   fhirType: String!
   id: ID!
-  label: String!
+  label: String
   primaryKeyColumn: String
   primaryKeyOwner: String
   primaryKeyTable: String
@@ -118,6 +123,7 @@ type Source {
   credential: Credential
   hasOwner: Boolean!
   id: ID!
+  mappingProgress: [Int!]
   name: String!
   resources(
     after: ID

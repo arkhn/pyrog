@@ -113,14 +113,19 @@ export interface NexusGenFieldTypes {
   }
   Mutation: {
     // field return type
+    createResource: NexusGenRootTypes['Resource'] // Resource!
     createSource: NexusGenRootTypes['Source'] // Source!
+    deleteResource: NexusGenRootTypes['Resource'] // Resource!
     deleteSource: NexusGenRootTypes['Source'] // Source!
     login: NexusGenRootTypes['AuthPayload'] // AuthPayload!
     signup: NexusGenRootTypes['AuthPayload'] // AuthPayload!
   }
   Query: {
     // field return type
+    attribute: NexusGenRootTypes['Attribute'] | null // Attribute
     me: NexusGenRootTypes['User'] | null // User
+    resource: NexusGenRootTypes['Resource'] | null // Resource
+    source: NexusGenRootTypes['Source'] | null // Source
     sources: NexusGenRootTypes['Source'][] | null // [Source!]
   }
   Resource: {
@@ -129,7 +134,7 @@ export interface NexusGenFieldTypes {
     createdAt: any // DateTime!
     fhirType: string // String!
     id: string // ID!
-    label: string // String!
+    label: string | null // String
     primaryKeyColumn: string | null // String
     primaryKeyOwner: string | null // String
     primaryKeyTable: string | null // String
@@ -142,6 +147,7 @@ export interface NexusGenFieldTypes {
     credential: NexusGenRootTypes['Credential'] | null // Credential
     hasOwner: boolean // Boolean!
     id: string // ID!
+    mappingProgress: number[] | null // [Int!]
     name: string // String!
     resources: NexusGenRootTypes['Resource'][] // [Resource!]!
     updatedAt: any // DateTime!
@@ -189,10 +195,19 @@ export interface NexusGenArgTypes {
     }
   }
   Mutation: {
+    createResource: {
+      // args
+      resourceName: string // String!
+      sourceId: string // ID!
+    }
     createSource: {
       // args
       hasOwner: boolean // Boolean!
       name: string // String!
+    }
+    deleteResource: {
+      // args
+      resourceId: string // ID!
     }
     deleteSource: {
       // args
@@ -208,6 +223,20 @@ export interface NexusGenArgTypes {
       email: string // String!
       name: string // String!
       password: string // String!
+    }
+  }
+  Query: {
+    attribute: {
+      // args
+      attributeId: string // ID!
+    }
+    resource: {
+      // args
+      resourceId: string // ID!
+    }
+    source: {
+      // args
+      sourceId: string // ID!
     }
   }
   Resource: {

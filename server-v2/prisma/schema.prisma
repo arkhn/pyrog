@@ -36,7 +36,7 @@ model Credential {
 
 model Resource {
   id               String  @default(cuid()) @id
-  label            String
+  label            String?
   fhirType         String
   primaryKeyOwner  String?
   primaryKeyTable  String?
@@ -59,7 +59,7 @@ model Attribute {
   depth         Int?
 
   // Parent resource
-  resource     Resource?     @relation(name: "ResourceToAttributes")
+  resource     Resource?     @relation(name: "ResourceToAttributes", onDelete: CASCADE)
   // Children attributes
   attributes   Attribute[]   @relation(name: "AttributeToAttributes", onDelete: CASCADE)
   // Parent attribute

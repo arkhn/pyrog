@@ -1,6 +1,7 @@
 import { rule, shield, and } from 'graphql-shield'
-import { getUserId } from '../utils'
-import { Context } from '../context'
+
+import { getUserId } from 'utils'
+import { Context } from 'context'
 
 const rules = {
   isAuthenticatedUser: rule()((_, __, ctx: Context) => {
@@ -19,6 +20,10 @@ const rules = {
 export const permissions = shield({
   Query: {
     me: rules.isAuthenticatedUser,
+    sources: rules.isAuthenticatedUser,
+    source: rules.isAuthenticatedUser,
+    resource: rules.isAuthenticatedUser,
+    attribute: rules.isAuthenticatedUser,
   },
   Mutation: {
     createSource: rules.isAdmin,

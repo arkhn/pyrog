@@ -1,9 +1,14 @@
 import { compare, hash } from 'bcryptjs'
 import { sign } from 'jsonwebtoken'
 import { idArg, mutationType, stringArg, booleanArg } from 'nexus'
-import { APP_SECRET, getUserId } from '../utils'
+
+import { APP_SECRET } from 'utils'
 
 export const Mutation = mutationType({
+  /*
+   * AUTH
+   */
+
   definition(t) {
     t.field('signup', {
       type: 'AuthPayload',
@@ -54,6 +59,10 @@ export const Mutation = mutationType({
       },
     })
 
+    /*
+     * SOURCE
+     */
+
     t.field('createSource', {
       type: 'Source',
       args: {
@@ -71,6 +80,66 @@ export const Mutation = mutationType({
       },
       resolve: async (_parent, { name }, ctx) =>
         ctx.photon.sources.delete({ where: { name } }),
+    })
+
+    /*
+     * RESOURCE
+     */
+
+    t.field('createResource', {
+      type: 'Resource',
+      args: {
+        sourceId: idArg({ nullable: false }),
+        resourceName: stringArg({ nullable: false }),
+      },
+      resolve: async (_parent, { sourceId, resourceName }, ctx) => {
+        let resourceSchema: any
+        try {
+          resourceSchema = require(`generated/fhir/${resourceName}.json`)
+        } catch (e) {
+          throw new Error(`Resource ${resourceName} does not exist.`)
+        }
+
+        const existing = await ctx.photon.resources.findMany({
+          where: { source: { id: sourceId }, fhirType: resourceName },
+          include: { source: true },
+        })
+        if (existing.length) {
+          throw new Error(
+            `Resource ${resourceName} already exists for source ${
+              existing[0].source.name
+            }`,
+          )
+        }
+
+        const attributes = Object.keys(resourceSchema.properties).map(attr => ({
+          name: attr,
+          comment: resourceSchema.properties[attr].description,
+        }))
+
+        return ctx.photon.resources.create({
+          data: {
+            fhirType: resourceName,
+            attributes: {
+              create: attributes,
+            },
+            source: {
+              connect: {
+                id: sourceId,
+              },
+            },
+          },
+        })
+      },
+    })
+
+    t.field('deleteResource', {
+      type: 'Resource',
+      args: {
+        resourceId: idArg({ nullable: false }),
+      },
+      resolve: async (_parent, { resourceId }, ctx) =>
+        ctx.photon.resources.delete({ where: { id: resourceId } }),
     })
   },
 })
