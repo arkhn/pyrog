@@ -13,6 +13,105 @@
     },
     {
       "stepType": "CreateModel",
+      "model": "Template"
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Template",
+      "field": "id",
+      "type": "String",
+      "arity": "required"
+    },
+    {
+      "stepType": "CreateDirective",
+      "model": "Template",
+      "field": "id",
+      "directive": "default"
+    },
+    {
+      "stepType": "CreateDirectiveArgument",
+      "model": "Template",
+      "field": "id",
+      "directive": "default",
+      "argument": "",
+      "value": "cuid()"
+    },
+    {
+      "stepType": "CreateDirective",
+      "model": "Template",
+      "field": "id",
+      "directive": "id"
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Template",
+      "field": "name",
+      "type": "String",
+      "arity": "required"
+    },
+    {
+      "stepType": "CreateDirective",
+      "model": "Template",
+      "field": "name",
+      "directive": "unique"
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Template",
+      "field": "sources",
+      "type": "Source",
+      "arity": "list"
+    },
+    {
+      "stepType": "CreateDirective",
+      "model": "Template",
+      "field": "sources",
+      "directive": "relation"
+    },
+    {
+      "stepType": "CreateDirectiveArgument",
+      "model": "Template",
+      "field": "sources",
+      "directive": "relation",
+      "argument": "onDelete",
+      "value": "CASCADE"
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Template",
+      "field": "updatedAt",
+      "type": "DateTime",
+      "arity": "required"
+    },
+    {
+      "stepType": "CreateDirective",
+      "model": "Template",
+      "field": "updatedAt",
+      "directive": "updatedAt"
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Template",
+      "field": "createdAt",
+      "type": "DateTime",
+      "arity": "required"
+    },
+    {
+      "stepType": "CreateDirective",
+      "model": "Template",
+      "field": "createdAt",
+      "directive": "default"
+    },
+    {
+      "stepType": "CreateDirectiveArgument",
+      "model": "Template",
+      "field": "createdAt",
+      "directive": "default",
+      "argument": "",
+      "value": "now()"
+    },
+    {
+      "stepType": "CreateModel",
       "model": "Source"
     },
     {
@@ -58,6 +157,13 @@
     {
       "stepType": "CreateField",
       "model": "Source",
+      "field": "version",
+      "type": "String",
+      "arity": "optional"
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Source",
       "field": "hasOwner",
       "type": "Boolean",
       "arity": "required"
@@ -94,16 +200,36 @@
       "model": "Source",
       "field": "resources",
       "directive": "relation",
-      "argument": "name",
-      "value": "\"SourceToResource\""
+      "argument": "onDelete",
+      "value": "CASCADE"
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Source",
+      "field": "credential",
+      "type": "Credential",
+      "arity": "optional"
+    },
+    {
+      "stepType": "CreateDirective",
+      "model": "Source",
+      "field": "credential",
+      "directive": "relation"
     },
     {
       "stepType": "CreateDirectiveArgument",
       "model": "Source",
-      "field": "resources",
+      "field": "credential",
       "directive": "relation",
       "argument": "onDelete",
       "value": "CASCADE"
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Source",
+      "field": "template",
+      "type": "Template",
+      "arity": "required"
     },
     {
       "stepType": "CreateField",
@@ -138,35 +264,6 @@
       "directive": "default",
       "argument": "",
       "value": "now()"
-    },
-    {
-      "stepType": "CreateField",
-      "model": "Source",
-      "field": "credential",
-      "type": "Credential",
-      "arity": "optional"
-    },
-    {
-      "stepType": "CreateDirective",
-      "model": "Source",
-      "field": "credential",
-      "directive": "relation"
-    },
-    {
-      "stepType": "CreateDirectiveArgument",
-      "model": "Source",
-      "field": "credential",
-      "directive": "relation",
-      "argument": "name",
-      "value": "\"SourceToCredential\""
-    },
-    {
-      "stepType": "CreateDirectiveArgument",
-      "model": "Source",
-      "field": "credential",
-      "directive": "relation",
-      "argument": "onDelete",
-      "value": "CASCADE"
     },
     {
       "stepType": "CreateModel",
@@ -249,18 +346,38 @@
       "arity": "required"
     },
     {
+      "stepType": "CreateField",
+      "model": "Credential",
+      "field": "updatedAt",
+      "type": "DateTime",
+      "arity": "required"
+    },
+    {
       "stepType": "CreateDirective",
       "model": "Credential",
-      "field": "source",
-      "directive": "relation"
+      "field": "updatedAt",
+      "directive": "updatedAt"
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Credential",
+      "field": "createdAt",
+      "type": "DateTime",
+      "arity": "required"
+    },
+    {
+      "stepType": "CreateDirective",
+      "model": "Credential",
+      "field": "createdAt",
+      "directive": "default"
     },
     {
       "stepType": "CreateDirectiveArgument",
       "model": "Credential",
-      "field": "source",
-      "directive": "relation",
-      "argument": "name",
-      "value": "\"SourceToCredential\""
+      "field": "createdAt",
+      "directive": "default",
+      "argument": "",
+      "value": "now()"
     },
     {
       "stepType": "CreateModel",
@@ -296,9 +413,9 @@
     {
       "stepType": "CreateField",
       "model": "Resource",
-      "field": "label",
+      "field": "profile",
       "type": "String",
-      "arity": "required"
+      "arity": "optional"
     },
     {
       "stepType": "CreateField",
@@ -306,27 +423,6 @@
       "field": "fhirType",
       "type": "String",
       "arity": "required"
-    },
-    {
-      "stepType": "CreateField",
-      "model": "Resource",
-      "field": "primaryKeyOwner",
-      "type": "String",
-      "arity": "optional"
-    },
-    {
-      "stepType": "CreateField",
-      "model": "Resource",
-      "field": "primaryKeyTable",
-      "type": "String",
-      "arity": "optional"
-    },
-    {
-      "stepType": "CreateField",
-      "model": "Resource",
-      "field": "primaryKeyColumn",
-      "type": "String",
-      "arity": "optional"
     },
     {
       "stepType": "CreateField",
@@ -346,14 +442,6 @@
       "model": "Resource",
       "field": "attributes",
       "directive": "relation",
-      "argument": "name",
-      "value": "\"ResourceToAttributes\""
-    },
-    {
-      "stepType": "CreateDirectiveArgument",
-      "model": "Resource",
-      "field": "attributes",
-      "directive": "relation",
       "argument": "onDelete",
       "value": "CASCADE"
     },
@@ -363,20 +451,6 @@
       "field": "source",
       "type": "Source",
       "arity": "required"
-    },
-    {
-      "stepType": "CreateDirective",
-      "model": "Resource",
-      "field": "source",
-      "directive": "relation"
-    },
-    {
-      "stepType": "CreateDirectiveArgument",
-      "model": "Resource",
-      "field": "source",
-      "directive": "relation",
-      "argument": "name",
-      "value": "\"SourceToResource\""
     },
     {
       "stepType": "CreateField",
@@ -460,130 +534,115 @@
     {
       "stepType": "CreateField",
       "model": "Attribute",
-      "field": "isProfile",
+      "field": "isArray",
       "type": "Boolean",
-      "arity": "optional"
+      "arity": "required"
+    },
+    {
+      "stepType": "CreateDirective",
+      "model": "Attribute",
+      "field": "isArray",
+      "directive": "default"
+    },
+    {
+      "stepType": "CreateDirectiveArgument",
+      "model": "Attribute",
+      "field": "isArray",
+      "directive": "default",
+      "argument": "",
+      "value": "false"
     },
     {
       "stepType": "CreateField",
       "model": "Attribute",
-      "field": "model",
+      "field": "fhirType",
       "type": "String",
-      "arity": "optional"
+      "arity": "required"
     },
     {
       "stepType": "CreateField",
       "model": "Attribute",
-      "field": "comment",
+      "field": "description",
       "type": "String",
-      "arity": "optional"
+      "arity": "required"
     },
     {
       "stepType": "CreateField",
       "model": "Attribute",
-      "field": "depth",
-      "type": "Int",
+      "field": "inputs",
+      "type": "Input",
+      "arity": "list"
+    },
+    {
+      "stepType": "CreateDirective",
+      "model": "Attribute",
+      "field": "inputs",
+      "directive": "relation"
+    },
+    {
+      "stepType": "CreateDirectiveArgument",
+      "model": "Attribute",
+      "field": "inputs",
+      "directive": "relation",
+      "argument": "onDelete",
+      "value": "CASCADE"
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Attribute",
+      "field": "children",
+      "type": "Attribute",
+      "arity": "list"
+    },
+    {
+      "stepType": "CreateDirective",
+      "model": "Attribute",
+      "field": "children",
+      "directive": "relation"
+    },
+    {
+      "stepType": "CreateDirectiveArgument",
+      "model": "Attribute",
+      "field": "children",
+      "directive": "relation",
+      "argument": "name",
+      "value": "\"AttributeToAttributes\""
+    },
+    {
+      "stepType": "CreateDirectiveArgument",
+      "model": "Attribute",
+      "field": "children",
+      "directive": "relation",
+      "argument": "onDelete",
+      "value": "CASCADE"
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Attribute",
+      "field": "parent",
+      "type": "Attribute",
       "arity": "optional"
+    },
+    {
+      "stepType": "CreateDirective",
+      "model": "Attribute",
+      "field": "parent",
+      "directive": "relation"
+    },
+    {
+      "stepType": "CreateDirectiveArgument",
+      "model": "Attribute",
+      "field": "parent",
+      "directive": "relation",
+      "argument": "name",
+      "value": "\"AttributeToAttributes\""
     },
     {
       "stepType": "CreateField",
       "model": "Attribute",
       "field": "resource",
       "type": "Resource",
-      "arity": "optional"
-    },
-    {
-      "stepType": "CreateDirective",
-      "model": "Attribute",
-      "field": "resource",
-      "directive": "relation"
-    },
-    {
-      "stepType": "CreateDirectiveArgument",
-      "model": "Attribute",
-      "field": "resource",
-      "directive": "relation",
-      "argument": "name",
-      "value": "\"ResourceToAttributes\""
-    },
-    {
-      "stepType": "CreateField",
-      "model": "Attribute",
-      "field": "attributes",
-      "type": "Attribute",
-      "arity": "list"
-    },
-    {
-      "stepType": "CreateDirective",
-      "model": "Attribute",
-      "field": "attributes",
-      "directive": "relation"
-    },
-    {
-      "stepType": "CreateDirectiveArgument",
-      "model": "Attribute",
-      "field": "attributes",
-      "directive": "relation",
-      "argument": "name",
-      "value": "\"AttributeToAttributes\""
-    },
-    {
-      "stepType": "CreateDirectiveArgument",
-      "model": "Attribute",
-      "field": "attributes",
-      "directive": "relation",
-      "argument": "onDelete",
-      "value": "CASCADE"
-    },
-    {
-      "stepType": "CreateField",
-      "model": "Attribute",
-      "field": "attribute",
-      "type": "Attribute",
-      "arity": "optional"
-    },
-    {
-      "stepType": "CreateDirective",
-      "model": "Attribute",
-      "field": "attribute",
-      "directive": "relation"
-    },
-    {
-      "stepType": "CreateDirectiveArgument",
-      "model": "Attribute",
-      "field": "attribute",
-      "directive": "relation",
-      "argument": "name",
-      "value": "\"AttributeToAttributes\""
-    },
-    {
-      "stepType": "CreateField",
-      "model": "Attribute",
-      "field": "inputColumns",
-      "type": "InputColumn",
-      "arity": "list"
-    },
-    {
-      "stepType": "CreateDirective",
-      "model": "Attribute",
-      "field": "inputColumns",
-      "directive": "relation"
-    },
-    {
-      "stepType": "CreateDirectiveArgument",
-      "model": "Attribute",
-      "field": "inputColumns",
-      "directive": "relation",
-      "argument": "name",
-      "value": "\"AttributeToInputColumns\""
-    },
-    {
-      "stepType": "CreateDirectiveArgument",
-      "model": "Attribute",
-      "field": "inputColumns",
-      "directive": "relation",
-      "argument": "onDelete",
-      "value": "CASCADE"
+      "arity": "required"
     },
     {
       "stepType": "CreateField",
@@ -621,24 +680,24 @@
     },
     {
       "stepType": "CreateModel",
-      "model": "InputColumn"
+      "model": "Input"
     },
     {
       "stepType": "CreateField",
-      "model": "InputColumn",
+      "model": "Input",
       "field": "id",
       "type": "String",
       "arity": "required"
     },
     {
       "stepType": "CreateDirective",
-      "model": "InputColumn",
+      "model": "Input",
       "field": "id",
       "directive": "default"
     },
     {
       "stepType": "CreateDirectiveArgument",
-      "model": "InputColumn",
+      "model": "Input",
       "field": "id",
       "directive": "default",
       "argument": "",
@@ -646,69 +705,140 @@
     },
     {
       "stepType": "CreateDirective",
-      "model": "InputColumn",
+      "model": "Input",
       "field": "id",
       "directive": "id"
     },
     {
       "stepType": "CreateField",
-      "model": "InputColumn",
-      "field": "owner",
-      "type": "String",
+      "model": "Input",
+      "field": "sqlValue",
+      "type": "Column",
       "arity": "required"
     },
     {
       "stepType": "CreateField",
-      "model": "InputColumn",
-      "field": "table",
-      "type": "String",
-      "arity": "required"
-    },
-    {
-      "stepType": "CreateField",
-      "model": "InputColumn",
-      "field": "column",
-      "type": "String",
-      "arity": "required"
-    },
-    {
-      "stepType": "CreateField",
-      "model": "InputColumn",
+      "model": "Input",
       "field": "script",
       "type": "String",
       "arity": "required"
     },
     {
       "stepType": "CreateField",
-      "model": "InputColumn",
+      "model": "Input",
       "field": "staticValue",
       "type": "String",
       "arity": "required"
     },
     {
       "stepType": "CreateField",
-      "model": "InputColumn",
+      "model": "Input",
+      "field": "attribute",
+      "type": "Attribute",
+      "arity": "required"
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Input",
+      "field": "updatedAt",
+      "type": "DateTime",
+      "arity": "required"
+    },
+    {
+      "stepType": "CreateDirective",
+      "model": "Input",
+      "field": "updatedAt",
+      "directive": "updatedAt"
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Input",
+      "field": "createdAt",
+      "type": "DateTime",
+      "arity": "required"
+    },
+    {
+      "stepType": "CreateDirective",
+      "model": "Input",
+      "field": "createdAt",
+      "directive": "default"
+    },
+    {
+      "stepType": "CreateDirectiveArgument",
+      "model": "Input",
+      "field": "createdAt",
+      "directive": "default",
+      "argument": "",
+      "value": "now()"
+    },
+    {
+      "stepType": "CreateModel",
+      "model": "Column"
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Column",
+      "field": "id",
+      "type": "String",
+      "arity": "required"
+    },
+    {
+      "stepType": "CreateDirective",
+      "model": "Column",
+      "field": "id",
+      "directive": "default"
+    },
+    {
+      "stepType": "CreateDirectiveArgument",
+      "model": "Column",
+      "field": "id",
+      "directive": "default",
+      "argument": "",
+      "value": "cuid()"
+    },
+    {
+      "stepType": "CreateDirective",
+      "model": "Column",
+      "field": "id",
+      "directive": "id"
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Column",
+      "field": "owner",
+      "type": "String",
+      "arity": "optional"
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Column",
+      "field": "table",
+      "type": "String",
+      "arity": "optional"
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Column",
+      "field": "column",
+      "type": "String",
+      "arity": "optional"
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Column",
       "field": "joins",
       "type": "Join",
       "arity": "list"
     },
     {
       "stepType": "CreateDirective",
-      "model": "InputColumn",
+      "model": "Column",
       "field": "joins",
       "directive": "relation"
     },
     {
       "stepType": "CreateDirectiveArgument",
-      "model": "InputColumn",
-      "field": "joins",
-      "directive": "relation",
-      "argument": "name",
-      "value": "\"InputColumnToJoins\""
-    },
-    {
-      "stepType": "CreateDirectiveArgument",
-      "model": "InputColumn",
+      "model": "Column",
       "field": "joins",
       "directive": "relation",
       "argument": "onDelete",
@@ -716,54 +846,33 @@
     },
     {
       "stepType": "CreateField",
-      "model": "InputColumn",
-      "field": "attribute",
-      "type": "Attribute",
-      "arity": "required"
-    },
-    {
-      "stepType": "CreateDirective",
-      "model": "InputColumn",
-      "field": "attribute",
-      "directive": "relation"
-    },
-    {
-      "stepType": "CreateDirectiveArgument",
-      "model": "InputColumn",
-      "field": "attribute",
-      "directive": "relation",
-      "argument": "name",
-      "value": "\"AttributeToInputColumns\""
-    },
-    {
-      "stepType": "CreateField",
-      "model": "InputColumn",
+      "model": "Column",
       "field": "updatedAt",
       "type": "DateTime",
       "arity": "required"
     },
     {
       "stepType": "CreateDirective",
-      "model": "InputColumn",
+      "model": "Column",
       "field": "updatedAt",
       "directive": "updatedAt"
     },
     {
       "stepType": "CreateField",
-      "model": "InputColumn",
+      "model": "Column",
       "field": "createdAt",
       "type": "DateTime",
       "arity": "required"
     },
     {
       "stepType": "CreateDirective",
-      "model": "InputColumn",
+      "model": "Column",
       "field": "createdAt",
       "directive": "default"
     },
     {
       "stepType": "CreateDirectiveArgument",
-      "model": "InputColumn",
+      "model": "Column",
       "field": "createdAt",
       "directive": "default",
       "argument": "",
@@ -803,65 +912,9 @@
     {
       "stepType": "CreateField",
       "model": "Join",
-      "field": "sourceOwner",
-      "type": "String",
-      "arity": "required"
-    },
-    {
-      "stepType": "CreateField",
-      "model": "Join",
-      "field": "sourceTable",
-      "type": "String",
-      "arity": "required"
-    },
-    {
-      "stepType": "CreateField",
-      "model": "Join",
-      "field": "sourceColumn",
-      "type": "String",
-      "arity": "required"
-    },
-    {
-      "stepType": "CreateField",
-      "model": "Join",
-      "field": "targetOwner",
-      "type": "String",
-      "arity": "required"
-    },
-    {
-      "stepType": "CreateField",
-      "model": "Join",
-      "field": "targetTable",
-      "type": "String",
-      "arity": "required"
-    },
-    {
-      "stepType": "CreateField",
-      "model": "Join",
-      "field": "targetColumn",
-      "type": "String",
-      "arity": "required"
-    },
-    {
-      "stepType": "CreateField",
-      "model": "Join",
-      "field": "inputColumn",
-      "type": "InputColumn",
-      "arity": "required"
-    },
-    {
-      "stepType": "CreateDirective",
-      "model": "Join",
-      "field": "inputColumn",
-      "directive": "relation"
-    },
-    {
-      "stepType": "CreateDirectiveArgument",
-      "model": "Join",
-      "field": "inputColumn",
-      "directive": "relation",
-      "argument": "name",
-      "value": "\"InputColumnToJoins\""
+      "field": "tables",
+      "type": "Column",
+      "arity": "list"
     },
     {
       "stepType": "CreateField",
@@ -1009,13 +1062,6 @@
       "directive": "default",
       "argument": "",
       "value": "now()"
-    },
-    {
-      "stepType": "CreateField",
-      "model": "User",
-      "field": "credentials",
-      "type": "Credential",
-      "arity": "list"
     }
   ]
 }

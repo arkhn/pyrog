@@ -17,7 +17,25 @@ declare global {
   interface NexusGen extends NexusGenTypes {}
 }
 
-export interface NexusGenInputs {}
+export interface NexusGenInputs {
+  JoinInput: {
+    // input type
+    source?: string | null // String
+    target?: string | null // String
+  }
+  SqlValueInput: {
+    // input type
+    column?: string | null // String
+    joins?: NexusGenInputs['JoinInput'][] | null // [JoinInput!]
+    owner?: string | null // String
+    table?: string | null // String
+  }
+  UpdateAttributeInput: {
+    // input type
+    description?: string | null // String
+    mergingScript?: string | null // String
+  }
+}
 
 export interface NexusGenEnums {
   DatabaseType: photon.DatabaseType
@@ -31,13 +49,15 @@ export interface NexusGenRootTypes {
     token: string // String!
     user: NexusGenRootTypes['User'] // User!
   }
+  Column: photon.Column
   Credential: photon.Credential
-  InputColumn: photon.InputColumn
+  Input: photon.Input
   Join: photon.Join
   Mutation: {}
   Query: {}
   Resource: photon.Resource
   Source: photon.Source
+  Template: photon.Template
   User: photon.User
   String: string
   Int: number
@@ -48,6 +68,9 @@ export interface NexusGenRootTypes {
 }
 
 export interface NexusGenAllTypes extends NexusGenRootTypes {
+  JoinInput: NexusGenInputs['JoinInput']
+  SqlValueInput: NexusGenInputs['SqlValueInput']
+  UpdateAttributeInput: NexusGenInputs['UpdateAttributeInput']
   DatabaseType: NexusGenEnums['DatabaseType']
   Role: NexusGenEnums['Role']
 }
@@ -55,18 +78,17 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
 export interface NexusGenFieldTypes {
   Attribute: {
     // field return type
-    attribute: NexusGenRootTypes['Attribute'] | null // Attribute
-    attributes: NexusGenRootTypes['Attribute'][] // [Attribute!]!
-    comment: string | null // String
+    children: NexusGenRootTypes['Attribute'][] // [Attribute!]!
     createdAt: any // DateTime!
-    depth: number | null // Int
+    description: string // String!
+    fhirType: string // String!
     id: string // ID!
-    inputColumns: NexusGenRootTypes['InputColumn'][] // [InputColumn!]!
-    isProfile: boolean | null // Boolean
+    inputs: NexusGenRootTypes['Input'][] // [Input!]!
+    isArray: boolean // Boolean!
     mergingScript: string | null // String
-    model: string | null // String
     name: string // String!
-    resource: NexusGenRootTypes['Resource'] | null // Resource
+    parent: NexusGenRootTypes['Attribute'] | null // Attribute
+    resource: NexusGenRootTypes['Resource'] // Resource!
     updatedAt: any // DateTime!
   }
   AuthPayload: {
@@ -74,8 +96,19 @@ export interface NexusGenFieldTypes {
     token: string // String!
     user: NexusGenRootTypes['User'] // User!
   }
+  Column: {
+    // field return type
+    column: string | null // String
+    createdAt: any // DateTime!
+    id: string // ID!
+    joins: NexusGenRootTypes['Join'][] // [Join!]!
+    owner: string | null // String
+    table: string | null // String
+    updatedAt: any // DateTime!
+  }
   Credential: {
     // field return type
+    createdAt: any // DateTime!
     database: string // String!
     host: string // String!
     id: string // ID!
@@ -84,41 +117,43 @@ export interface NexusGenFieldTypes {
     password: string // String!
     port: string // String!
     source: NexusGenRootTypes['Source'] // Source!
+    updatedAt: any // DateTime!
   }
-  InputColumn: {
+  Input: {
     // field return type
     attribute: NexusGenRootTypes['Attribute'] // Attribute!
-    column: string // String!
     createdAt: any // DateTime!
     id: string // ID!
-    joins: NexusGenRootTypes['Join'][] // [Join!]!
-    owner: string // String!
     script: string // String!
-    staticValue: string // String!
-    table: string // String!
+    sqlValue: NexusGenRootTypes['Column'] | null // Column
+    staticValue: string | null // String
     updatedAt: any // DateTime!
   }
   Join: {
     // field return type
     createdAt: any // DateTime!
     id: string // ID!
-    inputColumn: NexusGenRootTypes['InputColumn'] // InputColumn!
-    sourceColumn: string // String!
-    sourceOwner: string // String!
-    sourceTable: string // String!
-    targetColumn: string // String!
-    targetOwner: string // String!
-    targetTable: string // String!
+    tables: NexusGenRootTypes['Column'][] // [Column!]!
     updatedAt: any // DateTime!
   }
   Mutation: {
     // field return type
+    createAttribute: NexusGenRootTypes['Attribute'] // Attribute!
+    createInput: NexusGenRootTypes['Input'] // Input!
     createResource: NexusGenRootTypes['Resource'] // Resource!
     createSource: NexusGenRootTypes['Source'] // Source!
+    createTemplate: NexusGenRootTypes['Template'] // Template!
+    deleteAttribute: NexusGenRootTypes['Attribute'] // Attribute!
+    deleteCredential: NexusGenRootTypes['Credential'] // Credential!
+    deleteInput: NexusGenRootTypes['Input'] // Input!
     deleteResource: NexusGenRootTypes['Resource'] // Resource!
     deleteSource: NexusGenRootTypes['Source'] // Source!
+    deleteTemplate: NexusGenRootTypes['Template'] // Template!
     login: NexusGenRootTypes['AuthPayload'] // AuthPayload!
     signup: NexusGenRootTypes['AuthPayload'] // AuthPayload!
+    updateAttribute: NexusGenRootTypes['Attribute'] // Attribute!
+    updateInput: NexusGenRootTypes['Input'] // Input!
+    upsertCredential: NexusGenRootTypes['Credential'] // Credential!
   }
   Query: {
     // field return type
@@ -127,6 +162,8 @@ export interface NexusGenFieldTypes {
     resource: NexusGenRootTypes['Resource'] | null // Resource
     source: NexusGenRootTypes['Source'] | null // Source
     sources: NexusGenRootTypes['Source'][] | null // [Source!]
+    template: NexusGenRootTypes['Template'] | null // Template
+    templates: NexusGenRootTypes['Template'][] | null // [Template!]
   }
   Resource: {
     // field return type
@@ -134,10 +171,7 @@ export interface NexusGenFieldTypes {
     createdAt: any // DateTime!
     fhirType: string // String!
     id: string // ID!
-    label: string | null // String
-    primaryKeyColumn: string | null // String
-    primaryKeyOwner: string | null // String
-    primaryKeyTable: string | null // String
+    profile: string | null // String
     source: NexusGenRootTypes['Source'] // Source!
     updatedAt: any // DateTime!
   }
@@ -150,16 +184,24 @@ export interface NexusGenFieldTypes {
     mappingProgress: number[] | null // [Int!]
     name: string // String!
     resources: NexusGenRootTypes['Resource'][] // [Resource!]!
+    template: NexusGenRootTypes['Template'] // Template!
+    updatedAt: any // DateTime!
+    version: string | null // String
+  }
+  Template: {
+    // field return type
+    createdAt: any // DateTime!
+    id: string // ID!
+    name: string // String!
+    sources: NexusGenRootTypes['Source'][] // [Source!]!
     updatedAt: any // DateTime!
   }
   User: {
     // field return type
     createdAt: any // DateTime!
-    credentials: NexusGenRootTypes['Credential'][] // [Credential!]!
     email: string // String!
     id: string // ID!
     name: string // String!
-    password: string // String!
     role: NexusGenEnums['Role'] // Role!
     updatedAt: any // DateTime!
   }
@@ -167,7 +209,7 @@ export interface NexusGenFieldTypes {
 
 export interface NexusGenArgTypes {
   Attribute: {
-    attributes: {
+    children: {
       // args
       after?: string | null // ID
       before?: string | null // ID
@@ -175,7 +217,7 @@ export interface NexusGenArgTypes {
       last?: number | null // Int
       skip?: number | null // Int
     }
-    inputColumns: {
+    inputs: {
       // args
       after?: string | null // ID
       before?: string | null // ID
@@ -184,7 +226,7 @@ export interface NexusGenArgTypes {
       skip?: number | null // Int
     }
   }
-  InputColumn: {
+  Column: {
     joins: {
       // args
       after?: string | null // ID
@@ -194,7 +236,30 @@ export interface NexusGenArgTypes {
       skip?: number | null // Int
     }
   }
+  Join: {
+    tables: {
+      // args
+      after?: string | null // ID
+      before?: string | null // ID
+      first?: number | null // Int
+      last?: number | null // Int
+      skip?: number | null // Int
+    }
+  }
   Mutation: {
+    createAttribute: {
+      // args
+      fhirType: string // String!
+      mergingScript?: string | null // String
+      name: string // String!
+      parentId: string // ID!
+    }
+    createInput: {
+      // args
+      attributeId: string // ID!
+      sql?: NexusGenInputs['SqlValueInput'] | null // SqlValueInput
+      static?: string | null // String
+    }
     createResource: {
       // args
       resourceName: string // String!
@@ -204,14 +269,35 @@ export interface NexusGenArgTypes {
       // args
       hasOwner: boolean // Boolean!
       name: string // String!
+      templateName: string // String!
+    }
+    createTemplate: {
+      // args
+      name: string // String!
+    }
+    deleteAttribute: {
+      // args
+      id: string // ID!
+    }
+    deleteCredential: {
+      // args
+      id: string // ID!
+    }
+    deleteInput: {
+      // args
+      id: string // ID!
     }
     deleteResource: {
       // args
-      resourceId: string // ID!
+      id: string // ID!
     }
     deleteSource: {
       // args
       name: string // String!
+    }
+    deleteTemplate: {
+      // args
+      id: string // ID!
     }
     login: {
       // args
@@ -223,6 +309,21 @@ export interface NexusGenArgTypes {
       email: string // String!
       name: string // String!
       password: string // String!
+    }
+    updateAttribute: {
+      // args
+      attributeId: string // ID!
+      data?: NexusGenInputs['UpdateAttributeInput'] | null // UpdateAttributeInput
+    }
+    upsertCredential: {
+      // args
+      database: string // String!
+      host: string // String!
+      login: string // String!
+      model: string // String!
+      password: string // String!
+      port: string // String!
+      sourceId: string // ID!
     }
   }
   Query: {
@@ -237,6 +338,10 @@ export interface NexusGenArgTypes {
     source: {
       // args
       sourceId: string // ID!
+    }
+    template: {
+      // args
+      templateId: string // ID!
     }
   }
   Resource: {
@@ -259,8 +364,8 @@ export interface NexusGenArgTypes {
       skip?: number | null // Int
     }
   }
-  User: {
-    credentials: {
+  Template: {
+    sources: {
       // args
       after?: string | null // ID
       before?: string | null // ID
@@ -278,16 +383,21 @@ export interface NexusGenInheritedFields {}
 export type NexusGenObjectNames =
   | 'Attribute'
   | 'AuthPayload'
+  | 'Column'
   | 'Credential'
-  | 'InputColumn'
+  | 'Input'
   | 'Join'
   | 'Mutation'
   | 'Query'
   | 'Resource'
   | 'Source'
+  | 'Template'
   | 'User'
 
-export type NexusGenInputNames = never
+export type NexusGenInputNames =
+  | 'JoinInput'
+  | 'SqlValueInput'
+  | 'UpdateAttributeInput'
 
 export type NexusGenEnumNames = 'DatabaseType' | 'Role'
 

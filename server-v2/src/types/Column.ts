@@ -1,18 +1,15 @@
-import { objectType } from 'nexus'
+import { objectType, FieldResolver } from 'nexus'
 
-export const InputColumn = objectType({
-  name: 'InputColumn',
+export const Column = objectType({
+  name: 'Column',
   definition(t) {
     t.model.id()
 
     t.model.owner()
     t.model.table()
     t.model.column()
-    t.model.script()
-    t.model.staticValue()
 
     t.model.joins()
-    t.model.attribute()
 
     t.model.updatedAt()
     t.model.createdAt()

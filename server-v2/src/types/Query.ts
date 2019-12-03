@@ -17,6 +17,22 @@ export const Query = queryType({
       },
     })
 
+    t.list.field('templates', {
+      type: 'Template',
+      nullable: true,
+      resolve: (parent, args, ctx) => ctx.photon.templates(),
+    })
+
+    t.field('template', {
+      type: 'Template',
+      args: {
+        templateId: idArg({ nullable: false }),
+      },
+      nullable: true,
+      resolve: (parent, { templateId }, ctx) =>
+        ctx.photon.templates.findOne({ where: { id: templateId } }),
+    })
+
     t.list.field('sources', {
       type: 'Source',
       nullable: true,

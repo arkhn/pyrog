@@ -2,30 +2,23 @@
 ### Do not make changes to this file directly
 
 type Attribute {
-  attribute: Attribute
-  attributes(
+  children(
     after: ID
     before: ID
     first: Int
     last: Int
     skip: Int
   ): [Attribute!]!
-  comment: String
   createdAt: DateTime!
-  depth: Int
+  description: String!
+  fhirType: String!
   id: ID!
-  inputColumns(
-    after: ID
-    before: ID
-    first: Int
-    last: Int
-    skip: Int
-  ): [InputColumn!]!
-  isProfile: Boolean
+  inputs(after: ID, before: ID, first: Int, last: Int, skip: Int): [Input!]!
+  isArray: Boolean!
   mergingScript: String
-  model: String
   name: String!
-  resource: Resource
+  parent: Attribute
+  resource: Resource!
   updatedAt: DateTime!
 }
 
@@ -34,7 +27,18 @@ type AuthPayload {
   user: User!
 }
 
+type Column {
+  column: String
+  createdAt: DateTime!
+  id: ID!
+  joins(after: ID, before: ID, first: Int, last: Int, skip: Int): [Join!]!
+  owner: String
+  table: String
+  updatedAt: DateTime!
+}
+
 type Credential {
+  createdAt: DateTime!
   database: String!
   host: String!
   id: ID!
@@ -43,6 +47,7 @@ type Credential {
   password: String!
   port: String!
   source: Source!
+  updatedAt: DateTime!
 }
 
 enum DatabaseType {
@@ -51,39 +56,62 @@ enum DatabaseType {
 
 scalar DateTime
 
-type InputColumn {
+type Input {
   attribute: Attribute!
-  column: String!
   createdAt: DateTime!
   id: ID!
-  joins(after: ID, before: ID, first: Int, last: Int, skip: Int): [Join!]!
-  owner: String!
   script: String!
-  staticValue: String!
-  table: String!
+  sqlValue: Column
+  staticValue: String
   updatedAt: DateTime!
 }
 
 type Join {
   createdAt: DateTime!
   id: ID!
-  inputColumn: InputColumn!
-  sourceColumn: String!
-  sourceOwner: String!
-  sourceTable: String!
-  targetColumn: String!
-  targetOwner: String!
-  targetTable: String!
+  tables(after: ID, before: ID, first: Int, last: Int, skip: Int): [Column!]!
   updatedAt: DateTime!
 }
 
+input JoinInput {
+  source: String
+  target: String
+}
+
 type Mutation {
+  createAttribute(
+    fhirType: String!
+    mergingScript: String
+    name: String!
+    parentId: ID!
+  ): Attribute!
+  createInput(attributeId: ID!, sql: SqlValueInput, static: String): Input!
   createResource(resourceName: String!, sourceId: ID!): Resource!
-  createSource(hasOwner: Boolean!, name: String!): Source!
-  deleteResource(resourceId: ID!): Resource!
+  createSource(
+    hasOwner: Boolean!
+    name: String!
+    templateName: String!
+  ): Source!
+  createTemplate(name: String!): Template!
+  deleteAttribute(id: ID!): Attribute!
+  deleteCredential(id: ID!): Credential!
+  deleteInput(id: ID!): Input!
+  deleteResource(id: ID!): Resource!
   deleteSource(name: String!): Source!
+  deleteTemplate(id: ID!): Template!
   login(email: String!, password: String!): AuthPayload!
   signup(email: String!, name: String!, password: String!): AuthPayload!
+  updateAttribute(attributeId: ID!, data: UpdateAttributeInput): Attribute!
+  updateInput: Input!
+  upsertCredential(
+    database: String!
+    host: String!
+    login: String!
+    model: String!
+    password: String!
+    port: String!
+    sourceId: ID!
+  ): Credential!
 }
 
 type Query {
@@ -92,6 +120,8 @@ type Query {
   resource(resourceId: ID!): Resource
   source(sourceId: ID!): Source
   sources: [Source!]
+  template(templateId: ID!): Template
+  templates: [Template!]
 }
 
 type Resource {
@@ -105,10 +135,7 @@ type Resource {
   createdAt: DateTime!
   fhirType: String!
   id: ID!
-  label: String
-  primaryKeyColumn: String
-  primaryKeyOwner: String
-  primaryKeyTable: String
+  profile: String
   source: Source!
   updatedAt: DateTime!
 }
@@ -132,22 +159,36 @@ type Source {
     last: Int
     skip: Int
   ): [Resource!]!
+  template: Template!
   updatedAt: DateTime!
+  version: String
+}
+
+input SqlValueInput {
+  column: String
+  joins: [JoinInput!]
+  owner: String
+  table: String
+}
+
+type Template {
+  createdAt: DateTime!
+  id: ID!
+  name: String!
+  sources(after: ID, before: ID, first: Int, last: Int, skip: Int): [Source!]!
+  updatedAt: DateTime!
+}
+
+input UpdateAttributeInput {
+  description: String
+  mergingScript: String
 }
 
 type User {
   createdAt: DateTime!
-  credentials(
-    after: ID
-    before: ID
-    first: Int
-    last: Int
-    skip: Int
-  ): [Credential!]!
   email: String!
   id: ID!
   name: String!
-  password: String!
   role: Role!
   updatedAt: DateTime!
 }

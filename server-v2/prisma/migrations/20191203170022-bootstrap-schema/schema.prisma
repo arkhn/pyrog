@@ -4,7 +4,7 @@ generator photon {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://prisma:prisma@localhost:5432/prisma?schema=pyrog"
+  url = "***"
 }
 
 // One per software (Chimio, Crossway, etc)
@@ -83,11 +83,11 @@ model Attribute {
 model Input {
   id          String    @default(cuid()) @id
   // Sql column containing the value
-  sqlValue    Column?
+  sqlValue    Column
   // cleaning scripts for the sql column
   script      String
   // Or a static value is it's fixed
-  staticValue String?
+  staticValue String
   // parent
   attribute   Attribute
 
