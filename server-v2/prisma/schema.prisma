@@ -67,14 +67,14 @@ model Attribute {
   mergingScript String?
   isArray       Boolean     @default(false)
   fhirType      String
-  description   String
+  description   String?
   // Children input columns
   inputs        Input[]     @relation(onDelete: CASCADE)
   // Children attributes
   children      Attribute[] @relation(name: "AttributeToAttributes", onDelete: CASCADE)
   // Parent attribute or resource
   parent        Attribute?  @relation(name: "AttributeToAttributes")
-  resource      Resource
+  // resource      Resource
 
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
@@ -83,9 +83,9 @@ model Attribute {
 model Input {
   id          String    @default(cuid()) @id
   // Sql column containing the value
-  sqlValue    Column?
+  sqlValue    Column?   @relation(onDelete: CASCADE)
   // cleaning scripts for the sql column
-  script      String
+  script      String?
   // Or a static value is it's fixed
   staticValue String?
   // parent
@@ -101,7 +101,7 @@ model Column {
   table  String?
   column String?
 
-  joins Join[] @relation(onDelete: CASCADE)
+  joins Join[] @relation(name: "ColumnJoins", onDelete: CASCADE)
 
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
@@ -110,7 +110,7 @@ model Column {
 model Join {
   id String @default(cuid()) @id
 
-  tables Column[]
+  tables Column[] @relation(name: "JoinedColumns", onDelete: CASCADE)
 
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())

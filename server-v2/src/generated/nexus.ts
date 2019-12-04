@@ -18,17 +18,23 @@ declare global {
 }
 
 export interface NexusGenInputs {
+  ColumnInput: {
+    // input type
+    column: string // String!
+    joins?: NexusGenInputs['JoinInput'][] | null // [JoinInput!]
+    owner: string // String!
+    table: string // String!
+  }
+  ColumnInputWithoutJoins: {
+    // input type
+    column: string // String!
+    owner: string // String!
+    table: string // String!
+  }
   JoinInput: {
     // input type
-    source?: string | null // String
-    target?: string | null // String
-  }
-  SqlValueInput: {
-    // input type
-    column?: string | null // String
-    joins?: NexusGenInputs['JoinInput'][] | null // [JoinInput!]
-    owner?: string | null // String
-    table?: string | null // String
+    source: NexusGenInputs['ColumnInputWithoutJoins'] // ColumnInputWithoutJoins!
+    target: NexusGenInputs['ColumnInputWithoutJoins'] // ColumnInputWithoutJoins!
   }
   UpdateAttributeInput: {
     // input type
@@ -68,8 +74,9 @@ export interface NexusGenRootTypes {
 }
 
 export interface NexusGenAllTypes extends NexusGenRootTypes {
+  ColumnInput: NexusGenInputs['ColumnInput']
+  ColumnInputWithoutJoins: NexusGenInputs['ColumnInputWithoutJoins']
   JoinInput: NexusGenInputs['JoinInput']
-  SqlValueInput: NexusGenInputs['SqlValueInput']
   UpdateAttributeInput: NexusGenInputs['UpdateAttributeInput']
   DatabaseType: NexusGenEnums['DatabaseType']
   Role: NexusGenEnums['Role']
@@ -80,7 +87,7 @@ export interface NexusGenFieldTypes {
     // field return type
     children: NexusGenRootTypes['Attribute'][] // [Attribute!]!
     createdAt: any // DateTime!
-    description: string // String!
+    description: string | null // String
     fhirType: string // String!
     id: string // ID!
     inputs: NexusGenRootTypes['Input'][] // [Input!]!
@@ -88,7 +95,7 @@ export interface NexusGenFieldTypes {
     mergingScript: string | null // String
     name: string // String!
     parent: NexusGenRootTypes['Attribute'] | null // Attribute
-    resource: NexusGenRootTypes['Resource'] // Resource!
+    resource: NexusGenRootTypes['Resource'] | null // Resource
     updatedAt: any // DateTime!
   }
   AuthPayload: {
@@ -124,7 +131,7 @@ export interface NexusGenFieldTypes {
     attribute: NexusGenRootTypes['Attribute'] // Attribute!
     createdAt: any // DateTime!
     id: string // ID!
-    script: string // String!
+    script: string | null // String
     sqlValue: NexusGenRootTypes['Column'] | null // Column
     staticValue: string | null // String
     updatedAt: any // DateTime!
@@ -152,7 +159,6 @@ export interface NexusGenFieldTypes {
     login: NexusGenRootTypes['AuthPayload'] // AuthPayload!
     signup: NexusGenRootTypes['AuthPayload'] // AuthPayload!
     updateAttribute: NexusGenRootTypes['Attribute'] // Attribute!
-    updateInput: NexusGenRootTypes['Input'] // Input!
     upsertCredential: NexusGenRootTypes['Credential'] // Credential!
   }
   Query: {
@@ -257,7 +263,8 @@ export interface NexusGenArgTypes {
     createInput: {
       // args
       attributeId: string // ID!
-      sql?: NexusGenInputs['SqlValueInput'] | null // SqlValueInput
+      script?: string | null // String
+      sql?: NexusGenInputs['ColumnInput'] | null // ColumnInput
       static?: string | null // String
     }
     createResource: {
@@ -313,7 +320,7 @@ export interface NexusGenArgTypes {
     updateAttribute: {
       // args
       attributeId: string // ID!
-      data?: NexusGenInputs['UpdateAttributeInput'] | null // UpdateAttributeInput
+      data: NexusGenInputs['UpdateAttributeInput'] // UpdateAttributeInput!
     }
     upsertCredential: {
       // args
@@ -395,8 +402,9 @@ export type NexusGenObjectNames =
   | 'User'
 
 export type NexusGenInputNames =
+  | 'ColumnInput'
+  | 'ColumnInputWithoutJoins'
   | 'JoinInput'
-  | 'SqlValueInput'
   | 'UpdateAttributeInput'
 
 export type NexusGenEnumNames = 'DatabaseType' | 'Role'

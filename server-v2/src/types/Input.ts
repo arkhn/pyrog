@@ -1,4 +1,5 @@
 import { objectType, FieldResolver } from 'nexus'
+import { NexusGenInputs } from 'generated/nexus'
 
 export const Input = objectType({
   name: 'Input',
@@ -18,7 +19,7 @@ export const Input = objectType({
 
 export const createInput: FieldResolver<'Mutation', 'createInput'> = async (
   _parent,
-  { attributeId, static: staticValue, sql: sqlValue },
+  { attributeId, script, static: staticValue, sql: sqlValue },
   ctx,
 ) => {
   if (!sqlValue && !staticValue) {
@@ -27,14 +28,66 @@ export const createInput: FieldResolver<'Mutation', 'createInput'> = async (
     throw new Error(`Input cannot have both a static and sql value`)
   }
 
-  return ctx.photon.inputs.create({ data: {} })
-}
+  if (staticValue) {
+    return ctx.photon.inputs.create({
+      data: {
+        staticValue,
+        script,
+        attribute: {
+          connect: {
+            id: attributeId,
+          },
+        },
+      },
+    })
+  }
 
-export const updateInput: FieldResolver<'Mutation', 'updateInput'> = async (
-  _parent,
-  { id, data },
-  ctx,
-) => ctx.photon.inputs.update({ where: { id }, data })
+  const joins = sqlValue!.joins
+    ? await Promise.all(
+        sqlValue!.joins.map(j =>
+          ctx.photon.joins.create({
+            include: { tables: true },
+            data: {
+              tables: {
+                create: [
+                  {
+                    owner: j.source.owner,
+                    table: j.source.table,
+                    column: j.source.column,
+                  },
+                  {
+                    owner: j.target.owner,
+                    table: j.target.table,
+                    column: j.target.column,
+                  },
+                ],
+              },
+            },
+          }),
+        ),
+      )
+    : []
+  return ctx.photon.inputs.create({
+    data: {
+      sqlValue: {
+        create: {
+          owner: sqlValue!.owner,
+          table: sqlValue!.table,
+          column: sqlValue!.column,
+          joins: {
+            connect: joins.map(j => ({ id: j.id })),
+          },
+        },
+      },
+      script,
+      attribute: {
+        connect: {
+          id: attributeId,
+        },
+      },
+    },
+  })
+}
 
 export const deleteInput: FieldResolver<'Mutation', 'deleteInput'> = async (
   _parent,

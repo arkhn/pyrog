@@ -1,4 +1,6 @@
 import { objectType, FieldResolver } from 'nexus'
+import { AttributeCreateWithoutResourceInput } from '@prisma/photon'
+import { fetchResourceSchema } from '../utils'
 
 export const Attribute = objectType({
   name: 'Attribute',
@@ -42,24 +44,44 @@ export const createAttribute: FieldResolver<
   }
 
   // TODO: add children attributes recursively from json schema.
-  const attributes: any[] = []
+  let resourceSchema = fetchResourceSchema(parent.resource!.fhirType)
+
+  const createAttributes = (schema: any, key: string): any => {
+    if (schema.properties) {
+      // case object
+      return {
+        name: key,
+        fhirType: key,
+        description: schema.description,
+        isArray: false,
+        children: {
+          create: Object.keys(schema.properties).map(p =>
+            createAttributes(schema.properties[p], p),
+          ),
+        },
+      }
+    } else if (schema.items) {
+      // case array
+      return {
+        name: key,
+        fhirType: key,
+        description: schema.description,
+        isArray: true,
+        children: { create: [createAttributes(schema.items, key)] },
+      }
+    } else {
+      // case literal
+      return {
+        name: key,
+        fhirType: key,
+        isArray: false,
+        description: schema.description,
+      }
+    }
+  }
 
   return ctx.photon.attributes.create({
-    data: {
-      name,
-      fhirType,
-      mergingScript,
-      description: parent.description,
-      children: {
-        create: attributes,
-      },
-      parent: {
-        connect: { id: parentId },
-      },
-      resource: {
-        connect: { id: parent.resource.id },
-      },
-    },
+    data: createAttributes(resourceSchema.properties[fhirType], fhirType),
   })
 }
 

@@ -10,7 +10,7 @@ type Attribute {
     skip: Int
   ): [Attribute!]!
   createdAt: DateTime!
-  description: String!
+  description: String
   fhirType: String!
   id: ID!
   inputs(after: ID, before: ID, first: Int, last: Int, skip: Int): [Input!]!
@@ -18,7 +18,7 @@ type Attribute {
   mergingScript: String
   name: String!
   parent: Attribute
-  resource: Resource!
+  resource: Resource
   updatedAt: DateTime!
 }
 
@@ -35,6 +35,19 @@ type Column {
   owner: String
   table: String
   updatedAt: DateTime!
+}
+
+input ColumnInput {
+  column: String!
+  joins: [JoinInput!]
+  owner: String!
+  table: String!
+}
+
+input ColumnInputWithoutJoins {
+  column: String!
+  owner: String!
+  table: String!
 }
 
 type Credential {
@@ -60,7 +73,7 @@ type Input {
   attribute: Attribute!
   createdAt: DateTime!
   id: ID!
-  script: String!
+  script: String
   sqlValue: Column
   staticValue: String
   updatedAt: DateTime!
@@ -74,8 +87,8 @@ type Join {
 }
 
 input JoinInput {
-  source: String
-  target: String
+  source: ColumnInputWithoutJoins!
+  target: ColumnInputWithoutJoins!
 }
 
 type Mutation {
@@ -85,7 +98,12 @@ type Mutation {
     name: String!
     parentId: ID!
   ): Attribute!
-  createInput(attributeId: ID!, sql: SqlValueInput, static: String): Input!
+  createInput(
+    attributeId: ID!
+    script: String
+    sql: ColumnInput
+    static: String
+  ): Input!
   createResource(resourceName: String!, sourceId: ID!): Resource!
   createSource(
     hasOwner: Boolean!
@@ -101,8 +119,7 @@ type Mutation {
   deleteTemplate(id: ID!): Template!
   login(email: String!, password: String!): AuthPayload!
   signup(email: String!, name: String!, password: String!): AuthPayload!
-  updateAttribute(attributeId: ID!, data: UpdateAttributeInput): Attribute!
-  updateInput: Input!
+  updateAttribute(attributeId: ID!, data: UpdateAttributeInput!): Attribute!
   upsertCredential(
     database: String!
     host: String!
@@ -162,13 +179,6 @@ type Source {
   template: Template!
   updatedAt: DateTime!
   version: String
-}
-
-input SqlValueInput {
-  column: String
-  joins: [JoinInput!]
-  owner: String
-  table: String
 }
 
 type Template {

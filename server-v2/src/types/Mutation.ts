@@ -1,19 +1,10 @@
-import {
-  arg,
-  idArg,
-  mutationType,
-  stringArg,
-  booleanArg,
-  inputObjectType,
-  enumType,
-  objectType,
-} from 'nexus'
+import { arg, idArg, mutationType, stringArg, booleanArg } from 'nexus'
 
 import { createResource, deleteResource } from './Resource'
 import { deleteSource, createSource } from './Source'
 import { createAttribute, updateAttribute, deleteAttribute } from './Attribute'
 import { signup, login } from './User'
-import { createInput, updateInput, deleteInput } from './Input'
+import { createInput, deleteInput } from './Input'
 import { deleteCredential, upsertCredential } from './Credential'
 import { createTemplate, deleteTemplate } from './Template'
 
@@ -150,13 +141,7 @@ export const Mutation = mutationType({
       type: 'Attribute',
       args: {
         attributeId: idArg({ required: true }),
-        data: inputObjectType({
-          name: 'UpdateAttributeInput',
-          definition(t) {
-            t.string('description')
-            t.string('mergingScript')
-          },
-        }),
+        data: arg({ type: 'UpdateAttributeInput', required: true }),
       },
       resolve: updateAttribute,
     })
@@ -177,25 +162,13 @@ export const Mutation = mutationType({
       type: 'Input',
       args: {
         attributeId: idArg({ required: true }),
+        script: stringArg(),
         static: stringArg(),
-        sql: inputObjectType({
-          name: 'SqlValueInput',
-          definition(t) {
-            t.string('owner')
-            t.string('table')
-            t.string('column')
-            t.list.field('joins', {
-              type: 'JoinInput',
-            })
-          },
+        sql: arg({
+          type: 'ColumnInput',
         }),
       },
       resolve: createInput,
-    })
-
-    t.field('updateInput', {
-      type: 'Input',
-      resolve: updateInput,
     })
 
     t.field('deleteInput', {

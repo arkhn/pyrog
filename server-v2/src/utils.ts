@@ -1,5 +1,6 @@
 import { verify } from 'jsonwebtoken'
 import { Context } from './context'
+import { Resource } from '@prisma/photon'
 
 export const APP_SECRET = 'appsecret321'
 
@@ -13,5 +14,13 @@ export function getUserId(context: Context) {
     const token = Authorization.replace('Bearer ', '')
     const verifiedToken = verify(token, APP_SECRET) as Token
     return verifiedToken && verifiedToken.userId
+  }
+}
+
+export function fetchResourceSchema(resourceName: String) {
+  try {
+    return require(`generated/fhir/${resourceName}.json`)
+  } catch (e) {
+    throw new Error(`Resource ${resourceName} does not exist.`)
   }
 }
