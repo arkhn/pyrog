@@ -92,12 +92,7 @@ input JoinInput {
 }
 
 type Mutation {
-  createAttribute(
-    fhirType: String!
-    mergingScript: String
-    name: String!
-    parentId: ID!
-  ): Attribute!
+  createAttribute(parentId: ID!): Attribute!
   createInput(
     attributeId: ID!
     script: String

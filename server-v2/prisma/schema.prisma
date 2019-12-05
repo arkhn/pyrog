@@ -63,9 +63,9 @@ model Resource {
 
 model Attribute {
   id            String      @default(cuid()) @id
-  name          String
   mergingScript String?
   isArray       Boolean     @default(false)
+  name          String
   fhirType      String
   description   String?
   // Children input columns
@@ -74,7 +74,7 @@ model Attribute {
   children      Attribute[] @relation(name: "AttributeToAttributes", onDelete: CASCADE)
   // Parent attribute or resource
   parent        Attribute?  @relation(name: "AttributeToAttributes")
-  // resource      Resource
+  resource      Resource?
 
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())

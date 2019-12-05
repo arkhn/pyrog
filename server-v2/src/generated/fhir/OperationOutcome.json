@@ -3,17 +3,20 @@
   "properties": {
     "resourceType": {
       "description": "This is a OperationOutcome resource",
-      "enum": ["OperationOutcome"]
+      "enum": ["OperationOutcome"],
+      "title": "\"OperationOutcome\""
     },
     "implicitRules": {
       "pattern": "^\\S*$",
       "type": "string",
-      "description": "String of characters used to identify a name or a resource"
+      "description": "String of characters used to identify a name or a resource",
+      "title": "uri"
     },
     "language": {
       "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
       "type": "string",
-      "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+      "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+      "title": "code"
     },
     "issue": {
       "description": "An error, warning, or information message that results from a system action.",
@@ -22,7 +25,8 @@
         "properties": {
           "severity": {
             "description": "Indicates whether the issue indicates a variation from successful processing.",
-            "enum": ["fatal", "error", "warning", "information"]
+            "enum": ["fatal", "error", "warning", "information"],
+            "title": "\"fatal\"|\"error\"|\"warning\"|\"information\""
           },
           "code": {
             "description": "Describes the type of the issue. The system that creates an OperationOutcome SHALL choose the most applicable code from the IssueType value set, and may additional provide its own code for the error in the details element.",
@@ -58,7 +62,8 @@
               "incomplete",
               "throttled",
               "informational"
-            ]
+            ],
+            "title": "\"invalid\"|\"structure\"|\"required\"|\"value\"|\"invariant\"|\"security\"|\"login\"|\"unknown\"|\"expired\"|\"forbidden\"|\"suppressed\"|\"processing\"|\"not-supported\"|\"duplicate\"|\"multiple-matches\"|\"not-found\"|\"deleted\"|\"too-long\"|\"code-invalid\"|\"extension\"|\"too-costly\"|\"business-rule\"|\"conflict\"|\"transient\"|\"lock-error\"|\"no-store\"|\"exception\"|\"timeout\"|\"incomplete\"|\"throttled\"|\"informational\""
           },
           "details": {
             "description": "A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.",
@@ -71,47 +76,56 @@
                     "system": {
                       "pattern": "^\\S*$",
                       "type": "string",
-                      "description": "String of characters used to identify a name or a resource"
+                      "description": "String of characters used to identify a name or a resource",
+                      "title": "uri"
                     },
                     "version": {
                       "pattern": "^[ \\r\\n\\t\\S]+$",
                       "type": "string",
-                      "description": "A sequence of Unicode characters"
+                      "description": "A sequence of Unicode characters",
+                      "title": "string"
                     },
                     "code": {
                       "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                       "type": "string",
-                      "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                      "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                      "title": "code"
                     },
                     "display": {
                       "pattern": "^[ \\r\\n\\t\\S]+$",
                       "type": "string",
-                      "description": "A sequence of Unicode characters"
+                      "description": "A sequence of Unicode characters",
+                      "title": "string"
                     },
                     "userSelected": {
                       "pattern": "^true|false$",
                       "type": "boolean",
-                      "description": "Value of \"true\" or \"false\""
+                      "description": "Value of \"true\" or \"false\"",
+                      "title": "boolean"
                     }
                   },
-                  "additionalProperties": false
+                  "additionalProperties": false,
+                  "title": "Coding"
                 },
                 "type": "array"
               }
             },
-            "additionalProperties": false
+            "additionalProperties": false,
+            "title": "CodeableConcept"
           },
           "diagnostics": {
             "pattern": "^[ \\r\\n\\t\\S]+$",
             "type": "string",
-            "description": "A sequence of Unicode characters"
+            "description": "A sequence of Unicode characters",
+            "title": "string"
           },
           "location": {
             "description": "This element is deprecated because it is XML specific. It is replaced by issue.expression, which is format independent, and simpler to parse. \n\nFor resource issues, this will be a simple XPath limited to element names, repetition indicators and the default child accessor that identifies one of the elements in the resource that caused this issue to be raised.  For HTTP errors, will be \"http.\" + the parameter name.",
             "items": {
               "pattern": "^[ \\r\\n\\t\\S]+$",
               "type": "string",
-              "description": "A sequence of Unicode characters"
+              "description": "A sequence of Unicode characters",
+              "title": "string"
             },
             "type": "array"
           },
@@ -120,12 +134,14 @@
             "items": {
               "pattern": "^[ \\r\\n\\t\\S]+$",
               "type": "string",
-              "description": "A sequence of Unicode characters"
+              "description": "A sequence of Unicode characters",
+              "title": "string"
             },
             "type": "array"
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "title": "OperationOutcome_Issue"
       },
       "type": "array"
     },

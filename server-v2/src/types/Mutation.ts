@@ -130,9 +130,6 @@ export const Mutation = mutationType({
       type: 'Attribute',
       args: {
         parentId: idArg({ required: true }),
-        name: stringArg({ required: true }),
-        fhirType: stringArg({ required: true }),
-        mergingScript: stringArg(),
       },
       resolve: createAttribute,
     })

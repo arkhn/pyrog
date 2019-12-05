@@ -1,6 +1,5 @@
 import { objectType, FieldResolver } from 'nexus'
-import { AttributeCreateWithoutResourceInput } from '@prisma/photon'
-import { fetchResourceSchema } from '../utils'
+import { AttributeCreateWithoutParentInput } from '@prisma/photon'
 
 export const Attribute = objectType({
   name: 'Attribute',
@@ -26,62 +25,61 @@ export const Attribute = objectType({
 export const createAttribute: FieldResolver<
   'Mutation',
   'createAttribute'
-> = async (_, { parentId, name, fhirType, mergingScript }, ctx) => {
+> = async (_, { parentId }, ctx) => {
   const parent = await ctx.photon.attributes.findOne({
     where: { id: parentId },
-    include: { resource: true },
+    include: {
+      resource: true,
+      children: {
+        include: {
+          children: {
+            include: {
+              children: {
+                include: {
+                  children: {
+                    include: {
+                      children: {
+                        include: { children: { include: { children: true } } },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
   })
   if (!parent) {
     throw new Error(`Could not find parent attribute ${parentId}`)
   } else if (!parent.isArray) {
     throw new Error(`Parent ${parent.id} is not an array`)
-  } else if (parent.fhirType != fhirType) {
-    throw new Error(
-      `Child type does not match his parent's (${fhirType} != ${
-        parent.fhirType
-      })`,
-    )
   }
 
-  // TODO: add children attributes recursively from json schema.
-  let resourceSchema = fetchResourceSchema(parent.resource!.fhirType)
-
-  const createAttributes = (schema: any, key: string): any => {
-    if (schema.properties) {
-      // case object
+  const replicateChildren = (attr: any): AttributeCreateWithoutParentInput => {
+    if (attr.children.length > 0) {
       return {
-        name: key,
-        fhirType: key,
-        description: schema.description,
-        isArray: false,
-        children: {
-          create: Object.keys(schema.properties).map(p =>
-            createAttributes(schema.properties[p], p),
-          ),
-        },
+        name: attr.name,
+        fhirType: attr.fhirType,
+        isArray: attr.isArray,
+        description: attr.description,
+        children: { create: attr.children.map(replicateChildren) },
       }
-    } else if (schema.items) {
-      // case array
-      return {
-        name: key,
-        fhirType: key,
-        description: schema.description,
-        isArray: true,
-        children: { create: [createAttributes(schema.items, key)] },
-      }
-    } else {
-      // case literal
-      return {
-        name: key,
-        fhirType: key,
-        isArray: false,
-        description: schema.description,
-      }
+    }
+    return {
+      name: attr.name,
+      fhirType: attr.fhirType,
+      isArray: attr.isArray,
+      description: attr.description,
     }
   }
 
   return ctx.photon.attributes.create({
-    data: createAttributes(resourceSchema.properties[fhirType], fhirType),
+    data: {
+      ...replicateChildren(parent.children[0]),
+      parent: { connect: { id: parent.id } },
+    },
   })
 }
 

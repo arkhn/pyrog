@@ -255,9 +255,6 @@ export interface NexusGenArgTypes {
   Mutation: {
     createAttribute: {
       // args
-      fhirType: string // String!
-      mergingScript?: string | null // String
-      name: string // String!
       parentId: string // ID!
     }
     createInput: {

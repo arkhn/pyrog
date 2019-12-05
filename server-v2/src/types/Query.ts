@@ -56,7 +56,10 @@ export const Query = queryType({
       },
       nullable: true,
       resolve: (parent, { resourceId }, ctx) =>
-        ctx.photon.resources.findOne({ where: { id: resourceId } }),
+        ctx.photon.resources.findOne({
+          where: { id: resourceId },
+          include: { attributes: true },
+        }),
     })
 
     t.field('attribute', {

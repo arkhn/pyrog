@@ -520,13 +520,6 @@
     {
       "stepType": "CreateField",
       "model": "Attribute",
-      "field": "name",
-      "type": "String",
-      "arity": "required"
-    },
-    {
-      "stepType": "CreateField",
-      "model": "Attribute",
       "field": "mergingScript",
       "type": "String",
       "arity": "optional"
@@ -551,6 +544,13 @@
       "directive": "default",
       "argument": "",
       "value": "false"
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Attribute",
+      "field": "name",
+      "type": "String",
+      "arity": "required"
     },
     {
       "stepType": "CreateField",
@@ -636,6 +636,13 @@
       "directive": "relation",
       "argument": "name",
       "value": "\"AttributeToAttributes\""
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Attribute",
+      "field": "resource",
+      "type": "Resource",
+      "arity": "optional"
     },
     {
       "stepType": "CreateField",

@@ -1,6 +1,6 @@
 import { objectType, FieldResolver } from 'nexus'
 import { AttributeCreateWithoutResourceInput } from '@prisma/photon'
-import { createAttribute } from './Attribute'
+import { fetchResourceSchema } from 'utils'
 
 export const Resource = objectType({
   name: 'Resource',
@@ -18,17 +18,45 @@ export const Resource = objectType({
   },
 })
 
+const createResourceAttributes = (schema: any, key: string): any => {
+  if (schema.properties) {
+    // case object
+    return {
+      name: key,
+      fhirType: schema.title || schema.type,
+      description: schema.description,
+      isArray: false,
+      children: {
+        create: Object.keys(schema.properties).map(p =>
+          createResourceAttributes(schema.properties[p], p),
+        ),
+      },
+    }
+  } else if (schema.items) {
+    // case array
+    return {
+      name: key,
+      fhirType: schema.title || schema.type,
+      description: schema.description,
+      isArray: true,
+      children: { create: [createResourceAttributes(schema.items, key)] },
+    }
+  } else {
+    // case literal
+    return {
+      name: key,
+      fhirType: schema.title || schema.type,
+      isArray: false,
+      description: schema.description,
+    }
+  }
+}
 const attributesBlacklist = ['resourceType', '_id']
 export const createResource: FieldResolver<
   'Mutation',
   'createResource'
 > = async (_parent, { sourceId, resourceName }, ctx) => {
-  let resourceSchema: any
-  try {
-    resourceSchema = require(`generated/fhir/${resourceName}.json`)
-  } catch (e) {
-    throw new Error(`Resource ${resourceName} does not exist.`)
-  }
+  const resourceSchema = fetchResourceSchema(resourceName)
 
   // TODO: this won't work with profiles
   const existing = await ctx.photon.resources.findMany({
@@ -43,51 +71,9 @@ export const createResource: FieldResolver<
     )
   }
 
-  const createAttributes = (schema: any, key: string): any => {
-    if (schema.properties) {
-      // case object
-      return {
-        name: key,
-        fhirType: key,
-        description: schema.description,
-        isArray: false,
-        children: {
-          create: Object.keys(schema.properties).map(p =>
-            createAttributes(schema.properties[p], p),
-          ),
-        },
-      }
-    } else if (schema.items) {
-      // case array
-      return {
-        name: key,
-        fhirType: key,
-        description: schema.description,
-        isArray: true,
-        children: { create: [createAttributes(schema.items, key)] },
-      }
-    } else {
-      // case literal
-      return {
-        name: key,
-        fhirType: key,
-        isArray: false,
-        description: schema.description,
-      }
-    }
-  }
-
-  return ctx.photon.resources.create({
+  const resource = await ctx.photon.resources.create({
     data: {
       fhirType: resourceName,
-      attributes: {
-        create: Object.keys(resourceSchema.properties)
-          .filter(attr => !attributesBlacklist.includes(attr))
-          .map(
-            attr => createAttributes(resourceSchema.properties[attr], attr),
-            [] as AttributeCreateWithoutResourceInput[],
-          ),
-      },
       source: {
         connect: {
           id: sourceId,
@@ -95,6 +81,28 @@ export const createResource: FieldResolver<
       },
     },
   })
+
+  const attributes = await Promise.all(
+    Object.keys(resourceSchema.properties)
+      .filter(attr => !attributesBlacklist.includes(attr))
+      .map(
+        attr =>
+          ctx.photon.attributes.create({
+            data: {
+              ...createResourceAttributes(
+                resourceSchema.properties[attr],
+                attr,
+              ),
+              resource: {
+                connect: { id: resource.id },
+              },
+            },
+            include: { resource: true },
+          }),
+        [] as AttributeCreateWithoutResourceInput[],
+      ),
+  )
+  return attributes[0].resource!
 }
 
 export const deleteResource: FieldResolver<

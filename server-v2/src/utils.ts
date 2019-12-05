@@ -1,6 +1,10 @@
 import { verify } from 'jsonwebtoken'
 import { Context } from './context'
-import { Resource } from '@prisma/photon'
+import {
+  Resource,
+  AttributeCreateWithoutParentInput,
+  AttributeCreateWithoutResourceInput,
+} from '@prisma/photon'
 
 export const APP_SECRET = 'appsecret321'
 
@@ -17,7 +21,7 @@ export function getUserId(context: Context) {
   }
 }
 
-export function fetchResourceSchema(resourceName: String) {
+export const fetchResourceSchema = (resourceName: String) => {
   try {
     return require(`generated/fhir/${resourceName}.json`)
   } catch (e) {

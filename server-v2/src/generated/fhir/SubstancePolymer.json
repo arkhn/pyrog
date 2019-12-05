@@ -3,17 +3,20 @@
   "properties": {
     "resourceType": {
       "description": "This is a SubstancePolymer resource",
-      "enum": ["SubstancePolymer"]
+      "enum": ["SubstancePolymer"],
+      "title": "\"SubstancePolymer\""
     },
     "implicitRules": {
       "pattern": "^\\S*$",
       "type": "string",
-      "description": "String of characters used to identify a name or a resource"
+      "description": "String of characters used to identify a name or a resource",
+      "title": "uri"
     },
     "language": {
       "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
       "type": "string",
-      "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+      "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+      "title": "code"
     },
     "class": {
       "description": "A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.",
@@ -26,35 +29,42 @@
               "system": {
                 "pattern": "^\\S*$",
                 "type": "string",
-                "description": "String of characters used to identify a name or a resource"
+                "description": "String of characters used to identify a name or a resource",
+                "title": "uri"
               },
               "version": {
                 "pattern": "^[ \\r\\n\\t\\S]+$",
                 "type": "string",
-                "description": "A sequence of Unicode characters"
+                "description": "A sequence of Unicode characters",
+                "title": "string"
               },
               "code": {
                 "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                 "type": "string",
-                "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                "title": "code"
               },
               "display": {
                 "pattern": "^[ \\r\\n\\t\\S]+$",
                 "type": "string",
-                "description": "A sequence of Unicode characters"
+                "description": "A sequence of Unicode characters",
+                "title": "string"
               },
               "userSelected": {
                 "pattern": "^true|false$",
                 "type": "boolean",
-                "description": "Value of \"true\" or \"false\""
+                "description": "Value of \"true\" or \"false\"",
+                "title": "boolean"
               }
             },
-            "additionalProperties": false
+            "additionalProperties": false,
+            "title": "Coding"
           },
           "type": "array"
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "title": "CodeableConcept"
     },
     "geometry": {
       "description": "A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.",
@@ -67,35 +77,42 @@
               "system": {
                 "pattern": "^\\S*$",
                 "type": "string",
-                "description": "String of characters used to identify a name or a resource"
+                "description": "String of characters used to identify a name or a resource",
+                "title": "uri"
               },
               "version": {
                 "pattern": "^[ \\r\\n\\t\\S]+$",
                 "type": "string",
-                "description": "A sequence of Unicode characters"
+                "description": "A sequence of Unicode characters",
+                "title": "string"
               },
               "code": {
                 "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                 "type": "string",
-                "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                "title": "code"
               },
               "display": {
                 "pattern": "^[ \\r\\n\\t\\S]+$",
                 "type": "string",
-                "description": "A sequence of Unicode characters"
+                "description": "A sequence of Unicode characters",
+                "title": "string"
               },
               "userSelected": {
                 "pattern": "^true|false$",
                 "type": "boolean",
-                "description": "Value of \"true\" or \"false\""
+                "description": "Value of \"true\" or \"false\"",
+                "title": "boolean"
               }
             },
-            "additionalProperties": false
+            "additionalProperties": false,
+            "title": "Coding"
           },
           "type": "array"
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "title": "CodeableConcept"
     },
     "copolymerConnectivity": {
       "description": "Todo.",
@@ -110,35 +127,42 @@
                 "system": {
                   "pattern": "^\\S*$",
                   "type": "string",
-                  "description": "String of characters used to identify a name or a resource"
+                  "description": "String of characters used to identify a name or a resource",
+                  "title": "uri"
                 },
                 "version": {
                   "pattern": "^[ \\r\\n\\t\\S]+$",
                   "type": "string",
-                  "description": "A sequence of Unicode characters"
+                  "description": "A sequence of Unicode characters",
+                  "title": "string"
                 },
                 "code": {
                   "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                   "type": "string",
-                  "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                  "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                  "title": "code"
                 },
                 "display": {
                   "pattern": "^[ \\r\\n\\t\\S]+$",
                   "type": "string",
-                  "description": "A sequence of Unicode characters"
+                  "description": "A sequence of Unicode characters",
+                  "title": "string"
                 },
                 "userSelected": {
                   "pattern": "^true|false$",
                   "type": "boolean",
-                  "description": "Value of \"true\" or \"false\""
+                  "description": "Value of \"true\" or \"false\"",
+                  "title": "boolean"
                 }
               },
-              "additionalProperties": false
+              "additionalProperties": false,
+              "title": "Coding"
             },
             "type": "array"
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "title": "CodeableConcept"
       },
       "type": "array"
     },
@@ -147,7 +171,8 @@
       "items": {
         "pattern": "^[ \\r\\n\\t\\S]+$",
         "type": "string",
-        "description": "A sequence of Unicode characters"
+        "description": "A sequence of Unicode characters",
+        "title": "string"
       },
       "type": "array"
     },
@@ -167,35 +192,42 @@
                     "system": {
                       "pattern": "^\\S*$",
                       "type": "string",
-                      "description": "String of characters used to identify a name or a resource"
+                      "description": "String of characters used to identify a name or a resource",
+                      "title": "uri"
                     },
                     "version": {
                       "pattern": "^[ \\r\\n\\t\\S]+$",
                       "type": "string",
-                      "description": "A sequence of Unicode characters"
+                      "description": "A sequence of Unicode characters",
+                      "title": "string"
                     },
                     "code": {
                       "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                       "type": "string",
-                      "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                      "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                      "title": "code"
                     },
                     "display": {
                       "pattern": "^[ \\r\\n\\t\\S]+$",
                       "type": "string",
-                      "description": "A sequence of Unicode characters"
+                      "description": "A sequence of Unicode characters",
+                      "title": "string"
                     },
                     "userSelected": {
                       "pattern": "^true|false$",
                       "type": "boolean",
-                      "description": "Value of \"true\" or \"false\""
+                      "description": "Value of \"true\" or \"false\"",
+                      "title": "boolean"
                     }
                   },
-                  "additionalProperties": false
+                  "additionalProperties": false,
+                  "title": "Coding"
                 },
                 "type": "array"
               }
             },
-            "additionalProperties": false
+            "additionalProperties": false,
+            "title": "CodeableConcept"
           },
           "startingMaterial": {
             "description": "Todo.",
@@ -213,35 +245,42 @@
                           "system": {
                             "pattern": "^\\S*$",
                             "type": "string",
-                            "description": "String of characters used to identify a name or a resource"
+                            "description": "String of characters used to identify a name or a resource",
+                            "title": "uri"
                           },
                           "version": {
                             "pattern": "^[ \\r\\n\\t\\S]+$",
                             "type": "string",
-                            "description": "A sequence of Unicode characters"
+                            "description": "A sequence of Unicode characters",
+                            "title": "string"
                           },
                           "code": {
                             "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                             "type": "string",
-                            "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                            "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                            "title": "code"
                           },
                           "display": {
                             "pattern": "^[ \\r\\n\\t\\S]+$",
                             "type": "string",
-                            "description": "A sequence of Unicode characters"
+                            "description": "A sequence of Unicode characters",
+                            "title": "string"
                           },
                           "userSelected": {
                             "pattern": "^true|false$",
                             "type": "boolean",
-                            "description": "Value of \"true\" or \"false\""
+                            "description": "Value of \"true\" or \"false\"",
+                            "title": "boolean"
                           }
                         },
-                        "additionalProperties": false
+                        "additionalProperties": false,
+                        "title": "Coding"
                       },
                       "type": "array"
                     }
                   },
-                  "additionalProperties": false
+                  "additionalProperties": false,
+                  "title": "CodeableConcept"
                 },
                 "type": {
                   "description": "A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.",
@@ -254,40 +293,48 @@
                           "system": {
                             "pattern": "^\\S*$",
                             "type": "string",
-                            "description": "String of characters used to identify a name or a resource"
+                            "description": "String of characters used to identify a name or a resource",
+                            "title": "uri"
                           },
                           "version": {
                             "pattern": "^[ \\r\\n\\t\\S]+$",
                             "type": "string",
-                            "description": "A sequence of Unicode characters"
+                            "description": "A sequence of Unicode characters",
+                            "title": "string"
                           },
                           "code": {
                             "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                             "type": "string",
-                            "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                            "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                            "title": "code"
                           },
                           "display": {
                             "pattern": "^[ \\r\\n\\t\\S]+$",
                             "type": "string",
-                            "description": "A sequence of Unicode characters"
+                            "description": "A sequence of Unicode characters",
+                            "title": "string"
                           },
                           "userSelected": {
                             "pattern": "^true|false$",
                             "type": "boolean",
-                            "description": "Value of \"true\" or \"false\""
+                            "description": "Value of \"true\" or \"false\"",
+                            "title": "boolean"
                           }
                         },
-                        "additionalProperties": false
+                        "additionalProperties": false,
+                        "title": "Coding"
                       },
                       "type": "array"
                     }
                   },
-                  "additionalProperties": false
+                  "additionalProperties": false,
+                  "title": "CodeableConcept"
                 },
                 "isDefining": {
                   "pattern": "^true|false$",
                   "type": "boolean",
-                  "description": "Value of \"true\" or \"false\""
+                  "description": "Value of \"true\" or \"false\"",
+                  "title": "boolean"
                 },
                 "amount": {
                   "description": "Chemical substances are a single substance type whose primary defining element is the molecular structure. Chemical substances shall be defined on the basis of their complete covalent molecular structure; the presence of a salt (counter-ion) and/or solvates (water, alcohols) is also captured. Purity, grade, physical form or particle size are not taken into account in the definition of a chemical substance or in the assignment of a Substance ID.",
@@ -298,29 +345,35 @@
                         "value": {
                           "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$",
                           "type": "number",
-                          "description": "A rational number with implicit precision"
+                          "description": "A rational number with implicit precision",
+                          "title": "decimal"
                         },
                         "comparator": {
                           "description": "How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.",
-                          "enum": ["<", "<=", ">=", ">"]
+                          "enum": ["<", "<=", ">=", ">"],
+                          "title": "\"<\"|\"<=\"|\">=\"|\">\""
                         },
                         "unit": {
                           "pattern": "^[ \\r\\n\\t\\S]+$",
                           "type": "string",
-                          "description": "A sequence of Unicode characters"
+                          "description": "A sequence of Unicode characters",
+                          "title": "string"
                         },
                         "system": {
                           "pattern": "^\\S*$",
                           "type": "string",
-                          "description": "String of characters used to identify a name or a resource"
+                          "description": "String of characters used to identify a name or a resource",
+                          "title": "uri"
                         },
                         "code": {
                           "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                           "type": "string",
-                          "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                          "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                          "title": "code"
                         }
                       },
-                      "additionalProperties": false
+                      "additionalProperties": false,
+                      "title": "Quantity"
                     },
                     "amountRange": {
                       "description": "A set of ordered Quantities defined by a low and high limit.",
@@ -331,29 +384,35 @@
                             "value": {
                               "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$",
                               "type": "number",
-                              "description": "A rational number with implicit precision"
+                              "description": "A rational number with implicit precision",
+                              "title": "decimal"
                             },
                             "comparator": {
                               "description": "How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.",
-                              "enum": ["<", "<=", ">=", ">"]
+                              "enum": ["<", "<=", ">=", ">"],
+                              "title": "\"<\"|\"<=\"|\">=\"|\">\""
                             },
                             "unit": {
                               "pattern": "^[ \\r\\n\\t\\S]+$",
                               "type": "string",
-                              "description": "A sequence of Unicode characters"
+                              "description": "A sequence of Unicode characters",
+                              "title": "string"
                             },
                             "system": {
                               "pattern": "^\\S*$",
                               "type": "string",
-                              "description": "String of characters used to identify a name or a resource"
+                              "description": "String of characters used to identify a name or a resource",
+                              "title": "uri"
                             },
                             "code": {
                               "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                               "type": "string",
-                              "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                              "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                              "title": "code"
                             }
                           },
-                          "additionalProperties": false
+                          "additionalProperties": false,
+                          "title": "Quantity"
                         },
                         "high": {
                           "description": "A measured amount (or an amount that can potentially be measured). Note that measured amounts include amounts that are not precisely quantified, including amounts involving arbitrary units and floating currencies.",
@@ -361,32 +420,39 @@
                             "value": {
                               "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$",
                               "type": "number",
-                              "description": "A rational number with implicit precision"
+                              "description": "A rational number with implicit precision",
+                              "title": "decimal"
                             },
                             "comparator": {
                               "description": "How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.",
-                              "enum": ["<", "<=", ">=", ">"]
+                              "enum": ["<", "<=", ">=", ">"],
+                              "title": "\"<\"|\"<=\"|\">=\"|\">\""
                             },
                             "unit": {
                               "pattern": "^[ \\r\\n\\t\\S]+$",
                               "type": "string",
-                              "description": "A sequence of Unicode characters"
+                              "description": "A sequence of Unicode characters",
+                              "title": "string"
                             },
                             "system": {
                               "pattern": "^\\S*$",
                               "type": "string",
-                              "description": "String of characters used to identify a name or a resource"
+                              "description": "String of characters used to identify a name or a resource",
+                              "title": "uri"
                             },
                             "code": {
                               "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                               "type": "string",
-                              "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                              "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                              "title": "code"
                             }
                           },
-                          "additionalProperties": false
+                          "additionalProperties": false,
+                          "title": "Quantity"
                         }
                       },
-                      "additionalProperties": false
+                      "additionalProperties": false,
+                      "title": "Range"
                     },
                     "amountString": {
                       "description": "Used to capture quantitative values for a variety of elements. If only limits are given, the arithmetic mean would be the average. If only a single definite value for a given element is given, it would be captured in this field.",
@@ -404,40 +470,48 @@
                               "system": {
                                 "pattern": "^\\S*$",
                                 "type": "string",
-                                "description": "String of characters used to identify a name or a resource"
+                                "description": "String of characters used to identify a name or a resource",
+                                "title": "uri"
                               },
                               "version": {
                                 "pattern": "^[ \\r\\n\\t\\S]+$",
                                 "type": "string",
-                                "description": "A sequence of Unicode characters"
+                                "description": "A sequence of Unicode characters",
+                                "title": "string"
                               },
                               "code": {
                                 "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                                 "type": "string",
-                                "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                                "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                                "title": "code"
                               },
                               "display": {
                                 "pattern": "^[ \\r\\n\\t\\S]+$",
                                 "type": "string",
-                                "description": "A sequence of Unicode characters"
+                                "description": "A sequence of Unicode characters",
+                                "title": "string"
                               },
                               "userSelected": {
                                 "pattern": "^true|false$",
                                 "type": "boolean",
-                                "description": "Value of \"true\" or \"false\""
+                                "description": "Value of \"true\" or \"false\"",
+                                "title": "boolean"
                               }
                             },
-                            "additionalProperties": false
+                            "additionalProperties": false,
+                            "title": "Coding"
                           },
                           "type": "array"
                         }
                       },
-                      "additionalProperties": false
+                      "additionalProperties": false,
+                      "title": "CodeableConcept"
                     },
                     "amountText": {
                       "pattern": "^[ \\r\\n\\t\\S]+$",
                       "type": "string",
-                      "description": "A sequence of Unicode characters"
+                      "description": "A sequence of Unicode characters",
+                      "title": "string"
                     },
                     "referenceRange": {
                       "description": "Chemical substances are a single substance type whose primary defining element is the molecular structure. Chemical substances shall be defined on the basis of their complete covalent molecular structure; the presence of a salt (counter-ion) and/or solvates (water, alcohols) is also captured. Purity, grade, physical form or particle size are not taken into account in the definition of a chemical substance or in the assignment of a Substance ID.",
@@ -448,29 +522,35 @@
                             "value": {
                               "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$",
                               "type": "number",
-                              "description": "A rational number with implicit precision"
+                              "description": "A rational number with implicit precision",
+                              "title": "decimal"
                             },
                             "comparator": {
                               "description": "How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.",
-                              "enum": ["<", "<=", ">=", ">"]
+                              "enum": ["<", "<=", ">=", ">"],
+                              "title": "\"<\"|\"<=\"|\">=\"|\">\""
                             },
                             "unit": {
                               "pattern": "^[ \\r\\n\\t\\S]+$",
                               "type": "string",
-                              "description": "A sequence of Unicode characters"
+                              "description": "A sequence of Unicode characters",
+                              "title": "string"
                             },
                             "system": {
                               "pattern": "^\\S*$",
                               "type": "string",
-                              "description": "String of characters used to identify a name or a resource"
+                              "description": "String of characters used to identify a name or a resource",
+                              "title": "uri"
                             },
                             "code": {
                               "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                               "type": "string",
-                              "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                              "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                              "title": "code"
                             }
                           },
-                          "additionalProperties": false
+                          "additionalProperties": false,
+                          "title": "Quantity"
                         },
                         "highLimit": {
                           "description": "A measured amount (or an amount that can potentially be measured). Note that measured amounts include amounts that are not precisely quantified, including amounts involving arbitrary units and floating currencies.",
@@ -478,43 +558,53 @@
                             "value": {
                               "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$",
                               "type": "number",
-                              "description": "A rational number with implicit precision"
+                              "description": "A rational number with implicit precision",
+                              "title": "decimal"
                             },
                             "comparator": {
                               "description": "How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.",
-                              "enum": ["<", "<=", ">=", ">"]
+                              "enum": ["<", "<=", ">=", ">"],
+                              "title": "\"<\"|\"<=\"|\">=\"|\">\""
                             },
                             "unit": {
                               "pattern": "^[ \\r\\n\\t\\S]+$",
                               "type": "string",
-                              "description": "A sequence of Unicode characters"
+                              "description": "A sequence of Unicode characters",
+                              "title": "string"
                             },
                             "system": {
                               "pattern": "^\\S*$",
                               "type": "string",
-                              "description": "String of characters used to identify a name or a resource"
+                              "description": "String of characters used to identify a name or a resource",
+                              "title": "uri"
                             },
                             "code": {
                               "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                               "type": "string",
-                              "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                              "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                              "title": "code"
                             }
                           },
-                          "additionalProperties": false
+                          "additionalProperties": false,
+                          "title": "Quantity"
                         }
                       },
-                      "additionalProperties": false
+                      "additionalProperties": false,
+                      "title": "SubstanceAmount_ReferenceRange"
                     }
                   },
-                  "additionalProperties": false
+                  "additionalProperties": false,
+                  "title": "SubstanceAmount"
                 }
               },
-              "additionalProperties": false
+              "additionalProperties": false,
+              "title": "SubstancePolymer_StartingMaterial"
             },
             "type": "array"
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "title": "SubstancePolymer_MonomerSet"
       },
       "type": "array"
     },
@@ -526,12 +616,14 @@
           "numberOfUnits": {
             "pattern": "^-?([0]|([1-9][0-9]*))$",
             "type": "number",
-            "description": "A whole number"
+            "description": "A whole number",
+            "title": "integer"
           },
           "averageMolecularFormula": {
             "pattern": "^[ \\r\\n\\t\\S]+$",
             "type": "string",
-            "description": "A sequence of Unicode characters"
+            "description": "A sequence of Unicode characters",
+            "title": "string"
           },
           "repeatUnitAmountType": {
             "description": "A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.",
@@ -544,35 +636,42 @@
                     "system": {
                       "pattern": "^\\S*$",
                       "type": "string",
-                      "description": "String of characters used to identify a name or a resource"
+                      "description": "String of characters used to identify a name or a resource",
+                      "title": "uri"
                     },
                     "version": {
                       "pattern": "^[ \\r\\n\\t\\S]+$",
                       "type": "string",
-                      "description": "A sequence of Unicode characters"
+                      "description": "A sequence of Unicode characters",
+                      "title": "string"
                     },
                     "code": {
                       "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                       "type": "string",
-                      "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                      "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                      "title": "code"
                     },
                     "display": {
                       "pattern": "^[ \\r\\n\\t\\S]+$",
                       "type": "string",
-                      "description": "A sequence of Unicode characters"
+                      "description": "A sequence of Unicode characters",
+                      "title": "string"
                     },
                     "userSelected": {
                       "pattern": "^true|false$",
                       "type": "boolean",
-                      "description": "Value of \"true\" or \"false\""
+                      "description": "Value of \"true\" or \"false\"",
+                      "title": "boolean"
                     }
                   },
-                  "additionalProperties": false
+                  "additionalProperties": false,
+                  "title": "Coding"
                 },
                 "type": "array"
               }
             },
-            "additionalProperties": false
+            "additionalProperties": false,
+            "title": "CodeableConcept"
           },
           "repeatUnit": {
             "description": "Todo.",
@@ -590,40 +689,48 @@
                           "system": {
                             "pattern": "^\\S*$",
                             "type": "string",
-                            "description": "String of characters used to identify a name or a resource"
+                            "description": "String of characters used to identify a name or a resource",
+                            "title": "uri"
                           },
                           "version": {
                             "pattern": "^[ \\r\\n\\t\\S]+$",
                             "type": "string",
-                            "description": "A sequence of Unicode characters"
+                            "description": "A sequence of Unicode characters",
+                            "title": "string"
                           },
                           "code": {
                             "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                             "type": "string",
-                            "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                            "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                            "title": "code"
                           },
                           "display": {
                             "pattern": "^[ \\r\\n\\t\\S]+$",
                             "type": "string",
-                            "description": "A sequence of Unicode characters"
+                            "description": "A sequence of Unicode characters",
+                            "title": "string"
                           },
                           "userSelected": {
                             "pattern": "^true|false$",
                             "type": "boolean",
-                            "description": "Value of \"true\" or \"false\""
+                            "description": "Value of \"true\" or \"false\"",
+                            "title": "boolean"
                           }
                         },
-                        "additionalProperties": false
+                        "additionalProperties": false,
+                        "title": "Coding"
                       },
                       "type": "array"
                     }
                   },
-                  "additionalProperties": false
+                  "additionalProperties": false,
+                  "title": "CodeableConcept"
                 },
                 "repeatUnit": {
                   "pattern": "^[ \\r\\n\\t\\S]+$",
                   "type": "string",
-                  "description": "A sequence of Unicode characters"
+                  "description": "A sequence of Unicode characters",
+                  "title": "string"
                 },
                 "amount": {
                   "description": "Chemical substances are a single substance type whose primary defining element is the molecular structure. Chemical substances shall be defined on the basis of their complete covalent molecular structure; the presence of a salt (counter-ion) and/or solvates (water, alcohols) is also captured. Purity, grade, physical form or particle size are not taken into account in the definition of a chemical substance or in the assignment of a Substance ID.",
@@ -634,29 +741,35 @@
                         "value": {
                           "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$",
                           "type": "number",
-                          "description": "A rational number with implicit precision"
+                          "description": "A rational number with implicit precision",
+                          "title": "decimal"
                         },
                         "comparator": {
                           "description": "How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.",
-                          "enum": ["<", "<=", ">=", ">"]
+                          "enum": ["<", "<=", ">=", ">"],
+                          "title": "\"<\"|\"<=\"|\">=\"|\">\""
                         },
                         "unit": {
                           "pattern": "^[ \\r\\n\\t\\S]+$",
                           "type": "string",
-                          "description": "A sequence of Unicode characters"
+                          "description": "A sequence of Unicode characters",
+                          "title": "string"
                         },
                         "system": {
                           "pattern": "^\\S*$",
                           "type": "string",
-                          "description": "String of characters used to identify a name or a resource"
+                          "description": "String of characters used to identify a name or a resource",
+                          "title": "uri"
                         },
                         "code": {
                           "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                           "type": "string",
-                          "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                          "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                          "title": "code"
                         }
                       },
-                      "additionalProperties": false
+                      "additionalProperties": false,
+                      "title": "Quantity"
                     },
                     "amountRange": {
                       "description": "A set of ordered Quantities defined by a low and high limit.",
@@ -667,29 +780,35 @@
                             "value": {
                               "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$",
                               "type": "number",
-                              "description": "A rational number with implicit precision"
+                              "description": "A rational number with implicit precision",
+                              "title": "decimal"
                             },
                             "comparator": {
                               "description": "How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.",
-                              "enum": ["<", "<=", ">=", ">"]
+                              "enum": ["<", "<=", ">=", ">"],
+                              "title": "\"<\"|\"<=\"|\">=\"|\">\""
                             },
                             "unit": {
                               "pattern": "^[ \\r\\n\\t\\S]+$",
                               "type": "string",
-                              "description": "A sequence of Unicode characters"
+                              "description": "A sequence of Unicode characters",
+                              "title": "string"
                             },
                             "system": {
                               "pattern": "^\\S*$",
                               "type": "string",
-                              "description": "String of characters used to identify a name or a resource"
+                              "description": "String of characters used to identify a name or a resource",
+                              "title": "uri"
                             },
                             "code": {
                               "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                               "type": "string",
-                              "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                              "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                              "title": "code"
                             }
                           },
-                          "additionalProperties": false
+                          "additionalProperties": false,
+                          "title": "Quantity"
                         },
                         "high": {
                           "description": "A measured amount (or an amount that can potentially be measured). Note that measured amounts include amounts that are not precisely quantified, including amounts involving arbitrary units and floating currencies.",
@@ -697,32 +816,39 @@
                             "value": {
                               "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$",
                               "type": "number",
-                              "description": "A rational number with implicit precision"
+                              "description": "A rational number with implicit precision",
+                              "title": "decimal"
                             },
                             "comparator": {
                               "description": "How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.",
-                              "enum": ["<", "<=", ">=", ">"]
+                              "enum": ["<", "<=", ">=", ">"],
+                              "title": "\"<\"|\"<=\"|\">=\"|\">\""
                             },
                             "unit": {
                               "pattern": "^[ \\r\\n\\t\\S]+$",
                               "type": "string",
-                              "description": "A sequence of Unicode characters"
+                              "description": "A sequence of Unicode characters",
+                              "title": "string"
                             },
                             "system": {
                               "pattern": "^\\S*$",
                               "type": "string",
-                              "description": "String of characters used to identify a name or a resource"
+                              "description": "String of characters used to identify a name or a resource",
+                              "title": "uri"
                             },
                             "code": {
                               "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                               "type": "string",
-                              "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                              "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                              "title": "code"
                             }
                           },
-                          "additionalProperties": false
+                          "additionalProperties": false,
+                          "title": "Quantity"
                         }
                       },
-                      "additionalProperties": false
+                      "additionalProperties": false,
+                      "title": "Range"
                     },
                     "amountString": {
                       "description": "Used to capture quantitative values for a variety of elements. If only limits are given, the arithmetic mean would be the average. If only a single definite value for a given element is given, it would be captured in this field.",
@@ -740,40 +866,48 @@
                               "system": {
                                 "pattern": "^\\S*$",
                                 "type": "string",
-                                "description": "String of characters used to identify a name or a resource"
+                                "description": "String of characters used to identify a name or a resource",
+                                "title": "uri"
                               },
                               "version": {
                                 "pattern": "^[ \\r\\n\\t\\S]+$",
                                 "type": "string",
-                                "description": "A sequence of Unicode characters"
+                                "description": "A sequence of Unicode characters",
+                                "title": "string"
                               },
                               "code": {
                                 "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                                 "type": "string",
-                                "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                                "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                                "title": "code"
                               },
                               "display": {
                                 "pattern": "^[ \\r\\n\\t\\S]+$",
                                 "type": "string",
-                                "description": "A sequence of Unicode characters"
+                                "description": "A sequence of Unicode characters",
+                                "title": "string"
                               },
                               "userSelected": {
                                 "pattern": "^true|false$",
                                 "type": "boolean",
-                                "description": "Value of \"true\" or \"false\""
+                                "description": "Value of \"true\" or \"false\"",
+                                "title": "boolean"
                               }
                             },
-                            "additionalProperties": false
+                            "additionalProperties": false,
+                            "title": "Coding"
                           },
                           "type": "array"
                         }
                       },
-                      "additionalProperties": false
+                      "additionalProperties": false,
+                      "title": "CodeableConcept"
                     },
                     "amountText": {
                       "pattern": "^[ \\r\\n\\t\\S]+$",
                       "type": "string",
-                      "description": "A sequence of Unicode characters"
+                      "description": "A sequence of Unicode characters",
+                      "title": "string"
                     },
                     "referenceRange": {
                       "description": "Chemical substances are a single substance type whose primary defining element is the molecular structure. Chemical substances shall be defined on the basis of their complete covalent molecular structure; the presence of a salt (counter-ion) and/or solvates (water, alcohols) is also captured. Purity, grade, physical form or particle size are not taken into account in the definition of a chemical substance or in the assignment of a Substance ID.",
@@ -784,29 +918,35 @@
                             "value": {
                               "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$",
                               "type": "number",
-                              "description": "A rational number with implicit precision"
+                              "description": "A rational number with implicit precision",
+                              "title": "decimal"
                             },
                             "comparator": {
                               "description": "How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.",
-                              "enum": ["<", "<=", ">=", ">"]
+                              "enum": ["<", "<=", ">=", ">"],
+                              "title": "\"<\"|\"<=\"|\">=\"|\">\""
                             },
                             "unit": {
                               "pattern": "^[ \\r\\n\\t\\S]+$",
                               "type": "string",
-                              "description": "A sequence of Unicode characters"
+                              "description": "A sequence of Unicode characters",
+                              "title": "string"
                             },
                             "system": {
                               "pattern": "^\\S*$",
                               "type": "string",
-                              "description": "String of characters used to identify a name or a resource"
+                              "description": "String of characters used to identify a name or a resource",
+                              "title": "uri"
                             },
                             "code": {
                               "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                               "type": "string",
-                              "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                              "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                              "title": "code"
                             }
                           },
-                          "additionalProperties": false
+                          "additionalProperties": false,
+                          "title": "Quantity"
                         },
                         "highLimit": {
                           "description": "A measured amount (or an amount that can potentially be measured). Note that measured amounts include amounts that are not precisely quantified, including amounts involving arbitrary units and floating currencies.",
@@ -814,35 +954,43 @@
                             "value": {
                               "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$",
                               "type": "number",
-                              "description": "A rational number with implicit precision"
+                              "description": "A rational number with implicit precision",
+                              "title": "decimal"
                             },
                             "comparator": {
                               "description": "How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.",
-                              "enum": ["<", "<=", ">=", ">"]
+                              "enum": ["<", "<=", ">=", ">"],
+                              "title": "\"<\"|\"<=\"|\">=\"|\">\""
                             },
                             "unit": {
                               "pattern": "^[ \\r\\n\\t\\S]+$",
                               "type": "string",
-                              "description": "A sequence of Unicode characters"
+                              "description": "A sequence of Unicode characters",
+                              "title": "string"
                             },
                             "system": {
                               "pattern": "^\\S*$",
                               "type": "string",
-                              "description": "String of characters used to identify a name or a resource"
+                              "description": "String of characters used to identify a name or a resource",
+                              "title": "uri"
                             },
                             "code": {
                               "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                               "type": "string",
-                              "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                              "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                              "title": "code"
                             }
                           },
-                          "additionalProperties": false
+                          "additionalProperties": false,
+                          "title": "Quantity"
                         }
                       },
-                      "additionalProperties": false
+                      "additionalProperties": false,
+                      "title": "SubstanceAmount_ReferenceRange"
                     }
                   },
-                  "additionalProperties": false
+                  "additionalProperties": false,
+                  "title": "SubstanceAmount"
                 },
                 "degreeOfPolymerisation": {
                   "description": "Todo.",
@@ -860,35 +1008,42 @@
                                 "system": {
                                   "pattern": "^\\S*$",
                                   "type": "string",
-                                  "description": "String of characters used to identify a name or a resource"
+                                  "description": "String of characters used to identify a name or a resource",
+                                  "title": "uri"
                                 },
                                 "version": {
                                   "pattern": "^[ \\r\\n\\t\\S]+$",
                                   "type": "string",
-                                  "description": "A sequence of Unicode characters"
+                                  "description": "A sequence of Unicode characters",
+                                  "title": "string"
                                 },
                                 "code": {
                                   "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                                   "type": "string",
-                                  "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                                  "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                                  "title": "code"
                                 },
                                 "display": {
                                   "pattern": "^[ \\r\\n\\t\\S]+$",
                                   "type": "string",
-                                  "description": "A sequence of Unicode characters"
+                                  "description": "A sequence of Unicode characters",
+                                  "title": "string"
                                 },
                                 "userSelected": {
                                   "pattern": "^true|false$",
                                   "type": "boolean",
-                                  "description": "Value of \"true\" or \"false\""
+                                  "description": "Value of \"true\" or \"false\"",
+                                  "title": "boolean"
                                 }
                               },
-                              "additionalProperties": false
+                              "additionalProperties": false,
+                              "title": "Coding"
                             },
                             "type": "array"
                           }
                         },
-                        "additionalProperties": false
+                        "additionalProperties": false,
+                        "title": "CodeableConcept"
                       },
                       "amount": {
                         "description": "Chemical substances are a single substance type whose primary defining element is the molecular structure. Chemical substances shall be defined on the basis of their complete covalent molecular structure; the presence of a salt (counter-ion) and/or solvates (water, alcohols) is also captured. Purity, grade, physical form or particle size are not taken into account in the definition of a chemical substance or in the assignment of a Substance ID.",
@@ -899,29 +1054,35 @@
                               "value": {
                                 "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$",
                                 "type": "number",
-                                "description": "A rational number with implicit precision"
+                                "description": "A rational number with implicit precision",
+                                "title": "decimal"
                               },
                               "comparator": {
                                 "description": "How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.",
-                                "enum": ["<", "<=", ">=", ">"]
+                                "enum": ["<", "<=", ">=", ">"],
+                                "title": "\"<\"|\"<=\"|\">=\"|\">\""
                               },
                               "unit": {
                                 "pattern": "^[ \\r\\n\\t\\S]+$",
                                 "type": "string",
-                                "description": "A sequence of Unicode characters"
+                                "description": "A sequence of Unicode characters",
+                                "title": "string"
                               },
                               "system": {
                                 "pattern": "^\\S*$",
                                 "type": "string",
-                                "description": "String of characters used to identify a name or a resource"
+                                "description": "String of characters used to identify a name or a resource",
+                                "title": "uri"
                               },
                               "code": {
                                 "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                                 "type": "string",
-                                "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                                "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                                "title": "code"
                               }
                             },
-                            "additionalProperties": false
+                            "additionalProperties": false,
+                            "title": "Quantity"
                           },
                           "amountRange": {
                             "description": "A set of ordered Quantities defined by a low and high limit.",
@@ -932,29 +1093,35 @@
                                   "value": {
                                     "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$",
                                     "type": "number",
-                                    "description": "A rational number with implicit precision"
+                                    "description": "A rational number with implicit precision",
+                                    "title": "decimal"
                                   },
                                   "comparator": {
                                     "description": "How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.",
-                                    "enum": ["<", "<=", ">=", ">"]
+                                    "enum": ["<", "<=", ">=", ">"],
+                                    "title": "\"<\"|\"<=\"|\">=\"|\">\""
                                   },
                                   "unit": {
                                     "pattern": "^[ \\r\\n\\t\\S]+$",
                                     "type": "string",
-                                    "description": "A sequence of Unicode characters"
+                                    "description": "A sequence of Unicode characters",
+                                    "title": "string"
                                   },
                                   "system": {
                                     "pattern": "^\\S*$",
                                     "type": "string",
-                                    "description": "String of characters used to identify a name or a resource"
+                                    "description": "String of characters used to identify a name or a resource",
+                                    "title": "uri"
                                   },
                                   "code": {
                                     "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                                     "type": "string",
-                                    "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                                    "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                                    "title": "code"
                                   }
                                 },
-                                "additionalProperties": false
+                                "additionalProperties": false,
+                                "title": "Quantity"
                               },
                               "high": {
                                 "description": "A measured amount (or an amount that can potentially be measured). Note that measured amounts include amounts that are not precisely quantified, including amounts involving arbitrary units and floating currencies.",
@@ -962,32 +1129,39 @@
                                   "value": {
                                     "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$",
                                     "type": "number",
-                                    "description": "A rational number with implicit precision"
+                                    "description": "A rational number with implicit precision",
+                                    "title": "decimal"
                                   },
                                   "comparator": {
                                     "description": "How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.",
-                                    "enum": ["<", "<=", ">=", ">"]
+                                    "enum": ["<", "<=", ">=", ">"],
+                                    "title": "\"<\"|\"<=\"|\">=\"|\">\""
                                   },
                                   "unit": {
                                     "pattern": "^[ \\r\\n\\t\\S]+$",
                                     "type": "string",
-                                    "description": "A sequence of Unicode characters"
+                                    "description": "A sequence of Unicode characters",
+                                    "title": "string"
                                   },
                                   "system": {
                                     "pattern": "^\\S*$",
                                     "type": "string",
-                                    "description": "String of characters used to identify a name or a resource"
+                                    "description": "String of characters used to identify a name or a resource",
+                                    "title": "uri"
                                   },
                                   "code": {
                                     "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                                     "type": "string",
-                                    "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                                    "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                                    "title": "code"
                                   }
                                 },
-                                "additionalProperties": false
+                                "additionalProperties": false,
+                                "title": "Quantity"
                               }
                             },
-                            "additionalProperties": false
+                            "additionalProperties": false,
+                            "title": "Range"
                           },
                           "amountString": {
                             "description": "Used to capture quantitative values for a variety of elements. If only limits are given, the arithmetic mean would be the average. If only a single definite value for a given element is given, it would be captured in this field.",
@@ -1005,40 +1179,48 @@
                                     "system": {
                                       "pattern": "^\\S*$",
                                       "type": "string",
-                                      "description": "String of characters used to identify a name or a resource"
+                                      "description": "String of characters used to identify a name or a resource",
+                                      "title": "uri"
                                     },
                                     "version": {
                                       "pattern": "^[ \\r\\n\\t\\S]+$",
                                       "type": "string",
-                                      "description": "A sequence of Unicode characters"
+                                      "description": "A sequence of Unicode characters",
+                                      "title": "string"
                                     },
                                     "code": {
                                       "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                                       "type": "string",
-                                      "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                                      "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                                      "title": "code"
                                     },
                                     "display": {
                                       "pattern": "^[ \\r\\n\\t\\S]+$",
                                       "type": "string",
-                                      "description": "A sequence of Unicode characters"
+                                      "description": "A sequence of Unicode characters",
+                                      "title": "string"
                                     },
                                     "userSelected": {
                                       "pattern": "^true|false$",
                                       "type": "boolean",
-                                      "description": "Value of \"true\" or \"false\""
+                                      "description": "Value of \"true\" or \"false\"",
+                                      "title": "boolean"
                                     }
                                   },
-                                  "additionalProperties": false
+                                  "additionalProperties": false,
+                                  "title": "Coding"
                                 },
                                 "type": "array"
                               }
                             },
-                            "additionalProperties": false
+                            "additionalProperties": false,
+                            "title": "CodeableConcept"
                           },
                           "amountText": {
                             "pattern": "^[ \\r\\n\\t\\S]+$",
                             "type": "string",
-                            "description": "A sequence of Unicode characters"
+                            "description": "A sequence of Unicode characters",
+                            "title": "string"
                           },
                           "referenceRange": {
                             "description": "Chemical substances are a single substance type whose primary defining element is the molecular structure. Chemical substances shall be defined on the basis of their complete covalent molecular structure; the presence of a salt (counter-ion) and/or solvates (water, alcohols) is also captured. Purity, grade, physical form or particle size are not taken into account in the definition of a chemical substance or in the assignment of a Substance ID.",
@@ -1049,29 +1231,35 @@
                                   "value": {
                                     "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$",
                                     "type": "number",
-                                    "description": "A rational number with implicit precision"
+                                    "description": "A rational number with implicit precision",
+                                    "title": "decimal"
                                   },
                                   "comparator": {
                                     "description": "How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.",
-                                    "enum": ["<", "<=", ">=", ">"]
+                                    "enum": ["<", "<=", ">=", ">"],
+                                    "title": "\"<\"|\"<=\"|\">=\"|\">\""
                                   },
                                   "unit": {
                                     "pattern": "^[ \\r\\n\\t\\S]+$",
                                     "type": "string",
-                                    "description": "A sequence of Unicode characters"
+                                    "description": "A sequence of Unicode characters",
+                                    "title": "string"
                                   },
                                   "system": {
                                     "pattern": "^\\S*$",
                                     "type": "string",
-                                    "description": "String of characters used to identify a name or a resource"
+                                    "description": "String of characters used to identify a name or a resource",
+                                    "title": "uri"
                                   },
                                   "code": {
                                     "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                                     "type": "string",
-                                    "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                                    "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                                    "title": "code"
                                   }
                                 },
-                                "additionalProperties": false
+                                "additionalProperties": false,
+                                "title": "Quantity"
                               },
                               "highLimit": {
                                 "description": "A measured amount (or an amount that can potentially be measured). Note that measured amounts include amounts that are not precisely quantified, including amounts involving arbitrary units and floating currencies.",
@@ -1079,38 +1267,47 @@
                                   "value": {
                                     "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$",
                                     "type": "number",
-                                    "description": "A rational number with implicit precision"
+                                    "description": "A rational number with implicit precision",
+                                    "title": "decimal"
                                   },
                                   "comparator": {
                                     "description": "How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.",
-                                    "enum": ["<", "<=", ">=", ">"]
+                                    "enum": ["<", "<=", ">=", ">"],
+                                    "title": "\"<\"|\"<=\"|\">=\"|\">\""
                                   },
                                   "unit": {
                                     "pattern": "^[ \\r\\n\\t\\S]+$",
                                     "type": "string",
-                                    "description": "A sequence of Unicode characters"
+                                    "description": "A sequence of Unicode characters",
+                                    "title": "string"
                                   },
                                   "system": {
                                     "pattern": "^\\S*$",
                                     "type": "string",
-                                    "description": "String of characters used to identify a name or a resource"
+                                    "description": "String of characters used to identify a name or a resource",
+                                    "title": "uri"
                                   },
                                   "code": {
                                     "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                                     "type": "string",
-                                    "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                                    "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                                    "title": "code"
                                   }
                                 },
-                                "additionalProperties": false
+                                "additionalProperties": false,
+                                "title": "Quantity"
                               }
                             },
-                            "additionalProperties": false
+                            "additionalProperties": false,
+                            "title": "SubstanceAmount_ReferenceRange"
                           }
                         },
-                        "additionalProperties": false
+                        "additionalProperties": false,
+                        "title": "SubstanceAmount"
                       }
                     },
-                    "additionalProperties": false
+                    "additionalProperties": false,
+                    "title": "SubstancePolymer_DegreeOfPolymerisation"
                   },
                   "type": "array"
                 },
@@ -1130,40 +1327,48 @@
                                 "system": {
                                   "pattern": "^\\S*$",
                                   "type": "string",
-                                  "description": "String of characters used to identify a name or a resource"
+                                  "description": "String of characters used to identify a name or a resource",
+                                  "title": "uri"
                                 },
                                 "version": {
                                   "pattern": "^[ \\r\\n\\t\\S]+$",
                                   "type": "string",
-                                  "description": "A sequence of Unicode characters"
+                                  "description": "A sequence of Unicode characters",
+                                  "title": "string"
                                 },
                                 "code": {
                                   "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                                   "type": "string",
-                                  "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                                  "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                                  "title": "code"
                                 },
                                 "display": {
                                   "pattern": "^[ \\r\\n\\t\\S]+$",
                                   "type": "string",
-                                  "description": "A sequence of Unicode characters"
+                                  "description": "A sequence of Unicode characters",
+                                  "title": "string"
                                 },
                                 "userSelected": {
                                   "pattern": "^true|false$",
                                   "type": "boolean",
-                                  "description": "Value of \"true\" or \"false\""
+                                  "description": "Value of \"true\" or \"false\"",
+                                  "title": "boolean"
                                 }
                               },
-                              "additionalProperties": false
+                              "additionalProperties": false,
+                              "title": "Coding"
                             },
                             "type": "array"
                           }
                         },
-                        "additionalProperties": false
+                        "additionalProperties": false,
+                        "title": "CodeableConcept"
                       },
                       "representation": {
                         "pattern": "^[ \\r\\n\\t\\S]+$",
                         "type": "string",
-                        "description": "A sequence of Unicode characters"
+                        "description": "A sequence of Unicode characters",
+                        "title": "string"
                       },
                       "attachment": {
                         "description": "For referring to data content defined in other formats.",
@@ -1171,56 +1376,68 @@
                           "contentType": {
                             "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                             "type": "string",
-                            "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                            "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                            "title": "code"
                           },
                           "language": {
                             "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
                             "type": "string",
-                            "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents"
+                            "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                            "title": "code"
                           },
                           "data": {
                             "type": "string",
-                            "description": "A stream of bytes"
+                            "description": "A stream of bytes",
+                            "title": "base64Binary"
                           },
                           "url": {
                             "pattern": "^\\S*$",
                             "type": "string",
-                            "description": "A URI that is a literal reference"
+                            "description": "A URI that is a literal reference",
+                            "title": "url"
                           },
                           "size": {
                             "pattern": "^[0]|([1-9][0-9]*)$",
                             "type": "number",
-                            "description": "An integer with a value that is not negative (e.g. >= 0)"
+                            "description": "An integer with a value that is not negative (e.g. >= 0)",
+                            "title": "unsignedInt"
                           },
                           "hash": {
                             "type": "string",
-                            "description": "A stream of bytes"
+                            "description": "A stream of bytes",
+                            "title": "base64Binary"
                           },
                           "title": {
                             "pattern": "^[ \\r\\n\\t\\S]+$",
                             "type": "string",
-                            "description": "A sequence of Unicode characters"
+                            "description": "A sequence of Unicode characters",
+                            "title": "string"
                           },
                           "creation": {
                             "pattern": "^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$",
                             "type": "string",
-                            "description": "A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates."
+                            "description": "A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates.",
+                            "title": "dateTime"
                           }
                         },
-                        "additionalProperties": false
+                        "additionalProperties": false,
+                        "title": "Attachment"
                       }
                     },
-                    "additionalProperties": false
+                    "additionalProperties": false,
+                    "title": "SubstancePolymer_StructuralRepresentation"
                   },
                   "type": "array"
                 }
               },
-              "additionalProperties": false
+              "additionalProperties": false,
+              "title": "SubstancePolymer_RepeatUnit"
             },
             "type": "array"
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "title": "SubstancePolymer_Repeat"
       },
       "type": "array"
     },
