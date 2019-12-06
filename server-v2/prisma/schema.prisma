@@ -4,7 +4,7 @@ generator photon {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://prisma:prisma@localhost:5432/prisma?schema=pyrog"
+  url      = env("POSTGRES_URL")
 }
 
 // One per software (Chimio, Crossway, etc)

@@ -65,9 +65,7 @@ export const createResource: FieldResolver<
   })
   if (existing.length) {
     throw new Error(
-      `Resource ${resourceName} already exists for source ${
-        existing[0].source.name
-      }`,
+      `Resource ${resourceName} already exists for source ${existing[0].source.name}`,
     )
   }
 

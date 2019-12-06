@@ -1,4 +1,4 @@
-import { objectType, FieldResolver } from 'nexus'
+import { objectType } from 'nexus'
 
 export const Column = objectType({
   name: 'Column',

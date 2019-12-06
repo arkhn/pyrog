@@ -1,10 +1,5 @@
 import { verify } from 'jsonwebtoken'
 import { Context } from './context'
-import {
-  Resource,
-  AttributeCreateWithoutParentInput,
-  AttributeCreateWithoutResourceInput,
-} from '@prisma/photon'
 
 export const APP_SECRET = 'appsecret321'
 

@@ -1,4 +1,4 @@
-import { idArg, queryType, stringArg } from 'nexus'
+import { idArg, queryType } from 'nexus'
 
 import { getUserId } from 'utils'
 

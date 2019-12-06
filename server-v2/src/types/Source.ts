@@ -1,6 +1,5 @@
-import { objectType, idArg, FieldResolver } from 'nexus'
+import { objectType, FieldResolver } from 'nexus'
 import { Attribute } from '@prisma/photon'
-import { monitorEventLoopDelay } from 'perf_hooks'
 
 export const Source = objectType({
   name: 'Source',

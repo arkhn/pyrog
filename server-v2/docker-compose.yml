@@ -1,6 +1,15 @@
 version: '3'
 services:
-  postgre:
+  pyrog:
+    image: pyrog2:latest
+    ports:
+      - 4000:4000
+    environment:
+      POSTGRES_URL: 'postgresql://prisma:prisma@postgres:5432/prisma?schema=pyrog'
+    depends_on:
+      - postgres
+
+  postgres:
     image: postgres
     ports:
       - 5432:5432

@@ -1,5 +1,4 @@
 import { objectType, FieldResolver } from 'nexus'
-import { NexusGenInputs } from 'generated/nexus'
 
 export const Input = objectType({
   name: 'Input',
