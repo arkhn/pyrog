@@ -1,0 +1,7 @@
+query {
+  sources {
+    id
+    name
+    hasOwner
+  }
+}

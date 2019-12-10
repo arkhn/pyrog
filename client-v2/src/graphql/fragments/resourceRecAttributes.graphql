@@ -1,0 +1,49 @@
+#import "./entireAttribute.graphql"
+
+fragment resourceRecAttributes on Resource {
+  id
+  label
+  fhirType
+  attributes {
+    ...entireAttribute
+    attributes {
+      ...entireAttribute
+      attributes {
+        ...entireAttribute
+        attributes {
+          ...entireAttribute
+          attributes {
+            ...entireAttribute
+            attributes {
+              ...entireAttribute
+              attributes {
+                ...entireAttribute
+                attributes {
+                  ...entireAttribute
+                  attributes {
+                    ...entireAttribute
+                    attributes {
+                      ...entireAttribute
+                      attributes {
+                        ...entireAttribute
+                        attributes {
+                          ...entireAttribute
+                          attributes {
+                            ...entireAttribute
+                            attributes {
+                              ...entireAttribute
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

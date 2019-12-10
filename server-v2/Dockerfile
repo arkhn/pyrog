@@ -16,6 +16,7 @@ ENV POSTGRES_URL=${POSTGRES_URL}
 # Install dependencies
 COPY package.json package.json
 COPY tsconfig.json tsconfig.json
+COPY tsconfig.build.json tsconfig.build.json
 COPY yarn.lock yarn.lock
 
 RUN yarn --frozen-lockfile
@@ -46,7 +47,6 @@ ENV POSTGRES_URL=${POSTGRES_URL}
 # Install deps for production only
 COPY package.json package.json
 COPY yarn.lock yarn.lock
-COPY tsconfig.json tsconfig.json
 
 RUN yarn --frozen-lockfile && \
     yarn cache clean --force

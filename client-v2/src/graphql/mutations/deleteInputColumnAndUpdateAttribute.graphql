@@ -1,0 +1,13 @@
+#import "../fragments/entireInputColumn.graphql"
+
+mutation deleteInputColumnAndUpdateAttribute(
+  $attributeId: ID!
+  $inputColumnId: ID!
+) {
+  deleteInputColumnAndUpdateAttribute(
+    attributeId: $attributeId
+    inputColumnId: $inputColumnId
+  ) {
+    ...entireInputColumn
+  }
+}

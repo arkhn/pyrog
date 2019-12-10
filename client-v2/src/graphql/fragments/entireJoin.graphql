@@ -1,0 +1,9 @@
+fragment entireJoin on Join {
+  id
+  sourceOwner
+  sourceTable
+  sourceColumn
+  targetOwner
+  targetTable
+  targetColumn
+}

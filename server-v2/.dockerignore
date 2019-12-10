@@ -8,6 +8,7 @@
 !package.json
 !src
 !tsconfig.json
+!tsconfig.build.json
 !prisma
 !scripts
 !.env*
