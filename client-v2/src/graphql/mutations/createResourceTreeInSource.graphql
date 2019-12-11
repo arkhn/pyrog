@@ -1,7 +1,0 @@
-mutation createResourceTreeInSource($sourceId: ID!, $resourceName: String!) {
-  createResourceTreeInSource(sourceId: $sourceId, resourceName: $resourceName) {
-    id
-    label
-    fhirType
-  }
-}

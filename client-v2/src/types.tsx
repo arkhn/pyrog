@@ -106,6 +106,11 @@ export interface ISource {
   schema: any;
 }
 
+export interface ITemplate {
+  name: string;
+  sources: ISource[];
+}
+
 export interface ISourceSchemaWithOwner {
   [owner: string]: {
     [table: string]: string[];

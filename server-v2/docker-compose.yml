@@ -1,7 +1,7 @@
 version: '3'
 services:
   pyrog:
-    image: pyrog2:latest
+    image: arkhn/pyrog2:latest
     ports:
       - 4000:4000
     environment:

@@ -1,7 +1,0 @@
-query availableResources($sourceId: ID!) {
-  availableResources(sourceId: $sourceId) {
-    id
-    label
-    fhirType
-  }
-}

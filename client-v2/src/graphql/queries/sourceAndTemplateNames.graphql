@@ -1,0 +1,8 @@
+query sourceAndTemplateNames {
+  templates {
+    name
+    sources {
+      name
+    }
+  }
+}
