@@ -1,7 +1,7 @@
 import { Button, Card, Elevation, Icon, Spinner, Tag } from '@blueprintjs/core';
 import * as QueryString from 'query-string';
 import * as React from 'react';
-import { Mutation, Query, Subscription } from 'react-apollo';
+import { Query } from 'react-apollo';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
@@ -17,8 +17,7 @@ import './style.less';
 // GRAPHQL OPERATIONS
 
 // Queries
-const sources = require('../../graphql/queries/sources.graphql');
-const computeSourceMappingProgress = require('../../graphql/queries/computeSourceMappingProgress.graphql');
+const qSources = require('../../graphql/queries/sources.graphql');
 
 export interface ISourcesState {}
 
@@ -70,7 +69,7 @@ class SourcesView extends React.Component<ISourcesViewState, IState> {
           >
             Ajouter une source / un logiciel
           </Button>
-          <Query fetchPolicy="network-only" query={sources}>
+          <Query fetchPolicy="network-only" query={qSources}>
             {({ data, loading }: any) => {
               return (
                 <div id="software-cards">
@@ -107,43 +106,19 @@ class SourcesView extends React.Component<ISourcesViewState, IState> {
                           </div>
 
                           <div>
-                            <Query
-                              query={computeSourceMappingProgress}
-                              variables={{
-                                sourceId: source.id
-                              }}
-                              skip={!source.id}
-                            >
-                              {({ data, loading }: any) => {
-                                let numberResources = null;
-                                let numberAttributes = null;
-
-                                if (data && data.computeSourceMappingProgress) {
-                                  numberResources =
-                                    data.computeSourceMappingProgress[0];
-                                  numberAttributes =
-                                    data.computeSourceMappingProgress[1];
-                                }
-
-                                return loading ? (
-                                  <Spinner size={15} />
-                                ) : (
-                                  <div className="flexbox">
-                                    <span>
-                                      <Icon
-                                        icon="layout-hierarchy"
-                                        color="#5C7080"
-                                      />
-                                      <span>{numberResources} Ressources</span>
-                                    </span>
-                                    <span>
-                                      <Icon icon="tag" color="#5C7080" />
-                                      <span>{numberAttributes} Attributs</span>
-                                    </span>
-                                  </div>
-                                );
-                              }}
-                            </Query>
+                            <div className="flexbox">
+                              <span>
+                                <Icon
+                                  icon="layout-hierarchy"
+                                  color="#5C7080"
+                                />
+                                <span>{source.mappingProgress[0]} Ressources</span>
+                              </span>
+                              <span>
+                                <Icon icon="tag" color="#5C7080" />
+                                <span>{source.mappingProgress[1]} Attributs</span>
+                              </span>
+                            </div>
                           </div>
                         </Card>
                       );
