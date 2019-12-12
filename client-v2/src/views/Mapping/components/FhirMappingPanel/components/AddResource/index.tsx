@@ -7,7 +7,7 @@ import { IReduxStore } from "src/types";
 import { availableResourceNames } from "./resourceNames";
 import AddResourceSelect from "src/components/selects/addResourceSelect";
 
-const createResourceTreeInSource = require("src/graphql/mutations/createResourceTreeInSource.graphql");
+const createResource = require("src/graphql/mutations/createResource.graphql");
 
 interface IProps {
   callback: any;
@@ -35,13 +35,13 @@ const AddResource = ({ callback }: IProps) => {
           }}
         />
         <Mutation
-          mutation={createResourceTreeInSource}
+          mutation={createResource}
           onCompleted={(data: any) => {
             toaster.show({
               icon: "layout-hierarchy",
               intent: "success",
               message: `Ressource ${
-                data.createResourceTreeInSource.fhirType
+                data.createResource.fhirType
               } créée pour ${selectedNode.source.name}.`,
               timeout: 4000
             });

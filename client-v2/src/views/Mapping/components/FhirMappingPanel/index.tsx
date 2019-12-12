@@ -17,7 +17,7 @@ import { IReduxStore } from "src/types";
 import { updateLocationParams } from "src/services/urlState";
 
 // GRAPHQL
-const availableResources = require("src/graphql/queries/availableResources.graphql");
+const qResourcesForSource = require("src/graphql/queries/ResourcesForSource.graphql");
 const resourceAttributeTree = require("src/graphql/queries/resourceAttributeTree.graphql");
 
 const FhirMappingPanel = () => {
@@ -35,7 +35,7 @@ const FhirMappingPanel = () => {
   return (
     <Query
       fetchPolicy={"network-only"}
-      query={availableResources}
+      query={qResourcesForSource}
       skip={!selectedNode.source.id}
       variables={{
         sourceId: selectedNode.source.id,
@@ -50,7 +50,7 @@ const FhirMappingPanel = () => {
             <div id="fhir-attributes">
               <div id="resource-selector">
                 <ResourceSelector
-                  availableResources={data ? data.availableResources : []}
+                  availableResources={data ? data.source.resources : []}
                   loading={loading}
                   deleteResourceCallback={() => {
                     setCreatedResources(createdResources - 1);

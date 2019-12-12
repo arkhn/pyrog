@@ -1,7 +1,7 @@
 fragment partialAttribute on Attribute {
   id
-  comment
+  description
   name
-  isProfile
+  isArray
   type
 }

@@ -1,0 +1,9 @@
+#import "../fragments/entireInput.graphql"
+
+query inputsForAttribute($attributeId: ID!) {
+  attribute(attributeId: $attributeId) {
+    inputs {
+      ...entireInput
+    }
+  }
+}

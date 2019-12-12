@@ -17,7 +17,7 @@ import "./style.less";
 import StringSelect from "src/components/selects/stringSelect";
 import { IReduxStore } from "src/types";
 
-const credential = require("src/graphql/queries/credential.graphql");
+const qCredentialForSource = require("src/graphql/queries/credentialForSource.graphql");
 const upsertCredential = require("src/graphql/mutations/upsertCredential.graphql");
 
 interface IProps {
@@ -27,14 +27,14 @@ interface IProps {
 }
 
 const Drawer = ({ title, isOpen, onClose }: IProps) => {
-  const types = ["POSTGRES"];
+  const models = ["POSTGRES"];
 
   const [host, setHost] = React.useState("");
   const [port, setPort] = React.useState("");
   const [login, setLogin] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [database, setDatabase] = React.useState("");
-  const [type, setType] = React.useState(types[0]);
+  const [model, setModel] = React.useState(models[0]);
   const [hasChanged, setHasChanged] = React.useState(false);
   const [hasSuccessfullyChanged, setHasSuccessfullyChanged] = React.useState(
     false
@@ -47,7 +47,7 @@ const Drawer = ({ title, isOpen, onClose }: IProps) => {
     if (selectedNode.source.id) {
       client
         .query({
-          query: credential,
+          query: qCredentialForSource,
           variables: {
             sourceId: selectedNode.source.id
           },
@@ -56,13 +56,13 @@ const Drawer = ({ title, isOpen, onClose }: IProps) => {
         .then((response: any) => {
           setLoading(false);
 
-          const cred = response.data.credential;
+          const cred = response.data.source.credential;
           setHost(cred.host);
           setPort(cred.port);
           setLogin(cred.login);
           setPassword(cred.password);
           setDatabase(cred.database);
-          setType(cred.type);
+          setModel(cred.model);
         })
         .catch((error: any) => {
           console.log(error);
@@ -109,7 +109,7 @@ const Drawer = ({ title, isOpen, onClose }: IProps) => {
                         login,
                         database,
                         password,
-                        type,
+                        model,
                         sourceId: selectedNode.source.id
                       }
                     });
@@ -179,12 +179,12 @@ const Drawer = ({ title, isOpen, onClose }: IProps) => {
                   <FormGroup label="Type">
                     <StringSelect
                       filterable={false}
-                      items={types}
+                      items={models}
                       disabled={loading}
-                      inputItem={type}
+                      inputItem={model}
                       onChange={(item: string) => {
                         setHasChanged(true);
-                        setType(item);
+                        setModel(item);
                       }}
                     />
                   </FormGroup>
@@ -211,7 +211,7 @@ const Drawer = ({ title, isOpen, onClose }: IProps) => {
                           login,
                           password,
                           database,
-                          type,
+                          model,
                           sourceId: selectedNode.source.id
                         }
                       });

@@ -1,0 +1,11 @@
+fragment entireInput on Input {
+  id
+  sqlValue {
+    id
+  }
+  script
+  staticValue
+  attribute {
+    id
+  }
+}

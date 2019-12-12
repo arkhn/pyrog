@@ -1,4 +1,4 @@
-#import "../fragments/entireInputColumn.graphql"
+#import "../fragments/entireInput.graphql"
 
 mutation deleteInputColumnAndUpdateAttribute(
   $attributeId: ID!
@@ -8,6 +8,6 @@ mutation deleteInputColumnAndUpdateAttribute(
     attributeId: $attributeId
     inputColumnId: $inputColumnId
   ) {
-    ...entireInputColumn
+    ...entireInput
   }
 }

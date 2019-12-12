@@ -3,8 +3,8 @@ import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useReactRouter from "use-react-router";
 
-import { IReduxStore } from "../../../../types";
-import { deselectSource } from "../../../../services/selectedNode/actions";
+import { IReduxStore } from "src/types";
+import { deselectSource } from "src/services/selectedNode/actions";
 
 interface IProps {
   openDrawer: any;

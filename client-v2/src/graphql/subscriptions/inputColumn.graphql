@@ -1,9 +1,9 @@
-#import "../fragments/entireInputColumn.graphql"
+#import "../fragments/entireInput.graphql"
 
 subscription subscribeInputColumn($id: ID!) {
   inputColumn(where: { node: { id: $id } }) {
     node {
-      ...entireInputColumn
+      ...entireInput
     }
   }
 }

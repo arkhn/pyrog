@@ -8,7 +8,7 @@ import {
 
 import { fetchSourceSchema } from "./sourceSchemas/actions";
 
-const attributeInfo = require("../../graphql/queries/attributeInfo.graphql");
+const qAttribute = require("../../graphql/queries/attribute.graphql");
 const resourceInfo = require("../../graphql/queries/resourceInfo.graphql");
 const sourceInfo = require("../../graphql/queries/sourceInfo.graphql");
 
@@ -34,7 +34,7 @@ export const changeNode = (
         : null,
       attributeId
         ? client.query({
-            query: attributeInfo,
+            query: qAttribute,
             variables: { attributeId }
           })
         : null
@@ -53,7 +53,7 @@ export const changeNode = (
                     ? resource.data.resourceInfo
                     : { id: null, label: null, fhirType: null },
                   attribute
-                    ? attribute.data.attributeInfo
+                    ? attribute
                     : { id: null, name: null }
                 )
               );

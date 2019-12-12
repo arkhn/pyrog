@@ -1,5 +1,5 @@
 query sourceInfo($sourceId: ID!) {
-  sourceInfo(sourceId: $sourceId) {
+  source(sourceId: $sourceId) {
     id
     name
     hasOwner

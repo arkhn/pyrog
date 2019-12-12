@@ -13,16 +13,16 @@ import { ApolloClient } from "apollo-client";
 import { withApollo } from "react-apollo";
 import React from "react";
 
-const createAttributeProfileInAttribute = require("../../../../../../graphql/mutations/createAttributeProfileInAttribute.graphql");
-const deleteAttribute = require("../../../../../../graphql/mutations/deleteAttribute.graphql");
+const createAttributeProfileInAttribute = require("src/graphql/mutations/createAttributeProfileInAttribute.graphql");
+const deleteAttribute = require("src/graphql/mutations/deleteAttribute.graphql");
 
 interface INodeData {
-  comment: string;
+  description: string;
+  fhirType: string;
   id: string;
-  isProfile: boolean;
+  isArray: boolean;
   name: string;
   path: string[];
-  type: string;
 }
 
 export interface IProps {
@@ -61,7 +61,7 @@ class NodeLabel extends React.PureComponent<INodeLabelProps, INodeLabelState> {
     return (
       <div className={"node-label"} onContextMenu={this.showContextMenu}>
         <div>{this.props.node.name}</div>
-        <div className={"node-type"}>{this.props.node.type}</div>
+        <div className={"node-type"}>{this.props.node.fhirType}</div>
       </div>
     );
   }
@@ -71,7 +71,7 @@ class NodeLabel extends React.PureComponent<INodeLabelProps, INodeLabelState> {
 
     const { node } = this.props;
 
-    const menu = node.isProfile ? (
+    const menu = node.isArray ? (
       <Menu>
         <MenuItem icon={"edit"} text={"Renommer"} disabled />
         <MenuItem icon={"duplicate"} text={"Dupliquer"} disabled />
@@ -83,7 +83,7 @@ class NodeLabel extends React.PureComponent<INodeLabelProps, INodeLabelState> {
           text={"Supprimer"}
         />
       </Menu>
-    ) : node.type && node.type.startsWith("list::") && node.attributes ? (
+    ) : node.fhirType && node.fhirType.startsWith("list::") && node.children ? (
       <Menu>
         <MenuItem
           icon={"add"}
@@ -119,12 +119,12 @@ class FhirResourceTree extends React.Component<IProps, IState> {
     return FhirResourceTree.id;
   };
 
-  private static breadFirstSearchInputColumn = (node: any) => {
-    if (node.inputColumns && node.inputColumns.length > 0) {
+  private static breadthFirstSearchInputs = (node: any) => {
+    if (node.inputs && node.inputs.length > 0) {
       return true;
     } else if (node.attributes && node.attributes.length > 0) {
       return node.attributes.some((attribute: any) => {
-        return FhirResourceTree.breadFirstSearchInputColumn(attribute);
+        return FhirResourceTree.breadthFirstSearchInputs(attribute);
       });
     } else {
       return false;
@@ -194,25 +194,25 @@ class FhirResourceTree extends React.Component<IProps, IState> {
         />
       );
 
-      const hasChildren = node.attributes && node.attributes.length > 0;
-      const hasInputColumns = node.inputColumns && node.inputColumns.length > 0;
+      const hasChildren = node.children && node.children.length > 0;
+      const hasInputs = node.inputs && node.inputs.length > 0;
       const nodePath = [...pathAcc, node.id];
 
-      const secondaryLabel = hasInputColumns ? (
+      const secondaryLabel = hasInputs ? (
         <Icon icon="small-tick" intent={"success"} />
       ) : hasChildren ? (
-        FhirResourceTree.breadFirstSearchInputColumn(node) ? (
+        FhirResourceTree.breadthFirstSearchInputs(node) ? (
           <Icon icon="dot" />
         ) : null
       ) : null;
       return {
         childNodes: hasChildren
-          ? node.attributes.map((attribute: any) => {
-              return genObjNodes(attribute, nodePath);
+          ? node.children.map((child: any) => {
+              return genObjNodes(child, nodePath);
             })
           : null,
         hasCaret: hasChildren,
-        icon: node.isProfile
+        icon: node.isArray
           ? "multi-select"
           : hasChildren
           ? "folder-open"
@@ -220,20 +220,20 @@ class FhirResourceTree extends React.Component<IProps, IState> {
         id: FhirResourceTree.getId(),
         isExpanded: false,
         isSelected: false,
-        label: node.comment ? (
-          <Tooltip boundary={"viewport"} content={node.comment}>
+        label: node.description ? (
+          <Tooltip boundary={"viewport"} content={node.description}>
             {nodeLabel}
           </Tooltip>
         ) : (
           nodeLabel
         ),
         nodeData: {
-          comment: node.comment,
+          description: node.description,
           id: node.id,
-          isProfile: node.isProfile,
+          isArray: node.isArray,
           name: node.name,
           path: nodePath,
-          type: node.type
+          fhirType: node.fhirType
         },
         secondaryLabel: secondaryLabel
       };

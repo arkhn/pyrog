@@ -1,3 +1,0 @@
-query computeSourceMappingProgress($sourceId: ID!) {
-  computeSourceMappingProgress(sourceId: $sourceId)
-}

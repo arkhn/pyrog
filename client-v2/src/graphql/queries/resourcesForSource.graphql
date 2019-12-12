@@ -1,0 +1,8 @@
+query resourcesForSource($sourceId: ID!) {
+  source(sourceId: $sourceId) {
+    resources {
+      id
+      fhirType
+    }
+  }
+}

@@ -1,7 +1,7 @@
 #import "src/graphql/fragments/entireResource.graphql"
 
 query resourceInfo($resourceId: ID!) {
-  resourceInfo(resourceId: $resourceId) {
+  resource(resourceId: $resourceId) {
     ...entireResource
   }
 }

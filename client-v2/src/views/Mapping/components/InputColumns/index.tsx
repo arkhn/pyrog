@@ -2,17 +2,17 @@ import { Tag, Spinner } from "@blueprintjs/core";
 import * as React from "react";
 import { Mutation, Query, Subscription } from "react-apollo";
 
-import { ISelectedSource } from "../../../../types";
+import { ISelectedSource } from "src/types";
 
 // COMPONENTS
-import StringSelect from "../../../../components/selects/stringSelect";
+import StringSelect from "src/components/selects/stringSelect";
 import InputColumn from "./../InputColumn";
 
 // GRAPHQL
-const inputColumns = require("../../../../graphql/queries/inputColumns.graphql");
-const updateAttribute = require("../../../../graphql/mutations/updateAttribute.graphql");
-const subscribeAttribute = require("../../../../graphql/subscriptions/attribute.graphql");
-const subscribeInputColumn = require("../../../../graphql/subscriptions/inputColumn.graphql");
+const qInputsForAttribute = require("src/graphql/queries/inputsForAttribute.graphql");
+const updateAttribute = require("src/graphql/mutations/updateAttribute.graphql");
+const subscribeAttribute = require("src/graphql/subscriptions/attribute.graphql");
+const subscribeInputColumn = require("src/graphql/subscriptions/inputColumn.graphql");
 
 interface IProps {
   schema: any;
@@ -26,7 +26,7 @@ interface IProps {
 const InputColumns = ({ schema, selectedAttribute, source }: IProps) => {
   return (
     <Query
-      query={inputColumns}
+      query={qInputsForAttribute}
       variables={{ attributeId: selectedAttribute.id }}
       skip={!selectedAttribute.id}
     >
@@ -34,7 +34,7 @@ const InputColumns = ({ schema, selectedAttribute, source }: IProps) => {
         if (loading) {
           return <Spinner />;
         }
-        let inputColumns = data && data.inputColumns ? data.inputColumns : [];
+        let inputColumns = data && data.attribute.inputs ? data.attribute.inputs : [];
 
         return selectedAttribute.id ? (
           <Subscription
