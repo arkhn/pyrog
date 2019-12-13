@@ -9,17 +9,17 @@ import {
 import * as React from "react";
 import { Mutation, Subscription } from "react-apollo";
 
-import { ISelectedSource } from "../../../../types";
+import { ISelectedSource } from "src/types";
 
 // COMPONENTS
 import Join from "./../Join";
-import ScriptSelect from "../../../../components/selects/scriptSelect";
+import ScriptSelect from "src/components/selects/scriptSelect";
 
 // GRAPHQL
-const updateInputColumn = require("../../../../graphql/mutations/updateInputColumn.graphql");
-const deleteInputColumnAndUpdateAttribute = require("../../../../graphql/mutations/deleteInputColumnAndUpdateAttribute.graphql");
-const createJoinAndUpdateInputColumn = require("../../../../graphql/mutations/createJoinAndUpdateInputColumn.graphql");
-const subscribeJoin = require("../../../../graphql/subscriptions/join.graphql");
+const updateInputColumn = require("src/graphql/mutations/updateInputColumn.graphql");
+const mDeleteInput = require("src/graphql/mutations/deleteInput.graphql");
+const createJoinAndUpdateInputColumn = require("src/graphql/mutations/createJoinAndUpdateInputColumn.graphql");
+const subscribeJoin = require("src/graphql/subscriptions/join.graphql");
 
 interface IProps {
   attribute: {
@@ -33,18 +33,17 @@ interface IProps {
 
 const InputColumn = ({ attribute, column, schema, source }: IProps) => (
   <div className="input-column">
-    <Mutation mutation={deleteInputColumnAndUpdateAttribute}>
-      {(deleteInputColumn: any, { loading }: any) => {
+    <Mutation mutation={mDeleteInput}>
+      {(deleteInput: any, { loading }: any) => {
         return (
           <Button
             icon={"trash"}
             loading={loading}
             minimal={true}
             onClick={() => {
-              deleteInputColumn({
+              deleteInput({
                 variables: {
-                  attributeId: attribute.id,
-                  inputColumnId: column.id
+                  id: column.id
                 }
               });
             }}

@@ -1,0 +1,11 @@
+mutation createStaticInput(
+  $attributeId: ID!,
+  $staticValue: String,
+) {
+  createInput(
+    attributeId: $attributeId
+    static: $staticValue
+  ) {
+    id
+  }
+}

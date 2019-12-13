@@ -9,7 +9,7 @@ import {
 import * as React from "react";
 import { Mutation } from "react-apollo";
 
-const createInputColumnAndUpdateAttribute = require("../../../../../../graphql/mutations/createInputColumnAndUpdateAttribute.graphql");
+const mCreateStaticInput = require("src/graphql/mutations/createStaticInput.graphql");
 
 interface IProps {
   attribute: {
@@ -35,20 +35,18 @@ const StaticColumnPicker = ({ attribute }: IProps) => {
             placeholder="Column static value"
             value={staticValue}
           />
-          <Mutation mutation={createInputColumnAndUpdateAttribute}>
-            {(createInputColumn: any, { data, loading }: any) => {
+          <Mutation mutation={mCreateStaticInput}>
+            {(createStaticInput: any, { data, loading }: any) => {
               return (
                 <Button
                   disabled={!attribute.id || staticValue.length == 0}
                   icon={"add"}
                   loading={loading}
                   onClick={() =>
-                    createInputColumn({
+                    createStaticInput({
                       variables: {
                         attributeId: attribute.id,
-                        data: {
-                          staticValue: staticValue
-                        }
+                        staticValue: staticValue
                       }
                     })
                   }

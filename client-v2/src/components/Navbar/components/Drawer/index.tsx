@@ -57,12 +57,14 @@ const Drawer = ({ title, isOpen, onClose }: IProps) => {
           setLoading(false);
 
           const cred = response.data.source.credential;
-          setHost(cred.host);
-          setPort(cred.port);
-          setLogin(cred.login);
-          setPassword(cred.password);
-          setDatabase(cred.database);
-          setModel(cred.model);
+          if (cred) {
+            setHost(cred.host);
+            setPort(cred.port);
+            setLogin(cred.login);
+            setPassword(cred.password);
+            setDatabase(cred.database);
+            setModel(cred.model);
+          }
         })
         .catch((error: any) => {
           console.log(error);

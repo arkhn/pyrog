@@ -1,0 +1,11 @@
+mutation createSQLInput(
+  $attributeId: ID!,
+  $columnInput: ColumnInput,
+) {
+  createInput(
+    attributeId: $attributeId
+    sql: $columnInput
+  ) {
+    id
+  }
+}

@@ -1,4 +1,4 @@
-import axios from "axios";
+// import axios from "axios";
 import {
   Card,
   Elevation,
@@ -11,11 +11,11 @@ import { Mutation } from "react-apollo";
 import { useSelector } from "react-redux";
 
 import ColumnPicker from "../../../ColumnPicker";
-import TableViewer from "../TableViewer";
+// import TableViewer from "../TableViewer";
 
-import { IReduxStore } from "../../../../../../types";
+import { IReduxStore } from "src/types";
 
-const createInputColumnAndUpdateAttribute = require("../../../../../../graphql/mutations/createInputColumnAndUpdateAttribute.graphql");
+const mCreateSQLInput = require("src/graphql/mutations/createSQLInput.graphql");
 
 interface IProps {
   attribute: {
@@ -30,32 +30,32 @@ const DynamicColumnPicker = ({ attribute, schema, source }: IProps) => {
   const [owner, setOwner] = React.useState(null);
   const [table, setTable] = React.useState(null);
   const [column, setColumn] = React.useState(null);
-  const [tableIsLoading, setTableIsLoading] = React.useState(false);
-  const [rows, setRows] = React.useState([]);
-  const [fields, setFields] = React.useState([]);
+  // const [tableIsLoading, setTableIsLoading] = React.useState(false);
+  // const [rows, setRows] = React.useState([]);
+  // const [fields, setFields] = React.useState([]);
 
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
 
-  React.useEffect(() => {
-    if (selectedNode.source && selectedNode.source.id) {
-      setTableIsLoading(true);
-      axios
-        .get(
-          `${process.env.HTTP_BACKEND_URL}/tableview/${
-            selectedNode.source.id
-          }/${table}`
-        )
-        .then((res: any) => {
-          setTableIsLoading(false);
-          setRows(res.data.rows);
-          setFields(res.data.fields.map((field: any) => field.name));
-        })
-        .catch((err: any) => {
-          setTableIsLoading(false);
-          console.log(err);
-        });
-    }
-  }, [table]);
+  // React.useEffect(() => {
+  //   if (selectedNode.source && selectedNode.source.id) {
+  //     setTableIsLoading(true);
+  //     axios
+  //       .get(
+  //         `${process.env.HTTP_BACKEND_URL}/tableview/${
+  //           selectedNode.source.id
+  //         }/${table}`
+  //       )
+  //       .then((res: any) => {
+  //         setTableIsLoading(false);
+  //         setRows(res.data.rows);
+  //         setFields(res.data.fields.map((field: any) => field.name));
+  //       })
+  //       .catch((err: any) => {
+  //         setTableIsLoading(false);
+  //         console.log(err);
+  //       });
+  //   }
+  // }, [table]);
 
   return (
     <Card elevation={Elevation.ONE}>
@@ -78,9 +78,9 @@ const DynamicColumnPicker = ({ attribute, schema, source }: IProps) => {
             }}
             sourceSchema={schema}
           />
-          <Mutation mutation={createInputColumnAndUpdateAttribute}>
+          <Mutation mutation={mCreateSQLInput}>
             {(
-              createInputColumnAndUpdateAttribute: any,
+              createSQLInput: any,
               { data, loading }: any
             ) => {
               return (
@@ -89,11 +89,11 @@ const DynamicColumnPicker = ({ attribute, schema, source }: IProps) => {
                   icon={"add"}
                   loading={loading}
                   onClick={() =>
-                    createInputColumnAndUpdateAttribute({
+                    createSQLInput({
                       variables: {
                         attributeId: attribute.id,
-                        data: {
-                          owner: owner,
+                        columnInput: {
+                          owner: owner || "",  // TODO remove "". I'm only testing because owner of inputColumn non-nullable
                           table: table,
                           column: column
                         }
@@ -106,7 +106,7 @@ const DynamicColumnPicker = ({ attribute, schema, source }: IProps) => {
           </Mutation>
         </ControlGroup>
       </FormGroup>
-      <TableViewer fields={fields} rows={rows} isLoading={tableIsLoading} />
+      {/* <TableViewer fields={fields} rows={rows} isLoading={tableIsLoading} /> */}
     </Card>
   );
 };

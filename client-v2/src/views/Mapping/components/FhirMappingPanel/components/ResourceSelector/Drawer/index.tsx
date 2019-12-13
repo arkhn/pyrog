@@ -136,10 +136,10 @@ const Drawer = ({
           }
         })
         .then((response: any) => {
-          setLabel(response.data.resourceInfo.label);
-          setPkOwner(response.data.resourceInfo.primaryKeyOwner || "");
-          setPkTable(response.data.resourceInfo.primaryKeyTable || "");
-          setPkColumn(response.data.resourceInfo.primaryKeyColumn || "");
+          setLabel(response.data.resource.label || "");
+          setPkOwner(response.data.resource.primaryKeyOwner || "");
+          setPkTable(response.data.resource.primaryKeyTable || "");
+          setPkColumn(response.data.resource.primaryKeyColumn || "");
         });
     }
 
