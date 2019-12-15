@@ -4,12 +4,17 @@
     {
       "stepType": "CreateEnum",
       "enum": "DatabaseType",
-      "values": ["POSTGRES"]
+      "values": [
+        "POSTGRES"
+      ]
     },
     {
       "stepType": "CreateEnum",
       "enum": "Role",
-      "values": ["ADMIN", "USER"]
+      "values": [
+        "ADMIN",
+        "USER"
+      ]
     },
     {
       "stepType": "CreateModel",
@@ -409,6 +414,13 @@
       "model": "Resource",
       "field": "id",
       "directive": "id"
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Resource",
+      "field": "label",
+      "type": "String",
+      "arity": "optional"
     },
     {
       "stepType": "CreateField",

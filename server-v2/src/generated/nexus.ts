@@ -3,8 +3,10 @@
  * Do not make changes to this file directly
  */
 
-import * as Context from '../context'
-import * as photon from '@prisma/photon'
+import * as Context from "../context"
+import * as photon from "@prisma/photon"
+
+
 
 declare global {
   interface NexusGenCustomOutputProperties<TypeName extends string> {
@@ -18,28 +20,27 @@ declare global {
 }
 
 export interface NexusGenInputs {
-  ColumnInput: {
-    // input type
-    column: string // String!
-    joins?: NexusGenInputs['JoinInput'][] | null // [JoinInput!]
-    owner: string // String!
-    table: string // String!
+  ColumnInput: { // input type
+    column: string; // String!
+    joins?: NexusGenInputs['JoinInput'][] | null; // [JoinInput!]
+    owner: string; // String!
+    table: string; // String!
   }
-  ColumnInputWithoutJoins: {
-    // input type
-    column: string // String!
-    owner: string // String!
-    table: string // String!
+  ColumnInputWithoutJoins: { // input type
+    column: string; // String!
+    owner: string; // String!
+    table: string; // String!
   }
-  JoinInput: {
-    // input type
-    source: NexusGenInputs['ColumnInputWithoutJoins'] // ColumnInputWithoutJoins!
-    target: NexusGenInputs['ColumnInputWithoutJoins'] // ColumnInputWithoutJoins!
+  JoinInput: { // input type
+    source: NexusGenInputs['ColumnInputWithoutJoins']; // ColumnInputWithoutJoins!
+    target: NexusGenInputs['ColumnInputWithoutJoins']; // ColumnInputWithoutJoins!
   }
-  UpdateAttributeInput: {
-    // input type
-    description?: string | null // String
-    mergingScript?: string | null // String
+  UpdateAttributeInput: { // input type
+    description?: string | null; // String
+    mergingScript?: string | null; // String
+  }
+  UpdateResourceInput: { // input type
+    label: string; // String!
   }
 }
 
@@ -49,411 +50,354 @@ export interface NexusGenEnums {
 }
 
 export interface NexusGenRootTypes {
-  Attribute: photon.Attribute
-  AuthPayload: {
-    // root type
-    token: string // String!
-    user: NexusGenRootTypes['User'] // User!
+  Attribute: photon.Attribute;
+  AuthPayload: { // root type
+    token: string; // String!
+    user: NexusGenRootTypes['User']; // User!
   }
-  Column: photon.Column
-  Credential: photon.Credential
-  Input: photon.Input
-  Join: photon.Join
-  Mutation: {}
-  Query: {}
-  Resource: photon.Resource
-  Source: photon.Source
-  Template: photon.Template
-  User: photon.User
-  String: string
-  Int: number
-  Float: number
-  Boolean: boolean
-  ID: string
-  DateTime: any
+  Column: photon.Column;
+  Credential: photon.Credential;
+  Input: photon.Input;
+  Join: photon.Join;
+  Mutation: {};
+  Query: {};
+  Resource: photon.Resource;
+  Source: photon.Source;
+  Template: photon.Template;
+  User: photon.User;
+  String: string;
+  Int: number;
+  Float: number;
+  Boolean: boolean;
+  ID: string;
+  DateTime: any;
 }
 
 export interface NexusGenAllTypes extends NexusGenRootTypes {
-  ColumnInput: NexusGenInputs['ColumnInput']
-  ColumnInputWithoutJoins: NexusGenInputs['ColumnInputWithoutJoins']
-  JoinInput: NexusGenInputs['JoinInput']
-  UpdateAttributeInput: NexusGenInputs['UpdateAttributeInput']
-  DatabaseType: NexusGenEnums['DatabaseType']
-  Role: NexusGenEnums['Role']
+  ColumnInput: NexusGenInputs['ColumnInput'];
+  ColumnInputWithoutJoins: NexusGenInputs['ColumnInputWithoutJoins'];
+  JoinInput: NexusGenInputs['JoinInput'];
+  UpdateAttributeInput: NexusGenInputs['UpdateAttributeInput'];
+  UpdateResourceInput: NexusGenInputs['UpdateResourceInput'];
+  DatabaseType: NexusGenEnums['DatabaseType'];
+  Role: NexusGenEnums['Role'];
 }
 
 export interface NexusGenFieldTypes {
-  Attribute: {
-    // field return type
-    children: NexusGenRootTypes['Attribute'][] // [Attribute!]!
-    createdAt: any // DateTime!
-    description: string | null // String
-    fhirType: string // String!
-    id: string // ID!
-    inputs: NexusGenRootTypes['Input'][] // [Input!]!
-    isArray: boolean // Boolean!
-    mergingScript: string | null // String
-    name: string // String!
-    parent: NexusGenRootTypes['Attribute'] | null // Attribute
-    resource: NexusGenRootTypes['Resource'] | null // Resource
-    updatedAt: any // DateTime!
+  Attribute: { // field return type
+    children: NexusGenRootTypes['Attribute'][]; // [Attribute!]!
+    createdAt: any; // DateTime!
+    description: string | null; // String
+    fhirType: string; // String!
+    id: string; // ID!
+    inputs: NexusGenRootTypes['Input'][]; // [Input!]!
+    isArray: boolean; // Boolean!
+    mergingScript: string | null; // String
+    name: string; // String!
+    parent: NexusGenRootTypes['Attribute'] | null; // Attribute
+    resource: NexusGenRootTypes['Resource'] | null; // Resource
+    updatedAt: any; // DateTime!
   }
-  AuthPayload: {
-    // field return type
-    token: string // String!
-    user: NexusGenRootTypes['User'] // User!
+  AuthPayload: { // field return type
+    token: string; // String!
+    user: NexusGenRootTypes['User']; // User!
   }
-  Column: {
-    // field return type
-    column: string | null // String
-    createdAt: any // DateTime!
-    id: string // ID!
-    joins: NexusGenRootTypes['Join'][] // [Join!]!
-    owner: string | null // String
-    table: string | null // String
-    updatedAt: any // DateTime!
+  Column: { // field return type
+    column: string | null; // String
+    createdAt: any; // DateTime!
+    id: string; // ID!
+    joins: NexusGenRootTypes['Join'][]; // [Join!]!
+    owner: string | null; // String
+    table: string | null; // String
+    updatedAt: any; // DateTime!
   }
-  Credential: {
-    // field return type
-    createdAt: any // DateTime!
-    database: string // String!
-    host: string // String!
-    id: string // ID!
-    login: string // String!
-    model: NexusGenEnums['DatabaseType'] // DatabaseType!
-    password: string // String!
-    port: string // String!
-    source: NexusGenRootTypes['Source'] // Source!
-    updatedAt: any // DateTime!
+  Credential: { // field return type
+    createdAt: any; // DateTime!
+    database: string; // String!
+    host: string; // String!
+    id: string; // ID!
+    login: string; // String!
+    model: NexusGenEnums['DatabaseType']; // DatabaseType!
+    password: string; // String!
+    port: string; // String!
+    source: NexusGenRootTypes['Source']; // Source!
+    updatedAt: any; // DateTime!
   }
-  Input: {
-    // field return type
-    attribute: NexusGenRootTypes['Attribute'] // Attribute!
-    createdAt: any // DateTime!
-    id: string // ID!
-    script: string | null // String
-    sqlValue: NexusGenRootTypes['Column'] | null // Column
-    staticValue: string | null // String
-    updatedAt: any // DateTime!
+  Input: { // field return type
+    attribute: NexusGenRootTypes['Attribute']; // Attribute!
+    createdAt: any; // DateTime!
+    id: string; // ID!
+    script: string | null; // String
+    sqlValue: NexusGenRootTypes['Column'] | null; // Column
+    staticValue: string | null; // String
+    updatedAt: any; // DateTime!
   }
-  Join: {
-    // field return type
-    createdAt: any // DateTime!
-    id: string // ID!
-    tables: NexusGenRootTypes['Column'][] // [Column!]!
-    updatedAt: any // DateTime!
+  Join: { // field return type
+    createdAt: any; // DateTime!
+    id: string; // ID!
+    tables: NexusGenRootTypes['Column'][]; // [Column!]!
+    updatedAt: any; // DateTime!
   }
-  Mutation: {
-    // field return type
-    createAttribute: NexusGenRootTypes['Attribute'] // Attribute!
-    createInput: NexusGenRootTypes['Input'] // Input!
-    createResource: NexusGenRootTypes['Resource'] // Resource!
-    createSource: NexusGenRootTypes['Source'] // Source!
-    createTemplate: NexusGenRootTypes['Template'] // Template!
-    deleteAttribute: NexusGenRootTypes['Attribute'] // Attribute!
-    deleteCredential: NexusGenRootTypes['Credential'] // Credential!
-    deleteInput: NexusGenRootTypes['Input'] // Input!
-    deleteResource: NexusGenRootTypes['Resource'] // Resource!
-    deleteSource: NexusGenRootTypes['Source'] // Source!
-    deleteTemplate: NexusGenRootTypes['Template'] // Template!
-    login: NexusGenRootTypes['AuthPayload'] // AuthPayload!
-    signup: NexusGenRootTypes['AuthPayload'] // AuthPayload!
-    updateAttribute: NexusGenRootTypes['Attribute'] // Attribute!
-    upsertCredential: NexusGenRootTypes['Credential'] // Credential!
+  Mutation: { // field return type
+    addJoinToColumn: NexusGenRootTypes['Column']; // Column!
+    createAttribute: NexusGenRootTypes['Attribute']; // Attribute!
+    createInput: NexusGenRootTypes['Input']; // Input!
+    createResource: NexusGenRootTypes['Resource']; // Resource!
+    createSource: NexusGenRootTypes['Source']; // Source!
+    createTemplate: NexusGenRootTypes['Template']; // Template!
+    deleteAttribute: NexusGenRootTypes['Attribute']; // Attribute!
+    deleteCredential: NexusGenRootTypes['Credential']; // Credential!
+    deleteInput: NexusGenRootTypes['Input']; // Input!
+    deleteResource: NexusGenRootTypes['Resource']; // Resource!
+    deleteSource: NexusGenRootTypes['Source']; // Source!
+    deleteTemplate: NexusGenRootTypes['Template']; // Template!
+    login: NexusGenRootTypes['AuthPayload']; // AuthPayload!
+    signup: NexusGenRootTypes['AuthPayload']; // AuthPayload!
+    updateAttribute: NexusGenRootTypes['Attribute']; // Attribute!
+    updateResource: NexusGenRootTypes['Resource']; // Resource!
+    upsertCredential: NexusGenRootTypes['Credential']; // Credential!
   }
-  Query: {
-    // field return type
-    attribute: NexusGenRootTypes['Attribute'] | null // Attribute
-    me: NexusGenRootTypes['User'] | null // User
-    resource: NexusGenRootTypes['Resource'] | null // Resource
-    source: NexusGenRootTypes['Source'] | null // Source
-    sources: NexusGenRootTypes['Source'][] | null // [Source!]
-    template: NexusGenRootTypes['Template'] | null // Template
-    templates: NexusGenRootTypes['Template'][] | null // [Template!]
+  Query: { // field return type
+    attribute: NexusGenRootTypes['Attribute'] | null; // Attribute
+    me: NexusGenRootTypes['User'] | null; // User
+    resource: NexusGenRootTypes['Resource'] | null; // Resource
+    source: NexusGenRootTypes['Source'] | null; // Source
+    sources: NexusGenRootTypes['Source'][] | null; // [Source!]
+    template: NexusGenRootTypes['Template'] | null; // Template
+    templates: NexusGenRootTypes['Template'][] | null; // [Template!]
   }
-  Resource: {
-    // field return type
-    attributes: NexusGenRootTypes['Attribute'][] // [Attribute!]!
-    createdAt: any // DateTime!
-    fhirType: string // String!
-    id: string // ID!
-    profile: string | null // String
-    source: NexusGenRootTypes['Source'] // Source!
-    updatedAt: any // DateTime!
+  Resource: { // field return type
+    attributes: NexusGenRootTypes['Attribute'][]; // [Attribute!]!
+    createdAt: any; // DateTime!
+    fhirType: string; // String!
+    id: string; // ID!
+    label: string | null; // String
+    profile: string | null; // String
+    source: NexusGenRootTypes['Source']; // Source!
+    updatedAt: any; // DateTime!
   }
-  Source: {
-    // field return type
-    createdAt: any // DateTime!
-    credential: NexusGenRootTypes['Credential'] | null // Credential
-    hasOwner: boolean // Boolean!
-    id: string // ID!
-    mappingProgress: number[] | null // [Int!]
-    name: string // String!
-    resources: NexusGenRootTypes['Resource'][] // [Resource!]!
-    template: NexusGenRootTypes['Template'] // Template!
-    updatedAt: any // DateTime!
-    version: string | null // String
+  Source: { // field return type
+    createdAt: any; // DateTime!
+    credential: NexusGenRootTypes['Credential'] | null; // Credential
+    hasOwner: boolean; // Boolean!
+    id: string; // ID!
+    mappingProgress: number[] | null; // [Int!]
+    name: string; // String!
+    resources: NexusGenRootTypes['Resource'][]; // [Resource!]!
+    template: NexusGenRootTypes['Template']; // Template!
+    updatedAt: any; // DateTime!
+    version: string | null; // String
   }
-  Template: {
-    // field return type
-    createdAt: any // DateTime!
-    id: string // ID!
-    name: string // String!
-    sources: NexusGenRootTypes['Source'][] // [Source!]!
-    updatedAt: any // DateTime!
+  Template: { // field return type
+    createdAt: any; // DateTime!
+    id: string; // ID!
+    name: string; // String!
+    sources: NexusGenRootTypes['Source'][]; // [Source!]!
+    updatedAt: any; // DateTime!
   }
-  User: {
-    // field return type
-    createdAt: any // DateTime!
-    email: string // String!
-    id: string // ID!
-    name: string // String!
-    role: NexusGenEnums['Role'] // Role!
-    updatedAt: any // DateTime!
+  User: { // field return type
+    createdAt: any; // DateTime!
+    email: string; // String!
+    id: string; // ID!
+    name: string; // String!
+    role: NexusGenEnums['Role']; // Role!
+    updatedAt: any; // DateTime!
   }
 }
 
 export interface NexusGenArgTypes {
   Attribute: {
-    children: {
-      // args
-      after?: string | null // ID
-      before?: string | null // ID
-      first?: number | null // Int
-      last?: number | null // Int
-      skip?: number | null // Int
+    children: { // args
+      after?: string | null; // ID
+      before?: string | null; // ID
+      first?: number | null; // Int
+      last?: number | null; // Int
+      skip?: number | null; // Int
     }
-    inputs: {
-      // args
-      after?: string | null // ID
-      before?: string | null // ID
-      first?: number | null // Int
-      last?: number | null // Int
-      skip?: number | null // Int
+    inputs: { // args
+      after?: string | null; // ID
+      before?: string | null; // ID
+      first?: number | null; // Int
+      last?: number | null; // Int
+      skip?: number | null; // Int
     }
   }
   Column: {
-    joins: {
-      // args
-      after?: string | null // ID
-      before?: string | null // ID
-      first?: number | null // Int
-      last?: number | null // Int
-      skip?: number | null // Int
+    joins: { // args
+      after?: string | null; // ID
+      before?: string | null; // ID
+      first?: number | null; // Int
+      last?: number | null; // Int
+      skip?: number | null; // Int
     }
   }
   Join: {
-    tables: {
-      // args
-      after?: string | null // ID
-      before?: string | null // ID
-      first?: number | null // Int
-      last?: number | null // Int
-      skip?: number | null // Int
+    tables: { // args
+      after?: string | null; // ID
+      before?: string | null; // ID
+      first?: number | null; // Int
+      last?: number | null; // Int
+      skip?: number | null; // Int
     }
   }
   Mutation: {
-    createAttribute: {
-      // args
-      parentId: string // ID!
+    addJoinToColumn: { // args
+      columnId: string; // ID!
+      join: NexusGenInputs['JoinInput']; // JoinInput!
     }
-    createInput: {
-      // args
-      attributeId: string // ID!
-      script?: string | null // String
-      sql?: NexusGenInputs['ColumnInput'] | null // ColumnInput
-      static?: string | null // String
+    createAttribute: { // args
+      parentId: string; // ID!
     }
-    createResource: {
-      // args
-      resourceName: string // String!
-      sourceId: string // ID!
+    createInput: { // args
+      attributeId: string; // ID!
+      script?: string | null; // String
+      sql?: NexusGenInputs['ColumnInput'] | null; // ColumnInput
+      static?: string | null; // String
     }
-    createSource: {
-      // args
-      hasOwner: boolean // Boolean!
-      name: string // String!
-      templateName: string // String!
+    createResource: { // args
+      resourceName: string; // String!
+      sourceId: string; // ID!
     }
-    createTemplate: {
-      // args
-      name: string // String!
+    createSource: { // args
+      hasOwner: boolean; // Boolean!
+      name: string; // String!
+      templateName: string; // String!
     }
-    deleteAttribute: {
-      // args
-      id: string // ID!
+    createTemplate: { // args
+      name: string; // String!
     }
-    deleteCredential: {
-      // args
-      id: string // ID!
+    deleteAttribute: { // args
+      id: string; // ID!
     }
-    deleteInput: {
-      // args
-      id: string // ID!
+    deleteCredential: { // args
+      id: string; // ID!
     }
-    deleteResource: {
-      // args
-      id: string // ID!
+    deleteInput: { // args
+      id: string; // ID!
     }
-    deleteSource: {
-      // args
-      name: string // String!
+    deleteResource: { // args
+      id: string; // ID!
     }
-    deleteTemplate: {
-      // args
-      id: string // ID!
+    deleteSource: { // args
+      name: string; // String!
     }
-    login: {
-      // args
-      email: string // String!
-      password: string // String!
+    deleteTemplate: { // args
+      id: string; // ID!
     }
-    signup: {
-      // args
-      email: string // String!
-      name: string // String!
-      password: string // String!
+    login: { // args
+      email: string; // String!
+      password: string; // String!
     }
-    updateAttribute: {
-      // args
-      attributeId: string // ID!
-      data: NexusGenInputs['UpdateAttributeInput'] // UpdateAttributeInput!
+    signup: { // args
+      email: string; // String!
+      name: string; // String!
+      password: string; // String!
     }
-    upsertCredential: {
-      // args
-      database: string // String!
-      host: string // String!
-      login: string // String!
-      model: string // String!
-      password: string // String!
-      port: string // String!
-      sourceId: string // ID!
+    updateAttribute: { // args
+      attributeId: string; // ID!
+      data: NexusGenInputs['UpdateAttributeInput']; // UpdateAttributeInput!
+    }
+    updateResource: { // args
+      data: NexusGenInputs['UpdateResourceInput']; // UpdateResourceInput!
+      resourceId: string; // ID!
+    }
+    upsertCredential: { // args
+      database: string; // String!
+      host: string; // String!
+      login: string; // String!
+      model: string; // String!
+      password: string; // String!
+      port: string; // String!
+      sourceId: string; // ID!
     }
   }
   Query: {
-    attribute: {
-      // args
-      attributeId: string // ID!
+    attribute: { // args
+      attributeId: string; // ID!
     }
-    resource: {
-      // args
-      resourceId: string // ID!
+    resource: { // args
+      resourceId: string; // ID!
     }
-    source: {
-      // args
-      sourceId: string // ID!
+    source: { // args
+      sourceId: string; // ID!
     }
-    template: {
-      // args
-      templateId: string // ID!
+    template: { // args
+      templateId: string; // ID!
     }
   }
   Resource: {
-    attributes: {
-      // args
-      after?: string | null // ID
-      before?: string | null // ID
-      first?: number | null // Int
-      last?: number | null // Int
-      skip?: number | null // Int
+    attributes: { // args
+      after?: string | null; // ID
+      before?: string | null; // ID
+      first?: number | null; // Int
+      last?: number | null; // Int
+      skip?: number | null; // Int
     }
   }
   Source: {
-    resources: {
-      // args
-      after?: string | null // ID
-      before?: string | null // ID
-      first?: number | null // Int
-      last?: number | null // Int
-      skip?: number | null // Int
+    resources: { // args
+      after?: string | null; // ID
+      before?: string | null; // ID
+      first?: number | null; // Int
+      last?: number | null; // Int
+      skip?: number | null; // Int
     }
   }
   Template: {
-    sources: {
-      // args
-      after?: string | null // ID
-      before?: string | null // ID
-      first?: number | null // Int
-      last?: number | null // Int
-      skip?: number | null // Int
+    sources: { // args
+      after?: string | null; // ID
+      before?: string | null; // ID
+      first?: number | null; // Int
+      last?: number | null; // Int
+      skip?: number | null; // Int
     }
   }
 }
 
-export interface NexusGenAbstractResolveReturnTypes {}
+export interface NexusGenAbstractResolveReturnTypes {
+}
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames =
-  | 'Attribute'
-  | 'AuthPayload'
-  | 'Column'
-  | 'Credential'
-  | 'Input'
-  | 'Join'
-  | 'Mutation'
-  | 'Query'
-  | 'Resource'
-  | 'Source'
-  | 'Template'
-  | 'User'
+export type NexusGenObjectNames = "Attribute" | "AuthPayload" | "Column" | "Credential" | "Input" | "Join" | "Mutation" | "Query" | "Resource" | "Source" | "Template" | "User";
 
-export type NexusGenInputNames =
-  | 'ColumnInput'
-  | 'ColumnInputWithoutJoins'
-  | 'JoinInput'
-  | 'UpdateAttributeInput'
+export type NexusGenInputNames = "ColumnInput" | "ColumnInputWithoutJoins" | "JoinInput" | "UpdateAttributeInput" | "UpdateResourceInput";
 
-export type NexusGenEnumNames = 'DatabaseType' | 'Role'
+export type NexusGenEnumNames = "DatabaseType" | "Role";
 
-export type NexusGenInterfaceNames = never
+export type NexusGenInterfaceNames = never;
 
-export type NexusGenScalarNames =
-  | 'Boolean'
-  | 'DateTime'
-  | 'Float'
-  | 'ID'
-  | 'Int'
-  | 'String'
+export type NexusGenScalarNames = "Boolean" | "DateTime" | "Float" | "ID" | "Int" | "String";
 
-export type NexusGenUnionNames = never
+export type NexusGenUnionNames = never;
 
 export interface NexusGenTypes {
-  context: Context.Context
-  inputTypes: NexusGenInputs
-  rootTypes: NexusGenRootTypes
-  argTypes: NexusGenArgTypes
-  fieldTypes: NexusGenFieldTypes
-  allTypes: NexusGenAllTypes
-  inheritedFields: NexusGenInheritedFields
-  objectNames: NexusGenObjectNames
-  inputNames: NexusGenInputNames
-  enumNames: NexusGenEnumNames
-  interfaceNames: NexusGenInterfaceNames
-  scalarNames: NexusGenScalarNames
-  unionNames: NexusGenUnionNames
-  allInputTypes:
-    | NexusGenTypes['inputNames']
-    | NexusGenTypes['enumNames']
-    | NexusGenTypes['scalarNames']
-  allOutputTypes:
-    | NexusGenTypes['objectNames']
-    | NexusGenTypes['enumNames']
-    | NexusGenTypes['unionNames']
-    | NexusGenTypes['interfaceNames']
-    | NexusGenTypes['scalarNames']
-  allNamedTypes:
-    | NexusGenTypes['allInputTypes']
-    | NexusGenTypes['allOutputTypes']
-  abstractTypes: NexusGenTypes['interfaceNames'] | NexusGenTypes['unionNames']
-  abstractResolveReturn: NexusGenAbstractResolveReturnTypes
+  context: Context.Context;
+  inputTypes: NexusGenInputs;
+  rootTypes: NexusGenRootTypes;
+  argTypes: NexusGenArgTypes;
+  fieldTypes: NexusGenFieldTypes;
+  allTypes: NexusGenAllTypes;
+  inheritedFields: NexusGenInheritedFields;
+  objectNames: NexusGenObjectNames;
+  inputNames: NexusGenInputNames;
+  enumNames: NexusGenEnumNames;
+  interfaceNames: NexusGenInterfaceNames;
+  scalarNames: NexusGenScalarNames;
+  unionNames: NexusGenUnionNames;
+  allInputTypes: NexusGenTypes['inputNames'] | NexusGenTypes['enumNames'] | NexusGenTypes['scalarNames'];
+  allOutputTypes: NexusGenTypes['objectNames'] | NexusGenTypes['enumNames'] | NexusGenTypes['unionNames'] | NexusGenTypes['interfaceNames'] | NexusGenTypes['scalarNames'];
+  allNamedTypes: NexusGenTypes['allInputTypes'] | NexusGenTypes['allOutputTypes']
+  abstractTypes: NexusGenTypes['interfaceNames'] | NexusGenTypes['unionNames'];
+  abstractResolveReturn: NexusGenAbstractResolveReturnTypes;
 }
 
+
 declare global {
-  interface NexusGenPluginTypeConfig<TypeName extends string> {}
-  interface NexusGenPluginFieldConfig<
-    TypeName extends string,
-    FieldName extends string
-  > {}
-  interface NexusGenPluginSchemaConfig {}
+  interface NexusGenPluginTypeConfig<TypeName extends string> {
+  }
+  interface NexusGenPluginFieldConfig<TypeName extends string, FieldName extends string> {
+  }
+  interface NexusGenPluginSchemaConfig {
+  }
 }

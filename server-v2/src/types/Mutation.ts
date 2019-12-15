@@ -1,12 +1,13 @@
 import { arg, idArg, mutationType, stringArg, booleanArg } from 'nexus'
 
-import { createResource, deleteResource } from './Resource'
+import { createResource, updateResource, deleteResource } from './Resource'
 import { deleteSource, createSource } from './Source'
 import { createAttribute, updateAttribute, deleteAttribute } from './Attribute'
 import { signup, login } from './User'
 import { createInput, deleteInput } from './Input'
 import { deleteCredential, upsertCredential } from './Credential'
 import { createTemplate, deleteTemplate } from './Template'
+import { addJoinToColumn } from './Column'
 
 export const Mutation = mutationType({
   /*
@@ -34,7 +35,7 @@ export const Mutation = mutationType({
     })
 
     /*
-     * SOURCE
+     * TEMPLATE
      */
 
     t.field('createTemplate', {
@@ -122,6 +123,15 @@ export const Mutation = mutationType({
       resolve: deleteResource,
     })
 
+    t.field('updateResource', {
+      type: 'Resource',
+      args: {
+        resourceId: idArg({ required: true }),
+        data: arg({ type: 'UpdateResourceInput', required: true }),
+      },
+      resolve: updateResource,
+    })
+
     /*
      * ATTRIBUTE
      */
@@ -152,7 +162,7 @@ export const Mutation = mutationType({
     })
 
     /*
-     * Input
+     * INPUT
      */
 
     t.field('createInput', {
@@ -174,6 +184,19 @@ export const Mutation = mutationType({
         id: idArg({ required: true }),
       },
       resolve: deleteInput,
+    })
+
+    /*
+    * COLUMN
+    */
+
+    t.field('addJoinToColumn', {
+      type: 'Column',
+      args: {
+        columnId: idArg({ required: true }),
+        join: arg({ type: 'JoinInput', required: true }),
+      },
+      resolve: addJoinToColumn,
     })
   },
 })

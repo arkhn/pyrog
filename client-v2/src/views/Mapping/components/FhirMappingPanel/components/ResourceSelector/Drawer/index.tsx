@@ -28,7 +28,7 @@ import { deleteLocationParams } from "src/services/urlState";
 
 const resourceInfo = require("src/graphql/queries/resourceInfo.graphql");
 const deleteResourceMutation = require("src/graphql/mutations/deleteResource.graphql");
-const updateResource = require("src/graphql/mutations/updateResource.graphql");
+const mUpdateResource = require("src/graphql/mutations/updateResource.graphql");
 
 interface IProps {
   title: string;
@@ -62,14 +62,12 @@ const Drawer = ({
 
       updateResource({
         variables: {
-          where: {
-            id: selectedNode.resource.id
-          },
+          resourceId: selectedNode.resource.id,
           data: {
             label,
-            primaryKeyOwner: pkOwner,
-            primaryKeyTable: pkTable,
-            primaryKeyColumn: pkColumn
+            // primaryKeyOwner: pkOwner,
+            // primaryKeyTable: pkTable,
+            // primaryKeyColumn: pkColumn
           }
         }
       });
@@ -163,7 +161,7 @@ const Drawer = ({
       <div className={Classes.DRAWER_BODY}>
         <div className={Classes.DIALOG_BODY}>
           <Mutation
-            mutation={updateResource}
+            mutation={mUpdateResource}
             onCompleted={onUpdateCompleted}
             onError={onUpdateError}
           >

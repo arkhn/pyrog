@@ -51,6 +51,7 @@ model Credential {
 
 model Resource {
   id         String      @default(cuid()) @id
+  label      String?
   profile    String?
   fhirType   String
   attributes Attribute[] @relation(onDelete: CASCADE)

@@ -8,6 +8,13 @@ export const UpdateAttributeInput = inputObjectType({
   },
 })
 
+export const UpdateResourceInput = inputObjectType({
+  name: 'UpdateResourceInput',
+  definition(t) {
+    t.field('label', { type: 'String', required: true })
+  },
+})
+
 export const ColumnInput = inputObjectType({
   name: 'ColumnInput',
   definition(t) {

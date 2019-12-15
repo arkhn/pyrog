@@ -7,6 +7,7 @@ export const Resource = objectType({
   definition(t) {
     t.model.id()
 
+    t.model.label()
     t.model.profile()
     t.model.fhirType()
 
@@ -152,4 +153,14 @@ export const deleteResource: FieldResolver<
     }),
   )
   return ctx.photon.resources.delete({ where: { id } })
+}
+
+export const updateResource:  FieldResolver<
+  'Mutation',
+  'updateResource'
+> = async (_parent, { resourceId, data }, ctx) => {
+  return ctx.photon.resources.update({
+    where: { id: resourceId },
+    data,
+  })
 }
