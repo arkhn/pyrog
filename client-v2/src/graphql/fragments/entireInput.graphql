@@ -1,6 +1,9 @@
 fragment entireInput on Input {
   id
   sqlValue {
+    owner
+    table
+    column
     id
   }
   script

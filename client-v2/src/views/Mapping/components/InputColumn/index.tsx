@@ -18,7 +18,7 @@ import ScriptSelect from "src/components/selects/scriptSelect";
 // GRAPHQL
 const updateInputColumn = require("src/graphql/mutations/updateInputColumn.graphql");
 const mDeleteInput = require("src/graphql/mutations/deleteInput.graphql");
-const createJoinAndUpdateInputColumn = require("src/graphql/mutations/createJoinAndUpdateInputColumn.graphql");
+const mAddJoinToColumn = require("src/graphql/mutations/addJoinToColumn.graphql");
 const subscribeJoin = require("src/graphql/subscriptions/join.graphql");
 
 interface IProps {
@@ -26,12 +26,12 @@ interface IProps {
     id: string;
     name: string;
   };
-  column: any;
+  input: any;
   schema: any;
   source: ISelectedSource;
 }
 
-const InputColumn = ({ attribute, column, schema, source }: IProps) => (
+const InputColumn = ({ attribute, input, schema, source }: IProps) => (
   <div className="input-column">
     <Mutation mutation={mDeleteInput}>
       {(deleteInput: any, { loading }: any) => {
@@ -43,7 +43,7 @@ const InputColumn = ({ attribute, column, schema, source }: IProps) => (
             onClick={() => {
               deleteInput({
                 variables: {
-                  id: column.id
+                  id: input.id
                 }
               });
             }}
@@ -52,11 +52,11 @@ const InputColumn = ({ attribute, column, schema, source }: IProps) => (
       }}
     </Mutation>
     <Card elevation={Elevation.ONE} className="input-column-info">
-      {column.staticValue ? (
+      {input.staticValue ? (
         <div className="input-column-name">
           <Tag large={true}>Static</Tag>
           <Tag intent={"success"} large={true} minimal={true}>
-            {column.staticValue}
+            {input.staticValue}
           </Tag>
         </div>
       ) : (
@@ -74,7 +74,7 @@ const InputColumn = ({ attribute, column, schema, source }: IProps) => (
                           <div className="stacked-tags">
                             <Tag minimal={true}>OWNER</Tag>
                             <Tag intent={"success"} large={true}>
-                              {column.owner}
+                              {input.sqlValue.owner}
                             </Tag>
                           </div>
                         )
@@ -84,7 +84,7 @@ const InputColumn = ({ attribute, column, schema, source }: IProps) => (
                           <div className="stacked-tags">
                             <Tag minimal={true}>TABLE</Tag>
                             <Tag intent={"success"} large={true}>
-                              {column.table}
+                              {input.sqlValue.table}
                             </Tag>
                           </div>
                         )
@@ -94,7 +94,7 @@ const InputColumn = ({ attribute, column, schema, source }: IProps) => (
                           <div className="stacked-tags">
                             <Tag minimal={true}>COLUMN</Tag>
                             <Tag intent={"success"} large={true}>
-                              {column.column}
+                              {input.sqlValue.column}
                             </Tag>
                           </div>
                         )
@@ -106,7 +106,7 @@ const InputColumn = ({ attribute, column, schema, source }: IProps) => (
                           <div className="stacked-tags">
                             <Tag minimal={true}>TABLE</Tag>
                             <Tag intent={"success"} large={true}>
-                              {column.table}
+                              {input.sqlValue.table}
                             </Tag>
                           </div>
                         )
@@ -116,7 +116,7 @@ const InputColumn = ({ attribute, column, schema, source }: IProps) => (
                           <div className="stacked-tags">
                             <Tag minimal={true}>COLUMN</Tag>
                             <Tag intent={"success"} large={true}>
-                              {column.column}
+                              {input.sqlValue.column}
                             </Tag>
                           </div>
                         )
@@ -131,11 +131,11 @@ const InputColumn = ({ attribute, column, schema, source }: IProps) => (
                     <Tag>SCRIPT</Tag>
                     <ScriptSelect
                       loading={loading}
-                      selectedScript={column.script}
+                      selectedScript={input.script}
                       onChange={(script: string) => {
                         updateInputColumn({
                           variables: {
-                            id: column.id,
+                            id: input.id,
                             data: { script }
                           }
                         });
@@ -143,7 +143,7 @@ const InputColumn = ({ attribute, column, schema, source }: IProps) => (
                       onClear={(): any => {
                         updateInputColumn({
                           variables: {
-                            id: column.id,
+                            id: input.id,
                             data: { script: null }
                           }
                         });
@@ -155,16 +155,16 @@ const InputColumn = ({ attribute, column, schema, source }: IProps) => (
             </Mutation>
           </div>
           <div className="input-column-joins">
-            <Mutation mutation={createJoinAndUpdateInputColumn}>
-              {(createJoin: any, { data, loading }: any) => {
+            <Mutation mutation={mAddJoinToColumn}>
+              {(addJoinToColumn: any, { data, loading }: any) => {
                 return (
                   <Button
                     icon={"add"}
                     loading={loading}
                     onClick={() => {
-                      createJoin({
+                      addJoinToColumn({
                         variables: {
-                          inputColumnId: column.id,
+                          columnId: input.sqlValue.id,
                           data: {}
                         }
                       });
@@ -175,8 +175,8 @@ const InputColumn = ({ attribute, column, schema, source }: IProps) => (
                 );
               }}
             </Mutation>
-            {column.joins
-              ? column.joins.map((join: any, index: number) => {
+            {input.sqlValue.joins
+              ? input.sqlValue.joins.map((join: any, index: number) => {
                   let joinData = join;
                   return (
                     <Subscription
@@ -194,7 +194,7 @@ const InputColumn = ({ attribute, column, schema, source }: IProps) => (
 
                         return joinData ? (
                           <Join
-                            column={column}
+                            column={input.sqlValue}
                             joinData={joinData}
                             schema={schema}
                             source={source}

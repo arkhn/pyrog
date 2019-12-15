@@ -2,6 +2,7 @@
 
 query inputsForAttribute($attributeId: ID!) {
   attribute(attributeId: $attributeId) {
+    id
     inputs {
       ...entireInput
     }
