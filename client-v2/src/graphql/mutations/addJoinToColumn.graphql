@@ -1,0 +1,8 @@
+mutation addJoinToColumn(
+  $columnId: ID!
+  $join: JoinInput!
+) {
+  addJoinToColumn(columnId: $columnId, join: $join) {
+    id
+  }
+}

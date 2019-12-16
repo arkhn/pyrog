@@ -62,6 +62,7 @@
     "react-test-renderer": "^16.8.6",
     "redux": "^4.0.4",
     "redux-logger": "^3.0.6",
+    "redux-persist": "^6.0.0",
     "style-loader": "^0.23.1",
     "subscriptions-transport-ws": "^0.9.15",
     "svg-inline-loader": "^0.8.0",

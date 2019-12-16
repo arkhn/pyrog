@@ -2,6 +2,9 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { combineReducers, createStore, applyMiddleware } from "redux";
+import { persistStore, persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
+import { PersistGate } from 'redux-persist/integration/react'
 import { createLogger } from "redux-logger";
 
 import { HttpLink, InMemoryCache, ApolloClient } from "apollo-client-preset";
@@ -66,8 +69,16 @@ const mainReducer = combineReducers({
 });
 
 // Store
+const persistConfig = {
+  key: 'root',
+  storage,
+}
+const persistedReducer = persistReducer(persistConfig, mainReducer)
+
 const finalCreateStore = applyMiddleware(...middlewares)(createStore);
-const store = finalCreateStore(mainReducer);
+const store = finalCreateStore(persistedReducer);
+
+let persistor = persistStore(store)
 
 // APOLLO
 
@@ -153,7 +164,9 @@ export const client = new ApolloClient({
 ReactDOM.render(
   <Provider store={store}>
     <ApolloProvider client={client}>
-      <Routes />
+      <PersistGate loading={null} persistor={persistor}>
+        <Routes />
+      </PersistGate>
     </ApolloProvider>
   </Provider>,
   document.getElementById("application-wrapper") ||
