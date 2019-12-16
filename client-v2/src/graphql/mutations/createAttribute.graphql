@@ -1,0 +1,5 @@
+mutation createAttribute($parentId: ID!) {
+  createAttribute(parentId: $parentId) {
+    id
+  }
+}

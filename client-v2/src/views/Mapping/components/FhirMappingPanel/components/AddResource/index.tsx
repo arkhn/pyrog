@@ -1,19 +1,53 @@
 import { Button, FormGroup, ControlGroup } from "@blueprintjs/core";
 import React from "react";
-import { Mutation } from "react-apollo";
+import { useMutation } from '@apollo/react-hooks';
 import { useSelector } from "react-redux";
 
 import { IReduxStore } from "src/types";
 import { availableResourceNames } from "./resourceNames";
 import AddResourceSelect from "src/components/selects/addResourceSelect";
 
-const createResource = require("src/graphql/mutations/createResource.graphql");
+const mCreateResource = require("src/graphql/mutations/createResource.graphql");
 
 interface IProps {
   callback: any;
 }
 
 const AddResource = ({ callback }: IProps) => {
+
+  // Hooking mutation
+  const onCompleted = (data: any) => {
+    toaster.show({
+      icon: "layout-hierarchy",
+      intent: "success",
+      message: `Ressource ${
+        data.createResource.fhirType
+        } créée pour ${selectedNode.source.name}.`,
+      timeout: 4000
+    })
+
+    setSelectedAddResource({
+      type: null,
+      subtype: null,
+      name: null
+    })
+    callback()
+  }
+
+  const onError = (error: any) => {
+    toaster.show({
+      icon: "error",
+      intent: "danger",
+      message: error.message,
+      timeout: 4000
+    })
+  }
+
+  const [
+    createResource,
+    { loading: creatingResource }
+  ] = useMutation(mCreateResource, { onCompleted, onError });
+
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
   const toaster = useSelector((state: IReduxStore) => state.toaster);
   const [selectedAddResource, setSelectedAddResource] = React.useState({
@@ -34,51 +68,18 @@ const AddResource = ({ callback }: IProps) => {
             setSelectedAddResource(resource);
           }}
         />
-        <Mutation
-          mutation={createResource}
-          onCompleted={(data: any) => {
-            toaster.show({
-              icon: "layout-hierarchy",
-              intent: "success",
-              message: `Ressource ${
-                data.createResource.fhirType
-              } créée pour ${selectedNode.source.name}.`,
-              timeout: 4000
-            });
-
-            setSelectedAddResource({
-              type: null,
-              subtype: null,
-              name: null
-            });
-            callback();
-          }}
-          onError={(error: any) => {
-            toaster.show({
-              icon: "error",
-              intent: "danger",
-              message: error.message,
-              timeout: 4000
+        <Button
+          loading={creatingResource}
+          icon={"plus"}
+          onClick={() => {
+            createResource({
+              variables: {
+                sourceId: selectedNode.source.id,
+                resourceName: selectedAddResource.name
+              },
             });
           }}
-        >
-          {(createResource: any, { loading }: any) => {
-            return (
-              <Button
-                loading={loading}
-                icon={"plus"}
-                onClick={() => {
-                  createResource({
-                    variables: {
-                      sourceId: selectedNode.source.id,
-                      resourceName: selectedAddResource.name
-                    }
-                  });
-                }}
-              />
-            );
-          }}
-        </Mutation>
+        />
       </ControlGroup>
     </FormGroup>
   );
