@@ -10,7 +10,7 @@ import InputColumn from "./../InputColumn";
 
 // GRAPHQL
 const qInputsForAttribute = require("src/graphql/queries/inputsForAttribute.graphql");
-const updateAttribute = require("src/graphql/mutations/updateAttribute.graphql");
+const mUpdateAttribute = require("src/graphql/mutations/updateAttribute.graphql");
 // const subscribeAttribute = require("src/graphql/subscriptions/attribute.graphql");
 // const subscribeInputColumn = require("src/graphql/subscriptions/inputColumn.graphql");
 
@@ -57,7 +57,7 @@ const InputColumns = ({ schema, selectedAttribute, source }: IProps) => {
             </div>
             {inputs.length > 1 ? (
               <div id="input-column-merging-script">
-                <Mutation mutation={updateAttribute}>
+                <Mutation mutation={mUpdateAttribute}>
                   {(updateAttribute: any, { data, loading }: any) => {
                     return (
                       <div className="stacked-tags">

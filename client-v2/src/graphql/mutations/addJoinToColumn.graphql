@@ -1,6 +1,6 @@
 mutation addJoinToColumn(
   $columnId: ID!
-  $join: JoinInput!
+  $join: JoinInput
 ) {
   addJoinToColumn(columnId: $columnId, join: $join) {
     id

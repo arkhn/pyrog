@@ -40,9 +40,9 @@ input ColumnInput {
 }
 
 input ColumnInputWithoutJoins {
-  column: String!
-  owner: String!
-  table: String!
+  column: String
+  owner: String
+  table: String
 }
 
 type Credential {
@@ -82,12 +82,12 @@ type Join {
 }
 
 input JoinInput {
-  source: ColumnInputWithoutJoins!
-  target: ColumnInputWithoutJoins!
+  source: ColumnInputWithoutJoins
+  target: ColumnInputWithoutJoins
 }
 
 type Mutation {
-  addJoinToColumn(columnId: ID!, join: JoinInput!): Column!
+  addJoinToColumn(columnId: ID!, join: JoinInput): Column!
   createAttribute(parentId: ID!): Attribute!
   createInput(attributeId: ID!, script: String, sql: ColumnInput, static: String): Input!
   createResource(resourceName: String!, sourceId: ID!): Resource!
@@ -102,6 +102,7 @@ type Mutation {
   login(email: String!, password: String!): AuthPayload!
   signup(email: String!, name: String!, password: String!): AuthPayload!
   updateAttribute(attributeId: ID!, data: UpdateAttributeInput!): Attribute!
+  updateJoin(data: JoinInput!, joinId: ID!): Join!
   updateResource(data: UpdateResourceInput!, resourceId: ID!): Resource!
   upsertCredential(database: String!, host: String!, login: String!, model: String!, password: String!, port: String!, sourceId: ID!): Credential!
 }

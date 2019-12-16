@@ -27,13 +27,13 @@ export interface NexusGenInputs {
     table: string; // String!
   }
   ColumnInputWithoutJoins: { // input type
-    column: string; // String!
-    owner: string; // String!
-    table: string; // String!
+    column?: string | null; // String
+    owner?: string | null; // String
+    table?: string | null; // String
   }
   JoinInput: { // input type
-    source: NexusGenInputs['ColumnInputWithoutJoins']; // ColumnInputWithoutJoins!
-    target: NexusGenInputs['ColumnInputWithoutJoins']; // ColumnInputWithoutJoins!
+    source?: NexusGenInputs['ColumnInputWithoutJoins'] | null; // ColumnInputWithoutJoins
+    target?: NexusGenInputs['ColumnInputWithoutJoins'] | null; // ColumnInputWithoutJoins
   }
   UpdateAttributeInput: { // input type
     description?: string | null; // String
@@ -154,6 +154,7 @@ export interface NexusGenFieldTypes {
     login: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     signup: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     updateAttribute: NexusGenRootTypes['Attribute']; // Attribute!
+    updateJoin: NexusGenRootTypes['Join']; // Join!
     updateResource: NexusGenRootTypes['Resource']; // Resource!
     upsertCredential: NexusGenRootTypes['Credential']; // Credential!
   }
@@ -243,7 +244,7 @@ export interface NexusGenArgTypes {
   Mutation: {
     addJoinToColumn: { // args
       columnId: string; // ID!
-      join: NexusGenInputs['JoinInput']; // JoinInput!
+      join?: NexusGenInputs['JoinInput'] | null; // JoinInput
     }
     createAttribute: { // args
       parentId: string; // ID!
@@ -296,6 +297,10 @@ export interface NexusGenArgTypes {
     updateAttribute: { // args
       attributeId: string; // ID!
       data: NexusGenInputs['UpdateAttributeInput']; // UpdateAttributeInput!
+    }
+    updateJoin: { // args
+      data: NexusGenInputs['JoinInput']; // JoinInput!
+      joinId: string; // ID!
     }
     updateResource: { // args
       data: NexusGenInputs['UpdateResourceInput']; // UpdateResourceInput!

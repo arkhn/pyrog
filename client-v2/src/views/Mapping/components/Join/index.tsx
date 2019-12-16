@@ -8,8 +8,8 @@ import { ISelectedSource } from "../../../../types";
 import JoinColumns from "./../JoinColumns";
 
 // GRAPHQL
-const deleteJoinAndUpdateInputColumn = require("../../../../graphql/mutations/deleteJoinAndUpdateInputColumn.graphql");
-const updateJoin = require("../../../../graphql/mutations/updateJoin.graphql");
+const deleteJoinAndUpdateInputColumn = require("src/graphql/mutations/deleteJoinAndUpdateInputColumn.graphql");
+const updateJoin = require("src/graphql/mutations/updateJoin.graphql");
 
 interface IProps {
   column: any;

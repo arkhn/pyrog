@@ -30,9 +30,9 @@ export const ColumnInput = inputObjectType({
 export const ColumnInputWithoutJoins = inputObjectType({
   name: 'ColumnInputWithoutJoins',
   definition(t) {
-    t.field('owner', { type: 'String', required: true })
-    t.field('table', { type: 'String', required: true })
-    t.field('column', { type: 'String', required: true })
+    t.field('owner', { type: 'String' })
+    t.field('table', { type: 'String' })
+    t.field('column', { type: 'String' })
   },
 })
 
@@ -41,11 +41,9 @@ export const JoinInput = inputObjectType({
   definition(t) {
     t.field('source', {
       type: 'ColumnInputWithoutJoins',
-      required: true,
     })
     t.field('target', {
       type: 'ColumnInputWithoutJoins',
-      required: true,
     })
   },
 })

@@ -8,6 +8,7 @@ import { createInput, deleteInput } from './Input'
 import { deleteCredential, upsertCredential } from './Credential'
 import { createTemplate, deleteTemplate } from './Template'
 import { addJoinToColumn } from './Column'
+import { updateJoin } from './Join'
 
 export const Mutation = mutationType({
   /*
@@ -194,9 +195,22 @@ export const Mutation = mutationType({
       type: 'Column',
       args: {
         columnId: idArg({ required: true }),
-        join: arg({ type: 'JoinInput', required: true }),
+        join: arg({ type: 'JoinInput' }),
       },
       resolve: addJoinToColumn,
+    })
+
+    /*
+    * JOIN
+    */
+
+    t.field('updateJoin', {
+      type: 'Join',
+      args: {
+        joinId: idArg({ required: true }),
+        data: arg({ type: 'JoinInput', required: true }),
+      },
+      resolve: updateJoin,
     })
   },
 })

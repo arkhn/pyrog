@@ -19,11 +19,13 @@ const JoinColumns = ({ join, schema, source, updateJoin }: IProps) => (
       ownerChangeCallback={(e: string) => {
         updateJoin({
           variables: {
-            id: join.id,
+            joinId: join.id,
             data: {
-              sourceOwner: e,
-              sourceTable: null,
-              sourceColumn: null
+              source: {
+                owner: e,
+                table: null,
+                column: null,
+              }
             }
           }
         });
@@ -31,10 +33,12 @@ const JoinColumns = ({ join, schema, source, updateJoin }: IProps) => (
       tableChangeCallback={(e: string) => {
         updateJoin({
           variables: {
-            id: join.id,
+            joinId: join.id,
             data: {
-              sourceTable: e,
-              sourceColumn: null
+              source: {
+                table: e,
+                column: null,
+              }
             }
           }
         });
@@ -42,17 +46,19 @@ const JoinColumns = ({ join, schema, source, updateJoin }: IProps) => (
       columnChangeCallback={(e: string) => {
         updateJoin({
           variables: {
-            id: join.id,
+            joinId: join.id,
             data: {
-              sourceColumn: e
+              source: {
+                column: e
+              }
             }
           }
         });
       }}
       initialColumn={{
-        owner: join.sourceOwner,
-        table: join.sourceTable,
-        column: join.sourceColumn
+        owner: join.tables[0].owner,
+        table: join.tables[0].table,
+        column: join.tables[0].column,
       }}
       sourceSchema={schema}
     />
@@ -61,11 +67,13 @@ const JoinColumns = ({ join, schema, source, updateJoin }: IProps) => (
       ownerChangeCallback={(e: string) => {
         updateJoin({
           variables: {
-            id: join.id,
+            joinId: join.id,
             data: {
-              targetOwner: e,
-              targetTable: null,
-              targetColumn: null
+              target: {
+                owner: e,
+                table: null,
+                column: null,
+              }
             }
           }
         });
@@ -73,10 +81,12 @@ const JoinColumns = ({ join, schema, source, updateJoin }: IProps) => (
       tableChangeCallback={(e: string) => {
         updateJoin({
           variables: {
-            id: join.id,
+            joinId: join.id,
             data: {
-              targetTable: e,
-              targetColumn: null
+              target: {
+                table: e,
+                column: null,
+              }
             }
           }
         });
@@ -84,17 +94,19 @@ const JoinColumns = ({ join, schema, source, updateJoin }: IProps) => (
       columnChangeCallback={(e: string) => {
         updateJoin({
           variables: {
-            id: join.id,
+            joinId: join.id,
             data: {
-              targetColumn: e
+              target: {
+                column: e
+              }
             }
           }
         });
       }}
       initialColumn={{
-        owner: join.targetOwner,
-        table: join.targetTable,
-        column: join.targetColumn
+        owner: join.tables[1].owner,
+        table: join.tables[1].table,
+        column: join.tables[1].column,
       }}
       sourceSchema={schema}
     />

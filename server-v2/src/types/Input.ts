@@ -50,14 +50,14 @@ export const createInput: FieldResolver<'Mutation', 'createInput'> = async (
               tables: {
                 create: [
                   {
-                    owner: j.source.owner,
-                    table: j.source.table,
-                    column: j.source.column,
+                    owner: j.source ? j.source.owner : "",
+                    table: j.source ? j.source.table : "",
+                    column: j.source ? j.source.column : "",
                   },
                   {
-                    owner: j.target.owner,
-                    table: j.target.table,
-                    column: j.target.column,
+                    owner: j.target ? j.target.owner : "",
+                    table: j.target ? j.target.table : "",
+                    column: j.target ? j.target.column : "",
                   },
                 ],
               },

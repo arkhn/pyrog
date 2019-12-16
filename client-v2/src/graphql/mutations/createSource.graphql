@@ -1,5 +1,13 @@
-mutation createSource($templateName: String!, $name: String!, $hasOwner: Boolean!) {
-  createSource(templateName: $templateName, name: $name, hasOwner: $hasOwner) {
+mutation createSource(
+  $templateName: String!,
+  $name: String!,
+  $hasOwner: Boolean!
+) {
+  createSource(
+    templateName: $templateName,
+    name: $name,
+    hasOwner: $hasOwner
+) {
     id
   }
 }

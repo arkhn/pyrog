@@ -13,8 +13,8 @@ import { ApolloClient } from "apollo-client";
 import { withApollo } from "react-apollo";
 import React from "react";
 
-const createAttributeProfileInAttribute = require("src/graphql/mutations/createAttributeProfileInAttribute.graphql");
-const deleteAttribute = require("src/graphql/mutations/deleteAttribute.graphql");
+const mCreateAttribute = require("src/graphql/mutations/createAttribute.graphql");
+const mDeleteAttribute = require("src/graphql/mutations/deleteAttribute.graphql");
 
 interface INodeData {
   description: string;
@@ -161,7 +161,7 @@ class FhirResourceTree extends React.Component<IProps, IState> {
 
             props.client
               .mutate({
-                mutation: createAttributeProfileInAttribute,
+                mutation: mCreateAttribute,
                 variables: {
                   parentAttributeId: node.id,
                   attributeName: `${type}_${node.attributes.length}`,
@@ -178,7 +178,7 @@ class FhirResourceTree extends React.Component<IProps, IState> {
           deleteAttribute={(node: any) => {
             props.client
               .mutate({
-                mutation: deleteAttribute,
+                mutation: mDeleteAttribute,
                 variables: {
                   attributeId: node.id
                 }
