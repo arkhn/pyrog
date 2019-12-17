@@ -8,7 +8,7 @@ import { createInput, deleteInput } from './Input'
 import { deleteCredential, upsertCredential } from './Credential'
 import { createTemplate, deleteTemplate } from './Template'
 import { addJoinToColumn } from './Column'
-import { updateJoin } from './Join'
+import { updateJoin, deleteJoin } from './Join'
 
 export const Mutation = mutationType({
   /*
@@ -211,6 +211,14 @@ export const Mutation = mutationType({
         data: arg({ type: 'JoinInput', required: true }),
       },
       resolve: updateJoin,
+    })
+
+    t.field('deleteJoin', {
+      type: 'Join',
+      args: {
+        id: idArg({ required: true }),
+      },
+      resolve: deleteJoin,
     })
   },
 })

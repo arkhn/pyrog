@@ -217,7 +217,6 @@ const InputColumn = ({ attribute, input, schema, source }: IProps) => {
 
                           return joinData ? (
                             <Join
-                              column={input.sqlValue}
                               joinData={joinData}
                               schema={schema}
                               source={source}

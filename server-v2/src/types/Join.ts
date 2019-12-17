@@ -1,5 +1,4 @@
 import { objectType, FieldResolver } from 'nexus'
-import { Source } from 'graphql'
 
 export const Join = objectType({
   name: 'Join',
@@ -76,3 +75,9 @@ export const updateJoin: FieldResolver<
     }
   })
 }
+
+export const deleteJoin: FieldResolver<'Mutation', 'deleteJoin'> = async (
+  _parent,
+  { id },
+  ctx,
+) => ctx.photon.joins.delete({ where: { id } })

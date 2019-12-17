@@ -1,6 +1,8 @@
 import { Button } from "@blueprintjs/core";
 import * as React from "react";
-import { Mutation } from "react-apollo";
+import { useSelector } from "react-redux";
+import { IReduxStore } from "src/types";
+import { useMutation } from '@apollo/react-hooks';
 
 import { ISelectedSource } from "../../../../types";
 
@@ -8,50 +10,82 @@ import { ISelectedSource } from "../../../../types";
 import JoinColumns from "./../JoinColumns";
 
 // GRAPHQL
-const deleteJoinAndUpdateInputColumn = require("src/graphql/mutations/deleteJoinAndUpdateInputColumn.graphql");
-const updateJoin = require("src/graphql/mutations/updateJoin.graphql");
+const qInputsForAttribute = require("src/graphql/queries/inputsForAttribute.graphql");
+const mUpdateJoin = require("src/graphql/mutations/updateJoin.graphql");
+const mDeleteJoin = require("src/graphql/mutations/deleteJoin.graphql");
 
 interface IProps {
-  column: any;
   joinData: any;
   schema: any;
   source: ISelectedSource;
 }
 
-const Join = ({ column, joinData, schema, source }: IProps) => (
-  <div className={"join"}>
-    <Mutation mutation={deleteJoinAndUpdateInputColumn}>
-      {(deleteJoin: any, { data, loading }: any) => {
-        return (
-          <Button
-            icon={"trash"}
-            minimal={true}
-            loading={loading}
-            onClick={() => {
-              deleteJoin({
-                variables: {
-                  inputColumnId: column.id,
-                  joinId: joinData.id
-                }
-              });
-            }}
-          />
-        );
-      }}
-    </Mutation>
-    <Mutation mutation={updateJoin}>
-      {(updateJoin: any, { data, loading }: any) => {
-        return (
-          <JoinColumns
-            join={joinData}
-            updateJoin={updateJoin}
-            schema={schema}
-            source={source}
-          />
-        );
-      }}
-    </Mutation>
-  </div>
-);
+const Join = ({ joinData, schema, source }: IProps) => {
+  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
+
+  const updateJoin = useMutation(mUpdateJoin)
+  const [
+    deleteJoin,
+    { loading: deletingJoin }
+  ] = useMutation(mDeleteJoin)
+
+  const removeJoin = (input: any) => {
+    return {
+      ...input,
+      sqlValue: {
+        ...input.sqlValue,
+        joins: input.sqlValue.joins.filter((j: any) => j.id !== joinData.id),
+      }
+    }
+  }
+
+  const removeJoinFromCache = (cache: any) => {
+    const data = cache.readQuery({
+      query: qInputsForAttribute,
+      variables: {
+        attributeId: selectedNode.attribute.id
+      }
+    });
+    const newData = {
+      attribute: {
+        ...data.attribute,
+        inputs:
+          data.attribute.inputs.map(removeJoin),
+      }
+    }
+    cache.writeQuery({
+      query: qInputsForAttribute,
+      variables: {
+        attributeId: selectedNode.attribute.id
+      },
+      data: newData
+    });
+  }
+
+  return (
+    <div className={"join"}>
+      <Button
+        icon={"trash"}
+        minimal={true}
+        loading={deletingJoin}
+        onClick={() => {
+          deleteJoin({
+            variables: {
+              id: joinData.id
+            },
+            update: removeJoinFromCache,
+          });
+        }}
+      />
+
+      <JoinColumns
+        join={joinData}
+        updateJoin={updateJoin}
+        schema={schema}
+        source={source}
+      />
+    </div>
+  )
+}
 
 export default Join;
