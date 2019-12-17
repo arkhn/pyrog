@@ -1,4 +1,4 @@
-import { useApolloClient } from "@apollo/react-hooks";
+import { useApolloClient, useMutation } from "@apollo/react-hooks";
 import {
   InputGroup,
   FormGroup,
@@ -9,7 +9,6 @@ import {
   Position
 } from "@blueprintjs/core";
 import React from "react";
-import { Mutation } from "react-apollo";
 import { useSelector, useDispatch, useStore } from "react-redux";
 import useReactRouter from "use-react-router";
 
@@ -26,8 +25,10 @@ import {
 
 import { deleteLocationParams } from "src/services/urlState";
 
+// GRAPHQL
+const qResourcesForSource = require("src/graphql/queries/ResourcesForSource.graphql");
 const resourceInfo = require("src/graphql/queries/resourceInfo.graphql");
-const deleteResourceMutation = require("src/graphql/mutations/deleteResource.graphql");
+const mDeleteResource = require("src/graphql/mutations/deleteResource.graphql");
 const mUpdateResource = require("src/graphql/mutations/updateResource.graphql");
 
 interface IProps {
@@ -78,7 +79,7 @@ const Drawer = ({
     toaster.show({
       message: `Successfully updated ${
         selectedNode.resource.fhirType
-      } properties`,
+        } properties`,
       intent: "success",
       icon: "properties"
     });
@@ -106,7 +107,7 @@ const Drawer = ({
       intent: "success",
       message: `Ressource ${data.deleteResource.fhirType} deleted for ${
         selectedNode.source.name
-      }.`,
+        }.`,
       timeout: 4000
     });
     deleteLocationParams(history, location, ["resourceId", "attributeId"]);
@@ -124,6 +125,55 @@ const Drawer = ({
     deleteResourceCallback();
   };
 
+  // Mutation and query hooks
+  const [
+    updateResource,
+    { loading: updatingResource }
+  ] = useMutation(
+    mUpdateResource,
+    {
+      onCompleted: onUpdateCompleted,
+      onError: onUpdateError,
+    }
+  );
+
+  const removeResourceFromCache = (cache: any, { data: { deleteResource } }: any) => {
+    try {
+      const { source } = cache.readQuery({
+        query: qResourcesForSource,
+        variables: {
+          sourceId: selectedNode.source.id,
+        }
+      });
+      const newSource = {
+        ...source,
+        resources:
+          source.resources.filter((r: any) => r.id !== deleteResource.id),
+      }
+      cache.writeQuery({
+        query: qResourcesForSource,
+        variables: {
+          sourceId: selectedNode.source.id,
+        },
+        data: { source: newSource }
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const [
+    deleteResource,
+    { loading: deletingResource }
+  ] = useMutation(
+    mDeleteResource,
+    {
+      update: removeResourceFromCache,
+      onCompleted: onDeletionCompleted,
+      onError: onDeletionError
+    }
+  );
+
   React.useEffect(() => {
     if (selectedNode.resource.id) {
       client
@@ -134,7 +184,7 @@ const Drawer = ({
           }
         })
         .then((response: any) => {
-          setLabel(response.data.resource.label || "");
+          setLabel(response.data.resource.label || "");
           setPkOwner(response.data.resource.primaryKeyOwner || "");
           setPkTable(response.data.resource.primaryKeyTable || "");
           setPkColumn(response.data.resource.primaryKeyColumn || "");
@@ -144,7 +194,7 @@ const Drawer = ({
     if (selectedNode.source.name) {
       setSchema(
         store.getState().data.sourceSchemas.schemaBySourceName[
-          selectedNode.source.name
+        selectedNode.source.name
         ]
       );
     }
@@ -160,101 +210,83 @@ const Drawer = ({
     >
       <div className={Classes.DRAWER_BODY}>
         <div className={Classes.DIALOG_BODY}>
-          <Mutation
-            mutation={mUpdateResource}
-            onCompleted={onUpdateCompleted}
-            onError={onUpdateError}
-          >
-            {(updateResource: any, { loading }: any) => {
-              return (
-                <form onSubmit={onFormSubmit(updateResource)}>
-                  <FormGroup
-                    label="Resource Label"
-                    className="resource-info"
-                    disabled={loading || selectedNode.resource.id === null}
-                  >
-                    <InputGroup
-                      type="text"
-                      placeholder="Label..."
-                      value={label}
-                      onChange={(event: React.FormEvent<HTMLElement>) => {
-                        setLabel((event.target as any).value);
-                      }}
-                    />
-                  </FormGroup>
-                  <FormGroup
-                    label="Primary Key"
-                    disabled={loading || selectedNode.resource.id === null}
-                  >
-                    <ColumnPicker
-                      ownerChangeCallback={(owner: string) => {
-                        setPkOwner(owner);
-                        setPkTable("");
-                        setPkColumn("");
-                      }}
-                      tableChangeCallback={(table: string) => {
-                        setPkTable(table);
-                        setPkColumn("");
-                      }}
-                      columnChangeCallback={(column: string) => {
-                        setPkColumn(column);
-                      }}
-                      initialColumn={{
-                        owner: pkOwner,
-                        table: pkTable,
-                        column: pkColumn
-                      }}
-                      sourceSchema={schema}
-                      vertical={true}
-                      fill={true}
-                      popoverProps={{
-                        autoFocus: true,
-                        boundary: "viewport",
-                        canEscapeKeyClose: true,
-                        lazy: true,
-                        position: Position.LEFT_TOP,
-                        usePortal: true
-                      }}
-                      disabled={loading || selectedNode.resource.id === null}
-                    />
-                  </FormGroup>
-                  <Button
-                    disabled={loading || selectedNode.resource.id === null}
-                    intent="primary"
-                    text="Save"
-                    type="submit"
-                  />
-                </form>
-              );
-            }}
-          </Mutation>
+          <form onSubmit={onFormSubmit(updateResource)}>
+            <FormGroup
+              label="Resource Label"
+              className="resource-info"
+              disabled={updatingResource || selectedNode.resource.id === null}
+            >
+              <InputGroup
+                type="text"
+                placeholder="Label..."
+                value={label}
+                onChange={(event: React.FormEvent<HTMLElement>) => {
+                  setLabel((event.target as any).value);
+                }}
+              />
+            </FormGroup>
+            <FormGroup
+              label="Primary Key"
+              disabled={updatingResource || selectedNode.resource.id === null}
+            >
+              <ColumnPicker
+                ownerChangeCallback={(owner: string) => {
+                  setPkOwner(owner);
+                  setPkTable("");
+                  setPkColumn("");
+                }}
+                tableChangeCallback={(table: string) => {
+                  setPkTable(table);
+                  setPkColumn("");
+                }}
+                columnChangeCallback={(column: string) => {
+                  setPkColumn(column);
+                }}
+                initialColumn={{
+                  owner: pkOwner,
+                  table: pkTable,
+                  column: pkColumn
+                }}
+                sourceSchema={schema}
+                vertical={true}
+                fill={true}
+                popoverProps={{
+                  autoFocus: true,
+                  boundary: "viewport",
+                  canEscapeKeyClose: true,
+                  lazy: true,
+                  position: Position.LEFT_TOP,
+                  usePortal: true
+                }}
+                disabled={updatingResource || selectedNode.resource.id === null}
+              />
+            </FormGroup>
+            <Button
+              disabled={updatingResource || selectedNode.resource.id === null}
+              intent="primary"
+              text="Save"
+              type="submit"
+            />
+          </form>
         </div>
       </div>
       <div className={Classes.DRAWER_FOOTER}>
-        <Mutation
-          mutation={deleteResourceMutation}
-          onCompleted={onDeletionCompleted}
-          onError={onDeletionError}
-        >
-          {(deleteResource: any, { loading }: any) => (
-            <ControlGroup fill={true}>
-              <Button
-                disabled={selectedNode.resource.id === null}
-                loading={loading}
-                icon={"trash"}
-                intent={"danger"}
-                onClick={() => {
-                  deleteResource({
-                    variables: {
-                      resourceId: selectedNode.resource.id
-                    }
-                  });
-                }}
-                text="Delete Resource"
-              />
-            </ControlGroup>
-          )}
-        </Mutation>
+        <ControlGroup fill={true}>
+          <Button
+            disabled={selectedNode.resource.id === null}
+            loading={deletingResource}
+            icon={"trash"}
+            intent={"danger"}
+            onClick={() => {
+              deleteResource({
+                variables: {
+                  id: selectedNode.resource.id
+                }
+              });
+            }}
+            text="Delete Resource"
+          />
+        </ControlGroup>
       </div>
     </BPDrawer>
   );
