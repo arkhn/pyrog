@@ -7,14 +7,16 @@ import {
   Button
 } from "@blueprintjs/core";
 import * as React from "react";
-import { Mutation } from "react-apollo";
-import { useSelector } from "react-redux";
+import { useMutation } from '@apollo/react-hooks';
+// import { useSelector } from "react-redux";
 
 import ColumnPicker from "../../../ColumnPicker";
 // import TableViewer from "../TableViewer";
 
-import { IReduxStore } from "src/types";
+// import { IReduxStore } from "src/types";
 
+// GRAPHQL
+const qInputsForAttribute = require("src/graphql/queries/inputsForAttribute.graphql");
 const mCreateSQLInput = require("src/graphql/mutations/createSQLInput.graphql");
 
 interface IProps {
@@ -34,7 +36,37 @@ const DynamicColumnPicker = ({ attribute, schema, source }: IProps) => {
   // const [rows, setRows] = React.useState([]);
   // const [fields, setFields] = React.useState([]);
 
-  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
+  // const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
+
+  const addInputToCache = (cache: any, { data: { createInput } }: any) => {
+    try {
+      const { attribute: dataAttribute } = cache.readQuery({
+        query: qInputsForAttribute,
+        variables: {
+          attributeId: attribute.id
+        }
+      });
+      cache.writeQuery({
+        query: qInputsForAttribute,
+        variables: {
+          attributeId: attribute.id
+        },
+        data: {
+          attribute: {
+            ...dataAttribute,
+            inputs: dataAttribute.inputs.concat([createInput])
+          }
+        },
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const [
+    createSQLInput,
+    { loading: creatingSQLInput }
+  ] = useMutation(mCreateSQLInput, { update: addInputToCache });
 
   // React.useEffect(() => {
   //   if (selectedNode.source && selectedNode.source.id) {
@@ -78,32 +110,23 @@ const DynamicColumnPicker = ({ attribute, schema, source }: IProps) => {
             }}
             sourceSchema={schema}
           />
-          <Mutation mutation={mCreateSQLInput}>
-            {(
-              createSQLInput: any,
-              { data, loading }: any
-            ) => {
-              return (
-                <Button
-                  disabled={!attribute.id || !column}
-                  icon={"add"}
-                  loading={loading}
-                  onClick={() =>
-                    createSQLInput({
-                      variables: {
-                        attributeId: attribute.id,
-                        columnInput: {
-                          owner: owner || "",  // TODO remove "". I'm only testing because owner of inputColumn non-nullable
-                          table: table,
-                          column: column
-                        }
-                      }
-                    })
+          <Button
+            disabled={!attribute.id || !column}
+            icon={"add"}
+            loading={creatingSQLInput}
+            onClick={() =>
+              createSQLInput({
+                variables: {
+                  attributeId: attribute.id,
+                  columnInput: {
+                    owner: owner || "",
+                    table: table,
+                    column: column
                   }
-                />
-              );
-            }}
-          </Mutation>
+                }
+              })
+            }
+          />
         </ControlGroup>
       </FormGroup>
       {/* <TableViewer fields={fields} rows={rows} isLoading={tableIsLoading} /> */}
