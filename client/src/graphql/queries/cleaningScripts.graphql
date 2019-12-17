@@ -1,7 +1,7 @@
 query CleaningScriptsList {
   cleaningScripts @rest(type: "CleaningScriptsPayload", path: "list") {
     scripts @type(name: "CleaningScript") {
-      code
+      name
       description
     }
   }
