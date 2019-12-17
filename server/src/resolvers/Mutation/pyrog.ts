@@ -4,10 +4,10 @@ const crypto = require('crypto');
 import { checkAuth, Context, getUserId } from '../../utils';
 
 export const pyrogMutation = {
-  async createSource(parent, { sourceName, hasOwner }, context: Context) {
+  createSource(parent, { sourceName, hasOwner }, context: Context) {
     getUserId(context);
 
-    return await context.client.createSource({
+    return context.client.createSource({
       name: sourceName,
       hasOwner
     });
@@ -18,7 +18,7 @@ export const pyrogMutation = {
   // Cela permet que ce genre d'évènement (création, suppression)
   // soit pris en compte lors d'une subscription à l'attribut parent.
   // Une issue parle de ça ici : https://github.com/prisma/prisma/issues/146
-  async createInputColumnAndUpdateAttribute(
+  createInputColumnAndUpdateAttribute(
     parent,
     { attributeId, data },
     context: Context
@@ -26,7 +26,7 @@ export const pyrogMutation = {
     getUserId(context);
 
     // Création de la nouvelle inputColumn
-    const inputColumn = await context.client.createInputColumn({
+    const inputColumn = context.client.createInputColumn({
       ...data,
       attribute: {
         connect: {
@@ -38,7 +38,7 @@ export const pyrogMutation = {
     // On update manuellement l'Attribut, sans rien modifier
     // ce qui permet de déclencher un évènement
     // pour les souscripteurs.
-    await context.client.updateAttribute({
+    context.client.updateAttribute({
       data: {},
       where: { id: attributeId }
     });
@@ -46,7 +46,7 @@ export const pyrogMutation = {
     return inputColumn;
   },
 
-  async deleteInputColumnAndUpdateAttribute(
+  deleteInputColumnAndUpdateAttribute(
     parent,
     { attributeId, inputColumnId },
     context: Context
@@ -54,25 +54,25 @@ export const pyrogMutation = {
     getUserId(context);
 
     // Suppression d'une inputColumn
-    const inputColumn = await context.client.deleteInputColumn({
+    const inputColumn = context.client.deleteInputColumn({
       id: inputColumnId
     });
 
-    await context.client.updateAttribute({
+    context.client.updateAttribute({
       data: {},
       where: { id: attributeId }
     });
 
     return inputColumn;
   },
-  async createJoinAndUpdateInputColumn(
+  createJoinAndUpdateInputColumn(
     parent,
     { inputColumnId, data },
     context: Context
   ) {
     getUserId(context);
 
-    const join = await context.client.createJoin({
+    const join = context.client.createJoin({
       ...data,
       inputColumn: {
         connect: {
@@ -81,7 +81,7 @@ export const pyrogMutation = {
       }
     });
 
-    await context.client.updateInputColumn({
+    context.client.updateInputColumn({
       data: {},
       where: { id: inputColumnId }
     });
@@ -89,7 +89,7 @@ export const pyrogMutation = {
     return join;
   },
 
-  async deleteJoinAndUpdateInputColumn(
+  deleteJoinAndUpdateInputColumn(
     parent,
     { inputColumnId, joinId },
     context: Context
@@ -97,11 +97,11 @@ export const pyrogMutation = {
     getUserId(context);
 
     // Suppression d'une inputColumn
-    const join = await context.client.deleteJoin({
+    const join = context.client.deleteJoin({
       id: joinId
     });
 
-    await context.client.updateInputColumn({
+    context.client.updateInputColumn({
       data: {},
       where: { id: inputColumnId }
     });
@@ -111,28 +111,28 @@ export const pyrogMutation = {
 
   updateResource: checkAuth(forwardTo('binding')),
 
-  async updateAttribute(parent, { id, data }, context: Context) {
+  updateAttribute(parent, { id, data }, context: Context) {
     getUserId(context);
 
-    return await context.client.updateAttribute({
+    return context.client.updateAttribute({
       data,
       where: { id }
     });
   },
 
-  async updateInputColumn(parent, { id, data }, context: Context) {
+  updateInputColumn(parent, { id, data }, context: Context) {
     getUserId(context);
 
-    return await context.client.updateInputColumn({
+    return context.client.updateInputColumn({
       data,
       where: { id }
     });
   },
 
-  async updateJoin(parent, { id, data }, context: Context) {
+  updateJoin(parent, { id, data }, context: Context) {
     getUserId(context);
 
-    return await context.client.updateJoin({
+    return context.client.updateJoin({
       data,
       where: { id }
     });
@@ -188,7 +188,7 @@ export const pyrogMutation = {
       });
   },
 
-  async deleteResource(parent, { resourceId }, context: Context) {
+  deleteResource(parent, { resourceId }, context: Context) {
     getUserId(context);
     return context.client.deleteResource({ id: resourceId });
   },
@@ -232,9 +232,9 @@ export const pyrogMutation = {
       throw new Error(error);
     }
   },
-  async deleteAttribute(parent, { id }, context: Context) {
+  deleteAttribute(parent, { id }, context: Context) {
     const userId = getUserId(context);
-    await context.client.user({ id: userId });
+    context.client.user({ id: userId });
 
     // TODO: check role
     // if (user.role == "ADMIN") {
