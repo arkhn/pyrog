@@ -111,7 +111,14 @@ export const pyrogMutation = {
 
   updateResource: checkAuth(forwardTo('binding')),
 
-  updateAttribute: checkAuth(forwardTo('binding')),
+  async updateAttribute(parent, { id, data }, context: Context) {
+    getUserId(context);
+
+    return await context.client.updateAttribute({
+      data,
+      where: { id }
+    });
+  },
 
   async updateInputColumn(parent, { id, data }, context: Context) {
     getUserId(context);
