@@ -7,8 +7,10 @@ import {
   Elevation
 } from "@blueprintjs/core";
 import * as React from "react";
-import { Mutation } from "react-apollo";
+import { useMutation } from '@apollo/react-hooks';
 
+// GRAPHQL
+const qInputsForAttribute = require("src/graphql/queries/inputsForAttribute.graphql");
 const mCreateStaticInput = require("src/graphql/mutations/createStaticInput.graphql");
 
 interface IProps {
@@ -20,6 +22,36 @@ interface IProps {
 
 const StaticColumnPicker = ({ attribute }: IProps) => {
   const [staticValue, setStaticValue] = React.useState("");
+
+  const addInputToCache = (cache: any, { data: { createInput } }: any) => {
+    try {
+      const { attribute: dataAttribute } = cache.readQuery({
+        query: qInputsForAttribute,
+        variables: {
+          attributeId: attribute.id
+        }
+      });
+      cache.writeQuery({
+        query: qInputsForAttribute,
+        variables: {
+          attributeId: attribute.id
+        },
+        data: {
+          attribute: {
+            ...dataAttribute,
+            inputs: dataAttribute.inputs.concat([createInput])
+          }
+        },
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const [
+    createStaticInput,
+    { loading: creatingStaticInput }
+  ] = useMutation(mCreateStaticInput, { update: addInputToCache });
 
   return (
     <Card elevation={Elevation.ONE}>
@@ -35,25 +67,19 @@ const StaticColumnPicker = ({ attribute }: IProps) => {
             placeholder="Column static value"
             value={staticValue}
           />
-          <Mutation mutation={mCreateStaticInput}>
-            {(createStaticInput: any, { data, loading }: any) => {
-              return (
-                <Button
-                  disabled={!attribute.id || staticValue.length == 0}
-                  icon={"add"}
-                  loading={loading}
-                  onClick={() =>
-                    createStaticInput({
-                      variables: {
-                        attributeId: attribute.id,
-                        staticValue: staticValue
-                      }
-                    })
-                  }
-                />
-              );
-            }}
-          </Mutation>
+          <Button
+            disabled={!attribute.id || staticValue.length == 0}
+            icon={"add"}
+            loading={creatingStaticInput}
+            onClick={() =>
+              createStaticInput({
+                variables: {
+                  attributeId: attribute.id,
+                  staticValue: staticValue
+                }
+              })
+            }
+          />
         </ControlGroup>
       </FormGroup>
     </Card>
