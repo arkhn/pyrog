@@ -1,7 +1,7 @@
 mutation createResource($sourceId: ID!, $resourceName: String!) {
   createResource(sourceId: $sourceId, resourceName: $resourceName) {
     id
-    label
     fhirType
+    label
   }
 }

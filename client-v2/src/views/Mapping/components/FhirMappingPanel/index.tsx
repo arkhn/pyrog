@@ -1,6 +1,6 @@
 import { Spinner } from "@blueprintjs/core";
 import React from "react";
-import { Query } from "react-apollo";
+import { useQuery } from '@apollo/react-hooks';
 import { useSelector, useDispatch } from "react-redux";
 import useReactRouter from "use-react-router";
 
@@ -18,7 +18,7 @@ import { updateLocationParams } from "src/services/urlState";
 
 // GRAPHQL
 const qResourcesForSource = require("src/graphql/queries/ResourcesForSource.graphql");
-const resourceAttributeTree = require("src/graphql/queries/resourceAttributeTree.graphql");
+const qResourceAttributeTree = require("src/graphql/queries/resourceAttributeTree.graphql");
 
 const FhirMappingPanel = () => {
   const dispatch = useDispatch();
@@ -32,98 +32,86 @@ const FhirMappingPanel = () => {
   const [createdResources, setCreatedResources] = React.useState(0);
   const [createdProfiles, setCreatedProfiles] = React.useState(0);
 
-  return (
-    <Query
-      fetchPolicy={"network-only"}
-      query={qResourcesForSource}
-      skip={!selectedNode.source.id}
-      variables={{
+  const { data: dataResources, loading: loadingResources } =
+    useQuery(qResourcesForSource, {
+      skip: !selectedNode.source.id,
+      variables: {
         sourceId: selectedNode.source.id,
-        // This allows to force refetch
-        // when a new resource is added.
-        createdResources: createdResources
-      }}
-    >
-      {({ data, loading }: any) => {
-        return (
-          <>
-            <div id="fhir-attributes">
-              <div id="resource-selector">
-                <ResourceSelector
-                  availableResources={data ? data.source.resources : []}
-                  loading={loading}
-                  deleteResourceCallback={() => {
-                    setCreatedResources(createdResources - 1);
-                  }}
-                />
-              </div>
-              <div id="fhir-resource-tree">
-                {selectedNode.resource.fhirType ? (
-                  <Query
-                    fetchPolicy={"network-only"}
-                    query={resourceAttributeTree}
-                    variables={{
-                      createdProfiles: createdProfiles,
-                      resourceId: selectedNode.resource.id
-                    }}
-                    skip={!selectedNode.source || !selectedNode.resource.id}
-                  >
-                    {({ data, loading }: any) => {
-                      return loading ? (
-                        <Spinner />
-                      ) : (
-                        <FhirResourceTree
-                          addProfileCallback={(response: any) => {
-                            setCreatedProfiles(createdProfiles + 1);
-                          }}
-                          deleteProfileCallback={(response: any) => {
-                            setCreatedProfiles(createdProfiles - 1);
-                          }}
-                          expandedAttributesIdList={expandedAttributesIdList}
-                          nodeCollapseCallback={(node: any) => {
-                            setExpandedAttributesIdList(
-                              expandedAttributesIdList.filter(
-                                (item: any) => item !== node.nodeData.id
-                              )
-                            );
-                          }}
-                          nodeExpandCallback={(node: any) => {
-                            setExpandedAttributesIdList([
-                              ...expandedAttributesIdList,
-                              node.nodeData.id
-                            ]);
-                          }}
-                          json={data.resource.attributes}
-                          onClickCallback={(nodeData: any) => {
-                            dispatch(
-                              updateFhirAttribute(nodeData.id, nodeData.name)
-                            );
-                            updateLocationParams(
-                              history,
-                              location,
-                              "attributeId",
-                              nodeData.id
-                            );
-                          }}
-                          selectedNodeId={selectedNode.attribute.id}
-                        />
-                      );
-                    }}
-                  </Query>
-                ) : null}
-              </div>
-            </div>
-            <div id="resource-add">
-              <AddResource
-                callback={() => {
-                  setCreatedResources(createdResources + 1);
+      }
+    })
+  const { data: dataTree, loading: loadingTree } =
+    useQuery(qResourceAttributeTree, {
+      skip: !selectedNode.source || !selectedNode.resource.id,
+      variables: {
+        createdProfiles: createdProfiles,
+        resourceId: selectedNode.resource.id,
+      }
+    })
+
+  return (
+    <>
+      <div id="fhir-attributes">
+        <div id="resource-selector">
+          <ResourceSelector
+            availableResources={dataResources ? dataResources.source.resources : []}
+            loading={loadingResources}
+            deleteResourceCallback={() => {
+              setCreatedResources(createdResources - 1);
+            }}
+          />
+        </div>
+        <div id="fhir-resource-tree">
+          {selectedNode.resource.fhirType ? (
+            loadingTree ? (
+              <Spinner />
+            ) : (
+              <FhirResourceTree
+                addProfileCallback={(response: any) => {
+                  setCreatedProfiles(createdProfiles + 1);
                 }}
+                deleteProfileCallback={(response: any) => {
+                  setCreatedProfiles(createdProfiles - 1);
+                }}
+                expandedAttributesIdList={expandedAttributesIdList}
+                nodeCollapseCallback={(node: any) => {
+                  setExpandedAttributesIdList(
+                    expandedAttributesIdList.filter(
+                      (item: any) => item !== node.nodeData.id
+                    )
+                  );
+                }}
+                nodeExpandCallback={(node: any) => {
+                  setExpandedAttributesIdList([
+                    ...expandedAttributesIdList,
+                    node.nodeData.id
+                  ]);
+                }}
+                json={dataTree.resource.attributes}
+                onClickCallback={(nodeData: any) => {
+                  dispatch(
+                    updateFhirAttribute(nodeData.id, nodeData.name)
+                  );
+                  updateLocationParams(
+                    history,
+                    location,
+                    "attributeId",
+                    nodeData.id
+                  );
+                }}
+                selectedNodeId={selectedNode.attribute.id}
               />
-            </div>
-          </>
-        );
-      }}
-    </Query>
+            )
+          ) : null}
+        </div>
+      </div>
+      <div id="resource-add">
+        <AddResource
+          callback={() => {
+            setCreatedResources(createdResources + 1);
+          }}
+        />
+      </div>
+    </>
   );
 };
 

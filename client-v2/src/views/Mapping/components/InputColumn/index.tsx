@@ -48,26 +48,23 @@ const InputColumn = ({ attribute, input, schema, source }: IProps) => {
   ] = useMutation(mUpdateInputColumn);
 
   const removeInputFromCache = (cache: any) => {
-    const data = cache.readQuery({
+    const { attribute: dataAttribute } = cache.readQuery({
       query: qInputsForAttribute,
       variables: {
         attributeId: attribute.id
       }
     });
-    const newData = {
-      attribute: {
-        __typename: data.attribute.__typename,
-        id: data.attribute.id,
-        inputs:
-          data.attribute.inputs.filter((i: any) => i.id !== input.id),
-      }
+    const newDataAttribute = {
+      ...dataAttribute,
+      inputs:
+      dataAttribute.inputs.filter((i: any) => i.id !== input.id),
     }
     cache.writeQuery({
       query: qInputsForAttribute,
       variables: {
         attributeId: attribute.id
       },
-      data: newData
+      data: { attribute: newDataAttribute }
     });
   }
 

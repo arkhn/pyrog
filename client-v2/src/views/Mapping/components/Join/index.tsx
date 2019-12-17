@@ -40,25 +40,23 @@ const Join = ({ joinData, schema, source }: IProps) => {
   }
 
   const removeJoinFromCache = (cache: any) => {
-    const data = cache.readQuery({
+    const { attribute: dataAttribute } = cache.readQuery({
       query: qInputsForAttribute,
       variables: {
         attributeId: selectedNode.attribute.id
       }
     });
-    const newData = {
-      attribute: {
-        ...data.attribute,
-        inputs:
-          data.attribute.inputs.map(removeJoin),
-      }
+    const newDataAttribute = {
+      ...dataAttribute,
+      inputs:
+        dataAttribute.inputs.map(removeJoin),
     }
     cache.writeQuery({
       query: qInputsForAttribute,
       variables: {
         attributeId: selectedNode.attribute.id
       },
-      data: newData
+      data: { attribute: newDataAttribute }
     });
   }
 

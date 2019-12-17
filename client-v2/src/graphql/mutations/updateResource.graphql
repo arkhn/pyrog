@@ -4,5 +4,6 @@ mutation updateResource(
 ) {
   updateResource(resourceId: $resourceId, data: $data) {
     id
+    label
   }
 }

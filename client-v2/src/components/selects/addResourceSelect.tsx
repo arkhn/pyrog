@@ -1,10 +1,8 @@
 import * as React from "react";
-import { Button, Intent, MenuItem, Position } from "@blueprintjs/core";
+import { Intent, MenuItem, Position } from "@blueprintjs/core";
 import {
-  Select,
   ItemPredicate,
   ItemRenderer,
-  ItemListPredicate
 } from "@blueprintjs/select";
 import { IconName } from "@blueprintjs/icons";
 
@@ -66,8 +64,7 @@ export default class AddResourceSelect extends React.Component<
     return 0;
   };
 
-  private sortItems: ItemListPredicate<IFhirResource> = (
-    query,
+  private sortItems = (
     resources: IFhirResource[]
   ) => {
     resources.sort((r1, r2) => {
@@ -94,7 +91,6 @@ export default class AddResourceSelect extends React.Component<
       items,
       loading,
       onChange,
-      popoverProps
     } = this.props;
 
     return (
@@ -102,12 +98,11 @@ export default class AddResourceSelect extends React.Component<
         disabled={disabled}
         displayItem={this.displayItem}
         filterItems={this.filterByName}
-        sortItems={this.sortItems}
         loading={loading}
         icon={icon}
         inputItem={inputItem}
         intent={intent}
-        items={items}
+        items={this.sortItems(items)}
         onChange={onChange}
         popoverProps={{
           autoFocus: true,

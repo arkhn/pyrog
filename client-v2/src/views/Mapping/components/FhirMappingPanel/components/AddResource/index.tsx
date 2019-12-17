@@ -7,6 +7,7 @@ import { IReduxStore } from "src/types";
 import { availableResourceNames } from "./resourceNames";
 import AddResourceSelect from "src/components/selects/addResourceSelect";
 
+const qResourcesForSource = require("src/graphql/queries/ResourcesForSource.graphql");
 const mCreateResource = require("src/graphql/mutations/createResource.graphql");
 
 interface IProps {
@@ -43,10 +44,34 @@ const AddResource = ({ callback }: IProps) => {
     })
   }
 
+  const addResourceToCache = (cache: any, { data: { createResource } }: any) => {
+    const { source } = cache.readQuery({
+      query: qResourcesForSource,
+      variables: {
+        sourceId: selectedNode.source.id,
+      }
+    });
+    cache.writeQuery({
+      query: qResourcesForSource,
+      variables: {
+        sourceId: selectedNode.source.id,
+      },
+      data: {
+        source: {
+          ...source,
+          resources: source.resources.concat([createResource])
+        }
+      },
+    })
+  }
+
   const [
     createResource,
     { loading: creatingResource }
-  ] = useMutation(mCreateResource, { onCompleted, onError });
+  ] = useMutation(
+    mCreateResource,
+    { onCompleted, onError, update: addResourceToCache }
+  );
 
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
   const toaster = useSelector((state: IReduxStore) => state.toaster);
