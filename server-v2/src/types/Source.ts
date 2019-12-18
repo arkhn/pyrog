@@ -59,6 +59,6 @@ export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
 
 export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
   _parent,
-  { name },
+  { id },
   ctx,
-) => ctx.photon.sources.delete({ where: { name } })
+) => ctx.photon.sources.delete({ where: { id } })

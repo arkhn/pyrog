@@ -72,7 +72,7 @@ export const Mutation = mutationType({
     t.field('deleteSource', {
       type: 'Source',
       args: {
-        name: stringArg({ required: true }),
+        id: idArg({ required: true }),
       },
       resolve: deleteSource,
     })

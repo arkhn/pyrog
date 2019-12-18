@@ -1,81 +1,70 @@
 import { Button, Card, Elevation, Icon, Spinner, Tag } from '@blueprintjs/core';
 import * as QueryString from 'query-string';
 import * as React from 'react';
+import { useMutation } from "@apollo/react-hooks";
 import { Query } from 'react-apollo';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { useDispatch } from "react-redux";
+import useReactRouter from "use-react-router";
 
 import Navbar from '../../components/Navbar';
 
 import { changeSelectedSource } from '../../services/selectedNode/actions';
 
-// Import types
-import { IReduxStore, IView } from '../../types';
-
 import './style.less';
 
-// GRAPHQL OPERATIONS
+// GRAPHQL
+const qSources = require('src/graphql/queries/sources.graphql');
+const mDeleteSource = require('src/graphql/mutations/deleteSource.graphql');
 
-// Queries
-const qSources = require('../../graphql/queries/sources.graphql');
+const SourcesView = () => {
+  const dispatch = useDispatch();
+  const { history } = useReactRouter();
 
-export interface ISourcesState {}
+  const removeSourceFromCache = (
+    cache: any, { data: { deleteSource } }: any
+  ) => {
+    try {
+      const { sources } = cache.readQuery({
+        query: qSources,
+      });
 
-interface IState {}
+      const newSources = sources.filter((s: any) => s.id !== deleteSource.id)
 
-interface ISourcesViewState extends IView, ISourcesState {}
-
-const mapReduxStateToReactProps = (state: IReduxStore): ISourcesViewState => {
-  return {
-    data: state.data,
-    dispatch: state.dispatch
-  };
-};
-
-const reduxify = (
-  mapReduxStateToReactProps: any,
-  mapDispatchToProps?: any,
-  mergeProps?: any,
-  options?: any
-): any => {
-  return (target: any) =>
-    connect(
-      mapReduxStateToReactProps,
-      mapDispatchToProps,
-      mergeProps,
-      options
-    )(target) as any;
-};
-
-class SourcesView extends React.Component<ISourcesViewState, IState> {
-  constructor(props: ISourcesViewState) {
-    super(props);
+      cache.writeQuery({
+        query: qSources,
+        data: { sources: newSources }
+      });
+    } catch (error) {
+      console.log(error)
+    }
   }
 
-  public render = () => {
-    const { data, dispatch } = this.props;
+  const [
+    deleteSource,
+    { loading: deletingSource }
+  ] = useMutation(mDeleteSource, { update: removeSourceFromCache });
 
-    return (
-      <div>
-        <Navbar />
-        <div id="main-container-softwares">
-          <Button
-            icon={'add'}
-            intent={'primary'}
-            large={true}
-            onClick={() => {
-              this.props.history.push('/newSource');
-            }}
-          >
-            Ajouter une source / un logiciel
-          </Button>
-          <Query fetchPolicy="network-only" query={qSources}>
-            {({ data, loading }: any) => {
-              return (
-                <div id="software-cards">
-                  {loading ? (
-                    <Spinner />
-                  ) : (
+  return (
+    <div>
+      <Navbar />
+      <div id="main-container-softwares">
+        <Button
+          icon={'add'}
+          intent={'primary'}
+          large={true}
+          onClick={() => {
+            history.push('/newSource');
+          }}
+        >
+          Ajouter une source / un logiciel
+        </Button>
+        <Query fetchPolicy="network-only" query={qSources}>
+          {({ data, loading }: any) => {
+            return (
+              <div id="software-cards">
+                {loading ? (
+                  <Spinner />
+                ) : (
                     data.sources.map((source: any, index: number) => {
                       return (
                         <Card
@@ -90,7 +79,7 @@ class SourcesView extends React.Component<ISourcesViewState, IState> {
                                 source.hasOwner
                               )
                             );
-                            this.props.history.push({
+                            history.push({
                               pathname: '/mapping',
                               search: QueryString.stringify({
                                 sourceId: source.id
@@ -98,7 +87,21 @@ class SourcesView extends React.Component<ISourcesViewState, IState> {
                             });
                           }}
                         >
-                          <h2>{source.name}</h2>
+                          <h2>{source.name}
+                            <Button
+                              icon={"delete"}
+                              loading={deletingSource}
+                              minimal={true}
+                              onClick={(e: React.MouseEvent) => {
+                                e.stopPropagation()
+                                deleteSource({
+                                  variables: {
+                                    id: source.id
+                                  }
+                                });
+                                console.log(`Removing {source.name}`)
+                              }} />
+                          </h2>
                           <div className="tags">
                             <Tag>DPI</Tag>
                             <Tag>Généraliste</Tag>
@@ -124,16 +127,13 @@ class SourcesView extends React.Component<ISourcesViewState, IState> {
                       );
                     })
                   )}
-                </div>
-              );
-            }}
-          </Query>
-        </div>
+              </div>
+            );
+          }}
+        </Query>
       </div>
-    );
-  };
+    </div>
+  );
 }
 
-export default withRouter(connect(mapReduxStateToReactProps)(
-  SourcesView
-) as any);
+export default SourcesView;

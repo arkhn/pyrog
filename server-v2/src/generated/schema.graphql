@@ -96,8 +96,9 @@ type Mutation {
   deleteAttribute(id: ID!): Attribute!
   deleteCredential(id: ID!): Credential!
   deleteInput(id: ID!): Input!
+  deleteJoin(id: ID!): Join!
   deleteResource(id: ID!): Resource!
-  deleteSource(name: String!): Source!
+  deleteSource(id: ID!): Source!
   deleteTemplate(id: ID!): Template!
   login(email: String!, password: String!): AuthPayload!
   signup(email: String!, name: String!, password: String!): AuthPayload!
