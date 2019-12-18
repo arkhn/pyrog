@@ -1,4 +1,4 @@
-import { Button, Card, Elevation, Icon, Spinner, Tag } from '@blueprintjs/core';
+import { Alert, Button, Card, Elevation, Icon, Intent, Spinner, Tag } from '@blueprintjs/core';
 import * as QueryString from 'query-string';
 import * as React from 'react';
 import { useMutation } from "@apollo/react-hooks";
@@ -19,6 +19,8 @@ const mDeleteSource = require('src/graphql/mutations/deleteSource.graphql');
 const SourcesView = () => {
   const dispatch = useDispatch();
   const { history } = useReactRouter();
+
+  const [alertIsOpen, setAlertIsOpen] = React.useState(false);
 
   const removeSourceFromCache = (
     cache: any, { data: { deleteSource } }: any
@@ -94,13 +96,34 @@ const SourcesView = () => {
                               minimal={true}
                               onClick={(e: React.MouseEvent) => {
                                 e.stopPropagation()
-                                deleteSource({
-                                  variables: {
-                                    id: source.id
-                                  }
-                                });
-                                console.log(`Removing {source.name}`)
+                                setAlertIsOpen(true)
                               }} />
+                            <Alert
+                              cancelButtonText="Cancel"
+                              confirmButtonText="Confirm"
+                              icon="trash"
+                              intent={Intent.DANGER}
+                              isOpen={alertIsOpen}
+                              canOutsideClickCancel={true}
+                              onClose={
+                                (confirmed, e) => {
+                                  e.stopPropagation()
+                                  setAlertIsOpen(false)
+                                  if (confirmed) {
+                                    deleteSource({
+                                      variables: {
+                                        id: source.id
+                                      }
+                                    })
+                                  }
+                                }
+                              }
+                            >
+                              <p>
+                                Etes-vous sûr de vouloir supprimer la source <b>{source.name}</b>?
+                                Cette action n'est pas réversible.
+                                </p>
+                            </Alert>
                           </h2>
                           <div className="tags">
                             <Tag>DPI</Tag>
