@@ -1,10 +1,16 @@
 fragment entireAttribute on Attribute {
   id
   name
-  mergingScript
-  isArray
   fhirType
+  isArray
+  parent {
+    isArray
+    children {
+      id
+    }
+  }
   description
+  mergingScript
   inputs {
     id
   }

@@ -4,17 +4,22 @@ import {
   Icon,
   ITreeNode,
   Menu,
-  MenuDivider,
   MenuItem,
   Tooltip,
   Tree
 } from "@blueprintjs/core";
+import React from "react";
 import { ApolloClient } from "apollo-client";
 import { withApollo } from "react-apollo";
-import React from "react";
+import { useSelector } from "react-redux";
 
+import { IReduxStore } from "src/types";
+
+// GRAPHQL
+const qResourceAttributeTree = require("src/graphql/queries/resourceAttributeTree.graphql");
 const mCreateAttribute = require("src/graphql/mutations/createAttribute.graphql");
 const mDeleteAttribute = require("src/graphql/mutations/deleteAttribute.graphql");
+const qAttributeChildren = require("src/graphql/queries/attributeChildren.graphql");
 
 interface INodeData {
   description: string;
@@ -22,13 +27,13 @@ interface INodeData {
   id: string;
   isArray: boolean;
   name: string;
+  parent: INodeData;
+  children: INodeData[];
   path: string[];
 }
 
 export interface IProps {
-  addProfileCallback: any;
   client?: ApolloClient<any>;
-  deleteProfileCallback: any;
   expandedAttributesIdList: string[];
   nodeCollapseCallback: any;
   nodeExpandCallback: any;
@@ -45,60 +50,157 @@ export interface IState {
 }
 
 interface INodeLabelProps {
-  createProfile: any;
-  deleteAttribute: any;
+  client: any;
   node: any;
+  nodePath: String[];
 }
 
 interface INodeLabelState {
   isContextMenuOpen: boolean;
 }
 
-class NodeLabel extends React.PureComponent<INodeLabelProps, INodeLabelState> {
-  public state = { isContextMenuOpen: false };
+const NodeLabel = ({ client, node, nodePath }: INodeLabelProps) => {
 
-  public render() {
-    return (
-      <div className={"node-label"} onContextMenu={this.showContextMenu}>
-        <div>{this.props.node.name}</div>
-        <div className={"node-type"}>{this.props.node.fhirType}</div>
-      </div>
-    );
+  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
+
+  const [isContextMenuOpen, setIsContextMenuOpen] = React.useState(false);
+
+  // Methods to update Apollo cache after creation/deletion mutations
+  const buildNewResource = (
+    resource: any, path: String[], adding: boolean, data: any
+  ): INodeData => {
+    if (path.length > 0) {
+      return resource.children ? {
+        ...resource,
+        children: (
+          resource.children.map(
+            (c: any) => c.id === path[0]
+              ? buildNewResource(c, path.splice(1), adding, data)
+              : c
+          )
+        )
+      } : {
+          ...resource,
+          attributes: (
+            resource.attributes.map(
+              (c: any) => c.id === path[0]
+                ? buildNewResource(c, path.splice(1), adding, data)
+                : c
+            )
+          )
+        }
+    }
+    return {
+      ...resource,
+      children:
+        adding  // If not adding then we are removing
+          ? resource.children.concat([data])
+          : resource.children.filter((c: any) => c.id !== data.id),
+    }
   }
 
-  private showContextMenu = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault();
+  const readCacheQuery = (cache: any) => {
+    return cache.readQuery({
+      query: qResourceAttributeTree,
+      variables: {
+        resourceId: selectedNode.resource.id,
+      }
+    });
+  }
 
-    const { node } = this.props;
+  const writeInCache = (cache: any, data: any) => {
+    cache.writeQuery({
+      query: qResourceAttributeTree,
+      variables: {
+        resourceId: selectedNode.resource.id,
+      },
+      data: data,
+    })
+  }
+
+  const addAttributeToCache = (
+    cache: any,
+    { data: { createAttribute } }: any
+  ) => {
+    try {
+      const { resource } = readCacheQuery(cache)
+
+      const newResource =
+        buildNewResource(resource, nodePath.concat([node.id]), true, createAttribute)
+      
+      writeInCache(cache, {resource: newResource})
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const removeAttributeFromCache = (
+    cache: any,
+    { data: { deleteAttribute } }: any
+  ) => {
+    try {
+      const { resource } = readCacheQuery(cache)
+
+      const newResource =
+        buildNewResource(resource, nodePath, false, deleteAttribute)
+      
+      writeInCache(cache, {resource: newResource})
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const showContextMenu = async (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
 
     const menu = node.isArray ? (
       <Menu>
-        <MenuItem icon={"edit"} text={"Renommer"} disabled />
-        <MenuItem icon={"duplicate"} text={"Dupliquer"} disabled />
-        <MenuDivider />
-        <MenuItem
-          icon={"trash"}
-          intent={"danger"}
-          onClick={() => this.props.deleteAttribute(node)}
-          text={"Supprimer"}
-        />
-      </Menu>
-    ) : node.fhirType && node.fhirType.startsWith("list::") && node.children ? (
-      <Menu>
         <MenuItem
           icon={"add"}
-          onClick={() => this.props.createProfile(node)}
-          text={"Ajouter un profil"}
+          onClick={() => {
+            client.mutate({
+              mutation: mCreateAttribute,
+              variables: {
+                parentId: node.id,
+              },
+              update: addAttributeToCache,
+            })
+          }}
+          text={"Ajouter un item"}
+        />
+      </Menu>
+    ) : node.parent && node.parent.isArray ? (
+      <Menu>
+        <MenuItem
+          icon={"delete"}
+          onClick={() => {
+            client
+              .mutate({
+                mutation: mDeleteAttribute,
+                variables: {
+                  attributeId: node.id
+                },
+                update: removeAttributeFromCache,
+              })
+          }}
+          text={"Supprimer l'item"}
         />
       </Menu>
     ) : null;
 
     ContextMenu.show(menu, { left: e.clientX, top: e.clientY }, () =>
-      this.setState({ isContextMenuOpen: false })
+      setIsContextMenuOpen(false)
     );
 
-    this.setState({ isContextMenuOpen: true });
+    setIsContextMenuOpen(true)
   };
+
+  return (
+    <div className={"node-label"} onContextMenu={showContextMenu}>
+      <div>{node.name}</div>
+      <div className={"node-type"}>{node.fhirType}</div>
+    </div>
+  );
 }
 
 class FhirResourceTree extends React.Component<IProps, IState> {
@@ -152,45 +254,9 @@ class FhirResourceTree extends React.Component<IProps, IState> {
     ): ITreeNode<INodeData> => {
       const nodeLabel = (
         <NodeLabel
-          createProfile={(node: any) => {
-            // One puts "Reference" instead of "Reference(Organisation)"
-            const type =
-              node.type && node.type.substring(6).startsWith("Reference")
-                ? "Reference"
-                : node.type.substring(6);
-
-            props.client
-              .mutate({
-                mutation: mCreateAttribute,
-                variables: {
-                  parentAttributeId: node.id,
-                  attributeName: `${type}_${node.attributes.length}`,
-                  attributeType: type
-                }
-              })
-              .then((response: any) => {
-                props.addProfileCallback(response);
-              })
-              .catch((error: any) => {
-                console.log(error);
-              });
-          }}
-          deleteAttribute={(node: any) => {
-            props.client
-              .mutate({
-                mutation: mDeleteAttribute,
-                variables: {
-                  attributeId: node.id
-                }
-              })
-              .then((response: any) => {
-                props.deleteProfileCallback(response);
-              })
-              .catch((error: any) => {
-                console.log(error);
-              });
-          }}
           node={node}
+          nodePath={pathAcc}
+          client={props.client}
         />
       );
 
@@ -208,15 +274,15 @@ class FhirResourceTree extends React.Component<IProps, IState> {
       return {
         childNodes: hasChildren
           ? node.children.map((child: any) => {
-              return genObjNodes(child, nodePath);
-            })
+            return genObjNodes(child, nodePath);
+          })
           : null,
         hasCaret: hasChildren,
         icon: node.isArray
           ? "multi-select"
           : hasChildren
-          ? "folder-open"
-          : "tag",
+            ? "folder-open"
+            : "tag",
         id: FhirResourceTree.getId(),
         isExpanded: false,
         isSelected: false,
@@ -225,15 +291,17 @@ class FhirResourceTree extends React.Component<IProps, IState> {
             {nodeLabel}
           </Tooltip>
         ) : (
-          nodeLabel
-        ),
+            nodeLabel
+          ),
         nodeData: {
           description: node.description,
+          fhirType: node.fhirType,
           id: node.id,
           isArray: node.isArray,
           name: node.name,
+          parent: node.parent,
+          children: node.children,
           path: nodePath,
-          fhirType: node.fhirType
         },
         secondaryLabel: secondaryLabel
       };

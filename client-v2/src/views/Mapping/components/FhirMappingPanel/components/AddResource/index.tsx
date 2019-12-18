@@ -45,24 +45,28 @@ const AddResource = ({ callback }: IProps) => {
   }
 
   const addResourceToCache = (cache: any, { data: { createResource } }: any) => {
-    const { source } = cache.readQuery({
-      query: qResourcesForSource,
-      variables: {
-        sourceId: selectedNode.source.id,
-      }
-    });
-    cache.writeQuery({
-      query: qResourcesForSource,
-      variables: {
-        sourceId: selectedNode.source.id,
-      },
-      data: {
-        source: {
-          ...source,
-          resources: source.resources.concat([createResource])
+    try {
+      const { source } = cache.readQuery({
+        query: qResourcesForSource,
+        variables: {
+          sourceId: selectedNode.source.id,
         }
-      },
-    })
+      });
+      cache.writeQuery({
+        query: qResourcesForSource,
+        variables: {
+          sourceId: selectedNode.source.id,
+        },
+        data: {
+          source: {
+            ...source,
+            resources: source.resources.concat([createResource])
+          }
+        },
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const [

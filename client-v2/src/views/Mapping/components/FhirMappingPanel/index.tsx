@@ -30,7 +30,6 @@ const FhirMappingPanel = () => {
     setExpandedAttributesIdList
   ] = React.useState([]);
   const [createdResources, setCreatedResources] = React.useState(0);
-  const [createdProfiles, setCreatedProfiles] = React.useState(0);
 
   const { data: dataResources, loading: loadingResources } =
     useQuery(qResourcesForSource, {
@@ -43,7 +42,6 @@ const FhirMappingPanel = () => {
     useQuery(qResourceAttributeTree, {
       skip: !selectedNode.source || !selectedNode.resource.id,
       variables: {
-        createdProfiles: createdProfiles,
         resourceId: selectedNode.resource.id,
       }
     })
@@ -66,12 +64,6 @@ const FhirMappingPanel = () => {
               <Spinner />
             ) : (
               <FhirResourceTree
-                addProfileCallback={(response: any) => {
-                  setCreatedProfiles(createdProfiles + 1);
-                }}
-                deleteProfileCallback={(response: any) => {
-                  setCreatedProfiles(createdProfiles - 1);
-                }}
                 expandedAttributesIdList={expandedAttributesIdList}
                 nodeCollapseCallback={(node: any) => {
                   setExpandedAttributesIdList(
