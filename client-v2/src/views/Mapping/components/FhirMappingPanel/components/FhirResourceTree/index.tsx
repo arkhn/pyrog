@@ -19,7 +19,6 @@ import { IReduxStore } from "src/types";
 const qResourceAttributeTree = require("src/graphql/queries/resourceAttributeTree.graphql");
 const mCreateAttribute = require("src/graphql/mutations/createAttribute.graphql");
 const mDeleteAttribute = require("src/graphql/mutations/deleteAttribute.graphql");
-const qAttributeChildren = require("src/graphql/queries/attributeChildren.graphql");
 
 interface INodeData {
   description: string;
@@ -127,8 +126,8 @@ const NodeLabel = ({ client, node, nodePath }: INodeLabelProps) => {
 
       const newResource =
         buildNewResource(resource, nodePath.concat([node.id]), true, createAttribute)
-      
-      writeInCache(cache, {resource: newResource})
+
+      writeInCache(cache, { resource: newResource })
     } catch (error) {
       console.log(error)
     }
@@ -143,11 +142,26 @@ const NodeLabel = ({ client, node, nodePath }: INodeLabelProps) => {
 
       const newResource =
         buildNewResource(resource, nodePath, false, deleteAttribute)
-      
-      writeInCache(cache, {resource: newResource})
+
+      writeInCache(cache, { resource: newResource })
     } catch (error) {
       console.log(error)
     }
+  }
+
+  const hasMoreThanOneSibling = (path: String[]) => {
+    var { resource } = client.readQuery({
+      query: qResourceAttributeTree,
+      variables: {
+        resourceId: selectedNode.resource.id,
+      },
+    });
+    resource = resource.attributes.find((a: any) => a.id === path[0])
+    path = path.slice(1)
+    for (var id of path) {
+      resource = resource.children.find((c: any) => c.id === id)
+    }
+    return resource.children.length > 1
   }
 
   const showContextMenu = async (e: React.MouseEvent<HTMLDivElement>) => {
@@ -169,7 +183,7 @@ const NodeLabel = ({ client, node, nodePath }: INodeLabelProps) => {
           text={"Ajouter un item"}
         />
       </Menu>
-    ) : node.parent && node.parent.isArray ? (
+    ) : node.parent && node.parent.isArray && hasMoreThanOneSibling(nodePath) ? (
       <Menu>
         <MenuItem
           icon={"delete"}
