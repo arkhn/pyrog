@@ -102,17 +102,6 @@ const middlewareLink = new ApolloLink((operation, forward) => {
 
 const httpLinkAuth = middlewareLink.concat(httpLink);
 
-// WebSocketLink
-const wsLink = new WebSocketLink({
-  uri: process.env.WS_BACKEND_URL,
-  options: {
-    reconnect: true,
-    connectionParams: {
-      Authorization: `Bearer ${localStorage.getItem(process.env.AUTH_TOKEN)}`
-    }
-  }
-});
-
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
     graphQLErrors.map(({ message, locations, path }) =>
@@ -123,19 +112,6 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 
   if (networkError) console.log(`[Network error]: ${networkError}`);
 });
-
-const coreLink = split(
-  // Split based on operation type
-  ({ query }) => {
-    const definition = getMainDefinition(query);
-    return (
-      definition.kind === "OperationDefinition" &&
-      definition.operation === "subscription"
-    );
-  },
-  wsLink,
-  httpLinkAuth
-);
 
 // Aggregate all links
 const links = [];
@@ -152,7 +128,7 @@ if (process.env.CLEANING_SCRIPTS_URI) {
     })
   );
 }
-links.push(coreLink);
+links.push(httpLinkAuth);
 
 // Client
 export const client = new ApolloClient({
