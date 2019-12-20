@@ -7,7 +7,6 @@ import {
   Tag
 } from "@blueprintjs/core";
 import * as React from "react";
-import { Subscription } from "react-apollo";
 import { useMutation } from '@apollo/react-hooks';
 
 import { ISelectedSource } from "src/types";
@@ -21,7 +20,6 @@ const qInputsForAttribute = require("src/graphql/queries/inputsForAttribute.grap
 const mUpdateInputColumn = require("src/graphql/mutations/updateInputColumn.graphql");
 const mDeleteInput = require("src/graphql/mutations/deleteInput.graphql");
 const mAddJoinToColumn = require("src/graphql/mutations/addJoinToColumn.graphql");
-const subscribeJoin = require("src/graphql/subscriptions/join.graphql");
 
 interface IProps {
   attribute: {
@@ -36,11 +34,11 @@ interface IProps {
 const InputColumn = ({ attribute, input, schema, source }: IProps) => {
   const [
     deleteInput,
-    { data: dataDelInput, loading: loadDelInput }
+    { loading: loadDelInput }
   ] = useMutation(mDeleteInput);
   const [
     addJoinToColumn,
-    { data: dataAddJoin, loading: loadAddJoin }
+    { loading: loadAddJoin }
   ] = useMutation(mAddJoinToColumn);
   const [
     updateInputColumn,
@@ -57,7 +55,7 @@ const InputColumn = ({ attribute, input, schema, source }: IProps) => {
     const newDataAttribute = {
       ...dataAttribute,
       inputs:
-      dataAttribute.inputs.filter((i: any) => i.id !== input.id),
+        dataAttribute.inputs.filter((i: any) => i.id !== input.id),
     }
     cache.writeQuery({
       query: qInputsForAttribute,
@@ -194,35 +192,15 @@ const InputColumn = ({ attribute, input, schema, source }: IProps) => {
                 >
                   Add Join
                 </Button>
-                {console.log(input.sqlValue)}
                 {input.sqlValue.joins
-                  ? input.sqlValue.joins.map((join: any, index: number) => {
-                    let joinData = join;
-                    return (
-                      <Subscription
-                        key={index}
-                        subscription={subscribeJoin}
-                        variables={{
-                          id: join.id
-                        }}
-                      >
-                        {({ data, loading }: any) => {
-                          joinData =
-                            data && data.join && data.join.node
-                              ? data.join.node
-                              : joinData;
-
-                          return joinData ? (
-                            <Join
-                              joinData={joinData}
-                              schema={schema}
-                              source={source}
-                            />
-                          ) : null;
-                        }}
-                      </Subscription>
-                    );
-                  })
+                  ? input.sqlValue.joins.map((join: any, index: number) =>
+                    <Join
+                      key={index}
+                      joinData={join}
+                      schema={schema}
+                      source={source}
+                    />
+                  )
                   : null}
               </div>
             </div>

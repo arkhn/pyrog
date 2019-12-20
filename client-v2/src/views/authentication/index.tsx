@@ -9,7 +9,7 @@ import {
   Tag
 } from "@blueprintjs/core";
 import * as React from "react";
-import { Mutation, Query, Subscription } from "react-apollo";
+import { Mutation, Query } from "react-apollo";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 
