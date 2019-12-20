@@ -3,7 +3,7 @@ fragment entireResource on Resource {
   label
   profile
   fhirType
-  source {
-    id
-  }
+  primaryKeyOwner
+  primaryKeyTable
+  primaryKeyColumn
 }

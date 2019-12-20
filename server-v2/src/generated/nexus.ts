@@ -174,6 +174,9 @@ export interface NexusGenFieldTypes {
     fhirType: string; // String!
     id: string; // ID!
     label: string | null; // String
+    primaryKeyColumn: string | null; // String
+    primaryKeyOwner: string | null; // String
+    primaryKeyTable: string | null; // String
     profile: string | null; // String
     source: NexusGenRootTypes['Source']; // Source!
     updatedAt: any; // DateTime!

@@ -11,6 +11,10 @@ export const Resource = objectType({
     t.model.profile()
     t.model.fhirType()
 
+    t.model.primaryKeyOwner()
+    t.model.primaryKeyTable()
+    t.model.primaryKeyColumn()
+
     t.model.attributes()
     t.model.source()
 
