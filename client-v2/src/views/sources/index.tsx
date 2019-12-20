@@ -2,7 +2,7 @@ import { Alert, Button, Card, Elevation, Icon, Intent, Spinner, Tag } from '@blu
 import * as QueryString from 'query-string';
 import * as React from 'react';
 import { useMutation } from "@apollo/react-hooks";
-import { Query } from 'react-apollo';
+import { useQuery } from '@apollo/react-hooks';
 import { useDispatch } from "react-redux";
 import useReactRouter from "use-react-router";
 
@@ -21,6 +21,11 @@ const SourcesView = () => {
   const { history } = useReactRouter();
 
   const [alertIsOpen, setAlertIsOpen] = React.useState(false);
+
+  const { data: dataSources, loading: loadingSources } =
+    useQuery(qSources, {
+      fetchPolicy: "network-only",
+    })
 
   const removeSourceFromCache = (
     cache: any, { data: { deleteSource } }: any
@@ -60,100 +65,94 @@ const SourcesView = () => {
         >
           Ajouter une source / un logiciel
         </Button>
-        <Query fetchPolicy="network-only" query={qSources}>
-          {({ data, loading }: any) => {
-            return (
-              <div id="software-cards">
-                {loading ? (
-                  <Spinner />
-                ) : (
-                    data.sources.map((source: any, index: number) => {
-                      return (
-                        <Card
-                          elevation={Elevation.TWO}
-                          interactive={true}
-                          key={index}
-                          onClick={() => {
-                            dispatch(
-                              changeSelectedSource(
-                                source.id,
-                                source.name,
-                                source.hasOwner
-                              )
-                            );
-                            history.push({
-                              pathname: '/mapping',
-                              search: QueryString.stringify({
-                                sourceId: source.id
-                              })
-                            });
-                          }}
-                        >
-                          <h2>{source.name}
-                            <Button
-                              icon={"delete"}
-                              loading={deletingSource}
-                              minimal={true}
-                              onClick={(e: React.MouseEvent) => {
-                                e.stopPropagation()
-                                setAlertIsOpen(true)
-                              }} />
-                            <Alert
-                              cancelButtonText="Cancel"
-                              confirmButtonText="Confirm"
-                              icon="trash"
-                              intent={Intent.DANGER}
-                              isOpen={alertIsOpen}
-                              canOutsideClickCancel={true}
-                              onClose={
-                                (confirmed, e) => {
-                                  e.stopPropagation()
-                                  setAlertIsOpen(false)
-                                  if (confirmed) {
-                                    deleteSource({
-                                      variables: {
-                                        id: source.id
-                                      }
-                                    })
-                                  }
-                                }
-                              }
-                            >
-                              <p>
-                                Etes-vous sûr de vouloir supprimer la source <b>{source.name}</b>?
-                                Cette action n'est pas réversible.
-                                </p>
-                            </Alert>
-                          </h2>
-                          <div className="tags">
-                            <Tag>DPI</Tag>
-                            <Tag>Généraliste</Tag>
-                            <Tag>Prescription</Tag>
-                          </div>
-
-                          <div>
-                            <div className="flexbox">
-                              <span>
-                                <Icon
-                                  icon="layout-hierarchy"
-                                  color="#5C7080"
-                                />
-                                <span>{source.mappingProgress[0]} Ressources</span>
-                              </span>
-                              <span>
-                                <Icon icon="tag" color="#5C7080" />
-                                <span>{source.mappingProgress[1]} Attributs</span>
-                              </span>
-                            </div>
-                          </div>
-                        </Card>
+        <div id="software-cards">
+          {loadingSources ? (
+            <Spinner />
+          ) : (
+              dataSources.sources.map((source: any, index: number) => {
+                return (
+                  <Card
+                    elevation={Elevation.TWO}
+                    interactive={true}
+                    key={index}
+                    onClick={() => {
+                      dispatch(
+                        changeSelectedSource(
+                          source.id,
+                          source.name,
+                          source.hasOwner
+                        )
                       );
-                    })
-                  )}
-              </div>
-            );
-          }}
-        </Query>
+                      history.push({
+                        pathname: '/mapping',
+                        search: QueryString.stringify({
+                          sourceId: source.id
+                        })
+                      });
+                    }}
+                  >
+                    <h2>{source.name}
+                      <Button
+                        icon={"delete"}
+                        loading={deletingSource}
+                        minimal={true}
+                        onClick={(e: React.MouseEvent) => {
+                          e.stopPropagation()
+                          setAlertIsOpen(true)
+                        }} />
+                      <Alert
+                        cancelButtonText="Cancel"
+                        confirmButtonText="Confirm"
+                        icon="trash"
+                        intent={Intent.DANGER}
+                        isOpen={alertIsOpen}
+                        canOutsideClickCancel={true}
+                        onClose={
+                          (confirmed, e) => {
+                            e.stopPropagation()
+                            setAlertIsOpen(false)
+                            if (confirmed) {
+                              deleteSource({
+                                variables: {
+                                  id: source.id
+                                }
+                              })
+                            }
+                          }
+                        }
+                      >
+                        <p>
+                          Etes-vous sûr de vouloir supprimer la source <b>{source.name}</b>?
+                          Cette action n'est pas réversible.
+                      </p>
+                      </Alert>
+                    </h2>
+                    <div className="tags">
+                      <Tag>DPI</Tag>
+                      <Tag>Généraliste</Tag>
+                      <Tag>Prescription</Tag>
+                    </div>
+
+                    <div>
+                      <div className="flexbox">
+                        <span>
+                          <Icon
+                            icon="layout-hierarchy"
+                            color="#5C7080"
+                          />
+                          <span>{source.mappingProgress[0]} Ressources</span>
+                        </span>
+                        <span>
+                          <Icon icon="tag" color="#5C7080" />
+                          <span>{source.mappingProgress[1]} Attributs</span>
+                        </span>
+                      </div>
+                    </div>
+                  </Card>
+                );
+              })
+            )}
+        </div>
       </div>
     </div>
   );
