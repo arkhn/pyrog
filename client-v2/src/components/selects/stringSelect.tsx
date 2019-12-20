@@ -35,10 +35,7 @@ export default class StringSelect extends React.Component<ISelectProps, any> {
     return `${item.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0;
   };
 
-  private sortItems: ItemListPredicate<string> = (
-    query,
-    resources: string[]
-  ) => {
+  private sortItems = (resources: string[]) => {
     resources.sort((s1, s2) => {
       const name1 = s1.toLowerCase();
       const name2 = s2.toLowerCase();
@@ -70,14 +67,13 @@ export default class StringSelect extends React.Component<ISelectProps, any> {
       <TSelect<string>
         disabled={disabled}
         displayItem={this.displayItem}
-        sortItems={this.sortItems}
         filterItems={this.filterByName}
         filterable={filterable}
         loading={loading}
         icon={icon}
         inputItem={inputItem}
         intent={intent}
-        items={items}
+        items={this.sortItems(items)}
         onChange={onChange}
         renderItem={this.renderItem}
         popoverProps={popoverProps}
