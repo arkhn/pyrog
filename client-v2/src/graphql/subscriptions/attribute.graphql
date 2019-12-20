@@ -1,9 +1,0 @@
-#import "../fragments/recAttributes.graphql"
-
-subscription subscribeAttribute($id: ID!) {
-  attribute(where: { node: { id: $id } }) {
-    node {
-      ...recAttributes
-    }
-  }
-}
