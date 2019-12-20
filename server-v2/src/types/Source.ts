@@ -1,5 +1,5 @@
 import { objectType, FieldResolver } from 'nexus'
-import { Attribute } from '@prisma/photon'
+import { Attribute, Resource } from '@prisma/photon'
 
 export const Source = objectType({
   name: 'Source',
@@ -26,19 +26,60 @@ export const Source = objectType({
             attributes: {
               include: {
                 inputs: true,
-              },
+                children: {
+                  include: {
+                    inputs: true,
+                    children: {
+                      include: {
+                        inputs: true,
+                        children: {
+                          include: {
+                            inputs: true,
+                            children: {
+                              include: {
+                                inputs: true,
+                                children: {
+                                  include: { 
+                                    inputs: true,
+                                    children: { include: { inputs: true, children: true } }
+                                  },
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },              },
             },
           },
           where: { source: { id: parent.id } },
         })
-        const attributes = resources.reduce(
-          (acc, r) => [
-            ...acc,
-            ...r.attributes.filter(attr => attr.inputs.length > 0),
-          ],
-          [] as Attribute[],
+        // const attributes = resources.reduce(
+        //   (acc, r) => [
+        //     ...acc,
+        //     ...r.attributes.filter(attr => attr.inputs.length > 0),
+        //   ],
+        //   [] as Attribute[],
+        // )
+        //return [resources.length, attributes.length]
+        const countFilledAttributes = (attributes: Attribute[]): number => {
+          return attributes.reduce(
+            (acc: number, attr: any) => 
+              attr.inputs && attr.inputs.length > 0
+                ? acc + 1
+                : attr.children && attr.children.length > 0
+                  ? acc + countFilledAttributes(attr.children)
+                  : acc,
+            0,
+          )
+        }
+        const nbAttributes = resources.reduce(
+          (acc, r) => acc + countFilledAttributes(r.attributes),
+          0
         )
-        return [resources.length, attributes.length]
+        return [resources.length, nbAttributes]
       },
     })
   },
