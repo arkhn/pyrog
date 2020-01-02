@@ -1,24 +1,20 @@
-import * as bcrypt from "bcryptjs";
-import * as fs from "fs";
-import { GraphQLServer } from "graphql-yoga";
-import * as multer from "multer";
-import "graphql-import-node";
-import { Client as PgClient } from "pg";
-const crypto = require("crypto");
+import * as fs from 'fs';
+import { GraphQLServer } from 'graphql-yoga';
+import * as multer from 'multer';
+import 'graphql-import-node';
+import { Client as PgClient } from 'pg';
+const crypto = require('crypto');
 
-import * as Schema from "./schema.graphql";
+import * as Schema from './schema.graphql';
 
 import {
   Prisma as PrismaClient,
   prisma as prismaClient
-} from "./generated/prisma-client";
-import { Prisma as PrismaBinding } from "./generated/prisma-binding";
-import resolvers from "./resolvers";
+} from './generated/prisma-client';
+import { Prisma as PrismaBinding } from './generated/prisma-binding';
+import resolvers from './resolvers';
 
-const endpoint =
-  process.env.NODE_ENV == "docker"
-    ? "http://prisma:4466"
-    : process.env.PRISMA_ENDPOINT;
+const endpoint = process.env.PRISMA_ENDPOINT;
 
 const SCHEMAS_DEST = `${process.env.STATIC_FILES_DIR}/schemas`;
 
@@ -44,10 +40,10 @@ const server = new GraphQLServer({
 });
 
 const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
+  destination(req, file, cb) {
     cb(null, `${SCHEMAS_DEST}/`);
   },
-  filename: function(req, file, cb) {
+  filename(req, file, cb) {
     let name = `${file.originalname}.json`;
 
     if (fs.existsSync(`${SCHEMAS_DEST}/${name}`)) {
@@ -63,59 +59,59 @@ var upload = multer({
     // Maximum file size in bytes (here, 100Mo)
     fileSize: 100 * 1024 * 1024
   },
-  storage: storage
+  storage
 });
 
 server.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header('Access-Control-Allow-Origin', '*');
   res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
   );
   next();
 });
 
-server.post("/upload", upload.single("schema"), function(req, res) {
+server.post('/upload', upload.single('schema'), function(req, res) {
   console.log(
     req.file && req.file.originalname
       ? `Uploading ${req.file.originalname}.json...`
-      : "No File Uploaded"
+      : 'No File Uploaded'
   );
 
   res.send({
     message:
       req.file && req.file.originalname
-        ? "Schéma uploadé"
-        : "Une erreur est survenue",
+        ? 'Schéma uploadé'
+        : 'Une erreur est survenue',
     success: req.file && req.file.originalname
   });
 });
 
-server.get("/schemas/:filename", function(req, res) {
+server.get('/schemas/:filename', function(req, res) {
   res.sendFile(
     `${process.env.STATIC_FILES_DIR}/schemas/${req.params.filename}`,
     (err: any) => {
       if (err) {
-        res.setHeader("Content-Type", "application/json");
+        res.setHeader('Content-Type', 'application/json');
         res.status(err.status).send({ error: err, message: err.message });
       }
     }
   );
 });
 
-server.get("/resource/:filename", function(req, res) {
+server.get('/resource/:filename', function(req, res) {
   res.sendFile(
     `${process.env.STATIC_FILES_DIR}/fhirResources/${req.params.filename}`,
     (err: any) => {
       if (err) {
-        res.setHeader("Content-Type", "application/json");
+        res.setHeader('Content-Type', 'application/json');
         res.status(err.status).send({ error: err, message: err.message });
       }
     }
   );
 });
 
-server.get("/tableview/:sourceId/:tableName", async (req: any, res: any) => {
+server.get('/tableview/:sourceId/:tableName', async (req: any, res: any) => {
   // TODO
   // check authentication + user should be ADMIN
 
@@ -123,11 +119,11 @@ server.get("/tableview/:sourceId/:tableName", async (req: any, res: any) => {
   const cred = await prismaClient
     .source({ id: req.params.sourceId })
     .credential();
-  console.log("CRED", cred);
-  const decipher = crypto.createDecipher("aes256", process.env.APP_SECRET);
+  console.log('CRED', cred);
+  const decipher = crypto.createDecipher('aes256', process.env.APP_SECRET);
   const decryptedPassword =
-    decipher.update(cred.password, "hex", "utf8") + decipher.final("utf8");
-  console.log("DECR", decryptedPassword);
+    decipher.update(cred.password, 'hex', 'utf8') + decipher.final('utf8');
+  console.log('DECR', decryptedPassword);
 
   // Connect to distant database
   const pgClient = new PgClient({
@@ -138,16 +134,16 @@ server.get("/tableview/:sourceId/:tableName", async (req: any, res: any) => {
     password: decryptedPassword
   });
 
-  console.log("PG CLIENT OK");
+  console.log('PG CLIENT OK');
 
   pgClient.connect();
-  console.log("PGCLIENT CONNECTED");
+  console.log('PGCLIENT CONNECTED');
 
   // Query table and send results
   pgClient
     .query(`SELECT * FROM ${req.params.tableName} LIMIT 10;`)
     .then((data: any) => {
-      console.log("RES OK", data);
+      console.log('RES OK', data);
 
       res.send({
         rows: data.rows,
@@ -157,7 +153,7 @@ server.get("/tableview/:sourceId/:tableName", async (req: any, res: any) => {
       pgClient.end();
     })
     .catch((err: any) => {
-      console.log("ERR", err);
+      console.log('ERR', err);
 
       res.status(500).send({
         error: err,

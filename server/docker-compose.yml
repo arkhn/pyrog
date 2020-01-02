@@ -1,12 +1,13 @@
-version: "3"
+version: '3'
 services:
   pyrog:
     build:
       context: .
     image: arkhn/pyrog:latest
+    env_file: .env.docker
     ports:
-      - "$SERVER_PORT:$SERVER_PORT"
-    restart: "no"
+      - $SERVER_PORT:$SERVER_PORT
+    restart: 'no'
     depends_on:
       - prisma
     volumes:
@@ -14,9 +15,9 @@ services:
     env_file: .env.dev.default
   prisma:
     image: prismagraphql/prisma:1.34
-    restart: "no"
+    restart: 'no'
     ports:
-      - "4466:4466"
+      - 4466:4466
     environment:
       PRISMA_CONFIG: |
         port: 4466
@@ -31,9 +32,9 @@ services:
       - postgres-db
   postgres-db:
     image: postgres
-    restart: "no"
+    restart: 'no'
     ports:
-      - "9391:5432"
+      - 9391:5432
     environment:
       POSTGRES_USER: prisma
       POSTGRES_PASSWORD: prisma

@@ -10,3 +10,4 @@ RUN rm pyrog_dev_static.zip
 CMD PRISMA_ENDPOINT="http://prisma:4466" yarn run prisma deploy &&\
     PRISMA_ENDPOINT="http://prisma:4466" yarn run prisma import --data ./static/pyrog_mimic_mapping.zip &&\
     yarn start
+
