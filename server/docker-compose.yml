@@ -1,20 +1,21 @@
 version: '3'
 services:
   pyrog:
+    image: arkhn/pyrog-server:latest
+    container_name: pyrog-server
     build:
       context: .
-    image: arkhn/pyrog:latest
-    env_file: .env.docker
     ports:
       - $SERVER_PORT:$SERVER_PORT
+    env_file: .env.docker
     restart: 'no'
     depends_on:
       - prisma
     volumes:
       - static:$WORKDIR/static
-    env_file: .env.dev.default
   prisma:
     image: prismagraphql/prisma:1.34
+    container_name: pyrog-server-prisma
     restart: 'no'
     ports:
       - 4466:4466
@@ -32,6 +33,7 @@ services:
       - postgres-db
   postgres-db:
     image: postgres
+    container_name: pyrog-server-prisma-pg
     restart: 'no'
     ports:
       - 9391:5432

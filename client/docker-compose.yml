@@ -1,10 +1,11 @@
 version: "3"
 services:
   pyrog_client:
-    env_file: .env.dev.default
+    image: arkhn/pyrog-client:latest
+    container_name: pyrog-client
     build:
       context: .
-    image: arkhn/pyrogclient:latest
     ports:
       - "1729:1729"
+    env_file: .env.dev.default
     restart: "no"
