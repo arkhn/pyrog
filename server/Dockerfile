@@ -3,6 +3,10 @@ WORKDIR /usr/src/app
 COPY package.json yarn.lock ./
 RUN yarn install
 COPY . .
-EXPOSE 4000
 ENV NODE_ENV docker
-CMD ["yarn", "start"]
+RUN wget https://arkhn.org/pyrog_dev_static.zip
+RUN unzip -o pyrog_dev_static.zip
+RUN rm pyrog_dev_static.zip
+CMD PRISMA_ENDPOINT="http://prisma:4466" yarn run prisma deploy &&\
+    PRISMA_ENDPOINT="http://prisma:4466" yarn run prisma import --data ./static/pyrog_mimic_mapping.zip &&\
+    yarn start
