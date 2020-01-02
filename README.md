@@ -5,14 +5,14 @@
 ![CircleCI branch](https://img.shields.io/circleci/project/github/arkhn/pyrog/master.svg?style=for-the-badge&logo=circleci)
 [![Codecov branch](https://img.shields.io/codecov/c/github/arkhn/pyrog/master.svg?style=for-the-badge&logo=codecov)](https://codecov.io/gh/arkhn/pyrog/branch/master)
 
-Pyrog is a web application intended to help standardizing healthcare data collected through various softwares. Our main goal is to build a community tool so as to share ETLs for all these softwares. Moreover, we want to make it easy for healthcare facilities to convert their ETL into [FHIR](https://www.hl7.org/fhir/) and publish it.
+**Pyrog** is a web application which helps standardizing healthcare data collected from various softwares. We are building a community tool to design and share ETLs for all these softwares. We make it easy for healthcare facilities to convert their ETL into [FHIR](https://www.hl7.org/fhir/).
 
 This project comprises a `server` built with Prisma (GraphQL) and `client` which consists of a React application.
 
 **Want to see what our project looks like?
-Checkout our staging client and dive into our staging GraphQL server (playground):**
+Checkout our staging client and our staging GraphQL server (playground):**
 
-- [https://pyrog.staging.arkhn.org](https://pyrog.staging.arkhn.org) (sign in with login `user@arkhn.org`, password `user` or login `admin@arkhn.org`, password `admin`)
+- [https://pyrog.staging.arkhn.org](https://pyrog.staging.arkhn.org) (sign in with login `user@arkhn.org`, password `user`)
 - [https://graphql.pyrog.staging.arkhn.org](https://graphql.pyrog.staging.arkhn.org)
 
 ## Installation

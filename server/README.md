@@ -7,13 +7,13 @@
 
 ![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=for-the-badge)
 
-This is a web server for [Pyrog](https://github.com/arkhn/pyrog-client).
+This is the server part of Pyrog. Pyrog is a web application which helps people design and share rules to map healthcare data sources to a FHIR database.
 
-**Checkout our staging GraphQL playground here:**
-
-- [https://graphql.pyrog.staging.arkhn.org](https://graphql.pyrog.staging.arkhn.org)
+**Checkout the demo [here](https://pyrog.staging.arkhn.org).**
 
 ## Quick install
+
+### Manual
 
 ```
 yarn install
@@ -24,6 +24,14 @@ unzip pyrog_static.zip
 rm pyrog_static.zip
 yarn start
 ```
+
+### Docker
+
+```
+docker-compose up --build
+```
+
+✅You can now start the [client](https://github.com/arkhn/pyrog/tree/master/client).
 
 ## Detailed installation
 

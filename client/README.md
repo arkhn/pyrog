@@ -7,32 +7,32 @@
 
 ![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=for-the-badge)
 
-Pyrog is a web application meant to help people build and share mappings from healthcare softwares / data sources to FHIR.
+Pyrog is a web application which helps people design and share rules to map healthcare data sources to a FHIR database.
 
-**Checkout the staging version here:**
-
-- [https://pyrog.staging.arkhn.org](https://pyrog.staging.arkhn.org)
+**Checkout the demo [here](https://pyrog.staging.arkhn.org).**
 
 ## Quick install
+
+:warning: Make sure you've started the [server](https://github.com/arkhn/pyrog/tree/master/server) first.
+
+### Manual
 
 ```
 yarn install
 yarn start
 ```
 
+### Docker
+
+```
+docker-compose up --build
+```
+
 ## Detailed installation
 
 ### Custom setup
 
-`.env.dev.default` already contains a default setup. However, you can use a custom setup under `.env.dev.custom`. In particular, this allows you to point to a specific Pyrog server. This is useful if you are working on the client part of Pyrog only and do not want to run a Pyrog server locally. You could then use our running staging Pyrog server and your `.env.dev.custom` file should then look something like this:
-
-```
-AUTH_TOKEN="ARKHN_TOKEN"
-ENGINE_BACKEND_URL=https://engine.arkhn.org
-HTTP_BACKEND_URL=https://graphql.pyrog.staging.arkhn.org
-WS_BACKEND_URL=ws://graphql.pyrog.staging.arkhn.org
-CLEANING_SCRIPTS_URI=http://localhost:5000
-```
+`.env.dev.default` already contains a default setup. However, you can use a custom setup under `.env.dev.custom`. In particular, this allows you to point to a specific Pyrog server. This is useful if you are working on the client part of Pyrog only and do not want to run a Pyrog server locally.
 
 ### Install dependencies
 
