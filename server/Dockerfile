@@ -7,7 +7,8 @@ ENV NODE_ENV docker
 RUN wget https://arkhn.org/pyrog_dev_static.zip
 RUN unzip -o pyrog_dev_static.zip
 RUN rm pyrog_dev_static.zip
-CMD PRISMA_ENDPOINT="http://prisma:4466" yarn run prisma deploy &&\
+CMD node ./scripts/wait_for_db.js &&\
+    PRISMA_ENDPOINT="http://prisma:4466" yarn run prisma deploy &&\
     PRISMA_ENDPOINT="http://prisma:4466" yarn run prisma import --data ./static/pyrog_mimic_mapping.zip &&\
     yarn start
 
