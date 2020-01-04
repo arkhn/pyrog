@@ -9,6 +9,7 @@ export const Attribute = objectType({
     t.model.name()
     t.model.mergingScript()
     t.model.isArray()
+    t.model.isRequired()
     t.model.fhirType()
     t.model.description()
 

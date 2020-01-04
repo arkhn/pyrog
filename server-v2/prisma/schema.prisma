@@ -69,6 +69,7 @@ model Attribute {
   id            String      @default(cuid()) @id
   mergingScript String?
   isArray       Boolean     @default(false)
+  isRequired    Boolean     @default(false)
   name          String
   fhirType      String
   description   String?

@@ -25,6 +25,7 @@ interface INodeData {
   fhirType: string;
   id: string;
   isArray: boolean;
+  isRequired: boolean;
   name: string;
   parent: INodeData;
   children: INodeData[];
@@ -50,7 +51,7 @@ export interface IState {
 
 interface INodeLabelProps {
   client: any;
-  node: any;
+  node: INodeData;
   nodePath: String[];
 }
 
@@ -280,6 +281,8 @@ class FhirResourceTree extends React.Component<IProps, IState> {
 
       const secondaryLabel = hasInputs ? (
         <Icon icon="small-tick" intent={"success"} />
+      ) : node.isRequired ? (
+        <Icon icon="dot" intent="warning"/>
       ) : hasChildren ? (
         FhirResourceTree.breadthFirstSearchInputs(node) ? (
           <Icon icon="dot" />
@@ -312,6 +315,7 @@ class FhirResourceTree extends React.Component<IProps, IState> {
           fhirType: node.fhirType,
           id: node.id,
           isArray: node.isArray,
+          isRequired: node.isRequired,
           name: node.name,
           parent: node.parent,
           children: node.children,
