@@ -3,7 +3,7 @@ import { inputObjectType } from 'nexus'
 export const UpdateAttributeInput = inputObjectType({
   name: 'UpdateAttributeInput',
   definition(t) {
-    t.string('description')
+    t.string('comments')
     t.string('mergingScript')
   },
 })

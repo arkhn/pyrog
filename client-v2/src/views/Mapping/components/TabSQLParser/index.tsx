@@ -28,8 +28,6 @@ const TabSQLParser = () => {
                 if (result) {
                   setColumns(result.columns);
                   setTable(result.table);
-                  console.log("Im here");
-                  console.log(result);
                 }
               }}
             />

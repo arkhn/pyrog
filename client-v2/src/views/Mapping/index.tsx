@@ -7,6 +7,7 @@ import InputColumns from "./components/InputColumns";
 import TabColumnSuggestion from "./components/TabColumnSuggestion";
 import TabColumnPicking from "./components/TabColumnPicking";
 import TabSQLParser from "./components/TabSQLParser";
+import Comments from "./components/Comments";
 import FhirMappingPanel from "./components/FhirMappingPanel";
 
 // Import types
@@ -72,6 +73,9 @@ const MappingView = () => {
                   title="Column Suggestion"
                 />
               </Tabs>
+            </div>
+            <div>
+              <Comments attribute={selectedNode.attribute}/>
             </div>
           </div>
           <div id="fhir-panel">

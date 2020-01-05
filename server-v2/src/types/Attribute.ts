@@ -12,6 +12,7 @@ export const Attribute = objectType({
     t.model.isRequired()
     t.model.fhirType()
     t.model.description()
+    t.model.comments()
 
     t.model.inputs()
     t.model.children()

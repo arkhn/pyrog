@@ -11,6 +11,7 @@ fragment entireAttribute on Attribute {
     }
   }
   description
+  comments
   mergingScript
   inputs {
     id
