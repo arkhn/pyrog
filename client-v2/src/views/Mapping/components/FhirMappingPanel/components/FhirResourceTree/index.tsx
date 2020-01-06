@@ -236,12 +236,32 @@ class FhirResourceTree extends React.Component<IProps, IState> {
     return FhirResourceTree.id;
   };
 
-  private static breadthFirstSearchInputs = (node: any) => {
+  private static bfsInputs = (node: any) => {
     if (node.inputs && node.inputs.length > 0) {
       return true;
+    } else if (node.children && node.children.length > 0) {
+      return node.children.some((attribute: any) => {
+        return FhirResourceTree.bfsInputs(attribute);
+      });
     } else if (node.attributes && node.attributes.length > 0) {
       return node.attributes.some((attribute: any) => {
-        return FhirResourceTree.breadthFirstSearchInputs(attribute);
+        return FhirResourceTree.bfsInputs(attribute);
+      });
+    } else {
+      return false;
+    }
+  };
+
+  private static bfsRequired = (node: any) => {
+    if (node.isRequired && !(node.inputs && node.inputs.length > 0)) {
+      return true;
+    } else if (node.children && node.children.length > 0) {
+      return node.children.some((attribute: any) => {
+        return FhirResourceTree.bfsRequired(attribute);
+      });
+    } else if (node.attributes && node.attributes.length > 0) {
+      return node.attributes.some((attribute: any) => {
+        return FhirResourceTree.bfsRequired(attribute);
       });
     } else {
       return false;
@@ -281,12 +301,10 @@ class FhirResourceTree extends React.Component<IProps, IState> {
 
       const secondaryLabel = hasInputs ? (
         <Icon icon="small-tick" intent={"success"} />
-      ) : node.isRequired ? (
+      ) : FhirResourceTree.bfsRequired(node) ? (
         <Icon icon="dot" intent="warning"/>
-      ) : hasChildren ? (
-        FhirResourceTree.breadthFirstSearchInputs(node) ? (
-          <Icon icon="dot" />
-        ) : null
+      ) : FhirResourceTree.bfsInputs(node) ? (
+        <Icon icon="dot" />
       ) : null;
       return {
         childNodes: hasChildren
