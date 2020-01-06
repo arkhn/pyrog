@@ -1,5 +1,5 @@
 {
-  "name": "pyrog-serer",
+  "name": "pyrog-server",
   "license": "Apache-2.0",
   "scripts": {
     "build": "rimraf dist && tsc && yarn copy-schemas",

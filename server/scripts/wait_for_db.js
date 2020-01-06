@@ -1,5 +1,5 @@
 const { Client } = require('pg');
-const connectionString = process.env.POSTGRES_URL;
+const connectionString = process.env.PRISMA_ENDPOINT;
 const client = new Client({
   connectionString: connectionString
 });
@@ -24,12 +24,13 @@ const wait = async () => {
     }
   }
   if (!ok) {
-    throw new Error('database is not available');
+    throw new Error('Prisma seems unavailable');
   }
   await client.end();
 };
 
-console.log('Waiting for postgres...');
+console.log('Waiting for prisma...');
+console.log(connectionString);
 wait().catch(e => {
   console.error(e);
 });
