@@ -26,7 +26,7 @@ const Comments = ({ attribute }: IProps) => {
     })
   const [updateAttribute] = useMutation(mUpdateAttribute)
 
-  const [stateComments, setComments] = React.useState("")
+  const [comments, setComments] = React.useState("")
 
   React.useEffect(() => {
     setComments(
@@ -34,7 +34,7 @@ const Comments = ({ attribute }: IProps) => {
         ? data.attribute.comments
         : ""
       )
-  })
+  }, [loading])
 
   return (
     <div>
@@ -42,7 +42,7 @@ const Comments = ({ attribute }: IProps) => {
         <div>
           <TextArea
             className={"bp3-fill"}
-            value={stateComments}
+            value={comments}
             disabled={loading || !attribute.id}
             onChange={e => {
               setComments(e.target.value)
