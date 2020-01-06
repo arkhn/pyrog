@@ -13,7 +13,4 @@ fragment entireInput on Input {
   }
   script
   staticValue
-  attribute {
-    id
-  }
 }

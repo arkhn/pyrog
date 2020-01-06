@@ -124,6 +124,9 @@ type Resource {
   fhirType: String!
   id: ID!
   label: String
+  primaryKeyColumn: String
+  primaryKeyOwner: String
+  primaryKeyTable: String
   profile: String
   source: Source!
   updatedAt: DateTime!

@@ -1,9 +1,0 @@
-#import "../fragments/entireJoin.graphql"
-
-subscription subscribeJoin($id: ID!) {
-  join(where: { node: { id: $id } }) {
-    node {
-      ...entireJoin
-    }
-  }
-}

@@ -66,9 +66,9 @@ const Drawer = ({
           resourceId: selectedNode.resource.id,
           data: {
             label,
-            // primaryKeyOwner: pkOwner,
-            // primaryKeyTable: pkTable,
-            // primaryKeyColumn: pkColumn
+            primaryKeyOwner: pkOwner,
+            primaryKeyTable: pkTable,
+            primaryKeyColumn: pkColumn
           }
         }
       });

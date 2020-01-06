@@ -439,6 +439,27 @@
     {
       "stepType": "CreateField",
       "model": "Resource",
+      "field": "primaryKeyOwner",
+      "type": "String",
+      "arity": "optional"
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Resource",
+      "field": "primaryKeyTable",
+      "type": "String",
+      "arity": "optional"
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Resource",
+      "field": "primaryKeyColumn",
+      "type": "String",
+      "arity": "optional"
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Resource",
       "field": "attributes",
       "type": "Attribute",
       "arity": "list"

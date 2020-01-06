@@ -1,9 +1,10 @@
+#import "src/graphql/fragments/entireResource.graphql"
+
 mutation updateResource(
   $resourceId: ID!
   $data: UpdateResourceInput!
 ) {
   updateResource(resourceId: $resourceId, data: $data) {
-    id
-    label
+    ...enntireResource
   }
 }

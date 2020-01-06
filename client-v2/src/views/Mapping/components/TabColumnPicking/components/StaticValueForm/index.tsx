@@ -20,7 +20,7 @@ interface IProps {
   };
 }
 
-const StaticColumnPicker = ({ attribute }: IProps) => {
+const StaticValueForm = ({ attribute }: IProps) => {
   const [staticValue, setStaticValue] = React.useState("");
 
   const addInputToCache = (cache: any, { data: { createInput } }: any) => {
@@ -86,4 +86,4 @@ const StaticColumnPicker = ({ attribute }: IProps) => {
   );
 };
 
-export default StaticColumnPicker;
+export default StaticValueForm;

@@ -1,7 +1,0 @@
-fragment partialAttribute on Attribute {
-  id
-  description
-  name
-  isArray
-  type
-}
