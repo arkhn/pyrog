@@ -10,7 +10,7 @@ export const Source = objectType({
     t.model.version()
     t.model.hasOwner()
 
-    t.model.resources()
+    t.model.resources({ filtering: true })
     t.model.credential()
     t.model.template()
 
