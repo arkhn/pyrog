@@ -34,7 +34,7 @@ const Comments = ({ attribute }: IProps) => {
         ? data.attribute.comments
         : ""
       )
-  }, [loading])
+  }, [attribute, loading])
 
   return (
     <div>
