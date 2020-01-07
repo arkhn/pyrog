@@ -5,25 +5,25 @@ import {
   FormGroup,
   InputGroup,
   IToastProps,
-  ProgressBar,
-} from '@blueprintjs/core';
-import axios from "axios";
-import * as React from 'react';
-import { Query, withApollo } from 'react-apollo';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+  ProgressBar
+} from "@blueprintjs/core";
+import axios, { AxiosResponse } from "axios";
+import * as React from "react";
+import { Query, withApollo } from "react-apollo";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 
-import Navbar from '../../components/Navbar';
+import Navbar from "../../components/navbar";
 
 // Import types
-import { ITemplate, IReduxStore, IView } from '../../types';
+import { ITemplate, IReduxStore, IView } from "../../types";
 
-import './style.less';
+import "./style.less";
 
 // GRAPHQL OPERATIONS
-const qSourceAndTemplateNames = require('../../graphql/queries/sourceAndTemplateNames.graphql');
-const mCreateTemplate = require('../../graphql/mutations/createTemplate.graphql');
-const mCreateSource = require('../../graphql/mutations/createSource.graphql');
+const qSourceAndTemplateNames = require("../../graphql/queries/sourceAndTemplateNames.graphql");
+const mCreateTemplate = require("../../graphql/mutations/createTemplate.graphql");
+const mCreateSource = require("../../graphql/mutations/createSource.graphql");
 
 export interface INewSourceState {}
 
@@ -53,156 +53,162 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
     this.state = {
       hasOwner: false,
       isUploading: false,
-      templateName: '',
-      templateExists: false,  // TODO check if really needed in state
-      sourceName: '',
-      schemaFile: null,
+      templateName: "",
+      templateExists: false, // TODO check if really needed in state
+      sourceName: "",
+      schemaFile: null
     };
   }
 
-  onFormSubmit = async (e: any) => {
-    e.preventDefault();
+  renderToastProps = ({
+    action,
+    uploadProgress,
+    success,
+    message
+  }: any): IToastProps => {
+    return {
+      action,
+      icon: "cloud-upload",
+      intent:
+        typeof uploadProgress !== "undefined"
+          ? null
+          : success
+          ? "success"
+          : "danger",
+      message: uploadProgress ? (
+        <ProgressBar
+          intent={uploadProgress < 1 ? "primary" : "success"}
+          value={uploadProgress}
+        />
+      ) : (
+        message
+      ),
+      timeout: uploadProgress < 1 ? 0 : 2500
+    };
+  };
+
+  uploadSchema = async (toastID: string): Promise<AxiosResponse> => {
+    if (!this.state.schemaFile) {
+      throw new Error("Database schema is missing");
+    }
+    if (!this.state.sourceName) {
+      throw new Error("Source name is missing");
+    }
 
     const formData = new FormData();
     formData.append("schema", this.state.schemaFile, this.state.sourceName);
 
+    const CancelToken = axios.CancelToken;
+    let cancel: any;
+
+    return axios.request({
+      cancelToken: new CancelToken((c: any) => {
+        cancel = c;
+      }),
+      data: formData,
+      method: "post",
+      url: `${process.env.HTTP_BACKEND_URL}/upload`,
+      onUploadProgress: p => {
+        this.props.toaster.show(
+          this.renderToastProps({
+            action: {
+              onClick: () => {
+                cancel();
+              },
+              text: "Interrompre"
+            },
+            uploadProgress: p.loaded / p.total
+          }),
+          toastID
+        );
+      }
+    });
+  };
+
+  createTemplate = async () =>
+    this.props.client.mutate({
+      mutation: mCreateTemplate,
+      variables: {
+        name: this.state.templateName
+      }
+    });
+
+  createSource = async (toastID: string) => {
+    const response = await this.props.client.mutate({
+      mutation: mCreateSource,
+      variables: {
+        templateName: this.state.templateName,
+        name: this.state.sourceName,
+        hasOwner: this.state.hasOwner
+      }
+    });
+    // After source is created,
+    // redirect to /sources page.
+    this.props.toaster.show(
+      this.renderToastProps({
+        message: `Source ${this.state.sourceName} was created`,
+        success: !!response.data
+      }),
+      toastID
+    );
+
+    this.setState({
+      ...this.state,
+      isUploading: false
+    });
+
+    this.props.history.push("/sources");
+  };
+
+  onFormSubmit = async (e: any) => {
+    e.preventDefault();
     this.setState({
       ...this.state,
       isUploading: true
     });
 
-    const renderToastProps = ({
-      action,
-      uploadProgress,
-      success,
-      message
-    }: any): IToastProps => {
-      return {
-        action,
-        icon: "cloud-upload",
-        intent:
-          typeof uploadProgress !== "undefined"
-            ? null
-            : success
-            ? "success"
-            : "danger",
-        message: uploadProgress ? (
-          <ProgressBar
-            intent={uploadProgress < 1 ? "primary" : "success"}
-            value={uploadProgress}
-          />
-        ) : (
-          message
-        ),
-        timeout: uploadProgress < 1 ? 0 : 2500
-      };
-    };
-
-    const CancelToken = axios.CancelToken;
-    let cancel: any;
-
-    const key = this.props.toaster.show(
-      renderToastProps({
+    const toastID = this.props.toaster.show(
+      this.renderToastProps({
         action: {
-          onClick: () => {
-            cancel();
-          },
           text: "Interrompre"
         },
         uploadProgress: 0
       })
     );
 
-    return axios
-      .request({
-        cancelToken: new CancelToken((c: any) => {
-          cancel = c;
-        }),
-        data: formData,
-        method: "post",
-        url: `${process.env.HTTP_BACKEND_URL}/upload`,
-        onUploadProgress: p => {
-          this.props.toaster.show(
-            renderToastProps({
-              action: {
-                onClick: () => {
-                  cancel();
-                },
-                text: "Interrompre"
-              },
-              uploadProgress: p.loaded / p.total
-            }),
-            key
-          );
+    try {
+      const uploadResponse = await this.uploadSchema(toastID);
+
+      if (uploadResponse.data.success) {
+        // Create new template in Graphql if it doesn't exist
+        if (!this.state.templateExists) {
+          await this.createTemplate();
         }
-      })
-      .then(async (response: any) => {
         // Create new source in Graphql
-        if (response.data.success) {
-          // Create new template in Graphql if it doesn't exist
-          if (!this.state.templateExists) {
-            await this.props.client
-              .mutate({
-                mutation: mCreateTemplate,
-                variables: {
-                  name: this.state.templateName,
-                }
-              })
-          }
-          this.props.client
-            .mutate({
-              mutation: mCreateSource,
-              variables: {
-                templateName: this.state.templateName,
-                name: this.state.sourceName,
-                hasOwner: this.state.hasOwner,
-              }
-            })
-            .then((graphqlResponse: any) => {
-              // After source is created,
-              // redirect to /sources page.
-              this.props.toaster.show(
-                renderToastProps({
-                  message: response.data.message,
-                  success: response.data.success
-                }),
-                key
-              );
-
-              this.setState({
-                ...this.state,
-                isUploading: false
-              });
-
-              this.props.history.push("/sources");
-            })
-            .catch((error: any) => {
-              console.log(error);
-            });
-        } else {
-          this.props.toaster.show(
-            renderToastProps({
-              message: response.data.message,
-              success: response.data.success
-            }),
-            key
-          );
-        }
-      })
-      .catch((response: any) => {
-        this.setState({
-          ...this.state,
-          isUploading: false
-        });
-
+        await this.createSource(toastID);
+      } else {
         this.props.toaster.show(
-          renderToastProps({
-            message: "Annulé",
-            success: false
+          this.renderToastProps({
+            message: uploadResponse.data.message,
+            success: uploadResponse.data.success
           }),
-          key
+          toastID
         );
+      }
+    } catch (e) {
+      this.setState({
+        ...this.state,
+        isUploading: false
       });
+      console.error(e);
+      this.props.toaster.show(
+        this.renderToastProps({
+          message: e.message,
+          success: false
+        }),
+        toastID
+      );
+    }
   };
 
   public render = () => {
@@ -212,8 +218,8 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
     [owner: string] : {
         [table: string]: string[]
     }`;
-    
-        const schemaExample: string = `
+
+    const schemaExample: string = `
     {
         "$SYSTEM": {
             "PATIENT": [
@@ -223,12 +229,12 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
             ]
         },
     }`;
-    
-        const sqlCommand: string = `
+
+    const sqlCommand: string = `
     SELECT OWNER, TABLE_NAME, COLUMN_NAME, DATA_TYPE FROM all_tab_columns;
     `;
-    
-        const sqlplusCommand: string = `
+
+    const sqlplusCommand: string = `
     set heading off;
     set underline off;
     set pagesize 0;
@@ -249,16 +255,19 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
             {({ data, loading }: any) => {
               // Build a map where keys are template names
               // and values are lists of source names for each template
-              const mapTemplateToSourceNames =
-                data
+              const mapTemplateToSourceNames = data
                 ? data.templates
-                  ? data.templates.reduce((map: Record<string, string[]>, template: ITemplate) => {
-                      map[template.name] = 
-                        (template.sources ? template.sources.map(s => s.name) : [])
-                    return map;
-                  }, {})
+                  ? data.templates.reduce(
+                      (map: Record<string, string[]>, template: ITemplate) => {
+                        map[template.name] = template.sources
+                          ? template.sources.map(s => s.name)
+                          : [];
+                        return map;
+                      },
+                      {}
+                    )
                   : {}
-                : {}
+                : {};
 
               return (
                 <form onSubmit={this.onFormSubmit}>
@@ -269,10 +278,12 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
                       this.setState({
                         ...this.state,
                         templateName: target.value,
-                        templateExists: target.value && target.value in mapTemplateToSourceNames
+                        templateExists:
+                          target.value &&
+                          target.value in mapTemplateToSourceNames
                       });
                     }}
-                    name={'templateName'}
+                    name={"templateName"}
                     placeholder="Nom du template..."
                     value={templateName}
                   />
@@ -281,10 +292,13 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
                   <FormGroup
                     helperText={
                       templateName &&
-                      templateName in mapTemplateToSourceNames
-                      && mapTemplateToSourceNames[templateName].indexOf(sourceName) >= 0 ? (
-                        <p className={'warning'}>
-                          Ce nom existe déjà pour ce template et n'est pas disponible.
+                      templateName in mapTemplateToSourceNames &&
+                      mapTemplateToSourceNames[templateName].indexOf(
+                        sourceName
+                      ) >= 0 ? (
+                        <p className={"warning"}>
+                          Ce nom existe déjà pour ce template et n'est pas
+                          disponible.
                         </p>
                       ) : null
                     }
@@ -298,7 +312,7 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
                           sourceName: target.value
                         });
                       }}
-                      name={'sourceName'}
+                      name={"sourceName"}
                       placeholder="Nom de la source..."
                       value={sourceName}
                     />
@@ -341,8 +355,10 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
                       disabled={
                         !templateName ||
                         !sourceName ||
-                        (templateName in mapTemplateToSourceNames
-                          && mapTemplateToSourceNames[templateName].indexOf(sourceName) >= 0)
+                        (templateName in mapTemplateToSourceNames &&
+                          mapTemplateToSourceNames[templateName].indexOf(
+                            sourceName
+                          ) >= 0)
                       }
                       intent="primary"
                       large

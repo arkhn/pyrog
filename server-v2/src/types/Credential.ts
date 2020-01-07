@@ -1,6 +1,7 @@
-import { createCipher } from 'crypto'
 import { objectType, FieldResolver } from 'nexus'
 import { DatabaseType } from '@prisma/photon'
+
+import { encrypt, decrypt } from 'utils'
 
 export const Credential = objectType({
   name: 'Credential',
@@ -12,7 +13,10 @@ export const Credential = objectType({
     t.model.database()
     t.model.model()
     t.model.login()
-    t.model.password()
+    t.field('password', {
+      type: 'String',
+      resolve: parent => decrypt(parent.password),
+    })
 
     t.model.source()
 
@@ -29,12 +33,9 @@ export const upsertCredential: FieldResolver<
   { sourceId, host, port, database, login, password, model },
   ctx,
 ) => {
-  const cipher = createCipher(
-    'aes-256-gcm',
-    Buffer.from(process.env.APP_SECRET!),
-  )
-  const encryptedPassword =
-    cipher.update(password, 'utf8', 'hex') + cipher.final('hex')
+  console.log('before', password)
+  const encryptedPassword = encrypt(password)
+  console.log('after', encryptedPassword)
 
   const source = await ctx.photon.sources.findOne({
     where: { id: sourceId },

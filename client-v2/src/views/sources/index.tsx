@@ -6,7 +6,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { useDispatch } from "react-redux";
 import useReactRouter from "use-react-router";
 
-import Navbar from '../../components/Navbar';
+import Navbar from '../../components/navbar';
 
 import { changeSelectedSource } from '../../services/selectedNode/actions';
 

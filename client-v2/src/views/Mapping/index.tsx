@@ -2,12 +2,12 @@ import { Tab, Tabs, TabId } from "@blueprintjs/core";
 import * as React from "react";
 import { useSelector } from "react-redux";
 
-import Navbar from "../../components/Navbar";
-import InputColumns from "./components/InputColumns";
-import TabColumnSuggestion from "./components/TabColumnSuggestion";
-import TabColumnPicking from "./components/TabColumnPicking";
-import TabSQLParser from "./components/TabSQLParser";
-import FhirMappingPanel from "./components/FhirMappingPanel";
+import Navbar from "../../components/navbar";
+import InputColumns from "./InputColumns";
+import TabColumnSuggestion from "./TabColumnSuggestion";
+import TabColumnPicking from "./TabColumnPicking";
+import TabSQLParser from "./TabSQLParser";
+import FhirMappingPanel from "./FhirMappingPanel";
 
 // Import types
 import { IReduxStore } from "../../types";
@@ -18,7 +18,7 @@ const MappingView = () => {
   const data = useSelector((state: IReduxStore) => state.data);
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
   const [selectedTabId, setSelectedTabId] = React.useState("picker" as TabId);
-
+  console.log(selectedNode, data);
   return (
     <div>
       <Navbar />

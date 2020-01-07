@@ -26,6 +26,6 @@ export const permissions = shield({
     attribute: rules.isAuthenticatedUser,
   },
   Mutation: {
-    createSource: rules.isAdmin,
+    createSource: rules.isAuthenticatedUser,
   },
 })

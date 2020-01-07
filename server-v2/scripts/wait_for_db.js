@@ -29,7 +29,7 @@ const wait = async () => {
   await client.end()
 }
 
-console.log('Waiting for postgres...')
+console.log('Waiting for postgres...', connectionString)
 wait().catch(e => {
   console.error(e)
 })

@@ -42,19 +42,17 @@ export const changeNode = (
       .then(([source, resource, attribute]: any) => {
         dispatch(
           changeSelectedSource(
-            source.data.sourceInfo.id,
-            source.data.sourceInfo.name,
-            source.data.sourceInfo.hasOwner,
+            source.data.source.id,
+            source.data.source.name,
+            source.data.source.hasOwner,
             () => {
               return dispatch(
                 updateNode(
-                  source.data.sourceInfo,
+                  source.data.source,
                   resource
                     ? resource.data.resourceInfo
                     : { id: null, label: null, fhirType: null },
-                  attribute
-                    ? attribute
-                    : { id: null, name: null }
+                  attribute ? attribute : { id: null, name: null }
                 )
               );
             }

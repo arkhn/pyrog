@@ -17,9 +17,38 @@ type Attribute {
   updatedAt: DateTime!
 }
 
+input AttributeFilter {
+  every: AttributeWhereInput
+  none: AttributeWhereInput
+  some: AttributeWhereInput
+}
+
+input AttributeWhereInput {
+  AND: [AttributeWhereInput!]
+  children: AttributeFilter
+  createdAt: DateTimeFilter
+  description: NullableStringFilter
+  fhirType: StringFilter
+  id: StringFilter
+  inputs: InputFilter
+  isArray: BooleanFilter
+  mergingScript: NullableStringFilter
+  name: StringFilter
+  NOT: [AttributeWhereInput!]
+  OR: [AttributeWhereInput!]
+  parent: AttributeWhereInput
+  resource: ResourceWhereInput
+  updatedAt: DateTimeFilter
+}
+
 type AuthPayload {
   token: String!
   user: User!
+}
+
+input BooleanFilter {
+  equals: Boolean
+  not: Boolean
 }
 
 type Column {
@@ -30,6 +59,12 @@ type Column {
   owner: String
   table: String
   updatedAt: DateTime!
+}
+
+input ColumnFilter {
+  every: ColumnWhereInput
+  none: ColumnWhereInput
+  some: ColumnWhereInput
 }
 
 input ColumnInput {
@@ -45,6 +80,21 @@ input ColumnInputWithoutJoins {
   table: String
 }
 
+input ColumnWhereInput {
+  AND: [ColumnWhereInput!]
+  column: NullableStringFilter
+  createdAt: DateTimeFilter
+  id: StringFilter
+  inputs: InputFilter
+  join: JoinWhereInput
+  joins: JoinFilter
+  NOT: [ColumnWhereInput!]
+  OR: [ColumnWhereInput!]
+  owner: NullableStringFilter
+  table: NullableStringFilter
+  updatedAt: DateTimeFilter
+}
+
 type Credential {
   createdAt: DateTime!
   database: String!
@@ -58,11 +108,38 @@ type Credential {
   updatedAt: DateTime!
 }
 
+input CredentialWhereInput {
+  AND: [CredentialWhereInput!]
+  createdAt: DateTimeFilter
+  database: StringFilter
+  host: StringFilter
+  id: StringFilter
+  login: StringFilter
+  model: DatabaseType
+  NOT: [CredentialWhereInput!]
+  OR: [CredentialWhereInput!]
+  password: StringFilter
+  port: StringFilter
+  source: SourceWhereInput
+  updatedAt: DateTimeFilter
+}
+
 enum DatabaseType {
   POSTGRES
 }
 
 scalar DateTime
+
+input DateTimeFilter {
+  equals: DateTime
+  gt: DateTime
+  gte: DateTime
+  in: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  not: DateTime
+  notIn: [DateTime!]
+}
 
 type Input {
   attribute: Attribute!
@@ -74,6 +151,25 @@ type Input {
   updatedAt: DateTime!
 }
 
+input InputFilter {
+  every: InputWhereInput
+  none: InputWhereInput
+  some: InputWhereInput
+}
+
+input InputWhereInput {
+  AND: [InputWhereInput!]
+  attribute: AttributeWhereInput
+  createdAt: DateTimeFilter
+  id: StringFilter
+  NOT: [InputWhereInput!]
+  OR: [InputWhereInput!]
+  script: NullableStringFilter
+  sqlValue: ColumnWhereInput
+  staticValue: NullableStringFilter
+  updatedAt: DateTimeFilter
+}
+
 type Join {
   createdAt: DateTime!
   id: ID!
@@ -81,9 +177,26 @@ type Join {
   updatedAt: DateTime!
 }
 
+input JoinFilter {
+  every: JoinWhereInput
+  none: JoinWhereInput
+  some: JoinWhereInput
+}
+
 input JoinInput {
   source: ColumnInputWithoutJoins
   target: ColumnInputWithoutJoins
+}
+
+input JoinWhereInput {
+  AND: [JoinWhereInput!]
+  column: ColumnWhereInput
+  createdAt: DateTimeFilter
+  id: StringFilter
+  NOT: [JoinWhereInput!]
+  OR: [JoinWhereInput!]
+  tables: ColumnFilter
+  updatedAt: DateTimeFilter
 }
 
 type Mutation {
@@ -108,8 +221,23 @@ type Mutation {
   upsertCredential(database: String!, host: String!, login: String!, model: String!, password: String!, port: String!, sourceId: ID!): Credential!
 }
 
+input NullableStringFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: String
+  notIn: [String!]
+  startsWith: String
+}
+
 type Query {
   attribute(attributeId: ID!): Attribute
+  availableResources: [String!]!
   me: User
   resource(resourceId: ID!): Resource
   source(sourceId: ID!): Source
@@ -132,6 +260,29 @@ type Resource {
   updatedAt: DateTime!
 }
 
+input ResourceFilter {
+  every: ResourceWhereInput
+  none: ResourceWhereInput
+  some: ResourceWhereInput
+}
+
+input ResourceWhereInput {
+  AND: [ResourceWhereInput!]
+  attributes: AttributeFilter
+  createdAt: DateTimeFilter
+  fhirType: StringFilter
+  id: StringFilter
+  label: NullableStringFilter
+  NOT: [ResourceWhereInput!]
+  OR: [ResourceWhereInput!]
+  primaryKeyColumn: NullableStringFilter
+  primaryKeyOwner: NullableStringFilter
+  primaryKeyTable: NullableStringFilter
+  profile: NullableStringFilter
+  source: SourceWhereInput
+  updatedAt: DateTimeFilter
+}
+
 enum Role {
   ADMIN
   USER
@@ -144,10 +295,45 @@ type Source {
   id: ID!
   mappingProgress: [Int!]
   name: String!
-  resources(after: ID, before: ID, first: Int, last: Int, skip: Int): [Resource!]!
+  resources(after: ID, before: ID, first: Int, last: Int, skip: Int, where: ResourceWhereInput): [Resource!]!
   template: Template!
   updatedAt: DateTime!
   version: String
+}
+
+input SourceFilter {
+  every: SourceWhereInput
+  none: SourceWhereInput
+  some: SourceWhereInput
+}
+
+input SourceWhereInput {
+  AND: [SourceWhereInput!]
+  createdAt: DateTimeFilter
+  credential: CredentialWhereInput
+  hasOwner: BooleanFilter
+  id: StringFilter
+  name: StringFilter
+  NOT: [SourceWhereInput!]
+  OR: [SourceWhereInput!]
+  resources: ResourceFilter
+  template: TemplateWhereInput
+  updatedAt: DateTimeFilter
+  version: NullableStringFilter
+}
+
+input StringFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: String
+  notIn: [String!]
+  startsWith: String
 }
 
 type Template {
@@ -158,13 +344,27 @@ type Template {
   updatedAt: DateTime!
 }
 
+input TemplateWhereInput {
+  AND: [TemplateWhereInput!]
+  createdAt: DateTimeFilter
+  id: StringFilter
+  name: StringFilter
+  NOT: [TemplateWhereInput!]
+  OR: [TemplateWhereInput!]
+  sources: SourceFilter
+  updatedAt: DateTimeFilter
+}
+
 input UpdateAttributeInput {
   description: String
   mergingScript: String
 }
 
 input UpdateResourceInput {
-  label: String!
+  label: String
+  primaryKeyColumn: String
+  primaryKeyOwner: String
+  primaryKeyTable: String
 }
 
 type User {

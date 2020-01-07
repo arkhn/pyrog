@@ -30,10 +30,6 @@ model Source {
   createdAt DateTime @default(now())
 }
 
-enum DatabaseType {
-  POSTGRES
-}
-
 model Credential {
   id       String       @default(cuid()) @id
   host     String
@@ -47,6 +43,10 @@ model Credential {
 
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
+}
+
+enum DatabaseType {
+  POSTGRES
 }
 
 model Resource {

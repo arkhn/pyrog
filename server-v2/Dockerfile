@@ -47,6 +47,7 @@ ENV POSTGRES_URL=${POSTGRES_URL}
 # Install deps for production only
 COPY package.json package.json
 COPY yarn.lock yarn.lock
+COPY src/generated src/generated
 
 RUN yarn --frozen-lockfile && \
     yarn cache clean --force

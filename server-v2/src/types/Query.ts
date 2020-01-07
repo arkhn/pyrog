@@ -1,6 +1,6 @@
 import { idArg, queryType } from 'nexus'
 
-import { getUserId } from 'utils'
+import { getUserId, availableResources } from 'utils'
 
 export const Query = queryType({
   definition(t) {
@@ -70,6 +70,11 @@ export const Query = queryType({
       nullable: true,
       resolve: (parent, { attributeId }, ctx) =>
         ctx.photon.attributes.findOne({ where: { id: attributeId } }),
+    })
+
+    t.list.field('availableResources', {
+      type: 'String',
+      resolve: () => availableResources()
     })
   },
 })

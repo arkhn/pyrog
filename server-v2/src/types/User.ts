@@ -2,7 +2,7 @@ import { objectType, FieldResolver } from 'nexus'
 import { compare, hash } from 'bcryptjs'
 import { sign } from 'jsonwebtoken'
 
-import { APP_SECRET } from 'utils'
+import { APP_SECRET } from '../constants'
 
 export const User = objectType({
   name: 'User',

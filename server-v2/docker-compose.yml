@@ -4,8 +4,7 @@ services:
     image: arkhn/pyrog2:latest
     ports:
       - 4000:4000
-    environment:
-      POSTGRES_URL: 'postgresql://prisma:prisma@postgres:5432/prisma?schema=pyrog'
+    env_file: .env.docker
     depends_on:
       - postgres
 
@@ -20,5 +19,20 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
+  mimic-db:
+    env_file: ./mimic/.env
+    build:
+      context: ./mimic
+      dockerfile: MimicPSQL.Dockerfile
+      args:
+        MIMIC_USER: $MIMIC_USER
+        MIMIC_PASSWORD: $MIMIC_PASSWORD
+    container_name: fhir-pipe-mimic-db
+    restart: always
+    volumes:
+      - mimic-db:/var/lib/postgresql/data
+    ports:
+      - '5431:5432'
 volumes:
   postgres-data:
+  mimic-db:
