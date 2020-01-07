@@ -74,7 +74,7 @@ export const Query = queryType({
 
     t.list.field('availableResources', {
       type: 'String',
-      resolve: () => availableResources()
+      resolve: () => availableResources(),
     })
   },
 })
