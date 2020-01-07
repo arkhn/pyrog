@@ -23,7 +23,11 @@ export const Resource = objectType({
   },
 })
 
-const createResourceAttributes = (schema: any, key: string): any => {
+const createResourceAttributes = (
+  schema: any,
+  key: string,
+  required: string[],
+): any => {
   if (schema.properties) {
     // case object
     return {
@@ -31,9 +35,10 @@ const createResourceAttributes = (schema: any, key: string): any => {
       fhirType: schema.title || schema.type,
       description: schema.description,
       isArray: false,
+      isRequired: required && required.includes(key),
       children: {
         create: Object.keys(schema.properties).map(p =>
-          createResourceAttributes(schema.properties[p], p),
+          createResourceAttributes(schema.properties[p], p, schema.required),
         ),
       },
     }
@@ -44,7 +49,8 @@ const createResourceAttributes = (schema: any, key: string): any => {
       fhirType: schema.title || schema.type,
       description: schema.description,
       isArray: true,
-      children: { create: [createResourceAttributes(schema.items, key)] },
+      isRequired: required && required.includes(key),
+      children: { create: [createResourceAttributes(schema.items, key, [])] },
     }
   } else {
     // case literal
@@ -52,6 +58,7 @@ const createResourceAttributes = (schema: any, key: string): any => {
       name: key,
       fhirType: schema.title || schema.type,
       isArray: false,
+      isRequired: required && required.includes(key),
       description: schema.description,
     }
   }
@@ -95,6 +102,7 @@ export const createResource: FieldResolver<
               ...createResourceAttributes(
                 resourceSchema.properties[attr],
                 attr,
+                [],
               ),
               resource: {
                 connect: { id: resource.id },
@@ -159,7 +167,7 @@ export const deleteResource: FieldResolver<
   return ctx.photon.resources.delete({ where: { id } })
 }
 
-export const updateResource:  FieldResolver<
+export const updateResource: FieldResolver<
   'Mutation',
   'updateResource'
 > = async (_parent, { resourceId, data }, ctx) => {

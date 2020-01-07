@@ -3,6 +3,7 @@ fragment entireAttribute on Attribute {
   name
   fhirType
   isArray
+  isRequired
   parent {
     isArray
     children {
@@ -10,6 +11,7 @@ fragment entireAttribute on Attribute {
     }
   }
   description
+  comments
   mergingScript
   inputs {
     id

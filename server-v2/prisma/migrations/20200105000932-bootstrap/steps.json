@@ -581,6 +581,27 @@
     {
       "stepType": "CreateField",
       "model": "Attribute",
+      "field": "isRequired",
+      "type": "Boolean",
+      "arity": "required"
+    },
+    {
+      "stepType": "CreateDirective",
+      "model": "Attribute",
+      "field": "isRequired",
+      "directive": "default"
+    },
+    {
+      "stepType": "CreateDirectiveArgument",
+      "model": "Attribute",
+      "field": "isRequired",
+      "directive": "default",
+      "argument": "",
+      "value": "false"
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Attribute",
       "field": "name",
       "type": "String",
       "arity": "required"
@@ -596,6 +617,13 @@
       "stepType": "CreateField",
       "model": "Attribute",
       "field": "description",
+      "type": "String",
+      "arity": "optional"
+    },
+    {
+      "stepType": "CreateField",
+      "model": "Attribute",
+      "field": "comments",
       "type": "String",
       "arity": "optional"
     },
