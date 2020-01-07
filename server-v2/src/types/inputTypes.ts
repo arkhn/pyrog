@@ -11,10 +11,10 @@ export const UpdateAttributeInput = inputObjectType({
 export const UpdateResourceInput = inputObjectType({
   name: 'UpdateResourceInput',
   definition(t) {
-    t.field('label', { type: 'String'})
-    t.field('primaryKeyOwner', { type: 'String'})
-    t.field('primaryKeyTable', { type: 'String'})
-    t.field('primaryKeyColumn', { type: 'String'})
+    t.field('label', { type: 'String' })
+    t.field('primaryKeyOwner', { type: 'String' })
+    t.field('primaryKeyTable', { type: 'String' })
+    t.field('primaryKeyColumn', { type: 'String' })
   },
 })
 

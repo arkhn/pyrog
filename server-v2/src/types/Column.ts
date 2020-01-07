@@ -25,20 +25,24 @@ export const addJoinToColumn: FieldResolver<
       tables: {
         create: [
           {
-            owner: join && join.source && join.source.owner
-              ? join.source.owner : "",
-            table: join && join.source && join.source.table
-              ? join.source.table : "",
-            column: join && join.source && join.source.column
-              ? join.source.column : "",
+            owner:
+              join && join.source && join.source.owner ? join.source.owner : '',
+            table:
+              join && join.source && join.source.table ? join.source.table : '',
+            column:
+              join && join.source && join.source.column
+                ? join.source.column
+                : '',
           },
           {
-            owner: join && join.target && join.target.owner
-              ? join.target.owner : "",
-            table: join && join.target && join.target.table
-              ? join.target.table : "",
-            column: join && join.target && join.target.column
-              ? join.target.column : "",
+            owner:
+              join && join.target && join.target.owner ? join.target.owner : '',
+            table:
+              join && join.target && join.target.table ? join.target.table : '',
+            column:
+              join && join.target && join.target.column
+                ? join.target.column
+                : '',
           },
         ],
       },
@@ -49,8 +53,8 @@ export const addJoinToColumn: FieldResolver<
     where: { id: columnId },
     data: {
       joins: {
-        connect: { id: newJoin.id }
-      }
-    }
+        connect: { id: newJoin.id },
+      },
+    },
   })
 }

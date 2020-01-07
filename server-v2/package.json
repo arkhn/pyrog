@@ -14,7 +14,7 @@
     "seed": "ts-node prisma/seed"
   },
   "dependencies": {
-    "@prisma/photon": "2.0.0-preview017.2",
+    "@prisma/photon": "^2.0.0-preview019",
     "@types/multer": "^1.3.10",
     "bcryptjs": "2.4.3",
     "dotenv-cli": "^3.1.0",

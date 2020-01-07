@@ -23,7 +23,11 @@ export const Resource = objectType({
   },
 })
 
-const createResourceAttributes = (schema: any, key: string, required: string[]): any => {
+const createResourceAttributes = (
+  schema: any,
+  key: string,
+  required: string[],
+): any => {
   if (schema.properties) {
     // case object
     return {
@@ -163,7 +167,7 @@ export const deleteResource: FieldResolver<
   return ctx.photon.resources.delete({ where: { id } })
 }
 
-export const updateResource:  FieldResolver<
+export const updateResource: FieldResolver<
   'Mutation',
   'updateResource'
 > = async (_parent, { resourceId, data }, ctx) => {

@@ -12,10 +12,11 @@ export const Join = objectType({
   },
 })
 
-export const updateJoin: FieldResolver<
-  'Mutation',
-  'updateJoin'
-> = async (_parent, { joinId, data }, ctx) => {
+export const updateJoin: FieldResolver<'Mutation', 'updateJoin'> = async (
+  _parent,
+  { joinId, data },
+  ctx,
+) => {
   if (!data) {
     throw new Error('Update payload cannot be null')
   }
@@ -33,19 +34,22 @@ export const updateJoin: FieldResolver<
           {
             where: { id: join!.tables[0].id },
             data: {
-              owner: !data.source || data.source.owner === undefined
-                ? join!.tables[0].owner
-                : data.source.owner
+              owner:
+                !data.source || data.source.owner === undefined
+                  ? join!.tables[0].owner
+                  : data.source.owner
                   ? data.source.owner
                   : null,
-              table: !data.source || data.source.table === undefined
-                ? join!.tables[0].table
-                : data.source.table
+              table:
+                !data.source || data.source.table === undefined
+                  ? join!.tables[0].table
+                  : data.source.table
                   ? data.source.table
                   : null,
-              column: !data.source || data.source.column === undefined
-                ? join!.tables[0].column
-                : data.source.column
+              column:
+                !data.source || data.source.column === undefined
+                  ? join!.tables[0].column
+                  : data.source.column
                   ? data.source.column
                   : null,
             },
@@ -53,26 +57,29 @@ export const updateJoin: FieldResolver<
           {
             where: { id: join!.tables[1].id },
             data: {
-              owner: !data.target || data.target.owner === undefined
-                ? join!.tables[1].owner
-                : data.target.owner
+              owner:
+                !data.target || data.target.owner === undefined
+                  ? join!.tables[1].owner
+                  : data.target.owner
                   ? data.target.owner
                   : null,
-              table: !data.target || data.target.table === undefined
-                ? join!.tables[1].table
-                : data.target.table
+              table:
+                !data.target || data.target.table === undefined
+                  ? join!.tables[1].table
+                  : data.target.table
                   ? data.target.table
                   : null,
-              column: !data.target || data.target.column === undefined
-                ? join!.tables[1].column
-                : data.target.column
+              column:
+                !data.target || data.target.column === undefined
+                  ? join!.tables[1].column
+                  : data.target.column
                   ? data.target.column
                   : null,
-            }
+            },
           },
         ],
-      }
-    }
+      },
+    },
   })
 }
 
