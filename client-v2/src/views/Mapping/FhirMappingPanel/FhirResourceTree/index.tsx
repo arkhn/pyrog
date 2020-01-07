@@ -25,6 +25,7 @@ interface INodeData {
   fhirType: string;
   id: string;
   isArray: boolean;
+  isRequired: boolean;
   name: string;
   parent: INodeData;
   children: INodeData[];
@@ -50,7 +51,7 @@ export interface IState {
 
 interface INodeLabelProps {
   client: any;
-  node: any;
+  node: INodeData;
   nodePath: String[];
 }
 
@@ -235,12 +236,32 @@ class FhirResourceTree extends React.Component<IProps, IState> {
     return FhirResourceTree.id;
   };
 
-  private static breadthFirstSearchInputs = (node: any) => {
+  private static bfsInputs = (node: any) => {
     if (node.inputs && node.inputs.length > 0) {
       return true;
+    } else if (node.children && node.children.length > 0) {
+      return node.children.some((attribute: any) => {
+        return FhirResourceTree.bfsInputs(attribute);
+      });
     } else if (node.attributes && node.attributes.length > 0) {
       return node.attributes.some((attribute: any) => {
-        return FhirResourceTree.breadthFirstSearchInputs(attribute);
+        return FhirResourceTree.bfsInputs(attribute);
+      });
+    } else {
+      return false;
+    }
+  };
+
+  private static bfsRequired = (node: any) => {
+    if (node.isRequired && !(node.inputs && node.inputs.length > 0)) {
+      return true;
+    } else if (node.children && node.children.length > 0) {
+      return node.children.some((attribute: any) => {
+        return FhirResourceTree.bfsRequired(attribute);
+      });
+    } else if (node.attributes && node.attributes.length > 0) {
+      return node.attributes.some((attribute: any) => {
+        return FhirResourceTree.bfsRequired(attribute);
       });
     } else {
       return false;
@@ -280,10 +301,10 @@ class FhirResourceTree extends React.Component<IProps, IState> {
 
       const secondaryLabel = hasInputs ? (
         <Icon icon="small-tick" intent={"success"} />
-      ) : hasChildren ? (
-        FhirResourceTree.breadthFirstSearchInputs(node) ? (
-          <Icon icon="dot" />
-        ) : null
+      ) : FhirResourceTree.bfsRequired(node) ? (
+        <Icon icon="dot" intent="warning"/>
+      ) : FhirResourceTree.bfsInputs(node) ? (
+        <Icon icon="dot" />
       ) : null;
       return {
         childNodes: hasChildren
@@ -312,6 +333,7 @@ class FhirResourceTree extends React.Component<IProps, IState> {
           fhirType: node.fhirType,
           id: node.id,
           isArray: node.isArray,
+          isRequired: node.isRequired,
           name: node.name,
           parent: node.parent,
           children: node.children,

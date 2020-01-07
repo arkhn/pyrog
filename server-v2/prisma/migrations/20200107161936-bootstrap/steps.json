@@ -823,6 +823,38 @@
     {
       "tag": "CreateField",
       "model": "Attribute",
+      "field": "isRequired",
+      "type": "Boolean",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Attribute",
+          "field": "isRequired"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Attribute",
+          "field": "isRequired"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "false"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Attribute",
       "field": "name",
       "type": "String",
       "arity": "Required"
@@ -838,6 +870,13 @@
       "tag": "CreateField",
       "model": "Attribute",
       "field": "description",
+      "type": "String",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Attribute",
+      "field": "comments",
       "type": "String",
       "arity": "Optional"
     },

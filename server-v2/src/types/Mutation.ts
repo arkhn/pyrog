@@ -188,8 +188,8 @@ export const Mutation = mutationType({
     })
 
     /*
-    * COLUMN
-    */
+     * COLUMN
+     */
 
     t.field('addJoinToColumn', {
       type: 'Column',
@@ -201,8 +201,8 @@ export const Mutation = mutationType({
     })
 
     /*
-    * JOIN
-    */
+     * JOIN
+     */
 
     t.field('updateJoin', {
       type: 'Join',
