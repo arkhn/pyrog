@@ -1,5 +1,12 @@
 query sources {
   sources {
-    id name hasOwner mappingProgress
+    id
+    name
+    hasOwner
+    mappingProgress
+    template {
+      id
+      name
+    }
   }
 }

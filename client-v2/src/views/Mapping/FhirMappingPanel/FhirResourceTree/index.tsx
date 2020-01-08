@@ -60,110 +60,117 @@ interface INodeLabelState {
 }
 
 const NodeLabel = ({ client, node, nodePath }: INodeLabelProps) => {
-
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
 
   const [isContextMenuOpen, setIsContextMenuOpen] = React.useState(false);
 
   // Methods to update Apollo cache after creation/deletion mutations
   const buildNewResource = (
-    resource: any, path: String[], adding: boolean, data: any
+    resource: any,
+    path: String[],
+    adding: boolean,
+    data: any
   ): INodeData => {
     if (path.length > 0) {
-      return resource.children ? {
-        ...resource,
-        children: (
-          resource.children.map(
-            (c: any) => c.id === path[0]
-              ? buildNewResource(c, path.splice(1), adding, data)
-              : c
-          )
-        )
-      } : {
-          ...resource,
-          attributes: (
-            resource.attributes.map(
-              (c: any) => c.id === path[0]
+      return resource.children
+        ? {
+            ...resource,
+            children: resource.children.map((c: any) =>
+              c.id === path[0]
                 ? buildNewResource(c, path.splice(1), adding, data)
                 : c
             )
-          )
-        }
+          }
+        : {
+            ...resource,
+            attributes: resource.attributes.map((c: any) =>
+              c.id === path[0]
+                ? buildNewResource(c, path.splice(1), adding, data)
+                : c
+            )
+          };
     }
     return {
       ...resource,
-      children:
-        adding  // If not adding then we are removing
-          ? resource.children.concat([data])
-          : resource.children.filter((c: any) => c.id !== data.id),
-    }
-  }
+      children: adding // If not adding then we are removing
+        ? resource.children.concat([data])
+        : resource.children.filter((c: any) => c.id !== data.id)
+    };
+  };
 
   const readCacheQuery = (cache: any) => {
     return cache.readQuery({
       query: qResourceAttributeTree,
       variables: {
-        resourceId: selectedNode.resource.id,
+        resourceId: selectedNode.resource.id
       }
     });
-  }
+  };
 
   const writeInCache = (cache: any, data: any) => {
     cache.writeQuery({
       query: qResourceAttributeTree,
       variables: {
-        resourceId: selectedNode.resource.id,
+        resourceId: selectedNode.resource.id
       },
-      data: data,
-    })
-  }
+      data: data
+    });
+  };
 
   const addAttributeToCache = (
     cache: any,
     { data: { createAttribute } }: any
   ) => {
     try {
-      const { resource } = readCacheQuery(cache)
+      const { resource } = readCacheQuery(cache);
 
-      const newResource =
-        buildNewResource(resource, nodePath.concat([node.id]), true, createAttribute)
+      const newResource = buildNewResource(
+        resource,
+        nodePath.concat([node.id]),
+        true,
+        createAttribute
+      );
 
-      writeInCache(cache, { resource: newResource })
+      writeInCache(cache, { resource: newResource });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   const removeAttributeFromCache = (
     cache: any,
     { data: { deleteAttribute } }: any
   ) => {
     try {
-      const { resource } = readCacheQuery(cache)
+      const { resource } = readCacheQuery(cache);
 
-      const newResource =
-        buildNewResource(resource, nodePath, false, deleteAttribute)
+      const newResource = buildNewResource(
+        resource,
+        nodePath,
+        false,
+        deleteAttribute
+      );
 
-      writeInCache(cache, { resource: newResource })
+      writeInCache(cache, { resource: newResource });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   const hasMoreThanOneSibling = (path: String[]) => {
     var { resource } = client.readQuery({
       query: qResourceAttributeTree,
       variables: {
-        resourceId: selectedNode.resource.id,
-      },
+        resourceId: selectedNode.resource.id
+      }
     });
-    resource = resource.attributes.find((a: any) => a.id === path[0])
-    path = path.slice(1)
+    resource = resource.attributes.find((a: any) => a.id === path[0]);
+    path = path.slice(1);
     for (var id of path) {
-      resource = resource.children.find((c: any) => c.id === id)
+      resource = resource.children.find((c: any) => c.id === id);
     }
-    return resource.children.length > 1
-  }
+    return resource.children.length > 1;
+  };
 
   const showContextMenu = async (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -176,27 +183,28 @@ const NodeLabel = ({ client, node, nodePath }: INodeLabelProps) => {
             client.mutate({
               mutation: mCreateAttribute,
               variables: {
-                parentId: node.id,
+                parentId: node.id
               },
-              update: addAttributeToCache,
-            })
+              update: addAttributeToCache
+            });
           }}
           text={"Ajouter un item"}
         />
       </Menu>
-    ) : node.parent && node.parent.isArray && hasMoreThanOneSibling(nodePath) ? (
+    ) : node.parent &&
+      node.parent.isArray &&
+      hasMoreThanOneSibling(nodePath) ? (
       <Menu>
         <MenuItem
           icon={"delete"}
           onClick={() => {
-            client
-              .mutate({
-                mutation: mDeleteAttribute,
-                variables: {
-                  attributeId: node.id
-                },
-                update: removeAttributeFromCache,
-              })
+            client.mutate({
+              mutation: mDeleteAttribute,
+              variables: {
+                attributeId: node.id
+              },
+              update: removeAttributeFromCache
+            });
           }}
           text={"Supprimer l'item"}
         />
@@ -207,7 +215,7 @@ const NodeLabel = ({ client, node, nodePath }: INodeLabelProps) => {
       setIsContextMenuOpen(false)
     );
 
-    setIsContextMenuOpen(true)
+    setIsContextMenuOpen(true);
   };
 
   return (
@@ -216,7 +224,7 @@ const NodeLabel = ({ client, node, nodePath }: INodeLabelProps) => {
       <div className={"node-type"}>{node.fhirType}</div>
     </div>
   );
-}
+};
 
 class FhirResourceTree extends React.Component<IProps, IState> {
   static id: number = 0;
@@ -272,11 +280,7 @@ class FhirResourceTree extends React.Component<IProps, IState> {
       pathAcc: string[]
     ): ITreeNode<INodeData> => {
       const nodeLabel = (
-        <NodeLabel
-          node={node}
-          nodePath={pathAcc}
-          client={props.client}
-        />
+        <NodeLabel node={node} nodePath={pathAcc} client={props.client} />
       );
 
       const hasChildren = node.children && node.children.length > 0;
@@ -286,22 +290,22 @@ class FhirResourceTree extends React.Component<IProps, IState> {
       const secondaryLabel = hasInputs ? (
         <Icon icon="small-tick" intent={"success"} />
       ) : node.isRequired ? (
-        <Icon icon="dot" intent="warning"/>
+        <Icon icon="dot" intent="warning" />
       ) : FhirResourceTree.bfsInputs(node) ? (
         <Icon icon="dot" />
       ) : null;
       return {
         childNodes: hasChildren
           ? node.children.map((child: any) => {
-            return genObjNodes(child, nodePath);
-          })
+              return genObjNodes(child, nodePath);
+            })
           : null,
         hasCaret: hasChildren,
         icon: node.isArray
           ? "multi-select"
           : hasChildren
-            ? "folder-open"
-            : "tag",
+          ? "folder-open"
+          : "tag",
         id: FhirResourceTree.getId(),
         isExpanded: false,
         isSelected: false,
@@ -310,8 +314,8 @@ class FhirResourceTree extends React.Component<IProps, IState> {
             {nodeLabel}
           </Tooltip>
         ) : (
-            nodeLabel
-          ),
+          nodeLabel
+        ),
         nodeData: {
           description: node.description,
           fhirType: node.fhirType,
@@ -321,7 +325,7 @@ class FhirResourceTree extends React.Component<IProps, IState> {
           name: node.name,
           parent: node.parent,
           children: node.children,
-          path: nodePath,
+          path: nodePath
         },
         secondaryLabel: secondaryLabel
       };

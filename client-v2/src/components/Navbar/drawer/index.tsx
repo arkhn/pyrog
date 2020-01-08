@@ -44,7 +44,7 @@ const Drawer = ({ title, isOpen, onClose }: IProps) => {
   const client = useApolloClient();
 
   React.useEffect(() => {
-    if (selectedNode.source.id) {
+    if (selectedNode.source) {
       client
         .query({
           query: qCredentialForSource,

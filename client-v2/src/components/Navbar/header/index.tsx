@@ -35,7 +35,7 @@ const Header = ({ openDrawer }: IProps) => {
 
     case "/mapping": {
       header =
-        selectedNode.source.name !== null ? (
+        selectedNode.source !== null ? (
           <>
             <Button
               icon={"chevron-left"}

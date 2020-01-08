@@ -64,7 +64,7 @@ export default class ResourceSelect extends React.Component<ISelectProps, any> {
   };
 
   private displayItem = function(resource: IResource): string {
-    return resource.fhirType ? resource.fhirType : "None";
+    return resource ? resource.fhirType : "None";
   };
 
   public render() {

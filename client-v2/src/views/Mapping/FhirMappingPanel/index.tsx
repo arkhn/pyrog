@@ -34,7 +34,7 @@ const FhirMappingPanel = () => {
   const { data: dataResources, loading: loadingResources } = useQuery(
     qResourcesForSource,
     {
-      skip: !selectedNode.source.id,
+      skip: !selectedNode.source,
       variables: {
         sourceId: selectedNode.source.id
       }
@@ -43,12 +43,47 @@ const FhirMappingPanel = () => {
   const { data: dataTree, loading: loadingTree } = useQuery(
     qResourceAttributeTree,
     {
-      skip: !selectedNode.source || !selectedNode.resource.id,
+      skip: !selectedNode.resource.id,
       variables: {
         resourceId: selectedNode.resource.id
       }
     }
   );
+
+  const renderResourceTree = () => {
+    if (loadingTree) {
+      return <Spinner />;
+    }
+
+    return (
+      <div id="fhir-resource-tree">
+        <FhirResourceTree
+          expandedAttributesIdList={expandedAttributesIdList}
+          nodeCollapseCallback={(node: any) => {
+            setExpandedAttributesIdList(
+              expandedAttributesIdList.filter(
+                (item: any) => item !== node.nodeData.id
+              )
+            );
+          }}
+          nodeExpandCallback={(node: any) => {
+            setExpandedAttributesIdList([
+              ...expandedAttributesIdList,
+              node.nodeData.id
+            ]);
+          }}
+          json={dataTree.resource.attributes}
+          onClickCallback={(nodeData: any) => {
+            dispatch(updateFhirAttribute(nodeData.id, nodeData.name));
+            updateLocationParams(history, location, "attributeId", nodeData.id);
+          }}
+          selectedNodeId={
+            selectedNode.attribute ? selectedNode.attribute.id : null
+          }
+        />
+      </div>
+    );
+  };
 
   return (
     <>
@@ -64,41 +99,7 @@ const FhirMappingPanel = () => {
             }}
           />
         </div>
-        <div id="fhir-resource-tree">
-          {selectedNode.resource.fhirType ? (
-            loadingTree ? (
-              <Spinner />
-            ) : (
-              <FhirResourceTree
-                expandedAttributesIdList={expandedAttributesIdList}
-                nodeCollapseCallback={(node: any) => {
-                  setExpandedAttributesIdList(
-                    expandedAttributesIdList.filter(
-                      (item: any) => item !== node.nodeData.id
-                    )
-                  );
-                }}
-                nodeExpandCallback={(node: any) => {
-                  setExpandedAttributesIdList([
-                    ...expandedAttributesIdList,
-                    node.nodeData.id
-                  ]);
-                }}
-                json={dataTree.resource.attributes}
-                onClickCallback={(nodeData: any) => {
-                  dispatch(updateFhirAttribute(nodeData.id, nodeData.name));
-                  updateLocationParams(
-                    history,
-                    location,
-                    "attributeId",
-                    nodeData.id
-                  );
-                }}
-                selectedNodeId={selectedNode.attribute.id}
-              />
-            )
-          ) : null}
-        </div>
+        {selectedNode.resource.id && renderResourceTree()}
       </div>
       <div id="resource-add">
         <AddResource

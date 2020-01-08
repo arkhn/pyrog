@@ -25,15 +25,16 @@ const ResourceSelector = ({
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
   const { history, location } = useReactRouter();
   const [drawerIsOpen, setDrawerIsOpen] = React.useState(false);
+  const { source, resource } = selectedNode;
 
   return (
     <>
       <FormGroup>
         <ControlGroup>
           <ResourceSelect
-            disabled={!selectedNode.source}
+            disabled={!source}
             icon={"layout-hierarchy"}
-            inputItem={selectedNode.resource}
+            inputItem={resource}
             intent={"primary"}
             items={availableResources}
             loading={loading}
@@ -56,21 +57,23 @@ const ResourceSelector = ({
         </ControlGroup>
         <Button
           icon="more"
-          disabled={selectedNode.resource.id === null}
+          disabled={!resource}
           minimal
           onClick={() => {
             setDrawerIsOpen(true);
           }}
         />
       </FormGroup>
-      <Drawer
-        title={selectedNode.resource.fhirType}
-        isOpen={drawerIsOpen}
-        deleteResourceCallback={deleteResourceCallback}
-        onCloseCallback={() => {
-          setDrawerIsOpen(false);
-        }}
-      />
+      {resource && (
+        <Drawer
+          title={resource.fhirType}
+          isOpen={drawerIsOpen}
+          deleteResourceCallback={deleteResourceCallback}
+          onCloseCallback={() => {
+            setDrawerIsOpen(false);
+          }}
+        />
+      )}
     </>
   );
 };

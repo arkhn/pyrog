@@ -46,7 +46,7 @@ const Navbar = () => {
       })
       .then((response: any) => {
         if (response.data.me) {
-          if (location.pathname == "/mapping" && !selectedNode.source.id) {
+          if (location.pathname == "/mapping" && !selectedNode.source) {
             // Load arguments given through our URL...
             const args = QueryString.parse(location.search);
 
@@ -86,17 +86,15 @@ const Navbar = () => {
         />
       </BPNavbar.Group>
 
-      <Drawer
-        title={
-          selectedNode && selectedNode.source.name
-            ? selectedNode.source.name
-            : ""
-        }
-        isOpen={drawerIsOpen}
-        onClose={() => {
-          setDrawerIsOpen(false);
-        }}
-      />
+      {selectedNode.source.id && (
+        <Drawer
+          title={selectedNode.source ? selectedNode.source.name : ""}
+          isOpen={drawerIsOpen}
+          onClose={() => {
+            setDrawerIsOpen(false);
+          }}
+        />
+      )}
 
       <Query
         onCompleted={(data: any) => {

@@ -159,6 +159,49 @@ body {
     display: flex;
     flex-direction: column;
 
+    #help-resource {
+      text-align: right;
+      font-size: x-large;
+      flex-basis: 100%;
+      padding: 1rem;
+
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+
+      .bp3-icon svg {
+        width: 25px;
+        height: 25px;
+        position: relative;
+        top: 5px;
+      }
+
+      p {
+        padding-right: 10px;
+      }
+
+      #help-pick-resource {
+        display: flex;
+        flex-direction: row;
+      }
+
+      #help-add-resource {
+        display: flex;
+        flex-direction: row;
+
+        position: absolute;
+        bottom: 30px;
+      }
+
+      #help-pick-attribute {
+        display: flex;
+        flex-direction: row;
+
+        position: absolute;
+        top: 30%;
+      }
+    }
+
     .panel-header {
       background-color: @gray5;
     }
