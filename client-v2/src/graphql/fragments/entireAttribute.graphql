@@ -5,14 +5,10 @@ fragment entireAttribute on Attribute {
   isArray
   isRequired
   parent {
-    isArray
-    children {
       id
-    }
+    isArray
   }
   description
-  comments
-  mergingScript
   inputs {
     id
   }
