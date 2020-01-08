@@ -243,10 +243,6 @@ class FhirResourceTree extends React.Component<IProps, IState> {
       return node.children.some((attribute: any) => {
         return FhirResourceTree.bfsInputs(attribute);
       });
-    } else if (node.attributes && node.attributes.length > 0) {
-      return node.attributes.some((attribute: any) => {
-        return FhirResourceTree.bfsInputs(attribute);
-      });
     } else {
       return false;
     }
