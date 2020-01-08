@@ -49,21 +49,8 @@ const FhirMappingPanel = () => {
       }
     }
   );
-  const { data: dataTree, loading: loadingTree } = useQuery(
-    qResourceAttributeTree,
-    {
-      skip: !selectedNode.resource.id,
-      variables: {
-        resourceId: selectedNode.resource.id
-      }
-    }
-  );
 
   const renderResourceTree = () => {
-    if (loadingTree) {
-      return <Spinner />;
-    }
-
     return (
       <div id="fhir-resource-tree">
         <FhirResourceTree
@@ -81,12 +68,11 @@ const FhirMappingPanel = () => {
               node.nodeData.id
             ]);
           }}
-          json={dataTree.resource.attributes}
           onClickCallback={(nodeData: any) => {
             dispatch(updateFhirAttribute(nodeData.id, nodeData.name));
             updateLocationParams(history, location, "attributeId", nodeData.id);
           }}
-          selectedNodeId={
+          selectedAttributeId={
             selectedNode.attribute ? selectedNode.attribute.id : null
           }
         />
