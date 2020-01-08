@@ -19,7 +19,7 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
   const user = useSelector((state: IReduxStore) => state.user);
-  const { history, location } = useReactRouter();
+  const { history } = useReactRouter();
   const [drawerIsOpen, setDrawerIsOpen] = React.useState(false);
 
   return (

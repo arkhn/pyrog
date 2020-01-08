@@ -8,7 +8,7 @@ import { Spinner } from "@blueprintjs/core";
 const meQuery = require("../../graphql/queries/me.graphql");
 
 const PrivateRoute = ({ component: Component, ...rest }: any) => {
-  const { data, loading, error } = useQuery(meQuery, {
+  const { loading, error } = useQuery(meQuery, {
     fetchPolicy: "network-only"
   });
 
