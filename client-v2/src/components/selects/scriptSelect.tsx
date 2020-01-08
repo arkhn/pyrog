@@ -9,14 +9,14 @@ import * as React from "react";
 import TSelect from "./TSelect";
 import { useQuery } from "react-apollo";
 
-const cleaningScripts = require("~/graphql/queries/cleaningScripts.graphql");
+const cleaningScripts = require("src/graphql/queries/cleaningScripts.graphql");
 
 interface IOnChange {
   (script: String): any;
 }
 
 interface IScript {
-  code: string;
+  name: string;
   description?: string;
 }
 
@@ -27,14 +27,14 @@ interface IProps {
   onClear: Function;
 }
 
-const filterByCode: ItemPredicate<IScript> = (query, item) => {
-  return `${item.code.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0;
+const filterByName: ItemPredicate<IScript> = (query, item) => {
+  return `${item.name.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0;
 };
 
 const sortItems: ItemListPredicate<IScript> = (query, resources: IScript[]) => {
   resources.sort((s1, s2) => {
-    const name1 = s1.code.toLowerCase();
-    const name2 = s2.code.toLowerCase();
+    const name1 = s1.name.toLowerCase();
+    const name2 = s2.name.toLowerCase();
     if (name1 < name2) return -1;
     if (name1 > name2) return 1;
     return 0;
@@ -48,9 +48,9 @@ const renderItem: ItemRenderer<IScript> = (
 ) => {
   return (
     <MenuItem
-      key={item.code}
+      key={item.name}
       onClick={handleClick}
-      label={item.code}
+      label={item.name}
       text={item.description}
     />
   );
@@ -71,15 +71,15 @@ const ScriptSelect = ({
     <ButtonGroup>
       <TSelect<IScript>
         disabled={false}
-        displayItem={({ code }: IScript) => {
-          return code || "None";
+        displayItem={({ name }: IScript) => {
+          return name || "None";
         }}
         sortItems={sortItems}
-        filterItems={filterByCode}
+        filterItems={filterByName}
         loading={loading || queryLoading}
-        inputItem={{ code: selectedScript }}
+        inputItem={{ name: selectedScript }}
         items={items}
-        onChange={(script: IScript) => onChange(script.code)}
+        onChange={(script: IScript) => onChange(script.name)}
         renderItem={renderItem}
       />
       <Button
