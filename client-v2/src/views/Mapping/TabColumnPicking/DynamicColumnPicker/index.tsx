@@ -48,10 +48,6 @@ const DynamicColumnPicker = ({ attribute, schema, source }: IProps) => {
         }
       }
     });
-    setOwner(null);
-    setTable(null);
-    setColumn(null);
-    console.log("after");
   };
 
   const addInputToCache = (cache: any, { data: { createInput } }: any) => {
