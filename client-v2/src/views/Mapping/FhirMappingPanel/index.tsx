@@ -16,6 +16,15 @@ import { IReduxStore } from "src/types";
 
 import { updateLocationParams } from "src/services/urlState";
 
+interface INode {
+  nodeData: INodeData;
+}
+
+interface INodeData {
+  id: string;
+  name: string;
+}
+
 // GRAPHQL
 const qResourcesForSource = require("src/graphql/queries/ResourcesForSource.graphql");
 const qResourceAttributeTree = require("src/graphql/queries/resourceAttributeTree.graphql");

@@ -237,7 +237,12 @@ class FhirResourceTree extends React.Component<IProps, IState> {
       renderJson: "",
       selectedNode: null
     };
+    // Sort tree
+    this.props.json.sort(FhirResourceTree.sortByName);
   }
+
+  static sortByName = (a: INodeData, b: INodeData) =>
+    a.name > b.name ? 1 : -1;
 
   static getId = (): number => {
     FhirResourceTree.id++;
@@ -249,10 +254,6 @@ class FhirResourceTree extends React.Component<IProps, IState> {
       return true;
     } else if (node.children && node.children.length > 0) {
       return node.children.some((attribute: any) => {
-        return FhirResourceTree.bfsInputs(attribute);
-      });
-    } else if (node.attributes && node.attributes.length > 0) {
-      return node.attributes.some((attribute: any) => {
         return FhirResourceTree.bfsInputs(attribute);
       });
     } else {
@@ -294,11 +295,14 @@ class FhirResourceTree extends React.Component<IProps, IState> {
       ) : FhirResourceTree.bfsInputs(node) ? (
         <Icon icon="dot" />
       ) : null;
+
       return {
         childNodes: hasChildren
-          ? node.children.map((child: any) => {
-              return genObjNodes(child, nodePath);
-            })
+          ? node.children
+              .sort(FhirResourceTree.sortByName)
+              .map((child: any) => {
+                return genObjNodes(child, nodePath);
+              })
           : null,
         hasCaret: hasChildren,
         icon: node.isArray

@@ -60,7 +60,7 @@ export const createAttribute: FieldResolver<
   }
 
   const replicateChildren = (attr: any): AttributeCreateWithoutParentInput => {
-    if (attr.children.length > 0) {
+    if (attr.children && attr.children.length > 0) {
       return {
         name: attr.name,
         fhirType: attr.fhirType,
