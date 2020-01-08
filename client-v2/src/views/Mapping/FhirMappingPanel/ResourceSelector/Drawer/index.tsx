@@ -230,6 +230,7 @@ const Drawer = ({
               disabled={updatingResource || selectedNode.resource.id === null}
             >
               <ColumnPicker
+                hasOwner={selectedNode.source.hasOwner}
                 ownerChangeCallback={(owner: string) => {
                   setPkOwner(owner);
                   setPkTable("");

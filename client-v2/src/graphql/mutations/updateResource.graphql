@@ -5,6 +5,6 @@ mutation updateResource(
   $data: UpdateResourceInput!
 ) {
   updateResource(resourceId: $resourceId, data: $data) {
-    ...enntireResource
+    ...entireResource
   }
 }
