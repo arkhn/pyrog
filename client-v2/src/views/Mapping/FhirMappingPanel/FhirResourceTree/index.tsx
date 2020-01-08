@@ -252,22 +252,6 @@ class FhirResourceTree extends React.Component<IProps, IState> {
     }
   };
 
-  private static bfsRequired = (node: any) => {
-    if (node.isRequired && !(node.inputs && node.inputs.length > 0)) {
-      return true;
-    } else if (node.children && node.children.length > 0) {
-      return node.children.some((attribute: any) => {
-        return FhirResourceTree.bfsRequired(attribute);
-      });
-    } else if (node.attributes && node.attributes.length > 0) {
-      return node.attributes.some((attribute: any) => {
-        return FhirResourceTree.bfsRequired(attribute);
-      });
-    } else {
-      return false;
-    }
-  };
-
   private static forEachNode(
     nodes: ITreeNode[],
     callback: (node: ITreeNode) => void
@@ -301,7 +285,7 @@ class FhirResourceTree extends React.Component<IProps, IState> {
 
       const secondaryLabel = hasInputs ? (
         <Icon icon="small-tick" intent={"success"} />
-      ) : FhirResourceTree.bfsRequired(node) ? (
+      ) : node.isRequired ? (
         <Icon icon="dot" intent="warning"/>
       ) : FhirResourceTree.bfsInputs(node) ? (
         <Icon icon="dot" />
