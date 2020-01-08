@@ -26,7 +26,7 @@ interface INodeData {
 }
 
 // GRAPHQL
-const qResourcesForSource = require("src/graphql/queries/ResourcesForSource.graphql");
+const qResourcesForSource = require("src/graphql/queries/resourcesForSource.graphql");
 const qResourceAttributeTree = require("src/graphql/queries/resourceAttributeTree.graphql");
 
 const FhirMappingPanel = () => {

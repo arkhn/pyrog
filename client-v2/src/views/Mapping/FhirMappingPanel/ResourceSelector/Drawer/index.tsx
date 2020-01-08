@@ -26,7 +26,7 @@ import {
 import { deleteLocationParams } from "src/services/urlState";
 
 // GRAPHQL
-const qResourcesForSource = require("src/graphql/queries/ResourcesForSource.graphql");
+const qResourcesForSource = require("src/graphql/queries/resourcesForSource.graphql");
 const resourceInfo = require("src/graphql/queries/resourceInfo.graphql");
 const mDeleteResource = require("src/graphql/mutations/deleteResource.graphql");
 const mUpdateResource = require("src/graphql/mutations/updateResource.graphql");
@@ -79,7 +79,7 @@ const Drawer = ({
     toaster.show({
       message: `Successfully updated ${
         selectedNode.resource.fhirType
-        } properties`,
+      } properties`,
       intent: "success",
       icon: "properties"
     });
@@ -107,7 +107,7 @@ const Drawer = ({
       intent: "success",
       message: `Ressource ${data.deleteResource.fhirType} deleted for ${
         selectedNode.source.name
-        }.`,
+      }.`,
       timeout: 4000
     });
     deleteLocationParams(history, location, ["resourceId", "attributeId"]);
@@ -126,46 +126,44 @@ const Drawer = ({
   };
 
   // Mutation and query hooks
-  const [
-    updateResource,
-    { loading: updatingResource }
-  ] = useMutation(
+  const [updateResource, { loading: updatingResource }] = useMutation(
     mUpdateResource,
     {
       onCompleted: onUpdateCompleted,
-      onError: onUpdateError,
+      onError: onUpdateError
     }
   );
 
-  const removeResourceFromCache = (cache: any, { data: { deleteResource } }: any) => {
+  const removeResourceFromCache = (
+    cache: any,
+    { data: { deleteResource } }: any
+  ) => {
     try {
       const { source } = cache.readQuery({
         query: qResourcesForSource,
         variables: {
-          sourceId: selectedNode.source.id,
+          sourceId: selectedNode.source.id
         }
       });
       const newSource = {
         ...source,
-        resources:
-          source.resources.filter((r: any) => r.id !== deleteResource.id),
-      }
+        resources: source.resources.filter(
+          (r: any) => r.id !== deleteResource.id
+        )
+      };
       cache.writeQuery({
         query: qResourcesForSource,
         variables: {
-          sourceId: selectedNode.source.id,
+          sourceId: selectedNode.source.id
         },
         data: { source: newSource }
-      })
+      });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
-  const [
-    deleteResource,
-    { loading: deletingResource }
-  ] = useMutation(
+  const [deleteResource, { loading: deletingResource }] = useMutation(
     mDeleteResource,
     {
       update: removeResourceFromCache,
@@ -194,7 +192,7 @@ const Drawer = ({
     if (selectedNode.source.name) {
       setSchema(
         store.getState().data.sourceSchemas.schemaBySourceName[
-        selectedNode.source.name
+          selectedNode.source.name
         ]
       );
     }
