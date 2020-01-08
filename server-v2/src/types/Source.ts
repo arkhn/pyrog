@@ -86,9 +86,8 @@ export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
   { templateName, name, hasOwner },
   ctx,
 ) => {
-
   const exists = await ctx.photon.sources.findMany({
-    where: { template: { name: templateName }, name: name },
+    where: { template: { name: templateName }, name },
   })
   if (exists.length) {
     throw new Error(
