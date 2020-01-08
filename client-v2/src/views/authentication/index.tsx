@@ -111,7 +111,7 @@ class AuthenticationView extends React.Component<
                 const { id, name, email } = data.signup.user;
                 localStorage.setItem(process.env.AUTH_TOKEN, token);
                 dispatch(loginAction(id, name, email));
-                this.props.history.push("/sources");
+                this.props.history.push("/");
               }
             }}
             onError={(error: any) => {
@@ -261,7 +261,7 @@ class AuthenticationView extends React.Component<
                 const { id, name, email } = data.login.user;
                 localStorage.setItem(process.env.AUTH_TOKEN, token);
                 dispatch(loginAction(id, name, email));
-                this.props.history.push("/sources");
+                this.props.history.push("/");
               }
             }}
             onError={(error: any) => {

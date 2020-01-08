@@ -157,7 +157,7 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
       isUploading: false
     });
 
-    this.props.history.push("/sources");
+    this.props.history.push("/");
   };
 
   onFormSubmit = async (e: any) => {

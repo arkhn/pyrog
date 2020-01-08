@@ -24,7 +24,7 @@ const Header = ({ openDrawer }: IProps) => {
           intent={"primary"}
           minimal={true}
           onClick={() => {
-            history.push("/sources");
+            history.push("/");
           }}
         >
           Sources
@@ -43,7 +43,7 @@ const Header = ({ openDrawer }: IProps) => {
               minimal={true}
               onClick={() => {
                 dispatch(deselectSource());
-                history.push("/sources");
+                history.push("/");
               }}
             >
               Sources

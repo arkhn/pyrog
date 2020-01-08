@@ -1,4 +1,3 @@
-import { useApolloClient } from "@apollo/react-hooks";
 import {
   Button,
   Classes,
@@ -10,7 +9,7 @@ import {
   Spinner
 } from "@blueprintjs/core";
 import * as React from "react";
-import { Mutation } from "react-apollo";
+import { Mutation, useQuery } from "react-apollo";
 import { useSelector } from "react-redux";
 
 import "./style.less";
@@ -39,40 +38,21 @@ const Drawer = ({ title, isOpen, onClose }: IProps) => {
   const [hasSuccessfullyChanged, setHasSuccessfullyChanged] = React.useState(
     false
   );
-  const [loading, setLoading] = React.useState(true);
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
-  const client = useApolloClient();
+  const { data, loading } = useQuery(qCredentialForSource, {
+    variables: {
+      sourceId: selectedNode.source.id
+    }
+  });
 
   React.useEffect(() => {
-    if (selectedNode.source) {
-      client
-        .query({
-          query: qCredentialForSource,
-          variables: {
-            sourceId: selectedNode.source.id
-          },
-          fetchPolicy: "network-only"
-        })
-        .then((response: any) => {
-          setLoading(false);
-          if (!response.data.source) {
-            return;
-          }
-
-          const cred = response.data.source.credential;
-          if (cred) {
-            setHost(cred.host);
-            setPort(cred.port);
-            setLogin(cred.login);
-            setPassword(cred.password);
-            setDatabase(cred.database);
-            setModel(cred.model);
-          }
-        })
-        .catch((error: any) => {
-          console.log(error);
-          throw new Error(error);
-        });
+    if (!loading && data.source.credential) {
+      const c = data.source.credential;
+      setHost(c.host);
+      setPort(c.port);
+      setLogin(c.login);
+      setPassword(c.password);
+      setDatabase(c.database);
     }
   }, [selectedNode]);
 
