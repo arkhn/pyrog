@@ -1,11 +1,11 @@
 import { Tag, Spinner } from "@blueprintjs/core";
 import * as React from "react";
-import { Mutation, Query } from "react-apollo";
+import { useQuery, useMutation } from '@apollo/react-hooks';
 
 import { ISelectedSource } from "src/types";
 
 // COMPONENTS
-import StringSelect from "src/components/selects/stringSelect";
+import ScriptSelect from "src/components/selects/scriptSelect";
 import InputColumn from "./../InputColumn";
 
 // GRAPHQL
@@ -22,74 +22,74 @@ interface IProps {
 }
 
 const InputColumns = ({ schema, selectedAttribute, source }: IProps) => {
+
+  const { data, loading: loadingData } =
+    useQuery(qInputsForAttribute, {
+      variables: {
+        attributeId: selectedAttribute.id
+      },
+      skip: !selectedAttribute.id
+    })
+  const [updateAttribute, { loading: loadingMutation }] = useMutation(mUpdateAttribute)
+
+  if (loadingData) {
+    return <Spinner />;
+  }
+
+  const attribute = data && data.attribute
+    ? data.attribute
+    : null;
+  const inputs = attribute && attribute.inputs
+    ? attribute.inputs
+    : [];
+
   return (
-    <Query
-      query={qInputsForAttribute}
-      variables={{ attributeId: selectedAttribute.id }}
-      skip={!selectedAttribute.id}
-    >
-      {({ data, loading }: any) => {
-        if (loading) {
-          return <Spinner />;
-        }
-        const attribute = data && data.attribute
-          ? data.attribute
-          : null;
-        const inputs = attribute && attribute.inputs
-          ? attribute.inputs
-          : [];
-        return (
-          <div id="input-columns">
-            <div id="input-column-rows">
-              {inputs.map((input: any, index: number) => {
-                return input ? (
-                  <InputColumn
-                    key={index}
-                    attribute={selectedAttribute}
-                    input={input}
-                    schema={schema}
-                    source={source}
-                  />
-                ) : null;
-              })}
-            </div>
-            {inputs.length > 1 ? (
-              <div id="input-column-merging-script">
-                <Mutation mutation={mUpdateAttribute}>
-                  {(updateAttribute: any, { data, loading }: any) => {
-                    return (
-                      <div className="stacked-tags">
-                        <Tag>SCRIPT</Tag>
-                        <StringSelect
-                          disabled={true}
-                          inputItem={
-                            attribute && attribute.mergingScript
-                              ? attribute.mergingScript
-                              : ""
-                          }
-                          items={["mergingScript.py"]}
-                          loading={loading}
-                          onChange={(e: string) => {
-                            updateAttribute({
-                              variables: {
-                                id: selectedAttribute.id,
-                                data: {
-                                  mergingScript: e
-                                }
-                              }
-                            });
-                          }}
-                        />
-                      </div>
-                    );
-                  }}
-                </Mutation>
-              </div>
-            ) : null}
+    <div id="input-columns">
+      <div id="input-column-rows">
+        {inputs.map((input: any, index: number) => {
+          return input ? (
+            <InputColumn
+              key={index}
+              attribute={selectedAttribute}
+              input={input}
+              schema={schema}
+              source={source}
+            />
+          ) : null;
+        })}
+      </div>
+      {inputs.length > 1 ? (
+        <div id="input-column-merging-script">
+          <div className="stacked-tags">
+            <Tag>SCRIPT</Tag>
+            <ScriptSelect
+              loading={loadingMutation}
+              selectedScript={attribute.mergingScript}
+              onChange={(script: string) => {
+                updateAttribute({
+                  variables: {
+                    attributeId: attribute.id,
+                    data: {
+                      mergingScript: script
+                    }
+                  }
+                });
+              }}
+              onClear={(): any => {
+                updateAttribute({
+                  variables: {
+                    attributeId: attribute.id,
+                    data: {
+                      mergingScript: null
+                    }
+                  }
+                });
+              }}
+            />
           </div>
-        );
-      }}
-    </Query>
+        </div>
+      ) : null}
+    </div>
   );
 };
 
