@@ -70,17 +70,6 @@ export const createResource: FieldResolver<
 > = async (_parent, { sourceId, resourceName }, ctx) => {
   const resourceSchema = fetchResourceSchema(resourceName)
 
-  // TODO: this won't work with profiles
-  const existing = await ctx.photon.resources.findMany({
-    where: { source: { id: sourceId }, fhirType: resourceName },
-    include: { source: true },
-  })
-  if (existing.length) {
-    throw new Error(
-      `Resource ${resourceName} already exists for source ${existing[0].source.name}`,
-    )
-  }
-
   const resource = await ctx.photon.resources.create({
     data: {
       fhirType: resourceName,

@@ -10,6 +10,9 @@ var DIST_DIR = path.join(__dirname, "./dist");
 
 module.exports = (env, argv) => {
   return {
+    watchOptions: {
+      poll: true
+    },
     // Indicates where to start so as to build the module dependency graph
     context: SRC_DIR,
     entry: "./app.tsx",

@@ -85,14 +85,25 @@ export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
   _parent,
   { templateName, name, hasOwner },
   ctx,
-) =>
-  ctx.photon.sources.create({
+) => {
+
+  const exists = await ctx.photon.sources.findMany({
+    where: { template: { name: templateName }, name: name },
+  })
+  if (exists.length) {
+    throw new Error(
+      `Source ${name} already exists for template ${templateName}`,
+    )
+  }
+
+  return ctx.photon.sources.create({
     data: {
       name,
       hasOwner,
       template: { connect: { name: templateName } },
     },
   })
+}
 
 export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
   _parent,

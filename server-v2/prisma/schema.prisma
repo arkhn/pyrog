@@ -19,7 +19,7 @@ model Template {
 
 model Source {
   id         String      @default(cuid()) @id
-  name       String      @unique
+  name       String
   version    String?
   hasOwner   Boolean     @default(false)
   resources  Resource[]  @relation(onDelete: CASCADE)
