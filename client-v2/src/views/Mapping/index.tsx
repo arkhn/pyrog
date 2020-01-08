@@ -75,7 +75,7 @@ const MappingView = () => {
               </Tabs>
             </div>
             <div>
-              <Comments attribute={selectedNode.attribute} />
+              <Comments />
             </div>
           </div>
           <div id="fhir-panel">

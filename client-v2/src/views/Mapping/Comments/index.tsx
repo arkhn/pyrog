@@ -1,28 +1,28 @@
 import * as React from "react"
 import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useSelector } from "react-redux";
 import {
   FormGroup,
   TextArea,
 } from "@blueprintjs/core";
 
+import { IReduxStore } from "../../../types";
 
-interface IProps {
-  attribute: {
-    id: string
-  }
-}
 
 // GRAPHQL
 const qCommentsForAttribute = require("src/graphql/queries/commentsForAttribute.graphql");
 const mUpdateAttribute = require("src/graphql/mutations/updateAttribute.graphql");
 
-const Comments = ({ attribute }: IProps) => {
+const Comments = () => {
+
+  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
 
   const { data, loading } =
     useQuery(qCommentsForAttribute, {
       variables: {
-        attributeId: attribute.id
-      }
+        attributeId: selectedNode.attribute.id
+      },
+      skip: !selectedNode.attribute.id
     })
   const [updateAttribute] = useMutation(mUpdateAttribute)
 
@@ -34,7 +34,7 @@ const Comments = ({ attribute }: IProps) => {
         ? data.attribute.comments
         : ""
       )
-  }, [attribute, loading])
+  }, [selectedNode, loading])
 
   return (
     <div>
@@ -43,12 +43,12 @@ const Comments = ({ attribute }: IProps) => {
           <TextArea
             className={"bp3-fill"}
             value={comments}
-            disabled={loading || !attribute.id}
+            disabled={loading || !selectedNode.attribute.id}
             onChange={e => {
               setComments(e.target.value)
               updateAttribute({
                 variables: {
-                  attributeId: attribute.id,
+                  attributeId: selectedNode.attribute.id,
                   data: {
                     comments: e.target.value
                   }
