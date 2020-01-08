@@ -229,7 +229,11 @@ class FhirResourceTree extends React.Component<IProps, IState> {
       renderJson: "",
       selectedNode: null
     };
+    // Sort tree
+    this.props.json.sort(FhirResourceTree.sortByName)
   }
+
+  static sortByName = (a: INodeData, b: INodeData) => a.name > b.name ? 1 : -1
 
   static getId = (): number => {
     FhirResourceTree.id++;
@@ -286,9 +290,10 @@ class FhirResourceTree extends React.Component<IProps, IState> {
       ) : FhirResourceTree.bfsInputs(node) ? (
         <Icon icon="dot" />
       ) : null;
+
       return {
         childNodes: hasChildren
-          ? node.children.map((child: any) => {
+          ? node.children.sort(FhirResourceTree.sortByName).map((child: any) => {
             return genObjNodes(child, nodePath);
           })
           : null,

@@ -16,6 +16,16 @@ import { IReduxStore } from "src/types";
 
 import { updateLocationParams } from "src/services/urlState";
 
+
+interface INode {
+  nodeData: INodeData
+}
+
+interface INodeData {
+  id: string
+  name: string
+}
+
 // GRAPHQL
 const qResourcesForSource = require("src/graphql/queries/ResourcesForSource.graphql");
 const qResourceAttributeTree = require("src/graphql/queries/resourceAttributeTree.graphql");
@@ -71,21 +81,21 @@ const FhirMappingPanel = () => {
             ) : (
               <FhirResourceTree
                 expandedAttributesIdList={expandedAttributesIdList}
-                nodeCollapseCallback={(node: any) => {
+                nodeCollapseCallback={(node: INode) => {
                   setExpandedAttributesIdList(
                     expandedAttributesIdList.filter(
                       (item: any) => item !== node.nodeData.id
                     )
                   );
                 }}
-                nodeExpandCallback={(node: any) => {
+                nodeExpandCallback={(node: INode) => {
                   setExpandedAttributesIdList([
                     ...expandedAttributesIdList,
                     node.nodeData.id
                   ]);
                 }}
                 json={dataTree.resource.attributes}
-                onClickCallback={(nodeData: any) => {
+                onClickCallback={(nodeData: INodeData) => {
                   dispatch(updateFhirAttribute(nodeData.id, nodeData.name));
                   updateLocationParams(
                     history,
