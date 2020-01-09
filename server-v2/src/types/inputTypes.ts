@@ -18,6 +18,13 @@ export const UpdateResourceInput = inputObjectType({
   },
 })
 
+export const UpdateInputInput = inputObjectType({
+  name: 'UpdateInputInput',
+  definition(t) {
+    t.field('script', { type: 'String' })
+  },
+})
+
 export const ColumnInput = inputObjectType({
   name: 'ColumnInput',
   definition(t) {

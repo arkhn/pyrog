@@ -4,7 +4,7 @@ import { createResource, updateResource, deleteResource } from './Resource'
 import { deleteSource, createSource } from './Source'
 import { createAttribute, updateAttribute, deleteAttribute } from './Attribute'
 import { signup, login } from './User'
-import { createInput, deleteInput } from './Input'
+import { createInput, deleteInput, updateInput } from './Input'
 import { deleteCredential, upsertCredential } from './Credential'
 import { createTemplate, deleteTemplate } from './Template'
 import { addJoinToColumn } from './Column'
@@ -185,6 +185,15 @@ export const Mutation = mutationType({
         id: idArg({ required: true }),
       },
       resolve: deleteInput,
+    })
+
+    t.field('updateInput', {
+      type: 'Input',
+      args: {
+        inputId: idArg({ required: true }),
+        data: arg({ type: 'UpdateInputInput', required: true }),
+      },
+      resolve: updateInput,
     })
 
     /*

@@ -17,7 +17,7 @@ import ScriptSelect from "src/components/selects/scriptSelect";
 
 // GRAPHQL
 const qInputsForAttribute = require("src/graphql/queries/inputsForAttribute.graphql");
-const mUpdateInputColumn = require("src/graphql/mutations/updateInputColumn.graphql");
+const mUpdateInput = require("src/graphql/mutations/updateInput.graphql");
 const mDeleteInput = require("src/graphql/mutations/deleteInput.graphql");
 const mAddJoinToColumn = require("src/graphql/mutations/addJoinToColumn.graphql");
 
@@ -41,9 +41,9 @@ const InputColumn = ({ attribute, input, schema, source }: IProps) => {
     { loading: loadAddJoin }
   ] = useMutation(mAddJoinToColumn);
   const [
-    updateInputColumn,
+    updateInput,
     { loading: loadUpdInput }
-  ] = useMutation(mUpdateInputColumn);
+  ] = useMutation(mUpdateInput);
 
   const removeInputFromCache = (cache: any) => {
     const { attribute: dataAttribute } = cache.readQuery({
@@ -160,17 +160,17 @@ const InputColumn = ({ attribute, input, schema, source }: IProps) => {
                     loading={loadUpdInput}
                     selectedScript={input.script}
                     onChange={(script: string) => {
-                      updateInputColumn({
+                      updateInput({
                         variables: {
-                          id: input.id,
+                          inputId: input.id,
                           data: { script }
                         }
                       });
                     }}
                     onClear={(): any => {
-                      updateInputColumn({
+                      updateInput({
                         variables: {
-                          id: input.id,
+                          inputId: input.id,
                           data: { script: null }
                         }
                       });

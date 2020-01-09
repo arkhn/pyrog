@@ -93,3 +93,14 @@ export const deleteInput: FieldResolver<'Mutation', 'deleteInput'> = async (
   { id },
   ctx,
 ) => ctx.photon.inputs.delete({ where: { id } })
+
+export const updateInput: FieldResolver<'Mutation', 'updateInput'> = async (
+  _parent,
+  { inputId, data },
+  ctx,
+) => {
+  return ctx.photon.inputs.update({
+    where: { id: inputId },
+    data,
+  })
+}
