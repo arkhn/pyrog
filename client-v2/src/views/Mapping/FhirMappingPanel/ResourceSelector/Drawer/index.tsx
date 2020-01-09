@@ -16,7 +16,7 @@ import { IReduxStore } from "src/types";
 
 import ColumnPicker from "src/views/mapping/ColumnPicker";
 
-import "./style.less";
+import "./style.scss";
 
 import {
   updateFhirResource,
@@ -24,17 +24,20 @@ import {
 } from "src/services/selectedNode/actions";
 
 import { deleteLocationParams } from "src/services/urlState";
+import { loader } from "graphql.macro";
 
 // GRAPHQL
-const qResourcesForSource = require("src/graphql/queries/resourcesForSource.graphql");
-const resourceInfo = require("src/graphql/queries/resourceInfo.graphql");
-const mDeleteResource = require("src/graphql/mutations/deleteResource.graphql");
-const mUpdateResource = require("src/graphql/mutations/updateResource.graphql");
+const qResourcesForSource = loader(
+  "src/graphql/queries/resourcesForSource.graphql"
+);
+const resourceInfo = loader("src/graphql/queries/resourceInfo.graphql");
+const mDeleteResource = loader("src/graphql/mutations/deleteResource.graphql");
+const mUpdateResource = loader("src/graphql/mutations/updateResource.graphql");
 
 interface IProps {
   title: string;
   isOpen: boolean;
-  deleteResourceCallback?: () => void;
+  deleteResourceCallback: () => void;
   onCloseCallback?: () => void;
 }
 

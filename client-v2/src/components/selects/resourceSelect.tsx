@@ -80,7 +80,7 @@ export default class ResourceSelect extends React.Component<ISelectProps, any> {
 
     return (
       <TSelect<IResource>
-        disabled={disabled}
+        disabled={!!disabled}
         displayItem={this.displayItem}
         filterItems={this.filterByName}
         sortItems={this.sortItems}

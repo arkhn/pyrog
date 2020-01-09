@@ -5,7 +5,8 @@ import {
   FormGroup,
   InputGroup,
   IToastProps,
-  ProgressBar
+  ProgressBar,
+  IToaster
 } from "@blueprintjs/core";
 import axios, { AxiosResponse } from "axios";
 import * as React from "react";
@@ -18,12 +19,18 @@ import Navbar from "../../components/navbar";
 // Import types
 import { ITemplate, IReduxStore, IView } from "../../types";
 
-import "./style.less";
+import "./style.scss";
+import { loader } from "graphql.macro";
+import { HTTP_BACKEND_URL } from "src/constants";
 
 // GRAPHQL OPERATIONS
-const qSourceAndTemplateNames = require("../../graphql/queries/sourceAndTemplateNames.graphql");
-const mCreateTemplate = require("../../graphql/mutations/createTemplate.graphql");
-const mCreateSource = require("../../graphql/mutations/createSource.graphql");
+const qSourceAndTemplateNames = loader(
+  "src/graphql/queries/sourceAndTemplateNames.graphql"
+);
+const mCreateTemplate = loader(
+  "../../graphql/mutations/createTemplate.graphql"
+);
+const mCreateSource = loader("../../graphql/mutations/createSource.graphql");
 
 export interface INewSourceState {}
 
@@ -36,7 +43,9 @@ interface IState {
   schemaFile: any;
 }
 
-interface INewSourceViewState extends IView, INewSourceState {}
+interface INewSourceViewState extends IView, INewSourceState {
+  toaster: IToaster;
+}
 
 const mapReduxStateToReactProps = (state: IReduxStore): INewSourceViewState => {
   return {
@@ -71,7 +80,7 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
       icon: "cloud-upload",
       intent:
         typeof uploadProgress !== "undefined"
-          ? null
+          ? undefined
           : success
           ? "success"
           : "danger",
@@ -111,7 +120,7 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
       }),
       data: formData,
       method: "post",
-      url: `${process.env.HTTP_BACKEND_URL}/upload`,
+      url: `${HTTP_BACKEND_URL}/upload`,
       onUploadProgress: p => {
         this.props.toaster.show(
           this.renderToastProps({
@@ -283,7 +292,7 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
                         ...this.state,
                         templateName: target.value,
                         templateExists:
-                          target.value &&
+                          !!target.value &&
                           target.value in mapTemplateToSourceNames
                       });
                     }}

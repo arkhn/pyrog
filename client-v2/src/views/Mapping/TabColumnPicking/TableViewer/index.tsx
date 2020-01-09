@@ -7,7 +7,7 @@ import {
 } from "@blueprintjs/table";
 import * as React from "react";
 
-import "./style.less";
+import "./style.scss";
 
 interface IProps {
   fields: string[];
@@ -22,7 +22,7 @@ const TableViewer = ({ rows, fields, isLoading }: IProps) => {
     };
   };
 
-  const [columns, setColumns] = React.useState([]);
+  const [columns, setColumns] = React.useState([] as React.ReactElement[]);
 
   React.useEffect(() => {
     setColumns(

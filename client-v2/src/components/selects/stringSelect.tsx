@@ -65,7 +65,7 @@ export default class StringSelect extends React.Component<ISelectProps, any> {
 
     return (
       <TSelect<string>
-        disabled={disabled}
+        disabled={!!disabled}
         displayItem={this.displayItem}
         filterItems={this.filterByName}
         filterable={filterable}

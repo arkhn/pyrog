@@ -24,29 +24,29 @@ export interface IProps {
 
 export interface IState {
   owner?: string;
-  table: string;
-  column: string;
+  table?: string;
+  column?: string;
 }
 
 export default class ColumnPicker extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
-      owner: null,
-      table: null,
-      column: null
+      owner: undefined,
+      table: undefined,
+      column: undefined
     };
   }
 
-  static defaultProps = () => {
-    hasOwner: true;
-  };
+  static defaultProps = () => ({
+    hasOwner: true
+  });
 
   private changeOwner = (e: string) => {
     this.setState({
       owner: e,
-      table: null,
-      column: null
+      table: undefined,
+      column: undefined
     });
 
     if (this.props.ownerChangeCallback) {
@@ -57,7 +57,7 @@ export default class ColumnPicker extends React.Component<IProps, IState> {
   private changeTable = (e: string) => {
     this.setState({
       table: e,
-      column: null
+      column: undefined
     });
 
     if (this.props.tableChangeCallback) {
@@ -110,7 +110,7 @@ export default class ColumnPicker extends React.Component<IProps, IState> {
 
     let columns = table
       ? ((hasOwner
-          ? ((sourceSchema[owner] as { [key: string]: string[] })[
+          ? ((sourceSchema[owner!] as { [key: string]: string[] })[
               table
             ] as string[])
           : (sourceSchema[table] as string[])) as any)
@@ -121,7 +121,7 @@ export default class ColumnPicker extends React.Component<IProps, IState> {
         {hasOwner ? (
           <StringSelect
             icon={"group-objects"}
-            inputItem={owner}
+            inputItem={owner!}
             items={owners}
             onChange={this.changeOwner}
             popoverProps={popoverProps || {}}
@@ -131,7 +131,7 @@ export default class ColumnPicker extends React.Component<IProps, IState> {
         <StringSelect
           disabled={disabled || (hasOwner && !owner)}
           icon={"th"}
-          inputItem={table}
+          inputItem={table!}
           items={tables}
           onChange={this.changeTable}
           popoverProps={popoverProps || {}}
@@ -139,7 +139,7 @@ export default class ColumnPicker extends React.Component<IProps, IState> {
         <StringSelect
           disabled={disabled || !table}
           icon={"column-layout"}
-          inputItem={column}
+          inputItem={column!}
           items={columns}
           onChange={this.changeColumn}
           popoverProps={popoverProps || {}}

@@ -1,3 +1,4 @@
+import * as React from "react";
 import {
   Card,
   ControlGroup,
@@ -7,11 +8,9 @@ import {
   Tag,
   IBreadcrumbProps
 } from "@blueprintjs/core";
-import * as React from "react";
+import SQLRequestParser from "../SQLRequestParser";
 
 const sqlParser = require("js-sql-parser");
-
-import SQLRequestParser from "../SQLRequestParser";
 
 const TabSQLParser = () => {
   const [table, setTable] = React.useState(null);

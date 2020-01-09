@@ -1,9 +1,9 @@
 @import "~@blueprintjs/core/lib/css/blueprint.css";
-@import "~@blueprintjs/core/lib/less/variables";
+@import "~@blueprintjs/core/lib/scss/variables";
 @import "~react-json-pretty/src/JSONPretty.monikai.css";
 
-@window-padding: 20px;
-@border-radius: 6px;
+$window-padding: 20px;
+$border-radius: 6px;
 
 body {
   padding: 0;
@@ -27,7 +27,7 @@ body {
 }
 
 #main-container {
-  height: calc(100vh - @pt-navbar-height);
+  height: calc(100vh);
 }
 
 #main-container-spinner {
@@ -49,7 +49,7 @@ body {
   flex-basis: 350px;
 
   padding: 10px 0px;
-  background-color: @dark-gray1;
+  background-color: $dark-gray1;
   overflow: auto;
 
   .bp3-tree-node-content {
@@ -63,14 +63,14 @@ body {
       line-height: 1.1em;
 
       & > div:nth-child(2) {
-        color: @gray2;
+        color: $gray2;
         font-size: 0.8em;
       }
     }
   }
 
   .bp3-tree-node-selected .bp3-tree-node-label > div > div:nth-child(2) {
-    color: @gray5;
+    color: $gray5;
   }
 }
 
@@ -80,7 +80,7 @@ body {
 
   max-width: 80%;
 
-  padding: @window-padding;
+  padding: $window-padding;
 }
 
 #input-columns-container {
@@ -90,11 +90,11 @@ body {
 }
 
 #input-columns-viewer {
-  margin-bottom: @window-padding;
+  margin-bottom: $window-padding;
 
   table {
     width: 100%;
-    border-radius: @border-radius;
+    border-radius: $border-radius;
     border-collapse: collapse;
 
     td,
@@ -105,8 +105,8 @@ body {
     }
 
     td {
-      background-color: @dark-gray2;
-      border-color: @dark-gray3;
+      background-color: $dark-gray2;
+      border-color: $dark-gray3;
       border-width: 0px 1px 1px 0px;
       border-style: solid;
 
@@ -116,34 +116,34 @@ body {
     }
 
     td:first-child {
-      background-color: @dark-gray1;
+      background-color: $dark-gray1;
       border-right-width: 0px;
     }
 
     tr:first-child {
       th:nth-child(2) {
-        border-top-left-radius: @border-radius;
+        border-top-left-radius: $border-radius;
       }
 
       th:last-child {
-        border-top-right-radius: @border-radius;
+        border-top-right-radius: $border-radius;
       }
     }
 
     tr:nth-child(2) {
       td:first-child {
-        border-top-left-radius: @border-radius;
+        border-top-left-radius: $border-radius;
       }
 
       td:last-child {
         border: 0px;
-        border-bottom-right-radius: @border-radius;
+        border-bottom-right-radius: $border-radius;
       }
     }
 
     tr:last-child {
       td:first-child {
-        border-bottom-left-radius: @border-radius;
+        border-bottom-left-radius: $border-radius;
       }
     }
 
@@ -152,11 +152,11 @@ body {
     }
 
     th:not(:first-child) {
-      background-color: @dark-gray1;
+      background-color: $dark-gray1;
     }
 
     th:not(:first-child):not(:last-child) {
-      border-right-color: @dark-gray2;
+      border-right-color: $dark-gray2;
       border-right-style: solid;
       border-right-width: 1px;
     }
@@ -166,8 +166,8 @@ body {
 #column-selector {
   flex-grow: 1;
   overflow: auto;
-  background-color: @dark-gray1;
-  border-radius: @border-radius;
+  background-color: $dark-gray1;
+  border-radius: $border-radius;
 }
 
 .bp3-form-group {
@@ -178,7 +178,7 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding-top: @window-padding;
+  padding-top: $window-padding;
 
   .bp3-form-group {
     justify-content: center;
@@ -186,7 +186,7 @@ body {
 }
 
 #text-tab-search-group {
-  padding: @window-padding;
+  padding: $window-padding;
 
   .row {
     display: flex;
@@ -217,20 +217,20 @@ body {
 
 #save-comment-button {
   font-size: large;
-  border-style: solid @light-gray3;
-  border-radius: @border-radius;
+  border-style: solid $light-gray3;
+  border-radius: $border-radius;
 }
 
 .column-viewer {
-  padding: @window-padding;
+  padding: $window-padding;
   overflow: auto;
 
   .column-flexbox {
-    background-color: @dark-gray1;
-    border-radius: @border-radius;
+    background-color: $dark-gray1;
+    border-radius: $border-radius;
     overflow-x: scroll;
-    padding: @window-padding;
-    color: @black;
+    padding: $window-padding;
+    color: $black;
 
     display: flex;
     align-items: stretch;
@@ -246,8 +246,8 @@ body {
       left: calc(100% - 35px);
       top: -5px;
       z-index: 3;
-      background-color: @dark-gray5;
-      color: @light-gray1;
+      background-color: $dark-gray5;
+      color: $light-gray1;
       border-radius: 50%;
 
       & > * {
@@ -255,7 +255,7 @@ body {
       }
 
       &:hover {
-        background-color: @blue1;
+        background-color: $blue1;
       }
     }
 
@@ -266,15 +266,15 @@ body {
 
       margin-right: 20px;
       min-width: 150px;
-      background-color: @white;
-      border-radius: @border-radius;
+      background-color: $white;
+      border-radius: $border-radius;
       overflow-y: scroll;
       padding-bottom: 10px;
 
       .column-header {
         position: sticky;
         top: 0;
-        background-color: @light-gray3;
+        background-color: $light-gray3;
         text-align: center;
         padding: 0px 0px;
         z-index: 2;
@@ -286,7 +286,7 @@ body {
         }
 
         & > *:not(:last-child) {
-          border-bottom: 1px solid @gray5;
+          border-bottom: 1px solid $gray5;
         }
       }
 
@@ -295,7 +295,7 @@ body {
 
         & > * {
           padding: 2px 10px;
-          border-bottom: 1px solid @light-gray3;
+          border-bottom: 1px solid $light-gray3;
         }
       }
     }

@@ -4,10 +4,15 @@ import { useSelector } from "react-redux";
 import { FormGroup, TextArea, Button } from "@blueprintjs/core";
 
 import { IReduxStore } from "../../../types";
+import { loader } from "graphql.macro";
 
 // GRAPHQL
-const qCommentsForAttribute = require("src/graphql/queries/commentsForAttribute.graphql");
-const mUpdateAttribute = require("src/graphql/mutations/updateAttribute.graphql");
+const qCommentsForAttribute = loader(
+  "src/graphql/queries/commentsForAttribute.graphql"
+);
+const mUpdateAttribute = loader(
+  "src/graphql/mutations/updateAttribute.graphql"
+);
 
 const Comments = () => {
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);

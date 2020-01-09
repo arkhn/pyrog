@@ -1,3 +1,4 @@
+import { loader } from "graphql.macro";
 import { client } from "../../app";
 import {
   IAction,
@@ -8,9 +9,9 @@ import {
 
 import { fetchSourceSchema } from "./sourceSchemas/actions";
 
-const qAttribute = require("../../graphql/queries/attribute.graphql");
-const resourceInfo = require("../../graphql/queries/resourceInfo.graphql");
-const sourceInfo = require("../../graphql/queries/sourceInfo.graphql");
+const qAttribute = loader("../../graphql/queries/attribute.graphql");
+const resourceInfo = loader("../../graphql/queries/resourceInfo.graphql");
+const sourceInfo = loader("../../graphql/queries/sourceInfo.graphql");
 
 // Node
 export const changeNode = (

@@ -66,7 +66,7 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
         <Button
           disabled={disabled}
           icon={icon}
-          intent={intent ? intent : null}
+          intent={intent}
           loading={loading}
           rightIcon="caret-down"
           text={displayItem(inputItem)}

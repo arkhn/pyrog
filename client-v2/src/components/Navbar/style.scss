@@ -1,8 +1,8 @@
 @import "~@blueprintjs/core/lib/css/blueprint.css";
-@import "~@blueprintjs/core/lib/less/variables";
+@import "~@blueprintjs/core/lib/scss/variables";
 
 #navbar {
-  background-color: @black;
+  background-color: $black;
 }
 
 .bp3-navbar-heading {
@@ -10,7 +10,7 @@
 
   h2 {
     margin: 0px 0px 0px 9px;
-    color: @white;
+    color: $white;
     cursor: pointer;
     // background: linear-gradient(60deg, #e66465, #9198e5);
     // background: linear-gradient(60deg, #F29D49, #DB3737);

@@ -1,5 +1,4 @@
 import * as React from "react";
-import * as ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { combineReducers, createStore, applyMiddleware } from "redux";
 import { persistStore, persistReducer } from "redux-persist";
@@ -13,8 +12,25 @@ import { RestLink } from "apollo-link-rest";
 import { onError } from "apollo-link-error";
 import { ApolloProvider } from "react-apollo";
 
-import "./style.less";
+import "./style.scss";
 import Routes from "./routes";
+import {
+  AUTH_TOKEN,
+  HTTP_BACKEND_URL,
+  CLEANING_SCRIPTS_URI
+} from "./constants";
+
+// Reducers
+
+// Data fetching reducers
+import sourceSchemas from "./services/selectedNode/sourceSchemas/reducer";
+import recommendedColumns from "./services/recommendedColumns/reducer";
+import selectedNodeReducer from "./services/selectedNode/reducer";
+import toasterReducer from "./services/toaster/reducer";
+import userReducer from "./services/user/reducer";
+
+// View reducers
+import mimic from "./views/mimic/reducer";
 
 // REDUX
 
@@ -34,18 +50,6 @@ if (process.env.NODE_ENV === "development") {
   // Log redux dispatch only in development
   middlewares.push(createLogger({}));
 }
-
-// Reducers
-
-// Data fetching reducers
-import sourceSchemas from "./services/selectedNode/sourceSchemas/reducer";
-import recommendedColumns from "./services/recommendedColumns/reducer";
-import selectedNodeReducer from "./services/selectedNode/reducer";
-import toasterReducer from "./services/toaster/reducer";
-import userReducer from "./services/user/reducer";
-
-// View reducers
-import mimic from "./views/mimic/reducer";
 
 // Data reducer (also called canonical state)
 const dataReducer = combineReducers({
@@ -82,12 +86,12 @@ let persistor = persistStore(store);
 
 // HttpLink
 const httpLink = new HttpLink({
-  uri: process.env.HTTP_BACKEND_URL,
+  uri: HTTP_BACKEND_URL,
   fetch: fetch
 });
 
 const middlewareLink = new ApolloLink((operation, forward) => {
-  const token = localStorage.getItem(process.env.AUTH_TOKEN);
+  const token = localStorage.getItem(AUTH_TOKEN);
 
   operation.setContext({
     headers: {
@@ -116,10 +120,10 @@ const links = [];
 if (process.env.NODE_ENV === "development") {
   links.push(errorLink);
 }
-if (process.env.CLEANING_SCRIPTS_URI) {
+if (CLEANING_SCRIPTS_URI) {
   links.push(
     new RestLink({
-      uri: process.env.CLEANING_SCRIPTS_URI + "/",
+      uri: CLEANING_SCRIPTS_URI + "/",
       headers: {
         "Content-Type": "application/json"
       }
@@ -135,14 +139,12 @@ export const client = new ApolloClient({
   link: ApolloLink.from(links)
 });
 
-ReactDOM.render(
+export default () => (
   <Provider store={store}>
     <ApolloProvider client={client}>
       <PersistGate loading={null} persistor={persistor}>
         <Routes />
       </PersistGate>
     </ApolloProvider>
-  </Provider>,
-  document.getElementById("application-wrapper") ||
-    document.createElement("div")
+  </Provider>
 );

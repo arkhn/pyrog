@@ -4,6 +4,7 @@ import { ISelectedSource } from "../../../types";
 
 import StaticValueForm from "./StaticValueForm";
 import DynamicColumnPicker from "./DynamicColumnPicker";
+import "./style.scss";
 
 interface IProps {
   attribute: {
@@ -13,8 +14,6 @@ interface IProps {
   schema: any;
   source: ISelectedSource;
 }
-
-import "./style.less";
 
 const TabColumnPicking = ({ attribute, schema, source }: IProps) => {
   return (

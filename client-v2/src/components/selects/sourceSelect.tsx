@@ -51,7 +51,7 @@ export default class SourceSelect extends React.Component<ISelectProps, any> {
 
     return (
       <TSelect<ISource>
-        disabled={disabled}
+        disabled={!!disabled}
         displayItem={this.displayItem}
         filterItems={this.filterByName}
         loading={loading}

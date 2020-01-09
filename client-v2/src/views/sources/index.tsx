@@ -19,11 +19,12 @@ import Navbar from "../../components/navbar";
 
 import { changeSelectedSource } from "../../services/selectedNode/actions";
 
-import "./style.less";
+import "./style.scss";
+import { loader } from "graphql.macro";
 
 // GRAPHQL
-const qSources = require("src/graphql/queries/sources.graphql");
-const mDeleteSource = require("src/graphql/mutations/deleteSource.graphql");
+const qSources = loader("src/graphql/queries/sources.graphql");
+const mDeleteSource = loader("src/graphql/mutations/deleteSource.graphql");
 
 const SourcesView = () => {
   const dispatch = useDispatch();
@@ -120,7 +121,6 @@ const SourcesView = () => {
                       isOpen={alertIsOpen}
                       canOutsideClickCancel={true}
                       onClose={(confirmed, e) => {
-                        e.stopPropagation();
                         setAlertIsOpen(false);
                         if (confirmed) {
                           deleteSource({

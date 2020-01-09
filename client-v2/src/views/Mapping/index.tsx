@@ -13,7 +13,7 @@ import FhirMappingPanel from "./FhirMappingPanel";
 // Import types
 import { IReduxStore } from "../../types";
 
-import "./style.less";
+import "./style.scss";
 
 const MappingView = () => {
   const data = useSelector((state: IReduxStore) => state.data);

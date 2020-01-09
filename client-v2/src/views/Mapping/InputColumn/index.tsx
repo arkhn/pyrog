@@ -7,19 +7,24 @@ import {
   Tag
 } from "@blueprintjs/core";
 import * as React from "react";
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from "@apollo/react-hooks";
 
 import { ISelectedSource } from "src/types";
 
 // COMPONENTS
 import Join from "./../Join";
 import ScriptSelect from "src/components/selects/scriptSelect";
+import { loader } from "graphql.macro";
 
 // GRAPHQL
-const qInputsForAttribute = require("src/graphql/queries/inputsForAttribute.graphql");
-const mUpdateInput = require("src/graphql/mutations/updateInput.graphql");
-const mDeleteInput = require("src/graphql/mutations/deleteInput.graphql");
-const mAddJoinToColumn = require("src/graphql/mutations/addJoinToColumn.graphql");
+const qInputsForAttribute = loader(
+  "src/graphql/queries/inputsForAttribute.graphql"
+);
+const mUpdateInput = loader("src/graphql/mutations/updateInput.graphql");
+const mDeleteInput = loader("src/graphql/mutations/deleteInput.graphql");
+const mAddJoinToColumn = loader(
+  "src/graphql/mutations/addJoinToColumn.graphql"
+);
 
 interface IProps {
   attribute: {
@@ -32,18 +37,11 @@ interface IProps {
 }
 
 const InputColumn = ({ attribute, input, schema, source }: IProps) => {
-  const [
-    deleteInput,
-    { loading: loadDelInput }
-  ] = useMutation(mDeleteInput);
-  const [
-    addJoinToColumn,
-    { loading: loadAddJoin }
-  ] = useMutation(mAddJoinToColumn);
-  const [
-    updateInput,
-    { loading: loadUpdInput }
-  ] = useMutation(mUpdateInput);
+  const [deleteInput, { loading: loadDelInput }] = useMutation(mDeleteInput);
+  const [addJoinToColumn, { loading: loadAddJoin }] = useMutation(
+    mAddJoinToColumn
+  );
+  const [updateInput, { loading: loadUpdInput }] = useMutation(mUpdateInput);
 
   const removeInputFromCache = (cache: any) => {
     const { attribute: dataAttribute } = cache.readQuery({
@@ -54,9 +52,8 @@ const InputColumn = ({ attribute, input, schema, source }: IProps) => {
     });
     const newDataAttribute = {
       ...dataAttribute,
-      inputs:
-        dataAttribute.inputs.filter((i: any) => i.id !== input.id),
-    }
+      inputs: dataAttribute.inputs.filter((i: any) => i.id !== input.id)
+    };
     cache.writeQuery({
       query: qInputsForAttribute,
       variables: {
@@ -64,7 +61,7 @@ const InputColumn = ({ attribute, input, schema, source }: IProps) => {
       },
       data: { attribute: newDataAttribute }
     });
-  }
+  };
 
   return (
     <div className="input-column">
@@ -77,7 +74,7 @@ const InputColumn = ({ attribute, input, schema, source }: IProps) => {
             variables: {
               id: input.id
             },
-            update: removeInputFromCache,
+            update: removeInputFromCache
           });
         }}
       />
@@ -90,15 +87,15 @@ const InputColumn = ({ attribute, input, schema, source }: IProps) => {
             </Tag>
           </div>
         ) : (
-            <div>
-              <div className="input-column-name">
-                <Breadcrumbs
-                  breadcrumbRenderer={(item: IBreadcrumbProps) => {
-                    return <div>{item.text}</div>;
-                  }}
-                  items={
-                    source.hasOwner
-                      ? [
+          <div>
+            <div className="input-column-name">
+              <Breadcrumbs
+                breadcrumbRenderer={(item: IBreadcrumbProps) => {
+                  return <div>{item.text}</div>;
+                }}
+                items={
+                  source.hasOwner
+                    ? [
                         {
                           text: (
                             <div className="stacked-tags">
@@ -130,7 +127,7 @@ const InputColumn = ({ attribute, input, schema, source }: IProps) => {
                           )
                         }
                       ]
-                      : [
+                    : [
                         {
                           text: (
                             <div className="stacked-tags">
@@ -152,62 +149,62 @@ const InputColumn = ({ attribute, input, schema, source }: IProps) => {
                           )
                         }
                       ]
-                  }
-                />
-                <div className="stacked-tags">
-                  <Tag>SCRIPT</Tag>
-                  <ScriptSelect
-                    loading={loadUpdInput}
-                    selectedScript={input.script}
-                    onChange={(script: string) => {
-                      updateInput({
-                        variables: {
-                          inputId: input.id,
-                          data: { script }
-                        }
-                      });
-                    }}
-                    onClear={(): any => {
-                      updateInput({
-                        variables: {
-                          inputId: input.id,
-                          data: { script: null }
-                        }
-                      });
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="input-column-joins">
-                <Button
-                  icon={"add"}
-                  loading={loadAddJoin}
-                  onClick={() => {
-                    addJoinToColumn({
+                }
+              />
+              <div className="stacked-tags">
+                <Tag>SCRIPT</Tag>
+                <ScriptSelect
+                  loading={loadUpdInput}
+                  selectedScript={input.script}
+                  onChange={(script: String) => {
+                    updateInput({
                       variables: {
-                        columnId: input.sqlValue.id,
+                        inputId: input.id,
+                        data: { script }
                       }
                     });
                   }}
-                >
-                  Add Join
-                </Button>
-                {input.sqlValue.joins
-                  ? input.sqlValue.joins.map((join: any, index: number) =>
+                  onClear={(): any => {
+                    updateInput({
+                      variables: {
+                        inputId: input.id,
+                        data: { script: null }
+                      }
+                    });
+                  }}
+                />
+              </div>
+            </div>
+            <div className="input-column-joins">
+              <Button
+                icon={"add"}
+                loading={loadAddJoin}
+                onClick={() => {
+                  addJoinToColumn({
+                    variables: {
+                      columnId: input.sqlValue.id
+                    }
+                  });
+                }}
+              >
+                Add Join
+              </Button>
+              {input.sqlValue.joins
+                ? input.sqlValue.joins.map((join: any, index: number) => (
                     <Join
                       key={index}
                       joinData={join}
                       schema={schema}
                       source={source}
                     />
-                  )
-                  : null}
-              </div>
+                  ))
+                : null}
             </div>
-          )}
+          </div>
+        )}
       </Card>
     </div>
-  )
+  );
 };
 
 export default InputColumn;

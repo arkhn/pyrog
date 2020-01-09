@@ -1,14 +1,13 @@
 import { IAction } from "../../types";
 import { availableTypes } from "../../mockdata/mimic";
+import { ENGINE_BACKEND_URL } from "../../constants";
 
 export const fetchRecommendedColumns = (
   fhirAttribute: string,
   type: string
 ): IAction => {
   return (dispatch: any, getState: any) => {
-    const url = `${process.env.ENGINE_BACKEND_URL}/search/${
-      availableTypes[type]
-    }`;
+    const url = `${ENGINE_BACKEND_URL}/search/${availableTypes[type]}`;
 
     return fetch(url)
       .then((response: any) => {
@@ -33,10 +32,10 @@ export const fetchBetaRecommendedColumns = (
   return (dispatch: any, getState: any) => {
     const url =
       mot_clef == "" || !mot_clef
-        ? `${process.env.ENGINE_BACKEND_URL}/beta/search/${
+        ? `${ENGINE_BACKEND_URL}/beta/search/${
             availableTypes[type]
           }/${head_table}`
-        : `${process.env.ENGINE_BACKEND_URL}/beta/search/${
+        : `${ENGINE_BACKEND_URL}/beta/search/${
             type ? availableTypes[type] : "all"
           }/${head_table}/${mot_clef}`;
 

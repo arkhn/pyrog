@@ -7,11 +7,16 @@ import {
   Elevation
 } from "@blueprintjs/core";
 import * as React from "react";
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from "@apollo/react-hooks";
+import { loader } from "graphql.macro";
 
 // GRAPHQL
-const qInputsForAttribute = require("src/graphql/queries/inputsForAttribute.graphql");
-const mCreateStaticInput = require("src/graphql/mutations/createStaticInput.graphql");
+const qInputsForAttribute = loader(
+  "src/graphql/queries/inputsForAttribute.graphql"
+);
+const mCreateStaticInput = loader(
+  "src/graphql/mutations/createStaticInput.graphql"
+);
 
 interface IProps {
   attribute: {
@@ -41,17 +46,17 @@ const StaticValueForm = ({ attribute }: IProps) => {
             ...dataAttribute,
             inputs: dataAttribute.inputs.concat([createInput])
           }
-        },
-      })
+        }
+      });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
-  const [
-    createStaticInput,
-    { loading: creatingStaticInput }
-  ] = useMutation(mCreateStaticInput, { update: addInputToCache });
+  const [createStaticInput, { loading: creatingStaticInput }] = useMutation(
+    mCreateStaticInput,
+    { update: addInputToCache }
+  );
 
   return (
     <Card elevation={Elevation.ONE}>

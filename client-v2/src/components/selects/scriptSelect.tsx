@@ -5,11 +5,12 @@ import {
 } from "@blueprintjs/select";
 import { MenuItem, Button, ButtonGroup } from "@blueprintjs/core";
 import * as React from "react";
+import { loader } from "graphql.macro";
 
 import TSelect from "./TSelect";
 import { useQuery } from "react-apollo";
 
-const cleaningScripts = require("src/graphql/queries/cleaningScripts.graphql");
+const cleaningScripts = loader("src/graphql/queries/cleaningScripts.graphql");
 
 interface IOnChange {
   (script: String): any;

@@ -11,13 +11,18 @@ import {
 import * as React from "react";
 import { Mutation, useQuery } from "react-apollo";
 import { useSelector } from "react-redux";
+import { loader } from "graphql.macro";
 
-import "./style.less";
+import "./style.scss";
 import StringSelect from "src/components/selects/stringSelect";
 import { IReduxStore } from "src/types";
 
-const qCredentialForSource = require("src/graphql/queries/credentialForSource.graphql");
-const upsertCredential = require("src/graphql/mutations/upsertCredential.graphql");
+const qCredentialForSource = loader(
+  "src/graphql/queries/credentialForSource.graphql"
+);
+const upsertCredential = loader(
+  "src/graphql/mutations/upsertCredential.graphql"
+);
 
 interface IProps {
   title: string;

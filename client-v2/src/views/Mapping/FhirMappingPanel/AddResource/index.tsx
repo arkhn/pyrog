@@ -1,35 +1,39 @@
 import { Button, FormGroup, ControlGroup } from "@blueprintjs/core";
 import React from "react";
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from "@apollo/react-hooks";
 import { useSelector } from "react-redux";
 
 import { IReduxStore } from "src/types";
 import AddResourceSelect from "src/components/selects/addResourceSelect";
+import { loader } from "graphql.macro";
 
-const qAvailableResources = require("src/graphql/queries/availableResources.graphql");
-const qResourcesForSource = require("src/graphql/queries/resourcesForSource.graphql");
-const mCreateResource = require("src/graphql/mutations/createResource.graphql");
+const qAvailableResources = loader(
+  "src/graphql/queries/availableResources.graphql"
+);
+const qResourcesForSource = loader(
+  "src/graphql/queries/resourcesForSource.graphql"
+);
+const mCreateResource = loader("src/graphql/mutations/createResource.graphql");
 
 interface IProps {
   callback: any;
 }
 
 const AddResource = ({ callback }: IProps) => {
-
   // Hooking mutation
   const onCompleted = (data: any) => {
     toaster.show({
       icon: "layout-hierarchy",
       intent: "success",
-      message: `Ressource ${
-        data.createResource.fhirType
-        } créée pour ${selectedNode.source.name}.`,
+      message: `Ressource ${data.createResource.fhirType} créée pour ${
+        selectedNode.source.name
+      }.`,
       timeout: 4000
-    })
+    });
 
-    setSelectedAddResource(data.createResource.fhirType)
-    callback()
-  }
+    setSelectedAddResource(data.createResource.fhirType);
+    callback();
+  };
 
   const onError = (error: any) => {
     toaster.show({
@@ -37,42 +41,44 @@ const AddResource = ({ callback }: IProps) => {
       intent: "danger",
       message: error.message,
       timeout: 4000
-    })
-  }
+    });
+  };
 
-  const addResourceToCache = (cache: any, { data: { createResource } }: any) => {
+  const addResourceToCache = (
+    cache: any,
+    { data: { createResource } }: any
+  ) => {
     try {
       const { source } = cache.readQuery({
         query: qResourcesForSource,
         variables: {
-          sourceId: selectedNode.source.id,
+          sourceId: selectedNode.source.id
         }
       });
       cache.writeQuery({
         query: qResourcesForSource,
         variables: {
-          sourceId: selectedNode.source.id,
+          sourceId: selectedNode.source.id
         },
         data: {
           source: {
             ...source,
             resources: source.resources.concat([createResource])
           }
-        },
-      })
+        }
+      });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
-  const [
-    createResource,
-    { loading: creatingResource }
-  ] = useMutation(
+  const [createResource, { loading: creatingResource }] = useMutation(
     mCreateResource,
     { onCompleted, onError, update: addResourceToCache }
   );
-  const { loading: loadingAvailableResources, data } = useQuery(qAvailableResources);
+  const { loading: loadingAvailableResources, data } = useQuery(
+    qAvailableResources
+  );
 
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
   const toaster = useSelector((state: IReduxStore) => state.toaster);
@@ -84,7 +90,6 @@ const AddResource = ({ callback }: IProps) => {
         <AddResourceSelect
           loading={loadingAvailableResources}
           disabled={!selectedNode.source}
-          intent={null}
           inputItem={selectedAddResource}
           items={loadingAvailableResources ? [] : data.availableResources}
           onChange={(resource: any) => {
@@ -100,7 +105,7 @@ const AddResource = ({ callback }: IProps) => {
               variables: {
                 sourceId: selectedNode.source.id,
                 resourceName: selectedAddResource
-              },
+              }
             });
           }}
         />

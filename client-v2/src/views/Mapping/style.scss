@@ -1,12 +1,12 @@
 @import "~@blueprintjs/core/lib/css/blueprint.css";
-@import "~@blueprintjs/core/lib/less/variables";
+@import "~@blueprintjs/core/lib/scss/variables";
 
-@window-padding: 20px;
-@border-radius: 6px;
+$window-padding: 20px;
+$border-radius: 6px;
 
 body {
-  background-color: @black;
-  color: @light-gray1;
+  background-color: $black;
+  color: $light-gray1;
 }
 
 .flex-row {
@@ -50,7 +50,7 @@ body {
 }
 
 .bp3-tab-list {
-  background-color: @light-gray1;
+  background-color: $light-gray1;
   overflow: hidden;
 
   & > * {
@@ -78,7 +78,7 @@ body {
 }
 
 .bp3-tab-indicator-wrapper .bp3-tab-indicator {
-  background-color: @light-gray3;
+  background-color: $light-gray3;
   height: 100%;
 }
 
@@ -92,8 +92,8 @@ body {
   }
 
   #fhir-panel {
-    background-color: @dark-gray1;
-    color: @light-gray1;
+    background-color: $dark-gray1;
+    color: $light-gray1;
     min-width: 300px;
     flex-basis: 25%;
     display: flex;
@@ -108,8 +108,8 @@ body {
     }
 
     #resource-add {
-      background-color: @dark-gray2;
-      padding: @window-padding / 2;
+      background-color: $dark-gray2;
+      padding: $window-padding / 2;
 
       .bp3-form-group,
       .bp3-form-content {
@@ -123,7 +123,7 @@ body {
     }
 
     #resource-selector {
-      margin: @window-padding / 2;
+      margin: $window-padding / 2;
       text-align: center;
 
       .bp3-form-group,
@@ -138,13 +138,13 @@ body {
     }
 
     .panel-header {
-      background-color: @black;
+      background-color: $black;
     }
   }
 
   .panel-header {
     height: 50px;
-    padding: 0 @window-padding;
+    padding: 0 $window-padding;
 
     display: flex;
     flex-direction: row;
@@ -152,8 +152,8 @@ body {
   }
 
   #exploration-panel {
-    background-color: @light-gray5;
-    color: @black;
+    background-color: $light-gray5;
+    color: $black;
     flex-basis: 75%;
     max-width: 75%;
     display: flex;
@@ -203,7 +203,7 @@ body {
     }
 
     .panel-header {
-      background-color: @gray5;
+      background-color: $gray5;
     }
 
     #column-picker {
@@ -211,10 +211,10 @@ body {
       flex-direction: column;
       justify-content: center;
 
-      padding: @window-padding;
+      padding: $window-padding;
 
       & > *:not(:last-child) {
-        margin-bottom: @window-padding;
+        margin-bottom: $window-padding;
       }
       .bp3-card h3 {
         margin: 0;
@@ -230,10 +230,10 @@ body {
       flex-direction: column;
       justify-content: center;
 
-      padding: @window-padding;
+      padding: $window-padding;
 
       & > *:not(:last-child) {
-        margin-bottom: @window-padding;
+        margin-bottom: $window-padding;
       }
 
       .bp3-card h3 {
@@ -246,7 +246,7 @@ body {
     }
 
     #column-selection {
-      background-color: @light-gray3;
+      background-color: $light-gray3;
     }
   }
 }
@@ -258,16 +258,16 @@ body {
     box-shadow: none;
 
     .bp3-icon.bp3-intent-success {
-      color: @green5;
+      color: $green5;
     }
   }
 
   .bp3-tree-node-content:hover {
-    background-color: @dark-gray3;
+    background-color: $dark-gray3;
   }
 
   .bp3-tree-node-selected .bp3-tree-node-content:hover {
-    background-color: @blue4;
+    background-color: $blue4;
   }
 
   .bp3-tree-node-content {
@@ -281,29 +281,29 @@ body {
       line-height: 1.1em;
 
       .node-type {
-        color: @gray2;
+        color: $gray2;
         font-size: 0.8em;
       }
     }
   }
 
   .bp3-tree-node-selected .bp3-tree-node-label .node-type {
-    color: @gray5;
+    color: $gray5;
   }
 }
 
 #input-columns {
-  padding: @window-padding;
+  padding: $window-padding;
   display: flex;
   flex-direction: row;
   align-items: stretch;
 
   #input-column-rows {
     flex-grow: 1;
-    margin-right: calc(@window-padding / 2);
+    margin-right: calc(#{$window-padding} / 2);
 
     & > *:not(:last-child) {
-      margin-bottom: calc(@window-padding / 2);
+      margin-bottom: calc(#{$window-padding} / 2);
     }
   }
 
@@ -311,9 +311,9 @@ body {
     display: flex;
     align-items: center;
 
-    border-left: 1px solid @gray4;
-    padding: calc(@window-padding / 2);
-    margin-left: calc(@window-padding / 2);
+    border-left: 1px solid $gray4;
+    padding: calc(#{$window-padding} / 2);
+    margin-left: calc(#{$window-padding} / 2);
   }
 
   .stacked-tags {
@@ -333,7 +333,7 @@ body {
 
     .input-column-info {
       width: 100%;
-      padding: 10px @window-padding;
+      padding: 10px $window-padding;
     }
 
     .input-column-info > * {
@@ -344,7 +344,7 @@ body {
       align-items: flex-start;
 
       & > *:not(:last-child) {
-        margin-right: @window-padding;
+        margin-right: $window-padding;
       }
 
       .input-column-name {
@@ -354,7 +354,7 @@ body {
         align-items: center;
 
         & > *:not(:last-child) {
-          margin-right: calc(@window-padding / 2);
+          margin-right: calc(#{$window-padding} / 2);
         }
       }
 
@@ -366,7 +366,7 @@ body {
         align-items: stretch;
 
         & > *:not(:last-child) {
-          margin-bottom: calc(@window-padding / 2);
+          margin-bottom: calc(#{$window-padding} / 2);
         }
 
         .join {
@@ -374,7 +374,7 @@ body {
           align-items: center;
 
           & > *:not(:last-child) {
-            margin-right: calc(@window-padding / 2);
+            margin-right: calc(#{$window-padding} / 2);
           }
         }
       }

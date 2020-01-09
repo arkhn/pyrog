@@ -1,5 +1,5 @@
 @import "~@blueprintjs/core/lib/css/blueprint.css";
-@import "~@blueprintjs/core/lib/less/variables";
+@import "~@blueprintjs/core/lib/scss/variables";
 
 .formulaires {
   margin-top: 30px;
@@ -20,16 +20,16 @@
   }
 
   .signup-form {
-    background-color: @dark-gray3;
-    color: @light-gray5;
+    background-color: $dark-gray3;
+    color: $light-gray5;
   }
 
   .login-form {
-    background-color: @light-gray2;
+    background-color: $light-gray2;
   }
 
   .warning {
-    color: @pt-intent-warning;
+    color: $pt-intent-warning;
   }
 
   .hidden {

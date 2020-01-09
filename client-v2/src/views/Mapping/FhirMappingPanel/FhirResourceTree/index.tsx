@@ -15,11 +15,18 @@ import { useSelector } from "react-redux";
 import { useQuery } from "@apollo/react-hooks";
 
 import { IReduxStore } from "src/types";
+import { loader } from "graphql.macro";
 
 // GRAPHQL
-const qResourceAttributeTree = require("src/graphql/queries/resourceAttributeTree.graphql");
-const mCreateAttribute = require("src/graphql/mutations/createAttribute.graphql");
-const mDeleteAttribute = require("src/graphql/mutations/deleteAttribute.graphql");
+const qResourceAttributeTree = loader(
+  "src/graphql/queries/resourceAttributeTree.graphql"
+);
+const mCreateAttribute = loader(
+  "src/graphql/mutations/createAttribute.graphql"
+);
+const mDeleteAttribute = loader(
+  "src/graphql/mutations/deleteAttribute.graphql"
+);
 
 interface INodeData {
   description: string;
@@ -36,7 +43,7 @@ export interface IProps {
   nodeCollapseCallback: any;
   nodeExpandCallback: any;
   onClickCallback: any;
-  selectedAttributeId: string;
+  selectedAttributeId?: string;
 }
 
 interface INodeLabelProps {
@@ -61,21 +68,21 @@ const NodeLabel = ({ node, nodePath }: INodeLabelProps) => {
     if (path.length > 0) {
       return resource.children
         ? {
-          ...resource,
-          children: resource.children.map((c: any) =>
-            c.id === path[0]
-              ? buildNewResource(c, path.splice(1), adding, data)
-              : c
-          )
-        }
+            ...resource,
+            children: resource.children.map((c: any) =>
+              c.id === path[0]
+                ? buildNewResource(c, path.splice(1), adding, data)
+                : c
+            )
+          }
         : {
-          ...resource,
-          attributes: resource.attributes.map((c: any) =>
-            c.id === path[0]
-              ? buildNewResource(c, path.splice(1), adding, data)
-              : c
-          )
-        };
+            ...resource,
+            attributes: resource.attributes.map((c: any) =>
+              c.id === path[0]
+                ? buildNewResource(c, path.splice(1), adding, data)
+                : c
+            )
+          };
     }
     return {
       ...resource,
@@ -145,13 +152,15 @@ const NodeLabel = ({ node, nodePath }: INodeLabelProps) => {
   };
 
   const hasMoreThanOneSibling = (path: String[]) => {
-    var { resource } = client.readQuery({
+    var data = client.readQuery({
       query: qResourceAttributeTree,
       variables: {
         resourceId: selectedNode.resource.id
       }
     });
-    resource = resource.attributes.find((a: any) => a.id === path[0]);
+    if (!data) return false;
+
+    let resource = data.resource.attributes.find((a: any) => a.id === path[0]);
     path = path.slice(1);
     for (var id of path) {
       resource = resource.children.find((c: any) => c.id === id);
@@ -162,45 +171,54 @@ const NodeLabel = ({ node, nodePath }: INodeLabelProps) => {
   const showContextMenu = async (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
 
-    const menu = node.isArray ? (
-      <Menu>
-        <MenuItem
-          icon={"add"}
-          onClick={() => {
-            client.mutate({
-              mutation: mCreateAttribute,
-              variables: {
-                parentId: node.id
-              },
-              update: addAttributeToCache
-            });
-          }}
-          text={"Ajouter un item"}
-        />
-      </Menu>
-    ) : node.parent &&
+    let menu;
+    if (node.isArray) {
+      menu = (
+        <Menu>
+          <MenuItem
+            icon={"add"}
+            onClick={() => {
+              client.mutate({
+                mutation: mCreateAttribute,
+                variables: {
+                  parentId: node.id
+                },
+                update: addAttributeToCache
+              });
+            }}
+            text={"Ajouter un item"}
+          />
+        </Menu>
+      );
+    } else if (
+      node.parent &&
       node.parent.isArray &&
-      hasMoreThanOneSibling(nodePath) ? (
-          <Menu>
-            <MenuItem
-              icon={"delete"}
-              onClick={() => {
-                client.mutate({
-                  mutation: mDeleteAttribute,
-                  variables: {
-                    attributeId: node.id
-                  },
-                  update: removeAttributeFromCache
-                });
-              }}
-              text={"Supprimer l'item"}
-            />
-          </Menu>
-        ) : null;
+      hasMoreThanOneSibling(nodePath)
+    ) {
+      menu = (
+        <Menu>
+          <MenuItem
+            icon={"delete"}
+            onClick={() => {
+              client.mutate({
+                mutation: mDeleteAttribute,
+                variables: {
+                  attributeId: node.id
+                },
+                update: removeAttributeFromCache
+              });
+            }}
+            text={"Supprimer l'item"}
+          />
+        </Menu>
+      );
+    }
 
-    ContextMenu.show(menu, { left: e.clientX, top: e.clientY }, () =>
-      setIsContextMenuOpen(false)
-    );
+    if (menu) {
+      ContextMenu.show(menu, { left: e.clientX, top: e.clientY }, () =>
+        setIsContextMenuOpen(false)
+      );
+    }
 
     setIsContextMenuOpen(true);
   };
@@ -213,13 +231,12 @@ const NodeLabel = ({ node, nodePath }: INodeLabelProps) => {
   );
 };
 
-
 const FhirResourceTree = ({
   selectedAttributeId,
   expandedAttributesIdList,
   nodeCollapseCallback,
   nodeExpandCallback,
-  onClickCallback,
+  onClickCallback
 }: IProps) => {
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
 
@@ -229,57 +246,54 @@ const FhirResourceTree = ({
       variables: {
         resourceId: selectedNode.resource.id
       },
-      skip: !selectedNode.resource.id,
+      skip: !selectedNode.resource.id
     }
-  )
+  );
 
   if (loadingTree) {
     return <Spinner />;
   }
 
-  var attributesTree = dataTree ? dataTree.resource.attributes : null
+  var attributesTree = dataTree ? dataTree.resource.attributes : null;
 
   // Sort tree
-  const sortByName = (a: INodeData, b: INodeData) => a.name > b.name ? 1 : -1
-  attributesTree.sort(sortByName)
+  const sortByName = (a: INodeData, b: INodeData) => (a.name > b.name ? 1 : -1);
+  attributesTree.sort(sortByName);
 
   const bfsInputs = (node: any) => {
     if (node.inputs && node.inputs.length > 0) {
-      return true
+      return true;
     } else if (node.children && node.children.length > 0) {
       return node.children.some((attribute: any) => {
-        return bfsInputs(attribute)
-      })
+        return bfsInputs(attribute);
+      });
     } else {
-      return false
+      return false;
     }
   };
 
   const forEachNode = (
-    nodes: ITreeNode[],
-    callback: (node: ITreeNode) => void
+    nodes: ITreeNode<INodeData>[],
+    callback: (node: ITreeNode<INodeData>) => void
   ) => {
     if (nodes == null) {
-      return
+      return;
     }
 
     for (const node of nodes) {
-      callback(node)
-      forEachNode(node.childNodes, callback)
+      callback(node);
+      if (node.childNodes) {
+        forEachNode(node.childNodes, callback);
+      }
     }
-  }
+  };
 
-  const genObjNodes = (
-    node: any,
-    pathAcc: string[]
-  ): ITreeNode<INodeData> => {
-    const nodeLabel = (
-      <NodeLabel node={node} nodePath={pathAcc} />
-    );
+  const genObjNodes = (node: any, pathAcc: string[]): ITreeNode<INodeData> => {
+    const nodeLabel = <NodeLabel node={node} nodePath={pathAcc} />;
 
-    const hasChildren = node.children && node.children.length > 0
-    const hasInputs = node.inputs && node.inputs.length > 0
-    const nodePath = [...pathAcc, node.id]
+    const hasChildren = node.children && node.children.length > 0;
+    const hasInputs = node.inputs && node.inputs.length > 0;
+    const nodePath = [...pathAcc, node.id];
 
     const secondaryLabel = hasInputs ? (
       <Icon icon="small-tick" intent={"success"} />
@@ -290,25 +304,17 @@ const FhirResourceTree = ({
     ) : null;
 
     return {
-      childNodes:
-        node.isArray  // We don't want to sort if isArray because all children have same name
-          ? node.children
-            .map((child: any) => {
-              return genObjNodes(child, nodePath)
-            })
-          : hasChildren
-            ? node.children
-              .sort(sortByName)
-              .map((child: any) => {
-                return genObjNodes(child, nodePath)
-              })
-            : null,
-      hasCaret: hasChildren,
-      icon: node.isArray
-        ? "multi-select"
+      childNodes: node.isArray // We don't want to sort if isArray because all children have same name
+        ? node.children.map((child: any) => {
+            return genObjNodes(child, nodePath);
+          })
         : hasChildren
-          ? "folder-open"
-          : "tag",
+        ? node.children.sort(sortByName).map((child: any) => {
+            return genObjNodes(child, nodePath);
+          })
+        : null,
+      hasCaret: hasChildren,
+      icon: node.isArray ? "multi-select" : hasChildren ? "folder-open" : "tag",
       id: node.id,
       isExpanded: false,
       isSelected: false,
@@ -317,8 +323,8 @@ const FhirResourceTree = ({
           {nodeLabel}
         </Tooltip>
       ) : (
-          nodeLabel
-        ),
+        nodeLabel
+      ),
       nodeData: {
         description: node.description,
         fhirType: node.fhirType,
@@ -326,20 +332,24 @@ const FhirResourceTree = ({
         isArray: node.isArray,
         isRequired: node.isRequired,
         name: node.name,
-        parent: node.parent,
+        parent: node.parent
       },
       secondaryLabel: secondaryLabel
-    }
-  }
+    };
+  };
 
   let nodes = attributesTree.map((attribute: any) => {
-    return genObjNodes(attribute, [])
-  })
+    return genObjNodes(attribute, []);
+  });
 
   forEachNode(nodes, (node: ITreeNode<INodeData>) => {
-    node.isSelected = node.nodeData.id == selectedAttributeId
-    node.isExpanded = expandedAttributesIdList.indexOf(node.nodeData.id) >= 0
-  })
+    if (!node.nodeData) {
+      node.isSelected = false;
+      node.isExpanded = false;
+    }
+    node.isSelected = node.nodeData!.id == selectedAttributeId;
+    node.isExpanded = expandedAttributesIdList.indexOf(node.nodeData!.id) >= 0;
+  });
 
   const handleNodeClick = (
     node: ITreeNode<INodeData>,
@@ -362,14 +372,14 @@ const FhirResourceTree = ({
       onClickCallback(node.nodeData);
     } else {
       if (node.isExpanded) {
-        node.isExpanded = false
-        nodeCollapseCallback(node)
+        node.isExpanded = false;
+        nodeCollapseCallback(node);
       } else {
-        node.isExpanded = true
-        nodeExpandCallback(node)
+        node.isExpanded = true;
+        nodeExpandCallback(node);
       }
     }
-  }
+  };
 
   return (
     <Tree
@@ -377,7 +387,7 @@ const FhirResourceTree = ({
       contents={nodes}
       onNodeClick={handleNodeClick}
     />
-  )
-}
+  );
+};
 
 export default FhirResourceTree;

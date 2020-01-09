@@ -1,17 +1,16 @@
 import {
   Button,
-  ControlGroup,
-  Elevation,
   FormGroup,
   Icon,
   InputGroup,
-  Spinner,
-  Tag
+  Tag,
+  IToaster
 } from "@blueprintjs/core";
 import * as React from "react";
-import { Mutation, Query } from "react-apollo";
+import { Mutation } from "react-apollo";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
+import { loader } from "graphql.macro";
 
 import Navbar from "../../components/navbar";
 
@@ -19,17 +18,15 @@ import { login as loginAction } from "../../services/user/actions";
 
 // Import types
 import { IReduxStore, IView } from "../../types";
+import { AUTH_TOKEN } from "../../constants";
 
-import "./style.less";
+import "./style.scss";
 
 // GRAPHQL OPERATIONS
 
-// Queries
-const me = require("../../graphql/queries/me.graphql");
-
 // Mutations
-const mutationLogin = require("../../graphql/mutations/login.graphql");
-const mutationSignup = require("../../graphql/mutations/signup.graphql");
+const mutationLogin = loader("../../graphql/mutations/login.graphql");
+const mutationSignup = loader("../../graphql/mutations/signup.graphql");
 
 export interface IAuthenticationState {}
 
@@ -46,7 +43,9 @@ interface IState {
   };
 }
 
-interface IAuthenticationViewState extends IView, IAuthenticationState {}
+interface IAuthenticationViewState extends IView, IAuthenticationState {
+  toaster: IToaster;
+}
 
 const mapReduxStateToReactProps = (
   state: IReduxStore
@@ -57,21 +56,6 @@ const mapReduxStateToReactProps = (
     toaster: state.toaster,
     user: state.dispatch
   };
-};
-
-const reduxify = (
-  mapReduxStateToReactProps: any,
-  mapDispatchToProps?: any,
-  mergeProps?: any,
-  options?: any
-): any => {
-  return (target: any) =>
-    connect(
-      mapReduxStateToReactProps,
-      mapDispatchToProps,
-      mergeProps,
-      options
-    )(target) as any;
 };
 
 class AuthenticationView extends React.Component<
@@ -109,7 +93,7 @@ class AuthenticationView extends React.Component<
               if (data.signup.token) {
                 const token = data.signup.token;
                 const { id, name, email } = data.signup.user;
-                localStorage.setItem(process.env.AUTH_TOKEN, token);
+                localStorage.setItem(AUTH_TOKEN, token);
                 dispatch(loginAction(id, name, email));
                 this.props.history.push("/");
               }
@@ -259,7 +243,7 @@ class AuthenticationView extends React.Component<
               if (data.login.token) {
                 const token = data.login.token;
                 const { id, name, email } = data.login.user;
-                localStorage.setItem(process.env.AUTH_TOKEN, token);
+                localStorage.setItem(AUTH_TOKEN, token);
                 dispatch(loginAction(id, name, email));
                 this.props.history.push("/");
               }

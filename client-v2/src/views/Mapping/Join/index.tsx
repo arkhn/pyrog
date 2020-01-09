@@ -8,11 +8,14 @@ import { ISelectedSource } from "../../../types";
 
 // COMPONENTS
 import JoinColumns from "./../JoinColumns";
+import { loader } from "graphql.macro";
 
 // GRAPHQL
-const qInputsForAttribute = require("src/graphql/queries/inputsForAttribute.graphql");
-const mUpdateJoin = require("src/graphql/mutations/updateJoin.graphql");
-const mDeleteJoin = require("src/graphql/mutations/deleteJoin.graphql");
+const qInputsForAttribute = loader(
+  "src/graphql/queries/inputsForAttribute.graphql"
+);
+const mUpdateJoin = loader("src/graphql/mutations/updateJoin.graphql");
+const mDeleteJoin = loader("src/graphql/mutations/deleteJoin.graphql");
 
 interface IProps {
   joinData: any;

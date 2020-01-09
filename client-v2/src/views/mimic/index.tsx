@@ -8,7 +8,7 @@ import {
 import * as React from "react";
 import { connect } from "react-redux";
 
-import "./style.less";
+import "./style.scss";
 
 // Import custom actions
 import { addInputColumn, changeMotClefMimic, changeTypeMimic } from "./actions";
@@ -105,10 +105,10 @@ export default class MainView extends React.Component<IMimicViewState, any> {
 
         {questions[question_index].sections[section_index].mapping_items.map(
           (item: any, index: number) => {
-            let suggested_columns = data.recommendedColumns.columnsByAttribute[
+            let suggested_columns = data!.recommendedColumns.columnsByAttribute[
               item.fhir_attribute
             ]
-              ? data.recommendedColumns.columnsByAttribute[
+              ? data!.recommendedColumns.columnsByAttribute[
                   item.fhir_attribute
                 ].map((column: any, index: number) => {
                   return (
@@ -194,7 +194,7 @@ export default class MainView extends React.Component<IMimicViewState, any> {
                     <ControlGroup>
                       <StringSelect
                         icon={"layout-hierarchy"}
-                        inputItem={stateByAttribute[item.fhir_attribute].type}
+                        inputItem={stateByAttribute[item.fhir_attribute].type!}
                         intent={"primary"}
                         items={Object.keys(availableTypes)}
                         onChange={(e: any) =>
@@ -204,7 +204,7 @@ export default class MainView extends React.Component<IMimicViewState, any> {
                               e,
                               questions[question_index].sections[section_index]
                                 .head_table,
-                              stateByAttribute[item.fhir_attribute].mot_clef
+                              stateByAttribute[item.fhir_attribute].mot_clef!
                             )
                           )
                         }
@@ -215,7 +215,7 @@ export default class MainView extends React.Component<IMimicViewState, any> {
                           this.props.dispatch(
                             changeMotClefMimic(
                               item.fhir_attribute,
-                              stateByAttribute[item.fhir_attribute].type,
+                              stateByAttribute[item.fhir_attribute].type!,
                               questions[question_index].sections[section_index]
                                 .head_table,
                               e.target.value

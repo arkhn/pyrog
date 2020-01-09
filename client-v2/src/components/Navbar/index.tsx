@@ -9,11 +9,11 @@ import Header from "./header";
 import { logout } from "../../services/user/actions";
 
 import { IReduxStore } from "../../types";
+import { AUTH_TOKEN } from "../../constants";
 
-import "./style.less";
+import "./style.scss";
 
 // Logo
-const arkhnLogoWhite = require("../../assets/img/arkhn_logo_only_white.svg");
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -30,7 +30,7 @@ const Navbar = () => {
             history.push("/");
           }}
         >
-          <span dangerouslySetInnerHTML={{ __html: arkhnLogoWhite }} />
+          <img src="arkhn_logo_only_white.svg" />
           <h2>PYROG</h2>
         </BPNavbar.Heading>
         <Header
@@ -58,7 +58,7 @@ const Navbar = () => {
             className="bp3-minimal"
             icon="log-out"
             onClick={() => {
-              localStorage.removeItem(process.env.AUTH_TOKEN);
+              localStorage.removeItem(AUTH_TOKEN);
               dispatch(logout());
               history.push("/login");
             }}
