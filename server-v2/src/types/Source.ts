@@ -108,4 +108,59 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
   _parent,
   { id },
   ctx,
-) => ctx.photon.sources.delete({ where: { id } })
+) => {
+  const source = await ctx.photon.sources.findOne({
+    where: { id },
+    include: {
+      resources: {
+        include: {
+          attributes: {
+            include: {
+              inputs: {
+                include: {
+                  sqlValue: {
+                    include: {
+                      joins: {
+                        include: {
+                          tables: true,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  await Promise.all(
+    source!.resources.map(async r => {
+      await Promise.all(
+        r.attributes.map(async a => {
+          await Promise.all(
+            a.inputs.map(async i => {
+              if (i.sqlValue) {
+                await Promise.all(
+                  i.sqlValue.joins.map(async j => {
+                    await Promise.all(
+                      j.tables.map(t =>
+                        ctx.photon.columns.delete({ where: { id: t.id } }),
+                      ),
+                    )
+                    return ctx.photon.joins.delete({ where: { id: j.id } })
+                  }),
+                )
+              }
+              return ctx.photon.inputs.delete({ where: { id: i.id } })
+            }),
+          )
+          return ctx.photon.attributes.delete({ where: { id: a.id } })
+        }),
+      )
+      return ctx.photon.resources.delete({ where: { id: r.id } })
+    }),
+  )
+  return ctx.photon.sources.delete({ where: { id } })
+}

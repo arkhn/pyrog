@@ -146,8 +146,8 @@ export const deleteResource: FieldResolver<
                 return ctx.photon.joins.delete({ where: { id: j.id } })
               }),
             )
-            return ctx.photon.inputs.delete({ where: { id: i.id } })
           }
+          return ctx.photon.inputs.delete({ where: { id: i.id } })
         }),
       )
       return ctx.photon.attributes.delete({ where: { id: a.id } })
