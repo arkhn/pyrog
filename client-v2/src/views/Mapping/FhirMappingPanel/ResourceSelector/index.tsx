@@ -1,14 +1,14 @@
-import { FormGroup, ControlGroup, Button } from "@blueprintjs/core";
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import useReactRouter from "use-react-router";
+import { FormGroup, ControlGroup, Button } from '@blueprintjs/core';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import useReactRouter from 'use-react-router';
 
-import { updateLocationParams } from "src/services/urlState";
-import { updateFhirResource } from "src/services/selectedNode/actions";
-import { IReduxStore } from "src/types";
+import { updateLocationParams } from 'src/services/urlState';
+import { updateFhirResource } from 'src/services/selectedNode/actions';
+import { IReduxStore } from 'src/types';
 
-import Drawer from "./Drawer";
-import ResourceSelect from "src/components/selects/resourceSelect";
+import Drawer from './Drawer';
+import ResourceSelect from 'src/components/selects/resourceSelect';
 
 interface IProps {
   availableResources: any;
@@ -33,9 +33,9 @@ const ResourceSelector = ({
         <ControlGroup>
           <ResourceSelect
             disabled={!source}
-            icon={"layout-hierarchy"}
+            icon={'layout-hierarchy'}
             inputItem={resource}
-            intent={"primary"}
+            intent={'primary'}
             items={availableResources}
             loading={loading}
             onChange={(resource: any) => {
@@ -49,7 +49,7 @@ const ResourceSelector = ({
               updateLocationParams(
                 history,
                 location,
-                "resourceId",
+                'resourceId',
                 resource.id
               );
             }}

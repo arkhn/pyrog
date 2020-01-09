@@ -1,17 +1,17 @@
-import * as React from "react";
-import { useQuery, useMutation } from "@apollo/react-hooks";
-import { useSelector } from "react-redux";
-import { FormGroup, TextArea, Button } from "@blueprintjs/core";
+import * as React from 'react';
+import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useSelector } from 'react-redux';
+import { FormGroup, TextArea, Button } from '@blueprintjs/core';
 
-import { IReduxStore } from "../../../types";
-import { loader } from "graphql.macro";
+import { IReduxStore } from '../../../types';
+import { loader } from 'graphql.macro';
 
 // GRAPHQL
 const qCommentsForAttribute = loader(
-  "src/graphql/queries/commentsForAttribute.graphql"
+  'src/graphql/queries/commentsForAttribute.graphql'
 );
 const mUpdateAttribute = loader(
-  "src/graphql/mutations/updateAttribute.graphql"
+  'src/graphql/mutations/updateAttribute.graphql'
 );
 
 const Comments = () => {
@@ -25,18 +25,18 @@ const Comments = () => {
   });
   const [updateAttribute] = useMutation(mUpdateAttribute);
 
-  const [comments, setComments] = React.useState("");
+  const [comments, setComments] = React.useState('');
 
   React.useEffect(() => {
-    setComments(data && data.attribute.comments ? data.attribute.comments : "");
-  }, [selectedNode, loading]);
+    setComments(data && data.attribute.comments ? data.attribute.comments : '');
+  }, [data]);
 
   return (
     <div id="comment">
       <FormGroup label={<h3>Comments</h3>}>
         <div id="comment-input">
           <TextArea
-            className={"bp3-fill"}
+            className={'bp3-fill'}
             value={comments}
             disabled={loading || !selectedNode.attribute.id}
             onChange={e => {

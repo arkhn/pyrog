@@ -1,25 +1,25 @@
-import React from "react";
-import { useQuery } from "@apollo/react-hooks";
-import { useSelector, useDispatch } from "react-redux";
-import useReactRouter from "use-react-router";
+import React from 'react';
+import { useQuery } from '@apollo/react-hooks';
+import { useSelector, useDispatch } from 'react-redux';
+import useReactRouter from 'use-react-router';
 
 // ACTIONS
-import { updateFhirAttribute } from "src/services/selectedNode/actions";
+import { updateFhirAttribute } from 'src/services/selectedNode/actions';
 
 // COMPONENTS
-import AddResource from "./AddResource";
-import FhirResourceTree from "./FhirResourceTree";
-import ResourceSelector from "./ResourceSelector";
+import AddResource from './AddResource';
+import FhirResourceTree from './FhirResourceTree';
+import ResourceSelector from './ResourceSelector';
 
-import { IReduxStore } from "src/types";
+import { IReduxStore } from 'src/types';
 
-import { updateLocationParams } from "src/services/urlState";
-import { loader } from "graphql.macro";
+import { updateLocationParams } from 'src/services/urlState';
+import { loader } from 'graphql.macro';
 
 
 // GRAPHQL
 const qResourcesForSource = loader(
-  "src/graphql/queries/resourcesForSource.graphql"
+  'src/graphql/queries/resourcesForSource.graphql'
 );
 
 const FhirMappingPanel = () => {
@@ -63,7 +63,7 @@ const FhirMappingPanel = () => {
           }}
           onClickCallback={(nodeData: any) => {
             dispatch(updateFhirAttribute(nodeData.id, nodeData.name));
-            updateLocationParams(history, location, "attributeId", nodeData.id);
+            updateLocationParams(history, location, 'attributeId', nodeData.id);
           }}
           selectedAttributeId={
             selectedNode.attribute && selectedNode.attribute.id

@@ -4,10 +4,10 @@ import {
   Cell,
   Utils,
   TableLoadingOption
-} from "@blueprintjs/table";
-import * as React from "react";
+} from '@blueprintjs/table';
+import * as React from 'react';
 
-import "./style.scss";
+import './style.scss';
 
 interface IProps {
   fields: string[];
@@ -16,12 +16,6 @@ interface IProps {
 }
 
 const TableViewer = ({ rows, fields, isLoading }: IProps) => {
-  const getCellRenderer = (fieldName: string) => {
-    return (rowIndex: number) => {
-      return <Cell>{rows[rowIndex][fieldName]}</Cell>;
-    };
-  };
-
   const [columns, setColumns] = React.useState([] as React.ReactElement[]);
 
   React.useEffect(() => {
@@ -31,7 +25,7 @@ const TableViewer = ({ rows, fields, isLoading }: IProps) => {
           <Column
             key={index}
             name={field}
-            cellRenderer={getCellRenderer(field)}
+            cellRenderer={(i: number) => <Cell>{rows[i][field]}</Cell>}
           />
         );
       })

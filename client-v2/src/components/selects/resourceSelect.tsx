@@ -1,13 +1,13 @@
-import * as React from "react";
-import { MenuItem, Intent, Position } from "@blueprintjs/core";
+import * as React from 'react';
+import { MenuItem, Intent, Position } from '@blueprintjs/core';
 import {
   ItemPredicate,
   ItemListPredicate,
   ItemRenderer
-} from "@blueprintjs/select";
-import { IconName } from "@blueprintjs/icons";
+} from '@blueprintjs/select';
+import { IconName } from '@blueprintjs/icons';
 
-import TSelect from "./TSelect";
+import TSelect from './TSelect';
 
 interface IResource {
   id: string;
@@ -64,7 +64,7 @@ export default class ResourceSelect extends React.Component<ISelectProps, any> {
   };
 
   private displayItem = function(resource: IResource): string {
-    return resource ? resource.fhirType : "None";
+    return resource ? resource.fhirType : 'None';
   };
 
   public render() {
@@ -92,7 +92,7 @@ export default class ResourceSelect extends React.Component<ISelectProps, any> {
         onChange={onChange}
         popoverProps={{
           autoFocus: true,
-          boundary: "viewport",
+          boundary: 'viewport',
           canEscapeKeyClose: true,
           lazy: true,
           position: Position.RIGHT_BOTTOM,

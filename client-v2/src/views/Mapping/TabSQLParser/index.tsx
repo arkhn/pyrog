@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   Card,
   ControlGroup,
@@ -7,10 +7,10 @@ import {
   Breadcrumbs,
   Tag,
   IBreadcrumbProps
-} from "@blueprintjs/core";
-import SQLRequestParser from "../SQLRequestParser";
+} from '@blueprintjs/core';
+import SQLRequestParser from '../SQLRequestParser';
 
-const sqlParser = require("js-sql-parser");
+const sqlParser = require('js-sql-parser');
 
 const TabSQLParser = () => {
   const [table, setTable] = React.useState(null);
@@ -73,7 +73,7 @@ const inputColumnComponent = (column: any, table: any, index: number) => (
                 text: (
                   <div className="stacked-tags">
                     <Tag minimal={true}>TABLE</Tag>
-                    <Tag intent={"success"} large={true}>
+                    <Tag intent={'success'} large={true}>
                       {table}
                     </Tag>
                   </div>
@@ -83,7 +83,7 @@ const inputColumnComponent = (column: any, table: any, index: number) => (
                 text: (
                   <div className="stacked-tags">
                     <Tag minimal={true}>COLUMN</Tag>
-                    <Tag intent={"success"} large={true}>
+                    <Tag intent={'success'} large={true}>
                       {column.value}
                     </Tag>
                   </div>

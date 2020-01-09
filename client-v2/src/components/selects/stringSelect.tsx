@@ -1,15 +1,10 @@
-import * as React from "react";
-import { MenuItem, Intent, IPopoverProps } from "@blueprintjs/core";
+import * as React from 'react';
+import { MenuItem, Intent, IPopoverProps } from '@blueprintjs/core';
 
-import {
-  Select,
-  ItemPredicate,
-  ItemRenderer,
-  ItemListPredicate
-} from "@blueprintjs/select";
-import { IconName } from "@blueprintjs/icons";
+import { ItemPredicate, ItemRenderer } from '@blueprintjs/select';
+import { IconName } from '@blueprintjs/icons';
 
-import TSelect from "./TSelect";
+import TSelect from './TSelect';
 
 interface ISelectProps {
   disabled?: boolean;
@@ -47,7 +42,7 @@ export default class StringSelect extends React.Component<ISelectProps, any> {
   };
 
   private displayItem = function(item: string): string {
-    return item ? item : "None";
+    return item ? item : 'None';
   };
 
   public render() {

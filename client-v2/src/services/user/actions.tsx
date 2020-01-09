@@ -1,8 +1,8 @@
-import { IAction } from "../../types";
+import { IAction } from '../../types';
 
 export const login = (id: string, name: string, email: string): IAction => {
   return {
-    type: "LOGIN",
+    type: 'LOGIN',
     payload: {
       id,
       name,
@@ -13,7 +13,7 @@ export const login = (id: string, name: string, email: string): IAction => {
 
 export const logout = (): IAction => {
   return {
-    type: "LOGOUT",
+    type: 'LOGOUT',
     payload: {}
   };
 };

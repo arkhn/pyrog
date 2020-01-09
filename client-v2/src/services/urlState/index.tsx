@@ -1,5 +1,5 @@
-import { History, Location } from "history";
-import * as QueryString from "query-string";
+import { History, Location } from 'history';
+import * as QueryString from 'query-string';
 
 // This function updates the current url with new information.
 // Before: url/pathname?attr1=value1
@@ -23,7 +23,7 @@ export const deleteLocationParams = (
   location: Location<any>,
   keys: string[]
 ) => {
-  let qs = { ...QueryString.parse(location.search) };
+  const qs = { ...QueryString.parse(location.search) };
   keys.forEach(key => delete qs[key]);
 
   history.push({ search: QueryString.stringify(qs) });

@@ -5,28 +5,28 @@ import {
   InputGroup,
   Tag,
   IToaster
-} from "@blueprintjs/core";
-import * as React from "react";
-import { Mutation } from "react-apollo";
-import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
-import { loader } from "graphql.macro";
+} from '@blueprintjs/core';
+import * as React from 'react';
+import { Mutation } from 'react-apollo';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { loader } from 'graphql.macro';
 
-import Navbar from "../../components/navbar";
+import Navbar from '../../components/navbar';
 
-import { login as loginAction } from "../../services/user/actions";
+import { login as loginAction } from '../../services/user/actions';
 
 // Import types
-import { IReduxStore, IView } from "../../types";
-import { AUTH_TOKEN } from "../../constants";
+import { IReduxStore, IView } from '../../types';
+import { AUTH_TOKEN } from '../../constants';
 
-import "./style.scss";
+import './style.scss';
 
 // GRAPHQL OPERATIONS
 
 // Mutations
-const mutationLogin = loader("../../graphql/mutations/login.graphql");
-const mutationSignup = loader("../../graphql/mutations/signup.graphql");
+const mutationLogin = loader('../../graphql/mutations/login.graphql');
+const mutationSignup = loader('../../graphql/mutations/signup.graphql');
 
 export interface IAuthenticationState {}
 
@@ -66,20 +66,20 @@ class AuthenticationView extends React.Component<
     super(props);
     this.state = {
       login: {
-        email: "",
-        password: ""
+        email: '',
+        password: ''
       },
       signup: {
-        email: "",
-        name: "",
-        password: "",
-        confirmPassword: ""
+        email: '',
+        name: '',
+        password: '',
+        confirmPassword: ''
       }
     };
   }
 
   public render = () => {
-    const { data, dispatch } = this.props;
+    const { dispatch } = this.props;
 
     const { login, signup } = this.state;
 
@@ -95,16 +95,16 @@ class AuthenticationView extends React.Component<
                 const { id, name, email } = data.signup.user;
                 localStorage.setItem(AUTH_TOKEN, token);
                 dispatch(loginAction(id, name, email));
-                this.props.history.push("/");
+                this.props.history.push('/');
               }
             }}
             onError={(error: any) => {
               this.props.toaster.show({
-                icon: "error",
-                intent: "danger",
+                icon: 'error',
+                intent: 'danger',
                 message:
-                  error.message ==
-                  "GraphQL error: A unique constraint would be violated on User. Details: Field name = email"
+                  error.message ===
+                  'GraphQL error: A unique constraint would be violated on User. Details: Field name = email'
                     ? "L'adresse mail est déjà enregistrée."
                     : "Une erreur est survenue lors de l'inscription.",
                 timeout: 4000
@@ -186,18 +186,18 @@ class AuthenticationView extends React.Component<
                       placeholder="Mot de passe"
                       rightElement={
                         signup.confirmPassword ? (
-                          signup.confirmPassword != signup.password ? (
+                          signup.confirmPassword !== signup.password ? (
                             <Tag minimal={true}>
-                              <Icon color={"#EB532D"} icon={"cross"} />
+                              <Icon color={'#EB532D'} icon={'cross'} />
                             </Tag>
                           ) : (
                             <Tag minimal={true}>
-                              <Icon color={"#15B371"} icon={"tick"} />
+                              <Icon color={'#15B371'} icon={'tick'} />
                             </Tag>
                           )
                         ) : (
-                          <Tag className={"hidden"} minimal={true}>
-                            <Icon icon={"tick"} />
+                          <Tag className={'hidden'} minimal={true}>
+                            <Icon icon={'tick'} />
                           </Tag>
                         )
                       }
@@ -219,13 +219,13 @@ class AuthenticationView extends React.Component<
                     <Button
                       disabled={
                         loading ||
-                        signup.password == "" ||
-                        signup.password != signup.confirmPassword
+                        signup.password === '' ||
+                        signup.password !== signup.confirmPassword
                       }
                       intent="primary"
                       large
                       loading={loading}
-                      type={"submit"}
+                      type={'submit'}
                     >
                       S'inscrire
                     </Button>
@@ -245,18 +245,18 @@ class AuthenticationView extends React.Component<
                 const { id, name, email } = data.login.user;
                 localStorage.setItem(AUTH_TOKEN, token);
                 dispatch(loginAction(id, name, email));
-                this.props.history.push("/");
+                this.props.history.push('/');
               }
             }}
             onError={(error: any) => {
               this.props.toaster.show({
-                icon: "error",
-                intent: "danger",
+                icon: 'error',
+                intent: 'danger',
                 message:
-                  error.message == "GraphQL error: Invalid password"
-                    ? "Le mot de passe est incorrect."
+                  error.message === 'GraphQL error: Invalid password'
+                    ? 'Le mot de passe est incorrect.'
                     : error.message.startsWith(
-                        "GraphQL error: No such user found for email"
+                        'GraphQL error: No such user found for email'
                       )
                     ? "L'adresse utilisée n'est pas enregistrée."
                     : "Une erreur est survenue lors de l'authentification.",
@@ -315,7 +315,7 @@ class AuthenticationView extends React.Component<
                   <FormGroup>
                     <Button
                       disabled={
-                        loading || login.password == "" || login.email == ""
+                        loading || login.password === '' || login.email === ''
                       }
                       intent="primary"
                       large
@@ -342,6 +342,6 @@ class AuthenticationView extends React.Component<
   };
 }
 
-export default withRouter(connect(mapReduxStateToReactProps)(
-  AuthenticationView
-) as any);
+export default withRouter(
+  connect(mapReduxStateToReactProps)(AuthenticationView) as any
+);

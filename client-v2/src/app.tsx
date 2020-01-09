@@ -1,36 +1,36 @@
-import * as React from "react";
-import { Provider } from "react-redux";
-import { combineReducers, createStore, applyMiddleware } from "redux";
-import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
-import { PersistGate } from "redux-persist/integration/react";
-import { createLogger } from "redux-logger";
+import * as React from 'react';
+import { Provider } from 'react-redux';
+import { combineReducers, createStore, applyMiddleware } from 'redux';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
+import { PersistGate } from 'redux-persist/integration/react';
+import { createLogger } from 'redux-logger';
 
-import { HttpLink, InMemoryCache, ApolloClient } from "apollo-client-preset";
-import { ApolloLink } from "apollo-link";
-import { RestLink } from "apollo-link-rest";
-import { onError } from "apollo-link-error";
-import { ApolloProvider } from "react-apollo";
+import { HttpLink, InMemoryCache, ApolloClient } from 'apollo-client-preset';
+import { ApolloLink } from 'apollo-link';
+import { RestLink } from 'apollo-link-rest';
+import { onError } from 'apollo-link-error';
+import { ApolloProvider } from 'react-apollo';
 
-import "./style.scss";
-import Routes from "./routes";
+import './style.scss';
+import Routes from './routes';
 import {
   AUTH_TOKEN,
   HTTP_BACKEND_URL,
   CLEANING_SCRIPTS_URI
-} from "./constants";
+} from './constants';
 
 // Reducers
 
 // Data fetching reducers
-import sourceSchemas from "./services/selectedNode/sourceSchemas/reducer";
-import recommendedColumns from "./services/recommendedColumns/reducer";
-import selectedNodeReducer from "./services/selectedNode/reducer";
-import toasterReducer from "./services/toaster/reducer";
-import userReducer from "./services/user/reducer";
+import sourceSchemas from './services/selectedNode/sourceSchemas/reducer';
+import recommendedColumns from './services/recommendedColumns/reducer';
+import selectedNodeReducer from './services/selectedNode/reducer';
+import toasterReducer from './services/toaster/reducer';
+import userReducer from './services/user/reducer';
 
 // View reducers
-import mimic from "./views/mimic/reducer";
+import mimic from './views/mimic/reducer';
 
 // REDUX
 
@@ -39,14 +39,14 @@ const middlewares = [
   function thunkMiddleware({ dispatch, getState }: any) {
     return function(next: any) {
       return function(action: any) {
-        return typeof action === "function"
+        return typeof action === 'function'
           ? action(dispatch, getState)
           : next(action);
       };
     };
   }
 ];
-if (process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV === 'development') {
   // Log redux dispatch only in development
   middlewares.push(createLogger({}));
 }
@@ -72,7 +72,7 @@ const mainReducer = combineReducers({
 
 // Store
 const persistConfig = {
-  key: "root",
+  key: 'root',
   storage
 };
 const persistedReducer = persistReducer(persistConfig, mainReducer);
@@ -80,7 +80,7 @@ const persistedReducer = persistReducer(persistConfig, mainReducer);
 const finalCreateStore = applyMiddleware(...middlewares)(createStore);
 const store = finalCreateStore(persistedReducer);
 
-let persistor = persistStore(store);
+const persistor = persistStore(store);
 
 // APOLLO
 
@@ -95,7 +95,7 @@ const middlewareLink = new ApolloLink((operation, forward) => {
 
   operation.setContext({
     headers: {
-      Authorization: token ? `Bearer ${token}` : ""
+      Authorization: token ? `Bearer ${token}` : ''
     }
   });
 
@@ -117,15 +117,15 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 
 // Aggregate all links
 const links = [];
-if (process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV === 'development') {
   links.push(errorLink);
 }
 if (CLEANING_SCRIPTS_URI) {
   links.push(
     new RestLink({
-      uri: CLEANING_SCRIPTS_URI + "/",
+      uri: CLEANING_SCRIPTS_URI + '/',
       headers: {
-        "Content-Type": "application/json"
+        'Content-Type': 'application/json'
       }
     })
   );

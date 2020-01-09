@@ -1,17 +1,17 @@
-import { loader } from "graphql.macro";
-import { client } from "../../app";
+import { loader } from 'graphql.macro';
+import { client } from '../../app';
 import {
   IAction,
   ISelectedSource,
   ISelectedResource,
   ISelectedAttribute
-} from "../../types";
+} from '../../types';
 
-import { fetchSourceSchema } from "./sourceSchemas/actions";
+import { fetchSourceSchema } from './sourceSchemas/actions';
 
-const qAttribute = loader("../../graphql/queries/attribute.graphql");
-const resourceInfo = loader("../../graphql/queries/resourceInfo.graphql");
-const sourceInfo = loader("../../graphql/queries/sourceInfo.graphql");
+const qAttribute = loader('../../graphql/queries/attribute.graphql');
+const resourceInfo = loader('../../graphql/queries/resourceInfo.graphql');
+const sourceInfo = loader('../../graphql/queries/sourceInfo.graphql');
 
 // Node
 export const changeNode = (
@@ -73,7 +73,7 @@ export const updateNode = (
   attribute: ISelectedAttribute
 ): IAction => {
   return {
-    type: "UPDATE_NODE",
+    type: 'UPDATE_NODE',
     payload: {
       source,
       resource,
@@ -109,7 +109,7 @@ export const updateSelectedSource = (
   hasOwner: boolean
 ): IAction => {
   return {
-    type: "UPDATE_SELECTED_SOURCE",
+    type: 'UPDATE_SELECTED_SOURCE',
     payload: {
       id,
       name,
@@ -121,7 +121,7 @@ export const updateSelectedSource = (
 
 export const deselectSource = (): IAction => {
   return {
-    type: "DESELECTED_SOURCE"
+    type: 'DESELECTED_SOURCE'
   };
 };
 
@@ -132,7 +132,7 @@ export const updateFhirResource = (
   label: string
 ): IAction => {
   return {
-    type: "UPDATE_FHIR_RESOURCE",
+    type: 'UPDATE_FHIR_RESOURCE',
     payload: {
       fhirType,
       resourceId,
@@ -143,7 +143,7 @@ export const updateFhirResource = (
 
 export const deselectFhirResource = (): IAction => {
   return {
-    type: "DESELECTED_FHIR_RESOURCE"
+    type: 'DESELECTED_FHIR_RESOURCE'
   };
 };
 
@@ -153,7 +153,7 @@ export const updateFhirAttribute = (
   attributeName: string
 ): IAction => {
   return {
-    type: "UPDATE_FHIR_ATTRIBUTE",
+    type: 'UPDATE_FHIR_ATTRIBUTE',
     payload: {
       attributeId,
       attributeName

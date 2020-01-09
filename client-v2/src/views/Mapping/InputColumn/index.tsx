@@ -5,25 +5,25 @@ import {
   Elevation,
   IBreadcrumbProps,
   Tag
-} from "@blueprintjs/core";
-import * as React from "react";
-import { useMutation } from "@apollo/react-hooks";
+} from '@blueprintjs/core';
+import * as React from 'react';
+import { useMutation } from '@apollo/react-hooks';
 
-import { ISelectedSource } from "src/types";
+import { ISelectedSource } from 'src/types';
 
 // COMPONENTS
-import Join from "./../Join";
-import ScriptSelect from "src/components/selects/scriptSelect";
-import { loader } from "graphql.macro";
+import Join from './../Join';
+import ScriptSelect from 'src/components/selects/scriptSelect';
+import { loader } from 'graphql.macro';
 
 // GRAPHQL
 const qInputsForAttribute = loader(
-  "src/graphql/queries/inputsForAttribute.graphql"
+  'src/graphql/queries/inputsForAttribute.graphql'
 );
-const mUpdateInput = loader("src/graphql/mutations/updateInput.graphql");
-const mDeleteInput = loader("src/graphql/mutations/deleteInput.graphql");
+const mUpdateInput = loader('src/graphql/mutations/updateInput.graphql');
+const mDeleteInput = loader('src/graphql/mutations/deleteInput.graphql');
 const mAddJoinToColumn = loader(
-  "src/graphql/mutations/addJoinToColumn.graphql"
+  'src/graphql/mutations/addJoinToColumn.graphql'
 );
 
 interface IProps {
@@ -66,7 +66,7 @@ const InputColumn = ({ attribute, input, schema, source }: IProps) => {
   return (
     <div className="input-column">
       <Button
-        icon={"trash"}
+        icon={'trash'}
         loading={loadDelInput}
         minimal={true}
         onClick={() => {
@@ -82,7 +82,7 @@ const InputColumn = ({ attribute, input, schema, source }: IProps) => {
         {input.staticValue ? (
           <div className="input-column-name">
             <Tag large={true}>Static</Tag>
-            <Tag intent={"success"} large={true} minimal={true}>
+            <Tag intent={'success'} large={true} minimal={true}>
               {input.staticValue}
             </Tag>
           </div>
@@ -100,7 +100,7 @@ const InputColumn = ({ attribute, input, schema, source }: IProps) => {
                           text: (
                             <div className="stacked-tags">
                               <Tag minimal={true}>OWNER</Tag>
-                              <Tag intent={"success"} large={true}>
+                              <Tag intent={'success'} large={true}>
                                 {input.sqlValue.owner}
                               </Tag>
                             </div>
@@ -110,7 +110,7 @@ const InputColumn = ({ attribute, input, schema, source }: IProps) => {
                           text: (
                             <div className="stacked-tags">
                               <Tag minimal={true}>TABLE</Tag>
-                              <Tag intent={"success"} large={true}>
+                              <Tag intent={'success'} large={true}>
                                 {input.sqlValue.table}
                               </Tag>
                             </div>
@@ -120,7 +120,7 @@ const InputColumn = ({ attribute, input, schema, source }: IProps) => {
                           text: (
                             <div className="stacked-tags">
                               <Tag minimal={true}>COLUMN</Tag>
-                              <Tag intent={"success"} large={true}>
+                              <Tag intent={'success'} large={true}>
                                 {input.sqlValue.column}
                               </Tag>
                             </div>
@@ -132,7 +132,7 @@ const InputColumn = ({ attribute, input, schema, source }: IProps) => {
                           text: (
                             <div className="stacked-tags">
                               <Tag minimal={true}>TABLE</Tag>
-                              <Tag intent={"success"} large={true}>
+                              <Tag intent={'success'} large={true}>
                                 {input.sqlValue.table}
                               </Tag>
                             </div>
@@ -142,7 +142,7 @@ const InputColumn = ({ attribute, input, schema, source }: IProps) => {
                           text: (
                             <div className="stacked-tags">
                               <Tag minimal={true}>COLUMN</Tag>
-                              <Tag intent={"success"} large={true}>
+                              <Tag intent={'success'} large={true}>
                                 {input.sqlValue.column}
                               </Tag>
                             </div>
@@ -156,7 +156,7 @@ const InputColumn = ({ attribute, input, schema, source }: IProps) => {
                 <ScriptSelect
                   loading={loadUpdInput}
                   selectedScript={input.script}
-                  onChange={(script: String) => {
+                  onChange={(script: string) => {
                     updateInput({
                       variables: {
                         inputId: input.id,
@@ -177,7 +177,7 @@ const InputColumn = ({ attribute, input, schema, source }: IProps) => {
             </div>
             <div className="input-column-joins">
               <Button
-                icon={"add"}
+                icon={'add'}
                 loading={loadAddJoin}
                 onClick={() => {
                   addJoinToColumn({

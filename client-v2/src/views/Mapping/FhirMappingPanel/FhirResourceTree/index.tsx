@@ -1,5 +1,5 @@
-import { Spinner } from "@blueprintjs/core";
-import { useApolloClient } from "@apollo/react-hooks";
+import { Spinner } from '@blueprintjs/core';
+import { useApolloClient } from '@apollo/react-hooks';
 import {
   Classes,
   ContextMenu,
@@ -9,23 +9,23 @@ import {
   MenuItem,
   Tooltip,
   Tree
-} from "@blueprintjs/core";
-import React from "react";
-import { useSelector } from "react-redux";
-import { useQuery } from "@apollo/react-hooks";
+} from '@blueprintjs/core';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { useQuery } from '@apollo/react-hooks';
 
-import { IReduxStore } from "src/types";
-import { loader } from "graphql.macro";
+import { IReduxStore } from 'src/types';
+import { loader } from 'graphql.macro';
 
 // GRAPHQL
 const qResourceAttributeTree = loader(
-  "src/graphql/queries/resourceAttributeTree.graphql"
+  'src/graphql/queries/resourceAttributeTree.graphql'
 );
 const mCreateAttribute = loader(
-  "src/graphql/mutations/createAttribute.graphql"
+  'src/graphql/mutations/createAttribute.graphql'
 );
 const mDeleteAttribute = loader(
-  "src/graphql/mutations/deleteAttribute.graphql"
+  'src/graphql/mutations/deleteAttribute.graphql'
 );
 
 interface INodeData {
@@ -48,7 +48,7 @@ export interface IProps {
 
 interface INodeLabelProps {
   node: INodeData;
-  nodePath: String[];
+  nodePath: string[];
 }
 
 const NodeLabel = ({ node, nodePath }: INodeLabelProps) => {
@@ -56,12 +56,10 @@ const NodeLabel = ({ node, nodePath }: INodeLabelProps) => {
 
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
 
-  const [isContextMenuOpen, setIsContextMenuOpen] = React.useState(false);
-
   // Methods to update Apollo cache after creation/deletion mutations
   const buildNewResource = (
     resource: any,
-    path: String[],
+    path: string[],
     adding: boolean,
     data: any
   ): INodeData => {
@@ -151,8 +149,8 @@ const NodeLabel = ({ node, nodePath }: INodeLabelProps) => {
     }
   };
 
-  const hasMoreThanOneSibling = (path: String[]) => {
-    var data = client.readQuery({
+  const hasMoreThanOneSibling = (path: string[]) => {
+    const data = client.readQuery({
       query: qResourceAttributeTree,
       variables: {
         resourceId: selectedNode.resource.id
@@ -162,7 +160,7 @@ const NodeLabel = ({ node, nodePath }: INodeLabelProps) => {
 
     let resource = data.resource.attributes.find((a: any) => a.id === path[0]);
     path = path.slice(1);
-    for (var id of path) {
+    for (const id of path) {
       resource = resource.children.find((c: any) => c.id === id);
     }
     return resource.children.length > 1;
@@ -176,7 +174,7 @@ const NodeLabel = ({ node, nodePath }: INodeLabelProps) => {
       menu = (
         <Menu>
           <MenuItem
-            icon={"add"}
+            icon={'add'}
             onClick={() => {
               client.mutate({
                 mutation: mCreateAttribute,
@@ -186,7 +184,7 @@ const NodeLabel = ({ node, nodePath }: INodeLabelProps) => {
                 update: addAttributeToCache
               });
             }}
-            text={"Ajouter un item"}
+            text={'Ajouter un item'}
           />
         </Menu>
       );
@@ -198,7 +196,7 @@ const NodeLabel = ({ node, nodePath }: INodeLabelProps) => {
       menu = (
         <Menu>
           <MenuItem
-            icon={"delete"}
+            icon={'delete'}
             onClick={() => {
               client.mutate({
                 mutation: mDeleteAttribute,
@@ -215,18 +213,14 @@ const NodeLabel = ({ node, nodePath }: INodeLabelProps) => {
     }
 
     if (menu) {
-      ContextMenu.show(menu, { left: e.clientX, top: e.clientY }, () =>
-        setIsContextMenuOpen(false)
-      );
+      ContextMenu.show(menu, { left: e.clientX, top: e.clientY });
     }
-
-    setIsContextMenuOpen(true);
   };
 
   return (
-    <div className={"node-label"} onContextMenu={showContextMenu}>
+    <div className={'node-label'} onContextMenu={showContextMenu}>
       <div>{node.name}</div>
-      <div className={"node-type"}>{node.fhirType}</div>
+      <div className={'node-type'}>{node.fhirType}</div>
     </div>
   );
 };
@@ -254,7 +248,7 @@ const FhirResourceTree = ({
     return <Spinner />;
   }
 
-  var attributesTree = dataTree ? dataTree.resource.attributes : null;
+  const attributesTree = dataTree ? dataTree.resource.attributes : null;
 
   // Sort tree
   const sortByName = (a: INodeData, b: INodeData) => (a.name > b.name ? 1 : -1);
@@ -296,7 +290,7 @@ const FhirResourceTree = ({
     const nodePath = [...pathAcc, node.id];
 
     const secondaryLabel = hasInputs ? (
-      <Icon icon="small-tick" intent={"success"} />
+      <Icon icon="small-tick" intent={'success'} />
     ) : node.isRequired ? (
       <Icon icon="dot" intent="warning" />
     ) : bfsInputs(node) ? (
@@ -314,12 +308,12 @@ const FhirResourceTree = ({
           })
         : null,
       hasCaret: hasChildren,
-      icon: node.isArray ? "multi-select" : hasChildren ? "folder-open" : "tag",
+      icon: node.isArray ? 'multi-select' : hasChildren ? 'folder-open' : 'tag',
       id: node.id,
       isExpanded: false,
       isSelected: false,
       label: node.description ? (
-        <Tooltip boundary={"viewport"} content={node.description}>
+        <Tooltip boundary={'viewport'} content={node.description}>
           {nodeLabel}
         </Tooltip>
       ) : (
@@ -338,7 +332,7 @@ const FhirResourceTree = ({
     };
   };
 
-  let nodes = attributesTree.map((attribute: any) => {
+  const nodes = attributesTree.map((attribute: any) => {
     return genObjNodes(attribute, []);
   });
 
@@ -347,7 +341,7 @@ const FhirResourceTree = ({
       node.isSelected = false;
       node.isExpanded = false;
     }
-    node.isSelected = node.nodeData!.id == selectedAttributeId;
+    node.isSelected = node.nodeData!.id === selectedAttributeId;
     node.isExpanded = expandedAttributesIdList.indexOf(node.nodeData!.id) >= 0;
   });
 

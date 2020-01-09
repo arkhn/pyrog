@@ -2,18 +2,18 @@ import {
   ItemListPredicate,
   ItemPredicate,
   ItemRenderer
-} from "@blueprintjs/select";
-import { MenuItem, Button, ButtonGroup } from "@blueprintjs/core";
-import * as React from "react";
-import { loader } from "graphql.macro";
+} from '@blueprintjs/select';
+import { MenuItem, Button, ButtonGroup } from '@blueprintjs/core';
+import * as React from 'react';
+import { loader } from 'graphql.macro';
 
-import TSelect from "./TSelect";
-import { useQuery } from "react-apollo";
+import TSelect from './TSelect';
+import { useQuery } from 'react-apollo';
 
-const cleaningScripts = loader("src/graphql/queries/cleaningScripts.graphql");
+const cleaningScripts = loader('src/graphql/queries/cleaningScripts.graphql');
 
 interface IOnChange {
-  (script: String): any;
+  (script: string): any;
 }
 
 interface IScript {
@@ -63,7 +63,7 @@ const ScriptSelect = ({
   onChange,
   onClear
 }: IProps) => {
-  const { loading: queryLoading, error, data } = useQuery(cleaningScripts);
+  const { loading: queryLoading, data } = useQuery(cleaningScripts);
   let items: IScript[] = [];
   if (data && data.cleaningScripts) {
     items = data.cleaningScripts.scripts;
@@ -73,7 +73,7 @@ const ScriptSelect = ({
       <TSelect<IScript>
         disabled={false}
         displayItem={({ name }: IScript) => {
-          return name || "None";
+          return name || 'None';
         }}
         sortItems={sortItems}
         filterItems={filterByName}
@@ -86,7 +86,7 @@ const ScriptSelect = ({
       <Button
         disabled={!selectedScript}
         loading={loading || queryLoading}
-        icon={"cross"}
+        icon={'cross'}
         minimal={true}
         onClick={() => onClear()}
       />

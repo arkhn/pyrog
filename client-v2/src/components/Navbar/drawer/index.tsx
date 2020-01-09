@@ -7,21 +7,21 @@ import {
   InputGroup,
   FormGroup,
   Spinner
-} from "@blueprintjs/core";
-import * as React from "react";
-import { Mutation, useQuery } from "react-apollo";
-import { useSelector } from "react-redux";
-import { loader } from "graphql.macro";
+} from '@blueprintjs/core';
+import * as React from 'react';
+import { Mutation, useQuery } from 'react-apollo';
+import { useSelector } from 'react-redux';
+import { loader } from 'graphql.macro';
 
-import "./style.scss";
-import StringSelect from "src/components/selects/stringSelect";
-import { IReduxStore } from "src/types";
+import './style.scss';
+import StringSelect from 'src/components/selects/stringSelect';
+import { IReduxStore } from 'src/types';
 
 const qCredentialForSource = loader(
-  "src/graphql/queries/credentialForSource.graphql"
+  'src/graphql/queries/credentialForSource.graphql'
 );
 const upsertCredential = loader(
-  "src/graphql/mutations/upsertCredential.graphql"
+  'src/graphql/mutations/upsertCredential.graphql'
 );
 
 interface IProps {
@@ -31,13 +31,13 @@ interface IProps {
 }
 
 const Drawer = ({ title, isOpen, onClose }: IProps) => {
-  const models = ["POSTGRES"];
+  const models = ['POSTGRES'];
 
-  const [host, setHost] = React.useState("");
-  const [port, setPort] = React.useState("");
-  const [login, setLogin] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [database, setDatabase] = React.useState("");
+  const [host, setHost] = React.useState('');
+  const [port, setPort] = React.useState('');
+  const [login, setLogin] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [database, setDatabase] = React.useState('');
   const [model, setModel] = React.useState(models[0]);
   const [hasChanged, setHasChanged] = React.useState(false);
   const [hasSuccessfullyChanged, setHasSuccessfullyChanged] = React.useState(
@@ -59,7 +59,7 @@ const Drawer = ({ title, isOpen, onClose }: IProps) => {
       setPassword(c.password);
       setDatabase(c.database);
     }
-  }, [selectedNode]);
+  }, [loading, selectedNode, data.source.credential]);
 
   return (
     <BPDrawer
@@ -83,7 +83,7 @@ const Drawer = ({ title, isOpen, onClose }: IProps) => {
               setHasSuccessfullyChanged(true);
             }}
             onError={(error: any) => {
-              console.log("ERROR", error);
+              console.log('ERROR', error);
             }}
           >
             {(upsert: any, { loading }: any) => {
@@ -108,61 +108,61 @@ const Drawer = ({ title, isOpen, onClose }: IProps) => {
                     <InputGroup
                       value={host}
                       disabled={loading}
-                      leftIcon={"desktop"}
+                      leftIcon={'desktop'}
                       onChange={(event: any) => {
                         setHost(event.target.value);
                         setHasChanged(true);
                       }}
-                      placeholder={"Host"}
+                      placeholder={'Host'}
                     />
                   </FormGroup>
                   <FormGroup label="Port">
                     <InputGroup
                       value={port}
                       disabled={loading}
-                      leftIcon={"numerical"}
+                      leftIcon={'numerical'}
                       onChange={(event: any) => {
                         setPort(event.target.value);
                         setHasChanged(true);
                       }}
-                      placeholder={"Port"}
+                      placeholder={'Port'}
                     />
                   </FormGroup>
                   <FormGroup label="Database name">
                     <InputGroup
                       value={database}
                       disabled={loading}
-                      leftIcon={"database"}
+                      leftIcon={'database'}
                       onChange={(event: any) => {
                         setDatabase(event.target.value);
                         setHasChanged(true);
                       }}
-                      placeholder={"Database name"}
+                      placeholder={'Database name'}
                     />
                   </FormGroup>
                   <FormGroup label="Login">
                     <InputGroup
                       value={login}
                       disabled={loading}
-                      leftIcon={"user"}
+                      leftIcon={'user'}
                       onChange={(event: any) => {
                         setLogin(event.target.value);
                         setHasChanged(true);
                       }}
-                      placeholder={"Login"}
+                      placeholder={'Login'}
                     />
                   </FormGroup>
                   <FormGroup label="Password">
                     <InputGroup
                       value={password}
                       disabled={loading}
-                      leftIcon={"key"}
+                      leftIcon={'key'}
                       onChange={(event: any) => {
                         setPassword(event.target.value);
                         setHasChanged(true);
                       }}
-                      placeholder={"Password"}
-                      type={"password"}
+                      placeholder={'Password'}
+                      type={'password'}
                     />
                   </FormGroup>
                   <FormGroup label="Type">
@@ -180,8 +180,8 @@ const Drawer = ({ title, isOpen, onClose }: IProps) => {
                   <Button
                     intent={
                       hasSuccessfullyChanged && !hasChanged
-                        ? "success"
-                        : "primary"
+                        ? 'success'
+                        : 'primary'
                     }
                     disabled={
                       (hasSuccessfullyChanged && !hasChanged) || !hasChanged
@@ -189,9 +189,9 @@ const Drawer = ({ title, isOpen, onClose }: IProps) => {
                     loading={loading}
                     icon={
                       hasSuccessfullyChanged &&
-                      !hasChanged && <Icon intent={"success"} icon={"tick"} />
+                      !hasChanged && <Icon intent={'success'} icon={'tick'} />
                     }
-                    type={"submit"}
+                    type={'submit'}
                   >
                     Save
                   </Button>

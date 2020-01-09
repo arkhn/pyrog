@@ -1,24 +1,24 @@
-import { Tab, Tabs, TabId, Icon } from "@blueprintjs/core";
-import * as React from "react";
-import { useSelector } from "react-redux";
+import { Tab, Tabs, TabId, Icon } from '@blueprintjs/core';
+import * as React from 'react';
+import { useSelector } from 'react-redux';
 
-import Navbar from "../../components/navbar";
-import InputColumns from "./InputColumns";
-import TabColumnSuggestion from "./TabColumnSuggestion";
-import TabColumnPicking from "./TabColumnPicking";
-import TabSQLParser from "./TabSQLParser";
-import Comments from "./Comments";
-import FhirMappingPanel from "./FhirMappingPanel";
+import Navbar from '../../components/navbar';
+import InputColumns from './InputColumns';
+import TabColumnSuggestion from './TabColumnSuggestion';
+import TabColumnPicking from './TabColumnPicking';
+import TabSQLParser from './TabSQLParser';
+import Comments from './Comments';
+import FhirMappingPanel from './FhirMappingPanel';
 
 // Import types
-import { IReduxStore } from "../../types";
+import { IReduxStore } from '../../types';
 
-import "./style.scss";
+import './style.scss';
 
 const MappingView = () => {
   const data = useSelector((state: IReduxStore) => state.data);
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
-  const [selectedTabId, setSelectedTabId] = React.useState("picker" as TabId);
+  const [selectedTabId, setSelectedTabId] = React.useState('picker' as TabId);
 
   const renderExistingRules = () => (
     <InputColumns

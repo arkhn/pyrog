@@ -1,6 +1,6 @@
-import { IAction } from "../../types";
-import { availableTypes } from "../../mockdata/mimic";
-import { ENGINE_BACKEND_URL } from "../../constants";
+import { IAction } from '../../types';
+import { availableTypes } from '../../mockdata/mimic';
+import { ENGINE_BACKEND_URL } from '../../constants';
 
 export const fetchRecommendedColumns = (
   fhirAttribute: string,
@@ -31,12 +31,10 @@ export const fetchBetaRecommendedColumns = (
 ): IAction => {
   return (dispatch: any, getState: any) => {
     const url =
-      mot_clef == "" || !mot_clef
-        ? `${ENGINE_BACKEND_URL}/beta/search/${
-            availableTypes[type]
-          }/${head_table}`
+      mot_clef == '' || !mot_clef
+        ? `${ENGINE_BACKEND_URL}/beta/search/${availableTypes[type]}/${head_table}`
         : `${ENGINE_BACKEND_URL}/beta/search/${
-            type ? availableTypes[type] : "all"
+            type ? availableTypes[type] : 'all'
           }/${head_table}/${mot_clef}`;
 
     return fetch(url)
@@ -58,7 +56,7 @@ export const fetchRecommendedColumnsSuccess = (
   columns: any
 ): IAction => {
   return {
-    type: "FETCH_RECOMMENDED_COLUMNS_SUCCESS",
+    type: 'FETCH_RECOMMENDED_COLUMNS_SUCCESS',
     payload: {
       fhirAttribute,
       columns
@@ -68,7 +66,7 @@ export const fetchRecommendedColumnsSuccess = (
 
 export const fetchRecommendedColumnsFailure = (error: any): IAction => {
   return {
-    type: "FETCH_RECOMMENDED_COLUMNS_FAILURE",
+    type: 'FETCH_RECOMMENDED_COLUMNS_FAILURE',
     payload: error
   };
 };

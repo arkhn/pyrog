@@ -1,20 +1,20 @@
-import { Tag, Spinner } from "@blueprintjs/core";
-import * as React from "react";
-import { useQuery, useMutation } from "@apollo/react-hooks";
+import { Tag, Spinner } from '@blueprintjs/core';
+import * as React from 'react';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 
-import { ISelectedSource } from "src/types";
+import { ISelectedSource } from 'src/types';
 
 // COMPONENTS
-import ScriptSelect from "src/components/selects/scriptSelect";
-import InputColumn from "./../InputColumn";
-import { loader } from "graphql.macro";
+import ScriptSelect from 'src/components/selects/scriptSelect';
+import InputColumn from './../InputColumn';
+import { loader } from 'graphql.macro';
 
 // GRAPHQL
 const qInputsForAttribute = loader(
-  "src/graphql/queries/inputsForAttribute.graphql"
+  'src/graphql/queries/inputsForAttribute.graphql'
 );
 const mUpdateAttribute = loader(
-  "src/graphql/mutations/updateAttribute.graphql"
+  'src/graphql/mutations/updateAttribute.graphql'
 );
 
 interface IProps {
@@ -66,7 +66,7 @@ const InputColumns = ({ schema, selectedAttribute, source }: IProps) => {
             <ScriptSelect
               loading={loadingMutation}
               selectedScript={attribute.mergingScript}
-              onChange={(script: String) => {
+              onChange={(script: string) => {
                 updateAttribute({
                   variables: {
                     attributeId: attribute.id,

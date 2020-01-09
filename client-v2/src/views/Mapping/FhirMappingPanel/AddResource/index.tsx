@@ -1,19 +1,19 @@
-import { Button, FormGroup, ControlGroup } from "@blueprintjs/core";
-import React from "react";
-import { useMutation, useQuery } from "@apollo/react-hooks";
-import { useSelector } from "react-redux";
+import { Button, FormGroup, ControlGroup } from '@blueprintjs/core';
+import React from 'react';
+import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useSelector } from 'react-redux';
 
-import { IReduxStore } from "src/types";
-import AddResourceSelect from "src/components/selects/addResourceSelect";
-import { loader } from "graphql.macro";
+import { IReduxStore } from 'src/types';
+import AddResourceSelect from 'src/components/selects/addResourceSelect';
+import { loader } from 'graphql.macro';
 
 const qAvailableResources = loader(
-  "src/graphql/queries/availableResources.graphql"
+  'src/graphql/queries/availableResources.graphql'
 );
 const qResourcesForSource = loader(
-  "src/graphql/queries/resourcesForSource.graphql"
+  'src/graphql/queries/resourcesForSource.graphql'
 );
-const mCreateResource = loader("src/graphql/mutations/createResource.graphql");
+const mCreateResource = loader('src/graphql/mutations/createResource.graphql');
 
 interface IProps {
   callback: any;
@@ -23,11 +23,9 @@ const AddResource = ({ callback }: IProps) => {
   // Hooking mutation
   const onCompleted = (data: any) => {
     toaster.show({
-      icon: "layout-hierarchy",
-      intent: "success",
-      message: `Ressource ${data.createResource.fhirType} créée pour ${
-        selectedNode.source.name
-      }.`,
+      icon: 'layout-hierarchy',
+      intent: 'success',
+      message: `Ressource ${data.createResource.fhirType} créée pour ${selectedNode.source.name}.`,
       timeout: 4000
     });
 
@@ -37,8 +35,8 @@ const AddResource = ({ callback }: IProps) => {
 
   const onError = (error: any) => {
     toaster.show({
-      icon: "error",
-      intent: "danger",
+      icon: 'error',
+      intent: 'danger',
       message: error.message,
       timeout: 4000
     });
@@ -74,7 +72,11 @@ const AddResource = ({ callback }: IProps) => {
 
   const [createResource, { loading: creatingResource }] = useMutation(
     mCreateResource,
-    { onCompleted, onError, update: addResourceToCache }
+    {
+      onCompleted,
+      onError,
+      update: addResourceToCache
+    }
   );
   const { loading: loadingAvailableResources, data } = useQuery(
     qAvailableResources
@@ -82,10 +84,10 @@ const AddResource = ({ callback }: IProps) => {
 
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const [selectedAddResource, setSelectedAddResource] = React.useState("");
+  const [selectedAddResource, setSelectedAddResource] = React.useState('');
 
   return (
-    <FormGroup label={"Add Resource"}>
+    <FormGroup label={'Add Resource'}>
       <ControlGroup>
         <AddResourceSelect
           loading={loadingAvailableResources}
@@ -98,7 +100,7 @@ const AddResource = ({ callback }: IProps) => {
         />
         <Button
           loading={creatingResource}
-          icon={"plus"}
+          icon={'plus'}
           disabled={!selectedAddResource}
           onClick={() => {
             createResource({

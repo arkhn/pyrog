@@ -1,9 +1,9 @@
-import * as React from "react";
-import { Intent, MenuItem, Position } from "@blueprintjs/core";
-import { ItemPredicate, ItemRenderer } from "@blueprintjs/select";
-import { IconName } from "@blueprintjs/icons";
+import * as React from 'react';
+import { Intent, MenuItem, Position } from '@blueprintjs/core';
+import { ItemPredicate, ItemRenderer } from '@blueprintjs/select';
+import { IconName } from '@blueprintjs/icons';
 
-import TSelect from "./TSelect";
+import TSelect from './TSelect';
 
 interface ISelectProps {
   disabled?: boolean;
@@ -87,7 +87,7 @@ export default class AddResourceSelect extends React.Component<
         onChange={onChange}
         popoverProps={{
           autoFocus: true,
-          boundary: "viewport",
+          boundary: 'viewport',
           canEscapeKeyClose: true,
           lazy: true,
           position: Position.RIGHT_TOP,

@@ -1,8 +1,8 @@
-import { ControlGroup, FormGroup, IPopoverProps } from "@blueprintjs/core";
-import * as React from "react";
+import { ControlGroup, FormGroup, IPopoverProps } from '@blueprintjs/core';
+import * as React from 'react';
 
-import StringSelect from "src/components/selects/stringSelect";
-import { ISourceSchema } from "src/types";
+import StringSelect from 'src/components/selects/stringSelect';
+import { ISourceSchema } from 'src/types';
 
 export interface IProps {
   ownerChangeCallback?: any;
@@ -88,7 +88,7 @@ export default class ColumnPicker extends React.Component<IProps, IState> {
   }
 
   public render() {
-    let {
+    const {
       hasOwner,
       sourceSchema,
       label,
@@ -98,17 +98,17 @@ export default class ColumnPicker extends React.Component<IProps, IState> {
       disabled
     } = this.props;
 
-    let { owner, table, column } = this.state;
+    const { owner, table, column } = this.state;
 
-    let owners = Object.keys(sourceSchema);
+    const owners = Object.keys(sourceSchema);
 
-    let tables = hasOwner
+    const tables = hasOwner
       ? owner
         ? Object.keys(sourceSchema[owner])
         : []
       : Object.keys(sourceSchema);
 
-    let columns = table
+    const columns = table
       ? ((hasOwner
           ? ((sourceSchema[owner!] as { [key: string]: string[] })[
               table
@@ -116,11 +116,11 @@ export default class ColumnPicker extends React.Component<IProps, IState> {
           : (sourceSchema[table] as string[])) as any)
       : [];
 
-    let controlGroup = (
+    const controlGroup = (
       <ControlGroup vertical={vertical || false} fill={fill || false}>
         {hasOwner ? (
           <StringSelect
-            icon={"group-objects"}
+            icon={'group-objects'}
             inputItem={owner!}
             items={owners}
             onChange={this.changeOwner}
@@ -130,7 +130,7 @@ export default class ColumnPicker extends React.Component<IProps, IState> {
         ) : null}
         <StringSelect
           disabled={disabled || (hasOwner && !owner)}
-          icon={"th"}
+          icon={'th'}
           inputItem={table!}
           items={tables}
           onChange={this.changeTable}
@@ -138,7 +138,7 @@ export default class ColumnPicker extends React.Component<IProps, IState> {
         />
         <StringSelect
           disabled={disabled || !table}
-          icon={"column-layout"}
+          icon={'column-layout'}
           inputItem={column!}
           items={columns}
           onChange={this.changeColumn}

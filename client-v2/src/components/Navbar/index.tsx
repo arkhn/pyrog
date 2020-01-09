@@ -1,17 +1,17 @@
-import { Alignment, Button, Navbar as BPNavbar } from "@blueprintjs/core";
-import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import useReactRouter from "use-react-router";
+import { Alignment, Button, Navbar as BPNavbar } from '@blueprintjs/core';
+import * as React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import useReactRouter from 'use-react-router';
 
-import Drawer from "./drawer";
-import Header from "./header";
+import Drawer from './drawer';
+import Header from './header';
 
-import { logout } from "../../services/user/actions";
+import { logout } from '../../services/user/actions';
 
-import { IReduxStore } from "../../types";
-import { AUTH_TOKEN } from "../../constants";
+import { IReduxStore } from '../../types';
+import { AUTH_TOKEN } from '../../constants';
 
-import "./style.scss";
+import './style.scss';
 
 // Logo
 
@@ -27,10 +27,10 @@ const Navbar = () => {
       <BPNavbar.Group align={Alignment.LEFT}>
         <BPNavbar.Heading
           onClick={() => {
-            history.push("/");
+            history.push('/');
           }}
         >
-          <img src="arkhn_logo_only_white.svg" />
+          <img src="arkhn_logo_only_white.svg" alt="Arkhn" />
           <h2>PYROG</h2>
         </BPNavbar.Heading>
         <Header
@@ -42,7 +42,7 @@ const Navbar = () => {
 
       {selectedNode.source.id && (
         <Drawer
-          title={selectedNode.source ? selectedNode.source.name : ""}
+          title={selectedNode.source ? selectedNode.source.name : ''}
           isOpen={drawerIsOpen}
           onClose={() => {
             setDrawerIsOpen(false);
@@ -60,7 +60,7 @@ const Navbar = () => {
             onClick={() => {
               localStorage.removeItem(AUTH_TOKEN);
               dispatch(logout());
-              history.push("/login");
+              history.push('/login');
             }}
             text="Se déconnecter"
           />

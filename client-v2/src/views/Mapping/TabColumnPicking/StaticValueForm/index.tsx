@@ -5,17 +5,17 @@ import {
   InputGroup,
   FormGroup,
   Elevation
-} from "@blueprintjs/core";
-import * as React from "react";
-import { useMutation } from "@apollo/react-hooks";
-import { loader } from "graphql.macro";
+} from '@blueprintjs/core';
+import * as React from 'react';
+import { useMutation } from '@apollo/react-hooks';
+import { loader } from 'graphql.macro';
 
 // GRAPHQL
 const qInputsForAttribute = loader(
-  "src/graphql/queries/inputsForAttribute.graphql"
+  'src/graphql/queries/inputsForAttribute.graphql'
 );
 const mCreateStaticInput = loader(
-  "src/graphql/mutations/createStaticInput.graphql"
+  'src/graphql/mutations/createStaticInput.graphql'
 );
 
 interface IProps {
@@ -26,7 +26,7 @@ interface IProps {
 }
 
 const StaticValueForm = ({ attribute }: IProps) => {
-  const [staticValue, setStaticValue] = React.useState("");
+  const [staticValue, setStaticValue] = React.useState('');
 
   const addInputToCache = (cache: any, { data: { createInput } }: any) => {
     try {
@@ -53,10 +53,10 @@ const StaticValueForm = ({ attribute }: IProps) => {
     }
   };
 
-  const [createStaticInput, { loading: creatingStaticInput }] = useMutation(
-    mCreateStaticInput,
-    { update: addInputToCache }
-  );
+  const [
+    createStaticInput,
+    { loading: creatingStaticInput }
+  ] = useMutation(mCreateStaticInput, { update: addInputToCache });
 
   return (
     <Card elevation={Elevation.ONE}>
@@ -73,8 +73,8 @@ const StaticValueForm = ({ attribute }: IProps) => {
             value={staticValue}
           />
           <Button
-            disabled={!attribute.id || staticValue.length == 0}
-            icon={"add"}
+            disabled={!attribute.id || staticValue.length === 0}
+            icon={'add'}
             loading={creatingStaticInput}
             onClick={() =>
               createStaticInput({

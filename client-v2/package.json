@@ -5,7 +5,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint './src/**/*.{ts,tsx}'"
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.2",
@@ -74,13 +75,19 @@
     "@types/redux": "^3.6.0",
     "@types/redux-logger": "^3.0.6",
     "@types/ws": "^6.0.1",
+    "@typescript-eslint/eslint-plugin": "^2.15.0",
+    "@typescript-eslint/parser": "^2.15.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-import-resolver-typescript": "^2.0.0",
+    "eslint-plugin-json": "^2.0.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.2",
     "jest": "^24.7.1",
-    "prettier": "1.17.0",
+    "prettier": "^1.19.1",
     "ts-jest": "^24.0.2",
     "typescript": "^3.6.3"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
   },
   "browserslist": {
     "production": [

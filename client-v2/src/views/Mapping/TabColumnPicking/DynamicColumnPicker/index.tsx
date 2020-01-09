@@ -1,27 +1,27 @@
-import axios from "axios";
+import axios from 'axios';
 import {
   Card,
   Elevation,
   FormGroup,
   ControlGroup,
   Button
-} from "@blueprintjs/core";
-import * as React from "react";
-import { useMutation } from "@apollo/react-hooks";
-import { useSelector } from "react-redux";
+} from '@blueprintjs/core';
+import * as React from 'react';
+import { useMutation } from '@apollo/react-hooks';
+import { useSelector } from 'react-redux';
 
-import ColumnPicker from "../../ColumnPicker";
-import TableViewer from "../TableViewer";
+import ColumnPicker from '../../ColumnPicker';
+import TableViewer from '../TableViewer';
 
-import { IReduxStore } from "src/types";
-import { loader } from "graphql.macro";
-import { HTTP_BACKEND_URL } from "src/constants";
+import { IReduxStore } from 'src/types';
+import { loader } from 'graphql.macro';
+import { HTTP_BACKEND_URL } from 'src/constants';
 
 // GRAPHQL
 const qInputsForAttribute = loader(
-  "src/graphql/queries/inputsForAttribute.graphql"
+  'src/graphql/queries/inputsForAttribute.graphql'
 );
-const mCreateSQLInput = loader("src/graphql/mutations/createSQLInput.graphql");
+const mCreateSQLInput = loader('src/graphql/mutations/createSQLInput.graphql');
 
 interface IProps {
   attribute: {
@@ -33,9 +33,9 @@ interface IProps {
 }
 
 const DynamicColumnPicker = ({ attribute, schema, source }: IProps) => {
-  const [owner, setOwner] = React.useState("");
-  const [table, setTable] = React.useState("");
-  const [column, setColumn] = React.useState("");
+  const [owner, setOwner] = React.useState('');
+  const [table, setTable] = React.useState('');
+  const [column, setColumn] = React.useState('');
   const [tableIsLoading, setTableIsLoading] = React.useState(false);
   const [rows, setRows] = React.useState([]);
   const [fields, setFields] = React.useState([]);
@@ -46,7 +46,7 @@ const DynamicColumnPicker = ({ attribute, schema, source }: IProps) => {
       variables: {
         attributeId: attribute.id,
         columnInput: {
-          owner: owner || "",
+          owner: owner || '',
           table: table,
           column: column
         }
@@ -79,10 +79,10 @@ const DynamicColumnPicker = ({ attribute, schema, source }: IProps) => {
     }
   };
 
-  const [createSQLInput, { loading: creatingSQLInput }] = useMutation(
-    mCreateSQLInput,
-    { update: addInputToCache }
-  );
+  const [
+    createSQLInput,
+    { loading: creatingSQLInput }
+  ] = useMutation(mCreateSQLInput, { update: addInputToCache });
 
   React.useEffect(() => {
     if (selectedNode.source && selectedNode.source.id && table) {
@@ -90,7 +90,7 @@ const DynamicColumnPicker = ({ attribute, schema, source }: IProps) => {
       axios
         .get(
           `${HTTP_BACKEND_URL}/tableview/${selectedNode.source.id}/${
-            owner ? owner + "." : ""
+            owner ? owner + '.' : ''
           }${table}`
         )
         .then((res: any) => {
@@ -103,7 +103,7 @@ const DynamicColumnPicker = ({ attribute, schema, source }: IProps) => {
           console.log(err);
         });
     }
-  }, [table]);
+  }, [selectedNode.source, owner, table]);
 
   return (
     <Card elevation={Elevation.ONE}>
@@ -114,12 +114,12 @@ const DynamicColumnPicker = ({ attribute, schema, source }: IProps) => {
             hasOwner={source.hasOwner}
             ownerChangeCallback={(e: string) => {
               setOwner(e);
-              setTable("");
-              setColumn("");
+              setTable('');
+              setColumn('');
             }}
             tableChangeCallback={(e: string) => {
               setTable(e);
-              setColumn("");
+              setColumn('');
             }}
             columnChangeCallback={(e: string) => {
               setColumn(e);
@@ -128,7 +128,7 @@ const DynamicColumnPicker = ({ attribute, schema, source }: IProps) => {
           />
           <Button
             disabled={!attribute.id || !column}
-            icon={"add"}
+            icon={'add'}
             loading={creatingSQLInput}
             onClick={() => createInput()}
           />
