@@ -83,14 +83,6 @@ const Drawer = ({
       intent: "success",
       icon: "properties"
     });
-
-    dispatch(
-      updateFhirResource(
-        selectedNode.resource.id,
-        selectedNode.resource.fhirType,
-        label
-      )
-    );
   };
 
   const onUpdateError = (error: any) => {

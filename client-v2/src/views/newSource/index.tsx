@@ -54,7 +54,7 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
       hasOwner: false,
       isUploading: false,
       templateName: "",
-      templateExists: false, // TODO check if really needed in state
+      templateExists: false,
       sourceName: "",
       schemaFile: null
     };
