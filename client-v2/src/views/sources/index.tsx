@@ -89,6 +89,7 @@ const SourcesView = () => {
                       changeSelectedSource(
                         source.id,
                         source.name,
+                        source.template.name,
                         source.hasOwner
                       )
                     );

@@ -181,10 +181,10 @@ const Drawer = ({
         });
     }
 
-    if (selectedNode.source.name) {
+    if (selectedNode.source.schemaFileName) {
       setSchema(
-        store.getState().data.sourceSchemas.schemaBySourceName[
-          selectedNode.source.name
+        store.getState().data.sourceSchemas.schemaByFileName[
+          selectedNode.source.schemaFileName
         ]
       );
     }

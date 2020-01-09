@@ -2,7 +2,7 @@ import { ISourceSchemas, ISimpleAction } from "../../../types";
 
 const initialState: ISourceSchemas = {
   loadingSourceSchema: false,
-  schemaBySourceName: {}
+  schemaByFileName: {}
 };
 
 const sourceSchemas = (state = initialState, action: ISimpleAction): any => {
@@ -17,9 +17,9 @@ const sourceSchemas = (state = initialState, action: ISimpleAction): any => {
     case "FETCH_SOURCE_SCHEMA_SUCCESS":
       return {
         ...state,
-        schemaBySourceName: {
-          ...state.schemaBySourceName,
-          [action.payload.sourceName]: {
+        schemaByFileName: {
+          ...state.schemaByFileName,
+          [action.payload.schemaFileName]: {
             ...action.payload.schema
           }
         },

@@ -4,6 +4,7 @@ const initialState: any = {
   source: {
     id: null,
     name: null,
+    schemaFileName: null,
     hasOwner: null
   },
   resource: {
@@ -42,6 +43,7 @@ const selectedNodeReducer = (
         source: {
           id: action.payload.id,
           name: action.payload.name,
+          schemaFileName: action.payload.schemaFileName,
           hasOwner: action.payload.hasOwner
         },
         resource: {

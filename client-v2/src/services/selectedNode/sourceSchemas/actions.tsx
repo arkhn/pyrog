@@ -8,18 +8,18 @@ export const loadingSourceSchema = (): IAction => {
 };
 
 export const fetchSourceSchema = (
-  sourceName: string,
+  fileName: string,
   callback: any
 ): IAction => {
   return (dispatch: any, getState: any) => {
     dispatch(loadingSourceSchema());
 
-    return fetch(`${process.env.HTTP_BACKEND_URL}/schemas/${sourceName}.json`)
+    return fetch(`${process.env.HTTP_BACKEND_URL}/schemas/${fileName}.json`)
       .then((response: any) => {
         return response.json();
       })
       .then((response: any) => {
-        dispatch(fetchSourceSchemaSuccess(sourceName, response));
+        dispatch(fetchSourceSchemaSuccess(fileName, response));
         callback();
       })
       .catch((err: any) => {
@@ -30,13 +30,13 @@ export const fetchSourceSchema = (
 };
 
 export const fetchSourceSchemaSuccess = (
-  sourceName: string,
+  fileName: string,
   schema: any
 ): IAction => {
   return {
     type: "FETCH_SOURCE_SCHEMA_SUCCESS",
     payload: {
-      sourceName,
+      fileName,
       schema
     }
   };

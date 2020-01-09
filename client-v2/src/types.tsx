@@ -24,6 +24,7 @@ export interface IUser {
 export interface ISelectedSource {
   id: string;
   name: string;
+  schemaFileName: string;
   hasOwner: boolean;
 }
 
@@ -46,8 +47,8 @@ export interface ISelectedNode {
 
 export interface ISourceSchemas {
   loadingSourceSchema: boolean;
-  schemaBySourceName: {
-    [sourceName: string]: any;
+  schemaByFileName: {
+    [fileName: string]: any;
   };
 }
 

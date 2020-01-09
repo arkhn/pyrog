@@ -24,8 +24,8 @@ const MappingView = () => {
     <InputColumns
       selectedAttribute={selectedNode.attribute}
       schema={
-        selectedNode.source.name
-          ? data.sourceSchemas.schemaBySourceName[selectedNode.source.name]
+        selectedNode.source.schemaFileName
+          ? data.sourceSchemas.schemaByFileName[selectedNode.source.schemaFileName]
           : {}
       }
       source={selectedNode.source}
@@ -48,10 +48,8 @@ const MappingView = () => {
                 <TabColumnPicking
                   attribute={selectedNode.attribute}
                   schema={
-                    selectedNode.source.name
-                      ? data.sourceSchemas.schemaBySourceName[
-                          selectedNode.source.name
-                        ]
+                    selectedNode.source.schemaFileName
+                      ? data.sourceSchemas.schemaByFileName[selectedNode.source.schemaFileName]
                       : {}
                   }
                   source={selectedNode.source}

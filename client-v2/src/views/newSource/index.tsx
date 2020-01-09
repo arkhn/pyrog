@@ -91,12 +91,16 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
     if (!this.state.schemaFile) {
       throw new Error("Database schema is missing");
     }
+    if (!this.state.templateName) {
+      throw new Error("Template name is missing");
+    }
     if (!this.state.sourceName) {
       throw new Error("Source name is missing");
     }
 
+    const fileName = this.state.templateName.concat("_", this.state.sourceName)
     const formData = new FormData();
-    formData.append("schema", this.state.schemaFile, this.state.sourceName);
+    formData.append("schema", this.state.schemaFile, fileName);
 
     const CancelToken = axios.CancelToken;
     let cancel: any;

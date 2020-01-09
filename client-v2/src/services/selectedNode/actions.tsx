@@ -44,6 +44,7 @@ export const changeNode = (
           changeSelectedSource(
             source.data.source.id,
             source.data.source.name,
+            source.data.source.template.name,
             source.data.source.hasOwner,
             () => {
               return dispatch(
@@ -83,16 +84,18 @@ export const updateNode = (
 // Source
 export const changeSelectedSource = (
   id: string,
-  name: string,
+  sourceName: string,
+  templateName: string,
   hasOwner: boolean,
   callback: any = null
 ): IAction => {
+  const schemaFileName = templateName.concat("_", sourceName)
   return (dispatch: any, getState: any) => {
     dispatch(
-      fetchSourceSchema(name, () => {
+      fetchSourceSchema(schemaFileName, () => {
         return callback
           ? callback()
-          : dispatch(updateSelectedSource(id, name, hasOwner));
+          : dispatch(updateSelectedSource(id, sourceName, schemaFileName, hasOwner));
       })
     );
   };
@@ -101,6 +104,7 @@ export const changeSelectedSource = (
 export const updateSelectedSource = (
   id: string,
   name: string,
+  schemaFileName: string,
   hasOwner: boolean
 ): IAction => {
   return {
@@ -108,6 +112,7 @@ export const updateSelectedSource = (
     payload: {
       id,
       name,
+      schemaFileName,
       hasOwner
     }
   };
