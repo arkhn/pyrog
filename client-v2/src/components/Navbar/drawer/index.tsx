@@ -59,7 +59,7 @@ const Drawer = ({ title, isOpen, onClose }: IProps) => {
       setPassword(c.password);
       setDatabase(c.database);
     }
-  }, [loading, selectedNode, data.source.credential]);
+  }, [loading, selectedNode, data]);
 
   return (
     <BPDrawer
