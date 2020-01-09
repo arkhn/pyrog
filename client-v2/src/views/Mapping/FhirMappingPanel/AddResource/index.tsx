@@ -94,6 +94,7 @@ const AddResource = ({ callback }: IProps) => {
         <Button
           loading={creatingResource}
           icon={"plus"}
+          disabled={!selectedAddResource}
           onClick={() => {
             createResource({
               variables: {
