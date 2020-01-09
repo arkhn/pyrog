@@ -33,9 +33,7 @@ export const upsertCredential: FieldResolver<
   { sourceId, host, port, database, login, password, model },
   ctx,
 ) => {
-  console.log('before', password)
   const encryptedPassword = encrypt(password)
-  console.log('after', encryptedPassword)
 
   const source = await ctx.photon.sources.findOne({
     where: { id: sourceId },

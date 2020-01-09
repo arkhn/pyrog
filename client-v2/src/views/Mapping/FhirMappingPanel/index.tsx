@@ -1,4 +1,3 @@
-import { Spinner } from "@blueprintjs/core";
 import React from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { useSelector, useDispatch } from "react-redux";
@@ -27,7 +26,6 @@ interface INodeData {
 
 // GRAPHQL
 const qResourcesForSource = require("src/graphql/queries/resourcesForSource.graphql");
-const qResourceAttributeTree = require("src/graphql/queries/resourceAttributeTree.graphql");
 
 const FhirMappingPanel = () => {
   const dispatch = useDispatch();
