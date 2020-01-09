@@ -36,7 +36,7 @@ export const login: FieldResolver<'Mutation', 'login'> = async (
     throw new Error('Invalid password')
   }
   return {
-    token: sign({ userId: user.id }, APP_SECRET),
+    token: sign({ userId: user.id }, APP_SECRET!),
     user,
   }
 }
@@ -55,7 +55,7 @@ export const signup: FieldResolver<'Mutation', 'signup'> = async (
     },
   })
   return {
-    token: sign({ userId: user.id }, APP_SECRET),
+    token: sign({ userId: user.id }, APP_SECRET!),
     user,
   }
 }
