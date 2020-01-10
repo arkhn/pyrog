@@ -1,13 +1,11 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "moduleResolution": "node",
-    "module": "commonjs",
-    "sourceMap": true,
-    // "rootDir": "./src",
     "outDir": "dist",
-    "lib": ["esnext", "dom"]
+    "rootDir": "src",
+    "baseUrl": "src" /* Base directory to resolve non-absolute module names. */,
+    "lib": ["esnext"],
+    "strict": true,
+    "resolveJsonModule": true
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "**/*.test.ts", "test"]
+  "include": ["src/**/*"]
 }

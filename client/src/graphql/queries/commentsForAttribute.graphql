@@ -1,0 +1,6 @@
+query commentsForAttribute($attributeId: ID!) {
+  attribute(attributeId: $attributeId) {
+    id
+    comments
+  }
+}

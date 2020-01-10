@@ -2,35 +2,34 @@
 
 fragment resourceRecAttributes on Resource {
   id
-  label
   fhirType
   attributes {
     ...entireAttribute
-    attributes {
+    children {
       ...entireAttribute
-      attributes {
+      children {
         ...entireAttribute
-        attributes {
+        children {
           ...entireAttribute
-          attributes {
+          children {
             ...entireAttribute
-            attributes {
+            children {
               ...entireAttribute
-              attributes {
+              children {
                 ...entireAttribute
-                attributes {
+                children {
                   ...entireAttribute
-                  attributes {
+                  children {
                     ...entireAttribute
-                    attributes {
+                    children {
                       ...entireAttribute
-                      attributes {
+                      children {
                         ...entireAttribute
-                        attributes {
+                        children {
                           ...entireAttribute
-                          attributes {
+                          children {
                             ...entireAttribute
-                            attributes {
+                            children {
                               ...entireAttribute
                             }
                           }

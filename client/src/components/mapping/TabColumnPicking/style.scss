@@ -1,0 +1,27 @@
+@import "~@blueprintjs/core/lib/css/blueprint.css";
+@import "~@blueprintjs/core/lib/scss/variables";
+
+.bp3-card {
+  position: relative;
+
+  .bp3-inline {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  & > *:not(:last-child) {
+    margin-bottom: 15px;
+  }
+
+  .card-tag {
+    position: absolute;
+    background-color: $gray1;
+    color: $light-gray5;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+    top: -7px;
+    left: 20px;
+  }
+}

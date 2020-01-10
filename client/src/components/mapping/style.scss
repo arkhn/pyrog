@@ -1,0 +1,383 @@
+@import "~@blueprintjs/core/lib/css/blueprint.css";
+@import "~@blueprintjs/core/lib/scss/variables";
+
+$window-padding: 20px;
+$border-radius: 6px;
+
+body {
+  background-color: $black;
+  color: $light-gray1;
+}
+
+.flex-row {
+  display: flex;
+  justify-content: center;
+}
+
+.bp3-tabs {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .bp3-tab-panel:not([aria-hidden="true"]) {
+    flex-grow: 1;
+    display: flex;
+    overflow: auto;
+    flex-direction: column;
+
+    .vertical-flex {
+      width: 100%;
+      flex-grow: 1;
+      display: flex;
+      overflow: auto;
+      flex-direction: column;
+
+      .column-viewer {
+        flex-grow: 1;
+        overflow: auto;
+
+        .column-flexbox {
+          overflow: auto;
+          min-height: -moz-min-content;
+          min-height: -webkit-min-content;
+          min-height: min-content;
+          height: 100%;
+          overflow-x: scroll;
+        }
+      }
+    }
+  }
+}
+
+.bp3-tab-list {
+  background-color: $light-gray1;
+  overflow: hidden;
+
+  & > * {
+    text-align: center;
+    flex-grow: 1;
+  }
+
+  .tab-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    & > *:first-child {
+      margin-right: 5px;
+    }
+  }
+}
+
+.bp3-tab {
+  padding: 5px 0px;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.bp3-tab-indicator-wrapper .bp3-tab-indicator {
+  background-color: $light-gray3;
+  height: 100%;
+}
+
+#mapping-explorer-container {
+  width: 100vw;
+
+  #main-container {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  #fhir-panel {
+    background-color: $dark-gray1;
+    color: $light-gray1;
+    min-width: 300px;
+    flex-basis: 25%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+
+    #fhir-attributes {
+      overflow-y: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #resource-add {
+      background-color: $dark-gray2;
+      padding: $window-padding / 2;
+
+      .bp3-form-group,
+      .bp3-form-content {
+        display: flex;
+        justify-content: center;
+      }
+
+      .bp3-label {
+        text-align: center;
+      }
+    }
+
+    #resource-selector {
+      margin: $window-padding / 2;
+      text-align: center;
+
+      .bp3-form-group,
+      .bp3-form-content {
+        display: flex;
+        justify-content: center;
+      }
+
+      .bp3-label {
+        text-align: center;
+      }
+    }
+
+    .panel-header {
+      background-color: $black;
+    }
+  }
+
+  .panel-header {
+    height: 50px;
+    padding: 0 $window-padding;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  #exploration-panel {
+    background-color: $light-gray5;
+    color: $black;
+    flex-basis: 75%;
+    max-width: 75%;
+    display: flex;
+    flex-direction: column;
+
+    #help-resource {
+      text-align: right;
+      font-size: x-large;
+      flex-basis: 100%;
+      padding: 1rem;
+
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+
+      .bp3-icon svg {
+        width: 25px;
+        height: 25px;
+        position: relative;
+        top: 5px;
+      }
+
+      p {
+        padding-right: 10px;
+      }
+
+      #help-pick-resource {
+        display: flex;
+        flex-direction: row;
+      }
+
+      #help-add-resource {
+        display: flex;
+        flex-direction: row;
+
+        position: absolute;
+        bottom: 30px;
+      }
+
+      #help-pick-attribute {
+        display: flex;
+        flex-direction: row;
+
+        position: absolute;
+        top: 30%;
+      }
+    }
+
+    .panel-header {
+      background-color: $gray5;
+    }
+
+    #column-picker {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      padding: $window-padding;
+
+      & > *:not(:last-child) {
+        margin-bottom: $window-padding;
+      }
+      .bp3-card h3 {
+        margin: 0;
+      }
+
+      .bp3-label {
+        min-width: 250px;
+      }
+    }
+
+    #sql-request-parser {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      padding: $window-padding;
+
+      & > *:not(:last-child) {
+        margin-bottom: $window-padding;
+      }
+
+      .bp3-card h3 {
+        margin: 0;
+      }
+
+      .bp3-label {
+        min-width: 250px;
+      }
+    }
+
+    #column-selection {
+      background-color: $light-gray3;
+    }
+  }
+}
+
+#fhir-resource-tree {
+  overflow-y: scroll;
+
+  .bp3-tree {
+    box-shadow: none;
+
+    .bp3-icon.bp3-intent-success {
+      color: $green5;
+    }
+  }
+
+  .bp3-tree-node-content:hover {
+    background-color: $dark-gray3;
+  }
+
+  .bp3-tree-node-selected .bp3-tree-node-content:hover {
+    background-color: $blue4;
+  }
+
+  .bp3-tree-node-content {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    height: 34px;
+  }
+
+  .bp3-tree-node-label {
+    .node-label {
+      line-height: 1.1em;
+
+      .node-type {
+        color: $gray2;
+        font-size: 0.8em;
+      }
+    }
+  }
+
+  .bp3-tree-node-selected .bp3-tree-node-label .node-type {
+    color: $gray5;
+  }
+}
+
+#input-columns {
+  padding: $window-padding;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+
+  #input-column-rows {
+    flex-grow: 1;
+    margin-right: calc(#{$window-padding} / 2);
+
+    & > *:not(:last-child) {
+      margin-bottom: calc(#{$window-padding} / 2);
+    }
+  }
+
+  #input-column-merging-script {
+    display: flex;
+    align-items: center;
+
+    border-left: 1px solid $gray4;
+    padding: calc(#{$window-padding} / 2);
+    margin-left: calc(#{$window-padding} / 2);
+  }
+
+  .stacked-tags {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    .bp3-tag {
+      text-align: center;
+    }
+  }
+
+  .input-column {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .input-column-info {
+      width: 100%;
+      padding: 10px $window-padding;
+    }
+
+    .input-column-info > * {
+      width: 100%;
+
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+
+      & > *:not(:last-child) {
+        margin-right: $window-padding;
+      }
+
+      .input-column-name {
+        display: flex;
+        flex-basis: 50%;
+        flex-grow: 1;
+        align-items: center;
+
+        & > *:not(:last-child) {
+          margin-right: calc(#{$window-padding} / 2);
+        }
+      }
+
+      .input-column-joins {
+        display: flex;
+        flex-basis: 50%;
+        flex-grow: 1;
+        flex-direction: column;
+        align-items: stretch;
+
+        & > *:not(:last-child) {
+          margin-bottom: calc(#{$window-padding} / 2);
+        }
+
+        .join {
+          display: flex;
+          align-items: center;
+
+          & > *:not(:last-child) {
+            margin-right: calc(#{$window-padding} / 2);
+          }
+        }
+      }
+    }
+  }
+}

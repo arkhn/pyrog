@@ -1,7 +1,0 @@
-fragment partialAttribute on Attribute {
-  id
-  comment
-  name
-  isProfile
-  type
-}

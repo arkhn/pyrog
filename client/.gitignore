@@ -1,7 +1,8 @@
 node_modules/
 dist/*
-.env
-.env.dev.custom
+build/
 
 coverage
 yarn-error.log
+
+.DS_Store

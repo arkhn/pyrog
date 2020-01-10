@@ -1,4 +1,4 @@
-import { ISimpleAction } from "../../types";
+import { ISimpleAction } from 'types';
 
 const initialState: any = {
   id: null,
@@ -8,7 +8,7 @@ const initialState: any = {
 
 export const user = (state = initialState, action: ISimpleAction): any => {
   switch (action.type) {
-    case "LOGIN": {
+    case 'LOGIN': {
       return {
         id: action.payload.id,
         email: action.payload.email,
@@ -16,7 +16,7 @@ export const user = (state = initialState, action: ISimpleAction): any => {
       };
     }
 
-    case "LOGOUT": {
+    case 'LOGOUT': {
       return {
         ...initialState
       };

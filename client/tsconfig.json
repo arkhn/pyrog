@@ -1,19 +1,22 @@
 {
   "compilerOptions": {
     "jsx": "react",
-    "module": "commonjs",
-    "noImplicitAny": true,
+    "module": "esnext",
     "experimentalDecorators": true,
-    "esModuleInterop": true,
     "target": "es6",
-    "allowJs": true,
     "lib": ["es6", "dom", "esnext"],
-    "baseUrl": ".",
-    "paths": {
-      // Add an alias for the src directory: `import ... from ~/graphql`
-      "~/*": ["src/*"]
-    }
+    "moduleResolution": "node",
+    "baseUrl": "src",
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true
   },
-  "include": ["**/*.tsx"],
+  "include": ["src"],
   "exclude": ["node_modules"]
 }

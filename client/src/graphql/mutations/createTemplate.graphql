@@ -1,0 +1,5 @@
+mutation createTemplate($name: String!) {
+  createTemplate(name: $name) {
+    id
+  }
+}

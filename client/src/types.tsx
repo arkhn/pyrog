@@ -1,5 +1,5 @@
-import { IToaster } from "@blueprintjs/core";
-import * as redux from "redux";
+import { IToaster } from '@blueprintjs/core';
+import * as redux from 'redux';
 
 // REDUX
 export interface ISimpleAction {
@@ -24,6 +24,7 @@ export interface IUser {
 export interface ISelectedSource {
   id: string;
   name: string;
+  schemaFileName: string;
   hasOwner: boolean;
 }
 
@@ -46,8 +47,8 @@ export interface ISelectedNode {
 
 export interface ISourceSchemas {
   loadingSourceSchema: boolean;
-  schemaBySourceName: {
-    [sourceName: string]: any;
+  schemaByFileName: {
+    [fileName: string]: any;
   };
 }
 
@@ -104,6 +105,11 @@ export interface IFhirResource {
 export interface ISource {
   name: string;
   schema: any;
+}
+
+export interface ITemplate {
+  name: string;
+  sources: ISource[];
 }
 
 export interface ISourceSchemaWithOwner {

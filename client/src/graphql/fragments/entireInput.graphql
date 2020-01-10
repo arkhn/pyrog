@@ -1,0 +1,16 @@
+#import "./entireJoin.graphql"
+
+fragment entireInput on Input {
+  id
+  sqlValue {
+    id
+    owner
+    table
+    column
+    joins {
+      ...entireJoin
+    }
+  }
+  script
+  staticValue
+}

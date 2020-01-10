@@ -1,0 +1,13 @@
+#import "../fragments/entireInput.graphql"
+
+mutation createStaticInput(
+  $attributeId: ID!,
+  $staticValue: String,
+) {
+  createInput(
+    attributeId: $attributeId
+    static: $staticValue
+  ) {
+    ...entireInput
+  }
+}

@@ -2,33 +2,33 @@
 
 fragment recAttributes on Attribute {
   ...entireAttribute
-  attributes {
+  children {
     ...entireAttribute
-    attributes {
+    children {
       ...entireAttribute
-      attributes {
+      children {
         ...entireAttribute
-        attributes {
+        children {
           ...entireAttribute
-          attributes {
+          children {
             ...entireAttribute
-            attributes {
+            children {
               ...entireAttribute
-              attributes {
+              children {
                 ...entireAttribute
-                attributes {
+                children {
                   ...entireAttribute
-                  attributes {
+                  children {
                     ...entireAttribute
-                    attributes {
+                    children {
                       ...entireAttribute
-                      attributes {
+                      children {
                         ...entireAttribute
-                        attributes {
+                        children {
                           ...entireAttribute
-                          attributes {
+                          children {
                             ...entireAttribute
-                            attributes {
+                            children {
                               ...entireAttribute
                             }
                           }

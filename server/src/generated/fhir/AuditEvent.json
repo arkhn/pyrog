@@ -1,0 +1,2574 @@
+{
+  "description": "A record of an event made for purposes of maintaining a security log. Typical uses include detection of intrusion attempts and monitoring for inappropriate usage.",
+  "properties": {
+    "resourceType": {
+      "description": "This is a AuditEvent resource",
+      "enum": ["AuditEvent"],
+      "title": "\"AuditEvent\""
+    },
+    "implicitRules": {
+      "pattern": "^\\S*$",
+      "type": "string",
+      "description": "String of characters used to identify a name or a resource",
+      "title": "uri"
+    },
+    "language": {
+      "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
+      "type": "string",
+      "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+      "title": "code"
+    },
+    "type": {
+      "description": "A reference to a code defined by a terminology system.",
+      "properties": {
+        "system": {
+          "pattern": "^\\S*$",
+          "type": "string",
+          "description": "String of characters used to identify a name or a resource",
+          "title": "uri"
+        },
+        "version": {
+          "pattern": "^[ \\r\\n\\t\\S]+$",
+          "type": "string",
+          "description": "A sequence of Unicode characters",
+          "title": "string"
+        },
+        "code": {
+          "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
+          "type": "string",
+          "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+          "title": "code"
+        },
+        "display": {
+          "pattern": "^[ \\r\\n\\t\\S]+$",
+          "type": "string",
+          "description": "A sequence of Unicode characters",
+          "title": "string"
+        },
+        "userSelected": {
+          "pattern": "^true|false$",
+          "type": "boolean",
+          "description": "Value of \"true\" or \"false\"",
+          "title": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "title": "Coding"
+    },
+    "subtype": {
+      "description": "Identifier for the category of event.",
+      "items": {
+        "description": "A reference to a code defined by a terminology system.",
+        "properties": {
+          "system": {
+            "pattern": "^\\S*$",
+            "type": "string",
+            "description": "String of characters used to identify a name or a resource",
+            "title": "uri"
+          },
+          "version": {
+            "pattern": "^[ \\r\\n\\t\\S]+$",
+            "type": "string",
+            "description": "A sequence of Unicode characters",
+            "title": "string"
+          },
+          "code": {
+            "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
+            "type": "string",
+            "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+            "title": "code"
+          },
+          "display": {
+            "pattern": "^[ \\r\\n\\t\\S]+$",
+            "type": "string",
+            "description": "A sequence of Unicode characters",
+            "title": "string"
+          },
+          "userSelected": {
+            "pattern": "^true|false$",
+            "type": "boolean",
+            "description": "Value of \"true\" or \"false\"",
+            "title": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "title": "Coding"
+      },
+      "type": "array"
+    },
+    "action": {
+      "description": "Indicator for type of action performed during the event that generated the audit.",
+      "enum": ["C", "R", "U", "D", "E"],
+      "title": "\"C\"|\"R\"|\"U\"|\"D\"|\"E\""
+    },
+    "period": {
+      "description": "A time period defined by a start and end date and optionally time.",
+      "properties": {
+        "start": {
+          "pattern": "^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$",
+          "type": "string",
+          "description": "A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates.",
+          "title": "dateTime"
+        },
+        "end": {
+          "pattern": "^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$",
+          "type": "string",
+          "description": "A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates.",
+          "title": "dateTime"
+        }
+      },
+      "additionalProperties": false,
+      "title": "Period"
+    },
+    "recorded": {
+      "pattern": "^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00))$",
+      "type": "string",
+      "description": "An instant in time - known at least to the second",
+      "title": "instant"
+    },
+    "outcome": {
+      "description": "Indicates whether the event succeeded or failed.",
+      "enum": ["0", "4", "8", "12"],
+      "title": "\"0\"|\"4\"|\"8\"|\"12\""
+    },
+    "outcomeDesc": {
+      "pattern": "^[ \\r\\n\\t\\S]+$",
+      "type": "string",
+      "description": "A sequence of Unicode characters",
+      "title": "string"
+    },
+    "purposeOfEvent": {
+      "description": "The purposeOfUse (reason) that was used during the event being recorded.",
+      "items": {
+        "description": "A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.",
+        "properties": {
+          "coding": {
+            "description": "A reference to a code defined by a terminology system.",
+            "items": {
+              "description": "A reference to a code defined by a terminology system.",
+              "properties": {
+                "system": {
+                  "pattern": "^\\S*$",
+                  "type": "string",
+                  "description": "String of characters used to identify a name or a resource",
+                  "title": "uri"
+                },
+                "version": {
+                  "pattern": "^[ \\r\\n\\t\\S]+$",
+                  "type": "string",
+                  "description": "A sequence of Unicode characters",
+                  "title": "string"
+                },
+                "code": {
+                  "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
+                  "type": "string",
+                  "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                  "title": "code"
+                },
+                "display": {
+                  "pattern": "^[ \\r\\n\\t\\S]+$",
+                  "type": "string",
+                  "description": "A sequence of Unicode characters",
+                  "title": "string"
+                },
+                "userSelected": {
+                  "pattern": "^true|false$",
+                  "type": "boolean",
+                  "description": "Value of \"true\" or \"false\"",
+                  "title": "boolean"
+                }
+              },
+              "additionalProperties": false,
+              "title": "Coding"
+            },
+            "type": "array"
+          }
+        },
+        "additionalProperties": false,
+        "title": "CodeableConcept"
+      },
+      "type": "array"
+    },
+    "agent": {
+      "description": "An actor taking an active role in the event or activity that is logged.",
+      "items": {
+        "description": "A record of an event made for purposes of maintaining a security log. Typical uses include detection of intrusion attempts and monitoring for inappropriate usage.",
+        "properties": {
+          "type": {
+            "description": "A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.",
+            "properties": {
+              "coding": {
+                "description": "A reference to a code defined by a terminology system.",
+                "items": {
+                  "description": "A reference to a code defined by a terminology system.",
+                  "properties": {
+                    "system": {
+                      "pattern": "^\\S*$",
+                      "type": "string",
+                      "description": "String of characters used to identify a name or a resource",
+                      "title": "uri"
+                    },
+                    "version": {
+                      "pattern": "^[ \\r\\n\\t\\S]+$",
+                      "type": "string",
+                      "description": "A sequence of Unicode characters",
+                      "title": "string"
+                    },
+                    "code": {
+                      "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
+                      "type": "string",
+                      "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                      "title": "code"
+                    },
+                    "display": {
+                      "pattern": "^[ \\r\\n\\t\\S]+$",
+                      "type": "string",
+                      "description": "A sequence of Unicode characters",
+                      "title": "string"
+                    },
+                    "userSelected": {
+                      "pattern": "^true|false$",
+                      "type": "boolean",
+                      "description": "Value of \"true\" or \"false\"",
+                      "title": "boolean"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "title": "Coding"
+                },
+                "type": "array"
+              }
+            },
+            "additionalProperties": false,
+            "title": "CodeableConcept"
+          },
+          "role": {
+            "description": "The security role that the user was acting under, that come from local codes defined by the access control security system (e.g. RBAC, ABAC) used in the local context.",
+            "items": {
+              "description": "A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.",
+              "properties": {
+                "coding": {
+                  "description": "A reference to a code defined by a terminology system.",
+                  "items": {
+                    "description": "A reference to a code defined by a terminology system.",
+                    "properties": {
+                      "system": {
+                        "pattern": "^\\S*$",
+                        "type": "string",
+                        "description": "String of characters used to identify a name or a resource",
+                        "title": "uri"
+                      },
+                      "version": {
+                        "pattern": "^[ \\r\\n\\t\\S]+$",
+                        "type": "string",
+                        "description": "A sequence of Unicode characters",
+                        "title": "string"
+                      },
+                      "code": {
+                        "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
+                        "type": "string",
+                        "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                        "title": "code"
+                      },
+                      "display": {
+                        "pattern": "^[ \\r\\n\\t\\S]+$",
+                        "type": "string",
+                        "description": "A sequence of Unicode characters",
+                        "title": "string"
+                      },
+                      "userSelected": {
+                        "pattern": "^true|false$",
+                        "type": "boolean",
+                        "description": "Value of \"true\" or \"false\"",
+                        "title": "boolean"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "title": "Coding"
+                  },
+                  "type": "array"
+                }
+              },
+              "additionalProperties": false,
+              "title": "CodeableConcept"
+            },
+            "type": "array"
+          },
+          "who": {
+            "description": "A reference from one resource to another.",
+            "properties": {
+              "reference": {
+                "pattern": "^[ \\r\\n\\t\\S]+$",
+                "type": "string",
+                "description": "A sequence of Unicode characters",
+                "title": "string"
+              },
+              "type": {
+                "pattern": "^\\S*$",
+                "type": "string",
+                "description": "String of characters used to identify a name or a resource",
+                "title": "uri"
+              },
+              "identifier": {
+                "description": "An identifier - identifies some entity uniquely and unambiguously. Typically this is used for business identifiers.",
+                "properties": {
+                  "use": {
+                    "description": "The purpose of this identifier.",
+                    "enum": ["usual", "official", "temp", "secondary", "old"],
+                    "title": "\"usual\"|\"official\"|\"temp\"|\"secondary\"|\"old\""
+                  },
+                  "type": {
+                    "description": "A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.",
+                    "properties": {
+                      "coding": {
+                        "description": "A reference to a code defined by a terminology system.",
+                        "items": {
+                          "description": "A reference to a code defined by a terminology system.",
+                          "properties": {
+                            "system": {
+                              "pattern": "^\\S*$",
+                              "type": "string",
+                              "description": "String of characters used to identify a name or a resource",
+                              "title": "uri"
+                            },
+                            "version": {
+                              "pattern": "^[ \\r\\n\\t\\S]+$",
+                              "type": "string",
+                              "description": "A sequence of Unicode characters",
+                              "title": "string"
+                            },
+                            "code": {
+                              "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
+                              "type": "string",
+                              "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                              "title": "code"
+                            },
+                            "display": {
+                              "pattern": "^[ \\r\\n\\t\\S]+$",
+                              "type": "string",
+                              "description": "A sequence of Unicode characters",
+                              "title": "string"
+                            },
+                            "userSelected": {
+                              "pattern": "^true|false$",
+                              "type": "boolean",
+                              "description": "Value of \"true\" or \"false\"",
+                              "title": "boolean"
+                            }
+                          },
+                          "additionalProperties": false,
+                          "title": "Coding"
+                        },
+                        "type": "array"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "title": "CodeableConcept"
+                  },
+                  "system": {
+                    "pattern": "^\\S*$",
+                    "type": "string",
+                    "description": "String of characters used to identify a name or a resource",
+                    "title": "uri"
+                  },
+                  "value": {
+                    "pattern": "^[ \\r\\n\\t\\S]+$",
+                    "type": "string",
+                    "description": "A sequence of Unicode characters",
+                    "title": "string"
+                  },
+                  "period": {
+                    "description": "A time period defined by a start and end date and optionally time.",
+                    "properties": {
+                      "start": {
+                        "pattern": "^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$",
+                        "type": "string",
+                        "description": "A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates.",
+                        "title": "dateTime"
+                      },
+                      "end": {
+                        "pattern": "^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$",
+                        "type": "string",
+                        "description": "A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates.",
+                        "title": "dateTime"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "title": "Period"
+                  },
+                  "assigner": {
+                    "description": "A reference from one resource to another.",
+                    "properties": {
+                      "reference": {
+                        "pattern": "^[ \\r\\n\\t\\S]+$",
+                        "type": "string",
+                        "description": "A sequence of Unicode characters",
+                        "title": "string"
+                      },
+                      "type": {
+                        "pattern": "^\\S*$",
+                        "type": "string",
+                        "description": "String of characters used to identify a name or a resource",
+                        "title": "uri"
+                      },
+                      "identifier": {
+                        "description": "An identifier - identifies some entity uniquely and unambiguously. Typically this is used for business identifiers.",
+                        "properties": {
+                          "use": {
+                            "description": "The purpose of this identifier.",
+                            "enum": [
+                              "usual",
+                              "official",
+                              "temp",
+                              "secondary",
+                              "old"
+                            ],
+                            "title": "\"usual\"|\"official\"|\"temp\"|\"secondary\"|\"old\""
+                          },
+                          "type": {
+                            "description": "A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.",
+                            "properties": {
+                              "coding": {
+                                "description": "A reference to a code defined by a terminology system.",
+                                "items": {
+                                  "description": "A reference to a code defined by a terminology system.",
+                                  "properties": {
+                                    "system": {
+                                      "pattern": "^\\S*$",
+                                      "type": "string",
+                                      "description": "String of characters used to identify a name or a resource",
+                                      "title": "uri"
+                                    },
+                                    "version": {
+                                      "pattern": "^[ \\r\\n\\t\\S]+$",
+                                      "type": "string",
+                                      "description": "A sequence of Unicode characters",
+                                      "title": "string"
+                                    },
+                                    "code": {
+                                      "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
+                                      "type": "string",
+                                      "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                                      "title": "code"
+                                    },
+                                    "display": {
+                                      "pattern": "^[ \\r\\n\\t\\S]+$",
+                                      "type": "string",
+                                      "description": "A sequence of Unicode characters",
+                                      "title": "string"
+                                    },
+                                    "userSelected": {
+                                      "pattern": "^true|false$",
+                                      "type": "boolean",
+                                      "description": "Value of \"true\" or \"false\"",
+                                      "title": "boolean"
+                                    }
+                                  },
+                                  "additionalProperties": false,
+                                  "title": "Coding"
+                                },
+                                "type": "array"
+                              }
+                            },
+                            "additionalProperties": false,
+                            "title": "CodeableConcept"
+                          },
+                          "system": {
+                            "pattern": "^\\S*$",
+                            "type": "string",
+                            "description": "String of characters used to identify a name or a resource",
+                            "title": "uri"
+                          },
+                          "value": {
+                            "pattern": "^[ \\r\\n\\t\\S]+$",
+                            "type": "string",
+                            "description": "A sequence of Unicode characters",
+                            "title": "string"
+                          },
+                          "period": {
+                            "description": "A time period defined by a start and end date and optionally time.",
+                            "properties": {
+                              "start": {
+                                "pattern": "^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$",
+                                "type": "string",
+                                "description": "A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates.",
+                                "title": "dateTime"
+                              },
+                              "end": {
+                                "pattern": "^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$",
+                                "type": "string",
+                                "description": "A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates.",
+                                "title": "dateTime"
+                              }
+                            },
+                            "additionalProperties": false,
+                            "title": "Period"
+                          },
+                          "assigner": {
+                            "description": "A reference from one resource to another.",
+                            "properties": {
+                              "reference": {
+                                "pattern": "^[ \\r\\n\\t\\S]+$",
+                                "type": "string",
+                                "description": "A sequence of Unicode characters",
+                                "title": "string"
+                              },
+                              "type": {
+                                "pattern": "^\\S*$",
+                                "type": "string",
+                                "description": "String of characters used to identify a name or a resource",
+                                "title": "uri"
+                              },
+                              "identifier": {
+                                "description": "An identifier - identifies some entity uniquely and unambiguously. Typically this is used for business identifiers.",
+                                "properties": {
+                                  "use": {
+                                    "description": "The purpose of this identifier.",
+                                    "enum": [
+                                      "usual",
+                                      "official",
+                                      "temp",
+                                      "secondary",
+                                      "old"
+                                    ],
+                                    "title": "\"usual\"|\"official\"|\"temp\"|\"secondary\"|\"old\""
+                                  },
+                                  "type": {
+                                    "description": "A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.",
+                                    "properties": {
+                                      "coding": {
+                                        "description": "A reference to a code defined by a terminology system.",
+                                        "items": {
+                                          "description": "A reference to a code defined by a terminology system.",
+                                          "properties": {
+                                            "system": {
+                                              "pattern": "^\\S*$",
+                                              "type": "string",
+                                              "description": "String of characters used to identify a name or a resource",
+                                              "title": "uri"
+                                            },
+                                            "version": {
+                                              "pattern": "^[ \\r\\n\\t\\S]+$",
+                                              "type": "string",
+                                              "description": "A sequence of Unicode characters",
+                                              "title": "string"
+                                            },
+                                            "code": {
+                                              "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
+                                              "type": "string",
+                                              "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                                              "title": "code"
+                                            },
+                                            "display": {
+                                              "pattern": "^[ \\r\\n\\t\\S]+$",
+                                              "type": "string",
+                                              "description": "A sequence of Unicode characters",
+                                              "title": "string"
+                                            },
+                                            "userSelected": {
+                                              "pattern": "^true|false$",
+                                              "type": "boolean",
+                                              "description": "Value of \"true\" or \"false\"",
+                                              "title": "boolean"
+                                            }
+                                          },
+                                          "additionalProperties": false,
+                                          "title": "Coding"
+                                        },
+                                        "type": "array"
+                                      }
+                                    },
+                                    "additionalProperties": false,
+                                    "title": "CodeableConcept"
+                                  },
+                                  "system": {
+                                    "pattern": "^\\S*$",
+                                    "type": "string",
+                                    "description": "String of characters used to identify a name or a resource",
+                                    "title": "uri"
+                                  },
+                                  "value": {
+                                    "pattern": "^[ \\r\\n\\t\\S]+$",
+                                    "type": "string",
+                                    "description": "A sequence of Unicode characters",
+                                    "title": "string"
+                                  },
+                                  "period": {
+                                    "description": "A time period defined by a start and end date and optionally time.",
+                                    "properties": {
+                                      "start": {
+                                        "pattern": "^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$",
+                                        "type": "string",
+                                        "description": "A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates.",
+                                        "title": "dateTime"
+                                      },
+                                      "end": {
+                                        "pattern": "^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$",
+                                        "type": "string",
+                                        "description": "A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates.",
+                                        "title": "dateTime"
+                                      }
+                                    },
+                                    "additionalProperties": false,
+                                    "title": "Period"
+                                  },
+                                  "assigner": {
+                                    "description": "A reference from one resource to another.",
+                                    "properties": {
+                                      "reference": {
+                                        "pattern": "^[ \\r\\n\\t\\S]+$",
+                                        "type": "string",
+                                        "description": "A sequence of Unicode characters",
+                                        "title": "string"
+                                      },
+                                      "type": {
+                                        "pattern": "^\\S*$",
+                                        "type": "string",
+                                        "description": "String of characters used to identify a name or a resource",
+                                        "title": "uri"
+                                      },
+                                      "identifier": {
+                                        "description": "An identifier - identifies some entity uniquely and unambiguously. Typically this is used for business identifiers.",
+                                        "properties": {
+                                          "use": {
+                                            "description": "The purpose of this identifier.",
+                                            "enum": [
+                                              "usual",
+                                              "official",
+                                              "temp",
+                                              "secondary",
+                                              "old"
+                                            ],
+                                            "title": "\"usual\"|\"official\"|\"temp\"|\"secondary\"|\"old\""
+                                          },
+                                          "type": {
+                                            "description": "A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.",
+                                            "properties": {
+                                              "coding": {
+                                                "description": "A reference to a code defined by a terminology system.",
+                                                "items": {
+                                                  "type": "null"
+                                                },
+                                                "type": "array"
+                                              }
+                                            },
+                                            "additionalProperties": false,
+                                            "title": "CodeableConcept"
+                                          },
+                                          "system": {
+                                            "pattern": "^\\S*$",
+                                            "type": "string",
+                                            "description": "String of characters used to identify a name or a resource",
+                                            "title": "uri"
+                                          },
+                                          "value": {
+                                            "pattern": "^[ \\r\\n\\t\\S]+$",
+                                            "type": "string",
+                                            "description": "A sequence of Unicode characters",
+                                            "title": "string"
+                                          },
+                                          "period": {
+                                            "description": "A time period defined by a start and end date and optionally time.",
+                                            "properties": {
+                                              "start": {
+                                                "description": "The start of the period. The boundary is inclusive.",
+                                                "type": "null"
+                                              },
+                                              "end": {
+                                                "description": "The end of the period. If the end of the period is missing, it means no end was known or planned at the time the instance was created. The start may be in the past, and the end date in the future, which means that period is expected/planned to end at that time.",
+                                                "type": "null"
+                                              }
+                                            },
+                                            "additionalProperties": false,
+                                            "title": "Period"
+                                          },
+                                          "assigner": {
+                                            "description": "A reference from one resource to another.",
+                                            "properties": {
+                                              "reference": {
+                                                "description": "A reference to a location at which the other resource is found. The reference may be a relative reference, in which case it is relative to the service base URL, or an absolute URL that resolves to the location where the resource is found. The reference may be version specific or not. If the reference is not to a FHIR RESTful server, then it should be assumed to be version specific. Internal fragment references (start with '#') refer to contained resources.",
+                                                "type": "null"
+                                              },
+                                              "type": {
+                                                "description": "The expected type of the target of the reference. If both Reference.type and Reference.reference are populated and Reference.reference is a FHIR URL, both SHALL be consistent.\n\nThe type is the Canonical URL of Resource Definition that is the type this reference refers to. References are URLs that are relative to http://hl7.org/fhir/StructureDefinition/ e.g. \"Patient\" is a reference to http://hl7.org/fhir/StructureDefinition/Patient. Absolute URLs are only allowed for logical models (and can only be used in references in logical models, not resources).",
+                                                "type": "null"
+                                              },
+                                              "identifier": {
+                                                "description": "An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.",
+                                                "type": "null"
+                                              },
+                                              "display": {
+                                                "description": "Plain text narrative that identifies the resource in addition to the resource reference.",
+                                                "type": "null"
+                                              }
+                                            },
+                                            "additionalProperties": false,
+                                            "title": "Reference"
+                                          }
+                                        },
+                                        "additionalProperties": false,
+                                        "title": "Identifier"
+                                      },
+                                      "display": {
+                                        "pattern": "^[ \\r\\n\\t\\S]+$",
+                                        "type": "string",
+                                        "description": "A sequence of Unicode characters",
+                                        "title": "string"
+                                      }
+                                    },
+                                    "additionalProperties": false,
+                                    "title": "Reference"
+                                  }
+                                },
+                                "additionalProperties": false,
+                                "title": "Identifier"
+                              },
+                              "display": {
+                                "pattern": "^[ \\r\\n\\t\\S]+$",
+                                "type": "string",
+                                "description": "A sequence of Unicode characters",
+                                "title": "string"
+                              }
+                            },
+                            "additionalProperties": false,
+                            "title": "Reference"
+                          }
+                        },
+                        "additionalProperties": false,
+                        "title": "Identifier"
+                      },
+                      "display": {
+                        "pattern": "^[ \\r\\n\\t\\S]+$",
+                        "type": "string",
+                        "description": "A sequence of Unicode characters",
+                        "title": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "title": "Reference"
+                  }
+                },
+                "additionalProperties": false,
+                "title": "Identifier"
+              },
+              "display": {
+                "pattern": "^[ \\r\\n\\t\\S]+$",
+                "type": "string",
+                "description": "A sequence of Unicode characters",
+                "title": "string"
+              }
+            },
+            "additionalProperties": false,
+            "title": "Reference"
+          },
+          "altId": {
+            "pattern": "^[ \\r\\n\\t\\S]+$",
+            "type": "string",
+            "description": "A sequence of Unicode characters",
+            "title": "string"
+          },
+          "name": {
+            "pattern": "^[ \\r\\n\\t\\S]+$",
+            "type": "string",
+            "description": "A sequence of Unicode characters",
+            "title": "string"
+          },
+          "requestor": {
+            "pattern": "^true|false$",
+            "type": "boolean",
+            "description": "Value of \"true\" or \"false\"",
+            "title": "boolean"
+          },
+          "location": {
+            "description": "A reference from one resource to another.",
+            "properties": {
+              "reference": {
+                "pattern": "^[ \\r\\n\\t\\S]+$",
+                "type": "string",
+                "description": "A sequence of Unicode characters",
+                "title": "string"
+              },
+              "type": {
+                "pattern": "^\\S*$",
+                "type": "string",
+                "description": "String of characters used to identify a name or a resource",
+                "title": "uri"
+              },
+              "identifier": {
+                "description": "An identifier - identifies some entity uniquely and unambiguously. Typically this is used for business identifiers.",
+                "properties": {
+                  "use": {
+                    "description": "The purpose of this identifier.",
+                    "enum": ["usual", "official", "temp", "secondary", "old"],
+                    "title": "\"usual\"|\"official\"|\"temp\"|\"secondary\"|\"old\""
+                  },
+                  "type": {
+                    "description": "A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.",
+                    "properties": {
+                      "coding": {
+                        "description": "A reference to a code defined by a terminology system.",
+                        "items": {
+                          "description": "A reference to a code defined by a terminology system.",
+                          "properties": {
+                            "system": {
+                              "pattern": "^\\S*$",
+                              "type": "string",
+                              "description": "String of characters used to identify a name or a resource",
+                              "title": "uri"
+                            },
+                            "version": {
+                              "pattern": "^[ \\r\\n\\t\\S]+$",
+                              "type": "string",
+                              "description": "A sequence of Unicode characters",
+                              "title": "string"
+                            },
+                            "code": {
+                              "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
+                              "type": "string",
+                              "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                              "title": "code"
+                            },
+                            "display": {
+                              "pattern": "^[ \\r\\n\\t\\S]+$",
+                              "type": "string",
+                              "description": "A sequence of Unicode characters",
+                              "title": "string"
+                            },
+                            "userSelected": {
+                              "pattern": "^true|false$",
+                              "type": "boolean",
+                              "description": "Value of \"true\" or \"false\"",
+                              "title": "boolean"
+                            }
+                          },
+                          "additionalProperties": false,
+                          "title": "Coding"
+                        },
+                        "type": "array"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "title": "CodeableConcept"
+                  },
+                  "system": {
+                    "pattern": "^\\S*$",
+                    "type": "string",
+                    "description": "String of characters used to identify a name or a resource",
+                    "title": "uri"
+                  },
+                  "value": {
+                    "pattern": "^[ \\r\\n\\t\\S]+$",
+                    "type": "string",
+                    "description": "A sequence of Unicode characters",
+                    "title": "string"
+                  },
+                  "period": {
+                    "description": "A time period defined by a start and end date and optionally time.",
+                    "properties": {
+                      "start": {
+                        "pattern": "^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$",
+                        "type": "string",
+                        "description": "A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates.",
+                        "title": "dateTime"
+                      },
+                      "end": {
+                        "pattern": "^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$",
+                        "type": "string",
+                        "description": "A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates.",
+                        "title": "dateTime"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "title": "Period"
+                  },
+                  "assigner": {
+                    "description": "A reference from one resource to another.",
+                    "properties": {
+                      "reference": {
+                        "pattern": "^[ \\r\\n\\t\\S]+$",
+                        "type": "string",
+                        "description": "A sequence of Unicode characters",
+                        "title": "string"
+                      },
+                      "type": {
+                        "pattern": "^\\S*$",
+                        "type": "string",
+                        "description": "String of characters used to identify a name or a resource",
+                        "title": "uri"
+                      },
+                      "identifier": {
+                        "description": "An identifier - identifies some entity uniquely and unambiguously. Typically this is used for business identifiers.",
+                        "properties": {
+                          "use": {
+                            "description": "The purpose of this identifier.",
+                            "enum": [
+                              "usual",
+                              "official",
+                              "temp",
+                              "secondary",
+                              "old"
+                            ],
+                            "title": "\"usual\"|\"official\"|\"temp\"|\"secondary\"|\"old\""
+                          },
+                          "type": {
+                            "description": "A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.",
+                            "properties": {
+                              "coding": {
+                                "description": "A reference to a code defined by a terminology system.",
+                                "items": {
+                                  "description": "A reference to a code defined by a terminology system.",
+                                  "properties": {
+                                    "system": {
+                                      "pattern": "^\\S*$",
+                                      "type": "string",
+                                      "description": "String of characters used to identify a name or a resource",
+                                      "title": "uri"
+                                    },
+                                    "version": {
+                                      "pattern": "^[ \\r\\n\\t\\S]+$",
+                                      "type": "string",
+                                      "description": "A sequence of Unicode characters",
+                                      "title": "string"
+                                    },
+                                    "code": {
+                                      "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
+                                      "type": "string",
+                                      "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                                      "title": "code"
+                                    },
+                                    "display": {
+                                      "pattern": "^[ \\r\\n\\t\\S]+$",
+                                      "type": "string",
+                                      "description": "A sequence of Unicode characters",
+                                      "title": "string"
+                                    },
+                                    "userSelected": {
+                                      "pattern": "^true|false$",
+                                      "type": "boolean",
+                                      "description": "Value of \"true\" or \"false\"",
+                                      "title": "boolean"
+                                    }
+                                  },
+                                  "additionalProperties": false,
+                                  "title": "Coding"
+                                },
+                                "type": "array"
+                              }
+                            },
+                            "additionalProperties": false,
+                            "title": "CodeableConcept"
+                          },
+                          "system": {
+                            "pattern": "^\\S*$",
+                            "type": "string",
+                            "description": "String of characters used to identify a name or a resource",
+                            "title": "uri"
+                          },
+                          "value": {
+                            "pattern": "^[ \\r\\n\\t\\S]+$",
+                            "type": "string",
+                            "description": "A sequence of Unicode characters",
+                            "title": "string"
+                          },
+                          "period": {
+                            "description": "A time period defined by a start and end date and optionally time.",
+                            "properties": {
+                              "start": {
+                                "pattern": "^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$",
+                                "type": "string",
+                                "description": "A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates.",
+                                "title": "dateTime"
+                              },
+                              "end": {
+                                "pattern": "^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$",
+                                "type": "string",
+                                "description": "A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates.",
+                                "title": "dateTime"
+                              }
+                            },
+                            "additionalProperties": false,
+                            "title": "Period"
+                          },
+                          "assigner": {
+                            "description": "A reference from one resource to another.",
+                            "properties": {
+                              "reference": {
+                                "pattern": "^[ \\r\\n\\t\\S]+$",
+                                "type": "string",
+                                "description": "A sequence of Unicode characters",
+                                "title": "string"
+                              },
+                              "type": {
+                                "pattern": "^\\S*$",
+                                "type": "string",
+                                "description": "String of characters used to identify a name or a resource",
+                                "title": "uri"
+                              },
+                              "identifier": {
+                                "description": "An identifier - identifies some entity uniquely and unambiguously. Typically this is used for business identifiers.",
+                                "properties": {
+                                  "use": {
+                                    "description": "The purpose of this identifier.",
+                                    "enum": [
+                                      "usual",
+                                      "official",
+                                      "temp",
+                                      "secondary",
+                                      "old"
+                                    ],
+                                    "title": "\"usual\"|\"official\"|\"temp\"|\"secondary\"|\"old\""
+                                  },
+                                  "type": {
+                                    "description": "A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.",
+                                    "properties": {
+                                      "coding": {
+                                        "description": "A reference to a code defined by a terminology system.",
+                                        "items": {
+                                          "description": "A reference to a code defined by a terminology system.",
+                                          "properties": {
+                                            "system": {
+                                              "pattern": "^\\S*$",
+                                              "type": "string",
+                                              "description": "String of characters used to identify a name or a resource",
+                                              "title": "uri"
+                                            },
+                                            "version": {
+                                              "pattern": "^[ \\r\\n\\t\\S]+$",
+                                              "type": "string",
+                                              "description": "A sequence of Unicode characters",
+                                              "title": "string"
+                                            },
+                                            "code": {
+                                              "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
+                                              "type": "string",
+                                              "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                                              "title": "code"
+                                            },
+                                            "display": {
+                                              "pattern": "^[ \\r\\n\\t\\S]+$",
+                                              "type": "string",
+                                              "description": "A sequence of Unicode characters",
+                                              "title": "string"
+                                            },
+                                            "userSelected": {
+                                              "pattern": "^true|false$",
+                                              "type": "boolean",
+                                              "description": "Value of \"true\" or \"false\"",
+                                              "title": "boolean"
+                                            }
+                                          },
+                                          "additionalProperties": false,
+                                          "title": "Coding"
+                                        },
+                                        "type": "array"
+                                      }
+                                    },
+                                    "additionalProperties": false,
+                                    "title": "CodeableConcept"
+                                  },
+                                  "system": {
+                                    "pattern": "^\\S*$",
+                                    "type": "string",
+                                    "description": "String of characters used to identify a name or a resource",
+                                    "title": "uri"
+                                  },
+                                  "value": {
+                                    "pattern": "^[ \\r\\n\\t\\S]+$",
+                                    "type": "string",
+                                    "description": "A sequence of Unicode characters",
+                                    "title": "string"
+                                  },
+                                  "period": {
+                                    "description": "A time period defined by a start and end date and optionally time.",
+                                    "properties": {
+                                      "start": {
+                                        "pattern": "^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$",
+                                        "type": "string",
+                                        "description": "A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates.",
+                                        "title": "dateTime"
+                                      },
+                                      "end": {
+                                        "pattern": "^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$",
+                                        "type": "string",
+                                        "description": "A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates.",
+                                        "title": "dateTime"
+                                      }
+                                    },
+                                    "additionalProperties": false,
+                                    "title": "Period"
+                                  },
+                                  "assigner": {
+                                    "description": "A reference from one resource to another.",
+                                    "properties": {
+                                      "reference": {
+                                        "pattern": "^[ \\r\\n\\t\\S]+$",
+                                        "type": "string",
+                                        "description": "A sequence of Unicode characters",
+                                        "title": "string"
+                                      },
+                                      "type": {
+                                        "pattern": "^\\S*$",
+                                        "type": "string",
+                                        "description": "String of characters used to identify a name or a resource",
+                                        "title": "uri"
+                                      },
+                                      "identifier": {
+                                        "description": "An identifier - identifies some entity uniquely and unambiguously. Typically this is used for business identifiers.",
+                                        "properties": {
+                                          "use": {
+                                            "description": "The purpose of this identifier.",
+                                            "enum": [
+                                              "usual",
+                                              "official",
+                                              "temp",
+                                              "secondary",
+                                              "old"
+                                            ],
+                                            "title": "\"usual\"|\"official\"|\"temp\"|\"secondary\"|\"old\""
+                                          },
+                                          "type": {
+                                            "description": "A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.",
+                                            "properties": {
+                                              "coding": {
+                                                "description": "A reference to a code defined by a terminology system.",
+                                                "items": {
+                                                  "type": "null"
+                                                },
+                                                "type": "array"
+                                              }
+                                            },
+                                            "additionalProperties": false,
+                                            "title": "CodeableConcept"
+                                          },
+                                          "system": {
+                                            "pattern": "^\\S*$",
+                                            "type": "string",
+                                            "description": "String of characters used to identify a name or a resource",
+                                            "title": "uri"
+                                          },
+                                          "value": {
+                                            "pattern": "^[ \\r\\n\\t\\S]+$",
+                                            "type": "string",
+                                            "description": "A sequence of Unicode characters",
+                                            "title": "string"
+                                          },
+                                          "period": {
+                                            "description": "A time period defined by a start and end date and optionally time.",
+                                            "properties": {
+                                              "start": {
+                                                "description": "The start of the period. The boundary is inclusive.",
+                                                "type": "null"
+                                              },
+                                              "end": {
+                                                "description": "The end of the period. If the end of the period is missing, it means no end was known or planned at the time the instance was created. The start may be in the past, and the end date in the future, which means that period is expected/planned to end at that time.",
+                                                "type": "null"
+                                              }
+                                            },
+                                            "additionalProperties": false,
+                                            "title": "Period"
+                                          },
+                                          "assigner": {
+                                            "description": "A reference from one resource to another.",
+                                            "properties": {
+                                              "reference": {
+                                                "description": "A reference to a location at which the other resource is found. The reference may be a relative reference, in which case it is relative to the service base URL, or an absolute URL that resolves to the location where the resource is found. The reference may be version specific or not. If the reference is not to a FHIR RESTful server, then it should be assumed to be version specific. Internal fragment references (start with '#') refer to contained resources.",
+                                                "type": "null"
+                                              },
+                                              "type": {
+                                                "description": "The expected type of the target of the reference. If both Reference.type and Reference.reference are populated and Reference.reference is a FHIR URL, both SHALL be consistent.\n\nThe type is the Canonical URL of Resource Definition that is the type this reference refers to. References are URLs that are relative to http://hl7.org/fhir/StructureDefinition/ e.g. \"Patient\" is a reference to http://hl7.org/fhir/StructureDefinition/Patient. Absolute URLs are only allowed for logical models (and can only be used in references in logical models, not resources).",
+                                                "type": "null"
+                                              },
+                                              "identifier": {
+                                                "description": "An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.",
+                                                "type": "null"
+                                              },
+                                              "display": {
+                                                "description": "Plain text narrative that identifies the resource in addition to the resource reference.",
+                                                "type": "null"
+                                              }
+                                            },
+                                            "additionalProperties": false,
+                                            "title": "Reference"
+                                          }
+                                        },
+                                        "additionalProperties": false,
+                                        "title": "Identifier"
+                                      },
+                                      "display": {
+                                        "pattern": "^[ \\r\\n\\t\\S]+$",
+                                        "type": "string",
+                                        "description": "A sequence of Unicode characters",
+                                        "title": "string"
+                                      }
+                                    },
+                                    "additionalProperties": false,
+                                    "title": "Reference"
+                                  }
+                                },
+                                "additionalProperties": false,
+                                "title": "Identifier"
+                              },
+                              "display": {
+                                "pattern": "^[ \\r\\n\\t\\S]+$",
+                                "type": "string",
+                                "description": "A sequence of Unicode characters",
+                                "title": "string"
+                              }
+                            },
+                            "additionalProperties": false,
+                            "title": "Reference"
+                          }
+                        },
+                        "additionalProperties": false,
+                        "title": "Identifier"
+                      },
+                      "display": {
+                        "pattern": "^[ \\r\\n\\t\\S]+$",
+                        "type": "string",
+                        "description": "A sequence of Unicode characters",
+                        "title": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "title": "Reference"
+                  }
+                },
+                "additionalProperties": false,
+                "title": "Identifier"
+              },
+              "display": {
+                "pattern": "^[ \\r\\n\\t\\S]+$",
+                "type": "string",
+                "description": "A sequence of Unicode characters",
+                "title": "string"
+              }
+            },
+            "additionalProperties": false,
+            "title": "Reference"
+          },
+          "policy": {
+            "description": "The policy or plan that authorized the activity being recorded. Typically, a single activity may have multiple applicable policies, such as patient consent, guarantor funding, etc. The policy would also indicate the security token used.",
+            "items": {
+              "pattern": "^\\S*$",
+              "type": "string",
+              "description": "String of characters used to identify a name or a resource",
+              "title": "uri"
+            },
+            "type": "array"
+          },
+          "media": {
+            "description": "A reference to a code defined by a terminology system.",
+            "properties": {
+              "system": {
+                "pattern": "^\\S*$",
+                "type": "string",
+                "description": "String of characters used to identify a name or a resource",
+                "title": "uri"
+              },
+              "version": {
+                "pattern": "^[ \\r\\n\\t\\S]+$",
+                "type": "string",
+                "description": "A sequence of Unicode characters",
+                "title": "string"
+              },
+              "code": {
+                "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
+                "type": "string",
+                "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                "title": "code"
+              },
+              "display": {
+                "pattern": "^[ \\r\\n\\t\\S]+$",
+                "type": "string",
+                "description": "A sequence of Unicode characters",
+                "title": "string"
+              },
+              "userSelected": {
+                "pattern": "^true|false$",
+                "type": "boolean",
+                "description": "Value of \"true\" or \"false\"",
+                "title": "boolean"
+              }
+            },
+            "additionalProperties": false,
+            "title": "Coding"
+          },
+          "network": {
+            "description": "A record of an event made for purposes of maintaining a security log. Typical uses include detection of intrusion attempts and monitoring for inappropriate usage.",
+            "properties": {
+              "address": {
+                "pattern": "^[ \\r\\n\\t\\S]+$",
+                "type": "string",
+                "description": "A sequence of Unicode characters",
+                "title": "string"
+              },
+              "type": {
+                "description": "An identifier for the type of network access point that originated the audit event.",
+                "enum": ["1", "2", "3", "4", "5"],
+                "title": "\"1\"|\"2\"|\"3\"|\"4\"|\"5\""
+              }
+            },
+            "additionalProperties": false,
+            "title": "AuditEvent_Network"
+          },
+          "purposeOfUse": {
+            "description": "The reason (purpose of use), specific to this agent, that was used during the event being recorded.",
+            "items": {
+              "description": "A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.",
+              "properties": {
+                "coding": {
+                  "description": "A reference to a code defined by a terminology system.",
+                  "items": {
+                    "description": "A reference to a code defined by a terminology system.",
+                    "properties": {
+                      "system": {
+                        "pattern": "^\\S*$",
+                        "type": "string",
+                        "description": "String of characters used to identify a name or a resource",
+                        "title": "uri"
+                      },
+                      "version": {
+                        "pattern": "^[ \\r\\n\\t\\S]+$",
+                        "type": "string",
+                        "description": "A sequence of Unicode characters",
+                        "title": "string"
+                      },
+                      "code": {
+                        "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
+                        "type": "string",
+                        "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                        "title": "code"
+                      },
+                      "display": {
+                        "pattern": "^[ \\r\\n\\t\\S]+$",
+                        "type": "string",
+                        "description": "A sequence of Unicode characters",
+                        "title": "string"
+                      },
+                      "userSelected": {
+                        "pattern": "^true|false$",
+                        "type": "boolean",
+                        "description": "Value of \"true\" or \"false\"",
+                        "title": "boolean"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "title": "Coding"
+                  },
+                  "type": "array"
+                }
+              },
+              "additionalProperties": false,
+              "title": "CodeableConcept"
+            },
+            "type": "array"
+          }
+        },
+        "additionalProperties": false,
+        "title": "AuditEvent_Agent"
+      },
+      "type": "array"
+    },
+    "source": {
+      "description": "A record of an event made for purposes of maintaining a security log. Typical uses include detection of intrusion attempts and monitoring for inappropriate usage.",
+      "properties": {
+        "site": {
+          "pattern": "^[ \\r\\n\\t\\S]+$",
+          "type": "string",
+          "description": "A sequence of Unicode characters",
+          "title": "string"
+        },
+        "observer": {
+          "description": "A reference from one resource to another.",
+          "properties": {
+            "reference": {
+              "pattern": "^[ \\r\\n\\t\\S]+$",
+              "type": "string",
+              "description": "A sequence of Unicode characters",
+              "title": "string"
+            },
+            "type": {
+              "pattern": "^\\S*$",
+              "type": "string",
+              "description": "String of characters used to identify a name or a resource",
+              "title": "uri"
+            },
+            "identifier": {
+              "description": "An identifier - identifies some entity uniquely and unambiguously. Typically this is used for business identifiers.",
+              "properties": {
+                "use": {
+                  "description": "The purpose of this identifier.",
+                  "enum": ["usual", "official", "temp", "secondary", "old"],
+                  "title": "\"usual\"|\"official\"|\"temp\"|\"secondary\"|\"old\""
+                },
+                "type": {
+                  "description": "A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.",
+                  "properties": {
+                    "coding": {
+                      "description": "A reference to a code defined by a terminology system.",
+                      "items": {
+                        "description": "A reference to a code defined by a terminology system.",
+                        "properties": {
+                          "system": {
+                            "pattern": "^\\S*$",
+                            "type": "string",
+                            "description": "String of characters used to identify a name or a resource",
+                            "title": "uri"
+                          },
+                          "version": {
+                            "pattern": "^[ \\r\\n\\t\\S]+$",
+                            "type": "string",
+                            "description": "A sequence of Unicode characters",
+                            "title": "string"
+                          },
+                          "code": {
+                            "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
+                            "type": "string",
+                            "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                            "title": "code"
+                          },
+                          "display": {
+                            "pattern": "^[ \\r\\n\\t\\S]+$",
+                            "type": "string",
+                            "description": "A sequence of Unicode characters",
+                            "title": "string"
+                          },
+                          "userSelected": {
+                            "pattern": "^true|false$",
+                            "type": "boolean",
+                            "description": "Value of \"true\" or \"false\"",
+                            "title": "boolean"
+                          }
+                        },
+                        "additionalProperties": false,
+                        "title": "Coding"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "title": "CodeableConcept"
+                },
+                "system": {
+                  "pattern": "^\\S*$",
+                  "type": "string",
+                  "description": "String of characters used to identify a name or a resource",
+                  "title": "uri"
+                },
+                "value": {
+                  "pattern": "^[ \\r\\n\\t\\S]+$",
+                  "type": "string",
+                  "description": "A sequence of Unicode characters",
+                  "title": "string"
+                },
+                "period": {
+                  "description": "A time period defined by a start and end date and optionally time.",
+                  "properties": {
+                    "start": {
+                      "pattern": "^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$",
+                      "type": "string",
+                      "description": "A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates.",
+                      "title": "dateTime"
+                    },
+                    "end": {
+                      "pattern": "^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$",
+                      "type": "string",
+                      "description": "A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates.",
+                      "title": "dateTime"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "title": "Period"
+                },
+                "assigner": {
+                  "description": "A reference from one resource to another.",
+                  "properties": {
+                    "reference": {
+                      "pattern": "^[ \\r\\n\\t\\S]+$",
+                      "type": "string",
+                      "description": "A sequence of Unicode characters",
+                      "title": "string"
+                    },
+                    "type": {
+                      "pattern": "^\\S*$",
+                      "type": "string",
+                      "description": "String of characters used to identify a name or a resource",
+                      "title": "uri"
+                    },
+                    "identifier": {
+                      "description": "An identifier - identifies some entity uniquely and unambiguously. Typically this is used for business identifiers.",
+                      "properties": {
+                        "use": {
+                          "description": "The purpose of this identifier.",
+                          "enum": [
+                            "usual",
+                            "official",
+                            "temp",
+                            "secondary",
+                            "old"
+                          ],
+                          "title": "\"usual\"|\"official\"|\"temp\"|\"secondary\"|\"old\""
+                        },
+                        "type": {
+                          "description": "A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.",
+                          "properties": {
+                            "coding": {
+                              "description": "A reference to a code defined by a terminology system.",
+                              "items": {
+                                "description": "A reference to a code defined by a terminology system.",
+                                "properties": {
+                                  "system": {
+                                    "pattern": "^\\S*$",
+                                    "type": "string",
+                                    "description": "String of characters used to identify a name or a resource",
+                                    "title": "uri"
+                                  },
+                                  "version": {
+                                    "pattern": "^[ \\r\\n\\t\\S]+$",
+                                    "type": "string",
+                                    "description": "A sequence of Unicode characters",
+                                    "title": "string"
+                                  },
+                                  "code": {
+                                    "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
+                                    "type": "string",
+                                    "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                                    "title": "code"
+                                  },
+                                  "display": {
+                                    "pattern": "^[ \\r\\n\\t\\S]+$",
+                                    "type": "string",
+                                    "description": "A sequence of Unicode characters",
+                                    "title": "string"
+                                  },
+                                  "userSelected": {
+                                    "pattern": "^true|false$",
+                                    "type": "boolean",
+                                    "description": "Value of \"true\" or \"false\"",
+                                    "title": "boolean"
+                                  }
+                                },
+                                "additionalProperties": false,
+                                "title": "Coding"
+                              },
+                              "type": "array"
+                            }
+                          },
+                          "additionalProperties": false,
+                          "title": "CodeableConcept"
+                        },
+                        "system": {
+                          "pattern": "^\\S*$",
+                          "type": "string",
+                          "description": "String of characters used to identify a name or a resource",
+                          "title": "uri"
+                        },
+                        "value": {
+                          "pattern": "^[ \\r\\n\\t\\S]+$",
+                          "type": "string",
+                          "description": "A sequence of Unicode characters",
+                          "title": "string"
+                        },
+                        "period": {
+                          "description": "A time period defined by a start and end date and optionally time.",
+                          "properties": {
+                            "start": {
+                              "pattern": "^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$",
+                              "type": "string",
+                              "description": "A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates.",
+                              "title": "dateTime"
+                            },
+                            "end": {
+                              "pattern": "^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$",
+                              "type": "string",
+                              "description": "A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates.",
+                              "title": "dateTime"
+                            }
+                          },
+                          "additionalProperties": false,
+                          "title": "Period"
+                        },
+                        "assigner": {
+                          "description": "A reference from one resource to another.",
+                          "properties": {
+                            "reference": {
+                              "pattern": "^[ \\r\\n\\t\\S]+$",
+                              "type": "string",
+                              "description": "A sequence of Unicode characters",
+                              "title": "string"
+                            },
+                            "type": {
+                              "pattern": "^\\S*$",
+                              "type": "string",
+                              "description": "String of characters used to identify a name or a resource",
+                              "title": "uri"
+                            },
+                            "identifier": {
+                              "description": "An identifier - identifies some entity uniquely and unambiguously. Typically this is used for business identifiers.",
+                              "properties": {
+                                "use": {
+                                  "description": "The purpose of this identifier.",
+                                  "enum": [
+                                    "usual",
+                                    "official",
+                                    "temp",
+                                    "secondary",
+                                    "old"
+                                  ],
+                                  "title": "\"usual\"|\"official\"|\"temp\"|\"secondary\"|\"old\""
+                                },
+                                "type": {
+                                  "description": "A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.",
+                                  "properties": {
+                                    "coding": {
+                                      "description": "A reference to a code defined by a terminology system.",
+                                      "items": {
+                                        "description": "A reference to a code defined by a terminology system.",
+                                        "properties": {
+                                          "system": {
+                                            "pattern": "^\\S*$",
+                                            "type": "string",
+                                            "description": "String of characters used to identify a name or a resource",
+                                            "title": "uri"
+                                          },
+                                          "version": {
+                                            "pattern": "^[ \\r\\n\\t\\S]+$",
+                                            "type": "string",
+                                            "description": "A sequence of Unicode characters",
+                                            "title": "string"
+                                          },
+                                          "code": {
+                                            "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
+                                            "type": "string",
+                                            "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                                            "title": "code"
+                                          },
+                                          "display": {
+                                            "pattern": "^[ \\r\\n\\t\\S]+$",
+                                            "type": "string",
+                                            "description": "A sequence of Unicode characters",
+                                            "title": "string"
+                                          },
+                                          "userSelected": {
+                                            "pattern": "^true|false$",
+                                            "type": "boolean",
+                                            "description": "Value of \"true\" or \"false\"",
+                                            "title": "boolean"
+                                          }
+                                        },
+                                        "additionalProperties": false,
+                                        "title": "Coding"
+                                      },
+                                      "type": "array"
+                                    }
+                                  },
+                                  "additionalProperties": false,
+                                  "title": "CodeableConcept"
+                                },
+                                "system": {
+                                  "pattern": "^\\S*$",
+                                  "type": "string",
+                                  "description": "String of characters used to identify a name or a resource",
+                                  "title": "uri"
+                                },
+                                "value": {
+                                  "pattern": "^[ \\r\\n\\t\\S]+$",
+                                  "type": "string",
+                                  "description": "A sequence of Unicode characters",
+                                  "title": "string"
+                                },
+                                "period": {
+                                  "description": "A time period defined by a start and end date and optionally time.",
+                                  "properties": {
+                                    "start": {
+                                      "pattern": "^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$",
+                                      "type": "string",
+                                      "description": "A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates.",
+                                      "title": "dateTime"
+                                    },
+                                    "end": {
+                                      "pattern": "^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$",
+                                      "type": "string",
+                                      "description": "A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates.",
+                                      "title": "dateTime"
+                                    }
+                                  },
+                                  "additionalProperties": false,
+                                  "title": "Period"
+                                },
+                                "assigner": {
+                                  "description": "A reference from one resource to another.",
+                                  "properties": {
+                                    "reference": {
+                                      "pattern": "^[ \\r\\n\\t\\S]+$",
+                                      "type": "string",
+                                      "description": "A sequence of Unicode characters",
+                                      "title": "string"
+                                    },
+                                    "type": {
+                                      "pattern": "^\\S*$",
+                                      "type": "string",
+                                      "description": "String of characters used to identify a name or a resource",
+                                      "title": "uri"
+                                    },
+                                    "identifier": {
+                                      "description": "An identifier - identifies some entity uniquely and unambiguously. Typically this is used for business identifiers.",
+                                      "properties": {
+                                        "use": {
+                                          "description": "The purpose of this identifier.",
+                                          "enum": [
+                                            "usual",
+                                            "official",
+                                            "temp",
+                                            "secondary",
+                                            "old"
+                                          ],
+                                          "title": "\"usual\"|\"official\"|\"temp\"|\"secondary\"|\"old\""
+                                        },
+                                        "type": {
+                                          "description": "A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.",
+                                          "properties": {
+                                            "coding": {
+                                              "description": "A reference to a code defined by a terminology system.",
+                                              "items": {
+                                                "type": "null"
+                                              },
+                                              "type": "array"
+                                            }
+                                          },
+                                          "additionalProperties": false,
+                                          "title": "CodeableConcept"
+                                        },
+                                        "system": {
+                                          "pattern": "^\\S*$",
+                                          "type": "string",
+                                          "description": "String of characters used to identify a name or a resource",
+                                          "title": "uri"
+                                        },
+                                        "value": {
+                                          "pattern": "^[ \\r\\n\\t\\S]+$",
+                                          "type": "string",
+                                          "description": "A sequence of Unicode characters",
+                                          "title": "string"
+                                        },
+                                        "period": {
+                                          "description": "A time period defined by a start and end date and optionally time.",
+                                          "properties": {
+                                            "start": {
+                                              "description": "The start of the period. The boundary is inclusive.",
+                                              "type": "null"
+                                            },
+                                            "end": {
+                                              "description": "The end of the period. If the end of the period is missing, it means no end was known or planned at the time the instance was created. The start may be in the past, and the end date in the future, which means that period is expected/planned to end at that time.",
+                                              "type": "null"
+                                            }
+                                          },
+                                          "additionalProperties": false,
+                                          "title": "Period"
+                                        },
+                                        "assigner": {
+                                          "description": "A reference from one resource to another.",
+                                          "properties": {
+                                            "reference": {
+                                              "description": "A reference to a location at which the other resource is found. The reference may be a relative reference, in which case it is relative to the service base URL, or an absolute URL that resolves to the location where the resource is found. The reference may be version specific or not. If the reference is not to a FHIR RESTful server, then it should be assumed to be version specific. Internal fragment references (start with '#') refer to contained resources.",
+                                              "type": "null"
+                                            },
+                                            "type": {
+                                              "description": "The expected type of the target of the reference. If both Reference.type and Reference.reference are populated and Reference.reference is a FHIR URL, both SHALL be consistent.\n\nThe type is the Canonical URL of Resource Definition that is the type this reference refers to. References are URLs that are relative to http://hl7.org/fhir/StructureDefinition/ e.g. \"Patient\" is a reference to http://hl7.org/fhir/StructureDefinition/Patient. Absolute URLs are only allowed for logical models (and can only be used in references in logical models, not resources).",
+                                              "type": "null"
+                                            },
+                                            "identifier": {
+                                              "description": "An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.",
+                                              "type": "null"
+                                            },
+                                            "display": {
+                                              "description": "Plain text narrative that identifies the resource in addition to the resource reference.",
+                                              "type": "null"
+                                            }
+                                          },
+                                          "additionalProperties": false,
+                                          "title": "Reference"
+                                        }
+                                      },
+                                      "additionalProperties": false,
+                                      "title": "Identifier"
+                                    },
+                                    "display": {
+                                      "pattern": "^[ \\r\\n\\t\\S]+$",
+                                      "type": "string",
+                                      "description": "A sequence of Unicode characters",
+                                      "title": "string"
+                                    }
+                                  },
+                                  "additionalProperties": false,
+                                  "title": "Reference"
+                                }
+                              },
+                              "additionalProperties": false,
+                              "title": "Identifier"
+                            },
+                            "display": {
+                              "pattern": "^[ \\r\\n\\t\\S]+$",
+                              "type": "string",
+                              "description": "A sequence of Unicode characters",
+                              "title": "string"
+                            }
+                          },
+                          "additionalProperties": false,
+                          "title": "Reference"
+                        }
+                      },
+                      "additionalProperties": false,
+                      "title": "Identifier"
+                    },
+                    "display": {
+                      "pattern": "^[ \\r\\n\\t\\S]+$",
+                      "type": "string",
+                      "description": "A sequence of Unicode characters",
+                      "title": "string"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "title": "Reference"
+                }
+              },
+              "additionalProperties": false,
+              "title": "Identifier"
+            },
+            "display": {
+              "pattern": "^[ \\r\\n\\t\\S]+$",
+              "type": "string",
+              "description": "A sequence of Unicode characters",
+              "title": "string"
+            }
+          },
+          "additionalProperties": false,
+          "title": "Reference"
+        },
+        "type": {
+          "description": "Code specifying the type of source where event originated.",
+          "items": {
+            "description": "A reference to a code defined by a terminology system.",
+            "properties": {
+              "system": {
+                "pattern": "^\\S*$",
+                "type": "string",
+                "description": "String of characters used to identify a name or a resource",
+                "title": "uri"
+              },
+              "version": {
+                "pattern": "^[ \\r\\n\\t\\S]+$",
+                "type": "string",
+                "description": "A sequence of Unicode characters",
+                "title": "string"
+              },
+              "code": {
+                "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
+                "type": "string",
+                "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                "title": "code"
+              },
+              "display": {
+                "pattern": "^[ \\r\\n\\t\\S]+$",
+                "type": "string",
+                "description": "A sequence of Unicode characters",
+                "title": "string"
+              },
+              "userSelected": {
+                "pattern": "^true|false$",
+                "type": "boolean",
+                "description": "Value of \"true\" or \"false\"",
+                "title": "boolean"
+              }
+            },
+            "additionalProperties": false,
+            "title": "Coding"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "required": ["observer"],
+      "title": "AuditEvent_Source"
+    },
+    "entity": {
+      "description": "Specific instances of data or objects that have been accessed.",
+      "items": {
+        "description": "A record of an event made for purposes of maintaining a security log. Typical uses include detection of intrusion attempts and monitoring for inappropriate usage.",
+        "properties": {
+          "what": {
+            "description": "A reference from one resource to another.",
+            "properties": {
+              "reference": {
+                "pattern": "^[ \\r\\n\\t\\S]+$",
+                "type": "string",
+                "description": "A sequence of Unicode characters",
+                "title": "string"
+              },
+              "type": {
+                "pattern": "^\\S*$",
+                "type": "string",
+                "description": "String of characters used to identify a name or a resource",
+                "title": "uri"
+              },
+              "identifier": {
+                "description": "An identifier - identifies some entity uniquely and unambiguously. Typically this is used for business identifiers.",
+                "properties": {
+                  "use": {
+                    "description": "The purpose of this identifier.",
+                    "enum": ["usual", "official", "temp", "secondary", "old"],
+                    "title": "\"usual\"|\"official\"|\"temp\"|\"secondary\"|\"old\""
+                  },
+                  "type": {
+                    "description": "A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.",
+                    "properties": {
+                      "coding": {
+                        "description": "A reference to a code defined by a terminology system.",
+                        "items": {
+                          "description": "A reference to a code defined by a terminology system.",
+                          "properties": {
+                            "system": {
+                              "pattern": "^\\S*$",
+                              "type": "string",
+                              "description": "String of characters used to identify a name or a resource",
+                              "title": "uri"
+                            },
+                            "version": {
+                              "pattern": "^[ \\r\\n\\t\\S]+$",
+                              "type": "string",
+                              "description": "A sequence of Unicode characters",
+                              "title": "string"
+                            },
+                            "code": {
+                              "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
+                              "type": "string",
+                              "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                              "title": "code"
+                            },
+                            "display": {
+                              "pattern": "^[ \\r\\n\\t\\S]+$",
+                              "type": "string",
+                              "description": "A sequence of Unicode characters",
+                              "title": "string"
+                            },
+                            "userSelected": {
+                              "pattern": "^true|false$",
+                              "type": "boolean",
+                              "description": "Value of \"true\" or \"false\"",
+                              "title": "boolean"
+                            }
+                          },
+                          "additionalProperties": false,
+                          "title": "Coding"
+                        },
+                        "type": "array"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "title": "CodeableConcept"
+                  },
+                  "system": {
+                    "pattern": "^\\S*$",
+                    "type": "string",
+                    "description": "String of characters used to identify a name or a resource",
+                    "title": "uri"
+                  },
+                  "value": {
+                    "pattern": "^[ \\r\\n\\t\\S]+$",
+                    "type": "string",
+                    "description": "A sequence of Unicode characters",
+                    "title": "string"
+                  },
+                  "period": {
+                    "description": "A time period defined by a start and end date and optionally time.",
+                    "properties": {
+                      "start": {
+                        "pattern": "^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$",
+                        "type": "string",
+                        "description": "A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates.",
+                        "title": "dateTime"
+                      },
+                      "end": {
+                        "pattern": "^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$",
+                        "type": "string",
+                        "description": "A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates.",
+                        "title": "dateTime"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "title": "Period"
+                  },
+                  "assigner": {
+                    "description": "A reference from one resource to another.",
+                    "properties": {
+                      "reference": {
+                        "pattern": "^[ \\r\\n\\t\\S]+$",
+                        "type": "string",
+                        "description": "A sequence of Unicode characters",
+                        "title": "string"
+                      },
+                      "type": {
+                        "pattern": "^\\S*$",
+                        "type": "string",
+                        "description": "String of characters used to identify a name or a resource",
+                        "title": "uri"
+                      },
+                      "identifier": {
+                        "description": "An identifier - identifies some entity uniquely and unambiguously. Typically this is used for business identifiers.",
+                        "properties": {
+                          "use": {
+                            "description": "The purpose of this identifier.",
+                            "enum": [
+                              "usual",
+                              "official",
+                              "temp",
+                              "secondary",
+                              "old"
+                            ],
+                            "title": "\"usual\"|\"official\"|\"temp\"|\"secondary\"|\"old\""
+                          },
+                          "type": {
+                            "description": "A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.",
+                            "properties": {
+                              "coding": {
+                                "description": "A reference to a code defined by a terminology system.",
+                                "items": {
+                                  "description": "A reference to a code defined by a terminology system.",
+                                  "properties": {
+                                    "system": {
+                                      "pattern": "^\\S*$",
+                                      "type": "string",
+                                      "description": "String of characters used to identify a name or a resource",
+                                      "title": "uri"
+                                    },
+                                    "version": {
+                                      "pattern": "^[ \\r\\n\\t\\S]+$",
+                                      "type": "string",
+                                      "description": "A sequence of Unicode characters",
+                                      "title": "string"
+                                    },
+                                    "code": {
+                                      "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
+                                      "type": "string",
+                                      "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                                      "title": "code"
+                                    },
+                                    "display": {
+                                      "pattern": "^[ \\r\\n\\t\\S]+$",
+                                      "type": "string",
+                                      "description": "A sequence of Unicode characters",
+                                      "title": "string"
+                                    },
+                                    "userSelected": {
+                                      "pattern": "^true|false$",
+                                      "type": "boolean",
+                                      "description": "Value of \"true\" or \"false\"",
+                                      "title": "boolean"
+                                    }
+                                  },
+                                  "additionalProperties": false,
+                                  "title": "Coding"
+                                },
+                                "type": "array"
+                              }
+                            },
+                            "additionalProperties": false,
+                            "title": "CodeableConcept"
+                          },
+                          "system": {
+                            "pattern": "^\\S*$",
+                            "type": "string",
+                            "description": "String of characters used to identify a name or a resource",
+                            "title": "uri"
+                          },
+                          "value": {
+                            "pattern": "^[ \\r\\n\\t\\S]+$",
+                            "type": "string",
+                            "description": "A sequence of Unicode characters",
+                            "title": "string"
+                          },
+                          "period": {
+                            "description": "A time period defined by a start and end date and optionally time.",
+                            "properties": {
+                              "start": {
+                                "pattern": "^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$",
+                                "type": "string",
+                                "description": "A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates.",
+                                "title": "dateTime"
+                              },
+                              "end": {
+                                "pattern": "^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$",
+                                "type": "string",
+                                "description": "A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates.",
+                                "title": "dateTime"
+                              }
+                            },
+                            "additionalProperties": false,
+                            "title": "Period"
+                          },
+                          "assigner": {
+                            "description": "A reference from one resource to another.",
+                            "properties": {
+                              "reference": {
+                                "pattern": "^[ \\r\\n\\t\\S]+$",
+                                "type": "string",
+                                "description": "A sequence of Unicode characters",
+                                "title": "string"
+                              },
+                              "type": {
+                                "pattern": "^\\S*$",
+                                "type": "string",
+                                "description": "String of characters used to identify a name or a resource",
+                                "title": "uri"
+                              },
+                              "identifier": {
+                                "description": "An identifier - identifies some entity uniquely and unambiguously. Typically this is used for business identifiers.",
+                                "properties": {
+                                  "use": {
+                                    "description": "The purpose of this identifier.",
+                                    "enum": [
+                                      "usual",
+                                      "official",
+                                      "temp",
+                                      "secondary",
+                                      "old"
+                                    ],
+                                    "title": "\"usual\"|\"official\"|\"temp\"|\"secondary\"|\"old\""
+                                  },
+                                  "type": {
+                                    "description": "A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.",
+                                    "properties": {
+                                      "coding": {
+                                        "description": "A reference to a code defined by a terminology system.",
+                                        "items": {
+                                          "description": "A reference to a code defined by a terminology system.",
+                                          "properties": {
+                                            "system": {
+                                              "pattern": "^\\S*$",
+                                              "type": "string",
+                                              "description": "String of characters used to identify a name or a resource",
+                                              "title": "uri"
+                                            },
+                                            "version": {
+                                              "pattern": "^[ \\r\\n\\t\\S]+$",
+                                              "type": "string",
+                                              "description": "A sequence of Unicode characters",
+                                              "title": "string"
+                                            },
+                                            "code": {
+                                              "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
+                                              "type": "string",
+                                              "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                                              "title": "code"
+                                            },
+                                            "display": {
+                                              "pattern": "^[ \\r\\n\\t\\S]+$",
+                                              "type": "string",
+                                              "description": "A sequence of Unicode characters",
+                                              "title": "string"
+                                            },
+                                            "userSelected": {
+                                              "pattern": "^true|false$",
+                                              "type": "boolean",
+                                              "description": "Value of \"true\" or \"false\"",
+                                              "title": "boolean"
+                                            }
+                                          },
+                                          "additionalProperties": false,
+                                          "title": "Coding"
+                                        },
+                                        "type": "array"
+                                      }
+                                    },
+                                    "additionalProperties": false,
+                                    "title": "CodeableConcept"
+                                  },
+                                  "system": {
+                                    "pattern": "^\\S*$",
+                                    "type": "string",
+                                    "description": "String of characters used to identify a name or a resource",
+                                    "title": "uri"
+                                  },
+                                  "value": {
+                                    "pattern": "^[ \\r\\n\\t\\S]+$",
+                                    "type": "string",
+                                    "description": "A sequence of Unicode characters",
+                                    "title": "string"
+                                  },
+                                  "period": {
+                                    "description": "A time period defined by a start and end date and optionally time.",
+                                    "properties": {
+                                      "start": {
+                                        "pattern": "^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$",
+                                        "type": "string",
+                                        "description": "A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates.",
+                                        "title": "dateTime"
+                                      },
+                                      "end": {
+                                        "pattern": "^([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?$",
+                                        "type": "string",
+                                        "description": "A date, date-time or partial date (e.g. just year or year + month).  If hours and minutes are specified, a time zone SHALL be populated. The format is a union of the schema types gYear, gYearMonth, date and dateTime. Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored.                 Dates SHALL be valid dates.",
+                                        "title": "dateTime"
+                                      }
+                                    },
+                                    "additionalProperties": false,
+                                    "title": "Period"
+                                  },
+                                  "assigner": {
+                                    "description": "A reference from one resource to another.",
+                                    "properties": {
+                                      "reference": {
+                                        "pattern": "^[ \\r\\n\\t\\S]+$",
+                                        "type": "string",
+                                        "description": "A sequence of Unicode characters",
+                                        "title": "string"
+                                      },
+                                      "type": {
+                                        "pattern": "^\\S*$",
+                                        "type": "string",
+                                        "description": "String of characters used to identify a name or a resource",
+                                        "title": "uri"
+                                      },
+                                      "identifier": {
+                                        "description": "An identifier - identifies some entity uniquely and unambiguously. Typically this is used for business identifiers.",
+                                        "properties": {
+                                          "use": {
+                                            "description": "The purpose of this identifier.",
+                                            "enum": [
+                                              "usual",
+                                              "official",
+                                              "temp",
+                                              "secondary",
+                                              "old"
+                                            ],
+                                            "title": "\"usual\"|\"official\"|\"temp\"|\"secondary\"|\"old\""
+                                          },
+                                          "type": {
+                                            "description": "A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.",
+                                            "properties": {
+                                              "coding": {
+                                                "description": "A reference to a code defined by a terminology system.",
+                                                "items": {
+                                                  "type": "null"
+                                                },
+                                                "type": "array"
+                                              }
+                                            },
+                                            "additionalProperties": false,
+                                            "title": "CodeableConcept"
+                                          },
+                                          "system": {
+                                            "pattern": "^\\S*$",
+                                            "type": "string",
+                                            "description": "String of characters used to identify a name or a resource",
+                                            "title": "uri"
+                                          },
+                                          "value": {
+                                            "pattern": "^[ \\r\\n\\t\\S]+$",
+                                            "type": "string",
+                                            "description": "A sequence of Unicode characters",
+                                            "title": "string"
+                                          },
+                                          "period": {
+                                            "description": "A time period defined by a start and end date and optionally time.",
+                                            "properties": {
+                                              "start": {
+                                                "description": "The start of the period. The boundary is inclusive.",
+                                                "type": "null"
+                                              },
+                                              "end": {
+                                                "description": "The end of the period. If the end of the period is missing, it means no end was known or planned at the time the instance was created. The start may be in the past, and the end date in the future, which means that period is expected/planned to end at that time.",
+                                                "type": "null"
+                                              }
+                                            },
+                                            "additionalProperties": false,
+                                            "title": "Period"
+                                          },
+                                          "assigner": {
+                                            "description": "A reference from one resource to another.",
+                                            "properties": {
+                                              "reference": {
+                                                "description": "A reference to a location at which the other resource is found. The reference may be a relative reference, in which case it is relative to the service base URL, or an absolute URL that resolves to the location where the resource is found. The reference may be version specific or not. If the reference is not to a FHIR RESTful server, then it should be assumed to be version specific. Internal fragment references (start with '#') refer to contained resources.",
+                                                "type": "null"
+                                              },
+                                              "type": {
+                                                "description": "The expected type of the target of the reference. If both Reference.type and Reference.reference are populated and Reference.reference is a FHIR URL, both SHALL be consistent.\n\nThe type is the Canonical URL of Resource Definition that is the type this reference refers to. References are URLs that are relative to http://hl7.org/fhir/StructureDefinition/ e.g. \"Patient\" is a reference to http://hl7.org/fhir/StructureDefinition/Patient. Absolute URLs are only allowed for logical models (and can only be used in references in logical models, not resources).",
+                                                "type": "null"
+                                              },
+                                              "identifier": {
+                                                "description": "An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.",
+                                                "type": "null"
+                                              },
+                                              "display": {
+                                                "description": "Plain text narrative that identifies the resource in addition to the resource reference.",
+                                                "type": "null"
+                                              }
+                                            },
+                                            "additionalProperties": false,
+                                            "title": "Reference"
+                                          }
+                                        },
+                                        "additionalProperties": false,
+                                        "title": "Identifier"
+                                      },
+                                      "display": {
+                                        "pattern": "^[ \\r\\n\\t\\S]+$",
+                                        "type": "string",
+                                        "description": "A sequence of Unicode characters",
+                                        "title": "string"
+                                      }
+                                    },
+                                    "additionalProperties": false,
+                                    "title": "Reference"
+                                  }
+                                },
+                                "additionalProperties": false,
+                                "title": "Identifier"
+                              },
+                              "display": {
+                                "pattern": "^[ \\r\\n\\t\\S]+$",
+                                "type": "string",
+                                "description": "A sequence of Unicode characters",
+                                "title": "string"
+                              }
+                            },
+                            "additionalProperties": false,
+                            "title": "Reference"
+                          }
+                        },
+                        "additionalProperties": false,
+                        "title": "Identifier"
+                      },
+                      "display": {
+                        "pattern": "^[ \\r\\n\\t\\S]+$",
+                        "type": "string",
+                        "description": "A sequence of Unicode characters",
+                        "title": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "title": "Reference"
+                  }
+                },
+                "additionalProperties": false,
+                "title": "Identifier"
+              },
+              "display": {
+                "pattern": "^[ \\r\\n\\t\\S]+$",
+                "type": "string",
+                "description": "A sequence of Unicode characters",
+                "title": "string"
+              }
+            },
+            "additionalProperties": false,
+            "title": "Reference"
+          },
+          "type": {
+            "description": "A reference to a code defined by a terminology system.",
+            "properties": {
+              "system": {
+                "pattern": "^\\S*$",
+                "type": "string",
+                "description": "String of characters used to identify a name or a resource",
+                "title": "uri"
+              },
+              "version": {
+                "pattern": "^[ \\r\\n\\t\\S]+$",
+                "type": "string",
+                "description": "A sequence of Unicode characters",
+                "title": "string"
+              },
+              "code": {
+                "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
+                "type": "string",
+                "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                "title": "code"
+              },
+              "display": {
+                "pattern": "^[ \\r\\n\\t\\S]+$",
+                "type": "string",
+                "description": "A sequence of Unicode characters",
+                "title": "string"
+              },
+              "userSelected": {
+                "pattern": "^true|false$",
+                "type": "boolean",
+                "description": "Value of \"true\" or \"false\"",
+                "title": "boolean"
+              }
+            },
+            "additionalProperties": false,
+            "title": "Coding"
+          },
+          "role": {
+            "description": "A reference to a code defined by a terminology system.",
+            "properties": {
+              "system": {
+                "pattern": "^\\S*$",
+                "type": "string",
+                "description": "String of characters used to identify a name or a resource",
+                "title": "uri"
+              },
+              "version": {
+                "pattern": "^[ \\r\\n\\t\\S]+$",
+                "type": "string",
+                "description": "A sequence of Unicode characters",
+                "title": "string"
+              },
+              "code": {
+                "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
+                "type": "string",
+                "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                "title": "code"
+              },
+              "display": {
+                "pattern": "^[ \\r\\n\\t\\S]+$",
+                "type": "string",
+                "description": "A sequence of Unicode characters",
+                "title": "string"
+              },
+              "userSelected": {
+                "pattern": "^true|false$",
+                "type": "boolean",
+                "description": "Value of \"true\" or \"false\"",
+                "title": "boolean"
+              }
+            },
+            "additionalProperties": false,
+            "title": "Coding"
+          },
+          "lifecycle": {
+            "description": "A reference to a code defined by a terminology system.",
+            "properties": {
+              "system": {
+                "pattern": "^\\S*$",
+                "type": "string",
+                "description": "String of characters used to identify a name or a resource",
+                "title": "uri"
+              },
+              "version": {
+                "pattern": "^[ \\r\\n\\t\\S]+$",
+                "type": "string",
+                "description": "A sequence of Unicode characters",
+                "title": "string"
+              },
+              "code": {
+                "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
+                "type": "string",
+                "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                "title": "code"
+              },
+              "display": {
+                "pattern": "^[ \\r\\n\\t\\S]+$",
+                "type": "string",
+                "description": "A sequence of Unicode characters",
+                "title": "string"
+              },
+              "userSelected": {
+                "pattern": "^true|false$",
+                "type": "boolean",
+                "description": "Value of \"true\" or \"false\"",
+                "title": "boolean"
+              }
+            },
+            "additionalProperties": false,
+            "title": "Coding"
+          },
+          "securityLabel": {
+            "description": "Security labels for the identified entity.",
+            "items": {
+              "description": "A reference to a code defined by a terminology system.",
+              "properties": {
+                "system": {
+                  "pattern": "^\\S*$",
+                  "type": "string",
+                  "description": "String of characters used to identify a name or a resource",
+                  "title": "uri"
+                },
+                "version": {
+                  "pattern": "^[ \\r\\n\\t\\S]+$",
+                  "type": "string",
+                  "description": "A sequence of Unicode characters",
+                  "title": "string"
+                },
+                "code": {
+                  "pattern": "^[^\\s]+(\\s[^\\s]+)*$",
+                  "type": "string",
+                  "description": "A string which has at least one character and no leading or trailing whitespace and where there is no whitespace other than single spaces in the contents",
+                  "title": "code"
+                },
+                "display": {
+                  "pattern": "^[ \\r\\n\\t\\S]+$",
+                  "type": "string",
+                  "description": "A sequence of Unicode characters",
+                  "title": "string"
+                },
+                "userSelected": {
+                  "pattern": "^true|false$",
+                  "type": "boolean",
+                  "description": "Value of \"true\" or \"false\"",
+                  "title": "boolean"
+                }
+              },
+              "additionalProperties": false,
+              "title": "Coding"
+            },
+            "type": "array"
+          },
+          "name": {
+            "pattern": "^[ \\r\\n\\t\\S]+$",
+            "type": "string",
+            "description": "A sequence of Unicode characters",
+            "title": "string"
+          },
+          "description": {
+            "pattern": "^[ \\r\\n\\t\\S]+$",
+            "type": "string",
+            "description": "A sequence of Unicode characters",
+            "title": "string"
+          },
+          "query": {
+            "type": "string",
+            "description": "A stream of bytes",
+            "title": "base64Binary"
+          },
+          "detail": {
+            "description": "Tagged value pairs for conveying additional information about the entity.",
+            "items": {
+              "description": "A record of an event made for purposes of maintaining a security log. Typical uses include detection of intrusion attempts and monitoring for inappropriate usage.",
+              "properties": {
+                "type": {
+                  "pattern": "^[ \\r\\n\\t\\S]+$",
+                  "type": "string",
+                  "description": "A sequence of Unicode characters",
+                  "title": "string"
+                },
+                "valueString": {
+                  "description": "The  value of the extra detail.",
+                  "pattern": "^[ \\r\\n\\t\\S]+$",
+                  "type": "string"
+                },
+                "valueBase64Binary": {
+                  "description": "The  value of the extra detail.",
+                  "pattern": "^(\\s*([0-9a-zA-Z\\+/=]){4}\\s*)+$",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "title": "AuditEvent_Detail"
+            },
+            "type": "array"
+          }
+        },
+        "additionalProperties": false,
+        "title": "AuditEvent_Entity"
+      },
+      "type": "array"
+    },
+    "_id": {
+      "bsonType": "objectId"
+    }
+  },
+  "additionalProperties": false,
+  "required": ["agent", "source", "type", "resourceType"]
+}

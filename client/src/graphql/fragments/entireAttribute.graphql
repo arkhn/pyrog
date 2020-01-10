@@ -1,13 +1,15 @@
-#import "./entireInputColumn.graphql"
-
 fragment entireAttribute on Attribute {
   id
-  comment
   name
-  mergingScript
-  isProfile
-  type
-  inputColumns {
-    ...entireInputColumn
+  fhirType
+  isArray
+  isRequired
+  parent {
+      id
+    isArray
+  }
+  description
+  inputs {
+    id
   }
 }
