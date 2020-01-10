@@ -5,13 +5,18 @@ import {
   InputGroup,
   FormGroup,
   Elevation
-} from "@blueprintjs/core";
-import * as React from "react";
+} from '@blueprintjs/core';
+import * as React from 'react';
 import { useMutation } from '@apollo/react-hooks';
+import { loader } from 'graphql.macro';
 
 // GRAPHQL
-const qInputsForAttribute = require("src/graphql/queries/inputsForAttribute.graphql");
-const mCreateStaticInput = require("src/graphql/mutations/createStaticInput.graphql");
+const qInputsForAttribute = loader(
+  'src/graphql/queries/inputsForAttribute.graphql'
+);
+const mCreateStaticInput = loader(
+  'src/graphql/mutations/createStaticInput.graphql'
+);
 
 interface IProps {
   attribute: {
@@ -21,7 +26,7 @@ interface IProps {
 }
 
 const StaticValueForm = ({ attribute }: IProps) => {
-  const [staticValue, setStaticValue] = React.useState("");
+  const [staticValue, setStaticValue] = React.useState('');
 
   const addInputToCache = (cache: any, { data: { createInput } }: any) => {
     try {
@@ -41,12 +46,12 @@ const StaticValueForm = ({ attribute }: IProps) => {
             ...dataAttribute,
             inputs: dataAttribute.inputs.concat([createInput])
           }
-        },
-      })
+        }
+      });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   const [
     createStaticInput,
@@ -68,8 +73,8 @@ const StaticValueForm = ({ attribute }: IProps) => {
             value={staticValue}
           />
           <Button
-            disabled={!attribute.id || staticValue.length == 0}
-            icon={"add"}
+            disabled={!attribute.id || staticValue.length === 0}
+            icon={'add'}
             loading={creatingStaticInput}
             onClick={() =>
               createStaticInput({

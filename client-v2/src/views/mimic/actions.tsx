@@ -1,13 +1,13 @@
-import { IAction } from "../../types";
+import { IAction } from '../../types';
 
 import {
   fetchBetaRecommendedColumns,
   fetchRecommendedColumns
-} from "../../services/recommendedColumns/actions";
+} from '../../services/recommendedColumns/actions';
 
 export const addInputColumn = (fhirAttribute: string, inputColumn: string) => {
   return {
-    type: "ADD_INPUT_COLUMN_MIMIC",
+    type: 'ADD_INPUT_COLUMN_MIMIC',
     payload: {
       fhirAttribute,
       inputColumn
@@ -37,7 +37,7 @@ export const updateTypeMimic = (
   type: string
 ): IAction => {
   return {
-    type: "UPDATE_TYPE_MIMIC",
+    type: 'UPDATE_TYPE_MIMIC',
     payload: {
       fhirAttribute,
       type
@@ -67,7 +67,7 @@ export const updateMotClefMimic = (
   mot_clef: string
 ): IAction => {
   return {
-    type: "UPDATE_MOT_CLEF_MIMIC",
+    type: 'UPDATE_MOT_CLEF_MIMIC',
     payload: {
       fhirAttribute,
       mot_clef

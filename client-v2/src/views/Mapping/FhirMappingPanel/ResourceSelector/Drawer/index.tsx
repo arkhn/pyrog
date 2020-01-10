@@ -1,4 +1,4 @@
-import { useApolloClient, useMutation } from "@apollo/react-hooks";
+import { useApolloClient, useMutation } from '@apollo/react-hooks';
 import {
   InputGroup,
   FormGroup,
@@ -7,34 +7,37 @@ import {
   Drawer as BPDrawer,
   ControlGroup,
   Position
-} from "@blueprintjs/core";
-import React from "react";
-import { useSelector, useDispatch, useStore } from "react-redux";
-import useReactRouter from "use-react-router";
+} from '@blueprintjs/core';
+import React from 'react';
+import { useSelector, useDispatch, useStore } from 'react-redux';
+import useReactRouter from 'use-react-router';
 
-import { IReduxStore } from "src/types";
+import { IReduxStore } from 'src/types';
 
-import ColumnPicker from "src/views/mapping/ColumnPicker";
+import ColumnPicker from 'src/views/mapping/ColumnPicker';
 
-import "./style.less";
+import './style.scss';
 
 import {
   updateFhirResource,
   deselectFhirResource
-} from "src/services/selectedNode/actions";
+} from 'src/services/selectedNode/actions';
 
-import { deleteLocationParams } from "src/services/urlState";
+import { deleteLocationParams } from 'src/services/urlState';
+import { loader } from 'graphql.macro';
 
 // GRAPHQL
-const qResourcesForSource = require("src/graphql/queries/resourcesForSource.graphql");
-const resourceInfo = require("src/graphql/queries/resourceInfo.graphql");
-const mDeleteResource = require("src/graphql/mutations/deleteResource.graphql");
-const mUpdateResource = require("src/graphql/mutations/updateResource.graphql");
+const qResourcesForSource = loader(
+  'src/graphql/queries/resourcesForSource.graphql'
+);
+const resourceInfo = loader('src/graphql/queries/resourceInfo.graphql');
+const mDeleteResource = loader('src/graphql/mutations/deleteResource.graphql');
+const mUpdateResource = loader('src/graphql/mutations/updateResource.graphql');
 
 interface IProps {
   title: string;
   isOpen: boolean;
-  deleteResourceCallback?: () => void;
+  deleteResourceCallback: () => void;
   onCloseCallback?: () => void;
 }
 
@@ -52,10 +55,10 @@ const Drawer = ({
   const { history, location } = useReactRouter();
 
   const [schema, setSchema] = React.useState({});
-  const [label, setLabel] = React.useState("");
-  const [pkOwner, setPkOwner] = React.useState("");
-  const [pkTable, setPkTable] = React.useState("");
-  const [pkColumn, setPkColumn] = React.useState("");
+  const [label, setLabel] = React.useState('');
+  const [pkOwner, setPkOwner] = React.useState('');
+  const [pkTable, setPkTable] = React.useState('');
+  const [pkColumn, setPkColumn] = React.useState('');
 
   const onFormSubmit = (updateResource: any) => {
     return (e: React.FormEvent<HTMLElement>) => {
@@ -77,40 +80,36 @@ const Drawer = ({
 
   const onUpdateCompleted = () => {
     toaster.show({
-      message: `Successfully updated ${
-        selectedNode.resource.fhirType
-      } properties`,
-      intent: "success",
-      icon: "properties"
+      message: `Successfully updated ${selectedNode.resource.fhirType} properties`,
+      intent: 'success',
+      icon: 'properties'
     });
   };
 
   const onUpdateError = (error: any) => {
     toaster.show({
-      message: "An error occurred while updating properties",
-      intent: "danger",
-      icon: "properties"
+      message: 'An error occurred while updating properties',
+      intent: 'danger',
+      icon: 'properties'
     });
   };
 
   const onDeletionCompleted = (data: any) => {
     toaster.show({
-      icon: "layout-hierarchy",
-      intent: "success",
-      message: `Ressource ${data.deleteResource.fhirType} deleted for ${
-        selectedNode.source.name
-      }.`,
+      icon: 'layout-hierarchy',
+      intent: 'success',
+      message: `Ressource ${data.deleteResource.fhirType} deleted for ${selectedNode.source.name}.`,
       timeout: 4000
     });
-    deleteLocationParams(history, location, ["resourceId", "attributeId"]);
+    deleteLocationParams(history, location, ['resourceId', 'attributeId']);
     dispatch(deselectFhirResource());
     deleteResourceCallback();
   };
 
   const onDeletionError = (error: any) => {
     toaster.show({
-      icon: "error",
-      intent: "danger",
+      icon: 'error',
+      intent: 'danger',
       message: error.message,
       timeout: 4000
     });
@@ -174,10 +173,10 @@ const Drawer = ({
           }
         })
         .then((response: any) => {
-          setLabel(response.data.resource.label || "");
-          setPkOwner(response.data.resource.primaryKeyOwner || "");
-          setPkTable(response.data.resource.primaryKeyTable || "");
-          setPkColumn(response.data.resource.primaryKeyColumn || "");
+          setLabel(response.data.resource.label || '');
+          setPkOwner(response.data.resource.primaryKeyOwner || '');
+          setPkTable(response.data.resource.primaryKeyTable || '');
+          setPkColumn(response.data.resource.primaryKeyColumn || '');
         });
     }
 
@@ -193,7 +192,7 @@ const Drawer = ({
   return (
     <BPDrawer
       title={title}
-      icon={title ? "properties" : null}
+      icon={title ? 'properties' : null}
       isOpen={isOpen}
       onClose={onCloseCallback}
       size={BPDrawer.SIZE_SMALL}
@@ -223,12 +222,12 @@ const Drawer = ({
                 hasOwner={selectedNode.source.hasOwner}
                 ownerChangeCallback={(owner: string) => {
                   setPkOwner(owner);
-                  setPkTable("");
-                  setPkColumn("");
+                  setPkTable('');
+                  setPkColumn('');
                 }}
                 tableChangeCallback={(table: string) => {
                   setPkTable(table);
-                  setPkColumn("");
+                  setPkColumn('');
                 }}
                 columnChangeCallback={(column: string) => {
                   setPkColumn(column);
@@ -243,7 +242,7 @@ const Drawer = ({
                 fill={true}
                 popoverProps={{
                   autoFocus: true,
-                  boundary: "viewport",
+                  boundary: 'viewport',
                   canEscapeKeyClose: true,
                   lazy: true,
                   position: Position.LEFT_TOP,
@@ -266,8 +265,8 @@ const Drawer = ({
           <Button
             disabled={selectedNode.resource.id === null}
             loading={deletingResource}
-            icon={"trash"}
-            intent={"danger"}
+            icon={'trash'}
+            intent={'danger'}
             onClick={() => {
               deleteResource({
                 variables: {

@@ -5,38 +5,44 @@ import {
   FormGroup,
   InputGroup,
   IToastProps,
-  ProgressBar
-} from "@blueprintjs/core";
-import axios, { AxiosResponse } from "axios";
-import * as React from "react";
-import { Query, withApollo } from "react-apollo";
-import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+  ProgressBar,
+  IToaster
+} from '@blueprintjs/core';
+import axios, { AxiosResponse } from 'axios';
+import * as React from 'react';
+import { Query, withApollo } from 'react-apollo';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
-import Navbar from "../../components/navbar";
+import Navbar from '../../components/navbar';
 
 // Import types
-import { ITemplate, IReduxStore, IView } from "../../types";
+import { ITemplate, IReduxStore, IView } from '../../types';
 
-import "./style.less";
+import './style.scss';
+import { loader } from 'graphql.macro';
+import { HTTP_BACKEND_URL } from 'src/constants';
 
 // GRAPHQL OPERATIONS
-const qSourceAndTemplateNames = require("../../graphql/queries/sourceAndTemplateNames.graphql");
-const mCreateTemplate = require("../../graphql/mutations/createTemplate.graphql");
-const mCreateSource = require("../../graphql/mutations/createSource.graphql");
+const qSourceAndTemplateNames = loader(
+  'src/graphql/queries/sourceAndTemplateNames.graphql'
+);
+const mCreateTemplate = loader('src/graphql/mutations/createTemplate.graphql');
+const mCreateSource = loader('src/graphql/mutations/createSource.graphql');
 
 export interface INewSourceState {}
 
 interface IState {
   hasOwner: boolean;
-  isUploading: boolean;
   templateName: string;
   templateExists: boolean;
   sourceName: string;
   schemaFile: any;
 }
 
-interface INewSourceViewState extends IView, INewSourceState {}
+interface INewSourceViewState extends IView, INewSourceState {
+  toaster: IToaster;
+}
 
 const mapReduxStateToReactProps = (state: IReduxStore): INewSourceViewState => {
   return {
@@ -52,10 +58,9 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
     super(props);
     this.state = {
       hasOwner: false,
-      isUploading: false,
-      templateName: "",
+      templateName: '',
       templateExists: false,
-      sourceName: "",
+      sourceName: '',
       schemaFile: null
     };
   }
@@ -68,16 +73,16 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
   }: any): IToastProps => {
     return {
       action,
-      icon: "cloud-upload",
+      icon: 'cloud-upload',
       intent:
-        typeof uploadProgress !== "undefined"
-          ? null
+        typeof uploadProgress !== 'undefined'
+          ? undefined
           : success
-          ? "success"
-          : "danger",
+          ? 'success'
+          : 'danger',
       message: uploadProgress ? (
         <ProgressBar
-          intent={uploadProgress < 1 ? "primary" : "success"}
+          intent={uploadProgress < 1 ? 'primary' : 'success'}
           value={uploadProgress}
         />
       ) : (
@@ -89,18 +94,18 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
 
   uploadSchema = async (toastID: string): Promise<AxiosResponse> => {
     if (!this.state.schemaFile) {
-      throw new Error("Database schema is missing");
+      throw new Error('Database schema is missing');
     }
     if (!this.state.templateName) {
-      throw new Error("Template name is missing");
+      throw new Error('Template name is missing');
     }
     if (!this.state.sourceName) {
-      throw new Error("Source name is missing");
+      throw new Error('Source name is missing');
     }
 
-    const fileName = this.state.templateName.concat("_", this.state.sourceName)
+    const fileName = this.state.templateName.concat('_', this.state.sourceName);
     const formData = new FormData();
-    formData.append("schema", this.state.schemaFile, fileName);
+    formData.append('schema', this.state.schemaFile, fileName);
 
     const CancelToken = axios.CancelToken;
     let cancel: any;
@@ -110,8 +115,8 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
         cancel = c;
       }),
       data: formData,
-      method: "post",
-      url: `${process.env.HTTP_BACKEND_URL}/upload`,
+      method: 'post',
+      url: `${HTTP_BACKEND_URL}/upload`,
       onUploadProgress: p => {
         this.props.toaster.show(
           this.renderToastProps({
@@ -119,7 +124,7 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
               onClick: () => {
                 cancel();
               },
-              text: "Interrompre"
+              text: 'Interrompre'
             },
             uploadProgress: p.loaded / p.total
           }),
@@ -156,25 +161,16 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
       toastID
     );
 
-    this.setState({
-      ...this.state,
-      isUploading: false
-    });
-
-    this.props.history.push("/");
+    this.props.history.push('/');
   };
 
   onFormSubmit = async (e: any) => {
     e.preventDefault();
-    this.setState({
-      ...this.state,
-      isUploading: true
-    });
 
     const toastID = this.props.toaster.show(
       this.renderToastProps({
         action: {
-          text: "Interrompre"
+          text: 'Interrompre'
         },
         uploadProgress: 0
       })
@@ -200,10 +196,6 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
         );
       }
     } catch (e) {
-      this.setState({
-        ...this.state,
-        isUploading: false
-      });
       console.error(e);
       this.props.toaster.show(
         this.renderToastProps({
@@ -216,14 +208,14 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
   };
 
   public render = () => {
-    const { isUploading, templateName, sourceName, schemaFile } = this.state;
+    const { templateName, sourceName, schemaFile } = this.state;
 
-    const schemaType: string = `
+    const schemaType = `
     [owner: string] : {
         [table: string]: string[]
     }`;
 
-    const schemaExample: string = `
+    const schemaExample = `
     {
         "$SYSTEM": {
             "PATIENT": [
@@ -234,11 +226,11 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
         },
     }`;
 
-    const sqlCommand: string = `
+    const sqlCommand = `
     SELECT OWNER, TABLE_NAME, COLUMN_NAME, DATA_TYPE FROM all_tab_columns;
     `;
 
-    const sqlplusCommand: string = `
+    const sqlplusCommand = `
     set heading off;
     set underline off;
     set pagesize 0;
@@ -283,11 +275,11 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
                         ...this.state,
                         templateName: target.value,
                         templateExists:
-                          target.value &&
+                          !!target.value &&
                           target.value in mapTemplateToSourceNames
                       });
                     }}
-                    name={"templateName"}
+                    name={'templateName'}
                     placeholder="Nom du template..."
                     value={templateName}
                   />
@@ -300,7 +292,7 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
                       mapTemplateToSourceNames[templateName].indexOf(
                         sourceName
                       ) >= 0 ? (
-                        <p className={"warning"}>
+                        <p className={'warning'}>
                           Ce nom existe déjà pour ce template et n'est pas
                           disponible.
                         </p>
@@ -316,7 +308,7 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
                           sourceName: target.value
                         });
                       }}
-                      name={"sourceName"}
+                      name={'sourceName'}
                       placeholder="Nom de la source..."
                       value={sourceName}
                     />
@@ -333,7 +325,7 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
                           schemaFile: target.files[0]
                         });
                       },
-                      name: "schema"
+                      name: 'schema'
                     }}
                     text={
                       schemaFile ? (
@@ -413,6 +405,6 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
   };
 }
 
-export default withRouter(withApollo(connect(mapReduxStateToReactProps)(
-  NewSourceView
-) as any) as any);
+export default withRouter(
+  withApollo(connect(mapReduxStateToReactProps)(NewSourceView) as any) as any
+);

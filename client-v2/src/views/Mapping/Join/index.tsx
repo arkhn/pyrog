@@ -1,18 +1,21 @@
-import { Button } from "@blueprintjs/core";
-import * as React from "react";
-import { useSelector } from "react-redux";
-import { IReduxStore } from "src/types";
-import { useMutation } from "@apollo/react-hooks";
+import { Button } from '@blueprintjs/core';
+import * as React from 'react';
+import { useSelector } from 'react-redux';
+import { IReduxStore } from 'src/types';
+import { useMutation } from '@apollo/react-hooks';
 
-import { ISelectedSource } from "../../../types";
+import { ISelectedSource } from '../../../types';
 
 // COMPONENTS
-import JoinColumns from "./../JoinColumns";
+import JoinColumns from './../JoinColumns';
+import { loader } from 'graphql.macro';
 
 // GRAPHQL
-const qInputsForAttribute = require("src/graphql/queries/inputsForAttribute.graphql");
-const mUpdateJoin = require("src/graphql/mutations/updateJoin.graphql");
-const mDeleteJoin = require("src/graphql/mutations/deleteJoin.graphql");
+const qInputsForAttribute = loader(
+  'src/graphql/queries/inputsForAttribute.graphql'
+);
+const mUpdateJoin = loader('src/graphql/mutations/updateJoin.graphql');
+const mDeleteJoin = loader('src/graphql/mutations/deleteJoin.graphql');
 
 interface IProps {
   joinData: any;
@@ -57,9 +60,9 @@ const Join = ({ joinData, schema, source }: IProps) => {
   };
 
   return (
-    <div className={"join"}>
+    <div className={'join'}>
       <Button
-        icon={"trash"}
+        icon={'trash'}
         minimal={true}
         loading={updatingJoin || deletingJoin}
         onClick={() => {

@@ -1,9 +1,9 @@
-import { ISimpleAction } from "../../types";
-import { IMimicState } from "./index";
+import { ISimpleAction } from '../../types';
+import { IMimicState } from './index';
 
-import { questions } from "../../mockdata/mimic";
+import { questions } from '../../mockdata/mimic';
 
-let initialState: IMimicState = {
+const initialState: IMimicState = {
   question_index: 0,
   section_index: 0,
   stateByAttribute: {}
@@ -14,13 +14,13 @@ questions[initialState.question_index].sections[
 ].mapping_items.forEach((item: any) => {
   initialState.stateByAttribute[item.fhir_attribute] = {
     type: item.type,
-    mot_clef: ""
+    mot_clef: ''
   };
 });
 
 const reducer = (state = initialState, action: ISimpleAction): any => {
   switch (action.type) {
-    case "ADD_INPUT_COLUMN_MIMIC": {
+    case 'ADD_INPUT_COLUMN_MIMIC': {
       return {
         ...state,
         stateByAttribute: {
@@ -40,7 +40,7 @@ const reducer = (state = initialState, action: ISimpleAction): any => {
       };
     }
 
-    case "UPDATE_TYPE_MIMIC": {
+    case 'UPDATE_TYPE_MIMIC': {
       return {
         ...state,
         stateByAttribute: {
@@ -53,7 +53,7 @@ const reducer = (state = initialState, action: ISimpleAction): any => {
       };
     }
 
-    case "UPDATE_MOT_CLEF_MIMIC": {
+    case 'UPDATE_MOT_CLEF_MIMIC': {
       return {
         ...state,
         stateByAttribute: {

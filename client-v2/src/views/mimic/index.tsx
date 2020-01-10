@@ -4,28 +4,28 @@ import {
   ControlGroup,
   Icon,
   InputGroup
-} from "@blueprintjs/core";
-import * as React from "react";
-import { connect } from "react-redux";
+} from '@blueprintjs/core';
+import * as React from 'react';
+import { connect } from 'react-redux';
 
-import "./style.less";
+import './style.scss';
 
 // Import custom actions
-import { addInputColumn, changeMotClefMimic, changeTypeMimic } from "./actions";
+import { addInputColumn, changeMotClefMimic, changeTypeMimic } from './actions';
 
 import {
   fetchBetaRecommendedColumns,
   fetchRecommendedColumns
-} from "../../services/recommendedColumns/actions";
+} from '../../services/recommendedColumns/actions';
 
 // Import custom components
-import StringSelect from "../../components/selects/stringSelect";
+import StringSelect from '../../components/selects/stringSelect';
 
 // Import mockdata
-import { availableTypes, questions } from "../../mockdata/mimic";
+import { availableTypes, questions } from '../../mockdata/mimic';
 
 // Import custom types
-import { IReduxStore, IView } from "../../types";
+import { IReduxStore, IView } from '../../types';
 
 // Mimic types
 
@@ -80,7 +80,7 @@ export default class MainView extends React.Component<IMimicViewState, any> {
               item.fhir_attribute,
               item.type,
               questions[question_index].sections[section_index].head_table,
-              ""
+              ''
             )
           );
         }
@@ -99,39 +99,38 @@ export default class MainView extends React.Component<IMimicViewState, any> {
     return (
       <div id="mimic-poc">
         <h1>
-          {questions[question_index].chapter_name} -{" "}
+          {questions[question_index].chapter_name} -{' '}
           {questions[question_index].sections[section_index].resource}
         </h1>
 
         {questions[question_index].sections[section_index].mapping_items.map(
           (item: any, index: number) => {
-            let suggested_columns = data.recommendedColumns.columnsByAttribute[
-              item.fhir_attribute
-            ]
-              ? data.recommendedColumns.columnsByAttribute[
+            const suggested_columns = data!.recommendedColumns
+              .columnsByAttribute[item.fhir_attribute]
+              ? data!.recommendedColumns.columnsByAttribute[
                   item.fhir_attribute
                 ].map((column: any, index: number) => {
                   return (
                     <div key={index}>
                       <div
-                        className={"add-button"}
+                        className={'add-button'}
                         onClick={() =>
                           this.props.dispatch(
                             addInputColumn(item.fhir_attribute, column.column)
                           )
                         }
                       >
-                        <Icon icon={"plus"} />
+                        <Icon icon={'plus'} />
                       </div>
-                      <div className={"column"}>
-                        <div className={"column-header"}>
+                      <div className={'column'}>
+                        <div className={'column-header'}>
                           {column.column
-                            .split(".")
+                            .split('.')
                             .map((element: string, index: number) => {
                               return (
                                 <div key={index}>
                                   {index + 1 ==
-                                  column.column.split(".").length ? (
+                                  column.column.split('.').length ? (
                                     <strong>{element}</strong>
                                   ) : (
                                     element.toUpperCase()
@@ -141,7 +140,7 @@ export default class MainView extends React.Component<IMimicViewState, any> {
                             })}
                           <div>{Math.round(column.score * 100) / 100}</div>
                         </div>
-                        <div className={"column-rows"}>
+                        <div className={'column-rows'}>
                           {column.data
                             .slice(1, 10)
                             .map((entry: string, index: number) => (
@@ -154,7 +153,7 @@ export default class MainView extends React.Component<IMimicViewState, any> {
                 })
               : null;
 
-            let input_columns =
+            const input_columns =
               stateByAttribute[item.fhir_attribute] &&
               stateByAttribute[item.fhir_attribute].input_columns
                 ? stateByAttribute[item.fhir_attribute].input_columns.map(
@@ -162,7 +161,7 @@ export default class MainView extends React.Component<IMimicViewState, any> {
                       return (
                         <div key={index}>
                           <Breadcrumbs
-                            items={column.split(".")}
+                            items={column.split('.')}
                             breadcrumbRenderer={(item: any) => {
                               return (
                                 <div key={index}>{item.toUpperCase()}</div>
@@ -183,19 +182,19 @@ export default class MainView extends React.Component<IMimicViewState, any> {
                 : null;
 
             return (
-              <div className={"question"} key={index}>
+              <div className={'question'} key={index}>
                 <Callout
-                  className={"callout"}
+                  className={'callout'}
                   title={`${index + 1}. ${item.title}`}
                 >
                   {item.text}
-                  <div className={"input-columns"}>{input_columns}</div>
-                  <div className={"column-selector"}>
+                  <div className={'input-columns'}>{input_columns}</div>
+                  <div className={'column-selector'}>
                     <ControlGroup>
                       <StringSelect
-                        icon={"layout-hierarchy"}
-                        inputItem={stateByAttribute[item.fhir_attribute].type}
-                        intent={"primary"}
+                        icon={'layout-hierarchy'}
+                        inputItem={stateByAttribute[item.fhir_attribute].type!}
+                        intent={'primary'}
                         items={Object.keys(availableTypes)}
                         onChange={(e: any) =>
                           this.props.dispatch(
@@ -204,7 +203,7 @@ export default class MainView extends React.Component<IMimicViewState, any> {
                               e,
                               questions[question_index].sections[section_index]
                                 .head_table,
-                              stateByAttribute[item.fhir_attribute].mot_clef
+                              stateByAttribute[item.fhir_attribute].mot_clef!
                             )
                           )
                         }
@@ -215,7 +214,7 @@ export default class MainView extends React.Component<IMimicViewState, any> {
                           this.props.dispatch(
                             changeMotClefMimic(
                               item.fhir_attribute,
-                              stateByAttribute[item.fhir_attribute].type,
+                              stateByAttribute[item.fhir_attribute].type!,
                               questions[question_index].sections[section_index]
                                 .head_table,
                               e.target.value
@@ -228,8 +227,8 @@ export default class MainView extends React.Component<IMimicViewState, any> {
                     </ControlGroup>
                   </div>
                   {suggested_columns ? (
-                    <div className={"column-viewer"}>
-                      <div className={"column-flexbox"}>
+                    <div className={'column-viewer'}>
+                      <div className={'column-flexbox'}>
                         {suggested_columns}
                       </div>
                     </div>

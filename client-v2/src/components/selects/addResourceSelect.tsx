@@ -1,13 +1,9 @@
-import * as React from "react";
-import { Intent, MenuItem, Position } from "@blueprintjs/core";
-import {
-  ItemPredicate,
-  ItemRenderer,
-} from "@blueprintjs/select";
-import { IconName } from "@blueprintjs/icons";
+import * as React from 'react';
+import { Intent, MenuItem, Position } from '@blueprintjs/core';
+import { ItemPredicate, ItemRenderer } from '@blueprintjs/select';
+import { IconName } from '@blueprintjs/icons';
 
-import TSelect from "./TSelect";
-
+import TSelect from './TSelect';
 
 interface ISelectProps {
   disabled?: boolean;
@@ -23,7 +19,7 @@ interface ISelectProps {
 export default class AddResourceSelect extends React.Component<
   ISelectProps,
   any
-  > {
+> {
   private renderItem: ItemRenderer<string> = (
     resource: string,
     { handleClick, modifiers, query }
@@ -41,11 +37,8 @@ export default class AddResourceSelect extends React.Component<
     );
   };
 
-  private filterByName: ItemPredicate<string> = (
-    query,
-    resource: string
-  ) => {
-    return resource.toLowerCase().indexOf(query.toLowerCase()) >= 0
+  private filterByName: ItemPredicate<string> = (query, resource: string) => {
+    return resource.toLowerCase().indexOf(query.toLowerCase()) >= 0;
   };
 
   private sortAlphabetically = (item1: string, item2: string): number => {
@@ -56,21 +49,18 @@ export default class AddResourceSelect extends React.Component<
     return 0;
   };
 
-  private sortItems = (
-    resources: string[]
-  ) => {
-    const { loading } = this.props
+  private sortItems = (resources: string[]) => {
+    const { loading } = this.props;
     if (loading) {
-      return []
+      return [];
     }
 
-    resources.sort((r1, r2) => this.sortAlphabetically(r1, r2)
-    );
+    resources.sort((r1, r2) => this.sortAlphabetically(r1, r2));
     return resources;
   };
 
-  private displayItem = function (resource: string): string {
-    return resource
+  private displayItem = function(resource: string): string {
+    return resource;
   };
 
   public render() {
@@ -81,23 +71,23 @@ export default class AddResourceSelect extends React.Component<
       intent,
       items,
       loading,
-      onChange,
+      onChange
     } = this.props;
 
     return (
       <TSelect<string>
-        disabled={disabled}
+        disabled={!!disabled}
         displayItem={this.displayItem}
         filterItems={this.filterByName}
         loading={loading}
         icon={icon}
         inputItem={inputItem}
         intent={intent}
-        items={this.sortItems(items)}
+        items={this.sortItems(items || [])}
         onChange={onChange}
         popoverProps={{
           autoFocus: true,
-          boundary: "viewport",
+          boundary: 'viewport',
           canEscapeKeyClose: true,
           lazy: true,
           position: Position.RIGHT_TOP,

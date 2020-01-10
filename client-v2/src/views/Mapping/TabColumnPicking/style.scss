@@ -1,5 +1,5 @@
 @import "~@blueprintjs/core/lib/css/blueprint.css";
-@import "~@blueprintjs/core/lib/less/variables";
+@import "~@blueprintjs/core/lib/scss/variables";
 
 .bp3-card {
   position: relative;
@@ -16,8 +16,8 @@
 
   .card-tag {
     position: absolute;
-    background-color: @gray1;
-    color: @light-gray5;
+    background-color: $gray1;
+    color: $light-gray5;
     padding: 2px 8px;
     border-radius: 3px;
     font-size: 12px;

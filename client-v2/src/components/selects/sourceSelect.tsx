@@ -1,9 +1,9 @@
-import * as React from "react";
-import { MenuItem, Intent } from "@blueprintjs/core";
-import { ItemPredicate, ItemRenderer } from "@blueprintjs/select";
-import { IconName } from "@blueprintjs/icons";
+import * as React from 'react';
+import { MenuItem, Intent } from '@blueprintjs/core';
+import { ItemPredicate, ItemRenderer } from '@blueprintjs/select';
+import { IconName } from '@blueprintjs/icons';
 
-import TSelect from "./TSelect";
+import TSelect from './TSelect';
 
 interface ISource {
   id: string;
@@ -35,7 +35,7 @@ export default class SourceSelect extends React.Component<ISelectProps, any> {
   };
 
   private displayItem = function(source: ISource): string {
-    return source.name ? source.name : "None";
+    return source.name ? source.name : 'None';
   };
 
   public render() {
@@ -51,7 +51,7 @@ export default class SourceSelect extends React.Component<ISelectProps, any> {
 
     return (
       <TSelect<ISource>
-        disabled={disabled}
+        disabled={!!disabled}
         displayItem={this.displayItem}
         filterItems={this.filterByName}
         loading={loading}

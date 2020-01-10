@@ -1,4 +1,4 @@
-import { ISourceSchemas, ISimpleAction } from "../../../types";
+import { ISourceSchemas, ISimpleAction } from '../../../types';
 
 const initialState: ISourceSchemas = {
   loadingSourceSchema: false,
@@ -8,13 +8,13 @@ const initialState: ISourceSchemas = {
 const sourceSchemas = (state = initialState, action: ISimpleAction): any => {
   switch (action.type) {
     // Cases handling fhir resource json fetching
-    case "LOADING_SOURCE_SCHEMA":
+    case 'LOADING_SOURCE_SCHEMA':
       return {
         ...state,
         loadingSourceSchema: true
       };
 
-    case "FETCH_SOURCE_SCHEMA_SUCCESS":
+    case 'FETCH_SOURCE_SCHEMA_SUCCESS':
       return {
         ...state,
         schemaByFileName: {
@@ -26,7 +26,7 @@ const sourceSchemas = (state = initialState, action: ISimpleAction): any => {
         loadingSourceSchema: false
       };
 
-    case "FETCH_SOURCE_SCHEMA_FAILURE":
+    case 'FETCH_SOURCE_SCHEMA_FAILURE':
       return {
         ...state,
         loadingSourceSchema: false

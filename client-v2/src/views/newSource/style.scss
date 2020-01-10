@@ -1,16 +1,16 @@
 @import "~@blueprintjs/core/lib/css/blueprint.css";
-@import "~@blueprintjs/core/lib/less/variables";
+@import "~@blueprintjs/core/lib/scss/variables";
 
-@window-padding: 20px;
+$window-padding: 20px;
 
 #main-container-newsource {
   max-width: 600px;
   margin: 0px auto;
-  padding: @window-padding;
+  padding: $window-padding;
 
   button {
-    margin: @window-padding 0px;
-    margin-bottom: 4 * @window-padding;
+    margin: $window-padding 0px;
+    margin-bottom: 4 * $window-padding;
   }
 
   p {
@@ -22,10 +22,10 @@
   }
 
   .warning {
-    color: @pt-intent-warning;
+    color: $pt-intent-warning;
   }
 
   .disabled-text {
-    color: @pt-text-color-disabled;
+    color: $pt-text-color-disabled;
   }
 }

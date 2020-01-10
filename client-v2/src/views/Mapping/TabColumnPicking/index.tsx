@@ -1,9 +1,10 @@
-import * as React from "react";
+import * as React from 'react';
 
-import { ISelectedSource } from "../../../types";
+import { ISelectedSource } from '../../../types';
 
-import StaticValueForm from "./StaticValueForm";
-import DynamicColumnPicker from "./DynamicColumnPicker";
+import StaticValueForm from './StaticValueForm';
+import DynamicColumnPicker from './DynamicColumnPicker';
+import './style.scss';
 
 interface IProps {
   attribute: {
@@ -14,11 +15,9 @@ interface IProps {
   source: ISelectedSource;
 }
 
-import "./style.less";
-
 const TabColumnPicking = ({ attribute, schema, source }: IProps) => {
   return (
-    <div id={"column-picker"}>
+    <div id={'column-picker'}>
       <StaticValueForm attribute={attribute} />
       <DynamicColumnPicker
         attribute={attribute}

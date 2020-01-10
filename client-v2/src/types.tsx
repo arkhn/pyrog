@@ -1,5 +1,5 @@
-import { IToaster } from "@blueprintjs/core";
-import * as redux from "redux";
+import { IToaster } from '@blueprintjs/core';
+import * as redux from 'redux';
 
 // REDUX
 export interface ISimpleAction {

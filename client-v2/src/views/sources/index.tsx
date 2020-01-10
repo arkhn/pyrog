@@ -7,23 +7,24 @@ import {
   Intent,
   Spinner,
   Tag
-} from "@blueprintjs/core";
-import * as QueryString from "query-string";
-import * as React from "react";
-import { useMutation } from "@apollo/react-hooks";
-import { useQuery } from "@apollo/react-hooks";
-import { useDispatch } from "react-redux";
-import useReactRouter from "use-react-router";
+} from '@blueprintjs/core';
+import * as QueryString from 'query-string';
+import * as React from 'react';
+import { useMutation } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/react-hooks';
+import { useDispatch } from 'react-redux';
+import useReactRouter from 'use-react-router';
 
-import Navbar from "../../components/navbar";
+import Navbar from '../../components/navbar';
 
-import { changeSelectedSource } from "../../services/selectedNode/actions";
+import { changeSelectedSource } from '../../services/selectedNode/actions';
 
-import "./style.less";
+import './style.scss';
+import { loader } from 'graphql.macro';
 
 // GRAPHQL
-const qSources = require("src/graphql/queries/sources.graphql");
-const mDeleteSource = require("src/graphql/mutations/deleteSource.graphql");
+const qSources = loader('src/graphql/queries/sources.graphql');
+const mDeleteSource = loader('src/graphql/mutations/deleteSource.graphql');
 
 const SourcesView = () => {
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ const SourcesView = () => {
   const [alertIsOpen, setAlertIsOpen] = React.useState(false);
 
   const { data: dataSources, loading: loadingSources } = useQuery(qSources, {
-    fetchPolicy: "network-only"
+    fetchPolicy: 'network-only'
   });
 
   const removeSourceFromCache = (
@@ -65,11 +66,11 @@ const SourcesView = () => {
       <Navbar />
       <div id="main-container-softwares">
         <Button
-          icon={"add"}
-          intent={"primary"}
+          icon={'add'}
+          intent={'primary'}
           large={true}
           onClick={() => {
-            history.push("/newSource");
+            history.push('/newSource');
           }}
         >
           Ajouter une source / un logiciel
@@ -94,7 +95,7 @@ const SourcesView = () => {
                       )
                     );
                     history.push({
-                      pathname: "/mapping",
+                      pathname: '/mapping',
                       search: QueryString.stringify({
                         sourceId: source.id
                       })
@@ -104,7 +105,7 @@ const SourcesView = () => {
                   <h2>
                     {source.template.name} - {source.name}
                     <Button
-                      icon={"delete"}
+                      icon={'delete'}
                       loading={deletingSource}
                       minimal={true}
                       onClick={(e: React.MouseEvent) => {
@@ -120,7 +121,6 @@ const SourcesView = () => {
                       isOpen={alertIsOpen}
                       canOutsideClickCancel={true}
                       onClose={(confirmed, e) => {
-                        e.stopPropagation();
                         setAlertIsOpen(false);
                         if (confirmed) {
                           deleteSource({
@@ -132,7 +132,7 @@ const SourcesView = () => {
                       }}
                     >
                       <p>
-                        Etes-vous sûr de vouloir supprimer la source{" "}
+                        Etes-vous sûr de vouloir supprimer la source{' '}
                         <b>{source.name}</b>? Cette action n'est pas réversible.
                       </p>
                     </Alert>
