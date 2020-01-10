@@ -26,13 +26,7 @@ jobs:
           cd client
           yarn install
 
-      - name: Build in docker
-        run: |
-          cd client
-          yarn build:docker
-
       - name: Build
         run: |
           cd client
-          ls
           yarn build
