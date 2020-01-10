@@ -13,9 +13,9 @@ import { Mutation, useQuery } from 'react-apollo';
 import { useSelector } from 'react-redux';
 import { loader } from 'graphql.macro';
 
+import StringSelect from 'components/selects/stringSelect';
+import { IReduxStore } from 'types';
 import './style.scss';
-import StringSelect from 'src/components/selects/stringSelect';
-import { IReduxStore } from 'src/types';
 
 const qCredentialForSource = loader(
   'src/graphql/queries/credentialForSource.graphql'

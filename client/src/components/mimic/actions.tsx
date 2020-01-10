@@ -1,9 +1,9 @@
-import { IAction } from '../../types';
+import { IAction } from 'types';
 
 import {
   fetchBetaRecommendedColumns,
   fetchRecommendedColumns
-} from '../../services/recommendedColumns/actions';
+} from 'services/recommendedColumns/actions';
 
 export const addInputColumn = (fhirAttribute: string, inputColumn: string) => {
   return {

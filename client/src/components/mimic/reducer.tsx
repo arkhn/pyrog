@@ -1,7 +1,7 @@
-import { ISimpleAction } from '../../types';
+import { ISimpleAction } from 'types';
 import { IMimicState } from './index';
 
-import { questions } from '../../mockdata/mimic';
+import { questions } from 'mockdata/mimic';
 
 const initialState: IMimicState = {
   question_index: 0,

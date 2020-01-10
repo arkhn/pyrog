@@ -3,8 +3,8 @@ import React from 'react';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useSelector } from 'react-redux';
 
-import { IReduxStore } from 'src/types';
-import AddResourceSelect from 'src/components/selects/addResourceSelect';
+import { IReduxStore } from 'types';
+import AddResourceSelect from 'components/selects/addResourceSelect';
 import { loader } from 'graphql.macro';
 
 const qAvailableResources = loader(

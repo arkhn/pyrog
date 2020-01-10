@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { ISelectedSource } from 'src/types';
+import { ISelectedSource } from 'types';
 
 // COMPONENTS
 import ColumnPicker from '../ColumnPicker';

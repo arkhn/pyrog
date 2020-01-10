@@ -2,10 +2,10 @@ import { Tag, Spinner } from '@blueprintjs/core';
 import * as React from 'react';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 
-import { ISelectedSource } from 'src/types';
+import { ISelectedSource } from 'types';
 
 // COMPONENTS
-import ScriptSelect from 'src/components/selects/scriptSelect';
+import ScriptSelect from 'components/selects/scriptSelect';
 import InputColumn from '../InputColumn';
 import { loader } from 'graphql.macro';
 

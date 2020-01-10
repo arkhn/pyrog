@@ -1,5 +1,5 @@
 import { Position, Toaster } from '@blueprintjs/core';
-import { ISimpleAction } from '../../types';
+import { ISimpleAction } from 'types';
 
 const initialState: any = Toaster.create({
   className: 'recipe-toaster',

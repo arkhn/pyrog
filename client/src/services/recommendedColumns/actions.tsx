@@ -1,5 +1,5 @@
-import { IAction } from '../../types';
-import { availableTypes } from '../../mockdata/mimic';
+import { IAction } from 'types';
+import { availableTypes } from 'mockdata/mimic';
 import { ENGINE_BACKEND_URL } from '../../constants';
 
 export const fetchRecommendedColumns = (

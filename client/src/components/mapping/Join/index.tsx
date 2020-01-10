@@ -1,10 +1,10 @@
 import { Button } from '@blueprintjs/core';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
-import { IReduxStore } from 'src/types';
+import { IReduxStore } from 'types';
 import { useMutation } from '@apollo/react-hooks';
 
-import { ISelectedSource } from '../../../types';
+import { ISelectedSource } from 'types';
 
 // COMPONENTS
 import JoinColumns from '../JoinColumns';

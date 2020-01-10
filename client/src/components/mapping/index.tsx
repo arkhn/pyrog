@@ -2,7 +2,7 @@ import { Tab, Tabs, TabId, Icon } from '@blueprintjs/core';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 
-import Navbar from '../navbar';
+import Navbar from 'components/navbar';
 import InputColumns from './InputColumns';
 import TabColumnSuggestion from './TabColumnSuggestion';
 import TabColumnPicking from './TabColumnPicking';
@@ -11,7 +11,7 @@ import Comments from './Comments';
 import FhirMappingPanel from './FhirMappingPanel';
 
 // Import types
-import { IReduxStore } from '../../types';
+import { IReduxStore } from 'types';
 
 import './style.scss';
 

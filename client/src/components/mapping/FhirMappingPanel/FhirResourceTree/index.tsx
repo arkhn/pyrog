@@ -14,7 +14,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { useQuery } from '@apollo/react-hooks';
 
-import { IReduxStore } from 'src/types';
+import { IReduxStore } from 'types';
 import { loader } from 'graphql.macro';
 
 // GRAPHQL

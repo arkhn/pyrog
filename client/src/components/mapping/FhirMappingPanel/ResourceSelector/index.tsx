@@ -1,21 +1,14 @@
-import {
-  FormGroup,
-  ControlGroup,
-  Button
-} from '@blueprintjs/core';
+import { FormGroup, ControlGroup, Button } from '@blueprintjs/core';
 import React from 'react';
-import {
-  useSelector,
-  useDispatch
-} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import useReactRouter from 'use-react-router';
 
-import { updateLocationParams } from 'src/services/urlState';
-import { updateFhirResource } from 'src/services/selectedNode/actions';
-import { IReduxStore } from 'src/types';
+import { updateLocationParams } from 'services/urlState';
+import { updateFhirResource } from 'services/selectedNode/actions';
+import { IReduxStore } from 'types';
 
 import Drawer from './Drawer';
-import ResourceSelect from 'src/components/selects/resourceSelect';
+import ResourceSelect from 'components/selects/resourceSelect';
 
 interface IProps {
   availableResources: any;

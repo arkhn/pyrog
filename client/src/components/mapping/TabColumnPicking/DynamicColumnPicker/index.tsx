@@ -13,9 +13,9 @@ import { useSelector } from 'react-redux';
 import ColumnPicker from '../../ColumnPicker';
 import TableViewer from '../TableViewer';
 
-import { IReduxStore } from 'src/types';
+import { IReduxStore } from 'types';
 import { loader } from 'graphql.macro';
-import { HTTP_BACKEND_URL } from 'src/constants';
+import { HTTP_BACKEND_URL } from '../../../../constants';
 
 // GRAPHQL
 const qInputsForAttribute = loader(

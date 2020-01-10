@@ -12,15 +12,15 @@ import React from 'react';
 import { useSelector, useDispatch, useStore } from 'react-redux';
 import useReactRouter from 'use-react-router';
 
-import { IReduxStore } from 'src/types';
+import { IReduxStore } from 'types';
 
-import ColumnPicker from 'src/components/mapping/ColumnPicker';
+import ColumnPicker from 'components/mapping/ColumnPicker';
 
 import './style.scss';
 
-import { deselectFhirResource } from 'src/services/selectedNode/actions';
+import { deselectFhirResource } from 'services/selectedNode/actions';
 
-import { deleteLocationParams } from 'src/services/urlState';
+import { deleteLocationParams } from 'services/urlState';
 import { loader } from 'graphql.macro';
 
 // GRAPHQL

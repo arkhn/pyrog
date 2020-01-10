@@ -1,4 +1,4 @@
-import { ISimpleAction } from '../../types';
+import { ISimpleAction } from 'types';
 
 const initialState: any = {
   source: {

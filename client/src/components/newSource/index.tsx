@@ -14,14 +14,14 @@ import { Query, withApollo } from 'react-apollo';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
-import Navbar from '../navbar';
+import Navbar from 'components/navbar';
 
 // Import types
-import { ITemplate, IReduxStore, IView } from '../../types';
+import { ITemplate, IReduxStore, IView } from 'types';
 
 import './style.scss';
 import { loader } from 'graphql.macro';
-import { HTTP_BACKEND_URL } from 'src/constants';
+import { HTTP_BACKEND_URL } from '../../constants';
 
 // GRAPHQL OPERATIONS
 const qSourceAndTemplateNames = loader(

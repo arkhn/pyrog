@@ -14,13 +14,13 @@ import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from '@apollo/react-hooks';
 import { useDispatch } from 'react-redux';
 import useReactRouter from 'use-react-router';
+import { loader } from 'graphql.macro';
 
-import Navbar from '../navbar';
+import Navbar from 'components/navbar';
 
-import { changeSelectedSource } from '../../services/selectedNode/actions';
+import { changeSelectedSource } from 'services/selectedNode/actions';
 
 import './style.scss';
-import { loader } from 'graphql.macro';
 
 // GRAPHQL
 const qSources = loader('src/graphql/queries/sources.graphql');

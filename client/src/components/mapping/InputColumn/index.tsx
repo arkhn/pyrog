@@ -9,11 +9,11 @@ import {
 import * as React from 'react';
 import { useMutation } from '@apollo/react-hooks';
 
-import { ISelectedSource } from 'src/types';
+import { ISelectedSource } from 'types';
 
 // COMPONENTS
 import Join from '../Join';
-import ScriptSelect from 'src/components/selects/scriptSelect';
+import ScriptSelect from 'components/selects/scriptSelect';
 import { loader } from 'graphql.macro';
 
 // GRAPHQL

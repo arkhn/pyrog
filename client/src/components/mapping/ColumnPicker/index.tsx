@@ -1,12 +1,8 @@
-import {
-  ControlGroup,
-  FormGroup,
-  IPopoverProps
-} from '@blueprintjs/core';
+import { ControlGroup, FormGroup, IPopoverProps } from '@blueprintjs/core';
 import * as React from 'react';
 
-import StringSelect from 'src/components/selects/stringSelect';
-import { ISourceSchema } from 'src/types';
+import StringSelect from 'components/selects/stringSelect';
+import { ISourceSchema } from 'types';
 
 export interface IProps {
   ownerChangeCallback?: any;

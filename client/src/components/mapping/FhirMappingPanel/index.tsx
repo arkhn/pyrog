@@ -4,16 +4,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import useReactRouter from 'use-react-router';
 
 // ACTIONS
-import { updateFhirAttribute } from 'src/services/selectedNode/actions';
+import { updateFhirAttribute } from 'services/selectedNode/actions';
 
 // COMPONENTS
 import AddResource from './AddResource';
 import FhirResourceTree from './FhirResourceTree';
 import ResourceSelector from './ResourceSelector';
 
-import { IReduxStore } from 'src/types';
+import { IReduxStore } from 'types';
 
-import { updateLocationParams } from 'src/services/urlState';
+import { updateLocationParams } from 'services/urlState';
 import { loader } from 'graphql.macro';
 
 // GRAPHQL

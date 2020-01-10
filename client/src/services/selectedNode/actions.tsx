@@ -1,11 +1,12 @@
 import { loader } from 'graphql.macro';
-import { client } from '../../app';
+
+import { client } from 'app';
 import {
   IAction,
   ISelectedSource,
   ISelectedResource,
   ISelectedAttribute
-} from '../../types';
+} from 'types';
 
 import { fetchSourceSchema } from './sourceSchemas/actions';
 
@@ -90,13 +91,15 @@ export const changeSelectedSource = (
   hasOwner: boolean,
   callback: any = null
 ): IAction => {
-  const schemaFileName = templateName.concat("_", sourceName)
+  const schemaFileName = templateName.concat('_', sourceName);
   return (dispatch: any, getState: any) => {
     dispatch(
       fetchSourceSchema(schemaFileName, () => {
         return callback
           ? callback()
-          : dispatch(updateSelectedSource(id, sourceName, schemaFileName, hasOwner));
+          : dispatch(
+              updateSelectedSource(id, sourceName, schemaFileName, hasOwner)
+            );
       })
     );
   };

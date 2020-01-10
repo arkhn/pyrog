@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ControlGroup, Icon, InputGroup, Switch } from '@blueprintjs/core';
+import { Icon } from '@blueprintjs/core';
 
 export interface IProps {
   data: any;

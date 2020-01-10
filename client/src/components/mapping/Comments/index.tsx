@@ -1,16 +1,9 @@
 import * as React from 'react';
-import {
-  useQuery,
-  useMutation
-} from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import { useSelector } from 'react-redux';
-import {
-  FormGroup,
-  TextArea,
-  Button
-} from '@blueprintjs/core';
+import { FormGroup, TextArea, Button } from '@blueprintjs/core';
 
-import { IReduxStore } from '../../../types';
+import { IReduxStore } from 'types';
 import { loader } from 'graphql.macro';
 
 // GRAPHQL

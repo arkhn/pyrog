@@ -1,21 +1,14 @@
-import {
-  Alignment,
-  Button,
-  Navbar as BPNavbar
-} from '@blueprintjs/core';
+import { Alignment, Button, Navbar as BPNavbar } from '@blueprintjs/core';
 import * as React from 'react';
-import {
-  useDispatch,
-  useSelector
-} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import useReactRouter from 'use-react-router';
 
 import Drawer from './drawer';
 import Header from './header';
 
-import { logout } from '../../services/user/actions';
+import { logout } from 'services/user/actions';
 
-import { IReduxStore } from '../../types';
+import { IReduxStore } from 'types';
 import { AUTH_TOKEN } from '../../constants';
 
 import './style.scss';

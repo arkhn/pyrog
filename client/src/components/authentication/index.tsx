@@ -12,12 +12,12 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { loader } from 'graphql.macro';
 
-import Navbar from '../navbar';
+import Navbar from 'components/navbar';
 
-import { login as loginAction } from '../../services/user/actions';
+import { login as loginAction } from 'services/user/actions';
 
 // Import types
-import { IReduxStore, IView } from '../../types';
+import { IReduxStore, IView } from 'types';
 import { AUTH_TOKEN } from '../../constants';
 
 import './style.scss';

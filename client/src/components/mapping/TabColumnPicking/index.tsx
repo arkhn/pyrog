@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { ISelectedSource } from '../../../types';
+import { ISelectedSource } from 'types';
 
 import StaticValueForm from './StaticValueForm';
 import DynamicColumnPicker from './DynamicColumnPicker';

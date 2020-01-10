@@ -1,5 +1,5 @@
-import { IAction } from 'src/types';
-import { HTTP_BACKEND_URL } from 'src/constants';
+import { IAction } from 'types';
+import { HTTP_BACKEND_URL } from '../../../constants';
 
 // These actions handle source schema fetching.
 export const loadingSourceSchema = (): IAction => {
