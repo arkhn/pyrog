@@ -5,7 +5,7 @@
 module.exports = {
   parserOptions: {
     ecmaVersion: 7,
-    sourceType: 'module'
+    sourceType: 'module',
   },
   parser: '@typescript-eslint/parser',
   env: {
@@ -13,10 +13,10 @@ module.exports = {
     mocha: true,
     node: true,
     jest: true,
-    es6: true
+    es6: true,
   },
   plugins: ['@typescript-eslint', 'prettier'],
-
+  ignorePatterns: ['src/generated/'],
   rules: {
     'no-underscore-dangle': 0,
     'no-debugger': 1,
@@ -26,14 +26,14 @@ module.exports = {
     'no-param-reassign': [
       2,
       {
-        props: false
-      }
+        props: false,
+      },
     ],
     'prettier/prettier': [
       'error',
       {
-        singleQuote: true
-      }
+        singleQuote: true,
+      },
     ],
 
     /**
@@ -46,14 +46,14 @@ module.exports = {
     'no-new': 0,
     'no-shadow': 0,
     'no-case-declarations': 0,
-    camelcase: 0
+    camelcase: 0,
   },
   overrides: [
     {
       files: '*.test.ts',
       rules: {
-        'no-unused-expressions': 'off'
-      }
-    }
-  ]
-};
+        'no-unused-expressions': 'off',
+      },
+    },
+  ],
+}

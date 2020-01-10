@@ -73,8 +73,7 @@ I personally read this course so as to understand what Redux is and how it works
 
 React routes are defined in `./src/application/routes.tsx`. Links between React and Redux are made in `./src/application/app.tsx`.
 
-- All reusable React components are stored under `./src/application/components`.
-- All views of this application are React components and are stored under `./src/application/views`.
+- All React components are stored under `./src/application/components`.
 
 ## Start contributing
 

@@ -1,7 +1,0 @@
-mutation updateAttribute($attributeId: ID!, $data: UpdateAttributeInput!) {
-  updateAttribute(attributeId: $attributeId, data: $data) {
-    id
-    comments
-    mergingScript
-  }
-}

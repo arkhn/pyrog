@@ -1,12 +1,12 @@
-import { Button, Intent, MenuItem, IPopoverProps } from "@blueprintjs/core";
-import { IconName } from "@blueprintjs/icons";
+import { Button, Intent, MenuItem, IPopoverProps } from '@blueprintjs/core';
+import { IconName } from '@blueprintjs/icons';
 import {
   ItemPredicate,
   ItemRenderer,
   Select,
   ItemListPredicate
-} from "@blueprintjs/select";
-import * as React from "react";
+} from '@blueprintjs/select';
+import * as React from 'react';
 
 interface ISelectProps<T> {
   disabled: boolean;
@@ -25,10 +25,6 @@ interface ISelectProps<T> {
 }
 
 export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
-  constructor(props: ISelectProps<T>) {
-    super(props);
-  }
-
   private CustomSelect = Select.ofType<T>();
 
   private handleValueChange = (item: T) => {
@@ -66,7 +62,7 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
         <Button
           disabled={disabled}
           icon={icon}
-          intent={intent ? intent : null}
+          intent={intent}
           loading={loading}
           rightIcon="caret-down"
           text={displayItem(inputItem)}

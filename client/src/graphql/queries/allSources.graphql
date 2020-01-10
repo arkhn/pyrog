@@ -1,7 +1,0 @@
-query {
-  allSources {
-    id
-    name
-    hasOwner
-  }
-}

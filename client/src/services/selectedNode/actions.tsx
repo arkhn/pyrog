@@ -1,16 +1,17 @@
-import { client } from "../../app";
+import { loader } from 'graphql.macro';
+import { client } from '../../app';
 import {
   IAction,
   ISelectedSource,
   ISelectedResource,
   ISelectedAttribute
-} from "../../types";
+} from '../../types';
 
-import { fetchSourceSchema } from "./sourceSchemas/actions";
+import { fetchSourceSchema } from './sourceSchemas/actions';
 
-const attributeInfo = require("../../graphql/queries/attributeInfo.graphql");
-const resourceInfo = require("../../graphql/queries/resourceInfo.graphql");
-const sourceInfo = require("../../graphql/queries/sourceInfo.graphql");
+const qAttribute = loader('../../graphql/queries/attribute.graphql');
+const resourceInfo = loader('../../graphql/queries/resourceInfo.graphql');
+const sourceInfo = loader('../../graphql/queries/sourceInfo.graphql');
 
 // Node
 export const changeNode = (
@@ -34,7 +35,7 @@ export const changeNode = (
         : null,
       attributeId
         ? client.query({
-            query: attributeInfo,
+            query: qAttribute,
             variables: { attributeId }
           })
         : null
@@ -42,19 +43,18 @@ export const changeNode = (
       .then(([source, resource, attribute]: any) => {
         dispatch(
           changeSelectedSource(
-            source.data.sourceInfo.id,
-            source.data.sourceInfo.name,
-            source.data.sourceInfo.hasOwner,
+            source.data.source.id,
+            source.data.source.name,
+            source.data.source.template.name,
+            source.data.source.hasOwner,
             () => {
               return dispatch(
                 updateNode(
-                  source.data.sourceInfo,
+                  source.data.source,
                   resource
                     ? resource.data.resourceInfo
                     : { id: null, label: null, fhirType: null },
-                  attribute
-                    ? attribute.data.attributeInfo
-                    : { id: null, name: null }
+                  attribute ? attribute : { id: null, name: null }
                 )
               );
             }
@@ -73,7 +73,7 @@ export const updateNode = (
   attribute: ISelectedAttribute
 ): IAction => {
   return {
-    type: "UPDATE_NODE",
+    type: 'UPDATE_NODE',
     payload: {
       source,
       resource,
@@ -85,16 +85,18 @@ export const updateNode = (
 // Source
 export const changeSelectedSource = (
   id: string,
-  name: string,
+  sourceName: string,
+  templateName: string,
   hasOwner: boolean,
   callback: any = null
 ): IAction => {
+  const schemaFileName = templateName.concat("_", sourceName)
   return (dispatch: any, getState: any) => {
     dispatch(
-      fetchSourceSchema(name, () => {
+      fetchSourceSchema(schemaFileName, () => {
         return callback
           ? callback()
-          : dispatch(updateSelectedSource(id, name, hasOwner));
+          : dispatch(updateSelectedSource(id, sourceName, schemaFileName, hasOwner));
       })
     );
   };
@@ -103,13 +105,15 @@ export const changeSelectedSource = (
 export const updateSelectedSource = (
   id: string,
   name: string,
+  schemaFileName: string,
   hasOwner: boolean
 ): IAction => {
   return {
-    type: "UPDATE_SELECTED_SOURCE",
+    type: 'UPDATE_SELECTED_SOURCE',
     payload: {
       id,
       name,
+      schemaFileName,
       hasOwner
     }
   };
@@ -117,7 +121,7 @@ export const updateSelectedSource = (
 
 export const deselectSource = (): IAction => {
   return {
-    type: "DESELECTED_SOURCE"
+    type: 'DESELECTED_SOURCE'
   };
 };
 
@@ -128,7 +132,7 @@ export const updateFhirResource = (
   label: string
 ): IAction => {
   return {
-    type: "UPDATE_FHIR_RESOURCE",
+    type: 'UPDATE_FHIR_RESOURCE',
     payload: {
       fhirType,
       resourceId,
@@ -139,7 +143,7 @@ export const updateFhirResource = (
 
 export const deselectFhirResource = (): IAction => {
   return {
-    type: "DESELECTED_FHIR_RESOURCE"
+    type: 'DESELECTED_FHIR_RESOURCE'
   };
 };
 
@@ -149,7 +153,7 @@ export const updateFhirAttribute = (
   attributeName: string
 ): IAction => {
   return {
-    type: "UPDATE_FHIR_ATTRIBUTE",
+    type: 'UPDATE_FHIR_ATTRIBUTE',
     payload: {
       attributeId,
       attributeName

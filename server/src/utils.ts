@@ -1,175 +1,66 @@
-import { GraphQLResolveInfo } from 'graphql';
-import * as jwt from 'jsonwebtoken';
+import * as fs from 'fs'
+import * as crypto from 'crypto'
 
-import { Prisma as PrismaClient } from './generated/prisma-client';
-import { Prisma as PrismaBinding } from './generated/prisma-binding';
+import { verify } from 'jsonwebtoken'
 
-export interface Context {
-  binding: PrismaBinding;
-  client: PrismaClient;
-  request?: any;
-  response?: any;
-  connection?: any;
+import { Context } from './context'
+import { APP_SECRET, IV } from './constants'
+
+interface Token {
+  userId: string
 }
 
-// Inspiré du code de forwardTo de prisma-binding
-// https://github.com/graphql-binding/graphql-binding/blob/master/src/utils/index.ts#L73
-// sur une recommandation de nilan
-// https://github.com/graphql-binding/graphql-binding/issues/40
-// Cette fonction est un simple wrapper qui appelle la fonction getUserId
-// avant de faire suivre la requête au callback.
-export const checkAuth = (
-  callback: (parent, args, context: Context, info: GraphQLResolveInfo) => any
-) => {
-  return <PARENT, ARGS>(
-    parent: PARENT,
-    args: ARGS,
-    context: Context,
-    info: GraphQLResolveInfo
-  ) => {
-    getUserId(context);
-
-    return callback(parent, args, context, info);
-  };
-};
-
-export const checkIsAdmin = (
-  callback: (parent, args, context: Context, info: GraphQLResolveInfo) => any
-) => {
-  return async <PARENT, ARGS>(
-    parent: PARENT,
-    args: ARGS,
-    context: Context,
-    info: GraphQLResolveInfo
-  ) => {
-    const userId = getUserId(context);
-    const user = await context.client.user({ id: userId });
-
-    if (user.role != 'ADMIN') {
-      throw new PermissionError();
-    }
-
-    return callback(parent, args, context, info);
-  };
-};
-
-export const getUserId = (context: Context) => {
-  // Token appears in different places depending
-  // on whether the request is HTTP or WS
-  const Authorization = context.request
-    ? context.request.get('Authorization')
-    : context.connection.context.Authorization || null;
-
+export function getUserId(context: Context) {
+  const Authorization = context.request.get('Authorization')
   if (Authorization) {
-    const token = Authorization.replace('Bearer ', '');
-    const { userId } = jwt.verify(token, process.env.APP_SECRET) as {
-      userId: string;
-    };
-    return userId;
-  }
-
-  throw new AuthError();
-};
-
-export class AuthError extends Error {
-  constructor() {
-    super('Not authenticated');
+    const token = Authorization.replace('Bearer ', '')
+    const verifiedToken = verify(token, APP_SECRET!) as Token
+    return verifiedToken && verifiedToken.userId
   }
 }
 
-export class PermissionError extends Error {
-  constructor() {
-    super('Not authorized');
+export const fetchResourceSchema = (resourceName: String) => {
+  try {
+    return require(`generated/fhir/${resourceName}.json`)
+  } catch (e) {
+    throw new Error(`Resource ${resourceName} does not exist.`)
   }
 }
 
-export class ServerError extends Error {
-  constructor() {
-    super('Internal Error');
+export const availableResources = async () => {
+  const dir = await fs.promises.opendir('src/generated/fhir')
+  let ret = []
+  for await (const dirent of dir) {
+    ret.push(dirent.name.replace('.json', ''))
   }
+  return ret
 }
 
-export class CustomError extends Error {
-  constructor(message: string) {
-    super(message);
-  }
+export const encrypt = (text: string) => {
+  let cipher = crypto.createCipheriv(
+    'aes-256-cbc',
+    Buffer.from(APP_SECRET!),
+    IV,
+  )
+  let encrypted = cipher.update(text)
+
+  encrypted = Buffer.concat([encrypted, cipher.final()])
+
+  return IV.toString('hex') + ':' + encrypted.toString('hex')
 }
 
-// Recursively queries all nested attributes of a given attribute.
-export const getRecAttribute = async (attribute, context: Context) => {
-  const directAttributes = await context.client
-    .attribute({
-      id: attribute.id
-    })
-    .attributes();
+export const decrypt = (text: string) => {
+  let textParts = text.split(':')
+  let encryptedText = Buffer.from(textParts[1], 'hex')
+  let iv = Buffer.from(textParts[0], 'hex')
+  let decipher = crypto.createDecipheriv(
+    'aes-256-cbc',
+    Buffer.from(APP_SECRET!),
+    iv,
+  )
+  let decrypted = decipher.update(encryptedText)
 
-  return directAttributes.map(async attribute => {
-    return {
-      ...attribute,
-      attributes: await getRecAttribute(attribute, context)
-    };
-  });
-};
+  decrypted = Buffer.concat([decrypted, decipher.final()])
 
-export const recData = (attributePath: string[]) => {
-  if (attributePath.length == 0) {
-    return null;
-  } else if (attributePath.length == 1) {
-    return {
-      name: attributePath.pop()
-    };
-  } else {
-    return {
-      name: attributePath.pop(),
-      attributes: {
-        create: [recData(attributePath)]
-      }
-    };
-  }
-};
-
-export const recAttributeCreation = async (
-  context: Context,
-  info,
-  attributePath: string[],
-  parentId
-) => {
-  if (attributePath.length == 0) {
-    return null;
-  }
-
-  const attributeName = attributePath.pop();
-  let attributes = await context.client.attributes({
-    where: {
-      name: attributeName,
-      attribute: {
-        id: parentId
-      }
-    }
-  });
-
-  if (attributes.length > 1) {
-    // Problem
-  } else if (attributes.length == 1) {
-    await recAttributeCreation(context, info, attributePath, attributes[0].id);
-  } else {
-    let attribute = {
-      attribute: {
-        connect: {
-          id: parentId
-        }
-      },
-      name: attributeName
-    };
-
-    if (attributePath.length > 0) {
-      attribute['attributes'] = {
-        create: [recData(attributePath)]
-      };
-    }
-
-    await context.client.createAttribute({
-      ...attribute
-    });
-  }
-};
+  return decrypted.toString()
+}

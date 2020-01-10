@@ -1,7 +1,0 @@
-#import "../fragments/entireResource.graphql"
-
-mutation updateResource($resourceId: ID!, $data: UpdateResourceInput!) {
-  updateResource(resourceId: $resourceId, data: $data) {
-    ...entireResource
-  }
-}

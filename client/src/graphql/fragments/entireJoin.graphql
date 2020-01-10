@@ -1,9 +1,9 @@
 fragment entireJoin on Join {
   id
-  sourceOwner
-  sourceTable
-  sourceColumn
-  targetOwner
-  targetTable
-  targetColumn
+  tables {
+    id
+    owner
+    table
+    column
+  }
 }

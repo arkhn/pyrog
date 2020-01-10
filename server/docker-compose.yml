@@ -1,44 +1,26 @@
-version: '3'
+version: "3"
 services:
   pyrog:
-    build:
-      context: .
-    image: arkhn/pyrog:latest
+    image: arkhn/pyrog2:latest
+    ports:
+      - 4000:4000
     env_file: .env.docker
-    ports:
-      - $SERVER_PORT:$SERVER_PORT
-    restart: 'no'
     depends_on:
-      - prisma
+      - postgres
     volumes:
-      - static:$WORKDIR/static
-  prisma:
-    image: prismagraphql/prisma:1.34
-    restart: 'no'
-    ports:
-      - 4466:4466
-    environment:
-      PRISMA_CONFIG: |
-        port: 4466
-        databases:
-          default:
-            connector: postgres
-            host: postgres-db
-            port: 5432
-            user: prisma
-            password: prisma
-    depends_on:
-      - postgres-db
-  postgres-db:
+      - schemas:${SCHEMAS_DIR}
+
+  postgres:
     image: postgres
-    restart: 'no'
     ports:
-      - 9391:5432
+      - 5432:5432
     environment:
       POSTGRES_USER: prisma
       POSTGRES_PASSWORD: prisma
+      POSTGRES_DB: prisma
     volumes:
-      - postgres:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
+
 volumes:
-  postgres:
-  static:
+  postgres-data:
+  schemas:
