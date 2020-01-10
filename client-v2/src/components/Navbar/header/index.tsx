@@ -1,10 +1,10 @@
-import { Button, Navbar as BPNavbar } from "@blueprintjs/core";
-import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import useReactRouter from "use-react-router";
+import { Button, Navbar as BPNavbar } from '@blueprintjs/core';
+import * as React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import useReactRouter from 'use-react-router';
 
-import { IReduxStore } from "src/types";
-import { deselectSource } from "src/services/selectedNode/actions";
+import { IReduxStore } from 'src/types';
+import { deselectSource } from 'src/services/selectedNode/actions';
 
 interface IProps {
   openDrawer: any;
@@ -17,14 +17,14 @@ const Header = ({ openDrawer }: IProps) => {
 
   let header;
   switch (location.pathname) {
-    case "/newSource": {
+    case '/newSource': {
       header = (
         <Button
-          icon={"chevron-left"}
-          intent={"primary"}
+          icon={'chevron-left'}
+          intent={'primary'}
           minimal={true}
           onClick={() => {
-            history.push("/");
+            history.push('/');
           }}
         >
           Sources
@@ -33,17 +33,17 @@ const Header = ({ openDrawer }: IProps) => {
       break;
     }
 
-    case "/mapping": {
+    case '/mapping': {
       header =
         selectedNode.source !== null ? (
           <>
             <Button
-              icon={"chevron-left"}
-              intent={"primary"}
+              icon={'chevron-left'}
+              intent={'primary'}
               minimal={true}
               onClick={() => {
                 dispatch(deselectSource());
-                history.push("/");
+                history.push('/');
               }}
             >
               Sources

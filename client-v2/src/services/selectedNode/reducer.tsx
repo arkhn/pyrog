@@ -1,9 +1,10 @@
-import { ISimpleAction } from "../../types";
+import { ISimpleAction } from '../../types';
 
 const initialState: any = {
   source: {
     id: null,
     name: null,
+    schemaFileName: null,
     hasOwner: null
   },
   resource: {
@@ -22,7 +23,7 @@ const selectedNodeReducer = (
   action: ISimpleAction
 ): any => {
   switch (action.type) {
-    case "UPDATE_NODE":
+    case 'UPDATE_NODE':
       return {
         ...state,
         source: {
@@ -36,12 +37,13 @@ const selectedNodeReducer = (
         }
       };
 
-    case "UPDATE_SELECTED_SOURCE":
+    case 'UPDATE_SELECTED_SOURCE':
       return {
         ...state,
         source: {
           id: action.payload.id,
           name: action.payload.name,
+          schemaFileName: action.payload.schemaFileName,
           hasOwner: action.payload.hasOwner
         },
         resource: {
@@ -55,7 +57,7 @@ const selectedNodeReducer = (
         }
       };
 
-    case "UPDATE_FHIR_RESOURCE":
+    case 'UPDATE_FHIR_RESOURCE':
       return {
         ...state,
         resource: {
@@ -69,7 +71,7 @@ const selectedNodeReducer = (
         }
       };
 
-    case "DESELECTED_FHIR_RESOURCE":
+    case 'DESELECTED_FHIR_RESOURCE':
       return {
         ...state,
         resource: {
@@ -83,7 +85,7 @@ const selectedNodeReducer = (
         }
       };
 
-    case "UPDATE_FHIR_ATTRIBUTE":
+    case 'UPDATE_FHIR_ATTRIBUTE':
       return {
         ...state,
         attribute: {
@@ -92,7 +94,7 @@ const selectedNodeReducer = (
         }
       };
 
-    case "DESELECTED_SOURCE":
+    case 'DESELECTED_SOURCE':
       return {
         ...state,
         ...initialState

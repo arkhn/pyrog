@@ -1,6 +1,6 @@
-import { IRecommendedColumns, ISimpleAction } from "../../types";
+import { IRecommendedColumns, ISimpleAction } from '../../types';
 
-let initialState: IRecommendedColumns = {
+const initialState: IRecommendedColumns = {
   columnsByAttribute: {}
 };
 
@@ -9,7 +9,7 @@ export const recommendedColumns = (
   action: ISimpleAction
 ): any => {
   switch (action.type) {
-    case "FETCH_RECOMMENDED_COLUMNS_SUCCESS": {
+    case 'FETCH_RECOMMENDED_COLUMNS_SUCCESS': {
       return {
         ...state,
         columnsByAttribute: {

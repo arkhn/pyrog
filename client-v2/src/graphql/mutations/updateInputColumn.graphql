@@ -1,7 +1,0 @@
-#import "../fragments/entireInput.graphql"
-
-mutation updateInputColumn($id: ID!, $data: InputColumnUpdateInput) {
-  updateInputColumn(id: $id, data: $data) {
-    ...entireInput
-  }
-}

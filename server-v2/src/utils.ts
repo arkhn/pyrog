@@ -14,7 +14,7 @@ export function getUserId(context: Context) {
   const Authorization = context.request.get('Authorization')
   if (Authorization) {
     const token = Authorization.replace('Bearer ', '')
-    const verifiedToken = verify(token, APP_SECRET) as Token
+    const verifiedToken = verify(token, APP_SECRET!) as Token
     return verifiedToken && verifiedToken.userId
   }
 }
@@ -37,7 +37,11 @@ export const availableResources = async () => {
 }
 
 export const encrypt = (text: string) => {
-  let cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(APP_SECRET), IV)
+  let cipher = crypto.createCipheriv(
+    'aes-256-cbc',
+    Buffer.from(APP_SECRET!),
+    IV,
+  )
   let encrypted = cipher.update(text)
 
   encrypted = Buffer.concat([encrypted, cipher.final()])
@@ -51,7 +55,7 @@ export const decrypt = (text: string) => {
   let iv = Buffer.from(textParts[0], 'hex')
   let decipher = crypto.createDecipheriv(
     'aes-256-cbc',
-    Buffer.from(APP_SECRET),
+    Buffer.from(APP_SECRET!),
     iv,
   )
   let decrypted = decipher.update(encryptedText)

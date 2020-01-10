@@ -1,25 +1,23 @@
-import { IAction } from "../../../types";
+import { IAction } from 'src/types';
+import { HTTP_BACKEND_URL } from 'src/constants';
 
 // These actions handle source schema fetching.
 export const loadingSourceSchema = (): IAction => {
   return {
-    type: "LOADING_SOURCE_SCHEMA"
+    type: 'LOADING_SOURCE_SCHEMA'
   };
 };
 
-export const fetchSourceSchema = (
-  sourceName: string,
-  callback: any
-): IAction => {
+export const fetchSourceSchema = (fileName: string, callback: any): IAction => {
   return (dispatch: any, getState: any) => {
     dispatch(loadingSourceSchema());
 
-    return fetch(`${process.env.HTTP_BACKEND_URL}/schemas/${sourceName}.json`)
+    return fetch(`${HTTP_BACKEND_URL}/schemas/${fileName}.json`)
       .then((response: any) => {
         return response.json();
       })
       .then((response: any) => {
-        dispatch(fetchSourceSchemaSuccess(sourceName, response));
+        dispatch(fetchSourceSchemaSuccess(fileName, response));
         callback();
       })
       .catch((err: any) => {
@@ -30,13 +28,13 @@ export const fetchSourceSchema = (
 };
 
 export const fetchSourceSchemaSuccess = (
-  sourceName: string,
+  fileName: string,
   schema: any
 ): IAction => {
   return {
-    type: "FETCH_SOURCE_SCHEMA_SUCCESS",
+    type: 'FETCH_SOURCE_SCHEMA_SUCCESS',
     payload: {
-      sourceName,
+      fileName,
       schema
     }
   };
@@ -44,6 +42,6 @@ export const fetchSourceSchemaSuccess = (
 
 export const fetchSourceSchemaFailure = (err: any): IAction => {
   return {
-    type: "FETCH_SOURCE_SCHEMA_FAILURE"
+    type: 'FETCH_SOURCE_SCHEMA_FAILURE'
   };
 };

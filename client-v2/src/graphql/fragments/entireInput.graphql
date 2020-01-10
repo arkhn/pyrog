@@ -1,4 +1,4 @@
-#import "../fragments/entireJoin.graphql"
+#import "./entireJoin.graphql"
 
 fragment entireInput on Input {
   id

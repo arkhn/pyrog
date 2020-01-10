@@ -1,5 +1,5 @@
-import * as React from "react";
-import { ControlGroup, Icon, InputGroup, Switch } from "@blueprintjs/core";
+import * as React from 'react';
+import { ControlGroup, Icon, InputGroup, Switch } from '@blueprintjs/core';
 
 export interface IProps {
   data: any;
@@ -15,20 +15,20 @@ export default class ColumnViewer extends React.Component<IProps, IState> {
   };
 
   public render() {
-    let { data } = this.props;
+    const { data } = this.props;
 
-    let columns = data.map((column: any, index: number) => (
+    const columns = data.map((column: any, index: number) => (
       <div key={index}>
-        <div className={"add-button"} onClick={this.handleClick(column)}>
-          <Icon icon={"plus"} />
+        <div className={'add-button'} onClick={this.handleClick(column)}>
+          <Icon icon={'plus'} />
         </div>
-        <div className={"column"}>
-          <div className={"column-header"}>
+        <div className={'column'}>
+          <div className={'column-header'}>
             <div>{column.owner}</div>
             <div>{column.table}</div>
             <div>{column.column}</div>
           </div>
-          <div className={"column-rows"}>
+          <div className={'column-rows'}>
             {column.rows.map((row: string, index: number) => (
               <div key={index}>{row}</div>
             ))}
@@ -38,8 +38,8 @@ export default class ColumnViewer extends React.Component<IProps, IState> {
     ));
 
     return (
-      <div className={"column-viewer"}>
-        <div className={"column-flexbox"}>{columns}</div>
+      <div className={'column-viewer'}>
+        <div className={'column-flexbox'}>{columns}</div>
       </div>
     );
   }

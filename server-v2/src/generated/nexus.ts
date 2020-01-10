@@ -28,12 +28,14 @@ export interface NexusGenInputs {
   AttributeWhereInput: { // input type
     AND?: NexusGenInputs['AttributeWhereInput'][] | null; // [AttributeWhereInput!]
     children?: NexusGenInputs['AttributeFilter'] | null; // AttributeFilter
+    comments?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     description?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     fhirType?: NexusGenInputs['StringFilter'] | null; // StringFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     inputs?: NexusGenInputs['InputFilter'] | null; // InputFilter
     isArray?: NexusGenInputs['BooleanFilter'] | null; // BooleanFilter
+    isRequired?: NexusGenInputs['BooleanFilter'] | null; // BooleanFilter
     mergingScript?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     name?: NexusGenInputs['StringFilter'] | null; // StringFilter
     NOT?: NexusGenInputs['AttributeWhereInput'][] | null; // [AttributeWhereInput!]
@@ -214,8 +216,11 @@ export interface NexusGenInputs {
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
   UpdateAttributeInput: { // input type
-    description?: string | null; // String
+    comments?: string | null; // String
     mergingScript?: string | null; // String
+  }
+  UpdateInputInput: { // input type
+    script?: string | null; // String
   }
   UpdateResourceInput: { // input type
     label?: string | null; // String
@@ -277,6 +282,7 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
   StringFilter: NexusGenInputs['StringFilter'];
   TemplateWhereInput: NexusGenInputs['TemplateWhereInput'];
   UpdateAttributeInput: NexusGenInputs['UpdateAttributeInput'];
+  UpdateInputInput: NexusGenInputs['UpdateInputInput'];
   UpdateResourceInput: NexusGenInputs['UpdateResourceInput'];
   DatabaseType: NexusGenEnums['DatabaseType'];
   Role: NexusGenEnums['Role'];
@@ -285,12 +291,14 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
 export interface NexusGenFieldTypes {
   Attribute: { // field return type
     children: NexusGenRootTypes['Attribute'][]; // [Attribute!]!
+    comments: string | null; // String
     createdAt: any; // DateTime!
     description: string | null; // String
     fhirType: string; // String!
     id: string; // ID!
     inputs: NexusGenRootTypes['Input'][]; // [Input!]!
     isArray: boolean; // Boolean!
+    isRequired: boolean; // Boolean!
     mergingScript: string | null; // String
     name: string; // String!
     parent: NexusGenRootTypes['Attribute'] | null; // Attribute
@@ -354,6 +362,7 @@ export interface NexusGenFieldTypes {
     login: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     signup: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     updateAttribute: NexusGenRootTypes['Attribute']; // Attribute!
+    updateInput: NexusGenRootTypes['Input']; // Input!
     updateJoin: NexusGenRootTypes['Join']; // Join!
     updateResource: NexusGenRootTypes['Resource']; // Resource!
     upsertCredential: NexusGenRootTypes['Credential']; // Credential!
@@ -505,6 +514,10 @@ export interface NexusGenArgTypes {
       attributeId: string; // ID!
       data: NexusGenInputs['UpdateAttributeInput']; // UpdateAttributeInput!
     }
+    updateInput: { // args
+      data: NexusGenInputs['UpdateInputInput']; // UpdateInputInput!
+      inputId: string; // ID!
+    }
     updateJoin: { // args
       data: NexusGenInputs['JoinInput']; // JoinInput!
       joinId: string; // ID!
@@ -574,7 +587,7 @@ export interface NexusGenInheritedFields {}
 
 export type NexusGenObjectNames = "Attribute" | "AuthPayload" | "Column" | "Credential" | "Input" | "Join" | "Mutation" | "Query" | "Resource" | "Source" | "Template" | "User";
 
-export type NexusGenInputNames = "AttributeFilter" | "AttributeWhereInput" | "BooleanFilter" | "ColumnFilter" | "ColumnInput" | "ColumnInputWithoutJoins" | "ColumnWhereInput" | "CredentialWhereInput" | "DateTimeFilter" | "InputFilter" | "InputWhereInput" | "JoinFilter" | "JoinInput" | "JoinWhereInput" | "NullableStringFilter" | "ResourceFilter" | "ResourceWhereInput" | "SourceFilter" | "SourceWhereInput" | "StringFilter" | "TemplateWhereInput" | "UpdateAttributeInput" | "UpdateResourceInput";
+export type NexusGenInputNames = "AttributeFilter" | "AttributeWhereInput" | "BooleanFilter" | "ColumnFilter" | "ColumnInput" | "ColumnInputWithoutJoins" | "ColumnWhereInput" | "CredentialWhereInput" | "DateTimeFilter" | "InputFilter" | "InputWhereInput" | "JoinFilter" | "JoinInput" | "JoinWhereInput" | "NullableStringFilter" | "ResourceFilter" | "ResourceWhereInput" | "SourceFilter" | "SourceWhereInput" | "StringFilter" | "TemplateWhereInput" | "UpdateAttributeInput" | "UpdateInputInput" | "UpdateResourceInput";
 
 export type NexusGenEnumNames = "DatabaseType" | "Role";
 

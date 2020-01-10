@@ -4,12 +4,14 @@
 
 type Attribute {
   children(after: ID, before: ID, first: Int, last: Int, skip: Int): [Attribute!]!
+  comments: String
   createdAt: DateTime!
   description: String
   fhirType: String!
   id: ID!
   inputs(after: ID, before: ID, first: Int, last: Int, skip: Int): [Input!]!
   isArray: Boolean!
+  isRequired: Boolean!
   mergingScript: String
   name: String!
   parent: Attribute
@@ -26,12 +28,14 @@ input AttributeFilter {
 input AttributeWhereInput {
   AND: [AttributeWhereInput!]
   children: AttributeFilter
+  comments: NullableStringFilter
   createdAt: DateTimeFilter
   description: NullableStringFilter
   fhirType: StringFilter
   id: StringFilter
   inputs: InputFilter
   isArray: BooleanFilter
+  isRequired: BooleanFilter
   mergingScript: NullableStringFilter
   name: StringFilter
   NOT: [AttributeWhereInput!]
@@ -216,6 +220,7 @@ type Mutation {
   login(email: String!, password: String!): AuthPayload!
   signup(email: String!, name: String!, password: String!): AuthPayload!
   updateAttribute(attributeId: ID!, data: UpdateAttributeInput!): Attribute!
+  updateInput(data: UpdateInputInput!, inputId: ID!): Input!
   updateJoin(data: JoinInput!, joinId: ID!): Join!
   updateResource(data: UpdateResourceInput!, resourceId: ID!): Resource!
   upsertCredential(database: String!, host: String!, login: String!, model: String!, password: String!, port: String!, sourceId: ID!): Credential!
@@ -356,8 +361,12 @@ input TemplateWhereInput {
 }
 
 input UpdateAttributeInput {
-  description: String
+  comments: String
   mergingScript: String
+}
+
+input UpdateInputInput {
+  script: String
 }
 
 input UpdateResourceInput {

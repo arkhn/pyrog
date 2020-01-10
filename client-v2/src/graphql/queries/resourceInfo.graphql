@@ -1,4 +1,4 @@
-#import "src/graphql/fragments/entireResource.graphql"
+#import "../fragments/entireResource.graphql"
 
 query resourceInfo($resourceId: ID!) {
   resource(resourceId: $resourceId) {

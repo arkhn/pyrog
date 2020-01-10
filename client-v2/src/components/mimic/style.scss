@@ -1,0 +1,76 @@
+@import "~@blueprintjs/core/lib/css/blueprint.css";
+@import "~@blueprintjs/core/lib/scss/variables";
+@import "~react-json-pretty/src/JSONPretty.monikai.css";
+
+$window-padding: 20px;
+$border-radius: 6px;
+
+body {
+  background-color: $light-gray5;
+  color: $black;
+}
+
+#mimic-poc {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+
+  .question {
+    padding: $window-padding;
+
+    & > * {
+      padding: 10px;
+    }
+  }
+
+  .input-columns > div {
+    background-color: $light-gray5;
+    margin-top: 10px;
+    padding: 5px $window-padding;
+    border-radius: 3px;
+    color: $black;
+    border: 1px solid $green4;
+  }
+
+  .callout {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: justify;
+    padding: $window-padding;
+    background-color: $light-gray4;
+  }
+
+  .column-selector {
+    padding: $window-padding 0;
+  }
+
+  .column-viewer {
+    max-height: 50vh;
+    padding: 0;
+  }
+
+  .column-flexbox {
+    background-color: $light-gray4;
+    overflow-y: hidden;
+
+    .column {
+      width: 215px;
+      overflow-y: auto;
+    }
+
+    .column-header {
+      background-color: $light-gray1;
+      padding: 3px 0px;
+
+      & > :not(:last-child) {
+        border-bottom: none;
+      }
+    }
+
+    .column-rows > div {
+      white-space: nowrap;
+      overflow: hidden;
+      min-height: 26px;
+    }
+  }
+}
