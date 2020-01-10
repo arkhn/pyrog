@@ -1,6 +1,5 @@
 {
-  "name": "graphql-auth",
-  "license": "MIT",
+  "name": "pyrog",
   "scripts": {
     "start": "NODE_PATH=dist/ node dist/server",
     "clean": "rm -rf dist",

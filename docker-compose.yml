@@ -1,10 +1,20 @@
-version: '3'
+version: "3"
 services:
+  pyrog-client:
+    build:
+      context: ./client
+    image: arkhn/pyrog2-client:latest
+    ports:
+      - 1479:1479
+    env_file: ./client/.env.docker
+
   pyrog:
+    build:
+      context: ./server
     image: arkhn/pyrog2:latest
     ports:
       - 4000:4000
-    env_file: .env.docker
+    env_file: ./server/.env.docker
     depends_on:
       - postgres
     volumes:

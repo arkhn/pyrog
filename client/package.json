@@ -4,6 +4,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build:docker": "docker build -t arkhn/pyrog2-client:latest .",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint './src/**/*.{ts,tsx}'"
@@ -56,6 +57,7 @@
     "redux-persist": "^6.0.0",
     "sass": "^1.24.3",
     "sass-loader": "^8.0.0",
+    "serve": "^11.3.0",
     "use-react-router": "^1.0.7",
     "waait": "^1.0.5"
   },

@@ -85,6 +85,7 @@ const persistor = persistStore(store);
 // APOLLO
 
 // HttpLink
+console.log('----', process.env);
 const httpLink = new HttpLink({
   uri: HTTP_BACKEND_URL,
   fetch: fetch
