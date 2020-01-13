@@ -35,10 +35,10 @@ jobs:
           cd client
           yarn build
 
-      - name: Lint
-        run: |
-          cd client
-          yarn lint
+#      - name: Lint
+#        run: |
+#          cd client
+#          yarn lint
 
   publish:
     name: Build and publish
