@@ -14,13 +14,43 @@ import { AUTH_TOKEN } from '../../constants';
 import './style.scss';
 
 // Logo
+interface IProps {
+  exportMapping?: (event: any) => void;
+}
 
-const Navbar = () => {
+const Navbar = ({ exportMapping }: IProps) => {
   const dispatch = useDispatch();
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
   const user = useSelector((state: IReduxStore) => state.user);
   const { history } = useReactRouter();
   const [drawerIsOpen, setDrawerIsOpen] = React.useState(false);
+
+  const renderSource = () => {
+    return (
+      <BPNavbar.Group align={Alignment.LEFT}>
+        <BPNavbar.Divider />
+        {selectedNode.source.name}
+        <BPNavbar.Divider />
+        <Button icon="export" minimal={true} onClick={exportMapping!}>
+          Export mapping
+        </Button>
+        <Button
+          icon="more"
+          minimal={true}
+          onClick={() => setDrawerIsOpen(true)}
+        >
+          Database
+        </Button>
+        <Drawer
+          title={selectedNode.source ? selectedNode.source.name : ''}
+          isOpen={drawerIsOpen}
+          onClose={() => {
+            setDrawerIsOpen(false);
+          }}
+        />
+      </BPNavbar.Group>
+    );
+  };
 
   return (
     <BPNavbar id="navbar" className="bp3-dark">
@@ -33,22 +63,10 @@ const Navbar = () => {
           <img src="arkhn_logo_only_white.svg" alt="Arkhn" />
           <h2>PYROG</h2>
         </BPNavbar.Heading>
-        <Header
-          openDrawer={() => {
-            setDrawerIsOpen(true);
-          }}
-        />
+        <Header />
       </BPNavbar.Group>
 
-      {selectedNode.source.id && (
-        <Drawer
-          title={selectedNode.source ? selectedNode.source.name : ''}
-          isOpen={drawerIsOpen}
-          onClose={() => {
-            setDrawerIsOpen(false);
-          }}
-        />
-      )}
+      {user.id && selectedNode.source.id && renderSource()}
 
       {user.id && (
         <BPNavbar.Group align={Alignment.RIGHT}>

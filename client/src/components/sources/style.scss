@@ -1,5 +1,5 @@
-@import "~@blueprintjs/core/lib/css/blueprint.css";
-@import "~@blueprintjs/core/lib/scss/variables";
+@import '~@blueprintjs/core/lib/css/blueprint.css';
+@import '~@blueprintjs/core/lib/scss/variables';
 
 $window-padding: 20px;
 
@@ -9,6 +9,10 @@ h2 {
 
 #main-container-softwares {
   padding: $window-padding;
+
+  .bp3-button {
+    margin: 15px;
+  }
 }
 
 #software-cards {

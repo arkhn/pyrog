@@ -9,21 +9,23 @@ export const loadingSourceSchema = (): IAction => {
 };
 
 export const fetchSourceSchema = (fileName: string, callback: any): IAction => {
-  return (dispatch: any, getState: any) => {
+  return async (dispatch: any, getState: any) => {
     dispatch(loadingSourceSchema());
 
-    return fetch(`${HTTP_BACKEND_URL}/schemas/${fileName}.json`)
-      .then((response: any) => {
-        return response.json();
-      })
-      .then((response: any) => {
-        dispatch(fetchSourceSchemaSuccess(fileName, response));
-        callback();
-      })
-      .catch((err: any) => {
-        console.log(err);
-        dispatch(fetchSourceSchemaFailure(err));
-      });
+    try {
+      const response = await fetch(
+        `${HTTP_BACKEND_URL}/schemas/${fileName}.json`
+      );
+      const body = await response.json();
+      if (response.status !== 200) {
+        throw new Error(body.error);
+      }
+      dispatch(fetchSourceSchemaSuccess(fileName, body));
+      callback();
+    } catch (err) {
+      dispatch(fetchSourceSchemaFailure(err));
+      callback();
+    }
   };
 };
 
