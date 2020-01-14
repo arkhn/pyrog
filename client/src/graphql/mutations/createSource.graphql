@@ -2,7 +2,7 @@ mutation createSource(
   $templateName: String!
   $name: String!
   $hasOwner: Boolean!
-  $mapping: String!
+  $mapping: String
 ) {
   createSource(
     templateName: $templateName
