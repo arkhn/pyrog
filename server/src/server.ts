@@ -25,7 +25,7 @@ server.express.use((req: any, res: any, next: any) => {
 register(server.express)
 
 const options = {
-  bodyParserOptions: { limit: '1mb', type: 'application/json' },
+  bodyParserOptions: { limit: '10mb', type: 'application/json' },
 }
 
 server.start(options, () =>
