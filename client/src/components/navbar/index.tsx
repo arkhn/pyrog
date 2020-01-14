@@ -25,7 +25,7 @@ const Navbar = ({ exportMapping }: IProps) => {
   const { history } = useReactRouter();
   const [drawerIsOpen, setDrawerIsOpen] = React.useState(false);
 
-  const renderSource = () => {
+  const renderSourceContext = () => {
     return (
       <BPNavbar.Group align={Alignment.LEFT}>
         <BPNavbar.Divider />
@@ -66,7 +66,7 @@ const Navbar = ({ exportMapping }: IProps) => {
         <Header />
       </BPNavbar.Group>
 
-      {user.id && selectedNode.source.id && renderSource()}
+      {user.id && selectedNode.source.id && renderSourceContext()}
 
       {user.id && (
         <BPNavbar.Group align={Alignment.RIGHT}>

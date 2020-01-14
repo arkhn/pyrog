@@ -29,6 +29,8 @@ const buildJoinsFromMapping = (
     let join: JoinCreateWithoutColumnInput = clean(j)
     if (j.tables && j.tables.length) {
       join.tables = { create: j.tables.map(clean) }
+    } else {
+      delete join.tables
     }
     return join
   })
