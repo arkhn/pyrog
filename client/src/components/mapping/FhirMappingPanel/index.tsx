@@ -35,7 +35,7 @@ const FhirMappingPanel = () => {
   const { data: dataResources, loading: loadingResources } = useQuery(
     qResourcesForSource,
     {
-      skip: !selectedNode.source,
+      skip: !selectedNode.source.id,
       variables: {
         sourceId: selectedNode.source.id
       }
@@ -78,7 +78,9 @@ const FhirMappingPanel = () => {
         <div id="resource-selector">
           <ResourceSelector
             availableResources={
-              loadingResources ? [] : dataResources.source.resources
+              loadingResources || !dataResources
+                ? []
+                : dataResources.source.resources
             }
             loading={loadingResources}
             deleteResourceCallback={() => {

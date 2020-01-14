@@ -65,6 +65,7 @@ export const Mutation = mutationType({
         templateName: stringArg({ required: true }),
         name: stringArg({ required: true }),
         hasOwner: booleanArg({ required: true }),
+        mapping: stringArg({ required: false }),
       },
       resolve: createSource,
     })

@@ -208,7 +208,7 @@ type Mutation {
   createAttribute(parentId: ID!): Attribute!
   createInput(attributeId: ID!, script: String, sql: ColumnInput, static: String): Input!
   createResource(resourceName: String!, sourceId: ID!): Resource!
-  createSource(hasOwner: Boolean!, name: String!, templateName: String!): Source!
+  createSource(hasOwner: Boolean!, mapping: String, name: String!, templateName: String!): Source!
   createTemplate(name: String!): Template!
   deleteAttribute(id: ID!): Attribute!
   deleteCredential(id: ID!): Credential!
@@ -298,6 +298,7 @@ type Source {
   credential: Credential
   hasOwner: Boolean!
   id: ID!
+  mapping(depth: Int = 10): String!
   mappingProgress: [Int!]
   name: String!
   resources(after: ID, before: ID, first: Int, last: Int, skip: Int, where: ResourceWhereInput): [Resource!]!

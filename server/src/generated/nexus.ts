@@ -395,6 +395,7 @@ export interface NexusGenFieldTypes {
     credential: NexusGenRootTypes['Credential'] | null; // Credential
     hasOwner: boolean; // Boolean!
     id: string; // ID!
+    mapping: string; // String!
     mappingProgress: number[] | null; // [Int!]
     name: string; // String!
     resources: NexusGenRootTypes['Resource'][]; // [Resource!]!
@@ -474,6 +475,7 @@ export interface NexusGenArgTypes {
     }
     createSource: { // args
       hasOwner: boolean; // Boolean!
+      mapping?: string | null; // String
       name: string; // String!
       templateName: string; // String!
     }
@@ -560,6 +562,9 @@ export interface NexusGenArgTypes {
     }
   }
   Source: {
+    mapping: { // args
+      depth?: number | null; // Int
+    }
     resources: { // args
       after?: string | null; // ID
       before?: string | null; // ID
