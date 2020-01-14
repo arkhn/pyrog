@@ -78,7 +78,9 @@ const FhirMappingPanel = () => {
         <div id="resource-selector">
           <ResourceSelector
             availableResources={
-              loadingResources ? [] : dataResources.source.resources
+              loadingResources || !dataResources
+                ? []
+                : dataResources.source.resources
             }
             loading={loadingResources}
             deleteResourceCallback={() => {

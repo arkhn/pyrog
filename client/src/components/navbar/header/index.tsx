@@ -8,7 +8,7 @@ import { deselectSource } from 'services/selectedNode/actions';
 const Header = () => {
   const dispatch = useDispatch();
   const { history, location } = useReactRouter();
-  console.log(location);
+
   switch (location.pathname) {
     case '/':
     case '/login':
