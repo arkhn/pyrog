@@ -132,7 +132,7 @@ export const importMapping = async (
     JSON.parse(mapping).map(async (r: any) =>
       photon.resources.create({
         data: {
-          ...r,
+          ...clean(r),
           attributes: {
             create: buildResourceFromMapping(r.attributes),
           },
