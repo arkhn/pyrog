@@ -48,7 +48,7 @@ jobs:
       TAG: latest
     runs-on: ubuntu-18.04
     needs: build
-    if: github.ref == 'refs/heads/master'
+    #if: github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v1
 
@@ -65,5 +65,5 @@ jobs:
       - name: Publish to Github Packages
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login $GITHUB_REGISTRY -u ${{ github.actor }} --password-stdin
-          docker tag $IMAGE:$TAG $GITHUB_REGISTRY/${{ github.repository }}/$IMAGE:$TAG
-          docker push $GITHUB_REGISTRY/${{ github.repository }}/$IMAGE:$TAG
+          docker tag $IMAGE:$TAG $GITHUB_REGISTRY/${{ github.repository }}/pyrog-server:$TAG
+          docker push $GITHUB_REGISTRY/${{ github.repository }}/pyrog-server:$TAG
