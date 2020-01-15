@@ -66,8 +66,8 @@ const SourcesView = () => {
       <Navbar />
       <div id="main-container-softwares">
         <Button
-          icon={'add'}
-          intent={'primary'}
+          icon="add"
+          intent="primary"
           large={true}
           onClick={() => {
             history.push('/newSource');

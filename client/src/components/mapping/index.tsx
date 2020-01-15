@@ -1,5 +1,7 @@
-import { Tab, Tabs, TabId, Icon } from '@blueprintjs/core';
 import * as React from 'react';
+import { Tab, Tabs, TabId, Icon } from '@blueprintjs/core';
+import { loader } from 'graphql.macro';
+import { useApolloClient } from 'react-apollo';
 import { useSelector } from 'react-redux';
 
 import Navbar from 'components/navbar';
@@ -15,10 +17,52 @@ import { IReduxStore } from 'types';
 
 import './style.scss';
 
+const qExportMapping = loader('src/graphql/queries/exportMapping.graphql');
+
 const MappingView = () => {
   const data = useSelector((state: IReduxStore) => state.data);
+  const toaster = useSelector((state: IReduxStore) => state.toaster);
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
   const [selectedTabId, setSelectedTabId] = React.useState('picker' as TabId);
+  const client = useApolloClient();
+
+  const exportMapping = async () => {
+    const { data, errors } = await client.query({
+      query: qExportMapping,
+      variables: {
+        sourceId: selectedNode.source.id
+      }
+    });
+
+    if (errors && errors.length) {
+      toaster.show({
+        icon: 'error',
+        intent: 'danger',
+        message: `error while exporting mapping`,
+        timeout: 4000
+      });
+      return;
+    }
+
+    if (data) {
+      const {
+        source: { mapping, template, name }
+      } = data;
+      const fileName = `${template.name}_${name}_mapping.json`;
+      const element = document.createElement('a');
+      const file = new File(
+        [mapping],
+        `${template.name}_${name}_mapping.json`,
+        {
+          type: 'application/json'
+        }
+      );
+      element.href = URL.createObjectURL(file);
+      element.download = fileName;
+      document.body.appendChild(element); // Required for this to work in FireFox
+      element.click();
+    }
+  };
 
   const renderExistingRules = () => (
     <InputColumns
@@ -102,9 +146,26 @@ const MappingView = () => {
     );
   };
 
+  if (
+    selectedNode.source.schemaFileName &&
+    !data.sourceSchemas.schemaByFileName[selectedNode.source.schemaFileName]
+  ) {
+    toaster.show({
+      icon: 'error',
+      intent: 'danger',
+      message: `missing database schema for source ${selectedNode.source.name}`,
+      timeout: 4000
+    });
+    return (
+      <div>
+        <Navbar />
+      </div>
+    );
+  }
+
   return (
     <div>
-      <Navbar />
+      <Navbar exportMapping={exportMapping} />
       <div id="mapping-explorer-container">
         <div id="main-container">
           <div id="exploration-panel">
@@ -112,7 +173,7 @@ const MappingView = () => {
             {selectedNode.attribute.id ? renderTabs() : renderHelp()}
           </div>
           <div id="fhir-panel">
-            {selectedNode.source.id && <FhirMappingPanel />}
+            <FhirMappingPanel />
           </div>
         </div>
       </div>

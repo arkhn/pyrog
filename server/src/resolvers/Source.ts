@@ -1,5 +1,7 @@
-import { objectType, FieldResolver } from 'nexus'
+import { objectType, FieldResolver, intArg } from 'nexus'
 import { Attribute } from '@prisma/photon'
+
+import { importMapping, exportMapping } from 'resolvers/mapping'
 
 export const Source = objectType({
   name: 'Source',
@@ -16,6 +18,15 @@ export const Source = objectType({
 
     t.model.updatedAt()
     t.model.createdAt()
+
+    t.field('mapping', {
+      type: 'String',
+      nullable: false,
+      args: {
+        depth: intArg({ default: 10 }),
+      },
+      resolve: exportMapping,
+    })
 
     t.list.field('mappingProgress', {
       type: 'Int',
@@ -83,9 +94,10 @@ export const Source = objectType({
 
 export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
   _parent,
-  { templateName, name, hasOwner },
+  { templateName, name, hasOwner, mapping },
   ctx,
 ) => {
+  // make sure the source does not already exist
   const exists = await ctx.photon.sources.findMany({
     where: { template: { name: templateName }, name },
   })
@@ -95,13 +107,21 @@ export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
     )
   }
 
-  return ctx.photon.sources.create({
+  // create the source
+  const source = await ctx.photon.sources.create({
     data: {
       name,
       hasOwner,
       template: { connect: { name: templateName } },
     },
   })
+
+  // import mapping if present
+  if (mapping) {
+    await importMapping(ctx.photon, source.id, mapping)
+  }
+
+  return source
 }
 
 export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (

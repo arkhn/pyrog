@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   pyrog:
     image: arkhn/pyrog-server:latest

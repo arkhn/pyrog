@@ -37,7 +37,8 @@ interface IState {
   templateName: string;
   templateExists: boolean;
   sourceName: string;
-  schemaFile: any;
+  schemaFile?: File;
+  mappingFile?: File;
 }
 
 interface INewSourceViewState extends IView, INewSourceState {
@@ -61,7 +62,8 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
       templateName: '',
       templateExists: false,
       sourceName: '',
-      schemaFile: null
+      schemaFile: undefined,
+      mappingFile: undefined
     };
   }
 
@@ -134,7 +136,7 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
     });
   };
 
-  createTemplate = async () =>
+  createTemplate = () =>
     this.props.client.mutate({
       mutation: mCreateTemplate,
       variables: {
@@ -142,27 +144,46 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
       }
     });
 
-  createSource = async (toastID: string) => {
-    const response = await this.props.client.mutate({
-      mutation: mCreateSource,
-      variables: {
-        templateName: this.state.templateName,
-        name: this.state.sourceName,
-        hasOwner: this.state.hasOwner
+  createSource = () =>
+    new Promise(async (resolve, reject) => {
+      const { templateName, sourceName, hasOwner, mappingFile } = this.state;
+      if (mappingFile) {
+        var reader = new FileReader();
+        reader.onload = async (e: ProgressEvent<FileReader>) => {
+          const mapping = e.target?.result;
+          if (!mapping) {
+            reject(e.target?.error);
+          }
+          try {
+            JSON.parse(mapping as string);
+          } catch (e) {
+            reject(new Error(`could not parse ${mappingFile.name} as JSON`));
+          }
+          await this.props.client.mutate({
+            mutation: mCreateSource,
+            variables: {
+              templateName,
+              hasOwner,
+              mapping,
+              name: sourceName
+            }
+          });
+          resolve();
+        };
+        reader.onerror = (e: ProgressEvent<FileReader>) => reject(e);
+        reader.readAsText(mappingFile);
+      } else {
+        await this.props.client.mutate({
+          mutation: mCreateSource,
+          variables: {
+            templateName,
+            hasOwner,
+            name: sourceName
+          }
+        });
+        resolve();
       }
     });
-    // After source is created,
-    // redirect to /sources page.
-    this.props.toaster.show(
-      this.renderToastProps({
-        message: `Source ${this.state.sourceName} was created`,
-        success: !!response.data
-      }),
-      toastID
-    );
-
-    this.props.history.push('/');
-  };
 
   onFormSubmit = async (e: any) => {
     e.preventDefault();
@@ -185,7 +206,17 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
           await this.createTemplate();
         }
         // Create new source in Graphql
-        await this.createSource(toastID);
+        await this.createSource();
+        // After source is created,
+        // redirect to /sources page.
+        this.props.toaster.show(
+          this.renderToastProps({
+            message: `Source ${this.state.sourceName} was created`,
+            success: true
+          }),
+          toastID
+        );
+        this.props.history.push('/');
       } else {
         this.props.toaster.show(
           this.renderToastProps({
@@ -208,7 +239,7 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
   };
 
   public render = () => {
-    const { templateName, sourceName, schemaFile } = this.state;
+    const { templateName, sourceName, schemaFile, mappingFile } = this.state;
 
     const schemaType = `
     [owner: string] : {
@@ -346,6 +377,28 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
                     }
                   />
                   <br />
+                  <h1>Importer un mapping existant (optionnel)</h1>
+                  <FileInput
+                    fill
+                    inputProps={{
+                      onChange: (event: React.FormEvent<HTMLInputElement>) => {
+                        const target = event.target as any;
+                        console.log(target.files[0]);
+                        this.setState({
+                          ...this.state,
+                          mappingFile: target.files[0]
+                        });
+                      },
+                      name: 'mapping'
+                    }}
+                    text={
+                      mappingFile ? (
+                        mappingFile.name
+                      ) : (
+                        <p className="disabled-text">Importer un mapping...</p>
+                      )
+                    }
+                  />
                   <div className="align-right">
                     <Button
                       disabled={

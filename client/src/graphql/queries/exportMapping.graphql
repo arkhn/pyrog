@@ -1,0 +1,11 @@
+query exportMapping($sourceId: ID!) {
+  source(sourceId: $sourceId) {
+    id
+    name
+    template {
+      id
+      name
+    }
+    mapping(depth: 10)
+  }
+}

@@ -24,7 +24,11 @@ server.express.use((req: any, res: any, next: any) => {
 
 register(server.express)
 
-server.start(() =>
+const options = {
+  bodyParserOptions: { limit: '10mb', type: 'application/json' },
+}
+
+server.start(options, () =>
   console.log(
     `🚀 Server ready at: http://localhost:4000\n⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️`,
   ),
