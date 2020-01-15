@@ -112,6 +112,11 @@ export const exportMapping: FieldResolver<'Source', 'mapping'> = async (
       }, {}),
     }
   }
+  const { template } = (await ctx.photon.sources.findOne({
+    where: { id: parent.id },
+    include: { template: true },
+  }))!
+
   const resources = await ctx.photon.resources({
     where: { source: { id: parent.id } },
     ...buildRecursiveQuery({
@@ -121,8 +126,12 @@ export const exportMapping: FieldResolver<'Source', 'mapping'> = async (
       },
     }),
   })
-
-  return JSON.stringify({ resources, version: CURRENT_MAPPING_VERSION })
+  return JSON.stringify({
+    source: { name: parent.name, hasOwner: parent.hasOwner },
+    template: { name: template.name },
+    resources,
+    version: CURRENT_MAPPING_VERSION,
+  })
 }
 
 // copy all the resources from the mapping and their attributes.

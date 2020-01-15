@@ -1,3 +1,6 @@
+import { isAbsolute } from 'path'
+
+import * as express from 'express'
 import * as multer from 'multer'
 import * as fs from 'fs'
 import { SCHEMAS_DIR } from '../constants'
@@ -26,28 +29,45 @@ var upload = multer({
 })
 
 export default (server: any) => {
-  server.post('/upload', upload.single('schema'), (req: any, res: any) => {
-    console.log(
-      req.file && req.file.originalname
-        ? `Uploading ${req.file.originalname}.json...`
-        : 'No File Uploaded',
-    )
-
-    res.send({
-      message:
+  server.post(
+    '/upload',
+    upload.single('schema'),
+    (req: express.Request, res: express.Response) => {
+      console.log(
         req.file && req.file.originalname
-          ? 'Schéma uploadé'
-          : 'Une erreur est survenue',
-      success: req.file && req.file.originalname,
-    })
-  })
+          ? `Uploading ${req.file.originalname}.json...`
+          : 'No File Uploaded',
+      )
 
-  server.get('/schemas/:filename', (req: any, res: any) => {
-    res.sendFile(`${SCHEMAS_DIR!}/${req.params.filename}`, (err: any) => {
-      if (err) {
-        res.setHeader('Content-Type', 'application/json')
-        res.status(err.status).send({ error: err, message: err.message })
+      res.send({
+        message:
+          req.file && req.file.originalname
+            ? 'Schéma uploadé'
+            : 'Une erreur est survenue',
+        success: req.file && req.file.originalname,
+      })
+    },
+  )
+
+  server.get(
+    '/schemas/:filename',
+    (req: express.Request, res: express.Response) => {
+      const opts: any = {}
+      const path = `${SCHEMAS_DIR!}/${req.params.filename}`
+      if (!isAbsolute(path)) {
+        opts.root = process.cwd()
       }
-    })
-  })
+
+      res.sendFile(
+        `${SCHEMAS_DIR!}/${req.params.filename}`,
+        opts,
+        (err: any) => {
+          if (err) {
+            res.setHeader('Content-Type', 'application/json')
+            res.status(err.status).send({ error: err, message: err.message })
+          }
+        },
+      )
+    },
+  )
 }
