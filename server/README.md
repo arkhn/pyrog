@@ -1,9 +1,18 @@
 # Pyrog 2
 
+## Dev
+
 ```sh
 yarn # install dependencies
-yarn build:docker # build docker image
-docker-compose up # launches postgres and pyrog in docker
+docker-compose up postgres # launches postgres in docker
+yarn dev # runs pyrog-server with hot-reloading (using ts-node)
+```
+
+## Build
+
+```sh
+yarn build # builds a nodeJS bundle
+yarn start # runs using nodeJS
 ```
 
 ## Import a source from a mapping file
@@ -28,3 +37,16 @@ yarn seed <mapping.json>
 ```
 
 This will create the template (if needed), the source and all its resources.
+
+## Build a docker image
+
+```sh
+yarn build:docker
+```
+
+## Run pyrog server in docker
+
+```sh
+# this will launch a postgres service as well as a pyrog one.
+docker-compose up
+```
