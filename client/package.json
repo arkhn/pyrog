@@ -1,6 +1,7 @@
 {
-  "name": "pyrog",
+  "name": "pyrog-client",
   "version": "0.2.0",
+  "license": "GPL-3.0",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

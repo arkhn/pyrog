@@ -1,5 +1,7 @@
 {
-  "name": "pyrog",
+  "name": "pyrog-version",
+  "version": "0.2.0",
+  "license": "GPL-3.0",
   "scripts": {
     "start": "NODE_PATH=dist/ node dist/server",
     "clean": "rm -rf dist",
