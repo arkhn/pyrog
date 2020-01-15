@@ -8,5 +8,5 @@ services:
       context: .
     ports:
       - $PORT:$PORT
-    env_file: .env
+    env_file: .env.docker
     restart: "no"
