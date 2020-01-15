@@ -15,6 +15,8 @@ import {
   AttributeWithChildren,
 } from 'types'
 
+import { CURRENT_MAPPING_VERSION, MAPPING_VERSION_1 } from '../constants'
+
 const clean = (entry: any): any => {
   delete entry.id
   delete entry.updatedAt
@@ -120,7 +122,7 @@ export const exportMapping: FieldResolver<'Source', 'mapping'> = async (
     }),
   })
 
-  return JSON.stringify(resources)
+  return JSON.stringify({ resources, version: CURRENT_MAPPING_VERSION })
 }
 
 // copy all the resources from the mapping and their attributes.
@@ -129,21 +131,34 @@ export const importMapping = async (
   photon: Photon,
   sourceId: string,
   mapping: string,
-) =>
-  Promise.all(
-    JSON.parse(mapping).map(async (r: any) =>
-      photon.resources.create({
-        data: {
-          ...clean(r),
-          attributes: {
-            create: buildResourceFromMapping(r.attributes),
-          },
-          source: {
-            connect: {
-              id: sourceId,
+) => {
+  const { version, resources } = JSON.parse(mapping)
+  if (!version) {
+    throw new Error('Missing mapping version')
+  }
+  if (!resources) {
+    throw new Error('Missing "resources" key in mapping')
+  }
+  switch (version) {
+    case MAPPING_VERSION_1:
+      return Promise.all(
+        resources.map(async (r: any) =>
+          photon.resources.create({
+            data: {
+              ...clean(r),
+              attributes: {
+                create: buildResourceFromMapping(r.attributes),
+              },
+              source: {
+                connect: {
+                  id: sourceId,
+                },
+              },
             },
-          },
-        },
-      }),
-    ),
-  )
+          }),
+        ),
+      )
+    default:
+      throw new Error(`Unknown mapping version: "${version}"`)
+  }
+}
