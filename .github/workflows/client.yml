@@ -4,22 +4,26 @@ on: [push]
 
 jobs:
   build:
-    name: Build Pyrog UI
+    name: Build Pyrog client
     runs-on: ubuntu-18.04
+
+    strategy:
+      matrix:
+        node-version: [12.x]
 
     steps:
       - uses: actions/checkout@v1
 
-      - name: Use Node.js 13.x
+      - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
-          node-version: 13.x
+          node-version: ${{ matrix.node-version }}
 
       - name: Cache node modules
         uses: actions/cache@v1
         with:
           path: client/node_modules
-          key: ${{ runner.OS }}-node-modules-${{ hashFiles('client/yarn.lock') }}
+          key: ${{ runner.OS }}-${{ matrix.node-version}}-node-modules-${{ hashFiles('client/yarn.lock') }}
 
       - name: Install Dependencies
         run: |
@@ -30,3 +34,37 @@ jobs:
         run: |
           cd client
           yarn build
+
+# Same cleaning need to be done, see Issue #105
+#      - name: Lint
+#        run: |
+#          cd client
+#          yarn lint
+
+  publish:
+    name: Build and publish
+    env:
+      GITHUB_REGISTRY: docker.pkg.github.com
+      IMAGE: arkhn/pyrog-client
+      TAG: latest
+    runs-on: ubuntu-18.04
+    needs: build
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Build
+        run: |
+          cd client/
+          yarn build:docker
+
+      - name: Publish to the docker hub
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" |  docker login -u ${{ secrets.DOCKER_LOGIN }} --password-stdin
+          docker push $IMAGE:$TAG
+
+      - name: Publish to Github Packages
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login $GITHUB_REGISTRY -u ${{ github.actor }} --password-stdin
+          docker tag $IMAGE:$TAG $GITHUB_REGISTRY/${{ github.repository }}/pyrog-client:$TAG
+          docker push $GITHUB_REGISTRY/${{ github.repository }}/pyrog-client:$TAG

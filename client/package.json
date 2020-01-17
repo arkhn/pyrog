@@ -1,9 +1,11 @@
 {
-  "name": "pyrog",
+  "name": "pyrog-client",
   "version": "0.2.0",
+  "license": "GPL-3.0",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build:docker": "env $(cat .env.docker) docker build -t arkhn/pyrog-client:latest .",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint './src/**/*.{ts,tsx}'"
