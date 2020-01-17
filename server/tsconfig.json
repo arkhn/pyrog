@@ -1,11 +1,10 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "src",
     "baseUrl": "src" /* Base directory to resolve non-absolute module names. */,
     "lib": ["esnext"],
     "strict": true,
     "resolveJsonModule": true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "scripts/*.ts"]
 }
