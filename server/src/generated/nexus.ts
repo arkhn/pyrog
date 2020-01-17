@@ -5,9 +5,17 @@
 
 import * as Context from "../context"
 import * as photon from "@prisma/photon"
-
-
-
+import { core } from "nexus"
+declare global {
+  interface NexusGenCustomInputMethods<TypeName extends string> {
+    JSON<FieldName extends string>(fieldName: FieldName, opts?: core.ScalarInputFieldConfig<core.GetGen3<"inputTypes", TypeName, FieldName>>): void // "JSON";
+  }
+}
+declare global {
+  interface NexusGenCustomOutputMethods<TypeName extends string> {
+    JSON<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void // "JSON";
+  }
+}
 declare global {
   interface NexusGenCustomOutputProperties<TypeName extends string> {
     crud: NexusPrisma<TypeName, 'crud'>
@@ -161,6 +169,7 @@ export interface NexusGenInputs {
     AND?: NexusGenInputs['ResourceWhereInput'][] | null; // [ResourceWhereInput!]
     attributes?: NexusGenInputs['AttributeFilter'] | null; // AttributeFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    definition?: NexusGenInputs['StructureDefinitionWhereInput'] | null; // StructureDefinitionWhereInput
     fhirType?: NexusGenInputs['StringFilter'] | null; // StringFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     label?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
@@ -205,6 +214,22 @@ export interface NexusGenInputs {
     notIn?: string[] | null; // [String!]
     startsWith?: string | null; // String
   }
+  StructureDefinitionWhereInput: { // input type
+    AND?: NexusGenInputs['StructureDefinitionWhereInput'][] | null; // [StructureDefinitionWhereInput!]
+    author?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    content?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    derivation?: NexusGenEnums['FhirDerivation'] | null; // FhirDerivation
+    description?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    kind?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    name?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    NOT?: NexusGenInputs['StructureDefinitionWhereInput'][] | null; // [StructureDefinitionWhereInput!]
+    OR?: NexusGenInputs['StructureDefinitionWhereInput'][] | null; // [StructureDefinitionWhereInput!]
+    resources?: NexusGenInputs['ResourceFilter'] | null; // ResourceFilter
+    type?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+  }
   TemplateWhereInput: { // input type
     AND?: NexusGenInputs['TemplateWhereInput'][] | null; // [TemplateWhereInput!]
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
@@ -232,6 +257,7 @@ export interface NexusGenInputs {
 
 export interface NexusGenEnums {
   DatabaseType: photon.DatabaseType
+  FhirDerivation: photon.FhirDerivation
   Role: photon.Role
 }
 
@@ -249,6 +275,7 @@ export interface NexusGenRootTypes {
   Query: {};
   Resource: photon.Resource;
   Source: photon.Source;
+  StructureDefinition: photon.StructureDefinition;
   Template: photon.Template;
   User: photon.User;
   String: string;
@@ -257,6 +284,7 @@ export interface NexusGenRootTypes {
   Boolean: boolean;
   ID: string;
   DateTime: any;
+  JSON: any;
 }
 
 export interface NexusGenAllTypes extends NexusGenRootTypes {
@@ -280,11 +308,13 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
   SourceFilter: NexusGenInputs['SourceFilter'];
   SourceWhereInput: NexusGenInputs['SourceWhereInput'];
   StringFilter: NexusGenInputs['StringFilter'];
+  StructureDefinitionWhereInput: NexusGenInputs['StructureDefinitionWhereInput'];
   TemplateWhereInput: NexusGenInputs['TemplateWhereInput'];
   UpdateAttributeInput: NexusGenInputs['UpdateAttributeInput'];
   UpdateInputInput: NexusGenInputs['UpdateInputInput'];
   UpdateResourceInput: NexusGenInputs['UpdateResourceInput'];
   DatabaseType: NexusGenEnums['DatabaseType'];
+  FhirDerivation: NexusGenEnums['FhirDerivation'];
   Role: NexusGenEnums['Role'];
 }
 
@@ -402,6 +432,18 @@ export interface NexusGenFieldTypes {
     template: NexusGenRootTypes['Template']; // Template!
     updatedAt: any; // DateTime!
     version: string | null; // String
+  }
+  StructureDefinition: { // field return type
+    author: string; // String!
+    content: any; // JSON!
+    createdAt: any; // DateTime!
+    derivation: NexusGenEnums['FhirDerivation'] | null; // FhirDerivation
+    description: string; // String!
+    id: string; // String!
+    kind: string; // String!
+    name: string; // String!
+    type: string; // String!
+    updatedAt: any; // DateTime!
   }
   Template: { // field return type
     createdAt: any; // DateTime!
@@ -590,15 +632,15 @@ export interface NexusGenAbstractResolveReturnTypes {
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "Attribute" | "AuthPayload" | "Column" | "Credential" | "Input" | "Join" | "Mutation" | "Query" | "Resource" | "Source" | "Template" | "User";
+export type NexusGenObjectNames = "Attribute" | "AuthPayload" | "Column" | "Credential" | "Input" | "Join" | "Mutation" | "Query" | "Resource" | "Source" | "StructureDefinition" | "Template" | "User";
 
-export type NexusGenInputNames = "AttributeFilter" | "AttributeWhereInput" | "BooleanFilter" | "ColumnFilter" | "ColumnInput" | "ColumnInputWithoutJoins" | "ColumnWhereInput" | "CredentialWhereInput" | "DateTimeFilter" | "InputFilter" | "InputWhereInput" | "JoinFilter" | "JoinInput" | "JoinWhereInput" | "NullableStringFilter" | "ResourceFilter" | "ResourceWhereInput" | "SourceFilter" | "SourceWhereInput" | "StringFilter" | "TemplateWhereInput" | "UpdateAttributeInput" | "UpdateInputInput" | "UpdateResourceInput";
+export type NexusGenInputNames = "AttributeFilter" | "AttributeWhereInput" | "BooleanFilter" | "ColumnFilter" | "ColumnInput" | "ColumnInputWithoutJoins" | "ColumnWhereInput" | "CredentialWhereInput" | "DateTimeFilter" | "InputFilter" | "InputWhereInput" | "JoinFilter" | "JoinInput" | "JoinWhereInput" | "NullableStringFilter" | "ResourceFilter" | "ResourceWhereInput" | "SourceFilter" | "SourceWhereInput" | "StringFilter" | "StructureDefinitionWhereInput" | "TemplateWhereInput" | "UpdateAttributeInput" | "UpdateInputInput" | "UpdateResourceInput";
 
-export type NexusGenEnumNames = "DatabaseType" | "Role";
+export type NexusGenEnumNames = "DatabaseType" | "FhirDerivation" | "Role";
 
 export type NexusGenInterfaceNames = never;
 
-export type NexusGenScalarNames = "Boolean" | "DateTime" | "Float" | "ID" | "Int" | "String";
+export type NexusGenScalarNames = "Boolean" | "DateTime" | "Float" | "ID" | "Int" | "JSON" | "String";
 
 export type NexusGenUnionNames = never;
 

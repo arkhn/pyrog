@@ -7,3 +7,5 @@ export const IV = randomBytes(IV_LENGTH)
 
 export const MAPPING_VERSION_1 = 1
 export const CURRENT_MAPPING_VERSION = MAPPING_VERSION_1
+
+export const HL7_AUTHOR = 'HL7'
