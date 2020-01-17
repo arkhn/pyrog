@@ -6,7 +6,7 @@
     "start": "NODE_PATH=dist/ node dist/server",
     "clean": "rm -rf dist",
     "build": "yarn -s run clean && yarn -s run generate && tsc --project tsconfig.build.json",
-    "build:docker": "env $(cat .env.docker) docker build -t arkhn/pyrog2:latest .",
+    "build:docker": "env $(cat .env.docker) docker build -t arkhn/pyrog-server:latest .",
     "generate": "yarn -s run generate:prisma && yarn -s run generate:nexus",
     "generate:prisma": "dotenv prisma2 generate",
     "generate:nexus": "ts-node --project tsconfig.build.json -r tsconfig-paths/register --transpile-only src/schema",

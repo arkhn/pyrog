@@ -55,7 +55,7 @@ jobs:
       - name: Build
         run: |
           cd client/
-          yarn build
+          yarn build:docker
 
       - name: Publish to the docker hub
         run: |
