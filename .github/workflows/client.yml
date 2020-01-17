@@ -35,6 +35,7 @@ jobs:
           cd client
           yarn build
 
+# Same cleaning need to be done, see Issue #105
 #      - name: Lint
 #        run: |
 #          cd client
