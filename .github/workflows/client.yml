@@ -35,18 +35,17 @@ jobs:
           cd client
           yarn build
 
-# Same cleaning need to be done, see Issue #105
-#      - name: Lint
-#        run: |
-#          cd client
-#          yarn lint
+  # Same cleaning need to be done, see Issue #105
+  #      - name: Lint
+  #        run: |
+  #          cd client
+  #          yarn lint
 
   publish:
     name: Build and publish
     env:
       GITHUB_REGISTRY: docker.pkg.github.com
       IMAGE: arkhn/pyrog-client
-      TAG: latest
     runs-on: ubuntu-18.04
     needs: build
     if: github.ref == 'refs/heads/master'
@@ -58,13 +57,20 @@ jobs:
           cd client/
           yarn build:docker
 
+      - name: Tag docker images
+        run: |
+          docker tag $IMAGE $IMAGE:$GITHUB_SHA
+          docker tag $IMAGE $GITHUB_REGISTRY/${{ github.repository }}/pyrog-client:latest
+          docker tag $IMAGE $GITHUB_REGISTRY/${{ github.repository }}/pyrog-client:$GITHUB_SHA
+
       - name: Publish to the docker hub
         run: |
           echo "${{ secrets.DOCKER_PASSWORD }}" |  docker login -u ${{ secrets.DOCKER_LOGIN }} --password-stdin
-          docker push $IMAGE:$TAG
+          docker push $IMAGE:latest
+          docker push $IMAGE:$GITHUB_SHA
 
       - name: Publish to Github Packages
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login $GITHUB_REGISTRY -u ${{ github.actor }} --password-stdin
-          docker tag $IMAGE:$TAG $GITHUB_REGISTRY/${{ github.repository }}/pyrog-client:$TAG
-          docker push $GITHUB_REGISTRY/${{ github.repository }}/pyrog-client:$TAG
+          docker push $GITHUB_REGISTRY/${{ github.repository }}/pyrog-client:latest
+          docker push $GITHUB_REGISTRY/${{ github.repository }}/pyrog-client:$GITHUB_SHA
