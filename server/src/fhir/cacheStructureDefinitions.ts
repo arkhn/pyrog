@@ -1,7 +1,7 @@
-import * as nodeCache from 'node-cache'
-import * as _ from 'lodash'
+import NodeCache from 'node-cache'
+import set from 'lodash.set'
 
-const cache = new nodeCache()
+const cache = new NodeCache()
 
 export const setStructureDefinition = (fhirStructureDefinition: any) => {
   const struct = structurize(fhirStructureDefinition.resource)
@@ -30,30 +30,38 @@ const structurize = (definition: any): any => {
   Object.keys(definition)
     .filter(el => structureFieldsWhiteList.includes(el))
     .forEach(key => {
-      _.set(customStruct, key, definition[key])
+      set(customStruct, key, definition[key])
     })
 
-  // If the structure defines a primitive type (one which we don't need to unroll in UI)
-  // we don't need the properties field
-  if (definition.kind !== 'primitive-type') {
+  if (definition.kind === 'primitive-type') {
+    // If the structure defines a primitive type (one which we don't need to unroll in UI)
+    // we don't need the properties field, we only need the cardinality and constraints from the root
+    set(customStruct, 'min', definition.snapshot.element[0].min)
+    set(customStruct, 'max', definition.snapshot.element[0].max)
+    set(customStruct, 'constraint', definition.snapshot.element[0].constraint)
+  } else {
     definition.snapshot.element.forEach((element: any, index: number) => {
-      // Don't process first element in snapshot, it's the root
-      if (index == 0) return
+      // From the root, we only need the cardinality and constraints
+      if (index == 0) {
+        set(customStruct, 'min', element.min)
+        set(customStruct, 'max', element.max)
+        set(customStruct, 'constraint', element.constraint)
+      } else {
+        const elementName = element.id.substring(element.id.indexOf('.') + 1)
 
-      const elementName = element.id.substring(element.id.indexOf('.') + 1)
+        // We skip some elements we don't need as id, extension
+        if (elementBlackList.includes(elementName)) return
 
-      // We skip some elements we don't need as id, extension
-      if (elementBlackList.includes(elementName)) return
+        // Create custom element
+        var customElement = {}
 
-      // Create custom element
-      var customElement = {}
-
-      Object.keys(element)
-        .filter(el => elementFieldsWhiteList.includes(el))
-        .forEach(key => {
-          _.set(customElement, key, element[key])
-        })
-      _.set(customStruct, `properties.${elementName}`, customElement)
+        Object.keys(element)
+          .filter(el => elementFieldsWhiteList.includes(el))
+          .forEach(key => {
+            set(customElement, key, element[key])
+          })
+        set(customStruct, `properties.${elementName}`, customElement)
+      }
     })
   }
 
