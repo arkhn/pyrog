@@ -1,7 +1,7 @@
 import { isAbsolute } from 'path'
 
 import * as express from 'express'
-import * as multer from 'multer'
+import multer from 'multer'
 import * as fs from 'fs'
 import { SCHEMAS_DIR } from '../constants'
 
