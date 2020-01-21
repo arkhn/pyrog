@@ -1,6 +1,8 @@
 import NodeCache from 'node-cache'
 import set from 'lodash.set'
 
+import { StructureDefinition } from '../types'
+
 const cache = new NodeCache()
 
 export const setStructureDefinition = (fhirStructureDefinition: any) => {
@@ -19,13 +21,13 @@ export const setStructureDefinition = (fhirStructureDefinition: any) => {
 
 export const getStructureDefinition = (key: string) => cache.get(key)
 
-const structurize = (definition: any): any => {
+const structurize = (definition: any): StructureDefinition => {
   if (!definition.snapshot) {
     throw new Error('Snapshot is needed in the structure definition.')
   }
 
   // Create the new custom structure
-  var customStruct = {}
+  var customStruct = {} as StructureDefinition
 
   Object.keys(definition)
     .filter(el => structureFieldsWhiteList.includes(el))

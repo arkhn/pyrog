@@ -16,3 +16,26 @@ export type AttributeWithChildren = Attribute & {
   children: AttributeWithChildren[]
   inputs: InputWithColumn[]
 }
+
+export type StructureDefinition = {
+  id: string
+  url: string
+  name: string
+  description: string
+  kind: string
+  baseDefinition: string
+  derivation: string
+  min: string
+  max: string
+  constraint: ConstraintDefinition[]
+  properties: any
+}
+
+export type ConstraintDefinition = {
+  key: string
+  severity: string
+  human: string
+  expression: string
+  xpath: string
+  source: string
+}
