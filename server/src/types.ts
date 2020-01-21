@@ -18,16 +18,7 @@ export type AttributeWithChildren = Attribute & {
 }
 
 export type StructureDefinition = {
-  id: string
-  url: string
-  name: string
-  description: string
-  kind: string
-  baseDefinition: string
-  derivation: string
-  min: string
-  max: string
-  constraint: ConstraintDefinition[]
+  $meta: StructureMetadata
   properties: any
 }
 
@@ -38,4 +29,17 @@ export type ConstraintDefinition = {
   expression: string
   xpath: string
   source: string
+}
+
+export type StructureMetadata = {
+  id: string
+  url: string
+  name: string
+  description: string
+  kind: string
+  baseDefinition: string
+  derivation: string
+  min: string
+  max: string
+  constraint: ConstraintDefinition[]
 }
