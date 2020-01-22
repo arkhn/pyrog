@@ -250,12 +250,12 @@ input NullableStringFilter {
 
 type Query {
   attribute(attributeId: ID!): Attribute
-  availableResources: [String!]!
   me: User
   resource(resourceId: ID!): Resource
   resources(filter: ResourceWhereInput): [Resource!]
   source(sourceId: ID!): Source
   sources: [Source!]
+  structureDefinitions(filter: StructureDefinitionWhereInput): [StructureDefinition!]
   template(templateId: ID!): Template
   templates: [Template!]
 }
@@ -354,6 +354,9 @@ type StructureDefinition {
   createdAt: DateTime!
   derivation: FhirDerivation
   description: String!
+
+  """Structured version of a definition"""
+  display: JSON!
   id: String!
   kind: String!
   name: String!

@@ -4,6 +4,7 @@ import {
   StructureDefinitionUpdateInput,
 } from '@prisma/photon'
 import { getUserId } from 'utils'
+import { getDefinition } from 'fhir'
 
 export const StructureDefinition = objectType({
   name: 'StructureDefinition',
@@ -16,7 +17,15 @@ export const StructureDefinition = objectType({
     t.model.kind()
     t.model.derivation()
 
-    t.field('content', { type: 'JSON', resolve: () => t.model.content() })
+    t.field('content', {
+      type: 'JSON',
+      resolve: () => t.model.content(),
+    })
+    t.field('display', {
+      type: 'JSON',
+      description: 'Structured version of a definition',
+      resolve: parent => getDefinition(parent.id),
+    })
 
     t.model.updatedAt()
     t.model.createdAt()
