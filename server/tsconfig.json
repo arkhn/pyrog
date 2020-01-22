@@ -4,7 +4,8 @@
     "baseUrl": "src" /* Base directory to resolve non-absolute module names. */,
     "lib": ["esnext"],
     "strict": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
   },
   "include": ["src/**/*", "scripts/*.ts"]
 }
