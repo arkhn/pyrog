@@ -21,14 +21,6 @@ export function getUserId(context: Context) {
   }
 }
 
-export const availableResources = async () => {
-  const resources = await photon.structureDefinitions.findMany({
-    where: { derivation: 'specialization', kind: 'resource' },
-    select: { id: true, name: true },
-  })
-  return resources.map(r => r.name)
-}
-
 export const encrypt = (text: string) => {
   let cipher = crypto.createCipheriv(
     'aes-256-cbc',

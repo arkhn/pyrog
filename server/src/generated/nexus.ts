@@ -388,11 +388,11 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     attribute: NexusGenRootTypes['Attribute'] | null; // Attribute
-    availableResources: string[]; // [String!]!
     me: NexusGenRootTypes['User'] | null; // User
     resource: NexusGenRootTypes['Resource'] | null; // Resource
     source: NexusGenRootTypes['Source'] | null; // Source
     sources: NexusGenRootTypes['Source'][] | null; // [Source!]
+    structureDefinitions: NexusGenRootTypes['StructureDefinition'][] | null; // [StructureDefinition!]
     template: NexusGenRootTypes['Template'] | null; // Template
     templates: NexusGenRootTypes['Template'][] | null; // [Template!]
   }
@@ -426,6 +426,7 @@ export interface NexusGenFieldTypes {
     createdAt: any; // DateTime!
     derivation: NexusGenEnums['FhirDerivation'] | null; // FhirDerivation
     description: string; // String!
+    display: any; // JSON!
     id: string; // String!
     kind: string; // String!
     name: string; // String!
@@ -580,6 +581,9 @@ export interface NexusGenArgTypes {
     }
     source: { // args
       sourceId: string; // ID!
+    }
+    structureDefinitions: { // args
+      filter?: NexusGenInputs['StructureDefinitionWhereInput'] | null; // StructureDefinitionWhereInput
     }
     template: { // args
       templateId: string; // ID!

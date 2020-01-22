@@ -1,6 +1,6 @@
-import { idArg, queryType } from 'nexus'
+import { idArg, queryType, arg } from 'nexus'
 
-import { getUserId, availableResources } from 'utils'
+import { getUserId } from 'utils'
 
 export const Query = queryType({
   definition(t) {
@@ -72,9 +72,16 @@ export const Query = queryType({
         ctx.photon.attributes.findOne({ where: { id: attributeId } }),
     })
 
-    t.list.field('availableResources', {
-      type: 'String',
-      resolve: () => availableResources(),
+    t.list.field('structureDefinitions', {
+      type: 'StructureDefinition',
+      nullable: true,
+      args: {
+        filter: arg({
+          type: 'StructureDefinitionWhereInput',
+        }),
+      },
+      resolve: (parent, { filter }, ctx) =>
+        ctx.photon.structureDefinitions({ where: filter }),
     })
   },
 })
