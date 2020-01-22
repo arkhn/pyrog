@@ -6,10 +6,8 @@ RUN yarn install
 
 COPY src src
 COPY public public
-RUN yarn build
 
 EXPOSE 1729
 ENV NODE_ENV docker
-ENV PORT 1729
 
-CMD ["yarn", "serve", "-s", "build"]
+CMD ["yarn", "start"]
