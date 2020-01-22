@@ -1,5 +1,4 @@
-
-version: "3"
+version: '3'
 services:
   pyrog_client:
     image: arkhn/pyrog-client:latest
@@ -9,7 +8,7 @@ services:
     ports:
       - $PORT:$PORT
     env_file: .env.docker
-    restart: "no"
+    restart: 'no'
     depends_on:
       - cleaning-scripts
 
@@ -18,4 +17,4 @@ services:
     container_name: cleaning-scripts
     env_file: .env.docker
     ports:
-      - "5001:5001"
+      - 5001:5001
