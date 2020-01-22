@@ -12,3 +12,4 @@
 !prisma
 !scripts
 !.env*
+!fhir/bundles

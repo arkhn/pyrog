@@ -145,6 +145,11 @@ input DateTimeFilter {
   notIn: [DateTime!]
 }
 
+enum FhirDerivation {
+  constraint
+  specialization
+}
+
 type Input {
   attribute: Attribute!
   createdAt: DateTime!
@@ -202,6 +207,11 @@ input JoinWhereInput {
   tables: ColumnFilter
   updatedAt: DateTimeFilter
 }
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
 
 type Mutation {
   addJoinToColumn(columnId: ID!, join: JoinInput): Column!
@@ -275,6 +285,7 @@ input ResourceWhereInput {
   AND: [ResourceWhereInput!]
   attributes: AttributeFilter
   createdAt: DateTimeFilter
+  definition: StructureDefinitionWhereInput
   fhirType: StringFilter
   id: StringFilter
   label: NullableStringFilter
@@ -340,6 +351,36 @@ input StringFilter {
   not: String
   notIn: [String!]
   startsWith: String
+}
+
+type StructureDefinition {
+  author: String!
+  content: JSON!
+  createdAt: DateTime!
+  derivation: FhirDerivation
+  description: String!
+  id: String!
+  kind: String!
+  name: String!
+  type: String!
+  updatedAt: DateTime!
+}
+
+input StructureDefinitionWhereInput {
+  AND: [StructureDefinitionWhereInput!]
+  author: StringFilter
+  content: StringFilter
+  createdAt: DateTimeFilter
+  derivation: FhirDerivation
+  description: StringFilter
+  id: StringFilter
+  kind: StringFilter
+  name: StringFilter
+  NOT: [StructureDefinitionWhereInput!]
+  OR: [StructureDefinitionWhereInput!]
+  resources: ResourceFilter
+  type: StringFilter
+  updatedAt: DateTimeFilter
 }
 
 type Template {

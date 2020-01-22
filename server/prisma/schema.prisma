@@ -30,6 +30,10 @@ model Source {
   createdAt DateTime @default(now())
 }
 
+enum DatabaseType {
+  POSTGRES
+}
+
 model Credential {
   id       String       @default(cuid()) @id
   host     String
@@ -45,8 +49,38 @@ model Credential {
   createdAt DateTime @default(now())
 }
 
-enum DatabaseType {
-  POSTGRES
+// TODO: dashes are not supported in enums
+// enum FhirKind {
+//   logical
+//   primitive-type
+//   complex-type
+//   resource
+// }
+
+enum FhirDerivation {
+  constraint
+  specialization
+}
+
+model StructureDefinition {
+  id          String          @id
+  name        String
+  // eg: FRPatient
+  type        String
+  // the type the structure describes. eg: Patient
+  description String
+  // eg: "represents a french patient"
+  author      String
+  // eg: HL7, Interop'Santé, Arkhn...
+  kind        String
+  // resource | primitive | complex | logical
+  derivation  FhirDerivation?
+  // constraint || specialization
+  content     String
+  // raw StructureDefiniton
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
 }
 
 model Resource {
@@ -58,29 +92,33 @@ model Resource {
   primaryKeyTable  String?
   primaryKeyColumn String?
   attributes       Attribute[] @relation(onDelete: CASCADE)
+
+  definition StructureDefinition?
+
   // Parent
-  source           Source
+  source Source
 
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
 }
 
 model Attribute {
-  id            String      @default(cuid()) @id
+  id            String  @default(cuid()) @id
   mergingScript String?
-  isArray       Boolean     @default(false)
-  isRequired    Boolean     @default(false)
+  isArray       Boolean @default(false)
+  isRequired    Boolean @default(false)
   name          String
   fhirType      String
   description   String?
   comments      String?
+
   // Children input columns
-  inputs        Input[]     @relation(onDelete: CASCADE)
+  inputs   Input[]     @relation(onDelete: CASCADE)
   // Children attributes
-  children      Attribute[] @relation(name: "AttributeToAttributes", onDelete: CASCADE)
+  children Attribute[] @relation(name: "AttributeToAttributes", onDelete: CASCADE)
   // Parent attribute or resource
-  parent        Attribute?  @relation(name: "AttributeToAttributes")
-  resource      Resource?
+  parent   Attribute?  @relation(name: "AttributeToAttributes")
+  resource Resource?
 
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
