@@ -5,7 +5,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "build:docker": "env $(cat .env.docker) docker build -t arkhn/pyrog-client:latest .",
+    "build:docker": "docker build -t arkhn/pyrog-client:latest .",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint './src/**/*.{ts,tsx}'"
