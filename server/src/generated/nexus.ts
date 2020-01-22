@@ -393,6 +393,7 @@ export interface NexusGenFieldTypes {
     resources: NexusGenRootTypes['Resource'][] | null; // [Resource!]
     source: NexusGenRootTypes['Source'] | null; // Source
     sources: NexusGenRootTypes['Source'][] | null; // [Source!]
+    structureDefinition: NexusGenRootTypes['StructureDefinition'] | null; // StructureDefinition
     structureDefinitions: NexusGenRootTypes['StructureDefinition'][] | null; // [StructureDefinition!]
     template: NexusGenRootTypes['Template'] | null; // Template
     templates: NexusGenRootTypes['Template'][] | null; // [Template!]
@@ -585,6 +586,9 @@ export interface NexusGenArgTypes {
     }
     source: { // args
       sourceId: string; // ID!
+    }
+    structureDefinition: { // args
+      definitionId: string; // ID!
     }
     structureDefinitions: { // args
       filter?: NexusGenInputs['StructureDefinitionWhereInput'] | null; // StructureDefinitionWhereInput
