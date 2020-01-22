@@ -40,6 +40,11 @@ jobs:
           cd server
           yarn lint
 
+      - name: Test
+        run: |
+          cd server
+          yarn test:ci
+
   publish:
     name: Build and publish
     env:
