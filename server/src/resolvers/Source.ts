@@ -1,5 +1,4 @@
 import { objectType, FieldResolver, intArg } from 'nexus'
-import { Attribute } from '@prisma/photon'
 
 import { importMapping, exportMapping } from 'resolvers/mapping'
 
@@ -22,10 +21,7 @@ export const Source = objectType({
     t.field('mapping', {
       type: 'String',
       nullable: false,
-      args: {
-        depth: intArg({ default: 10 }),
-      },
-      resolve: exportMapping,
+      resolve: (parent, _, ctx) => exportMapping(ctx.photon, parent.id),
     })
 
     t.list.field('mappingProgress', {
@@ -37,53 +33,16 @@ export const Source = objectType({
             attributes: {
               include: {
                 inputs: true,
-                children: {
-                  include: {
-                    inputs: true,
-                    children: {
-                      include: {
-                        inputs: true,
-                        children: {
-                          include: {
-                            inputs: true,
-                            children: {
-                              include: {
-                                inputs: true,
-                                children: {
-                                  include: {
-                                    inputs: true,
-                                    children: {
-                                      include: { inputs: true, children: true },
-                                    },
-                                  },
-                                },
-                              },
-                            },
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
               },
             },
           },
           where: { source: { id: parent.id } },
         })
 
-        const countFilledAttributes = (attributes: Attribute[]): number => {
-          return attributes.reduce(
-            (acc: number, attr: any) =>
-              attr.inputs && attr.inputs.length > 0
-                ? acc + 1
-                : attr.children && attr.children.length > 0
-                ? acc + countFilledAttributes(attr.children)
-                : acc,
-            0,
-          )
-        }
         const nbAttributes = resources.reduce(
-          (acc, r) => acc + countFilledAttributes(r.attributes),
+          (acc, r) =>
+            acc +
+            r.attributes.filter(a => a.inputs && a.inputs.length > 0).length,
           0,
         )
         return [resources.length, nbAttributes]

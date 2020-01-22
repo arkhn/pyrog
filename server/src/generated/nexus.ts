@@ -35,20 +35,14 @@ export interface NexusGenInputs {
   }
   AttributeWhereInput: { // input type
     AND?: NexusGenInputs['AttributeWhereInput'][] | null; // [AttributeWhereInput!]
-    children?: NexusGenInputs['AttributeFilter'] | null; // AttributeFilter
     comments?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
-    description?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
-    fhirType?: NexusGenInputs['StringFilter'] | null; // StringFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     inputs?: NexusGenInputs['InputFilter'] | null; // InputFilter
-    isArray?: NexusGenInputs['BooleanFilter'] | null; // BooleanFilter
-    isRequired?: NexusGenInputs['BooleanFilter'] | null; // BooleanFilter
     mergingScript?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
-    name?: NexusGenInputs['StringFilter'] | null; // StringFilter
     NOT?: NexusGenInputs['AttributeWhereInput'][] | null; // [AttributeWhereInput!]
     OR?: NexusGenInputs['AttributeWhereInput'][] | null; // [AttributeWhereInput!]
-    parent?: NexusGenInputs['AttributeWhereInput'] | null; // AttributeWhereInput
+    path?: NexusGenInputs['StringFilter'] | null; // StringFilter
     resource?: NexusGenInputs['ResourceWhereInput'] | null; // ResourceWhereInput
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
@@ -170,7 +164,6 @@ export interface NexusGenInputs {
     attributes?: NexusGenInputs['AttributeFilter'] | null; // AttributeFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     definition?: NexusGenInputs['StructureDefinitionWhereInput'] | null; // StructureDefinitionWhereInput
-    fhirType?: NexusGenInputs['StringFilter'] | null; // StringFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     label?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     NOT?: NexusGenInputs['ResourceWhereInput'][] | null; // [ResourceWhereInput!]
@@ -178,7 +171,6 @@ export interface NexusGenInputs {
     primaryKeyColumn?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     primaryKeyOwner?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     primaryKeyTable?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
-    profile?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     source?: NexusGenInputs['SourceWhereInput'] | null; // SourceWhereInput
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
@@ -320,18 +312,12 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
 
 export interface NexusGenFieldTypes {
   Attribute: { // field return type
-    children: NexusGenRootTypes['Attribute'][]; // [Attribute!]!
     comments: string | null; // String
     createdAt: any; // DateTime!
-    description: string | null; // String
-    fhirType: string; // String!
     id: string; // ID!
     inputs: NexusGenRootTypes['Input'][]; // [Input!]!
-    isArray: boolean; // Boolean!
-    isRequired: boolean; // Boolean!
     mergingScript: string | null; // String
-    name: string; // String!
-    parent: NexusGenRootTypes['Attribute'] | null; // Attribute
+    path: string; // String!
     resource: NexusGenRootTypes['Resource'] | null; // Resource
     updatedAt: any; // DateTime!
   }
@@ -381,6 +367,7 @@ export interface NexusGenFieldTypes {
     createInput: NexusGenRootTypes['Input']; // Input!
     createResource: NexusGenRootTypes['Resource']; // Resource!
     createSource: NexusGenRootTypes['Source']; // Source!
+    createStructureDefinition: NexusGenRootTypes['StructureDefinition']; // StructureDefinition!
     createTemplate: NexusGenRootTypes['Template']; // Template!
     deleteAttribute: NexusGenRootTypes['Attribute']; // Attribute!
     deleteCredential: NexusGenRootTypes['Credential']; // Credential!
@@ -388,6 +375,7 @@ export interface NexusGenFieldTypes {
     deleteJoin: NexusGenRootTypes['Join']; // Join!
     deleteResource: NexusGenRootTypes['Resource']; // Resource!
     deleteSource: NexusGenRootTypes['Source']; // Source!
+    deleteStructureDefinition: NexusGenRootTypes['StructureDefinition']; // StructureDefinition!
     deleteTemplate: NexusGenRootTypes['Template']; // Template!
     login: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     signup: NexusGenRootTypes['AuthPayload']; // AuthPayload!
@@ -395,6 +383,7 @@ export interface NexusGenFieldTypes {
     updateInput: NexusGenRootTypes['Input']; // Input!
     updateJoin: NexusGenRootTypes['Join']; // Join!
     updateResource: NexusGenRootTypes['Resource']; // Resource!
+    updateStructureDefinition: NexusGenRootTypes['StructureDefinition']; // StructureDefinition!
     upsertCredential: NexusGenRootTypes['Credential']; // Credential!
   }
   Query: { // field return type
@@ -411,13 +400,11 @@ export interface NexusGenFieldTypes {
   Resource: { // field return type
     attributes: NexusGenRootTypes['Attribute'][]; // [Attribute!]!
     createdAt: any; // DateTime!
-    fhirType: string; // String!
     id: string; // ID!
     label: string | null; // String
     primaryKeyColumn: string | null; // String
     primaryKeyOwner: string | null; // String
     primaryKeyTable: string | null; // String
-    profile: string | null; // String
     source: NexusGenRootTypes['Source']; // Source!
     updatedAt: any; // DateTime!
   }
@@ -465,13 +452,6 @@ export interface NexusGenFieldTypes {
 
 export interface NexusGenArgTypes {
   Attribute: {
-    children: { // args
-      after?: string | null; // ID
-      before?: string | null; // ID
-      first?: number | null; // Int
-      last?: number | null; // Int
-      skip?: number | null; // Int
-    }
     inputs: { // args
       after?: string | null; // ID
       before?: string | null; // ID
@@ -504,7 +484,8 @@ export interface NexusGenArgTypes {
       join?: NexusGenInputs['JoinInput'] | null; // JoinInput
     }
     createAttribute: { // args
-      parentId: string; // ID!
+      path: string; // String!
+      resourceId: string; // ID!
     }
     createInput: { // args
       attributeId: string; // ID!
@@ -513,7 +494,7 @@ export interface NexusGenArgTypes {
       static?: string | null; // String
     }
     createResource: { // args
-      resourceName: string; // String!
+      definitionId: string; // String!
       sourceId: string; // ID!
     }
     createSource: { // args
@@ -521,6 +502,9 @@ export interface NexusGenArgTypes {
       mapping?: string | null; // String
       name: string; // String!
       templateName: string; // String!
+    }
+    createStructureDefinition: { // args
+      definition: string; // String!
     }
     createTemplate: { // args
       name: string; // String!
@@ -541,6 +525,9 @@ export interface NexusGenArgTypes {
       id: string; // ID!
     }
     deleteSource: { // args
+      id: string; // ID!
+    }
+    deleteStructureDefinition: { // args
       id: string; // ID!
     }
     deleteTemplate: { // args
@@ -570,6 +557,10 @@ export interface NexusGenArgTypes {
     updateResource: { // args
       data: NexusGenInputs['UpdateResourceInput']; // UpdateResourceInput!
       resourceId: string; // ID!
+    }
+    updateStructureDefinition: { // args
+      definition: string; // String!
+      id: string; // ID!
     }
     upsertCredential: { // args
       database: string; // String!
@@ -608,9 +599,6 @@ export interface NexusGenArgTypes {
     }
   }
   Source: {
-    mapping: { // args
-      depth?: number | null; // Int
-    }
     resources: { // args
       after?: string | null; // ID
       before?: string | null; // ID

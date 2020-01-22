@@ -12,9 +12,12 @@ export type InputWithColumn = Input & {
   sqlValue: ColumnWithJoins
 }
 
-export type AttributeWithChildren = Attribute & {
-  children: AttributeWithChildren[]
+export type AttributeWithInputs = Attribute & {
   inputs: InputWithColumn[]
+}
+
+export type AttributeWithChildren = AttributeWithInputs & {
+  children: AttributeWithChildren[]
 }
 
 export type StructureDefinition = {

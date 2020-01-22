@@ -13,13 +13,13 @@ COPY package.json package.json
 COPY tsconfig.json tsconfig.json
 COPY tsconfig.build.json tsconfig.build.json
 COPY yarn.lock yarn.lock
-COPY src/generated/fhir src/generated/fhir
 
 RUN yarn --frozen-lockfile
 RUN yarn cache clean --force
 
 COPY prisma prisma
 COPY src src
+COPY fhir fhir
 
 RUN yarn prisma2 generate
 RUN yarn build

@@ -24,8 +24,26 @@ export const permissions = shield({
     source: rules.isAuthenticatedUser,
     resource: rules.isAuthenticatedUser,
     attribute: rules.isAuthenticatedUser,
+    availableResources: rules.isAuthenticatedUser,
   },
   Mutation: {
     createSource: rules.isAuthenticatedUser,
+    deleteSource: rules.isAuthenticatedUser,
+
+    createStructureDefinition: rules.isAuthenticatedUser,
+    updateStructureDefinition: rules.isAuthenticatedUser,
+    deleteStructureDefinition: rules.isAuthenticatedUser,
+
+    createAttribute: rules.isAuthenticatedUser,
+    updateAttribute: rules.isAuthenticatedUser,
+    deleteAttribute: rules.isAuthenticatedUser,
+
+    createInput: rules.isAuthenticatedUser,
+    updateInput: rules.isAuthenticatedUser,
+    deleteInput: rules.isAuthenticatedUser,
+
+    addJoinToColumn: rules.isAuthenticatedUser,
+    updateJoin: rules.isAuthenticatedUser,
+    deleteJoin: rules.isAuthenticatedUser,
   },
 })

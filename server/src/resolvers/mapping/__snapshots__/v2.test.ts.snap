@@ -1,0 +1,827 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`import mapping V2 should send a query per resource 1`] = `
+Array [
+  Object {
+    "data": Object {
+      "attributes": Object {
+        "create": Array [
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "staticValue": "internal",
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "managingOrganization.reference",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "staticValue": "/Organization/{id}",
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "managingOrganization.identifier.system",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "SERVICE",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "SEJOUR",
+                    },
+                  },
+                  "staticValue": null,
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "managingOrganization.identifier.value",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "ETATSEJ",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "SEJOUR",
+                    },
+                  },
+                  "staticValue": null,
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "status",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "SECLEUNIK",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "SEJOUR",
+                    },
+                  },
+                  "staticValue": null,
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "identifier[0].value",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "ADMISSION",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "SEJOUR",
+                    },
+                  },
+                  "staticValue": null,
+                },
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "ADMISSION2",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "SEJOUR",
+                    },
+                  },
+                  "staticValue": null,
+                },
+              ],
+            },
+            "mergingScript": "select_first_not_empty",
+            "path": "identifier[1].value",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "TWCLEUNIK",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "SEJOUR",
+                    },
+                  },
+                  "staticValue": null,
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "type[0].coding[0].code",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "LIBELTW",
+                      "joins": Object {
+                        "create": Array [
+                          Object {
+                            "tables": Object {
+                              "create": Array [
+                                Object {
+                                  "column": "TWCLEUNIK",
+                                  "owner": "OPS$ACHQ1ABC",
+                                  "table": "SEJOUR",
+                                },
+                                Object {
+                                  "column": "TWCLEUNIK",
+                                  "owner": "OPS$ACHQ1ABC",
+                                  "table": "TYPESEJ",
+                                },
+                              ],
+                            },
+                          },
+                        ],
+                      },
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "TYPESEJ",
+                    },
+                  },
+                  "staticValue": null,
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "type[0].coding[0].display",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": "clean_date",
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "DATEOUT",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "SEJOUR",
+                    },
+                  },
+                  "staticValue": null,
+                },
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "HEUREOUT",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "SEJOUR",
+                    },
+                  },
+                  "staticValue": null,
+                },
+              ],
+            },
+            "mergingScript": "merge_concat",
+            "path": "period.end",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": "clean_date",
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "DATEIN",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "SEJOUR",
+                    },
+                  },
+                  "staticValue": null,
+                },
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "HEUREIN",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "SEJOUR",
+                    },
+                  },
+                  "staticValue": null,
+                },
+              ],
+            },
+            "mergingScript": "merge_concat",
+            "path": "period.start",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "staticValue": "internal",
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "patient.reference",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "staticValue": "/Patient/{id}",
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "patient.identifier.system",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "PACLEUNIK",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "SEJOUR",
+                    },
+                  },
+                  "staticValue": null,
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "patient.identifier.value",
+          },
+        ],
+      },
+      "label": "Hospital Stay",
+      "primaryKeyColumn": "SECLEUNIK",
+      "primaryKeyOwner": "OPS$ACHQ1ABC",
+      "primaryKeyTable": "SEJOUR",
+      "source": Object {
+        "connect": Object {
+          "id": "01234567",
+        },
+      },
+    },
+  },
+]
+`;
+
+exports[`import mapping V2 should send a query per resource 2`] = `
+Array [
+  Object {
+    "data": Object {
+      "attributes": Object {
+        "create": Array [
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "INACTIVPAT",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "PATIENT",
+                    },
+                  },
+                  "staticValue": null,
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "active",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "ADR1PAT",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "PATIENT",
+                    },
+                  },
+                  "staticValue": null,
+                },
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "ADR2PAT",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "PATIENT",
+                    },
+                  },
+                  "staticValue": null,
+                },
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "ADR3PAT",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "PATIENT",
+                    },
+                  },
+                  "staticValue": null,
+                },
+              ],
+            },
+            "mergingScript": "merge_concat",
+            "path": "address[0].line[0]",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "VILLEPAT",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "PATIENT",
+                    },
+                  },
+                  "staticValue": null,
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "address[0].city",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "CPOSTPAT",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "PATIENT",
+                    },
+                  },
+                  "staticValue": null,
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "address[0].postalCode",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "INACTIVPAT",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "PATIENT",
+                    },
+                  },
+                  "staticValue": null,
+                },
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "IDMOTIFINAC",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "PATIENT",
+                    },
+                  },
+                  "staticValue": null,
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "deceasedBoolean",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "DATEINACPAT",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "PATIENT",
+                    },
+                  },
+                  "staticValue": null,
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "deceasedDateTime",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "TELPAT",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "PATIENT",
+                    },
+                  },
+                  "staticValue": null,
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "telecom[0].value",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "staticValue": "official",
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "name[0].use",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "NOMPAT",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "PATIENT",
+                    },
+                  },
+                  "staticValue": null,
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "name[0].family",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "PRENOMPAT",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "PATIENT",
+                    },
+                  },
+                  "staticValue": null,
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "name[0].given[0]",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "staticValue": "maiden",
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "name[1].use",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "NOMJFPAT",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "PATIENT",
+                    },
+                  },
+                  "staticValue": null,
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "name[1].family",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": "clean_date",
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "DATENAISPA",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "PATIENT",
+                    },
+                  },
+                  "staticValue": null,
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "birthDate",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "SEXEPAT",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "PATIENT",
+                    },
+                  },
+                  "staticValue": null,
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "gender",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "staticValue": "http://terminology.interopsante.org/CodeSystem/v2-0203",
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "identifier[0].type.coding[0].system",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "staticValue": "PI",
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "identifier[0].type.coding[0].code",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "staticValue": "Patient internal identifier",
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "identifier[0].type.coding[0].display",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "staticValue": "false",
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "identifier[0].type.coding[0].userSelected",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "NOOBSPAT",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "PATIENT",
+                    },
+                  },
+                  "staticValue": null,
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "identifier[0].value",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "PACLEUNIK",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "PATIENT",
+                    },
+                  },
+                  "staticValue": null,
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "identifier[1].value",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "DOSSIERPAT",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "PATIENT",
+                    },
+                  },
+                  "staticValue": null,
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "identifier[2].value",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "DATEINPAT",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "PATIENT",
+                    },
+                  },
+                  "staticValue": null,
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "identifier[2].period.start",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "DATEOUTPAT",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "PATIENT",
+                    },
+                  },
+                  "staticValue": null,
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "identifier[2].period.end",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "staticValue": "/Organization",
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "managingOrganization.type",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "staticValue": "/Organization/{id}",
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "managingOrganization.identifier.system",
+          },
+          Object {
+            "comments": null,
+            "inputs": Object {
+              "create": Array [
+                Object {
+                  "script": null,
+                  "sqlValue": Object {
+                    "create": Object {
+                      "column": "CODESERV",
+                      "owner": "OPS$ACHQ1ABC",
+                      "table": "PATIENT",
+                    },
+                  },
+                  "staticValue": null,
+                },
+              ],
+            },
+            "mergingScript": null,
+            "path": "managingOrganization.identifier.value",
+          },
+        ],
+      },
+      "label": "",
+      "primaryKeyColumn": "PACLEUNIK",
+      "primaryKeyOwner": "OPS$ACHQ1ABC",
+      "primaryKeyTable": "PATIENT",
+      "source": Object {
+        "connect": Object {
+          "id": "01234567",
+        },
+      },
+    },
+  },
+]
+`;
