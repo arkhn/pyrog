@@ -1,1 +1,1 @@
-export { bootstrapDefinitions } from './definitions'
+export { bootstrapDefinitions, getDefinition } from './definitions'
