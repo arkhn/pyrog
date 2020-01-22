@@ -1,4 +1,4 @@
-import * as fs from 'fs'
+import { Photon } from '@prisma/photon'
 import * as crypto from 'crypto'
 
 import { verify } from 'jsonwebtoken'
@@ -10,6 +10,8 @@ interface Token {
   userId: string
 }
 
+const photon = new Photon()
+
 export function getUserId(context: Context) {
   const Authorization = context.request.get('Authorization')
   if (Authorization) {
@@ -19,21 +21,12 @@ export function getUserId(context: Context) {
   }
 }
 
-export const fetchResourceSchema = (resourceName: String) => {
-  try {
-    return require(`generated/fhir/${resourceName}.json`)
-  } catch (e) {
-    throw new Error(`Resource ${resourceName} does not exist.`)
-  }
-}
-
 export const availableResources = async () => {
-  const dir = await fs.promises.opendir('src/generated/fhir')
-  let ret = []
-  for await (const dirent of dir) {
-    ret.push(dirent.name.replace('.json', ''))
-  }
-  return ret
+  const resources = await photon.structureDefinitions.findMany({
+    where: { derivation: 'specialization', kind: 'resource' },
+    select: { id: true, name: true },
+  })
+  return resources.map(r => r.name)
 }
 
 export const encrypt = (text: string) => {

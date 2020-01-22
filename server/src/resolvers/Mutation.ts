@@ -9,6 +9,11 @@ import { deleteCredential, upsertCredential } from './Credential'
 import { createTemplate, deleteTemplate } from './Template'
 import { addJoinToColumn } from './Column'
 import { updateJoin, deleteJoin } from './Join'
+import {
+  createStructureDefinition,
+  updateStructureDefinition,
+  deleteStructureDefinition,
+} from './StructureDefinition'
 
 export const Mutation = mutationType({
   /*
@@ -108,11 +113,48 @@ export const Mutation = mutationType({
      * RESOURCE
      */
 
+    t.field('createStructureDefinition', {
+      type: 'StructureDefinition',
+      args: {
+        definition: stringArg({
+          required: true,
+          description:
+            'The content of the StructureDefinition as a JSON string',
+        }),
+      },
+      resolve: createStructureDefinition,
+    })
+
+    t.field('updateStructureDefinition', {
+      type: 'StructureDefinition',
+      args: {
+        id: idArg({ required: true }),
+        definition: stringArg({
+          required: true,
+          description:
+            'The content of the StructureDefinition as a JSON string',
+        }),
+      },
+      resolve: updateStructureDefinition,
+    })
+
+    t.field('deleteStructureDefinition', {
+      type: 'StructureDefinition',
+      args: {
+        id: idArg({ required: true }),
+      },
+      resolve: deleteStructureDefinition,
+    })
+
+    /*
+     * RESOURCE
+     */
+
     t.field('createResource', {
       type: 'Resource',
       args: {
         sourceId: idArg({ required: true }),
-        resourceName: stringArg({ required: true }),
+        definitionId: stringArg({ required: true }),
       },
       resolve: createResource,
     })
@@ -141,7 +183,8 @@ export const Mutation = mutationType({
     t.field('createAttribute', {
       type: 'Attribute',
       args: {
-        parentId: idArg({ required: true }),
+        resourceId: idArg({ required: true }),
+        path: stringArg({ required: true }),
       },
       resolve: createAttribute,
     })
@@ -180,14 +223,6 @@ export const Mutation = mutationType({
       resolve: createInput,
     })
 
-    t.field('deleteInput', {
-      type: 'Input',
-      args: {
-        id: idArg({ required: true }),
-      },
-      resolve: deleteInput,
-    })
-
     t.field('updateInput', {
       type: 'Input',
       args: {
@@ -195,6 +230,14 @@ export const Mutation = mutationType({
         data: arg({ type: 'UpdateInputInput', required: true }),
       },
       resolve: updateInput,
+    })
+
+    t.field('deleteInput', {
+      type: 'Input',
+      args: {
+        id: idArg({ required: true }),
+      },
+      resolve: deleteInput,
     })
 
     /*

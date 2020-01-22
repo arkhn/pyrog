@@ -5,6 +5,7 @@ import register from 'rest'
 
 import { schema } from './schema'
 import { createContext } from './context'
+import { bootstrapDefinitions } from 'fhir'
 
 const server = new GraphQLServer({
   schema,
@@ -25,11 +26,16 @@ server.express.use((req: any, res: any, next: any) => {
 register(server.express)
 
 const options = {
-  bodyParserOptions: { limit: '10mb', type: 'application/json' },
+  bodyParserOptions: { limit: '500kb', type: 'application/json' },
 }
 
-server.start(options, () =>
-  console.log(
-    `🚀 Server ready at: http://localhost:4000\n⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️`,
-  ),
-)
+const main = async () => {
+  await bootstrapDefinitions()
+  await server.start(options, () =>
+    console.log(
+      `🚀 Server ready at: http://localhost:4000\n⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️`,
+    ),
+  )
+}
+
+main()

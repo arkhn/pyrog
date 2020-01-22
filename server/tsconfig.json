@@ -5,7 +5,7 @@
     "lib": ["esnext"],
     "strict": true,
     "resolveJsonModule": true,
-    "esModuleInterop": true,
+    "esModuleInterop": true
   },
-  "include": ["src/**/*", "scripts/*.ts"]
+  "include": ["src/**/*", "scripts/*.ts", "test/fixtures/*"]
 }
