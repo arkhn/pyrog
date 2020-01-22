@@ -4,7 +4,7 @@
   "license": "GPL-3.0",
   "scripts": {
     "start": "NODE_PATH=dist/ env $(cat .env) node dist/server",
-    "bootstrap:definitions": "env $(cat .env) ts-node scripts/fhirDefinitions.ts fhir",
+    "bootstrap:definitions": "env $(cat .env) ts-node scripts/fhirDefinitions.ts $(ls fhir/*.json)",
     "clean": "rm -rf dist",
     "build": "yarn -s run clean && yarn -s run generate && tsc --project tsconfig.build.json",
     "build:docker": "env $(cat .env.docker) docker build -t arkhn/pyrog-server:latest .",

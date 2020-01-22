@@ -1,5 +1,5 @@
 import * as fs from 'fs'
-import { join } from 'path'
+import { join, isAbsolute } from 'path'
 
 import { Photon, StructureDefinitionCreateInput } from '@prisma/photon'
 
@@ -7,15 +7,17 @@ import { HL7_AUTHOR } from '../src/constants'
 
 const photon = new Photon()
 
-const parseBundles = async (directory: string) => {
-  const dir = await fs.promises.opendir(directory)
-  for await (const dirent of dir) {
-    const rawBundle = await fs.promises.readFile(join(dir.path, dirent.name), {
+const parseBundles = async (bundleFiles: string[]) => {
+  for (const bundleFile of bundleFiles) {
+    const filePath = isAbsolute(bundleFile)
+      ? bundleFile
+      : join(process.cwd(), bundleFile)
+    const rawBundle = await fs.promises.readFile(filePath, {
       encoding: 'utf-8',
     })
     const bundle = JSON.parse(rawBundle)
     if (!bundle.resourceType || bundle.resourceType !== 'Bundle') {
-      throw new Error(`${dirent.name} must be a FHIR Bundle resource`)
+      throw new Error(`${bundleFile} must be a FHIR Bundle resource`)
     }
     await Promise.all(
       bundle.entry.map(async ({ resource }: any) => {
@@ -59,16 +61,20 @@ const countDefinitions = async () => {
   )
 }
 
-if (process.argv.length !== 3) {
-  console.error('USAGE: ts-node scripts/fhirDefinitions.ts <bundle_directory>')
+if (process.argv.length < 3) {
+  console.error(
+    'USAGE: ts-node scripts/fhirDefinitions.ts <bundleFile.json> [<bundle2.json>...]',
+  )
   process.exit(1)
 }
 
 photon
   .connect()
   .then(() =>
-    parseBundles(process.argv[2]).then(() =>
-      countDefinitions().then(() => process.exit(0)),
+    parseBundles(process.argv.slice(2)).then(() =>
+      countDefinitions().then(() =>
+        photon.disconnect().then(() => process.exit(0)),
+      ),
     ),
   )
   .catch((err: Error) => {
