@@ -16,18 +16,19 @@ export const getDefinition = (key: string) => cache.get(key)
 // Loads definitions from the database and cache a structured
 // version of the definition in an in-memory cache.
 export const bootstrapDefinitions = async () => {
-  const cacheDefinition = (fhirStructureDefinition: any) => {
-    const struct = structurize(fhirStructureDefinition.resource)
+  const cacheDefinition = (fhirStructureDefinition: string) => {
+    const definition = JSON.parse(fhirStructureDefinition)
+    const structured = structurize(definition)
 
     // Use id as key. If it isn't present, use url
-    const { id, url } = fhirStructureDefinition.resource
+    const { id, url } = definition
 
     if (!id && !url) {
       throw new Error('Structure definition has no id nor url field.')
     }
 
     // Put obj in key value store
-    cache.set(id || url, struct)
+    cache.set(id || url, structured)
   }
 
   console.log('Bootstrapping standard FHIR definitions...')
@@ -35,7 +36,7 @@ export const bootstrapDefinitions = async () => {
     where: { author: HL7_AUTHOR },
   })
   for (const def of standardDefinitions) {
-    cacheDefinition(def)
+    cacheDefinition(def.content)
   }
 
   console.log('Bootstrapping custom FHIR definitions...')
@@ -43,7 +44,7 @@ export const bootstrapDefinitions = async () => {
     where: { author: { not: HL7_AUTHOR } },
   })
   for (const def of customDefinitions) {
-    cacheDefinition(def)
+    cacheDefinition(def.content)
   }
 }
 
