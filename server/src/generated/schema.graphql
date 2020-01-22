@@ -254,6 +254,7 @@ type Query {
   resource(resourceId: ID!): Resource
   source(sourceId: ID!): Source
   sources: [Source!]
+  structureDefinition(definitionId: ID!): StructureDefinition
   structureDefinitions(filter: StructureDefinitionWhereInput): [StructureDefinition!]
   template(templateId: ID!): Template
   templates: [Template!]

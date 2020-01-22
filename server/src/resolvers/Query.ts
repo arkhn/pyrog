@@ -83,5 +83,17 @@ export const Query = queryType({
       resolve: (parent, { filter }, ctx) =>
         ctx.photon.structureDefinitions({ where: filter }),
     })
+
+    t.field('structureDefinition', {
+      type: 'StructureDefinition',
+      args: {
+        definitionId: idArg({ nullable: false }),
+      },
+      nullable: true,
+      resolve: (parent, { definitionId }, ctx) =>
+        ctx.photon.structureDefinitions.findOne({
+          where: { id: definitionId },
+        }),
+    })
   },
 })
