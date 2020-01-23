@@ -77,7 +77,7 @@ const Drawer = ({
 
   const onUpdateCompleted = () => {
     toaster.show({
-      message: `Successfully updated ${selectedNode.resource.fhirType} properties`,
+      message: `Successfully updated ${selectedNode.resource.definition.type} properties`,
       intent: 'success',
       icon: 'properties'
     });

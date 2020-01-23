@@ -31,6 +31,7 @@ const FhirMappingPanel = () => {
     setExpandedAttributesIdList
   ] = React.useState([] as string[]);
   const [createdResources, setCreatedResources] = React.useState(0);
+  const [baseDefinitionId, setBaseDefinitionId] = React.useState('');
 
   const { data: dataResources, loading: loadingResources } = useQuery(
     qResourcesForSource,
@@ -46,20 +47,21 @@ const FhirMappingPanel = () => {
     return (
       <div id="fhir-resource-tree">
         <FhirResourceTree
+          baseDefinitionId={baseDefinitionId}
           expandedAttributesIdList={expandedAttributesIdList}
-          nodeCollapseCallback={(node: any) => {
-            setExpandedAttributesIdList(
-              expandedAttributesIdList.filter(
-                (item: any) => item !== node.nodeData.id
-              )
-            );
-          }}
-          nodeExpandCallback={(node: any) => {
-            setExpandedAttributesIdList([
-              ...expandedAttributesIdList,
-              node.nodeData.id
-            ]);
-          }}
+          // nodeCollapseCallback={(node: any) => {
+          //   setExpandedAttributesIdList(
+          //     expandedAttributesIdList.filter(
+          //       (item: any) => item !== node.nodeData.id
+          //     )
+          //   );
+          // }}
+          // nodeExpandCallback={(node: any) => {
+          //   setExpandedAttributesIdList([
+          //     ...expandedAttributesIdList,
+          //     node.nodeData.id
+          //   ]);
+          // }}
           onClickCallback={(nodeData: any) => {
             dispatch(updateFhirAttribute(nodeData.id, nodeData.name));
             updateLocationParams(history, location, 'attributeId', nodeData.id);
@@ -77,12 +79,13 @@ const FhirMappingPanel = () => {
       <div id="fhir-attributes">
         <div id="resource-selector">
           <ResourceSelector
-            availableResources={
+            resources={
               loadingResources || !dataResources
                 ? []
                 : dataResources.source.resources
             }
             loading={loadingResources}
+            setBaseDefinitionId={setBaseDefinitionId}
             deleteResourceCallback={() => {
               setCreatedResources(createdResources - 1);
             }}

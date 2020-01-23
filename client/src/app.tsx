@@ -26,6 +26,7 @@ import {
 import sourceSchemas from './services/selectedNode/sourceSchemas/reducer';
 import recommendedColumns from './services/recommendedColumns/reducer';
 import selectedNodeReducer from './services/selectedNode/reducer';
+import structureReducer from './services/structure/reducer';
 import toasterReducer from './services/toaster/reducer';
 import userReducer from './services/user/reducer';
 
@@ -65,6 +66,7 @@ const viewReducer = combineReducers({
 const mainReducer = combineReducers({
   data: dataReducer,
   selectedNode: selectedNodeReducer,
+  structure: structureReducer,
   toaster: toasterReducer,
   views: viewReducer,
   user: userReducer

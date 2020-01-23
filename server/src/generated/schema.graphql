@@ -264,6 +264,7 @@ type Query {
 type Resource {
   attributes(after: ID, before: ID, first: Int, last: Int, skip: Int): [Attribute!]!
   createdAt: DateTime!
+  definition: StructureDefinition
   id: ID!
   label: String
   primaryKeyColumn: String

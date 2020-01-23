@@ -401,6 +401,7 @@ export interface NexusGenFieldTypes {
   Resource: { // field return type
     attributes: NexusGenRootTypes['Attribute'][]; // [Attribute!]!
     createdAt: any; // DateTime!
+    definition: NexusGenRootTypes['StructureDefinition'] | null; // StructureDefinition
     id: string; // ID!
     label: string | null; // String
     primaryKeyColumn: string | null; // String

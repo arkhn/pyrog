@@ -1,8 +1,6 @@
 fragment entireResource on Resource {
   id
   label
-  profile
-  fhirType
   primaryKeyOwner
   primaryKeyTable
   primaryKeyColumn

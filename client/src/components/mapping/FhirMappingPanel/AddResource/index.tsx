@@ -25,11 +25,11 @@ const AddResource = ({ callback }: IProps) => {
     toaster.show({
       icon: 'layout-hierarchy',
       intent: 'success',
-      message: `Ressource ${data.createResource.fhirType} créée pour ${selectedNode.source.name}.`,
+      message: `Ressource ${data.createResource.definition.type} créée pour ${selectedNode.source.name}.`,
       timeout: 4000
     });
 
-    setSelectedAddResource(data.createResource.fhirType);
+    // setSelectedResourceId(data.createResource.fhirType);
     callback();
   };
 
@@ -82,9 +82,13 @@ const AddResource = ({ callback }: IProps) => {
     qAvailableResources
   );
 
+  const resourceNames = data
+    ? data.structureDefinitions.map((el: any) => el.name)
+    : []
+
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const [selectedAddResource, setSelectedAddResource] = React.useState('');
+  const [selectedResource, setSelectedResource] = React.useState({id:'', name: ''});
 
   return (
     <FormGroup label={'Add Resource'}>
@@ -92,21 +96,23 @@ const AddResource = ({ callback }: IProps) => {
         <AddResourceSelect
           loading={loadingAvailableResources}
           disabled={!selectedNode.source}
-          inputItem={selectedAddResource}
-          items={loadingAvailableResources ? [] : data.availableResources}
+          inputItem={selectedResource.name}
+          items={loadingAvailableResources ? [] : resourceNames}
           onChange={(resource: any) => {
-            setSelectedAddResource(resource);
+            setSelectedResource(
+              data.structureDefinitions.find((el: any) => el.name === resource)
+            );
           }}
         />
         <Button
           loading={creatingResource}
           icon={'plus'}
-          disabled={!selectedAddResource}
+          disabled={!selectedResource.id}
           onClick={() => {
             createResource({
               variables: {
                 sourceId: selectedNode.source.id,
-                resourceName: selectedAddResource
+                definitionId: selectedResource.id
               }
             });
           }}
