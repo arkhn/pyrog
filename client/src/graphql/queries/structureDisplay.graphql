@@ -1,0 +1,6 @@
+query structureDisplay($definitionId: ID!) {
+  structureDefinition(definitionId: $definitionId) {
+    id
+    display
+  }
+}

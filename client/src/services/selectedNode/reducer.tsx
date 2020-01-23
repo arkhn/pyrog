@@ -9,8 +9,11 @@ const initialState: any = {
   },
   resource: {
     id: null,
-    fhirType: null,
-    label: null
+    label: null,
+    definition: {
+      id: null,
+      type: null,
+    }
   },
   attribute: {
     id: null,
@@ -48,8 +51,11 @@ const selectedNodeReducer = (
         },
         resource: {
           id: null,
-          fhirType: null,
-          label: null
+          label: null,
+          definition: {
+            id: null,
+            type: null,
+          }
         },
         attribute: {
           id: null,
@@ -62,8 +68,11 @@ const selectedNodeReducer = (
         ...state,
         resource: {
           id: action.payload.resourceId,
-          fhirType: action.payload.fhirType,
-          label: action.payload.label
+          label: action.payload.label,
+          definition: {
+            id: action.payload.definition.id,
+            type: action.payload.definition.type,
+          }
         },
         attribute: {
           id: null,
@@ -76,8 +85,11 @@ const selectedNodeReducer = (
         ...state,
         resource: {
           id: null,
-          fhirType: null,
-          label: null
+          label: null,
+          definition: {
+            id: null,
+            type: null,
+          }
         },
         attribute: {
           id: null,

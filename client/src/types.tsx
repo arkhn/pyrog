@@ -31,7 +31,10 @@ export interface ISelectedSource {
 export interface ISelectedResource {
   id: string;
   label: string;
-  fhirType: string;
+  definition: {
+    id: string;
+    type: string;
+  }
 }
 
 export interface ISelectedAttribute {
@@ -68,6 +71,7 @@ export interface IReduxStore {
   data: IData;
   dispatch?: any;
   selectedNode: ISelectedNode;
+  structure: any;
   toaster: IToaster;
   user: IUser;
   views: any;
