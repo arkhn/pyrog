@@ -1,8 +1,6 @@
 import { IAction } from 'types';
 
 export const initAttributesMap = (responseAttributes: any): IAction => {
-  console.log('=======');
-  console.log(responseAttributes);
   const attributesMap: Record<string, any> = {};
 
   for (const attr of responseAttributes) {

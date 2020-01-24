@@ -55,7 +55,7 @@ const InputColumns = ({ schema, selectedAttribute, source }: IProps) => {
   const attribute = data && data.attribute ? data.attribute : null;
   const inputs = attribute && attribute.inputs ? attribute.inputs : [];
 
-  const onChangeCleaningScript = (script: string) => {
+  const onChangeMergingScript = (script: string) => {
     updateAttribute({
       variables: {
         attributeId: attribute.id,
@@ -66,7 +66,7 @@ const InputColumns = ({ schema, selectedAttribute, source }: IProps) => {
     });
   };
 
-  const onClearCleaningScript = (): any => {
+  const onClearMergingScript = (): any => {
     updateAttribute({
       variables: {
         attributeId: attribute.id,
@@ -99,8 +99,8 @@ const InputColumns = ({ schema, selectedAttribute, source }: IProps) => {
             <ScriptSelect
               loading={loadingMutation}
               selectedScript={attribute.mergingScript}
-              onChange={onChangeCleaningScript}
-              onClear={onClearCleaningScript}
+              onChange={onChangeMergingScript}
+              onClear={onClearMergingScript}
             />
           </div>
         </div>
