@@ -25,6 +25,14 @@ interface IProps {
 
 const Join = ({ joinData, schema, source }: IProps) => {
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
+  const path = selectedNode.attribute.path.join('.');
+
+  const attributesForResource = useSelector(
+    (state: IReduxStore) => state.resourceInputs.attributesMap
+  );
+  const attributeId = attributesForResource[path]
+    ? attributesForResource[path].id
+    : null;
 
   const [updateJoin, { loading: updatingJoin }] = useMutation(mUpdateJoin);
   const [deleteJoin, { loading: deletingJoin }] = useMutation(mDeleteJoin);
@@ -43,7 +51,7 @@ const Join = ({ joinData, schema, source }: IProps) => {
     const { attribute: dataAttribute } = cache.readQuery({
       query: qInputsForAttribute,
       variables: {
-        attributeId: selectedNode.attribute.id
+        attributeId
       }
     });
     const newDataAttribute = {
@@ -53,7 +61,7 @@ const Join = ({ joinData, schema, source }: IProps) => {
     cache.writeQuery({
       query: qInputsForAttribute,
       variables: {
-        attributeId: selectedNode.attribute.id
+        attributeId
       },
       data: { attribute: newDataAttribute }
     });

@@ -45,79 +45,89 @@ const primitiveTypes = [
 ];
 
 interface INodeData {
-  description: string;
-  fhirType: string;
   childTypes: string[];
   id: string;
   isArray: boolean;
   isPrimitive: boolean;
   isRequired: boolean;
-  name: string;
-  parent: INodeData;
   path: string[];
 }
 
 export interface IProps {
-  baseDefinitionId: string;
-  expandedAttributesIdList: string[];
-  // nodeCollapseCallback: any;
-  // nodeExpandCallback: any;
   onClickCallback: any;
-  selectedAttributeId?: string;
 }
 
-const FhirResourceTree = ({
-  baseDefinitionId,
-  selectedAttributeId,
-  expandedAttributesIdList,
-  // nodeCollapseCallback,
-  // nodeExpandCallback,
-  onClickCallback
-}: IProps) => {
-  const client = useApolloClient();
+interface INodeLabelProps {
+  name: string;
+  type: any;
+  isArray: boolean;
+  path: string[];
+}
 
-  // const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
+const NodeLabel = ({ name, type, isArray, path }: INodeLabelProps) => {
+  const showContextMenu = async (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+
+    let menu;
+    if (isArray) {
+      menu = (
+        <Menu>
+          <MenuItem
+            icon={'add'}
+            onClick={() => {
+              // TODO
+            }}
+            text={'Ajouter un item'}
+          />
+        </Menu>
+      );
+    } else if (
+      name === 'false' //false
+      // node.parent &&
+      // node.parent.isArray
+      // hasMoreThanOneSibling(nodePath)
+    ) {
+      menu = (
+        <Menu>
+          <MenuItem
+            icon={'delete'}
+            onClick={() => {
+              // TODO
+            }}
+            text={"Supprimer l'item"}
+          />
+        </Menu>
+      );
+    }
+
+    if (menu) {
+      ContextMenu.show(menu, { left: e.clientX, top: e.clientY });
+    }
+  };
+
+  return (
+    <div className={'node-label'} onContextMenu={showContextMenu}>
+      <div>{name}</div>
+      <div className={'node-type'}>{type ? type[0].code : ''}</div>
+    </div>
+  );
+};
+
+const FhirResourceTree = ({ onClickCallback }: IProps) => {
+  const client = useApolloClient();
+  const baseDefinitionId = useSelector(
+    (state: IReduxStore) => state.selectedNode.resource.definition.id
+  );
 
   const { data, loading } = useQuery(qStructureDisplay, {
     variables: { definitionId: baseDefinitionId }
   });
 
   const [nodes, setNodes] = useState([] as ITreeNode<INodeData>[]);
+  const [selectedNode, setSelectedNode] = useState([] as string[]);
 
   const fhirStructure =
     data && data.structureDefinition ? data.structureDefinition.display : {};
-
-  // const { data: dataTree, loading: loaingTree } = useQuery(
-  //   qResourceAttributeTree,
-  //   {
-  //     variables: {
-  //       resourceId: selectedNode.resource.id
-  //     },
-  //     skip: !selectedNode.resource.id
-  //   }
-  // );
-
-  // if (loadingTree) {
-  //   return <Spinner />;
-  // }
-
-  // const attributesTree = dataTree ? dataTree.resource.attributes : null;
-
-  // Sort tree
-  // const sortByName = (a: INodeData, b: INodeData) => (a.name > b.name ? 1 : -1);
-  // attributesTree.sort(sortByName);
-
-  // const bfsInputs = (node: any) => {
-  //   if (node.inputs && node.inputs.length > 0) {
-  //     return true;
-  //   } else if (node.children && node.children.length > 0) {
-  //     return node.children.some((attribute: any) => {
-  //       return bfsInputs(attribute);
-  //     });
-  //   } else {
-  //     return false;
-  //   }
-  // };
 
   const forEachNode = (
     nodes: ITreeNode<INodeData>[],
@@ -135,76 +145,18 @@ const FhirResourceTree = ({
     }
   };
 
-  // const genObjNodes_old = (node: any, pathAcc: string[]): ITreeNode<INodeData> => {
-  //   const nodeLabel = <NodeLabel node={node} nodePath={pathAcc} />;
-
-  //   const hasChildren = node.children && node.children.length > 0;
-  //   const hasInputs = node.inputs && node.inputs.length > 0;
-  //   const nodePath = [...pathAcc, node.id];
-
-  //   const secondaryLabel = hasInputs ? (
-  //     <Icon icon="small-tick" intent={'success'} />
-  //   ) : node.isRequired ? (
-  //     <Icon icon="dot" intent="warning" />
-  //   ) : bfsInputs(node) ? (
-  //     <Icon icon="dot" />
-  //   ) : null;
-
-  //   return {
-  //     childNodes: node.isArray // We don't want to sort if isArray because all children have same name
-  //       ? node.children.map((child: any) => {
-  //         return genObjNodes_old(child, nodePath);
-  //       })
-  //       : hasChildren
-  //         ? node.children.sort(sortByName).map((child: any) => {
-  //           return genObjNodes_old(child, nodePath);
-  //         })
-  //         : null,
-  //     hasCaret: hasChildren,
-  //     icon: node.isArray ? 'multi-select' : hasChildren ? 'folder-open' : 'tag',
-  //     id: node.id,
-  //     isExpanded: false,
-  //     isSelected: false,
-  //     label: node.description ? (
-  //       <Tooltip boundary={'viewport'} content={node.description}>
-  //         {nodeLabel}
-  //       </Tooltip>
-  //     ) : (
-  //         nodeLabel
-  //       ),
-  //     nodeData: {
-  //       description: node.description,
-  //       fhirType: node.fhirType,
-  //       id: node.id,
-  //       isArray: node.isArray,
-  //       isRequired: node.isRequired,
-  //       name: node.name,
-  //       parent: node.parent
-  //     },
-  //     secondaryLabel: secondaryLabel
-  //   };
-  // };
-
   const buildNodeFromObject = (
     [name, content]: [string, any],
     parentPath: string[]
   ): ITreeNode<INodeData> => {
-    const nodeLabel = (
-      <div className={'node-label'}>
-        <div>{name}</div>
-        <div className={'node-type'}>
-          {content.type ? content.type[0].code : ''}
-        </div>
-      </div>
-    );
-
     const isPrimitive = content.type
       ? primitiveTypes.includes(content.type[0].code)
       : true; // TODO what if type is absent?
     const isArray = content.max !== '1';
     const isRequired = content.min > 0;
     const path = parentPath.concat(name);
-    console.log('new', path);
+
+    const nodeLabel = NodeLabel({ name, type: content.type, isArray, path });
 
     return {
       hasCaret: !isPrimitive,
@@ -212,8 +164,8 @@ const FhirResourceTree = ({
       id: name, // TODO change id to path?
       isExpanded: false,
       isSelected: false,
-      label: content.description ? (
-        <Tooltip boundary={'viewport'} content={content.description}>
+      label: content.definition ? (
+        <Tooltip boundary={'viewport'} content={content.definition}>
           {nodeLabel}
         </Tooltip>
       ) : (
@@ -221,8 +173,6 @@ const FhirResourceTree = ({
       ),
       // secondaryLabel: secondaryLabel
       nodeData: {
-        description: content.description,
-        fhirType: content.fhirType,
         childTypes: content.type
           ? content.type.map((type: any) => type.code)
           : [],
@@ -230,9 +180,7 @@ const FhirResourceTree = ({
         isArray: isArray,
         isPrimitive: isPrimitive,
         isRequired: isRequired,
-        name: content.name,
-        parent: content.parent,
-        path: path
+        path: [...parentPath, name]
       }
     };
   };
@@ -251,16 +199,6 @@ const FhirResourceTree = ({
   useEffect(() => {
     setNodes(genTreeLevel(fhirStructure, []));
   }, [loading]);
-
-  // forEachNode(nodes, (node: ITreeNode<INodeData>) => {
-  //   if (!node.nodeData) {
-  //     node.isSelected = false;
-  //     node.isExpanded = false;
-  //     return;
-  //   }
-  //   node.isSelected = false;
-  //   node.isExpanded = expandedAttributesIdList.indexOf(node.nodeData.id) >= 0;
-  // });
 
   const findNode = (nodes: ITreeNode<INodeData>[], path: string[]) => {
     let curNode = nodes.find(el => el.id === path[0]);
@@ -288,8 +226,8 @@ const FhirResourceTree = ({
     const affectedNode = findNode(newNodes, node.nodeData!.path)!;
 
     if (!node.nodeData?.isPrimitive) {
-      if (!node.childNodes || node.childNodes.length == 0) {
-        console.log('WILL QUERY');
+      if (!node.childNodes || node.childNodes.length === 0) {
+        // TODO what if several types are possible?
         const { data } = await client.query({
           query: qStructureDisplay,
           variables: { definitionId: node.nodeData?.childTypes[0] }
@@ -298,8 +236,13 @@ const FhirResourceTree = ({
       }
       affectedNode.isExpanded = !affectedNode.isExpanded;
     } else {
+      if (selectedNode.length > 0) {
+        const unselectedNode = findNode(newNodes, selectedNode)!;
+        unselectedNode.isSelected = false;
+      }
       affectedNode.isSelected = true;
-      // onClickCallback(node.nodeData);
+      setSelectedNode(affectedNode.nodeData!.path);
+      onClickCallback(affectedNode.nodeData);
     }
     setNodes(newNodes);
   };

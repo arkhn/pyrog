@@ -125,19 +125,19 @@ const MappingView = () => {
   const renderHelp = () => {
     return (
       <div id="help-resource">
-        {!selectedNode.resource.id && (
+        {!selectedNode.resource && (
           <div id="help-pick-resource">
             <p>Pick a resource</p>
             <Icon icon="arrow-right" />
           </div>
         )}
-        {!selectedNode.resource.id && (
+        {!selectedNode.resource && (
           <div id="help-add-resource">
             <p>Add a resource</p>
             <Icon icon="arrow-right" />
           </div>
         )}
-        {selectedNode.resource.id && !selectedNode.attribute.id && (
+        {selectedNode.resource && !selectedNode.attribute && (
           <div id="help-pick-attribute">
             <p>Pick an attribute</p>
             <Icon icon="arrow-right" />
@@ -170,8 +170,8 @@ const MappingView = () => {
       <div id="mapping-explorer-container">
         <div id="main-container">
           <div id="exploration-panel">
-            {selectedNode.attribute.id && renderExistingRules()}
-            {selectedNode.attribute.id ? renderTabs() : renderHelp()}
+            {selectedNode.attribute && renderExistingRules()}
+            {selectedNode.attribute ? renderTabs() : renderHelp()}
           </div>
           <div id="fhir-panel">
             <FhirMappingPanel />

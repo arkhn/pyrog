@@ -26,12 +26,7 @@ const FhirMappingPanel = () => {
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
   const { history, location } = useReactRouter();
 
-  const [
-    expandedAttributesIdList,
-    setExpandedAttributesIdList
-  ] = React.useState([] as string[]);
   const [createdResources, setCreatedResources] = React.useState(0);
-  const [baseDefinitionId, setBaseDefinitionId] = React.useState('');
 
   const { data: dataResources, loading: loadingResources } = useQuery(
     qResourcesForSource,
@@ -47,28 +42,10 @@ const FhirMappingPanel = () => {
     return (
       <div id="fhir-resource-tree">
         <FhirResourceTree
-          baseDefinitionId={baseDefinitionId}
-          expandedAttributesIdList={expandedAttributesIdList}
-          // nodeCollapseCallback={(node: any) => {
-          //   setExpandedAttributesIdList(
-          //     expandedAttributesIdList.filter(
-          //       (item: any) => item !== node.nodeData.id
-          //     )
-          //   );
-          // }}
-          // nodeExpandCallback={(node: any) => {
-          //   setExpandedAttributesIdList([
-          //     ...expandedAttributesIdList,
-          //     node.nodeData.id
-          //   ]);
-          // }}
           onClickCallback={(nodeData: any) => {
-            dispatch(updateFhirAttribute(nodeData.id, nodeData.name));
+            dispatch(updateFhirAttribute(nodeData.path));
             updateLocationParams(history, location, 'attributeId', nodeData.id);
           }}
-          selectedAttributeId={
-            selectedNode.attribute ? selectedNode.attribute.id : undefined
-          }
         />
       </div>
     );
@@ -85,13 +62,12 @@ const FhirMappingPanel = () => {
                 : dataResources.source.resources
             }
             loading={loadingResources}
-            setBaseDefinitionId={setBaseDefinitionId}
             deleteResourceCallback={() => {
               setCreatedResources(createdResources - 1);
             }}
           />
         </div>
-        {selectedNode.resource.id && renderResourceTree()}
+        {selectedNode.resource && renderResourceTree()}
       </div>
       <div id="resource-add">
         <AddResource

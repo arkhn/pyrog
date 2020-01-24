@@ -34,18 +34,25 @@ export interface ISelectedResource {
   definition: {
     id: string;
     type: string;
-  }
+  };
 }
 
 export interface ISelectedAttribute {
   id: string;
-  name: string;
+  path: string[];
 }
 
 export interface ISelectedNode {
   source: ISelectedSource;
   resource: ISelectedResource;
   attribute: ISelectedAttribute;
+}
+
+export interface IResourceInputs {
+  primaryKeyOwner: string;
+  primaryKeyTable: string;
+  primaryKeyColumn: string;
+  attributesMap: any;
 }
 
 export interface ISourceSchemas {
@@ -71,6 +78,7 @@ export interface IReduxStore {
   data: IData;
   dispatch?: any;
   selectedNode: ISelectedNode;
+  resourceInputs: IResourceInputs;
   structure: any;
   toaster: IToaster;
   user: IUser;
