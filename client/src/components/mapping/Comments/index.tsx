@@ -9,6 +9,9 @@ import { loader } from 'graphql.macro';
 import { setAttributeInMap } from 'services/resourceInputs/actions';
 
 // GRAPHQL
+const qCommentsForAttribute = loader(
+  'src/graphql/queries/commentsForAttribute.graphql'
+);
 const mUpdateAttribute = loader(
   'src/graphql/mutations/updateAttribute.graphql'
 );
@@ -33,14 +36,20 @@ const Comments = () => {
     attributeForNode ? attributeForNode.comments : ''
   );
 
+  const { data, loading } = useQuery(qCommentsForAttribute, {
+    variables: {
+      attributeId: attributeForNode ? attributeForNode.id : null
+    },
+    skip: !attributeForNode
+  });
+
   React.useEffect(() => {
-    setComments(attributeForNode ? attributeForNode.comments : '');
-  }, [attributeForNode]);
+    setComments(data && data.attribute.comments ? data.attribute.comments : '');
+  }, [data]);
 
   const onSaveComment = async (): Promise<void> => {
-    // TODO factorize these functions
     if (attributeForNode) {
-      const { data } = await updateAttribute({
+      updateAttribute({
         variables: {
           attributeId: attributeForNode.id,
           data: {
@@ -48,8 +57,6 @@ const Comments = () => {
           }
         }
       });
-      const newAttr = data.createAttribute;
-      dispatch(setAttributeInMap(path, newAttr));
     } else {
       const { data } = await createAttribute({
         variables: {
@@ -72,7 +79,7 @@ const Comments = () => {
           <TextArea
             className={'bp3-fill'}
             value={comments}
-            disabled={!selectedNode.attribute}
+            disabled={loading || !selectedNode.attribute}
             onChange={e => {
               setComments(e.target.value);
             }}
