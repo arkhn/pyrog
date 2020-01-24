@@ -8,7 +8,7 @@ import { loader } from 'graphql.macro';
 
 import { updateLocationParams } from 'services/urlState';
 import { updateFhirResource } from 'services/selectedNode/actions';
-// import { updateStructure } from 'services/structure/actions';
+import { initAttributesMap } from 'services/resourceInputs/actions';
 import { IReduxStore } from 'types';
 
 import Drawer from './Drawer';
@@ -17,33 +17,37 @@ import ResourceSelect from 'components/selects/resourceSelect';
 interface IProps {
   resources: any;
   loading: boolean;
-  setBaseDefinitionId: any;
   deleteResourceCallback: any;
 }
 
-const qStructureDisplay = loader(
-  'src/graphql/queries/structureDisplay.graphql'
-);
+const qResource = loader('src/graphql/queries/resource.graphql');
 
 const ResourceSelector = ({
   resources,
   loading,
-  setBaseDefinitionId,
   deleteResourceCallback
 }: IProps) => {
   const client = useApolloClient();
   const dispatch = useDispatch();
-  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
+  const { source, resource } = useSelector(
+    (state: IReduxStore) => state.selectedNode
+  );
   const { history, location } = useReactRouter();
   const [drawerIsOpen, setDrawerIsOpen] = React.useState(false);
-  const { source, resource } = selectedNode;
 
   const onClickedResource = async (resource: any) => {
+    // Query attributes for corresponding resource
+    const { data } = await client.query({
+      query: qResource,
+      variables: { resourceId: resource.id }
+    });
+
+    // Update Redux store
+    dispatch(initAttributesMap(data.resource.attributes));
     dispatch(
       updateFhirResource(resource.id, resource.label, resource.definition)
     );
     updateLocationParams(history, location, 'resourceId', resource.id);
-    setBaseDefinitionId(resource.definition.id);
   };
 
   return (

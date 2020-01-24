@@ -185,6 +185,7 @@ export const Mutation = mutationType({
       args: {
         resourceId: idArg({ required: true }),
         path: stringArg({ required: true }),
+        data: arg({ type: 'AttributeInput' }),
       },
       resolve: createAttribute,
     })
@@ -193,7 +194,7 @@ export const Mutation = mutationType({
       type: 'Attribute',
       args: {
         attributeId: idArg({ required: true }),
-        data: arg({ type: 'UpdateAttributeInput', required: true }),
+        data: arg({ type: 'AttributeInput', required: true }),
       },
       resolve: updateAttribute,
     })

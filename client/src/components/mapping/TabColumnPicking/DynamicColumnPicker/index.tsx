@@ -8,7 +8,7 @@ import {
 } from '@blueprintjs/core';
 import * as React from 'react';
 import { useMutation } from '@apollo/react-hooks';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import ColumnPicker from '../../ColumnPicker';
 import TableViewer from '../TableViewer';
@@ -17,22 +17,39 @@ import { IReduxStore } from 'types';
 import { loader } from 'graphql.macro';
 import { HTTP_BACKEND_URL } from '../../../../constants';
 
+import { setAttributeInMap } from 'services/resourceInputs/actions';
+
 // GRAPHQL
 const qInputsForAttribute = loader(
   'src/graphql/queries/inputsForAttribute.graphql'
+);
+const mCreateAttribute = loader(
+  'src/graphql/mutations/createAttribute.graphql'
 );
 const mCreateSQLInput = loader('src/graphql/mutations/createSQLInput.graphql');
 
 interface IProps {
   attribute: {
     id: string;
-    name: string;
+    path: string[];
   };
   schema: any;
   source: any;
 }
 
 const DynamicColumnPicker = ({ attribute, schema, source }: IProps) => {
+  const dispatch = useDispatch();
+
+  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
+  const path = selectedNode.attribute.path.join('.');
+
+  const attributesForResource = useSelector(
+    (state: IReduxStore) => state.resourceInputs.attributesMap
+  );
+  let attributeId = attributesForResource[path]
+    ? attributesForResource[path].id
+    : null;
+
   const [owner, setOwner] = React.useState('');
   const [table, setTable] = React.useState('');
   const [column, setColumn] = React.useState('');
@@ -40,32 +57,23 @@ const DynamicColumnPicker = ({ attribute, schema, source }: IProps) => {
   const [rows, setRows] = React.useState([]);
   const [fields, setFields] = React.useState([]);
 
-  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
-  const createInput = async () => {
-    await createSQLInput({
-      variables: {
-        attributeId: attribute.id,
-        columnInput: {
-          owner: owner || '',
-          table: table,
-          column: column
-        }
-      }
-    });
-  };
+  const [createAttribute] = useMutation(mCreateAttribute);
+  const [createSQLInput, { loading: creatingSQLInput }] = useMutation(
+    mCreateSQLInput
+  );
 
   const addInputToCache = (cache: any, { data: { createInput } }: any) => {
     try {
       const { attribute: dataAttribute } = cache.readQuery({
         query: qInputsForAttribute,
         variables: {
-          attributeId: attribute.id
+          attributeId
         }
       });
       cache.writeQuery({
         query: qInputsForAttribute,
         variables: {
-          attributeId: attribute.id
+          attributeId
         },
         data: {
           attribute: {
@@ -79,10 +87,30 @@ const DynamicColumnPicker = ({ attribute, schema, source }: IProps) => {
     }
   };
 
-  const [
-    createSQLInput,
-    { loading: creatingSQLInput }
-  ] = useMutation(mCreateSQLInput, { update: addInputToCache });
+  const createInput = async (): Promise<any> => {
+    if (!attributeId) {
+      // First, we create the attribute if it doesn't exist
+      const { data: attr } = await createAttribute({
+        variables: {
+          resourceId: selectedNode.resource.id,
+          path
+        }
+      });
+      attributeId = attr.createAttribute.id;
+      dispatch(setAttributeInMap(path, attr.createAttribute));
+    }
+    createSQLInput({
+      variables: {
+        attributeId,
+        columnInput: {
+          owner: owner || '',
+          table: table,
+          column: column
+        }
+      },
+      update: addInputToCache
+    });
+  };
 
   React.useEffect(() => {
     if (selectedNode.source && selectedNode.source.id && table) {
@@ -127,10 +155,10 @@ const DynamicColumnPicker = ({ attribute, schema, source }: IProps) => {
             sourceSchema={schema}
           />
           <Button
-            disabled={!attribute.id || !column}
+            disabled={!attribute || !column}
             icon={'add'}
             loading={creatingSQLInput}
-            onClick={() => createInput()}
+            onClick={createInput}
           />
         </ControlGroup>
       </FormGroup>

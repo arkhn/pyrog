@@ -1,24 +1,9 @@
 import { ISimpleAction } from 'types';
 
 const initialState: any = {
-  source: {
-    id: null,
-    name: null,
-    schemaFileName: null,
-    hasOwner: null
-  },
-  resource: {
-    id: null,
-    label: null,
-    definition: {
-      id: null,
-      type: null,
-    }
-  },
-  attribute: {
-    id: null,
-    name: null
-  }
+  source: null,
+  resource: null,
+  attribute: null
 };
 
 const selectedNodeReducer = (
@@ -26,20 +11,6 @@ const selectedNodeReducer = (
   action: ISimpleAction
 ): any => {
   switch (action.type) {
-    case 'UPDATE_NODE':
-      return {
-        ...state,
-        source: {
-          ...action.payload.source
-        },
-        resource: {
-          ...action.payload.resource
-        },
-        attribute: {
-          ...action.payload.attribute
-        }
-      };
-
     case 'UPDATE_SELECTED_SOURCE':
       return {
         ...state,
@@ -49,18 +20,8 @@ const selectedNodeReducer = (
           schemaFileName: action.payload.schemaFileName,
           hasOwner: action.payload.hasOwner
         },
-        resource: {
-          id: null,
-          label: null,
-          definition: {
-            id: null,
-            type: null,
-          }
-        },
-        attribute: {
-          id: null,
-          name: null
-        }
+        resource: null,
+        attribute: null
       };
 
     case 'UPDATE_FHIR_RESOURCE':
@@ -71,38 +32,24 @@ const selectedNodeReducer = (
           label: action.payload.label,
           definition: {
             id: action.payload.definition.id,
-            type: action.payload.definition.type,
+            type: action.payload.definition.type
           }
         },
-        attribute: {
-          id: null,
-          name: null
-        }
+        attribute: null
       };
 
     case 'DESELECTED_FHIR_RESOURCE':
       return {
         ...state,
-        resource: {
-          id: null,
-          label: null,
-          definition: {
-            id: null,
-            type: null,
-          }
-        },
-        attribute: {
-          id: null,
-          name: null
-        }
+        resource: null,
+        attribute: null
       };
 
     case 'UPDATE_FHIR_ATTRIBUTE':
       return {
         ...state,
         attribute: {
-          id: action.payload.attributeId,
-          name: action.payload.attributeName
+          path: action.payload.attributePath
         }
       };
 

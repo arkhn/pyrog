@@ -1,8 +1,9 @@
 import { Tag, Spinner } from '@blueprintjs/core';
 import * as React from 'react';
 import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useSelector } from 'react-redux';
 
-import { ISelectedSource } from 'types';
+import { IReduxStore, ISelectedSource } from 'types';
 
 // COMPONENTS
 import ScriptSelect from 'components/selects/scriptSelect';
@@ -21,17 +22,27 @@ interface IProps {
   schema: any;
   selectedAttribute: {
     id: string;
-    name: string;
+    path: string[];
   };
   source: ISelectedSource;
 }
 
 const InputColumns = ({ schema, selectedAttribute, source }: IProps) => {
+  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
+  const path = selectedNode.attribute.path.join('.');
+
+  const attributesForResource = useSelector(
+    (state: IReduxStore) => state.resourceInputs.attributesMap
+  );
+  const attributeId = attributesForResource[path]
+    ? attributesForResource[path].id
+    : null;
+
   const { data, loading: loadingData } = useQuery(qInputsForAttribute, {
     variables: {
-      attributeId: selectedAttribute.id
+      attributeId: attributeId
     },
-    skip: !selectedAttribute.id
+    skip: !attributeId
   });
   const [updateAttribute, { loading: loadingMutation }] = useMutation(
     mUpdateAttribute
@@ -43,6 +54,28 @@ const InputColumns = ({ schema, selectedAttribute, source }: IProps) => {
 
   const attribute = data && data.attribute ? data.attribute : null;
   const inputs = attribute && attribute.inputs ? attribute.inputs : [];
+
+  const onChangeCleaningScript = (script: string) => {
+    updateAttribute({
+      variables: {
+        attributeId: attribute.id,
+        data: {
+          mergingScript: script
+        }
+      }
+    });
+  };
+
+  const onClearCleaningScript = (): any => {
+    updateAttribute({
+      variables: {
+        attributeId: attribute.id,
+        data: {
+          mergingScript: null
+        }
+      }
+    });
+  };
 
   return (
     <div id="input-columns">
@@ -66,26 +99,8 @@ const InputColumns = ({ schema, selectedAttribute, source }: IProps) => {
             <ScriptSelect
               loading={loadingMutation}
               selectedScript={attribute.mergingScript}
-              onChange={(script: string) => {
-                updateAttribute({
-                  variables: {
-                    attributeId: attribute.id,
-                    data: {
-                      mergingScript: script
-                    }
-                  }
-                });
-              }}
-              onClear={(): any => {
-                updateAttribute({
-                  variables: {
-                    attributeId: attribute.id,
-                    data: {
-                      mergingScript: null
-                    }
-                  }
-                });
-              }}
+              onChange={onChangeCleaningScript}
+              onClear={onClearCleaningScript}
             />
           </div>
         </div>

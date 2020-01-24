@@ -51,7 +51,7 @@ const Drawer = ({ title, isOpen, onClose }: IProps) => {
   });
 
   React.useEffect(() => {
-    if (!loading && data.source && data.source.credential) {
+    if (!loading && data && data.source && data.source.credential) {
       const c = data.source.credential;
       setHost(c.host);
       setPort(c.port);

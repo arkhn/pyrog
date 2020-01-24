@@ -20,7 +20,7 @@ export const Attribute = objectType({
 export const createAttribute: FieldResolver<
   'Mutation',
   'createAttribute'
-> = async (_, { resourceId, path }, ctx) => {
+> = async (_, { resourceId, path, data }, ctx) => {
   const existing = await ctx.photon.attributes.findMany({
     where: { path, resource: { id: resourceId } },
     include: {
@@ -35,6 +35,7 @@ export const createAttribute: FieldResolver<
 
   return ctx.photon.attributes.create({
     data: {
+      ...data,
       path,
       resource: {
         connect: { id: resourceId },
@@ -55,6 +56,7 @@ export const updateAttribute: FieldResolver<
     data,
   })
 }
+
 export const deleteAttribute: FieldResolver<
   'Mutation',
   'deleteAttribute'

@@ -20,7 +20,21 @@ interface IProps {
 }
 
 const AddResource = ({ callback }: IProps) => {
-  // Hooking mutation
+  const { loading: loadingAvailableResources, data } = useQuery(
+    qAvailableResources
+  );
+
+  const resourceNames = data
+    ? data.structureDefinitions.map((el: any) => el.name)
+    : [];
+
+  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
+  const toaster = useSelector((state: IReduxStore) => state.toaster);
+  const [selectedResource, setSelectedResource] = React.useState({
+    id: '',
+    name: ''
+  });
+
   const onCompleted = (data: any) => {
     toaster.show({
       icon: 'layout-hierarchy',
@@ -78,17 +92,6 @@ const AddResource = ({ callback }: IProps) => {
       update: addResourceToCache
     }
   );
-  const { loading: loadingAvailableResources, data } = useQuery(
-    qAvailableResources
-  );
-
-  const resourceNames = data
-    ? data.structureDefinitions.map((el: any) => el.name)
-    : []
-
-  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
-  const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const [selectedResource, setSelectedResource] = React.useState({id:'', name: ''});
 
   return (
     <FormGroup label={'Add Resource'}>

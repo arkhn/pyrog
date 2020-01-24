@@ -1,6 +1,6 @@
 #import "../fragments/entireResource.graphql"
 
-query resourceInfo($resourceId: ID!) {
+query resource($resourceId: ID!) {
   resource(resourceId: $resourceId) {
     ...entireResource
   }
