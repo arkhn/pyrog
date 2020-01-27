@@ -30,7 +30,6 @@ const mCreateSQLInput = loader('src/graphql/mutations/createSQLInput.graphql');
 
 interface IProps {
   attribute: {
-    id: string;
     path: string[];
   };
   schema: any;

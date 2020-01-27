@@ -28,7 +28,6 @@ const mCreateStaticInput = loader(
 
 interface IProps {
   attribute: {
-    id: string;
     path: string[];
   };
 }

@@ -21,7 +21,6 @@ const mUpdateAttribute = loader(
 interface IProps {
   schema: any;
   selectedAttribute: {
-    id: string;
     path: string[];
   };
   source: ISelectedSource;

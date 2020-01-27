@@ -38,7 +38,6 @@ export interface ISelectedResource {
 }
 
 export interface ISelectedAttribute {
-  id: string;
   path: string[];
 }
 
