@@ -61,7 +61,8 @@ interface INodeLabelProps {
   name: string;
   type: any;
   isArray: boolean;
-  path: string[];
+  addNodeCallback: any;
+  deleteNodeCallback: any;
 }
 
 const NodeLabel = ({ name, type, isArray, path }: INodeLabelProps) => {
@@ -129,21 +130,21 @@ const FhirResourceTree = ({ onClickCallback }: IProps) => {
   const fhirStructure =
     data && data.structureDefinition ? data.structureDefinition.display : {};
 
-  const forEachNode = (
-    nodes: ITreeNode<INodeData>[],
-    callback: (node: ITreeNode<INodeData>) => void
-  ) => {
-    if (nodes == null) {
-      return;
-    }
+  //   const forEachNode = (
+  //     nodes: ITreeNode<INodeData>[],
+  //     callback: (node: ITreeNode<INodeData>) => void
+  //   ) => {
+  //     if (nodes == null) {
+  //       return;
+  //     }
 
-    for (const node of nodes) {
-      callback(node);
-      if (node.childNodes) {
-        forEachNode(node.childNodes, callback);
-      }
-    }
-  };
+  //     for (const node of nodes) {
+  //       callback(node);
+  //       if (node.childNodes) {
+  //         forEachNode(node.childNodes, callback);
+  //       }
+  //     }
+  //   };
 
   const buildNodeFromObject = (
     [name, content]: [string, any],
@@ -158,31 +159,86 @@ const FhirResourceTree = ({ onClickCallback }: IProps) => {
 
     const nodeLabel = NodeLabel({ name, type: content.type, isArray, path });
 
-    return {
-      hasCaret: !isPrimitive,
-      icon: isArray ? 'multi-select' : !isPrimitive ? 'folder-open' : 'tag',
-      id: name, // TODO change id to path?
-      isExpanded: false,
-      isSelected: false,
-      label: content.definition ? (
-        <Tooltip boundary={'viewport'} content={content.definition}>
-          {nodeLabel}
-        </Tooltip>
-      ) : (
-        nodeLabel
-      ),
-      // secondaryLabel: secondaryLabel
-      nodeData: {
-        childTypes: content.type
-          ? content.type.map((type: any) => type.code)
-          : [],
-        id: content.id,
-        isArray: isArray,
-        isPrimitive: isPrimitive,
-        isRequired: isRequired,
-        path: [...parentPath, name]
-      }
-    };
+    if (isArray) {
+      // If node is array, we need to replicate the root node for this type
+      // childNode will be the node really having the structure defined by
+      // the structure definition
+      const childNode = {
+        hasCaret: !isPrimitive,
+        icon: (!isPrimitive ? 'folder-open' : 'tag') as any,
+        id: '0', // TODO change id to path?
+        isExpanded: false,
+        isSelected: false,
+        label: content.definition ? (
+          <Tooltip boundary={'viewport'} content={content.definition}>
+            {nodeLabel}
+          </Tooltip>
+        ) : (
+          nodeLabel
+        ),
+        // secondaryLabel: secondaryLabel
+        nodeData: {
+          childTypes: content.type
+            ? content.type.map((type: any) => type.code)
+            : [],
+          id: content.id,
+          isArray: false,
+          isPrimitive: false,
+          isRequired: isRequired,
+          path: [...parentPath, name, '0']
+        }
+      };
+      return {
+        childNodes: [childNode],
+        hasCaret: true,
+        icon: 'multi-select',
+        id: name, // TODO change id to path?
+        isExpanded: false,
+        isSelected: false,
+        label: content.definition ? (
+          <Tooltip boundary={'viewport'} content={content.definition}>
+            {nodeLabel}
+          </Tooltip>
+        ) : (
+          nodeLabel
+        ),
+        // secondaryLabel: secondaryLabel
+        nodeData: {
+          childTypes: [],
+          id: content.id,
+          isArray: true,
+          isPrimitive: isPrimitive,
+          isRequired: isRequired,
+          path: [...parentPath, name]
+        }
+      };
+    } else {
+      return {
+        hasCaret: !isPrimitive,
+        icon: isArray ? 'multi-select' : !isPrimitive ? 'folder-open' : 'tag',
+        id: name, // TODO change id to path?
+        isExpanded: false,
+        isSelected: false,
+        label: content.definition ? (
+          <Tooltip boundary={'viewport'} content={content.definition}>
+            {nodeLabel}
+          </Tooltip>
+        ) : (
+          nodeLabel
+        ),
+        // secondaryLabel: secondaryLabel
+        nodeData: {
+          childTypes: content.type
+            ? content.type.map((type: any) => type.code)
+            : [],
+          id: content.id,
+          isArray: isArray,
+          isPrimitive: isPrimitive,
+          isRequired: isRequired,
+          path: [...parentPath, name]
+        }
+      };
+    }
   };
 
   const genTreeLevel = (
@@ -202,6 +258,7 @@ const FhirResourceTree = ({ onClickCallback }: IProps) => {
 
   const findNode = (nodes: ITreeNode<INodeData>[], path: string[]) => {
     let curNode = nodes.find(el => el.id === path[0]);
+    console.log(path);
     for (const step of path.slice(1)) {
       curNode = curNode!.childNodes!.find(el => el.id === step);
     }
@@ -225,7 +282,9 @@ const FhirResourceTree = ({ onClickCallback }: IProps) => {
 
     const affectedNode = findNode(newNodes, node.nodeData!.path)!;
 
-    if (!node.nodeData?.isPrimitive) {
+    if (node.nodeData?.isArray) {
+      affectedNode.isExpanded = !affectedNode.isExpanded;
+    } else if (!node.nodeData?.isPrimitive) {
       if (!node.childNodes || node.childNodes.length === 0) {
         // TODO what if several types are possible?
         const { data } = await client.query({

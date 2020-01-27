@@ -29,7 +29,6 @@ const mAddJoinToColumn = loader(
 
 interface IProps {
   attribute: {
-    id: string;
     path: string[];
   };
   input: any;
