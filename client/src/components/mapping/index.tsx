@@ -31,7 +31,8 @@ const MappingView = () => {
       query: qExportMapping,
       variables: {
         sourceId: selectedNode.source.id
-      }
+      },
+      fetchPolicy: 'network-only'
     });
 
     if (errors && errors.length) {
