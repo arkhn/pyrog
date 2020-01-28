@@ -7,12 +7,20 @@ import {
   Elevation
 } from '@blueprintjs/core';
 import * as React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
 import { loader } from 'graphql.macro';
+
+import { IReduxStore } from 'types';
+
+import { setAttributeInMap } from 'services/resourceInputs/actions';
 
 // GRAPHQL
 const qInputsForAttribute = loader(
   'src/graphql/queries/inputsForAttribute.graphql'
+);
+const mCreateAttribute = loader(
+  'src/graphql/mutations/createAttribute.graphql'
 );
 const mCreateStaticInput = loader(
   'src/graphql/mutations/createStaticInput.graphql'
@@ -20,12 +28,23 @@ const mCreateStaticInput = loader(
 
 interface IProps {
   attribute: {
-    id: string;
-    name: string;
+    path: string[];
   };
 }
 
 const StaticValueForm = ({ attribute }: IProps) => {
+  const dispatch = useDispatch();
+
+  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
+  const path = selectedNode.attribute.path.join('.');
+
+  const attributesForResource = useSelector(
+    (state: IReduxStore) => state.resourceInputs.attributesMap
+  );
+  let attributeId = attributesForResource[path]
+    ? attributesForResource[path].id
+    : null;
+
   const [staticValue, setStaticValue] = React.useState('');
 
   const addInputToCache = (cache: any, { data: { createInput } }: any) => {
@@ -33,13 +52,13 @@ const StaticValueForm = ({ attribute }: IProps) => {
       const { attribute: dataAttribute } = cache.readQuery({
         query: qInputsForAttribute,
         variables: {
-          attributeId: attribute.id
+          attributeId
         }
       });
       cache.writeQuery({
         query: qInputsForAttribute,
         variables: {
-          attributeId: attribute.id
+          attributeId
         },
         data: {
           attribute: {
@@ -53,10 +72,31 @@ const StaticValueForm = ({ attribute }: IProps) => {
     }
   };
 
+  const [createAttribute] = useMutation(mCreateAttribute);
   const [
     createStaticInput,
     { loading: creatingStaticInput }
   ] = useMutation(mCreateStaticInput, { update: addInputToCache });
+
+  const onAddStaticValue = async (): Promise<void> => {
+    if (!attributeId) {
+      // First, we create the attribute if it doesn't exist
+      const { data: attr } = await createAttribute({
+        variables: {
+          resourceId: selectedNode.resource.id,
+          path
+        }
+      });
+      attributeId = attr.createAttribute.id;
+      dispatch(setAttributeInMap(path, attr.createAttribute));
+    }
+    createStaticInput({
+      variables: {
+        attributeId,
+        staticValue
+      }
+    });
+  };
 
   return (
     <Card elevation={Elevation.ONE}>
@@ -73,17 +113,10 @@ const StaticValueForm = ({ attribute }: IProps) => {
             value={staticValue}
           />
           <Button
-            disabled={!attribute.id || staticValue.length === 0}
+            disabled={!attribute || staticValue.length === 0}
             icon={'add'}
             loading={creatingStaticInput}
-            onClick={() =>
-              createStaticInput({
-                variables: {
-                  attributeId: attribute.id,
-                  staticValue: staticValue
-                }
-              })
-            }
+            onClick={onAddStaticValue}
           />
         </ControlGroup>
       </FormGroup>

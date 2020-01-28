@@ -1,15 +1,11 @@
+#import "../fragments/entireInput.graphql"
+
 fragment entireAttribute on Attribute {
   id
-  name
-  fhirType
-  isArray
-  isRequired
-  parent {
-      id
-    isArray
-  }
-  description
+  path
+  mergingScript
+  comments
   inputs {
-    id
+    ...entireInput
   }
 }

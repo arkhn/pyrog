@@ -12,7 +12,10 @@ import TSelect from './TSelect';
 interface IResource {
   id: string;
   label: string;
-  fhirType: string;
+  definition: {
+    id: string;
+    type: string;
+  }
 }
 
 interface ISelectProps {
@@ -34,7 +37,7 @@ export default class ResourceSelect extends React.Component<ISelectProps, any> {
       <MenuItem
         key={resource.id}
         onClick={handleClick}
-        text={resource.fhirType}
+        text={resource.definition.type}
         label={resource.label}
       />
     );
@@ -45,7 +48,7 @@ export default class ResourceSelect extends React.Component<ISelectProps, any> {
     resource: IResource
   ) => {
     return (
-      `${resource.fhirType.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0
+      `${resource.definition.type.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0
     );
   };
 
@@ -54,8 +57,8 @@ export default class ResourceSelect extends React.Component<ISelectProps, any> {
     resources: IResource[]
   ) => {
     resources.sort((r1, r2) => {
-      const name1 = r1.fhirType.toLowerCase();
-      const name2 = r2.fhirType.toLowerCase();
+      const name1 = r1.definition.type.toLowerCase();
+      const name2 = r2.definition.type.toLowerCase();
       if (name1 < name2) return -1;
       if (name1 > name2) return 1;
       return 0;
@@ -64,7 +67,7 @@ export default class ResourceSelect extends React.Component<ISelectProps, any> {
   };
 
   private displayItem = function(resource: IResource): string {
-    return resource ? resource.fhirType : 'None';
+    return resource ? resource.definition.type : 'None';
   };
 
   public render() {

@@ -19,6 +19,11 @@ input AttributeFilter {
   some: AttributeWhereInput
 }
 
+input AttributeInput {
+  comments: String
+  mergingScript: String
+}
+
 input AttributeWhereInput {
   AND: [AttributeWhereInput!]
   comments: NullableStringFilter
@@ -203,7 +208,7 @@ scalar JSON
 
 type Mutation {
   addJoinToColumn(columnId: ID!, join: JoinInput): Column!
-  createAttribute(path: String!, resourceId: ID!): Attribute!
+  createAttribute(data: AttributeInput, path: String!, resourceId: ID!): Attribute!
   createInput(attributeId: ID!, script: String, sql: ColumnInput, static: String): Input!
   createResource(definitionId: String!, sourceId: ID!): Resource!
   createSource(hasOwner: Boolean!, mapping: String, name: String!, templateName: String!): Source!
@@ -222,7 +227,7 @@ type Mutation {
   deleteTemplate(id: ID!): Template!
   login(email: String!, password: String!): AuthPayload!
   signup(email: String!, name: String!, password: String!): AuthPayload!
-  updateAttribute(attributeId: ID!, data: UpdateAttributeInput!): Attribute!
+  updateAttribute(attributeId: ID!, data: AttributeInput!): Attribute!
   updateInput(data: UpdateInputInput!, inputId: ID!): Input!
   updateJoin(data: JoinInput!, joinId: ID!): Join!
   updateResource(data: UpdateResourceInput!, resourceId: ID!): Resource!
@@ -263,6 +268,7 @@ type Query {
 type Resource {
   attributes(after: ID, before: ID, first: Int, last: Int, skip: Int): [Attribute!]!
   createdAt: DateTime!
+  definition: StructureDefinition
   id: ID!
   label: String
   primaryKeyColumn: String
@@ -398,11 +404,6 @@ input TemplateWhereInput {
   OR: [TemplateWhereInput!]
   sources: SourceFilter
   updatedAt: DateTimeFilter
-}
-
-input UpdateAttributeInput {
-  comments: String
-  mergingScript: String
 }
 
 input UpdateInputInput {

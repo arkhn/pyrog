@@ -1,7 +1,7 @@
-#import "../fragments/recAttributes.graphql"
+#import "../fragments/entireAttribute.graphql"
 
-mutation createAttribute($parentId: ID!) {
-  createAttribute(parentId: $parentId) {
-    ...recAttributes
+mutation createAttribute($resourceId: ID!, $path: String!, $data: AttributeInput) {
+  createAttribute(resourceId: $resourceId, path: $path, data: $data) {
+    ...entireAttribute
   }
 }

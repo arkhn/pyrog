@@ -27,7 +27,7 @@ import { loader } from 'graphql.macro';
 const qResourcesForSource = loader(
   'src/graphql/queries/resourcesForSource.graphql'
 );
-const resourceInfo = loader('src/graphql/queries/resourceInfo.graphql');
+const resourceInfo = loader('src/graphql/queries/resource.graphql');
 const mDeleteResource = loader('src/graphql/mutations/deleteResource.graphql');
 const mUpdateResource = loader('src/graphql/mutations/updateResource.graphql');
 
@@ -77,7 +77,7 @@ const Drawer = ({
 
   const onUpdateCompleted = () => {
     toaster.show({
-      message: `Successfully updated ${selectedNode.resource.fhirType} properties`,
+      message: `Successfully updated ${selectedNode.resource.definition.type} properties`,
       intent: 'success',
       icon: 'properties'
     });

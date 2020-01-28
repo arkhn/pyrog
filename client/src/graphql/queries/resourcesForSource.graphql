@@ -3,8 +3,11 @@ query resourcesForSource($sourceId: ID!) {
     id
     resources {
       id
-      fhirType
       label
+      definition {
+        id
+        type
+      }
     }
   }
 }

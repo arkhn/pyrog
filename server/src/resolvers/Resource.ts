@@ -12,6 +12,7 @@ export const Resource = objectType({
     t.model.primaryKeyColumn()
 
     t.model.attributes()
+    t.model.definition()
     t.model.source()
 
     t.model.updatedAt()

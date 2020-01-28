@@ -8,8 +8,9 @@ import {
 } from '@blueprintjs/core';
 import * as React from 'react';
 import { useMutation } from '@apollo/react-hooks';
+import { useSelector } from 'react-redux';
 
-import { ISelectedSource } from 'types';
+import { IReduxStore, ISelectedSource } from 'types';
 
 // COMPONENTS
 import Join from '../Join';
@@ -28,8 +29,7 @@ const mAddJoinToColumn = loader(
 
 interface IProps {
   attribute: {
-    id: string;
-    name: string;
+    path: string[];
   };
   input: any;
   schema: any;
@@ -37,6 +37,16 @@ interface IProps {
 }
 
 const InputColumn = ({ attribute, input, schema, source }: IProps) => {
+  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
+  const path = selectedNode.attribute.path.join('.');
+
+  const attributesForResource = useSelector(
+    (state: IReduxStore) => state.resourceInputs.attributesMap
+  );
+  const attributeId = attributesForResource[path]
+    ? attributesForResource[path].id
+    : null;
+
   const [deleteInput, { loading: loadDelInput }] = useMutation(mDeleteInput);
   const [addJoinToColumn, { loading: loadAddJoin }] = useMutation(
     mAddJoinToColumn
@@ -47,7 +57,7 @@ const InputColumn = ({ attribute, input, schema, source }: IProps) => {
     const { attribute: dataAttribute } = cache.readQuery({
       query: qInputsForAttribute,
       variables: {
-        attributeId: attribute.id
+        attributeId: attributeId
       }
     });
     const newDataAttribute = {
@@ -57,7 +67,7 @@ const InputColumn = ({ attribute, input, schema, source }: IProps) => {
     cache.writeQuery({
       query: qInputsForAttribute,
       variables: {
-        attributeId: attribute.id
+        attributeId: attributeId
       },
       data: { attribute: newDataAttribute }
     });
