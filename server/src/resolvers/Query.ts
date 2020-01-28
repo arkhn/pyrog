@@ -17,6 +17,16 @@ export const Query = queryType({
       },
     })
 
+    t.field('credential', {
+      type: 'Credential',
+      args: {
+        credentialId: idArg({ nullable: false }),
+      },
+      nullable: true,
+      resolve: (parent, { credentialId }, ctx) =>
+        ctx.photon.credentials.findOne({ where: { id: credentialId } }),
+    })
+
     t.list.field('templates', {
       type: 'Template',
       nullable: true,

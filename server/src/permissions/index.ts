@@ -20,6 +20,7 @@ const rules = {
 export const permissions = shield({
   Query: {
     me: rules.isAuthenticatedUser,
+    credential: rules.isAuthenticatedUser,
     sources: rules.isAuthenticatedUser,
     source: rules.isAuthenticatedUser,
     resource: rules.isAuthenticatedUser,
