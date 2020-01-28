@@ -1,14 +1,14 @@
-const { Client } = require('pg')
-const connectionString = process.env.POSTGRES_URL
+import { Client } from 'pg'
+
+const { POSTGRES_URL } = process.env
 const client = new Client({
-  connectionString: connectionString,
+  connectionString: POSTGRES_URL,
 })
 
-function sleep(ms) {
-  return new Promise(resolve => {
+const sleep = (ms: number) =>
+  new Promise(resolve => {
     setTimeout(resolve, ms)
   })
-}
 
 const wait = async () => {
   let ok = false
@@ -29,7 +29,7 @@ const wait = async () => {
   await client.end()
 }
 
-console.log('Waiting for postgres...', connectionString)
+console.log('Waiting for postgres...', POSTGRES_URL)
 wait().catch(e => {
   console.error(e)
 })

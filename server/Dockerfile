@@ -28,4 +28,6 @@ COPY scripts scripts
 
 # Start the app
 EXPOSE 4000
-CMD node ./scripts/wait_for_db.js && yarn prisma2 lift up && yarn start
+ENV NODE_PATH dist/
+
+CMD yarn wait:db && yarn prisma2 lift up && yarn start:docker

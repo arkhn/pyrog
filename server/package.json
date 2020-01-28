@@ -4,6 +4,7 @@
   "license": "GPL-3.0",
   "scripts": {
     "start": "NODE_PATH=dist/ env $(cat .env) node dist/server",
+    "start:docker": "node dist/server",
     "bootstrap:definitions": "env $(cat .env) ts-node scripts/fhirDefinitions.ts $(ls fhir/*.json)",
     "clean": "rm -rf dist",
     "build": "yarn -s run clean && yarn -s run generate && tsc --project tsconfig.build.json",
@@ -15,7 +16,8 @@
     "lint": "eslint './src/**/*.ts'",
     "seed": "env $(cat .env) ts-node scripts/importMapping.ts",
     "test": "jest --max-workers 1 --watch",
-    "test:ci": "jest --max-workers 1 --coverage"
+    "test:ci": "jest --max-workers 1 --coverage",
+    "wait:db": "ts-node scripts/waitForDb.ts"
   },
   "dependencies": {
     "@prisma/photon": "^2.0.0-preview019",
