@@ -10,7 +10,7 @@ import {
   Tooltip,
   Tree
 } from '@blueprintjs/core';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useQuery } from '@apollo/react-hooks';
 import { IReduxStore } from 'types';
@@ -45,8 +45,7 @@ const primitiveTypes = [
 ];
 
 interface INodeData {
-  childTypes: string[];
-  id: string;
+  types: string[];
   isArray: boolean;
   isPrimitive: boolean;
   isRequired: boolean;
@@ -60,56 +59,47 @@ export interface IProps {
 interface INodeLabelProps {
   name: string;
   type: any;
-  isArray: boolean;
   addNodeCallback: any;
   deleteNodeCallback: any;
 }
 
-const NodeLabel = ({ name, type, isArray, path }: INodeLabelProps) => {
+const NodeLabel = ({
+  name,
+  type,
+  addNodeCallback,
+  deleteNodeCallback
+}: INodeLabelProps) => {
   const showContextMenu = async (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
 
-    let menu;
-    if (isArray) {
-      menu = (
-        <Menu>
-          <MenuItem
-            icon={'add'}
-            onClick={() => {
-              // TODO
-            }}
-            text={'Ajouter un item'}
-          />
-        </Menu>
-      );
-    } else if (
-      name === 'false' //false
-      // node.parent &&
-      // node.parent.isArray
-      // hasMoreThanOneSibling(nodePath)
-    ) {
-      menu = (
-        <Menu>
-          <MenuItem
-            icon={'delete'}
-            onClick={() => {
-              // TODO
-            }}
-            text={"Supprimer l'item"}
-          />
-        </Menu>
-      );
-    }
+    const menu = addNodeCallback ? (
+      <Menu>
+        <MenuItem
+          icon={'add'}
+          onClick={addNodeCallback}
+          text={'Ajouter un item'}
+        />
+      </Menu>
+    ) : deleteNodeCallback ? (
+      <Menu>
+        <MenuItem
+          icon={'delete'}
+          onClick={deleteNodeCallback}
+          text={"Supprimer l'item"}
+        />
+      </Menu>
+    ) : null;
 
     if (menu) {
       ContextMenu.show(menu, { left: e.clientX, top: e.clientY });
     }
   };
 
+  // TODO what if several types?
   return (
     <div className={'node-label'} onContextMenu={showContextMenu}>
       <div>{name}</div>
-      <div className={'node-type'}>{type ? type[0].code : ''}</div>
+      <div className={'node-type'}>{type}</div>
     </div>
   );
 };
@@ -124,27 +114,78 @@ const FhirResourceTree = ({ onClickCallback }: IProps) => {
     variables: { definitionId: baseDefinitionId }
   });
 
-  const [nodes, setNodes] = useState([] as ITreeNode<INodeData>[]);
+  const [nodes, setNodes] = useState([{}] as ITreeNode<INodeData>[]);
   const [selectedNode, setSelectedNode] = useState([] as string[]);
 
   const fhirStructure =
     data && data.structureDefinition ? data.structureDefinition.display : {};
+  const findNode = (nodes: ITreeNode<INodeData>[], path: string[]) => {
+    let curNode = nodes.find(el => el.id === path[0]);
+    for (const step of path.slice(1)) {
+      curNode = curNode!.childNodes!.find(el => el.id === step);
+    }
+    return curNode;
+  };
 
-  //   const forEachNode = (
-  //     nodes: ITreeNode<INodeData>[],
-  //     callback: (node: ITreeNode<INodeData>) => void
-  //   ) => {
-  //     if (nodes == null) {
-  //       return;
-  //     }
+  const deleteNodeFromArray = (
+    stateNodes: ITreeNode<INodeData>[],
+    path: string[]
+  ): ITreeNode<INodeData>[] => {
+    // TODO also need to delete all the corresponding attributes from DB
+    const newNodes = Array.from(stateNodes);
 
-  //     for (const node of nodes) {
-  //       callback(node);
-  //       if (node.childNodes) {
-  //         forEachNode(node.childNodes, callback);
-  //       }
-  //     }
-  //   };
+    const targetId = path.splice(-1)[0];
+    const parent = findNode(newNodes, path);
+
+    if (!parent || !parent.childNodes) return stateNodes;
+    const targetIndex = parent.childNodes.findIndex(n => n.id === targetId);
+    parent.childNodes.splice(targetIndex, 1);
+
+    return newNodes;
+  };
+
+  const addNodeToArray = (
+    stateNodes: ITreeNode<INodeData>[],
+    path: string[]
+  ): ITreeNode<INodeData>[] => {
+    const newNodes = Array.from(stateNodes);
+
+    const parent = findNode(newNodes, path);
+    if (!parent || !parent.childNodes) return stateNodes;
+
+    const nextId = (
+      Number(parent.childNodes[parent.childNodes.length - 1].id) + 1
+    ).toString();
+
+    const deleteNodeCallback = (): void =>
+      setNodes(nodes => deleteNodeFromArray(nodes, [...path, nextId]));
+
+    const nodeLabel = (
+      <NodeLabel
+        name={parent.id as string}
+        type={parent.nodeData?.types[0]}
+        addNodeCallback={null}
+        deleteNodeCallback={deleteNodeCallback}
+      />
+    );
+
+    const newNode: ITreeNode<INodeData> = {
+      hasCaret: parent.childNodes[0].hasCaret,
+      icon: parent.childNodes[0].icon,
+      id: nextId,
+      isExpanded: false,
+      isSelected: false,
+      label: nodeLabel,
+      // secondaryLabel: secondaryLabel
+      nodeData: {
+        ...parent.childNodes[0].nodeData!,
+        path: [...path, nextId]
+      }
+    };
+    parent.childNodes = [...parent.childNodes, newNode];
+
+    return newNodes;
+  };
 
   const buildNodeFromObject = (
     [name, content]: [string, any],
@@ -156,89 +197,86 @@ const FhirResourceTree = ({ onClickCallback }: IProps) => {
     const isArray = content.max !== '1';
     const isRequired = content.min > 0;
     const path = parentPath.concat(name);
+    const types = content.type
+      ? content.type.map((type: any) => type.code)
+      : [];
 
-    const nodeLabel = NodeLabel({ name, type: content.type, isArray, path });
+    const addNodeCallback = (): void =>
+      setNodes(nodes => addNodeToArray(nodes, path));
 
+    const deleteNodeCallback = (): void =>
+      setNodes(nodes => deleteNodeFromArray(nodes, [...path, '0']));
+
+    const nodeLabel = (
+      <NodeLabel
+        name={name}
+        type={types[0]}
+        addNodeCallback={isArray ? addNodeCallback : null}
+        deleteNodeCallback={null}
+      />
+    );
+
+    // If node is array, we need to replicate the root node for this type
+    // childNode will be the node really having the structure defined by
+    // the structure definition
+    let childNodes = [] as ITreeNode<INodeData>[];
     if (isArray) {
-      // If node is array, we need to replicate the root node for this type
-      // childNode will be the node really having the structure defined by
-      // the structure definition
-      const childNode = {
-        hasCaret: !isPrimitive,
-        icon: (!isPrimitive ? 'folder-open' : 'tag') as any,
-        id: '0', // TODO change id to path?
-        isExpanded: false,
-        isSelected: false,
-        label: content.definition ? (
-          <Tooltip boundary={'viewport'} content={content.definition}>
-            {nodeLabel}
-          </Tooltip>
-        ) : (
-          nodeLabel
-        ),
-        // secondaryLabel: secondaryLabel
-        nodeData: {
-          childTypes: content.type
-            ? content.type.map((type: any) => type.code)
-            : [],
-          id: content.id,
-          isArray: false,
-          isPrimitive: false,
-          isRequired: isRequired,
-          path: [...parentPath, name, '0']
+      const childNodeLabel = (
+        <NodeLabel
+          name={name}
+          type={types[0]}
+          addNodeCallback={null}
+          deleteNodeCallback={deleteNodeCallback}
+        />
+      );
+      childNodes = [
+        {
+          hasCaret: !isPrimitive,
+          icon: (isPrimitive ? 'tag' : 'folder-open') as any,
+          id: '0', // TODO change id to path?
+          isExpanded: false,
+          isSelected: false,
+          label: content.definition ? (
+            <Tooltip boundary={'viewport'} content={content.definition}>
+              {childNodeLabel}
+            </Tooltip>
+          ) : (
+            childNodeLabel
+          ),
+          // secondaryLabel: secondaryLabel
+          nodeData: {
+            types: types,
+            isArray: false,
+            isPrimitive: isPrimitive,
+            isRequired: isRequired,
+            path: [...parentPath, name, '0']
+          }
         }
-      };
-      return {
-        childNodes: [childNode],
-        hasCaret: true,
-        icon: 'multi-select',
-        id: name, // TODO change id to path?
-        isExpanded: false,
-        isSelected: false,
-        label: content.definition ? (
-          <Tooltip boundary={'viewport'} content={content.definition}>
-            {nodeLabel}
-          </Tooltip>
-        ) : (
-          nodeLabel
-        ),
-        // secondaryLabel: secondaryLabel
-        nodeData: {
-          childTypes: [],
-          id: content.id,
-          isArray: true,
-          isPrimitive: isPrimitive,
-          isRequired: isRequired,
-          path: [...parentPath, name]
-        }
-      };
-    } else {
-      return {
-        hasCaret: !isPrimitive,
-        icon: isArray ? 'multi-select' : !isPrimitive ? 'folder-open' : 'tag',
-        id: name, // TODO change id to path?
-        isExpanded: false,
-        isSelected: false,
-        label: content.definition ? (
-          <Tooltip boundary={'viewport'} content={content.definition}>
-            {nodeLabel}
-          </Tooltip>
-        ) : (
-          nodeLabel
-        ),
-        // secondaryLabel: secondaryLabel
-        nodeData: {
-          childTypes: content.type
-            ? content.type.map((type: any) => type.code)
-            : [],
-          id: content.id,
-          isArray: isArray,
-          isPrimitive: isPrimitive,
-          isRequired: isRequired,
-          path: [...parentPath, name]
-        }
-      };
+      ];
     }
+    return {
+      childNodes: childNodes,
+      hasCaret: !isPrimitive || isArray,
+      icon: isArray ? 'multi-select' : !isPrimitive ? 'folder-open' : 'tag',
+      id: name,
+      isExpanded: false,
+      isSelected: false,
+      label: content.definition ? (
+        <Tooltip boundary={'viewport'} content={content.definition}>
+          {nodeLabel}
+        </Tooltip>
+      ) : (
+        nodeLabel
+      ),
+      // secondaryLabel: secondaryLabel
+      nodeData: {
+        types: types,
+        isArray: isArray,
+        isPrimitive: isPrimitive,
+        isRequired: isRequired,
+        path: [...parentPath, name]
+      }
+    };
   };
 
   const genTreeLevel = (
@@ -253,17 +291,8 @@ const FhirResourceTree = ({ onClickCallback }: IProps) => {
   };
 
   useEffect(() => {
-    setNodes(genTreeLevel(fhirStructure, []));
-  }, [loading]);
-
-  const findNode = (nodes: ITreeNode<INodeData>[], path: string[]) => {
-    let curNode = nodes.find(el => el.id === path[0]);
-    console.log(path);
-    for (const step of path.slice(1)) {
-      curNode = curNode!.childNodes!.find(el => el.id === step);
-    }
-    return curNode;
-  };
+    if (!loading) setNodes(genTreeLevel(fhirStructure, []));
+  }, [loading, fhirStructure]);
 
   const augmentStructure = (
     affectedNode: ITreeNode<INodeData>,
@@ -289,7 +318,7 @@ const FhirResourceTree = ({ onClickCallback }: IProps) => {
         // TODO what if several types are possible?
         const { data } = await client.query({
           query: qStructureDisplay,
-          variables: { definitionId: node.nodeData?.childTypes[0] }
+          variables: { definitionId: node.nodeData?.types[0] }
         });
         augmentStructure(affectedNode, data.structureDefinition.display);
       }
