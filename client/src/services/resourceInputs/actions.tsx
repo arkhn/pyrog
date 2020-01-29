@@ -23,3 +23,12 @@ export const setAttributeInMap = (path: string, attr: any): IAction => {
     }
   };
 };
+
+export const removeAttributesFromMap = (pathStart: string): IAction => {
+  return {
+    type: 'REMOVE_ATTRIBUTE_FROM_MAP',
+    payload: {
+      pathStart
+    }
+  };
+};
