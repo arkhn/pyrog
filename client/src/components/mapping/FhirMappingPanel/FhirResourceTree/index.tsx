@@ -117,6 +117,10 @@ const FhirResourceTree = ({ onClickCallback }: IProps) => {
   const [nodes, setNodes] = useState([{}] as ITreeNode<INodeData>[]);
   const [selectedNode, setSelectedNode] = useState([] as string[]);
 
+  const attributesForResource = useSelector(
+    (state: IReduxStore) => state.resourceInputs.attributesMap
+  );
+
   const fhirStructure =
     data && data.structureDefinition ? data.structureDefinition.display : {};
   const findNode = (nodes: ITreeNode<INodeData>[], path: string[]) => {
@@ -187,6 +191,68 @@ const FhirResourceTree = ({ onClickCallback }: IProps) => {
     return newNodes;
   };
 
+  const createChildNodesForArray = (
+    parentPath: string[],
+    name: string,
+    types: string[],
+    deleteNodeCallback: Function,
+    isPrimitive: boolean,
+    isRequired: boolean,
+    definition: string
+  ): ITreeNode<INodeData>[] => {
+    // Create the label
+    const childNodeLabel = (
+      <NodeLabel
+        name={name}
+        type={types[0]}
+        addNodeCallback={null}
+        deleteNodeCallback={deleteNodeCallback}
+      />
+    );
+
+    // Check if there are already existing attributes for this node
+    const pathKey = [...parentPath, name].join('.');
+    let existingChildrenIds = Object.keys(attributesForResource)
+      .filter(key => key.startsWith(pathKey))
+      .map(key => key.slice(pathKey.length + 1).split('.')[0]);
+
+    const hasAttributes = existingChildrenIds.length > 0;
+
+    let childNodes = [] as ITreeNode<INodeData>[];
+    if (!hasAttributes) {
+      // If no child exists yet, we still build one with id 0
+      existingChildrenIds = ['0'];
+    }
+    for (const childId of existingChildrenIds) {
+      childNodes = [
+        ...childNodes,
+        {
+          hasCaret: !isPrimitive,
+          icon: (isPrimitive ? 'tag' : 'folder-open') as any,
+          id: childId,
+          isExpanded: false,
+          isSelected: false,
+          label: definition ? (
+            <Tooltip boundary={'viewport'} content={definition}>
+              {childNodeLabel}
+            </Tooltip>
+          ) : (
+            childNodeLabel
+          ),
+          secondaryLabel: hasAttributes ? <Icon icon="dot" /> : null,
+          nodeData: {
+            types: types,
+            isArray: false,
+            isPrimitive: isPrimitive,
+            isRequired: isRequired,
+            path: [...parentPath, name, childId]
+          }
+        }
+      ];
+    }
+    return childNodes;
+  };
+
   const buildNodeFromObject = (
     [name, content]: [string, any],
     parentPath: string[]
@@ -200,6 +266,7 @@ const FhirResourceTree = ({ onClickCallback }: IProps) => {
     const types = content.type
       ? content.type.map((type: any) => type.code)
       : [];
+    const definition = content.definition;
 
     const addNodeCallback = (): void =>
       setNodes(nodes => addNodeToArray(nodes, path));
@@ -221,38 +288,15 @@ const FhirResourceTree = ({ onClickCallback }: IProps) => {
     // the structure definition
     let childNodes = [] as ITreeNode<INodeData>[];
     if (isArray) {
-      const childNodeLabel = (
-        <NodeLabel
-          name={name}
-          type={types[0]}
-          addNodeCallback={null}
-          deleteNodeCallback={deleteNodeCallback}
-        />
+      childNodes = createChildNodesForArray(
+        parentPath,
+        name,
+        types,
+        deleteNodeCallback,
+        isPrimitive,
+        isRequired,
+        definition
       );
-      childNodes = [
-        {
-          hasCaret: !isPrimitive,
-          icon: (isPrimitive ? 'tag' : 'folder-open') as any,
-          id: '0', // TODO change id to path?
-          isExpanded: false,
-          isSelected: false,
-          label: content.definition ? (
-            <Tooltip boundary={'viewport'} content={content.definition}>
-              {childNodeLabel}
-            </Tooltip>
-          ) : (
-            childNodeLabel
-          ),
-          // secondaryLabel: secondaryLabel
-          nodeData: {
-            types: types,
-            isArray: false,
-            isPrimitive: isPrimitive,
-            isRequired: isRequired,
-            path: [...parentPath, name, '0']
-          }
-        }
-      ];
     }
     return {
       childNodes: childNodes,
@@ -261,8 +305,8 @@ const FhirResourceTree = ({ onClickCallback }: IProps) => {
       id: name,
       isExpanded: false,
       isSelected: false,
-      label: content.definition ? (
-        <Tooltip boundary={'viewport'} content={content.definition}>
+      label: definition ? (
+        <Tooltip boundary={'viewport'} content={definition}>
           {nodeLabel}
         </Tooltip>
       ) : (
