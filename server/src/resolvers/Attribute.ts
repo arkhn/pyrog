@@ -1,4 +1,5 @@
 import { objectType, FieldResolver } from 'nexus'
+import { AttributeWhereInput } from '@prisma/photon'
 
 export const Attribute = objectType({
   name: 'Attribute',
@@ -62,3 +63,53 @@ export const deleteAttribute: FieldResolver<
   'deleteAttribute'
 > = async (_parent, { id }, ctx) =>
   ctx.photon.attributes.delete({ where: { id } })
+
+export const deleteAttributes: FieldResolver<
+  'Mutation',
+  'deleteAttributes'
+> = async (_parent, { filter }, ctx) => {
+  const res = await ctx.photon.attributes.findMany({
+    where: filter,
+    include: {
+      inputs: {
+        include: {
+          sqlValue: {
+            include: {
+              joins: {
+                include: {
+                  tables: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+
+  await Promise.all(
+    res.map(async a => {
+      await Promise.all(
+        a.inputs.map(async i => {
+          if (i.sqlValue) {
+            await Promise.all(
+              i.sqlValue.joins.map(async j => {
+                await Promise.all(
+                  j.tables.map(t =>
+                    ctx.photon.columns.delete({ where: { id: t.id } }),
+                  ),
+                )
+                return ctx.photon.joins.delete({ where: { id: j.id } })
+              }),
+            )
+          }
+          return ctx.photon.inputs.delete({ where: { id: i.id } })
+        }),
+      )
+      return ctx.photon.attributes.delete({ where: { id: a.id } })
+    }),
+  )
+
+  await ctx.photon.attributes.deleteMany({ where: filter })
+  return res
+}

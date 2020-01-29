@@ -2,7 +2,12 @@ import { arg, idArg, mutationType, stringArg, booleanArg } from 'nexus'
 
 import { createResource, updateResource, deleteResource } from './Resource'
 import { deleteSource, createSource } from './Source'
-import { createAttribute, updateAttribute, deleteAttribute } from './Attribute'
+import {
+  createAttribute,
+  updateAttribute,
+  deleteAttribute,
+  deleteAttributes,
+} from './Attribute'
 import { signup, login } from './User'
 import { createInput, deleteInput, updateInput } from './Input'
 import { deleteCredential, upsertCredential } from './Credential'
@@ -110,7 +115,7 @@ export const Mutation = mutationType({
     })
 
     /*
-     * RESOURCE
+     * STRUCTURE DEFINITION
      */
 
     t.field('createStructureDefinition', {
@@ -205,6 +210,17 @@ export const Mutation = mutationType({
         id: idArg({ required: true }),
       },
       resolve: deleteAttribute,
+    })
+
+    t.list.field('deleteAttributes', {
+      type: 'Attribute',
+      nullable: true,
+      args: {
+        filter: arg({
+          type: 'AttributeWhereInput',
+        }),
+      },
+      resolve: deleteAttributes,
     })
 
     /*

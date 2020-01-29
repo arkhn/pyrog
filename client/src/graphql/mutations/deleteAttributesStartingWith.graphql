@@ -1,0 +1,5 @@
+mutation deleteAttributesStartingWith($startsWith: String!) {
+  deleteAttributes(filter: {path: {startsWith: $startsWith}}) {
+    id
+  }
+}
