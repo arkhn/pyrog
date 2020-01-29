@@ -370,6 +370,7 @@ export interface NexusGenFieldTypes {
     createStructureDefinition: NexusGenRootTypes['StructureDefinition']; // StructureDefinition!
     createTemplate: NexusGenRootTypes['Template']; // Template!
     deleteAttribute: NexusGenRootTypes['Attribute']; // Attribute!
+    deleteAttributes: NexusGenRootTypes['Attribute'][] | null; // [Attribute!]
     deleteCredential: NexusGenRootTypes['Credential']; // Credential!
     deleteInput: NexusGenRootTypes['Input']; // Input!
     deleteJoin: NexusGenRootTypes['Join']; // Join!
@@ -514,6 +515,9 @@ export interface NexusGenArgTypes {
     }
     deleteAttribute: { // args
       id: string; // ID!
+    }
+    deleteAttributes: { // args
+      filter?: NexusGenInputs['AttributeWhereInput'] | null; // AttributeWhereInput
     }
     deleteCredential: { // args
       id: string; // ID!

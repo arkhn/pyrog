@@ -218,6 +218,7 @@ type Mutation {
   ): StructureDefinition!
   createTemplate(name: String!): Template!
   deleteAttribute(id: ID!): Attribute!
+  deleteAttributes(filter: AttributeWhereInput): [Attribute!]
   deleteCredential(id: ID!): Credential!
   deleteInput(id: ID!): Input!
   deleteJoin(id: ID!): Join!

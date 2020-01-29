@@ -1,5 +1,5 @@
 import { Spinner } from '@blueprintjs/core';
-import { useApolloClient } from '@apollo/react-hooks';
+import { useApolloClient, useMutation } from '@apollo/react-hooks';
 import {
   Classes,
   ContextMenu,
@@ -10,7 +10,7 @@ import {
   Tooltip,
   Tree
 } from '@blueprintjs/core';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useQuery } from '@apollo/react-hooks';
 import { IReduxStore } from 'types';
@@ -19,6 +19,9 @@ import { loader } from 'graphql.macro';
 // GRAPHQL
 const qStructureDisplay = loader(
   'src/graphql/queries/structureDisplay.graphql'
+);
+const mDeleteAttributesStartingWith = loader(
+  'src/graphql/mutations/deleteAttributesStartingWith.graphql'
 );
 
 const primitiveTypes = [
@@ -113,6 +116,7 @@ const FhirResourceTree = ({ onClickCallback }: IProps) => {
   const { data, loading } = useQuery(qStructureDisplay, {
     variables: { definitionId: baseDefinitionId }
   });
+  const [deleteAttributes] = useMutation(mDeleteAttributesStartingWith);
 
   const [nodes, setNodes] = useState([{}] as ITreeNode<INodeData>[]);
   const [selectedNode, setSelectedNode] = useState([] as string[]);
@@ -135,7 +139,14 @@ const FhirResourceTree = ({ onClickCallback }: IProps) => {
     stateNodes: ITreeNode<INodeData>[],
     path: string[]
   ): ITreeNode<INodeData>[] => {
-    // TODO also need to delete all the corresponding attributes from DB
+    // First, we delete all the corresponding attributes in DB
+    deleteAttributes({
+      variables: {
+        startsWith: path.join('.')
+      }
+    });
+
+    // Then we delete the node from the tree
     const newNodes = Array.from(stateNodes);
 
     const targetId = path.splice(-1)[0];
