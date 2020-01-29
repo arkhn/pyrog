@@ -27,6 +27,19 @@ const resourceInputsReducer = (
         }
       };
 
+    case 'REMOVE_ATTRIBUTE_FROM_MAP':
+      return {
+        ...state,
+        attributesMap: {
+          ...Object.keys(state.attributesMap)
+            .filter(key => !key.startsWith(action.payload.pathStart))
+            .reduce(
+              (acc, key) => ({ ...acc, [key]: state.attributesMap[key] }),
+              {}
+            )
+        }
+      };
+
     default:
       return state;
   }
