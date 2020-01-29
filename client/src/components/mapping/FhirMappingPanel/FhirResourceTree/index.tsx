@@ -253,19 +253,41 @@ const FhirResourceTree = ({ onClickCallback }: IProps) => {
     return childNodes;
   };
 
+  const buildMultiTypeNode = (
+    types: string[],
+    [name, content]: [string, any],
+    parentPath: string[]
+  ): ITreeNode<INodeData>[] => {
+    let childNodes = [] as ITreeNode<INodeData>[];
+    for (const type of types) {
+      const childContent = { ...content, type: [{ code: type }] };
+      const child = buildNodeFromObject(
+        [`${name}[${type}]`, childContent],
+        [...parentPath, name]
+      );
+      childNodes = [...childNodes, child];
+    }
+    return childNodes;
+  };
+
   const buildNodeFromObject = (
     [name, content]: [string, any],
     parentPath: string[]
   ): ITreeNode<INodeData> => {
-    const isPrimitive = content.type
-      ? primitiveTypes.includes(content.type[0].code)
-      : true; // TODO what if type is absent?
+    // NOTE pb in parsing, remove this when solved
+    content = content.x ? content.x : content;
     const isArray = content.max !== '1';
     const isRequired = content.min > 0;
     const path = parentPath.concat(name);
     const types = content.type
       ? content.type.map((type: any) => type.code)
       : [];
+    const isPrimitive =
+      types.length > 1
+        ? false
+        : primitiveTypes.includes(types[0])
+        ? true
+        : false;
     const definition = content.definition;
 
     const addNodeCallback = (): void =>
@@ -277,17 +299,19 @@ const FhirResourceTree = ({ onClickCallback }: IProps) => {
     const nodeLabel = (
       <NodeLabel
         name={name}
-        type={types[0]}
+        type={types.join(' | ')}
         addNodeCallback={isArray ? addNodeCallback : null}
         deleteNodeCallback={null}
       />
     );
 
-    // If node is array, we need to replicate the root node for this type
-    // childNode will be the node really having the structure defined by
-    // the structure definition
     let childNodes = [] as ITreeNode<INodeData>[];
-    if (isArray) {
+    if (types.length > 1) {
+      childNodes = buildMultiTypeNode(types, [name, content], parentPath);
+    } else if (isArray) {
+      // If node is array, we need to replicate the root node for this type
+      // childNode will be the node really having the structure defined by
+      // the structure definition
       childNodes = createChildNodesForArray(
         parentPath,
         name,
