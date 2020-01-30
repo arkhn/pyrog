@@ -22,7 +22,7 @@ const mCreateAttribute = loader(
 const Comments = () => {
   const dispatch = useDispatch();
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
-  const path = selectedNode.attribute.path.join('.');
+  const path = selectedNode.attribute.path;
 
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap

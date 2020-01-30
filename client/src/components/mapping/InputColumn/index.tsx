@@ -7,8 +7,8 @@ import {
   Tag
 } from '@blueprintjs/core';
 import * as React from 'react';
-import { useMutation } from '@apollo/react-hooks';
-import { useSelector } from 'react-redux';
+import { useApolloClient, useMutation } from '@apollo/react-hooks';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { IReduxStore, ISelectedSource } from 'types';
 
@@ -17,28 +17,34 @@ import Join from '../Join';
 import ScriptSelect from 'components/selects/scriptSelect';
 import { loader } from 'graphql.macro';
 
+// ACTIONS
+import { removeAttributeFromMap } from 'services/resourceInputs/actions';
+
 // GRAPHQL
 const qInputsForAttribute = loader(
   'src/graphql/queries/inputsForAttribute.graphql'
 );
 const mUpdateInput = loader('src/graphql/mutations/updateInput.graphql');
 const mDeleteInput = loader('src/graphql/mutations/deleteInput.graphql');
+const mDeleteAttribute = loader(
+  'src/graphql/mutations/deleteAttribute.graphql'
+);
 const mAddJoinToColumn = loader(
   'src/graphql/mutations/addJoinToColumn.graphql'
 );
 
-interface IProps {
-  attribute: {
-    path: string[];
-  };
+interface Props {
   input: any;
   schema: any;
   source: ISelectedSource;
 }
 
-const InputColumn = ({ attribute, input, schema, source }: IProps) => {
+const InputColumn = ({ input, schema, source }: Props) => {
+  const client = useApolloClient();
+  const dispatch = useDispatch();
+
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
-  const path = selectedNode.attribute.path.join('.');
+  const path = selectedNode.attribute.path;
 
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
@@ -48,6 +54,7 @@ const InputColumn = ({ attribute, input, schema, source }: IProps) => {
     : null;
 
   const [deleteInput, { loading: loadDelInput }] = useMutation(mDeleteInput);
+  const [deleteAttribute] = useMutation(mDeleteAttribute);
   const [addJoinToColumn, { loading: loadAddJoin }] = useMutation(
     mAddJoinToColumn
   );
@@ -73,20 +80,41 @@ const InputColumn = ({ attribute, input, schema, source }: IProps) => {
     });
   };
 
+  const onClickDelete = async () => {
+    // Mutation to remove from DB
+    await deleteInput({
+      variables: {
+        id: input.id
+      },
+      update: removeInputFromCache
+    });
+
+    // Remove attribute from map and DB if it was last input
+    const { data: dataInputs } = await client.query({
+      query: qInputsForAttribute,
+      variables: {
+        attributeId: attributeId
+      }
+    });
+
+    if (dataInputs.attribute.inputs.length === 0) {
+      deleteAttribute({
+        variables: {
+          attributeId
+        }
+      });
+      console.log('remove from map');
+      dispatch(removeAttributeFromMap(path));
+    }
+  };
+
   return (
     <div className="input-column">
       <Button
         icon={'trash'}
         loading={loadDelInput}
         minimal={true}
-        onClick={() => {
-          deleteInput({
-            variables: {
-              id: input.id
-            },
-            update: removeInputFromCache
-          });
-        }}
+        onClick={onClickDelete}
       />
       <Card elevation={Elevation.ONE} className="input-column-info">
         {input.staticValue ? (

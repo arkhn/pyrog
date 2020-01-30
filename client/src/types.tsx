@@ -38,7 +38,7 @@ export interface ISelectedResource {
 }
 
 export interface ISelectedAttribute {
-  path: string[];
+  path: string;
 }
 
 export interface ISelectedNode {

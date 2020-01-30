@@ -10,7 +10,6 @@ import {
 } from '@blueprintjs/core';
 import React from 'react';
 import { useSelector, useDispatch, useStore } from 'react-redux';
-import useReactRouter from 'use-react-router';
 
 import { IReduxStore } from 'types';
 
@@ -20,7 +19,6 @@ import './style.scss';
 
 import { deselectFhirResource } from 'services/selectedNode/actions';
 
-import { deleteLocationParams } from 'services/urlState';
 import { loader } from 'graphql.macro';
 
 // GRAPHQL
@@ -31,7 +29,7 @@ const resourceInfo = loader('src/graphql/queries/resource.graphql');
 const mDeleteResource = loader('src/graphql/mutations/deleteResource.graphql');
 const mUpdateResource = loader('src/graphql/mutations/updateResource.graphql');
 
-interface IProps {
+interface Props {
   title: string;
   isOpen: boolean;
   deleteResourceCallback: () => void;
@@ -43,13 +41,12 @@ const Drawer = ({
   isOpen,
   deleteResourceCallback,
   onCloseCallback
-}: IProps) => {
+}: Props) => {
   const client = useApolloClient();
   const dispatch = useDispatch();
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
   const store = useStore();
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const { history, location } = useReactRouter();
 
   const [schema, setSchema] = React.useState({});
   const [label, setLabel] = React.useState('');
@@ -98,7 +95,6 @@ const Drawer = ({
       message: `Ressource ${data.deleteResource.fhirType} deleted for ${selectedNode.source.name}.`,
       timeout: 4000
     });
-    deleteLocationParams(history, location, ['resourceId', 'attributeId']);
     dispatch(deselectFhirResource());
     deleteResourceCallback();
   };

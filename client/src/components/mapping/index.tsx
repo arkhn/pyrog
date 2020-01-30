@@ -39,7 +39,7 @@ const MappingView = () => {
       toaster.show({
         icon: 'error',
         intent: 'danger',
-        message: `error while exporting mapping`,
+        message: 'error while exporting mapping',
         timeout: 4000
       });
       return;
@@ -67,7 +67,6 @@ const MappingView = () => {
 
   const renderExistingRules = () => (
     <InputColumns
-      selectedAttribute={selectedNode.attribute}
       schema={
         selectedNode.source.schemaFileName
           ? data.sourceSchemas.schemaByFileName[
@@ -148,6 +147,7 @@ const MappingView = () => {
   };
 
   if (
+    selectedNode.source &&
     selectedNode.source.schemaFileName &&
     !data.sourceSchemas.schemaByFileName[selectedNode.source.schemaFileName]
   ) {

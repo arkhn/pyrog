@@ -1,7 +1,6 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { useSelector, useDispatch } from 'react-redux';
-import useReactRouter from 'use-react-router';
 
 // ACTIONS
 import { updateFhirAttribute } from 'services/selectedNode/actions';
@@ -13,7 +12,6 @@ import ResourceSelector from './ResourceSelector';
 
 import { IReduxStore } from 'types';
 
-import { updateLocationParams } from 'services/urlState';
 import { loader } from 'graphql.macro';
 
 // GRAPHQL
@@ -24,7 +22,6 @@ const qResourcesForSource = loader(
 const FhirMappingPanel = () => {
   const dispatch = useDispatch();
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
-  const { history, location } = useReactRouter();
 
   const [createdResources, setCreatedResources] = React.useState(0);
 
@@ -42,9 +39,8 @@ const FhirMappingPanel = () => {
     return (
       <div id="fhir-resource-tree">
         <FhirResourceTree
-          onClickCallback={(nodeData: any) => {
-            dispatch(updateFhirAttribute(nodeData.path));
-            updateLocationParams(history, location, 'attributeId', nodeData.id);
+          onClickCallback={(path: any) => {
+            dispatch(updateFhirAttribute(path));
           }}
         />
       </div>

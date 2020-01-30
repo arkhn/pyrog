@@ -27,7 +27,7 @@ const resourceInputsReducer = (
         }
       };
 
-    case 'REMOVE_ATTRIBUTE_FROM_MAP':
+    case 'REMOVE_ATTRIBUTES_FROM_MAP':
       return {
         ...state,
         attributesMap: {
@@ -37,6 +37,15 @@ const resourceInputsReducer = (
               (acc, key) => ({ ...acc, [key]: state.attributesMap[key] }),
               {}
             )
+        }
+      };
+
+    case 'REMOVE_ATTRIBUTE_FROM_MAP':
+      delete state.attributesMap[action.payload.path];
+      return {
+        ...state,
+        attributesMap: {
+          ...state.attributesMap
         }
       };
 

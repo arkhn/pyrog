@@ -18,17 +18,14 @@ const mUpdateAttribute = loader(
   'src/graphql/mutations/updateAttribute.graphql'
 );
 
-interface IProps {
+interface Props {
   schema: any;
-  selectedAttribute: {
-    path: string[];
-  };
   source: ISelectedSource;
 }
 
-const InputColumns = ({ schema, selectedAttribute, source }: IProps) => {
+const InputColumns = ({ schema, source }: Props) => {
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
-  const path = selectedNode.attribute.path.join('.');
+  const path = selectedNode.attribute.path;
 
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
@@ -83,7 +80,6 @@ const InputColumns = ({ schema, selectedAttribute, source }: IProps) => {
           return input ? (
             <InputColumn
               key={index}
-              attribute={selectedAttribute}
               input={input}
               schema={schema}
               source={source}

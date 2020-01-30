@@ -30,7 +30,7 @@ const mCreateSQLInput = loader('src/graphql/mutations/createSQLInput.graphql');
 
 interface IProps {
   attribute: {
-    path: string[];
+    path: string;
   };
   schema: any;
   source: any;
@@ -40,7 +40,7 @@ const DynamicColumnPicker = ({ attribute, schema, source }: IProps) => {
   const dispatch = useDispatch();
 
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
-  const path = selectedNode.attribute.path.join('.');
+  const path = selectedNode.attribute.path;
 
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap

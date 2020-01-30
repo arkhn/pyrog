@@ -123,7 +123,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
   const [deleteAttributes] = useMutation(mDeleteAttributesStartingWith);
 
   const [nodes, setNodes] = useState([] as ITreeNode<NodeData>[]);
-  const [selectedNode, setSelectedNode] = useState([] as string[]);
+  const [selectedNode, setSelectedNode] = useState([] as number[]);
 
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
@@ -131,12 +131,31 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
 
   const fhirStructure =
     data && data.structureDefinition ? data.structureDefinition.display : {};
-  const findNode = (nodes: ITreeNode<NodeData>[], path: string[]) => {
-    let curNode = nodes.find(el => el.id === path[0]);
+
+  const findNode = (
+    nodes: ITreeNode<NodeData>[],
+    path: string[]
+  ): ITreeNode<NodeData> | undefined => {
+    let curNode = nodes.find(n => n.id === path[0]);
     for (const step of path.slice(1)) {
-      curNode = curNode!.childNodes!.find(el => el.id === step);
+      curNode = curNode!.childNodes!.find(n => n.id === step);
     }
     return curNode;
+  };
+
+  const findNodeWithNumberPath = (
+    nodes: ITreeNode<NodeData>[],
+    path: number[]
+  ): ITreeNode<NodeData> => {
+    let curNode = nodes[path[0]];
+    for (const step of path.slice(1)) {
+      curNode = curNode!.childNodes![step];
+    }
+    return curNode;
+  };
+
+  const buildStringFromPath = (path: string[]) => {
+    return path.filter(attr => !attr.endsWith('[x]')).join('.');
   };
 
   const deleteNodeFromArray = (
@@ -146,20 +165,18 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     // First, we delete all the corresponding attributes in DB
     deleteAttributes({
       variables: {
-        startsWith: path.join('.')
+        startsWith: buildStringFromPath(path)
       }
     });
     // Same in Redux store
-    dispatch(removeAttributesFromMap(path.join('.')));
+    dispatch(removeAttributesFromMap(buildStringFromPath(path)));
 
     // Then we delete the node from the tree
-    const newNodes = Array.from(stateNodes);
-
     const targetId = path.splice(-1)[0];
-    const parent = findNode(newNodes, path);
+    const parent = findNode(stateNodes, path);
     if (!parent || !parent.childNodes) return stateNodes;
 
-    if (parent.childNodes.length == 1) {
+    if (parent.childNodes.length === 1) {
       // If only one child is left, we simply rebuild an empty one
       const deleteNodeCallback = (): void =>
         setNodes(nodes => deleteNodeFromArray(nodes, [...path, '0']));
@@ -191,16 +208,14 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       parent.childNodes.splice(targetIndex, 1);
     }
 
-    return newNodes;
+    return stateNodes;
   };
 
   const addNodeToArray = (
     stateNodes: ITreeNode<NodeData>[],
     path: string[]
   ): ITreeNode<NodeData>[] => {
-    const newNodes = Array.from(stateNodes);
-
-    const parent = findNode(newNodes, path);
+    const parent = findNode(stateNodes, path);
     if (!parent || !parent.childNodes) return stateNodes;
 
     const nextId = (
@@ -233,7 +248,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     };
     parent.childNodes = [...parent.childNodes, newNode];
 
-    return newNodes;
+    return Array.from(stateNodes);
   };
 
   const createChildNodesForArray = (
@@ -245,7 +260,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     definition: string
   ): ITreeNode<NodeData>[] => {
     // Check if there are already existing attributes for this node
-    const pathKey = [...parentPath, name].join('.');
+    const pathKey = buildStringFromPath([...parentPath, name]);
     let existingChildrenIds = Object.keys(attributesForResource)
       .filter(key => key.startsWith(pathKey))
       .map(key => key.slice(pathKey.length + 1).split('.')[0]);
@@ -311,8 +326,8 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     for (const type of types) {
       const childContent = { ...content, type: [{ code: type }] };
       const child = buildNodeFromObject(
-        [`${name}[${type}]`, childContent],
-        [...parentPath, name]
+        [name + type[0].toUpperCase() + type.slice(1), childContent],
+        [...parentPath, `${name}[x]`]
       );
       childNodes = [...childNodes, child];
     }
@@ -338,19 +353,19 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
         ? true
         : false;
     const definition = content.definition;
-    const hasInputs = Object.keys(attributesForResource).includes(
-      path.join('.')
-    );
+    const pathString = buildStringFromPath(path);
+    const hasInputs = Object.keys(attributesForResource).includes(pathString);
     const hasChildAttributes = Object.keys(attributesForResource).some(el =>
-      el.startsWith(path.join('.'))
+      el.startsWith(pathString)
     );
+    const nodeName = types.length > 1 ? `${name}[x]` : name;
 
     const addNodeCallback = (): void =>
       setNodes(nodes => addNodeToArray(nodes, path));
 
     const nodeLabel = (
       <NodeLabel
-        name={name}
+        name={nodeName}
         type={types.join(' | ')}
         addNodeCallback={isArray ? addNodeCallback : null}
         deleteNodeCallback={null}
@@ -366,7 +381,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       // the structure definition
       childNodes = createChildNodesForArray(
         parentPath,
-        name,
+        nodeName,
         types,
         isPrimitive,
         isRequired,
@@ -377,7 +392,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       childNodes: childNodes,
       hasCaret: !isPrimitive || isArray,
       icon: isArray ? 'multi-select' : !isPrimitive ? 'folder-open' : 'tag',
-      id: name,
+      id: nodeName,
       isExpanded: false,
       isSelected: false,
       label: definition ? (
@@ -399,7 +414,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
         isArray: isArray,
         isPrimitive: isPrimitive,
         isRequired: isRequired,
-        path: [...parentPath, name]
+        path: [...parentPath, nodeName]
       }
     };
   };
@@ -422,14 +437,13 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
   // To update secondary label on user input
   const updateSecondaryLabel = (node: ITreeNode<NodeData>) => {
     const isRequired = node.nodeData?.isRequired;
+    const pathString = buildStringFromPath(node.nodeData!.path);
     const hasInputs =
       node.nodeData?.isPrimitive &&
       !node.nodeData?.isArray &&
-      Object.keys(attributesForResource).includes(
-        node.nodeData!.path.join('.')
-      );
+      Object.keys(attributesForResource).includes(pathString);
     const hasChildAttributes = Object.keys(attributesForResource).some(el =>
-      el.startsWith(node.nodeData!.path.join('.'))
+      el.startsWith(pathString)
     );
 
     node.secondaryLabel = hasInputs ? (
@@ -448,13 +462,10 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
   };
 
   useEffect(() => {
-    const newNodes = Array.from(nodes);
-
-    for (const node of newNodes) {
+    for (const node of nodes) {
       updateSecondaryLabel(node);
     }
-
-    setNodes(newNodes);
+    setNodes(Array.from(nodes));
   }, [attributesForResource]);
 
   const augmentStructure = (
@@ -467,15 +478,10 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
 
   const handleNodeClick = async (
     node: ITreeNode<NodeData>,
-    _nodePath: number[],
-    _e: React.MouseEvent<HTMLElement>
-  ) => {
-    const newNodes = Array.from(nodes);
-
-    const affectedNode = findNode(newNodes, node.nodeData!.path)!;
-
+    nodePath: number[]
+  ): Promise<void> => {
     if (node.nodeData?.isArray) {
-      affectedNode.isExpanded = !affectedNode.isExpanded;
+      node.isExpanded = !node.isExpanded;
     } else if (!node.nodeData?.isPrimitive) {
       if (!node.childNodes || node.childNodes.length === 0) {
         // TODO what if several types are possible?
@@ -483,19 +489,20 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
           query: qStructureDisplay,
           variables: { definitionId: node.nodeData?.types[0] }
         });
-        augmentStructure(affectedNode, data.structureDefinition.display);
+        if (data.structureDefinition !== null)
+          augmentStructure(node, data.structureDefinition.display);
       }
-      affectedNode.isExpanded = !affectedNode.isExpanded;
+      node.isExpanded = !node.isExpanded;
     } else {
       if (selectedNode.length > 0) {
-        const unselectedNode = findNode(newNodes, selectedNode)!;
+        const unselectedNode = findNodeWithNumberPath(nodes, selectedNode)!;
         unselectedNode.isSelected = false;
       }
-      affectedNode.isSelected = true;
-      setSelectedNode(affectedNode.nodeData!.path);
-      onClickCallback(affectedNode.nodeData);
+      node.isSelected = true;
+      setSelectedNode(nodePath);
+      onClickCallback(buildStringFromPath(node.nodeData.path));
     }
-    setNodes(newNodes);
+    setNodes(Array.from(nodes));
   };
 
   return loading ? (

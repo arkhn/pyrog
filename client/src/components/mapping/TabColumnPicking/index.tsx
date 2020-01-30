@@ -8,7 +8,7 @@ import './style.scss';
 
 interface IProps {
   attribute: {
-    path: string[];
+    path: string;
   };
   schema: any;
   source: ISelectedSource;

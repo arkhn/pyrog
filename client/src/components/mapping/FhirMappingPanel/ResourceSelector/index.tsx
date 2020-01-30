@@ -1,12 +1,10 @@
 import { FormGroup, ControlGroup, Button } from '@blueprintjs/core';
 import React from 'react';
-import { useApolloClient, useQuery } from '@apollo/react-hooks';
+import { useApolloClient } from '@apollo/react-hooks';
 import { useSelector, useDispatch } from 'react-redux';
-import useReactRouter from 'use-react-router';
 
 import { loader } from 'graphql.macro';
 
-import { updateLocationParams } from 'services/urlState';
 import { updateFhirResource } from 'services/selectedNode/actions';
 import { initAttributesMap } from 'services/resourceInputs/actions';
 import { IReduxStore } from 'types';
@@ -32,7 +30,6 @@ const ResourceSelector = ({
   const { source, resource } = useSelector(
     (state: IReduxStore) => state.selectedNode
   );
-  const { history, location } = useReactRouter();
   const [drawerIsOpen, setDrawerIsOpen] = React.useState(false);
 
   const onClickedResource = async (resource: any) => {
@@ -47,7 +44,6 @@ const ResourceSelector = ({
     dispatch(
       updateFhirResource(resource.id, resource.label, resource.definition)
     );
-    updateLocationParams(history, location, 'resourceId', resource.id);
   };
 
   return (
