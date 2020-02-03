@@ -256,6 +256,7 @@ input NullableStringFilter {
 
 type Query {
   attribute(attributeId: ID!): Attribute
+  credential(credentialId: ID!): Credential
   me: User
   resource(resourceId: ID!): Resource
   resources(filter: ResourceWhereInput): [Resource!]

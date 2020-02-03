@@ -24,7 +24,7 @@ yarn start
 
 ### Custom setup
 
-`.env.dev.default` already contains a default setup. However, you can use a custom setup under `.env.dev.custom`. In particular, this allows you to point to a specific Pyrog server. This is useful if you are working on the client part of Pyrog only and do not want to run a Pyrog server locally. You could then use our running staging Pyrog server and your `.env.dev.custom` file should then look something like this:
+`.env` already contains a default setup. However, you can modify it with a custom setup. This allows you to point to a specific Pyrog server. This is useful if you are working on the client part of Pyrog only and do not want to run a Pyrog server locally. You could then use our running staging Pyrog server and your `.env` file should then look something like this:
 
 ```
 AUTH_TOKEN="ARKHN_TOKEN"

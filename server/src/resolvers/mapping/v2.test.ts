@@ -1,5 +1,4 @@
 import { Photon } from '@prisma/photon'
-import set from 'lodash.set'
 
 import importMappingV2 from './v2'
 import * as mappingV2 from '../../../test/fixtures/chimio-mapping-v2.json'

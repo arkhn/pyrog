@@ -1,6 +1,5 @@
 import { Photon, Attribute, Resource } from '@prisma/photon'
 
-import { AttributeWithChildren } from 'types'
 import { clean, buildAttributesQuery } from './utils'
 
 type AttributeV1 = Attribute & {
@@ -17,21 +16,21 @@ type ResourceV1 = Resource & {
 }
 
 const cleanAttributeV1 = (attribute: AttributeV1) => {
-  attribute = clean(attribute)
-  delete attribute.name
-  delete attribute.fhirType
-  delete attribute.description
-  delete attribute.isRequired
-  delete attribute.isArray
-  delete attribute.children
-  return attribute
+  const a = clean(attribute)
+  delete a.name
+  delete a.fhirType
+  delete a.description
+  delete a.isRequired
+  delete a.isArray
+  delete a.children
+  return a
 }
 
 const cleanResourceV1 = (resource: ResourceV1) => {
-  resource = clean(resource)
-  delete resource.profile
-  delete resource.fhirType
-  return resource
+  const r = clean(resource)
+  delete r.profile
+  delete r.fhirType
+  return r
 }
 
 const computePath = (

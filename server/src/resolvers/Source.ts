@@ -1,4 +1,4 @@
-import { objectType, FieldResolver, intArg } from 'nexus'
+import { objectType, FieldResolver } from 'nexus'
 
 import { importMapping, exportMapping } from 'resolvers/mapping'
 
