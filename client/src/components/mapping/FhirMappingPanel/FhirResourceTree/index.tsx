@@ -512,12 +512,8 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       className={Classes.ELEVATION_0}
       contents={nodes}
       onNodeClick={handleNodeClick}
-      onNodeCollapse={(node: ITreeNode): void => {
-        node.isExpanded = false;
-      }}
-      onNodeExpand={(node: ITreeNode): void => {
-        node.isExpanded = true;
-      }}
+      onNodeCollapse={handleNodeClick}
+      onNodeExpand={handleNodeClick}
     />
   );
 };
