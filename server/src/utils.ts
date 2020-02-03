@@ -1,4 +1,3 @@
-import { Photon } from '@prisma/photon'
 import * as crypto from 'crypto'
 
 import { verify } from 'jsonwebtoken'
@@ -9,8 +8,6 @@ import { APP_SECRET, IV } from './constants'
 interface Token {
   userId: string
 }
-
-const photon = new Photon()
 
 export function getUserId(context: Context) {
   const Authorization = context.request.get('Authorization')

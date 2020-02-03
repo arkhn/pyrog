@@ -1,5 +1,4 @@
 import { objectType, FieldResolver } from 'nexus'
-import { AttributeWhereInput } from '@prisma/photon'
 
 export const Attribute = objectType({
   name: 'Attribute',
