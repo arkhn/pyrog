@@ -402,6 +402,7 @@ export interface NexusGenFieldTypes {
     availableResources: string[]; // [String!]!
     me: NexusGenRootTypes['User'] | null; // User
     resource: NexusGenRootTypes['Resource'] | null; // Resource
+    resources: NexusGenRootTypes['Resource'][] | null; // [Resource!]
     source: NexusGenRootTypes['Source'] | null; // Source
     sources: NexusGenRootTypes['Source'][] | null; // [Source!]
     template: NexusGenRootTypes['Template'] | null; // Template
@@ -586,6 +587,9 @@ export interface NexusGenArgTypes {
     }
     resource: { // args
       resourceId: string; // ID!
+    }
+    resources: { // args
+      filter?: NexusGenInputs['ResourceWhereInput'] | null; // ResourceWhereInput
     }
     source: { // args
       sourceId: string; // ID!

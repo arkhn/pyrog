@@ -255,6 +255,7 @@ type Query {
   availableResources: [String!]!
   me: User
   resource(resourceId: ID!): Resource
+  resources(filter: ResourceWhereInput): [Resource!]
   source(sourceId: ID!): Source
   sources: [Source!]
   template(templateId: ID!): Template
