@@ -28,7 +28,7 @@ const mCreateAttribute = loader(
 );
 const mCreateSQLInput = loader('src/graphql/mutations/createSQLInput.graphql');
 
-interface IProps {
+interface Props {
   attribute: {
     path: string;
   };
@@ -36,7 +36,7 @@ interface IProps {
   source: any;
 }
 
-const DynamicColumnPicker = ({ attribute, schema, source }: IProps) => {
+const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
   const dispatch = useDispatch();
 
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);

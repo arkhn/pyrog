@@ -28,9 +28,9 @@ const FhirMappingPanel = () => {
   const { data: dataResources, loading: loadingResources } = useQuery(
     qResourcesForSource,
     {
-      skip: !selectedNode.source.id,
+      skip: !selectedNode.source,
       variables: {
-        sourceId: selectedNode.source.id
+        sourceId: selectedNode.source ? selectedNode.source.id : null
       }
     }
   );
