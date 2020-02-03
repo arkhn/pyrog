@@ -1,4 +1,4 @@
-import { idArg, queryType } from 'nexus'
+import { arg, idArg, queryType } from 'nexus'
 
 import { getUserId, availableResources } from 'utils'
 
@@ -60,6 +60,18 @@ export const Query = queryType({
           where: { id: resourceId },
           include: { attributes: true },
         }),
+    })
+
+    t.list.field('resources', {
+      type: 'Resource',
+      nullable: true,
+      args: {
+        filter: arg({
+          type: 'ResourceWhereInput',
+        }),
+      },
+      resolve: (parent, { filter }, ctx) =>
+        ctx.photon.resources({ where: filter }),
     })
 
     t.field('attribute', {
