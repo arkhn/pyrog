@@ -14,12 +14,7 @@ const selectedNodeReducer = (
     case 'UPDATE_SELECTED_SOURCE':
       return {
         ...state,
-        source: {
-          id: action.payload.id,
-          name: action.payload.name,
-          schemaFileName: action.payload.schemaFileName,
-          hasOwner: action.payload.hasOwner
-        },
+        source: action.payload,
         resource: null,
         attribute: null
       };

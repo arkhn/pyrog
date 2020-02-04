@@ -100,7 +100,11 @@ const StaticValueForm = ({ attribute }: IProps) => {
 
   return (
     <Card elevation={Elevation.ONE}>
-      <div className="card-tag">Static</div>
+      <div className="card-absolute">
+        <div className="card-flex">
+          <div className="card-tag">Static</div>
+        </div>
+      </div>
       <FormGroup labelFor="text-input" inline={true}>
         <ControlGroup>
           <InputGroup

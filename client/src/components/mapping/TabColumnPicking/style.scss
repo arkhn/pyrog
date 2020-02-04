@@ -1,5 +1,5 @@
-@import "~@blueprintjs/core/lib/css/blueprint.css";
-@import "~@blueprintjs/core/lib/scss/variables";
+@import '~@blueprintjs/core/lib/css/blueprint.css';
+@import '~@blueprintjs/core/lib/scss/variables';
 
 .bp3-card {
   position: relative;
@@ -14,14 +14,29 @@
     margin-bottom: 15px;
   }
 
-  .card-tag {
+  .card-flex {
+    display: flex;
+    flex-direction: row;
+    font-size: 14px;
+
+    .card-tag {
+      background-color: $gray1;
+      color: $light-gray5;
+      padding: 2px 8px;
+      border-radius: 3px;
+    }
+
+    .card-credentials-missing {
+      background-color: $orange1;
+      color: $light-gray5;
+      margin-left: 1rem;
+      padding: 2px 8px;
+      border-radius: 3px;
+    }
+  }
+
+  .card-absolute {
     position: absolute;
-    background-color: $gray1;
-    color: $light-gray5;
-    padding: 2px 8px;
-    border-radius: 3px;
-    font-size: 12px;
     top: -7px;
-    left: 20px;
   }
 }

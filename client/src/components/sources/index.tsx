@@ -18,7 +18,10 @@ import { loader } from 'graphql.macro';
 
 import Navbar from 'components/navbar';
 
-import { changeSelectedSource } from 'services/selectedNode/actions';
+import {
+  changeSelectedSource,
+  deselectSource
+} from 'services/selectedNode/actions';
 
 import './style.scss';
 
@@ -86,14 +89,7 @@ const SourcesView = () => {
                   interactive={true}
                   key={index}
                   onClick={() => {
-                    dispatch(
-                      changeSelectedSource(
-                        source.id,
-                        source.name,
-                        source.template.name,
-                        source.hasOwner
-                      )
-                    );
+                    dispatch(changeSelectedSource(source));
                     history.push({
                       pathname: '/mapping',
                       search: QueryString.stringify({
@@ -128,6 +124,7 @@ const SourcesView = () => {
                               id: source.id
                             }
                           });
+                          dispatch(deselectSource());
                         }
                       }}
                     >

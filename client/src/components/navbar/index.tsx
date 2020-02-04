@@ -66,7 +66,7 @@ const Navbar = ({ exportMapping }: IProps) => {
         <Header />
       </BPNavbar.Group>
 
-      {user.id && selectedNode.source && renderSourceContext()}
+      {selectedNode.source && renderSourceContext()}
 
       {user.id && (
         <BPNavbar.Group align={Alignment.RIGHT}>
