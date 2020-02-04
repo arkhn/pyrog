@@ -59,7 +59,7 @@ const main = async (path: string) => {
 }
 
 if (process.argv.length != 3) {
-  console.log('USAGE:\n> yarn seed <mapping.json>')
+  console.log('USAGE:\n> yarn seed:mapping <mapping.json>')
   process.exit(1)
 }
 

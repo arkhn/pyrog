@@ -33,7 +33,7 @@ docker-compose up postgres
 yarn prisma2 lift up
 
 # import the mapping from a file.
-yarn seed <mapping.json>
+yarn seed:mapping <mapping.json>
 ```
 
 This will create the template (if needed), the source and all its resources.
