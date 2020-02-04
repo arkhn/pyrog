@@ -12,7 +12,7 @@ import { IReduxStore } from 'types';
 import Drawer from './Drawer';
 import ResourceSelect from 'components/selects/resourceSelect';
 
-interface IProps {
+interface Props {
   resources: any;
   loading: boolean;
   deleteResourceCallback: any;
@@ -24,7 +24,7 @@ const ResourceSelector = ({
   resources,
   loading,
   deleteResourceCallback
-}: IProps) => {
+}: Props) => {
   const client = useApolloClient();
   const dispatch = useDispatch();
   const { source, resource } = useSelector(

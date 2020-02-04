@@ -39,8 +39,8 @@ interface Props {
 const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
   const dispatch = useDispatch();
 
-  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
-  const path = selectedNode.attribute.path;
+  const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
+  const path = attribute.path;
 
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
@@ -86,12 +86,12 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
     }
   };
 
-  const createInput = async (): Promise<any> => {
+  const createInput = async (): Promise<void> => {
     if (!attributeId) {
       // First, we create the attribute if it doesn't exist
       const { data: attr } = await createAttribute({
         variables: {
-          resourceId: selectedNode.resource.id,
+          resourceId: resource.id,
           path
         }
       });
@@ -112,11 +112,11 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
   };
 
   React.useEffect(() => {
-    if (selectedNode.source && selectedNode.source.id && table) {
+    if (source && source.id && table) {
       setTableIsLoading(true);
       axios
         .get(
-          `${HTTP_BACKEND_URL}/tableview/${selectedNode.source.id}/${
+          `${HTTP_BACKEND_URL}/tableview/${source.id}/${
             owner ? owner + '.' : ''
           }${table}`
         )
@@ -130,7 +130,7 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
           console.log(err);
         });
     }
-  }, [selectedNode.source, owner, table]);
+  }, [source, owner, table]);
 
   return (
     <Card elevation={Elevation.ONE}>

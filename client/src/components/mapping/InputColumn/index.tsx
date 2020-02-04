@@ -43,15 +43,14 @@ const InputColumn = ({ input, schema, source }: Props) => {
   const client = useApolloClient();
   const dispatch = useDispatch();
 
-  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
-  const path = selectedNode.attribute.path;
+  const {
+    attribute: { path }
+  } = useSelector((state: IReduxStore) => state.selectedNode);
 
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
   );
-  const attributeId = attributesForResource[path]
-    ? attributesForResource[path].id
-    : null;
+  const attributeId = attributesForResource[path].id;
 
   const [deleteInput, { loading: loadDelInput }] = useMutation(mDeleteInput);
   const [deleteAttribute] = useMutation(mDeleteAttribute);
@@ -103,7 +102,6 @@ const InputColumn = ({ input, schema, source }: Props) => {
           attributeId
         }
       });
-      console.log('remove from map');
       dispatch(removeAttributeFromMap(path));
     }
   };

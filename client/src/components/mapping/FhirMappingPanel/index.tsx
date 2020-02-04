@@ -21,16 +21,18 @@ const qResourcesForSource = loader(
 
 const FhirMappingPanel = () => {
   const dispatch = useDispatch();
-  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
+  const { source, resource } = useSelector(
+    (state: IReduxStore) => state.selectedNode
+  );
 
   const [createdResources, setCreatedResources] = React.useState(0);
 
   const { data: dataResources, loading: loadingResources } = useQuery(
     qResourcesForSource,
     {
-      skip: !selectedNode.source,
+      skip: !source,
       variables: {
-        sourceId: selectedNode.source ? selectedNode.source.id : null
+        sourceId: source ? source.id : null
       }
     }
   );
@@ -63,7 +65,7 @@ const FhirMappingPanel = () => {
             }}
           />
         </div>
-        {selectedNode.resource && renderResourceTree()}
+        {resource && renderResourceTree()}
       </div>
       <div id="resource-add">
         <AddResource

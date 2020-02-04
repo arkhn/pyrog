@@ -1,7 +1,6 @@
 const config = {
   preset: 'ts-jest',
   moduleDirectories: ['node_modules', 'src'],
-  // globalSetup: '<rootDir>/tests/setupTests.ts',
   testEnvironment: 'node',
   globals: {},
 }

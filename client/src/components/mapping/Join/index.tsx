@@ -17,15 +17,16 @@ const qInputsForAttribute = loader(
 const mUpdateJoin = loader('src/graphql/mutations/updateJoin.graphql');
 const mDeleteJoin = loader('src/graphql/mutations/deleteJoin.graphql');
 
-interface IProps {
+interface Props {
   joinData: any;
   schema: any;
   source: ISelectedSource;
 }
 
-const Join = ({ joinData, schema, source }: IProps) => {
-  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
-  const path = selectedNode.attribute.path;
+const Join = ({ joinData, schema, source }: Props) => {
+  const {
+    attribute: { path }
+  } = useSelector((state: IReduxStore) => state.selectedNode);
 
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap

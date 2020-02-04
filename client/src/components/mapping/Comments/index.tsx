@@ -21,13 +21,14 @@ const mCreateAttribute = loader(
 
 const Comments = () => {
   const dispatch = useDispatch();
-  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
-  const path = selectedNode.attribute.path;
+  const { attribute, resource } = useSelector(
+    (state: IReduxStore) => state.selectedNode
+  );
 
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
   );
-  const attributeForNode = attributesForResource[path];
+  const attributeForNode = attributesForResource[attribute.path];
 
   const [createAttribute] = useMutation(mCreateAttribute);
   const [updateAttribute] = useMutation(mUpdateAttribute);
@@ -60,15 +61,15 @@ const Comments = () => {
     } else {
       const { data } = await createAttribute({
         variables: {
-          resourceId: selectedNode.resource.id,
-          path,
+          resourceId: resource.id,
+          path: attribute.path,
           data: {
             comments
           }
         }
       });
       const newAttr = data.createAttribute;
-      dispatch(setAttributeInMap(path, newAttr));
+      dispatch(setAttributeInMap(attribute.path, newAttr));
     }
   };
 
@@ -79,14 +80,14 @@ const Comments = () => {
           <TextArea
             className={'bp3-fill'}
             value={comments}
-            disabled={loading || !selectedNode.attribute}
+            disabled={loading || !attribute}
             onChange={e => {
               setComments(e.target.value);
             }}
           />
           <Button
             id="save-comment-button"
-            disabled={!selectedNode.attribute}
+            disabled={!attribute}
             onClick={onSaveComment}
           >
             Save

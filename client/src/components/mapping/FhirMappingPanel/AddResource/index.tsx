@@ -15,11 +15,16 @@ const qResourcesForSource = loader(
 );
 const mCreateResource = loader('src/graphql/mutations/createResource.graphql');
 
-interface IProps {
+interface Props {
   callback: any;
 }
 
-const AddResource = ({ callback }: IProps) => {
+interface ResourceState {
+  id: string;
+  name: string;
+}
+
+const AddResource = ({ callback }: Props) => {
   const { loading: loadingAvailableResources, data } = useQuery(
     qAvailableResources
   );
@@ -28,22 +33,20 @@ const AddResource = ({ callback }: IProps) => {
     ? data.structureDefinitions.map((el: any) => el.name)
     : [];
 
-  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
+  const { source } = useSelector((state: IReduxStore) => state.selectedNode);
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const [selectedResource, setSelectedResource] = React.useState({
-    id: '',
-    name: ''
-  });
+  const [selectedResource, setSelectedResource] = React.useState(
+    {} as ResourceState
+  );
 
   const onCompleted = (data: any) => {
     toaster.show({
       icon: 'layout-hierarchy',
       intent: 'success',
-      message: `Ressource ${data.createResource.definition.type} créée pour ${selectedNode.source.name}.`,
+      message: `Ressource ${data.createResource.definition.type} créée pour ${source.name}.`,
       timeout: 4000
     });
 
-    // setSelectedResourceId(data.createResource.fhirType);
     callback();
   };
 
@@ -61,21 +64,21 @@ const AddResource = ({ callback }: IProps) => {
     { data: { createResource } }: any
   ) => {
     try {
-      const { source } = cache.readQuery({
+      const { dataSource } = cache.readQuery({
         query: qResourcesForSource,
         variables: {
-          sourceId: selectedNode.source.id
+          sourceId: source.id
         }
       });
       cache.writeQuery({
         query: qResourcesForSource,
         variables: {
-          sourceId: selectedNode.source.id
+          sourceId: source.id
         },
         data: {
           source: {
-            ...source,
-            resources: source.resources.concat([createResource])
+            ...dataSource,
+            resources: dataSource.resources.concat([createResource])
           }
         }
       });
@@ -98,8 +101,8 @@ const AddResource = ({ callback }: IProps) => {
       <ControlGroup>
         <AddResourceSelect
           loading={loadingAvailableResources}
-          disabled={!selectedNode.source}
-          inputItem={selectedResource.name}
+          disabled={!source}
+          inputItem={selectedResource ? selectedResource.name : ''}
           items={loadingAvailableResources ? [] : resourceNames}
           onChange={(resource: any) => {
             setSelectedResource(
@@ -110,11 +113,11 @@ const AddResource = ({ callback }: IProps) => {
         <Button
           loading={creatingResource}
           icon={'plus'}
-          disabled={!selectedResource.id}
+          disabled={!selectedResource}
           onClick={() => {
             createResource({
               variables: {
-                sourceId: selectedNode.source.id,
+                sourceId: source.id,
                 definitionId: selectedResource.id
               }
             });
