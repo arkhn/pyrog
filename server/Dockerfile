@@ -27,7 +27,6 @@ RUN yarn build
 COPY scripts scripts
 
 # Start the app
-EXPOSE 4000
 ENV NODE_PATH dist/
 
 CMD yarn wait:db && yarn prisma2 lift up && yarn start:docker
