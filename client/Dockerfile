@@ -6,8 +6,10 @@ RUN yarn install
 
 COPY src src
 COPY public public
+COPY .env.staging .env.staging
 
-EXPOSE 1729
-ENV NODE_ENV docker
+ENV NODE_ENV production
 
-CMD ["yarn", "start"]
+RUN yarn build:staging
+
+CMD yarn serve -s build

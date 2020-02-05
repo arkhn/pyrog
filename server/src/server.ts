@@ -29,11 +29,14 @@ const options = {
   bodyParserOptions: { limit: '10mb', type: 'application/json' },
 }
 
+const { PORT } = process.env
+
 const main = async () => {
   await bootstrapDefinitions()
   await server.start(options, () =>
     console.log(
-      `🚀 Server ready at: http://localhost:4000\n⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️`,
+      `🚀 Server ready at: http://localhost:${PORT || 4000}
+      \n⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️`,
     ),
   )
 }
