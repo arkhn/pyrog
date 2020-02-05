@@ -1,4 +1,4 @@
-query resource($resourceId: ID!) {
+query resourceAttributes($resourceId: ID!) {
   resource(resourceId: $resourceId) {
     id
     attributes {

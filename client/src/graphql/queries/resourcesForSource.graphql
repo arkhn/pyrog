@@ -4,6 +4,9 @@ query resourcesForSource($sourceId: ID!) {
     resources {
       id
       label
+      primaryKeyOwner
+      primaryKeyTable
+      primaryKeyColumn
       definition {
         id
         type

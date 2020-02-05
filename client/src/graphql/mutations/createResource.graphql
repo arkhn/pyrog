@@ -2,6 +2,9 @@ mutation createResource($sourceId: ID!, $definitionId: String!) {
   createResource(sourceId: $sourceId, definitionId: $definitionId) {
     id
     label
+    primaryKeyOwner
+    primaryKeyTable
+    primaryKeyColumn
     definition {
       id
       type

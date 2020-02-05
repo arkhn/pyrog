@@ -2,6 +2,18 @@ import { IAction } from 'types';
 
 import { fetchSourceSchema } from './sourceSchemas/actions';
 
+interface Resource {
+  id: string;
+  label: string;
+  primaryKeyOwner: string;
+  primaryKeyTable: string;
+  primaryKeyColumn: string;
+  definition: {
+    id: string;
+    type: string;
+  };
+}
+
 // Fhir Source
 export const updateSelectedSource = (
   id: string,
@@ -43,17 +55,11 @@ export const deselectSource = (): IAction => {
 };
 
 // Fhir Resource
-export const updateFhirResource = (
-  resourceId: string,
-  label: string,
-  definition: any
-): IAction => {
+export const updateFhirResource = (resource: Resource): IAction => {
   return {
     type: 'UPDATE_FHIR_RESOURCE',
     payload: {
-      resourceId,
-      label,
-      definition
+      resource
     }
   };
 };

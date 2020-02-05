@@ -12,13 +12,27 @@ import { IReduxStore } from 'types';
 import Drawer from './Drawer';
 import ResourceSelect from 'components/selects/resourceSelect';
 
+interface Resource {
+  id: string;
+  label: string;
+  primaryKeyOwner: string;
+  primaryKeyTable: string;
+  primaryKeyColumn: string;
+  definition: {
+    id: string;
+    type: string;
+  };
+}
+
 interface Props {
-  resources: any;
+  resources: Resource[];
   loading: boolean;
   deleteResourceCallback: any;
 }
 
-const qResource = loader('src/graphql/queries/resource.graphql');
+const qResourceAttributes = loader(
+  'src/graphql/queries/resourceAttributes.graphql'
+);
 
 const ResourceSelector = ({
   resources,
@@ -31,19 +45,23 @@ const ResourceSelector = ({
     (state: IReduxStore) => state.selectedNode
   );
   const [drawerIsOpen, setDrawerIsOpen] = React.useState(false);
+  // const [resource, setResource] = React.useState({} as Resource);
 
-  const onClickedResource = async (resource: any) => {
+  const onClickedResource = async (clickedResource: any) => {
     // Query attributes for corresponding resource
-    const { data } = await client.query({
-      query: qResource,
-      variables: { resourceId: resource.id }
+    const {
+      data: {
+        resource: { attributes }
+      }
+    } = await client.query({
+      query: qResourceAttributes,
+      variables: { resourceId: clickedResource.id }
     });
 
     // Update Redux store
-    dispatch(initAttributesMap(data.resource.attributes));
-    dispatch(
-      updateFhirResource(resource.id, resource.label, resource.definition)
-    );
+    console.log(clickedResource);
+    dispatch(initAttributesMap(attributes));
+    dispatch(updateFhirResource(clickedResource));
   };
 
   return (
@@ -53,7 +71,11 @@ const ResourceSelector = ({
           <ResourceSelect
             disabled={!source}
             icon={'layout-hierarchy'}
-            inputItem={resource}
+            inputItem={
+              !resource
+                ? ({} as Resource)
+                : resources.find(r => r.id === resource.id) || ({} as Resource)
+            }
             intent={'primary'}
             items={resources}
             loading={loading}
@@ -71,7 +93,7 @@ const ResourceSelector = ({
       </FormGroup>
       {resource && (
         <Drawer
-          title={resource.definition.type}
+          resource={resource}
           isOpen={drawerIsOpen}
           deleteResourceCallback={deleteResourceCallback}
           onCloseCallback={() => {

@@ -113,9 +113,10 @@ const NodeLabel = ({
 const FhirResourceTree = ({ onClickCallback }: Props) => {
   const client = useApolloClient();
   const dispatch = useDispatch();
-  const baseDefinitionId = useSelector(
-    (state: IReduxStore) => state.selectedNode.resource.definition.id
+  const resource = useSelector(
+    (state: IReduxStore) => state.selectedNode.resource
   );
+  const baseDefinitionId = resource.definition.id;
 
   const { data, loading } = useQuery(qStructureDisplay, {
     variables: { definitionId: baseDefinitionId }
@@ -432,7 +433,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
 
   useEffect(() => {
     if (!loading) setNodes(genTreeLevel(fhirStructure, []));
-  }, [loading]);
+  }, [resource, loading]);
 
   // To update secondary label on user input
   const updateSecondaryLabel = (node: ITreeNode<NodeData>) => {

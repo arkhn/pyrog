@@ -64,7 +64,7 @@ const AddResource = ({ callback }: Props) => {
     { data: { createResource } }: any
   ) => {
     try {
-      const { dataSource } = cache.readQuery({
+      const { source: cachedSource } = cache.readQuery({
         query: qResourcesForSource,
         variables: {
           sourceId: source.id
@@ -77,8 +77,8 @@ const AddResource = ({ callback }: Props) => {
         },
         data: {
           source: {
-            ...dataSource,
-            resources: dataSource.resources.concat([createResource])
+            ...cachedSource,
+            resources: cachedSource.resources.concat([createResource])
           }
         }
       });
@@ -102,7 +102,7 @@ const AddResource = ({ callback }: Props) => {
         <AddResourceSelect
           loading={loadingAvailableResources}
           disabled={!source}
-          inputItem={selectedResource ? selectedResource.name : ''}
+          inputItem={selectedResource.name ? selectedResource.name : ''}
           items={loadingAvailableResources ? [] : resourceNames}
           onChange={(resource: any) => {
             setSelectedResource(
@@ -113,7 +113,7 @@ const AddResource = ({ callback }: Props) => {
         <Button
           loading={creatingResource}
           icon={'plus'}
-          disabled={!selectedResource}
+          disabled={!selectedResource.name}
           onClick={() => {
             createResource({
               variables: {

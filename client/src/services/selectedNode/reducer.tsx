@@ -28,12 +28,7 @@ const selectedNodeReducer = (
       return {
         ...state,
         resource: {
-          id: action.payload.resourceId,
-          label: action.payload.label,
-          definition: {
-            id: action.payload.definition.id,
-            type: action.payload.definition.type
-          }
+          ...action.payload.resource
         },
         attribute: null
       };

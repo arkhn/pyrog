@@ -31,6 +31,9 @@ export interface ISelectedSource {
 export interface ISelectedResource {
   id: string;
   label: string;
+  primaryKeyOwner: string;
+  primaryKeyTable: string;
+  primaryKeyColumn: string;
   definition: {
     id: string;
     type: string;
