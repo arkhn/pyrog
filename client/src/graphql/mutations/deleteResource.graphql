@@ -1,6 +1,5 @@
 mutation deleteResource($id: ID!) {
   deleteResource(id: $id) {
     id
-    fhirType
   }
 }

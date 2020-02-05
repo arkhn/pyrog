@@ -119,7 +119,7 @@ const Drawer = ({
     toaster.show({
       icon: 'layout-hierarchy',
       intent: 'success',
-      message: `Ressource ${data.deleteResource.fhirType} deleted for ${source.name}.`,
+      message: 'Resource deleted.',
       timeout: 4000
     });
     dispatch(deselectFhirResource());

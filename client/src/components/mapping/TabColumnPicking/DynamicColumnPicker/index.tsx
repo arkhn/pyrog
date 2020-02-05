@@ -77,7 +77,7 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
         data: {
           attribute: {
             ...dataAttribute,
-            inputs: dataAttribute.inputs.concat([createInput])
+            inputs: [...dataAttribute.inputs, createInput]
           }
         }
       });

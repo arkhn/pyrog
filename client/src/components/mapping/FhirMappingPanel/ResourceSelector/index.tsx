@@ -45,7 +45,6 @@ const ResourceSelector = ({
     (state: IReduxStore) => state.selectedNode
   );
   const [drawerIsOpen, setDrawerIsOpen] = React.useState(false);
-  // const [resource, setResource] = React.useState({} as Resource);
 
   const onClickedResource = async (clickedResource: any) => {
     // Query attributes for corresponding resource
@@ -59,7 +58,6 @@ const ResourceSelector = ({
     });
 
     // Update Redux store
-    console.log(clickedResource);
     dispatch(initAttributesMap(attributes));
     dispatch(updateFhirResource(clickedResource));
   };

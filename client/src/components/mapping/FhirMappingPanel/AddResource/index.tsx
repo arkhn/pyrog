@@ -78,7 +78,7 @@ const AddResource = ({ callback }: Props) => {
         data: {
           source: {
             ...cachedSource,
-            resources: cachedSource.resources.concat([createResource])
+            resources: [...cachedSource.resources, createResource]
           }
         }
       });

@@ -63,7 +63,7 @@ const StaticValueForm = ({ attribute }: IProps) => {
         data: {
           attribute: {
             ...dataAttribute,
-            inputs: dataAttribute.inputs.concat([createInput])
+            inputs: [...dataAttribute.inputs, createInput]
           }
         }
       });
