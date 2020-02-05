@@ -84,19 +84,16 @@ model StructureDefinition {
 }
 
 model Resource {
-  id               String      @default(cuid()) @id
-  label            String?
-  profile          String?
-  fhirType         String
+  id    String  @default(cuid()) @id
+  label String?
+
   primaryKeyOwner  String?
   primaryKeyTable  String?
   primaryKeyColumn String?
-  attributes       Attribute[] @relation(onDelete: CASCADE)
 
+  attributes Attribute[]          @relation(onDelete: CASCADE)
   definition StructureDefinition?
-
-  // Parent
-  source Source
+  source     Source
 
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
@@ -104,20 +101,11 @@ model Resource {
 
 model Attribute {
   id            String  @default(cuid()) @id
+  path          String
   mergingScript String?
-  isArray       Boolean @default(false)
-  isRequired    Boolean @default(false)
-  name          String
-  fhirType      String
-  description   String?
   comments      String?
 
-  // Children input columns
-  inputs   Input[]     @relation(onDelete: CASCADE)
-  // Children attributes
-  children Attribute[] @relation(name: "AttributeToAttributes", onDelete: CASCADE)
-  // Parent attribute or resource
-  parent   Attribute?  @relation(name: "AttributeToAttributes")
+  inputs   Input[]   @relation(onDelete: CASCADE)
   resource Resource?
 
   updatedAt DateTime @updatedAt

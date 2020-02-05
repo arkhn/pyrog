@@ -1,7 +1,7 @@
 import { inputObjectType } from 'nexus'
 
-export const UpdateAttributeInput = inputObjectType({
-  name: 'UpdateAttributeInput',
+export const AttributeInput = inputObjectType({
+  name: 'AttributeInput',
   definition(t) {
     t.string('comments')
     t.string('mergingScript')

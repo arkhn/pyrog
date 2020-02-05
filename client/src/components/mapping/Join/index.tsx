@@ -17,14 +17,23 @@ const qInputsForAttribute = loader(
 const mUpdateJoin = loader('src/graphql/mutations/updateJoin.graphql');
 const mDeleteJoin = loader('src/graphql/mutations/deleteJoin.graphql');
 
-interface IProps {
+interface Props {
   joinData: any;
   schema: any;
   source: ISelectedSource;
 }
 
-const Join = ({ joinData, schema, source }: IProps) => {
-  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
+const Join = ({ joinData, schema, source }: Props) => {
+  const {
+    attribute: { path }
+  } = useSelector((state: IReduxStore) => state.selectedNode);
+
+  const attributesForResource = useSelector(
+    (state: IReduxStore) => state.resourceInputs.attributesMap
+  );
+  const attributeId = attributesForResource[path]
+    ? attributesForResource[path].id
+    : null;
 
   const [updateJoin, { loading: updatingJoin }] = useMutation(mUpdateJoin);
   const [deleteJoin, { loading: deletingJoin }] = useMutation(mDeleteJoin);
@@ -43,7 +52,7 @@ const Join = ({ joinData, schema, source }: IProps) => {
     const { attribute: dataAttribute } = cache.readQuery({
       query: qInputsForAttribute,
       variables: {
-        attributeId: selectedNode.attribute.id
+        attributeId
       }
     });
     const newDataAttribute = {
@@ -53,7 +62,7 @@ const Join = ({ joinData, schema, source }: IProps) => {
     cache.writeQuery({
       query: qInputsForAttribute,
       variables: {
-        attributeId: selectedNode.attribute.id
+        attributeId
       },
       data: { attribute: newDataAttribute }
     });

@@ -15,21 +15,38 @@ const qResourcesForSource = loader(
 );
 const mCreateResource = loader('src/graphql/mutations/createResource.graphql');
 
-interface IProps {
+interface Props {
   callback: any;
 }
 
-const AddResource = ({ callback }: IProps) => {
-  // Hooking mutation
+interface ResourceState {
+  id: string;
+  name: string;
+}
+
+const AddResource = ({ callback }: Props) => {
+  const { loading: loadingAvailableResources, data } = useQuery(
+    qAvailableResources
+  );
+
+  const resourceNames = data
+    ? data.structureDefinitions.map((el: any) => el.name)
+    : [];
+
+  const { source } = useSelector((state: IReduxStore) => state.selectedNode);
+  const toaster = useSelector((state: IReduxStore) => state.toaster);
+  const [selectedResource, setSelectedResource] = React.useState(
+    {} as ResourceState
+  );
+
   const onCompleted = (data: any) => {
     toaster.show({
       icon: 'layout-hierarchy',
       intent: 'success',
-      message: `Ressource ${data.createResource.fhirType} créée pour ${selectedNode.source.name}.`,
+      message: `Ressource ${data.createResource.definition.type} créée pour ${source.name}.`,
       timeout: 4000
     });
 
-    setSelectedAddResource(data.createResource.fhirType);
     callback();
   };
 
@@ -47,21 +64,21 @@ const AddResource = ({ callback }: IProps) => {
     { data: { createResource } }: any
   ) => {
     try {
-      const { source } = cache.readQuery({
+      const { source: cachedSource } = cache.readQuery({
         query: qResourcesForSource,
         variables: {
-          sourceId: selectedNode.source.id
+          sourceId: source.id
         }
       });
       cache.writeQuery({
         query: qResourcesForSource,
         variables: {
-          sourceId: selectedNode.source.id
+          sourceId: source.id
         },
         data: {
           source: {
-            ...source,
-            resources: source.resources.concat([createResource])
+            ...cachedSource,
+            resources: [...cachedSource.resources, createResource]
           }
         }
       });
@@ -78,35 +95,30 @@ const AddResource = ({ callback }: IProps) => {
       update: addResourceToCache
     }
   );
-  const { loading: loadingAvailableResources, data } = useQuery(
-    qAvailableResources
-  );
-
-  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
-  const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const [selectedAddResource, setSelectedAddResource] = React.useState('');
 
   return (
     <FormGroup label={'Add Resource'}>
       <ControlGroup>
         <AddResourceSelect
           loading={loadingAvailableResources}
-          disabled={!selectedNode.source}
-          inputItem={selectedAddResource}
-          items={loadingAvailableResources ? [] : data.availableResources}
+          disabled={!source}
+          inputItem={selectedResource.name ? selectedResource.name : ''}
+          items={loadingAvailableResources ? [] : resourceNames}
           onChange={(resource: any) => {
-            setSelectedAddResource(resource);
+            setSelectedResource(
+              data.structureDefinitions.find((el: any) => el.name === resource)
+            );
           }}
         />
         <Button
           loading={creatingResource}
           icon={'plus'}
-          disabled={!selectedAddResource}
+          disabled={!selectedResource.name}
           onClick={() => {
             createResource({
               variables: {
-                sourceId: selectedNode.source.id,
-                resourceName: selectedAddResource
+                sourceId: source.id,
+                definitionId: selectedResource.id
               }
             });
           }}

@@ -1,4 +1,10 @@
-import { objectType } from 'nexus'
+import { objectType, FieldResolver } from 'nexus'
+import {
+  StructureDefinitionCreateInput,
+  StructureDefinitionUpdateInput,
+} from '@prisma/photon'
+import { getUserId } from 'utils'
+import { getDefinition } from 'fhir'
 
 export const StructureDefinition = objectType({
   name: 'StructureDefinition',
@@ -11,22 +17,78 @@ export const StructureDefinition = objectType({
     t.model.kind()
     t.model.derivation()
 
-    t.field('content', { type: 'JSON', resolve: parent => parent.content })
+    t.field('content', {
+      type: 'JSON',
+      resolve: () => t.model.content(),
+    })
+    t.field('display', {
+      type: 'JSON',
+      description: 'Structured version of a definition',
+      resolve: parent => getDefinition(parent.id),
+    })
 
     t.model.updatedAt()
     t.model.createdAt()
   },
 })
 
-// TODO
-// export const createStructureDefinition: FieldResolver<
-//   'Mutation',
-//   'createStructureDefinition'
-// > = async (_parent, { name }, ctx) =>
-//   ctx.photon.structureDefinitions.create({ data: { name } })
+export const createStructureDefinition: FieldResolver<
+  'Mutation',
+  'createStructureDefinition'
+> = async (_parent, { definition: rawDefinition }, ctx) => {
+  const definition = JSON.parse(rawDefinition)
+  if (
+    !definition.resourceType ||
+    definition.resourceType !== 'StructureDefinition'
+  ) {
+    throw new Error(`${definition.name} must be a FHIR definition resource`)
+  }
 
-// export const deleteStructureDefinition: FieldResolver<
-//   'Mutation',
-//   'deleteStructureDefinition'
-// > = async (_parent, { id }, ctx) =>
-//   ctx.photon.structureDefinitions.delete({ where: { id } })
+  const data: StructureDefinitionCreateInput = {
+    id: definition.id,
+    name: definition.name,
+    type: definition.type,
+    description: definition.description,
+    kind: definition.kind,
+    derivation: definition.derivation,
+    author: definition.publisher || getUserId(ctx),
+    content: JSON.stringify(definition),
+  }
+  return ctx.photon.structureDefinitions.create({ data })
+}
+
+export const updateStructureDefinition: FieldResolver<
+  'Mutation',
+  'updateStructureDefinition'
+> = async (_parent, { id, definition: rawDefinition }, ctx) => {
+  const definition = JSON.parse(rawDefinition)
+  if (
+    !definition.resourceType ||
+    definition.resourceType !== 'StructureDefinition'
+  ) {
+    throw new Error(`${definition.name} must be a FHIR definition resource`)
+  }
+
+  if (definition.id !== id) {
+    throw new Error(
+      `Provided id ('${id}') must match the definition's id ('${definition.id}')`,
+    )
+  }
+
+  const data: StructureDefinitionUpdateInput = {
+    name: definition.name,
+    type: definition.type,
+    description: definition.description,
+    kind: definition.kind,
+    derivation: definition.derivation,
+    author: definition.publisher || getUserId(ctx),
+    content: JSON.stringify(definition),
+  }
+  return ctx.photon.structureDefinitions.update({ where: { id }, data })
+}
+
+export const deleteStructureDefinition: FieldResolver<
+  'Mutation',
+  'deleteStructureDefinition'
+> = async (_parent, { id }, ctx) =>
+  ctx.photon.structureDefinitions.delete({ where: { id } })

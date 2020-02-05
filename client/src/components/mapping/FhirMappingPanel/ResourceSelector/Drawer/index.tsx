@@ -1,4 +1,4 @@
-import { useApolloClient, useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import {
   InputGroup,
   FormGroup,
@@ -9,53 +9,68 @@ import {
   Position
 } from '@blueprintjs/core';
 import React from 'react';
-import { useSelector, useDispatch, useStore } from 'react-redux';
-import useReactRouter from 'use-react-router';
+import { loader } from 'graphql.macro';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { IReduxStore } from 'types';
-
 import ColumnPicker from 'components/mapping/ColumnPicker';
+import {
+  updateFhirResource,
+  deselectFhirResource
+} from 'services/selectedNode/actions';
 
 import './style.scss';
 
-import { deselectFhirResource } from 'services/selectedNode/actions';
+interface Resource {
+  id: string;
+  label: string;
+  primaryKeyOwner: string;
+  primaryKeyTable: string;
+  primaryKeyColumn: string;
+  definition: {
+    id: string;
+    type: string;
+  };
+}
 
-import { deleteLocationParams } from 'services/urlState';
-import { loader } from 'graphql.macro';
-
-// GRAPHQL
-const qResourcesForSource = loader(
-  'src/graphql/queries/resourcesForSource.graphql'
-);
-const resourceInfo = loader('src/graphql/queries/resourceInfo.graphql');
-const mDeleteResource = loader('src/graphql/mutations/deleteResource.graphql');
-const mUpdateResource = loader('src/graphql/mutations/updateResource.graphql');
-
-interface IProps {
-  title: string;
+interface Props {
+  resource: Resource;
   isOpen: boolean;
   deleteResourceCallback: () => void;
   onCloseCallback?: () => void;
 }
 
+// GRAPHQL
+const qResourcesForSource = loader(
+  'src/graphql/queries/resourcesForSource.graphql'
+);
+const mDeleteResource = loader('src/graphql/mutations/deleteResource.graphql');
+const mUpdateResource = loader('src/graphql/mutations/updateResource.graphql');
+
 const Drawer = ({
-  title,
+  resource,
   isOpen,
   deleteResourceCallback,
   onCloseCallback
-}: IProps) => {
-  const client = useApolloClient();
+}: Props) => {
   const dispatch = useDispatch();
-  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
-  const store = useStore();
+  const { source } = useSelector((state: IReduxStore) => state.selectedNode);
+  const sourceSchemas = useSelector(
+    (state: IReduxStore) => state.data.sourceSchemas
+  );
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const { history, location } = useReactRouter();
 
-  const [schema, setSchema] = React.useState({});
   const [label, setLabel] = React.useState('');
   const [pkOwner, setPkOwner] = React.useState('');
   const [pkTable, setPkTable] = React.useState('');
   const [pkColumn, setPkColumn] = React.useState('');
+
+  React.useEffect(() => {
+    setLabel(resource.label || '');
+    setPkOwner(resource.primaryKeyOwner || '');
+    setPkTable(resource.primaryKeyTable || '');
+    setPkColumn(resource.primaryKeyColumn || '');
+  }, [resource]);
 
   const onFormSubmit = (updateResource: any) => {
     return (e: React.FormEvent<HTMLElement>) => {
@@ -63,7 +78,7 @@ const Drawer = ({
 
       updateResource({
         variables: {
-          resourceId: selectedNode.resource.id,
+          resourceId: resource.id,
           data: {
             label,
             primaryKeyOwner: pkOwner,
@@ -72,12 +87,21 @@ const Drawer = ({
           }
         }
       });
+      dispatch(
+        updateFhirResource({
+          ...resource,
+          label,
+          primaryKeyOwner: pkOwner,
+          primaryKeyTable: pkTable,
+          primaryKeyColumn: pkColumn
+        })
+      );
     };
   };
 
   const onUpdateCompleted = () => {
     toaster.show({
-      message: `Successfully updated ${selectedNode.resource.fhirType} properties`,
+      message: `Successfully updated ${resource.definition.type} properties`,
       intent: 'success',
       icon: 'properties'
     });
@@ -95,10 +119,9 @@ const Drawer = ({
     toaster.show({
       icon: 'layout-hierarchy',
       intent: 'success',
-      message: `Ressource ${data.deleteResource.fhirType} deleted for ${selectedNode.source.name}.`,
+      message: 'Resource deleted.',
       timeout: 4000
     });
-    deleteLocationParams(history, location, ['resourceId', 'attributeId']);
     dispatch(deselectFhirResource());
     deleteResourceCallback();
   };
@@ -127,22 +150,22 @@ const Drawer = ({
     { data: { deleteResource } }: any
   ) => {
     try {
-      const { source } = cache.readQuery({
+      const { source: cachedSource } = cache.readQuery({
         query: qResourcesForSource,
         variables: {
-          sourceId: selectedNode.source.id
+          sourceId: source.id
         }
       });
       const newSource = {
-        ...source,
-        resources: source.resources.filter(
+        ...cachedSource,
+        resources: cachedSource.resources.filter(
           (r: any) => r.id !== deleteResource.id
         )
       };
       cache.writeQuery({
         query: qResourcesForSource,
         variables: {
-          sourceId: selectedNode.source.id
+          sourceId: source.id
         },
         data: { source: newSource }
       });
@@ -160,36 +183,10 @@ const Drawer = ({
     }
   );
 
-  React.useEffect(() => {
-    if (selectedNode.resource.id) {
-      client
-        .query({
-          query: resourceInfo,
-          variables: {
-            resourceId: selectedNode.resource.id
-          }
-        })
-        .then((response: any) => {
-          setLabel(response.data.resource.label || '');
-          setPkOwner(response.data.resource.primaryKeyOwner || '');
-          setPkTable(response.data.resource.primaryKeyTable || '');
-          setPkColumn(response.data.resource.primaryKeyColumn || '');
-        });
-    }
-
-    if (selectedNode.source.schemaFileName) {
-      setSchema(
-        store.getState().data.sourceSchemas.schemaByFileName[
-          selectedNode.source.schemaFileName
-        ]
-      );
-    }
-  }, [client, selectedNode, store]);
-
   return (
     <BPDrawer
-      title={title}
-      icon={title ? 'properties' : null}
+      title={resource.definition ? resource.definition.type : ''}
+      icon={resource.definition ? 'properties' : null}
       isOpen={isOpen}
       onClose={onCloseCallback}
       size={BPDrawer.SIZE_SMALL}
@@ -200,7 +197,7 @@ const Drawer = ({
             <FormGroup
               label="Resource Label"
               className="resource-info"
-              disabled={updatingResource || selectedNode.resource.id === null}
+              disabled={updatingResource || !resource}
             >
               <InputGroup
                 type="text"
@@ -213,10 +210,10 @@ const Drawer = ({
             </FormGroup>
             <FormGroup
               label="Primary Key"
-              disabled={updatingResource || selectedNode.resource.id === null}
+              disabled={updatingResource || !resource}
             >
               <ColumnPicker
-                hasOwner={selectedNode.source.hasOwner}
+                hasOwner={source ? source.hasOwner : undefined}
                 ownerChangeCallback={(owner: string) => {
                   setPkOwner(owner);
                   setPkTable('');
@@ -234,7 +231,11 @@ const Drawer = ({
                   table: pkTable,
                   column: pkColumn
                 }}
-                sourceSchema={schema}
+                sourceSchema={
+                  source
+                    ? sourceSchemas.schemaByFileName[source.schemaFileName]
+                    : undefined
+                }
                 vertical={true}
                 fill={true}
                 popoverProps={{
@@ -245,11 +246,11 @@ const Drawer = ({
                   position: Position.LEFT_TOP,
                   usePortal: true
                 }}
-                disabled={updatingResource || selectedNode.resource.id === null}
+                disabled={updatingResource || !resource}
               />
             </FormGroup>
             <Button
-              disabled={updatingResource || selectedNode.resource.id === null}
+              disabled={updatingResource || !resource}
               intent="primary"
               text="Save"
               type="submit"
@@ -260,14 +261,14 @@ const Drawer = ({
       <div className={Classes.DRAWER_FOOTER}>
         <ControlGroup fill={true}>
           <Button
-            disabled={selectedNode.resource.id === null}
+            disabled={!resource}
             loading={deletingResource}
             icon={'trash'}
             intent={'danger'}
             onClick={() => {
               deleteResource({
                 variables: {
-                  id: selectedNode.resource.id
+                  id: resource.id
                 }
               });
             }}

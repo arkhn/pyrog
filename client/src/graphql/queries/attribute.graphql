@@ -1,6 +1,0 @@
-query attribute($attributeId: ID!) {
-  attribute(attributeId: $attributeId) {
-    id
-    name
-  }
-}

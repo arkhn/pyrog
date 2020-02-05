@@ -9,53 +9,61 @@ import { IconName } from '@blueprintjs/icons';
 
 import TSelect from './TSelect';
 
-interface IResource {
+interface Resource {
   id: string;
   label: string;
-  fhirType: string;
+  primaryKeyOwner: string;
+  primaryKeyTable: string;
+  primaryKeyColumn: string;
+  definition: {
+    id: string;
+    type: string;
+  };
 }
 
-interface ISelectProps {
+interface SelectProps {
   disabled?: boolean;
   icon?: IconName;
-  inputItem: IResource;
+  inputItem: Resource;
   intent?: Intent;
-  items: IResource[];
+  items: Resource[];
   loading?: boolean;
   onChange: any;
 }
 
-export default class ResourceSelect extends React.Component<ISelectProps, any> {
-  private renderItem: ItemRenderer<IResource> = (
-    resource: IResource,
+export default class ResourceSelect extends React.Component<SelectProps, any> {
+  private renderItem: ItemRenderer<Resource> = (
+    resource: Resource,
     { handleClick, modifiers, query }
   ) => {
     return (
       <MenuItem
         key={resource.id}
         onClick={handleClick}
-        text={resource.fhirType}
+        text={resource.definition.type}
         label={resource.label}
       />
     );
   };
 
-  private filterByName: ItemPredicate<IResource> = (
+  private filterByName: ItemPredicate<Resource> = (
     query,
-    resource: IResource
+    resource: Resource
   ) => {
     return (
-      `${resource.fhirType.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0
+      `${resource.definition.type.toLowerCase()}`.indexOf(
+        query.toLowerCase()
+      ) >= 0
     );
   };
 
-  private sortItems: ItemListPredicate<IResource> = (
+  private sortItems: ItemListPredicate<Resource> = (
     query,
-    resources: IResource[]
+    resources: Resource[]
   ) => {
     resources.sort((r1, r2) => {
-      const name1 = r1.fhirType.toLowerCase();
-      const name2 = r2.fhirType.toLowerCase();
+      const name1 = r1.definition.type.toLowerCase();
+      const name2 = r2.definition.type.toLowerCase();
       if (name1 < name2) return -1;
       if (name1 > name2) return 1;
       return 0;
@@ -63,8 +71,8 @@ export default class ResourceSelect extends React.Component<ISelectProps, any> {
     return resources;
   };
 
-  private displayItem = function(resource: IResource): string {
-    return resource ? resource.fhirType : 'None';
+  private displayItem = function(resource: Resource): string {
+    return resource.definition ? resource.definition.type : 'None';
   };
 
   public render() {
@@ -79,7 +87,7 @@ export default class ResourceSelect extends React.Component<ISelectProps, any> {
     } = this.props;
 
     return (
-      <TSelect<IResource>
+      <TSelect<Resource>
         disabled={!!disabled}
         displayItem={this.displayItem}
         filterItems={this.filterByName}

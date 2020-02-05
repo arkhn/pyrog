@@ -1,31 +1,66 @@
 import { FormGroup, ControlGroup, Button } from '@blueprintjs/core';
 import React from 'react';
+import { useApolloClient } from '@apollo/react-hooks';
 import { useSelector, useDispatch } from 'react-redux';
-import useReactRouter from 'use-react-router';
 
-import { updateLocationParams } from 'services/urlState';
+import { loader } from 'graphql.macro';
+
 import { updateFhirResource } from 'services/selectedNode/actions';
+import { initAttributesMap } from 'services/resourceInputs/actions';
 import { IReduxStore } from 'types';
 
 import Drawer from './Drawer';
 import ResourceSelect from 'components/selects/resourceSelect';
 
-interface IProps {
-  availableResources: any;
+interface Resource {
+  id: string;
+  label: string;
+  primaryKeyOwner: string;
+  primaryKeyTable: string;
+  primaryKeyColumn: string;
+  definition: {
+    id: string;
+    type: string;
+  };
+}
+
+interface Props {
+  resources: Resource[];
   loading: boolean;
   deleteResourceCallback: any;
 }
 
+const qResourceAttributes = loader(
+  'src/graphql/queries/resourceAttributes.graphql'
+);
+
 const ResourceSelector = ({
-  availableResources,
+  resources,
   loading,
   deleteResourceCallback
-}: IProps) => {
+}: Props) => {
+  const client = useApolloClient();
   const dispatch = useDispatch();
-  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
-  const { history, location } = useReactRouter();
+  const { source, resource } = useSelector(
+    (state: IReduxStore) => state.selectedNode
+  );
   const [drawerIsOpen, setDrawerIsOpen] = React.useState(false);
-  const { source, resource } = selectedNode;
+
+  const onClickedResource = async (clickedResource: any) => {
+    // Query attributes for corresponding resource
+    const {
+      data: {
+        resource: { attributes }
+      }
+    } = await client.query({
+      query: qResourceAttributes,
+      variables: { resourceId: clickedResource.id }
+    });
+
+    // Update Redux store
+    dispatch(initAttributesMap(attributes));
+    dispatch(updateFhirResource(clickedResource));
+  };
 
   return (
     <>
@@ -34,25 +69,15 @@ const ResourceSelector = ({
           <ResourceSelect
             disabled={!source}
             icon={'layout-hierarchy'}
-            inputItem={resource}
+            inputItem={
+              !resource
+                ? ({} as Resource)
+                : resources.find(r => r.id === resource.id) || ({} as Resource)
+            }
             intent={'primary'}
-            items={availableResources}
+            items={resources}
             loading={loading}
-            onChange={(resource: any) => {
-              dispatch(
-                updateFhirResource(
-                  resource.id,
-                  resource.fhirType,
-                  resource.label
-                )
-              );
-              updateLocationParams(
-                history,
-                location,
-                'resourceId',
-                resource.id
-              );
-            }}
+            onChange={onClickedResource}
           />
         </ControlGroup>
         <Button
@@ -66,7 +91,7 @@ const ResourceSelector = ({
       </FormGroup>
       {resource && (
         <Drawer
-          title={resource.fhirType}
+          resource={resource}
           isOpen={drawerIsOpen}
           deleteResourceCallback={deleteResourceCallback}
           onCloseCallback={() => {

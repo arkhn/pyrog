@@ -1,7 +1,13 @@
-mutation createResource($sourceId: ID!, $resourceName: String!) {
-  createResource(sourceId: $sourceId, resourceName: $resourceName) {
+mutation createResource($sourceId: ID!, $definitionId: String!) {
+  createResource(sourceId: $sourceId, definitionId: $definitionId) {
     id
-    fhirType
     label
+    primaryKeyOwner
+    primaryKeyTable
+    primaryKeyColumn
+    definition {
+      id
+      type
+    }
   }
 }

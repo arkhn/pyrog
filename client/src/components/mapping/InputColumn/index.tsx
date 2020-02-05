@@ -7,14 +7,18 @@ import {
   Tag
 } from '@blueprintjs/core';
 import * as React from 'react';
-import { useMutation } from '@apollo/react-hooks';
+import { useApolloClient, useMutation } from '@apollo/react-hooks';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { ISelectedSource } from 'types';
+import { IReduxStore, ISelectedSource } from 'types';
 
 // COMPONENTS
 import Join from '../Join';
 import ScriptSelect from 'components/selects/scriptSelect';
 import { loader } from 'graphql.macro';
+
+// ACTIONS
+import { removeAttributeFromMap } from 'services/resourceInputs/actions';
 
 // GRAPHQL
 const qInputsForAttribute = loader(
@@ -22,22 +26,34 @@ const qInputsForAttribute = loader(
 );
 const mUpdateInput = loader('src/graphql/mutations/updateInput.graphql');
 const mDeleteInput = loader('src/graphql/mutations/deleteInput.graphql');
+const mDeleteAttribute = loader(
+  'src/graphql/mutations/deleteAttribute.graphql'
+);
 const mAddJoinToColumn = loader(
   'src/graphql/mutations/addJoinToColumn.graphql'
 );
 
-interface IProps {
-  attribute: {
-    id: string;
-    name: string;
-  };
+interface Props {
   input: any;
   schema: any;
   source: ISelectedSource;
 }
 
-const InputColumn = ({ attribute, input, schema, source }: IProps) => {
+const InputColumn = ({ input, schema, source }: Props) => {
+  const client = useApolloClient();
+  const dispatch = useDispatch();
+
+  const {
+    attribute: { path }
+  } = useSelector((state: IReduxStore) => state.selectedNode);
+
+  const attributesForResource = useSelector(
+    (state: IReduxStore) => state.resourceInputs.attributesMap
+  );
+  const attributeId = attributesForResource[path].id;
+
   const [deleteInput, { loading: loadDelInput }] = useMutation(mDeleteInput);
+  const [deleteAttribute] = useMutation(mDeleteAttribute);
   const [addJoinToColumn, { loading: loadAddJoin }] = useMutation(
     mAddJoinToColumn
   );
@@ -47,7 +63,7 @@ const InputColumn = ({ attribute, input, schema, source }: IProps) => {
     const { attribute: dataAttribute } = cache.readQuery({
       query: qInputsForAttribute,
       variables: {
-        attributeId: attribute.id
+        attributeId: attributeId
       }
     });
     const newDataAttribute = {
@@ -57,10 +73,37 @@ const InputColumn = ({ attribute, input, schema, source }: IProps) => {
     cache.writeQuery({
       query: qInputsForAttribute,
       variables: {
-        attributeId: attribute.id
+        attributeId: attributeId
       },
       data: { attribute: newDataAttribute }
     });
+  };
+
+  const onClickDelete = async () => {
+    // Mutation to remove from DB
+    await deleteInput({
+      variables: {
+        id: input.id
+      },
+      update: removeInputFromCache
+    });
+
+    // Remove attribute from map and DB if it was last input
+    const { data: dataInputs } = await client.query({
+      query: qInputsForAttribute,
+      variables: {
+        attributeId: attributeId
+      }
+    });
+
+    if (dataInputs.attribute.inputs.length === 0) {
+      deleteAttribute({
+        variables: {
+          attributeId
+        }
+      });
+      dispatch(removeAttributeFromMap(path));
+    }
   };
 
   return (
@@ -69,14 +112,7 @@ const InputColumn = ({ attribute, input, schema, source }: IProps) => {
         icon={'trash'}
         loading={loadDelInput}
         minimal={true}
-        onClick={() => {
-          deleteInput({
-            variables: {
-              id: input.id
-            },
-            update: removeInputFromCache
-          });
-        }}
+        onClick={onClickDelete}
       />
       <Card elevation={Elevation.ONE} className="input-column-info">
         {input.staticValue ? (

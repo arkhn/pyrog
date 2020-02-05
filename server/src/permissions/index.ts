@@ -20,12 +20,32 @@ const rules = {
 export const permissions = shield({
   Query: {
     me: rules.isAuthenticatedUser,
+    credential: rules.isAuthenticatedUser,
     sources: rules.isAuthenticatedUser,
     source: rules.isAuthenticatedUser,
     resource: rules.isAuthenticatedUser,
     attribute: rules.isAuthenticatedUser,
+    structureDefinitions: rules.isAuthenticatedUser,
+    structureDefinition: rules.isAuthenticatedUser,
   },
   Mutation: {
     createSource: rules.isAuthenticatedUser,
+    deleteSource: rules.isAuthenticatedUser,
+
+    createStructureDefinition: rules.isAuthenticatedUser,
+    updateStructureDefinition: rules.isAuthenticatedUser,
+    deleteStructureDefinition: rules.isAuthenticatedUser,
+
+    createAttribute: rules.isAuthenticatedUser,
+    updateAttribute: rules.isAuthenticatedUser,
+    deleteAttribute: rules.isAuthenticatedUser,
+
+    createInput: rules.isAuthenticatedUser,
+    updateInput: rules.isAuthenticatedUser,
+    deleteInput: rules.isAuthenticatedUser,
+
+    addJoinToColumn: rules.isAuthenticatedUser,
+    updateJoin: rules.isAuthenticatedUser,
+    deleteJoin: rules.isAuthenticatedUser,
   },
 })

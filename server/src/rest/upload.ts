@@ -1,11 +1,11 @@
 import { isAbsolute } from 'path'
 
 import * as express from 'express'
-import multer from 'multer'
+import Multer, { diskStorage } from 'multer'
 import * as fs from 'fs'
 import { SCHEMAS_DIR } from '../constants'
 
-const storage = multer.diskStorage({
+const storage = diskStorage({
   destination(req, file, cb) {
     cb(null, `${SCHEMAS_DIR!}/`)
   },
@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
   },
 })
 
-var upload = multer({
+var upload = Multer({
   limits: {
     // Maximum file size in bytes (here, 100Mo)
     fileSize: 100 * 1024 * 1024,

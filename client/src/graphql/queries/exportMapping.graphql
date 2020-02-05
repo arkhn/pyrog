@@ -6,6 +6,6 @@ query exportMapping($sourceId: ID!) {
       id
       name
     }
-    mapping(depth: 10)
+    mapping
   }
 }

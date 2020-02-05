@@ -3,18 +3,12 @@
 
 
 type Attribute {
-  children(after: ID, before: ID, first: Int, last: Int, skip: Int): [Attribute!]!
   comments: String
   createdAt: DateTime!
-  description: String
-  fhirType: String!
   id: ID!
   inputs(after: ID, before: ID, first: Int, last: Int, skip: Int): [Input!]!
-  isArray: Boolean!
-  isRequired: Boolean!
   mergingScript: String
-  name: String!
-  parent: Attribute
+  path: String!
   resource: Resource
   updatedAt: DateTime!
 }
@@ -25,22 +19,21 @@ input AttributeFilter {
   some: AttributeWhereInput
 }
 
+input AttributeInput {
+  comments: String
+  mergingScript: String
+}
+
 input AttributeWhereInput {
   AND: [AttributeWhereInput!]
-  children: AttributeFilter
   comments: NullableStringFilter
   createdAt: DateTimeFilter
-  description: NullableStringFilter
-  fhirType: StringFilter
   id: StringFilter
   inputs: InputFilter
-  isArray: BooleanFilter
-  isRequired: BooleanFilter
   mergingScript: NullableStringFilter
-  name: StringFilter
   NOT: [AttributeWhereInput!]
   OR: [AttributeWhereInput!]
-  parent: AttributeWhereInput
+  path: StringFilter
   resource: ResourceWhereInput
   updatedAt: DateTimeFilter
 }
@@ -215,24 +208,35 @@ scalar JSON
 
 type Mutation {
   addJoinToColumn(columnId: ID!, join: JoinInput): Column!
-  createAttribute(parentId: ID!): Attribute!
+  createAttribute(data: AttributeInput, path: String!, resourceId: ID!): Attribute!
   createInput(attributeId: ID!, script: String, sql: ColumnInput, static: String): Input!
-  createResource(resourceName: String!, sourceId: ID!): Resource!
+  createResource(definitionId: String!, sourceId: ID!): Resource!
   createSource(hasOwner: Boolean!, mapping: String, name: String!, templateName: String!): Source!
+  createStructureDefinition(
+    """The content of the StructureDefinition as a JSON string"""
+    definition: String!
+  ): StructureDefinition!
   createTemplate(name: String!): Template!
   deleteAttribute(id: ID!): Attribute!
+  deleteAttributes(filter: AttributeWhereInput): [Attribute!]
   deleteCredential(id: ID!): Credential!
   deleteInput(id: ID!): Input!
   deleteJoin(id: ID!): Join!
   deleteResource(id: ID!): Resource!
   deleteSource(id: ID!): Source!
+  deleteStructureDefinition(id: ID!): StructureDefinition!
   deleteTemplate(id: ID!): Template!
   login(email: String!, password: String!): AuthPayload!
   signup(email: String!, name: String!, password: String!): AuthPayload!
-  updateAttribute(attributeId: ID!, data: UpdateAttributeInput!): Attribute!
+  updateAttribute(attributeId: ID!, data: AttributeInput!): Attribute!
   updateInput(data: UpdateInputInput!, inputId: ID!): Input!
   updateJoin(data: JoinInput!, joinId: ID!): Join!
   updateResource(data: UpdateResourceInput!, resourceId: ID!): Resource!
+  updateStructureDefinition(
+    """The content of the StructureDefinition as a JSON string"""
+    definition: String!
+    id: ID!
+  ): StructureDefinition!
   upsertCredential(database: String!, host: String!, login: String!, model: String!, password: String!, port: String!, sourceId: ID!): Credential!
 }
 
@@ -252,12 +256,14 @@ input NullableStringFilter {
 
 type Query {
   attribute(attributeId: ID!): Attribute
-  availableResources: [String!]!
+  credential(credentialId: ID!): Credential
   me: User
   resource(resourceId: ID!): Resource
   resources(filter: ResourceWhereInput): [Resource!]
   source(sourceId: ID!): Source
   sources: [Source!]
+  structureDefinition(definitionId: ID!): StructureDefinition
+  structureDefinitions(filter: StructureDefinitionWhereInput): [StructureDefinition!]
   template(templateId: ID!): Template
   templates: [Template!]
 }
@@ -265,13 +271,12 @@ type Query {
 type Resource {
   attributes(after: ID, before: ID, first: Int, last: Int, skip: Int): [Attribute!]!
   createdAt: DateTime!
-  fhirType: String!
+  definition: StructureDefinition
   id: ID!
   label: String
   primaryKeyColumn: String
   primaryKeyOwner: String
   primaryKeyTable: String
-  profile: String
   source: Source!
   updatedAt: DateTime!
 }
@@ -287,7 +292,6 @@ input ResourceWhereInput {
   attributes: AttributeFilter
   createdAt: DateTimeFilter
   definition: StructureDefinitionWhereInput
-  fhirType: StringFilter
   id: StringFilter
   label: NullableStringFilter
   NOT: [ResourceWhereInput!]
@@ -295,7 +299,6 @@ input ResourceWhereInput {
   primaryKeyColumn: NullableStringFilter
   primaryKeyOwner: NullableStringFilter
   primaryKeyTable: NullableStringFilter
-  profile: NullableStringFilter
   source: SourceWhereInput
   updatedAt: DateTimeFilter
 }
@@ -310,7 +313,7 @@ type Source {
   credential: Credential
   hasOwner: Boolean!
   id: ID!
-  mapping(depth: Int = 10): String!
+  mapping: String!
   mappingProgress: [Int!]
   name: String!
   resources(after: ID, before: ID, first: Int, last: Int, skip: Int, where: ResourceWhereInput): [Resource!]!
@@ -360,6 +363,9 @@ type StructureDefinition {
   createdAt: DateTime!
   derivation: FhirDerivation
   description: String!
+
+  """Structured version of a definition"""
+  display: JSON!
   id: String!
   kind: String!
   name: String!
@@ -401,11 +407,6 @@ input TemplateWhereInput {
   OR: [TemplateWhereInput!]
   sources: SourceFilter
   updatedAt: DateTimeFilter
-}
-
-input UpdateAttributeInput {
-  comments: String
-  mergingScript: String
 }
 
 input UpdateInputInput {

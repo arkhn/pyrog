@@ -3,8 +3,14 @@ query resourcesForSource($sourceId: ID!) {
     id
     resources {
       id
-      fhirType
       label
+      primaryKeyOwner
+      primaryKeyTable
+      primaryKeyColumn
+      definition {
+        id
+        type
+      }
     }
   }
 }

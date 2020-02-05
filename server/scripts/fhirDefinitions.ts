@@ -79,5 +79,5 @@ photon
   )
   .catch((err: Error) => {
     console.error(err)
-    process.exit(1)
+    photon.disconnect().then(() => process.exit(1))
   })

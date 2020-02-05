@@ -1,5 +1,5 @@
 import { Spinner } from '@blueprintjs/core';
-import { useApolloClient } from '@apollo/react-hooks';
+import { useApolloClient, useMutation } from '@apollo/react-hooks';
 import {
   Classes,
   ContextMenu,
@@ -10,376 +10,511 @@ import {
   Tooltip,
   Tree
 } from '@blueprintjs/core';
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useQuery } from '@apollo/react-hooks';
-
 import { IReduxStore } from 'types';
 import { loader } from 'graphql.macro';
 
+// ACTIONS
+import { removeAttributesFromMap } from 'services/resourceInputs/actions';
+
 // GRAPHQL
-const qResourceAttributeTree = loader(
-  'src/graphql/queries/resourceAttributeTree.graphql'
+const qStructureDisplay = loader(
+  'src/graphql/queries/structureDisplay.graphql'
 );
-const mCreateAttribute = loader(
-  'src/graphql/mutations/createAttribute.graphql'
-);
-const mDeleteAttribute = loader(
-  'src/graphql/mutations/deleteAttribute.graphql'
+const mDeleteAttributesStartingWith = loader(
+  'src/graphql/mutations/deleteAttributesStartingWith.graphql'
 );
 
-interface INodeData {
-  description: string;
-  fhirType: string;
-  id: string;
+const primitiveTypes = [
+  'base64Binary',
+  'boolean',
+  'canonical',
+  'code',
+  'date',
+  'dateTime',
+  'decimal',
+  'id',
+  'instant',
+  'integer',
+  'markdown',
+  'oid',
+  'positiveInt',
+  'string',
+  'time',
+  'unsignedInt',
+  'uri',
+  'url',
+  'uuid',
+  'xhtml'
+];
+
+interface NodeData {
+  types: string[];
   isArray: boolean;
+  isPrimitive: boolean;
   isRequired: boolean;
-  name: string;
-  parent: INodeData;
+  path: string[];
 }
 
-export interface IProps {
-  expandedAttributesIdList: string[];
-  nodeCollapseCallback: any;
-  nodeExpandCallback: any;
+export interface Props {
   onClickCallback: any;
-  selectedAttributeId?: string;
 }
 
-interface INodeLabelProps {
-  node: INodeData;
-  nodePath: string[];
+interface NodeLabelProps {
+  name: string;
+  type: any;
+  addNodeCallback: any;
+  deleteNodeCallback: any;
 }
 
-const NodeLabel = ({ node, nodePath }: INodeLabelProps) => {
-  const client = useApolloClient();
-
-  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
-
-  // Methods to update Apollo cache after creation/deletion mutations
-  const buildNewResource = (
-    resource: any,
-    path: string[],
-    adding: boolean,
-    data: any
-  ): INodeData => {
-    if (path.length > 0) {
-      return resource.children
-        ? {
-            ...resource,
-            children: resource.children.map((c: any) =>
-              c.id === path[0]
-                ? buildNewResource(c, path.splice(1), adding, data)
-                : c
-            )
-          }
-        : {
-            ...resource,
-            attributes: resource.attributes.map((c: any) =>
-              c.id === path[0]
-                ? buildNewResource(c, path.splice(1), adding, data)
-                : c
-            )
-          };
-    }
-    return {
-      ...resource,
-      children: adding // If not adding then we are removing
-        ? resource.children.concat([data])
-        : resource.children.filter((c: any) => c.id !== data.id)
-    };
-  };
-
-  const readCacheQuery = (cache: any) => {
-    return cache.readQuery({
-      query: qResourceAttributeTree,
-      variables: {
-        resourceId: selectedNode.resource.id
-      }
-    });
-  };
-
-  const writeInCache = (cache: any, data: any) => {
-    cache.writeQuery({
-      query: qResourceAttributeTree,
-      variables: {
-        resourceId: selectedNode.resource.id
-      },
-      data: data
-    });
-  };
-
-  const addAttributeToCache = (
-    cache: any,
-    { data: { createAttribute } }: any
-  ) => {
-    try {
-      const { resource } = readCacheQuery(cache);
-
-      const newResource = buildNewResource(
-        resource,
-        nodePath.concat([node.id]),
-        true,
-        createAttribute
-      );
-
-      writeInCache(cache, { resource: newResource });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const removeAttributeFromCache = (
-    cache: any,
-    { data: { deleteAttribute } }: any
-  ) => {
-    try {
-      const { resource } = readCacheQuery(cache);
-
-      const newResource = buildNewResource(
-        resource,
-        nodePath,
-        false,
-        deleteAttribute
-      );
-
-      writeInCache(cache, { resource: newResource });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const hasMoreThanOneSibling = (path: string[]) => {
-    const data = client.readQuery({
-      query: qResourceAttributeTree,
-      variables: {
-        resourceId: selectedNode.resource.id
-      }
-    });
-    if (!data) return false;
-
-    let resource = data.resource.attributes.find((a: any) => a.id === path[0]);
-    path = path.slice(1);
-    for (const id of path) {
-      resource = resource.children.find((c: any) => c.id === id);
-    }
-    return resource.children.length > 1;
-  };
-
+const NodeLabel = ({
+  name,
+  type,
+  addNodeCallback,
+  deleteNodeCallback
+}: NodeLabelProps) => {
   const showContextMenu = async (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
 
-    let menu;
-    if (node.isArray) {
-      menu = (
-        <Menu>
-          <MenuItem
-            icon={'add'}
-            onClick={() => {
-              client.mutate({
-                mutation: mCreateAttribute,
-                variables: {
-                  parentId: node.id
-                },
-                update: addAttributeToCache
-              });
-            }}
-            text={'Ajouter un item'}
-          />
-        </Menu>
-      );
-    } else if (
-      node.parent &&
-      node.parent.isArray &&
-      hasMoreThanOneSibling(nodePath)
-    ) {
-      menu = (
-        <Menu>
-          <MenuItem
-            icon={'delete'}
-            onClick={() => {
-              client.mutate({
-                mutation: mDeleteAttribute,
-                variables: {
-                  attributeId: node.id
-                },
-                update: removeAttributeFromCache
-              });
-            }}
-            text={"Supprimer l'item"}
-          />
-        </Menu>
-      );
-    }
+    const menu = addNodeCallback ? (
+      <Menu>
+        <MenuItem
+          icon={'add'}
+          onClick={addNodeCallback}
+          text={'Ajouter un item'}
+        />
+      </Menu>
+    ) : deleteNodeCallback ? (
+      <Menu>
+        <MenuItem
+          icon={'delete'}
+          onClick={deleteNodeCallback}
+          text={"Supprimer l'item"}
+        />
+      </Menu>
+    ) : null;
 
     if (menu) {
       ContextMenu.show(menu, { left: e.clientX, top: e.clientY });
     }
   };
 
+  // TODO what if several types?
   return (
     <div className={'node-label'} onContextMenu={showContextMenu}>
-      <div>{node.name}</div>
-      <div className={'node-type'}>{node.fhirType}</div>
+      <div>{name}</div>
+      <div className={'node-type'}>{type}</div>
     </div>
   );
 };
 
-const FhirResourceTree = ({
-  selectedAttributeId,
-  expandedAttributesIdList,
-  nodeCollapseCallback,
-  nodeExpandCallback,
-  onClickCallback
-}: IProps) => {
-  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
+const FhirResourceTree = ({ onClickCallback }: Props) => {
+  const client = useApolloClient();
+  const dispatch = useDispatch();
+  const resource = useSelector(
+    (state: IReduxStore) => state.selectedNode.resource
+  );
+  const baseDefinitionId = resource.definition.id;
 
-  const { data: dataTree, loading: loadingTree } = useQuery(
-    qResourceAttributeTree,
-    {
-      variables: {
-        resourceId: selectedNode.resource.id
-      },
-      skip: !selectedNode.resource.id
-    }
+  const { data, loading } = useQuery(qStructureDisplay, {
+    variables: { definitionId: baseDefinitionId }
+  });
+  const [deleteAttributes] = useMutation(mDeleteAttributesStartingWith);
+
+  const [nodes, setNodes] = useState([] as ITreeNode<NodeData>[]);
+  const [selectedNode, setSelectedNode] = useState([] as number[]);
+
+  const attributesForResource = useSelector(
+    (state: IReduxStore) => state.resourceInputs.attributesMap
   );
 
-  if (loadingTree) {
-    return <Spinner />;
-  }
+  const fhirStructure =
+    data && data.structureDefinition ? data.structureDefinition.display : {};
 
-  const attributesTree = dataTree ? dataTree.resource.attributes : null;
-
-  // Sort tree
-  const sortByName = (a: INodeData, b: INodeData) => (a.name > b.name ? 1 : -1);
-  attributesTree.sort(sortByName);
-
-  const bfsInputs = (node: any) => {
-    if (node.inputs && node.inputs.length > 0) {
-      return true;
-    } else if (node.children && node.children.length > 0) {
-      return node.children.some((attribute: any) => {
-        return bfsInputs(attribute);
-      });
-    } else {
-      return false;
+  const findNode = (
+    nodes: ITreeNode<NodeData>[],
+    path: string[]
+  ): ITreeNode<NodeData> | undefined => {
+    let curNode = nodes.find(n => n.id === path[0]);
+    for (const step of path.slice(1)) {
+      curNode = curNode!.childNodes!.find(n => n.id === step);
     }
+    return curNode;
   };
 
-  const forEachNode = (
-    nodes: ITreeNode<INodeData>[],
-    callback: (node: ITreeNode<INodeData>) => void
-  ) => {
-    if (nodes == null) {
-      return;
+  const findNodeWithNumberPath = (
+    nodes: ITreeNode<NodeData>[],
+    path: number[]
+  ): ITreeNode<NodeData> => {
+    let curNode = nodes[path[0]];
+    for (const step of path.slice(1)) {
+      curNode = curNode!.childNodes![step];
     }
+    return curNode;
+  };
 
-    for (const node of nodes) {
-      callback(node);
-      if (node.childNodes) {
-        forEachNode(node.childNodes, callback);
+  const buildStringFromPath = (path: string[]) => {
+    return path.filter(attr => !attr.endsWith('[x]')).join('.');
+  };
+
+  const deleteNodeFromArray = (
+    stateNodes: ITreeNode<NodeData>[],
+    path: string[]
+  ): ITreeNode<NodeData>[] => {
+    // First, we delete all the corresponding attributes in DB
+    deleteAttributes({
+      variables: {
+        startsWith: buildStringFromPath(path)
       }
+    });
+    // Same in Redux store
+    dispatch(removeAttributesFromMap(buildStringFromPath(path)));
+
+    // Then we delete the node from the tree
+    const targetId = path.splice(-1)[0];
+    const parent = findNode(stateNodes, path);
+    if (!parent || !parent.childNodes) return stateNodes;
+
+    if (parent.childNodes.length === 1) {
+      // If only one child is left, we simply rebuild an empty one
+      const deleteNodeCallback = (): void =>
+        setNodes(nodes => deleteNodeFromArray(nodes, [...path, '0']));
+
+      const nodeLabel = (
+        <NodeLabel
+          name={parent.id as string}
+          type={parent.nodeData?.types[0]}
+          addNodeCallback={null}
+          deleteNodeCallback={deleteNodeCallback}
+        />
+      );
+
+      const newNode: ITreeNode<NodeData> = {
+        hasCaret: parent.childNodes[0].hasCaret,
+        icon: parent.childNodes[0].icon,
+        id: '0',
+        isExpanded: false,
+        isSelected: false,
+        label: nodeLabel,
+        nodeData: {
+          ...parent.childNodes[0].nodeData!,
+          path: [...path, '0']
+        }
+      };
+      parent.childNodes = [newNode];
+    } else {
+      const targetIndex = parent.childNodes.findIndex(n => n.id === targetId);
+      parent.childNodes.splice(targetIndex, 1);
     }
+
+    return stateNodes;
   };
 
-  const genObjNodes = (node: any, pathAcc: string[]): ITreeNode<INodeData> => {
-    const nodeLabel = <NodeLabel node={node} nodePath={pathAcc} />;
+  const addNodeToArray = (
+    stateNodes: ITreeNode<NodeData>[],
+    path: string[]
+  ): ITreeNode<NodeData>[] => {
+    const parent = findNode(stateNodes, path);
+    if (!parent || !parent.childNodes) return stateNodes;
 
-    const hasChildren = node.children && node.children.length > 0;
-    const hasInputs = node.inputs && node.inputs.length > 0;
-    const nodePath = [...pathAcc, node.id];
+    const nextId = (
+      Number(parent.childNodes[parent.childNodes.length - 1].id) + 1
+    ).toString();
 
-    const secondaryLabel = hasInputs ? (
-      <Icon icon="small-tick" intent={'success'} />
-    ) : node.isRequired ? (
-      <Icon icon="dot" intent="warning" />
-    ) : bfsInputs(node) ? (
-      <Icon icon="dot" />
-    ) : null;
+    const deleteNodeCallback = (): void =>
+      setNodes(nodes => deleteNodeFromArray(nodes, [...path, nextId]));
 
-    return {
-      childNodes: node.isArray // We don't want to sort if isArray because all children have same name
-        ? node.children.map((child: any) => {
-            return genObjNodes(child, nodePath);
-          })
-        : hasChildren
-        ? node.children.sort(sortByName).map((child: any) => {
-            return genObjNodes(child, nodePath);
-          })
-        : null,
-      hasCaret: hasChildren,
-      icon: node.isArray ? 'multi-select' : hasChildren ? 'folder-open' : 'tag',
-      id: node.id,
+    const nodeLabel = (
+      <NodeLabel
+        name={parent.id as string}
+        type={parent.nodeData?.types[0]}
+        addNodeCallback={null}
+        deleteNodeCallback={deleteNodeCallback}
+      />
+    );
+
+    const newNode: ITreeNode<NodeData> = {
+      hasCaret: parent.childNodes[0].hasCaret,
+      icon: parent.childNodes[0].icon,
+      id: nextId,
       isExpanded: false,
       isSelected: false,
-      label: node.description ? (
-        <Tooltip boundary={'viewport'} content={node.description}>
+      label: nodeLabel,
+      nodeData: {
+        ...parent.childNodes[0].nodeData!,
+        path: [...path, nextId]
+      }
+    };
+    parent.childNodes = [...parent.childNodes, newNode];
+
+    return Array.from(stateNodes);
+  };
+
+  const createChildNodesForArray = (
+    parentPath: string[],
+    name: string,
+    types: string[],
+    isPrimitive: boolean,
+    isRequired: boolean,
+    definition: string
+  ): ITreeNode<NodeData>[] => {
+    // Check if there are already existing attributes for this node
+    const pathKey = buildStringFromPath([...parentPath, name]);
+    let existingChildrenIds = Object.keys(attributesForResource)
+      .filter(key => key.startsWith(pathKey))
+      .map(key => key.slice(pathKey.length + 1).split('.')[0]);
+
+    const hasAttributes = existingChildrenIds.length > 0;
+
+    let childNodes = [] as ITreeNode<NodeData>[];
+    if (!hasAttributes) {
+      // If no child exists yet, we still build one with id 0
+      existingChildrenIds = ['0'];
+    }
+    for (const childId of existingChildrenIds) {
+      const deleteNodeCallback = (): void =>
+        setNodes(nodes =>
+          deleteNodeFromArray(nodes, [...parentPath, name, childId])
+        );
+
+      // Create the label
+      const childNodeLabel = (
+        <NodeLabel
+          name={name}
+          type={types[0]}
+          addNodeCallback={null}
+          deleteNodeCallback={deleteNodeCallback}
+        />
+      );
+
+      childNodes = [
+        ...childNodes,
+        {
+          hasCaret: !isPrimitive,
+          icon: (isPrimitive ? 'tag' : 'folder-open') as any,
+          id: childId,
+          isExpanded: false,
+          isSelected: false,
+          label: definition ? (
+            <Tooltip boundary={'viewport'} content={definition}>
+              {childNodeLabel}
+            </Tooltip>
+          ) : (
+            childNodeLabel
+          ),
+          secondaryLabel: hasAttributes ? <Icon icon="dot" /> : null,
+          nodeData: {
+            types: types,
+            isArray: false,
+            isPrimitive: isPrimitive,
+            isRequired: isRequired,
+            path: [...parentPath, name, childId]
+          }
+        }
+      ];
+    }
+    return childNodes;
+  };
+
+  const buildMultiTypeNode = (
+    types: string[],
+    [name, content]: [string, any],
+    parentPath: string[]
+  ): ITreeNode<NodeData>[] => {
+    let childNodes = [] as ITreeNode<NodeData>[];
+    for (const type of types) {
+      const childContent = { ...content, type: [{ code: type }] };
+      const child = buildNodeFromObject(
+        [name + type[0].toUpperCase() + type.slice(1), childContent],
+        [...parentPath, `${name}[x]`]
+      );
+      childNodes = [...childNodes, child];
+    }
+    return childNodes;
+  };
+
+  const buildNodeFromObject = (
+    [name, content]: [string, any],
+    parentPath: string[]
+  ): ITreeNode<NodeData> => {
+    // NOTE pb in parsing, remove this when solved
+    content = content.x ? content.x : content;
+    const isArray = content.max !== '1';
+    const isRequired = content.min > 0;
+    const path = [...parentPath, name];
+    const types = content.type
+      ? content.type.map((type: any) => type.code)
+      : [];
+    const isPrimitive =
+      types.length > 1
+        ? false
+        : primitiveTypes.includes(types[0])
+        ? true
+        : false;
+    const definition = content.definition;
+    const pathString = buildStringFromPath(path);
+    const hasInputs = Object.keys(attributesForResource).includes(pathString);
+    const hasChildAttributes = Object.keys(attributesForResource).some(el =>
+      el.startsWith(pathString)
+    );
+    const nodeName = types.length > 1 ? `${name}[x]` : name;
+
+    const addNodeCallback = (): void =>
+      setNodes(nodes => addNodeToArray(nodes, path));
+
+    const nodeLabel = (
+      <NodeLabel
+        name={nodeName}
+        type={types.join(' | ')}
+        addNodeCallback={isArray ? addNodeCallback : null}
+        deleteNodeCallback={null}
+      />
+    );
+
+    let childNodes = [] as ITreeNode<NodeData>[];
+    if (types.length > 1) {
+      childNodes = buildMultiTypeNode(types, [name, content], parentPath);
+    } else if (isArray) {
+      // If node is array, we need to replicate the root node for this type
+      // childNode will be the node really having the structure defined by
+      // the structure definition
+      childNodes = createChildNodesForArray(
+        parentPath,
+        nodeName,
+        types,
+        isPrimitive,
+        isRequired,
+        definition
+      );
+    }
+    return {
+      childNodes: childNodes,
+      hasCaret: !isPrimitive || isArray,
+      icon: isArray ? 'multi-select' : !isPrimitive ? 'folder-open' : 'tag',
+      id: nodeName,
+      isExpanded: false,
+      isSelected: false,
+      label: definition ? (
+        <Tooltip boundary={'viewport'} content={definition}>
           {nodeLabel}
         </Tooltip>
       ) : (
         nodeLabel
       ),
+      secondaryLabel: hasInputs ? (
+        <Icon icon="small-tick" intent={'success'} />
+      ) : isRequired ? (
+        <Icon icon="dot" intent="warning" />
+      ) : hasChildAttributes ? (
+        <Icon icon="dot" />
+      ) : null,
       nodeData: {
-        description: node.description,
-        fhirType: node.fhirType,
-        id: node.id,
-        isArray: node.isArray,
-        isRequired: node.isRequired,
-        name: node.name,
-        parent: node.parent
-      },
-      secondaryLabel: secondaryLabel
+        types: types,
+        isArray: isArray,
+        isPrimitive: isPrimitive,
+        isRequired: isRequired,
+        path: [...parentPath, nodeName]
+      }
     };
   };
 
-  const nodes = attributesTree.map((attribute: any) => {
-    return genObjNodes(attribute, []);
-  });
+  const genTreeLevel = (
+    levelStructure: any,
+    rootPath: string[]
+  ): ITreeNode<NodeData>[] => {
+    return Object.entries(levelStructure)
+      .filter(entry => entry[0] !== '$meta')
+      .map(entry => {
+        return buildNodeFromObject(entry, rootPath);
+      });
+  };
 
-  forEachNode(nodes, (node: ITreeNode<INodeData>) => {
-    if (!node.nodeData) {
-      node.isSelected = false;
-      node.isExpanded = false;
-    }
-    node.isSelected = node.nodeData!.id === selectedAttributeId;
-    node.isExpanded = expandedAttributesIdList.indexOf(node.nodeData!.id) >= 0;
-  });
+  useEffect(() => {
+    if (!loading) setNodes(genTreeLevel(fhirStructure, []));
+  }, [resource, loading]);
 
-  const handleNodeClick = (
-    node: ITreeNode<INodeData>,
-    _nodePath: number[],
-    e: React.MouseEvent<HTMLElement>
-  ) => {
-    // Can only select tree leaves
-    if (!node.hasCaret) {
-      const originallySelected = node.isSelected;
+  // To update secondary label on user input
+  const updateSecondaryLabel = (node: ITreeNode<NodeData>) => {
+    const isRequired = node.nodeData?.isRequired;
+    const pathString = buildStringFromPath(node.nodeData!.path);
+    const hasInputs =
+      node.nodeData?.isPrimitive &&
+      !node.nodeData?.isArray &&
+      Object.keys(attributesForResource).includes(pathString);
+    const hasChildAttributes = Object.keys(attributesForResource).some(el =>
+      el.startsWith(pathString)
+    );
 
-      if (!e.shiftKey) {
-        forEachNode(
-          nodes,
-          (node: ITreeNode<INodeData>) => (node.isSelected = false)
-        );
-      }
+    node.secondaryLabel = hasInputs ? (
+      <Icon icon="small-tick" intent={'success'} />
+    ) : isRequired ? (
+      <Icon icon="dot" intent="warning" />
+    ) : hasChildAttributes ? (
+      <Icon icon="dot" />
+    ) : null;
 
-      node.isSelected = originallySelected == null ? true : !originallySelected;
-
-      onClickCallback(node.nodeData);
-    } else {
-      if (node.isExpanded) {
-        node.isExpanded = false;
-        nodeCollapseCallback(node);
-      } else {
-        node.isExpanded = true;
-        nodeExpandCallback(node);
+    if (node.childNodes !== undefined) {
+      for (const child of node.childNodes) {
+        updateSecondaryLabel(child);
       }
     }
   };
 
-  return (
+  useEffect(() => {
+    for (const node of nodes) {
+      updateSecondaryLabel(node);
+    }
+    setNodes(Array.from(nodes));
+  }, [attributesForResource]);
+
+  const augmentStructure = (
+    affectedNode: ITreeNode<NodeData>,
+    structure: any
+  ): void => {
+    const treeLevel = genTreeLevel(structure, affectedNode.nodeData!.path);
+    affectedNode.childNodes = treeLevel;
+  };
+
+  const handleNodeClick = async (
+    node: ITreeNode<NodeData>,
+    nodePath: number[]
+  ): Promise<void> => {
+    if (node.nodeData?.isArray) {
+      node.isExpanded = !node.isExpanded;
+    } else if (!node.nodeData?.isPrimitive) {
+      if (!node.childNodes || node.childNodes.length === 0) {
+        // TODO what if several types are possible?
+        const { data } = await client.query({
+          query: qStructureDisplay,
+          variables: { definitionId: node.nodeData?.types[0] }
+        });
+        if (data.structureDefinition !== null)
+          augmentStructure(node, data.structureDefinition.display);
+      }
+      node.isExpanded = !node.isExpanded;
+    } else {
+      if (selectedNode.length > 0) {
+        const unselectedNode = findNodeWithNumberPath(nodes, selectedNode)!;
+        unselectedNode.isSelected = false;
+      }
+      node.isSelected = true;
+      setSelectedNode(nodePath);
+      onClickCallback(buildStringFromPath(node.nodeData.path));
+    }
+    setNodes(Array.from(nodes));
+  };
+
+  return loading ? (
+    <Spinner />
+  ) : (
     <Tree
       className={Classes.ELEVATION_0}
       contents={nodes}
       onNodeClick={handleNodeClick}
+      onNodeCollapse={handleNodeClick}
+      onNodeExpand={handleNodeClick}
     />
   );
 };

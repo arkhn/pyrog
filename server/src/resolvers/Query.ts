@@ -1,6 +1,6 @@
 import { arg, idArg, queryType } from 'nexus'
 
-import { getUserId, availableResources } from 'utils'
+import { getUserId } from 'utils'
 
 export const Query = queryType({
   definition(t) {
@@ -15,6 +15,16 @@ export const Query = queryType({
           },
         })
       },
+    })
+
+    t.field('credential', {
+      type: 'Credential',
+      args: {
+        credentialId: idArg({ nullable: false }),
+      },
+      nullable: true,
+      resolve: (parent, { credentialId }, ctx) =>
+        ctx.photon.credentials.findOne({ where: { id: credentialId } }),
     })
 
     t.list.field('templates', {
@@ -84,9 +94,28 @@ export const Query = queryType({
         ctx.photon.attributes.findOne({ where: { id: attributeId } }),
     })
 
-    t.list.field('availableResources', {
-      type: 'String',
-      resolve: () => availableResources(),
+    t.list.field('structureDefinitions', {
+      type: 'StructureDefinition',
+      nullable: true,
+      args: {
+        filter: arg({
+          type: 'StructureDefinitionWhereInput',
+        }),
+      },
+      resolve: (parent, { filter }, ctx) =>
+        ctx.photon.structureDefinitions({ where: filter }),
+    })
+
+    t.field('structureDefinition', {
+      type: 'StructureDefinition',
+      args: {
+        definitionId: idArg({ nullable: false }),
+      },
+      nullable: true,
+      resolve: (parent, { definitionId }, ctx) =>
+        ctx.photon.structureDefinitions.findOne({
+          where: { id: definitionId },
+        }),
     })
   },
 })

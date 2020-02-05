@@ -1,7 +1,7 @@
-mutation updateAttribute($attributeId: ID!, $data: UpdateAttributeInput!) {
+#import "../fragments/entireAttribute.graphql"
+
+mutation updateAttribute($attributeId: ID!, $data: AttributeInput!) {
   updateAttribute(attributeId: $attributeId, data: $data) {
-    id
-    comments
-    mergingScript
+    ...entireAttribute
   }
 }

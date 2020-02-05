@@ -1,0 +1,9 @@
+query resourceAttributes($resourceId: ID!) {
+  resource(resourceId: $resourceId) {
+    id
+    attributes {
+      id
+      path
+    }
+  }
+}
