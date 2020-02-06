@@ -6,7 +6,7 @@ services:
     build:
       context: .
     ports:
-      - 4000:4000
+      - 1000:1000
     env_file: .env.docker
     depends_on:
       - postgres
