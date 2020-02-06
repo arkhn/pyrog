@@ -463,10 +463,12 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
   };
 
   useEffect(() => {
-    for (const node of nodes) {
-      updateSecondaryLabel(node);
-    }
-    setNodes(Array.from(nodes));
+    setNodes(nodes => {
+      for (const node of nodes) {
+        updateSecondaryLabel(node);
+      }
+      return nodes;
+    });
   }, [attributesForResource]);
 
   const augmentStructure = (

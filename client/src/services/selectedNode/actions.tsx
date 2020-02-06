@@ -46,7 +46,7 @@ export const changeSelectedSource = (source: {
   return async dispatch => {
     try {
       const response = await fetch(
-        `${HTTP_BACKEND_URL}/schemas/${source.name}_${source.template.name}.json`
+        `${HTTP_BACKEND_URL}/schemas/${source.template.name}_${source.name}.json`
       );
       const body = await response.json();
       if (response.status !== 200) {

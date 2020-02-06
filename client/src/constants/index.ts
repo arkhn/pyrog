@@ -6,3 +6,4 @@ export const {
   REACT_APP_ENGINE_BACKEND_URL: ENGINE_BACKEND_URL,
   REACT_APP_PAGAI_URL: PAGAI_URL
 } = process.env;
+console.log(process.env);

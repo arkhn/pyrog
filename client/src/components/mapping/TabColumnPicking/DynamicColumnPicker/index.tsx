@@ -136,7 +136,7 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
           });
         });
     }
-  }, [source, owner, table]);
+  }, [source, owner, table, toaster]);
 
   return (
     <Card elevation={Elevation.ONE}>
