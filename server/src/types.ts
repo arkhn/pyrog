@@ -38,6 +38,7 @@ export type StructureMetadata = {
   id: string
   url: string
   name: string
+  type: string
   description: string
   kind: string
   baseDefinition: string

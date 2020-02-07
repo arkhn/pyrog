@@ -47,7 +47,6 @@ export const exportMapping = async (
   const resources = await photon.resources({
     where: { source: { id: source.id } },
     include: {
-      definition: true,
       attributes: {
         include: {
           inputs: {

@@ -1,6 +1,7 @@
 import { arg, idArg, queryType } from 'nexus'
 
 import { getUserId } from 'utils'
+import { getDefinition } from 'fhir'
 
 export const Query = queryType({
   definition(t) {
@@ -94,28 +95,13 @@ export const Query = queryType({
         ctx.photon.attributes.findOne({ where: { id: attributeId } }),
     })
 
-    t.list.field('structureDefinitions', {
-      type: 'StructureDefinition',
-      nullable: true,
-      args: {
-        filter: arg({
-          type: 'StructureDefinitionWhereInput',
-        }),
-      },
-      resolve: (parent, { filter }, ctx) =>
-        ctx.photon.structureDefinitions({ where: filter }),
-    })
-
     t.field('structureDefinition', {
       type: 'StructureDefinition',
       args: {
         definitionId: idArg({ nullable: false }),
       },
       nullable: true,
-      resolve: (parent, { definitionId }, ctx) =>
-        ctx.photon.structureDefinitions.findOne({
-          where: { id: definitionId },
-        }),
+      resolve: (_, { definitionId }, ctx) => ({ id: definitionId }),
     })
   },
 })

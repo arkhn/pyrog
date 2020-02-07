@@ -75,11 +75,7 @@ export default (photon: Photon, sourceId: string, resources: any[]) => {
           attributes: {
             create: buildAttributesQuery(attributes),
           },
-          definition: {
-            connect: {
-              id: r.fhirType,
-            },
-          },
+          definitionId: r.fhirType,
           source: {
             connect: {
               id: sourceId,

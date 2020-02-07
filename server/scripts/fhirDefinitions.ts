@@ -1,11 +1,9 @@
 import * as fs from 'fs'
 import { join, isAbsolute } from 'path'
 
-import { Photon, StructureDefinitionCreateInput } from '@prisma/photon'
+import axios from 'axios'
 
-import { HL7_AUTHOR } from '../src/constants'
-
-const photon = new Photon()
+import { FHIR_API_URL } from '../src/constants'
 
 const parseBundles = async (bundleFiles: string[]) => {
   for (const bundleFile of bundleFiles) {
@@ -24,41 +22,16 @@ const parseBundles = async (bundleFiles: string[]) => {
         if (!resource) throw new Error('Bundle entry is missing a resource')
         if (resource.resourceType !== 'StructureDefinition') return
 
-        const definition: StructureDefinitionCreateInput = {
-          id: resource.id,
-          name: resource.name,
-          type: resource.type,
-          description: resource.description,
-          kind: resource.kind,
-          derivation: resource.derivation,
-          author: HL7_AUTHOR,
-          content: JSON.stringify(resource),
+        try {
+          await axios.post(`${FHIR_API_URL}/StructureDefinition`, resource)
+        } catch (err) {
+          console.error(
+            `Could not create StructureDefinition ${resource.id}: ${err.response.data}`,
+          )
         }
-        await photon.structureDefinitions.create({ data: definition })
       }),
     )
   }
-}
-
-const countDefinitions = async () => {
-  // resources
-  const resources = await photon.structureDefinitions.findMany({
-    where: { derivation: 'specialization', kind: 'resource' },
-    select: { id: true },
-  })
-  // profiles
-  const profiles = await photon.structureDefinitions.findMany({
-    where: { derivation: 'constraint', kind: 'resource' },
-    select: { id: true },
-  })
-  // extensions
-  const extensions = await photon.structureDefinitions.findMany({
-    where: { derivation: 'constraint', type: 'Extension' },
-    select: { id: true },
-  })
-  console.log(
-    `Wrote ${resources.length} resources, ${profiles.length} profiles and ${extensions.length} extensions.`,
-  )
 }
 
 if (process.argv.length < 3) {
@@ -68,16 +41,9 @@ if (process.argv.length < 3) {
   process.exit(1)
 }
 
-photon
-  .connect()
-  .then(() =>
-    parseBundles(process.argv.slice(2)).then(() =>
-      countDefinitions().then(() =>
-        photon.disconnect().then(() => process.exit(0)),
-      ),
-    ),
-  )
-  .catch((err: Error) => {
-    console.error(err)
-    photon.disconnect().then(() => process.exit(1))
+parseBundles(process.argv.slice(2))
+  .then(() => {
+    console.log('Successfully wrote structure definitions to FHIR API')
+    process.exit(0)
   })
+  .catch(() => process.exit(1))

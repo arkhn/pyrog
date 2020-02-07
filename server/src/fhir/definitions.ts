@@ -1,9 +1,10 @@
 import { Photon } from '@prisma/photon'
 import NodeCache from 'node-cache'
 import set from 'lodash.set'
+import axios from 'axios'
 
 import { StructureDefinition } from 'types'
-import { HL7_AUTHOR } from '../constants'
+import { FHIR_API_URL } from '../constants'
 
 const photon = new Photon()
 const cache = new NodeCache()
@@ -11,13 +12,13 @@ const cache = new NodeCache()
 const metaPrefix = '$meta'
 
 // Gets a definition from the cache.
-export const getDefinition = (key: string) => cache.get(key)
+export const getDefinition = (key: string): StructureDefinition | undefined =>
+  cache.get(key)
 
 // Loads definitions from the database and cache a structured
 // version of the definition in an in-memory cache.
 export const bootstrapDefinitions = async () => {
-  const cacheDefinition = (fhirStructureDefinition: string) => {
-    const definition = JSON.parse(fhirStructureDefinition)
+  const cacheDefinition = (definition: any) => {
     const structured = structurize(definition)
 
     // Use id as key. If it isn't present, use url
@@ -28,24 +29,38 @@ export const bootstrapDefinitions = async () => {
     }
 
     // Put obj in key value store
+    console.log('loaded', id)
     cache.set(id || url, structured)
   }
 
   console.log('Bootstrapping standard FHIR definitions...')
-  const standardDefinitions = await photon.structureDefinitions.findMany({
-    where: { author: HL7_AUTHOR },
-  })
-  for (const def of standardDefinitions) {
-    cacheDefinition(def.content)
+  const { data: standardDefinitions } = await axios.get(
+    `${FHIR_API_URL}/StructureDefinition`,
+    {
+      params: {
+        _count: 1000, // TODO: use pagination
+      },
+    },
+  )
+  for (const def of standardDefinitions.items.map(
+    ({ _source }: any) => _source,
+  )) {
+    cacheDefinition(def)
   }
 
-  console.log('Bootstrapping custom FHIR definitions...')
-  const customDefinitions = await photon.structureDefinitions.findMany({
-    where: { author: { not: HL7_AUTHOR } },
-  })
-  for (const def of customDefinitions) {
-    cacheDefinition(def.content)
-  }
+  //TODO: fix the ':not' modifier in fhir-api
+  // console.log('Bootstrapping custom FHIR definitions...')
+  // const { data: customDefinitions } = await axios.get(
+  //   `${FHIR_API_URL}/StructureDefinition`,
+  //   {
+  //     params: { 'publisher:not': HL7_AUTHOR },
+  //   },
+  // )
+  // for (const def of customDefinitions.items.map(
+  //   ({ _source }: any) => _source,
+  // )) {
+  //   cacheDefinition(def)
+  // }
 }
 
 const structurize = (definition: any): StructureDefinition => {
@@ -93,6 +108,7 @@ const structureFieldsWhiteList = [
   'id',
   'url',
   'name',
+  'type',
   'description',
   'kind',
   'baseDefinition',
