@@ -12,6 +12,15 @@ services:
     depends_on:
       - cleaning-scripts
 
+  fhir-pipe:
+    image: arkhn/fhir-pipe:latest
+    container_name: fhir-pipe
+    env_file: .env.docker
+    ports:
+      - 3000:3000
+    networks:
+      - arkhn
+
   cleaning-scripts:
     image: arkhn/cleaning-scripts:latest
     container_name: cleaning-scripts

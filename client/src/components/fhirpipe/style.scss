@@ -8,21 +8,21 @@ $window-padding: 20px;
   margin: 0px auto;
   padding: $window-padding;
   
-  .align-right {
-    text-align: right;
+  .creds-alert {
+    margin-left: 10px;
+    color: #FFA500;
   }
 
   .advanced-options {
     margin: $window-padding 0px;
     margin-top: 2 * $window-padding;
-
-    .hidden {
-      margin: $window-padding 0px;
-      margin-bottom: $window-padding;
-    }
   }
 
   .button-submit {
     margin: $window-padding 0px;
+  }
+
+  .align-right {
+    text-align: right;
   }
 }

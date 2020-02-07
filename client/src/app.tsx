@@ -17,7 +17,7 @@ import Routes from './routes';
 import {
   AUTH_TOKEN,
   HTTP_BACKEND_URL,
-  CLEANING_SCRIPTS_URI
+  CLEANING_SCRIPTS_URL
 } from './constants';
 
 // Reducers
@@ -123,10 +123,10 @@ const links = [];
 if (process.env.NODE_ENV === 'development') {
   links.push(errorLink);
 }
-if (CLEANING_SCRIPTS_URI) {
+if (CLEANING_SCRIPTS_URL) {
   links.push(
     new RestLink({
-      uri: CLEANING_SCRIPTS_URI + '/',
+      uri: CLEANING_SCRIPTS_URL + '/',
       headers: {
         'Content-Type': 'application/json'
       }
