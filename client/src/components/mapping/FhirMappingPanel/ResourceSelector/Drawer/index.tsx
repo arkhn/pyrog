@@ -55,9 +55,7 @@ const Drawer = ({
 }: Props) => {
   const dispatch = useDispatch();
   const { source } = useSelector((state: IReduxStore) => state.selectedNode);
-  const sourceSchemas = useSelector(
-    (state: IReduxStore) => state.data.sourceSchemas
-  );
+
   const toaster = useSelector((state: IReduxStore) => state.toaster);
 
   const [label, setLabel] = React.useState('');
@@ -231,11 +229,7 @@ const Drawer = ({
                   table: pkTable,
                   column: pkColumn
                 }}
-                sourceSchema={
-                  source
-                    ? sourceSchemas.schemaByFileName[source.schemaFileName]
-                    : undefined
-                }
+                sourceSchema={source.schema!}
                 vertical={true}
                 fill={true}
                 popoverProps={{

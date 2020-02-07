@@ -20,9 +20,10 @@ import './style.scss';
 const qExportMapping = loader('src/graphql/queries/exportMapping.graphql');
 
 const MappingView = () => {
-  const data = useSelector((state: IReduxStore) => state.data);
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
+  const { source, resource, attribute } = useSelector(
+    (state: IReduxStore) => state.selectedNode
+  );
   const [selectedTabId, setSelectedTabId] = React.useState('picker' as TabId);
   const client = useApolloClient();
 
@@ -30,7 +31,7 @@ const MappingView = () => {
     const { data, errors } = await client.query({
       query: qExportMapping,
       variables: {
-        sourceId: selectedNode.source.id
+        sourceId: source.id
       },
       fetchPolicy: 'network-only'
     });
@@ -66,16 +67,7 @@ const MappingView = () => {
   };
 
   const renderExistingRules = () => (
-    <InputColumns
-      schema={
-        selectedNode.source.schemaFileName
-          ? data.sourceSchemas.schemaByFileName[
-              selectedNode.source.schemaFileName
-            ]
-          : {}
-      }
-      source={selectedNode.source}
-    />
+    <InputColumns schema={source.schema} source={source} />
   );
 
   const renderTabs = () => {
@@ -92,15 +84,9 @@ const MappingView = () => {
               id="picker"
               panel={
                 <TabColumnPicking
-                  attribute={selectedNode.attribute}
-                  schema={
-                    selectedNode.source.schemaFileName
-                      ? data.sourceSchemas.schemaByFileName[
-                          selectedNode.source.schemaFileName
-                        ]
-                      : {}
-                  }
-                  source={selectedNode.source}
+                  attribute={attribute}
+                  schema={source.schema}
+                  source={source}
                 />
               }
               title="Column Selection"
@@ -124,19 +110,19 @@ const MappingView = () => {
   const renderHelp = () => {
     return (
       <div id="help-resource">
-        {!selectedNode.resource && (
+        {!resource && (
           <div id="help-pick-resource">
             <p>Pick a resource</p>
             <Icon icon="arrow-right" />
           </div>
         )}
-        {!selectedNode.resource && (
+        {!resource && (
           <div id="help-add-resource">
             <p>Add a resource</p>
             <Icon icon="arrow-right" />
           </div>
         )}
-        {selectedNode.resource && !selectedNode.attribute && (
+        {resource && !attribute && (
           <div id="help-pick-attribute">
             <p>Pick an attribute</p>
             <Icon icon="arrow-right" />
@@ -146,15 +132,11 @@ const MappingView = () => {
     );
   };
 
-  if (
-    selectedNode.source &&
-    selectedNode.source.schemaFileName &&
-    !data.sourceSchemas.schemaByFileName[selectedNode.source.schemaFileName]
-  ) {
+  if (source && !source.schema) {
     toaster.show({
       icon: 'error',
       intent: 'danger',
-      message: `missing database schema for source ${selectedNode.source.name}`,
+      message: `missing database schema for source ${source.name}`,
       timeout: 4000
     });
     return (
@@ -170,8 +152,8 @@ const MappingView = () => {
       <div id="mapping-explorer-container">
         <div id="main-container">
           <div id="exploration-panel">
-            {selectedNode.attribute && renderExistingRules()}
-            {selectedNode.attribute ? renderTabs() : renderHelp()}
+            {attribute && renderExistingRules()}
+            {attribute ? renderTabs() : renderHelp()}
           </div>
           <div id="fhir-panel">
             <FhirMappingPanel />

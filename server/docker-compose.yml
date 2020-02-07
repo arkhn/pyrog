@@ -1,4 +1,4 @@
-version: "3"
+version: "3.7"
 services:
   pyrog:
     image: arkhn/pyrog-server:latest
@@ -6,12 +6,14 @@ services:
     build:
       context: .
     ports:
-      - 4000:4000
+      - 1000:1000
     env_file: .env.docker
     depends_on:
       - postgres
     volumes:
       - schemas:/home/node/app/schemas
+    networks:
+      - arkhn
 
   postgres:
     image: postgres
@@ -23,7 +25,13 @@ services:
       POSTGRES_DB: prisma
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    networks:
+      - arkhn
 
 volumes:
   postgres-data:
   schemas:
+
+networks:
+  arkhn:
+    name: arkhn_network
