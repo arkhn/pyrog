@@ -5,6 +5,16 @@ import axios from 'axios'
 
 import { FHIR_API_URL } from '../src/constants'
 
+const testConnection = async () => {
+  if (!FHIR_API_URL) throw new Error('missing FHIR API url')
+  try {
+    await axios.get(FHIR_API_URL)
+  } catch (err) {
+    if (!err.response || err.response.status != 404)
+      throw new Error(`could not connect to FHIR API: ${err.message}`)
+  }
+}
+
 const parseBundles = async (bundleFiles: string[]) => {
   for (const bundleFile of bundleFiles) {
     const filePath = isAbsolute(bundleFile)
@@ -26,7 +36,9 @@ const parseBundles = async (bundleFiles: string[]) => {
           await axios.post(`${FHIR_API_URL}/StructureDefinition`, resource)
         } catch (err) {
           console.error(
-            `Could not create StructureDefinition ${resource.id}: ${err.response.data}`,
+            `Could not create StructureDefinition ${resource.id}: ${
+              err.response ? err.response.data : err.message
+            }`,
           )
         }
       }),
@@ -41,9 +53,14 @@ if (process.argv.length < 3) {
   process.exit(1)
 }
 
-parseBundles(process.argv.slice(2))
-  .then(() => {
-    console.log('Successfully wrote structure definitions to FHIR API')
-    process.exit(0)
+testConnection()
+  .then(() =>
+    parseBundles(process.argv.slice(2)).then(() => {
+      console.log('Successfully wrote structure definitions to FHIR API')
+      process.exit(0)
+    }),
+  )
+  .catch((err: any) => {
+    console.error(err)
+    process.exit(1)
   })
-  .catch(() => process.exit(1))
