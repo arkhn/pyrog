@@ -168,8 +168,8 @@ const FhirpipeView = () => {
         <form onSubmit={onFormSubmit}>
           <h1>Select source</h1>
           <p>
-            Choose the source you want to process with the ETL. Note that need
-            to provide the credential for the source database before.
+            Choose the source you want to process with the ETL. Note that you
+            need to provide the credentials for the source database before.
           </p>
           <SourceSelect
             items={sources}
