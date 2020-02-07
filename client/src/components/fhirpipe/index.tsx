@@ -45,8 +45,12 @@ const FhirpipeView = () => {
   const [resetStore, setResetStore] = useState(false);
   const [multiprocessing, setMultiprocessing] = useState(false);
 
-  const { data: dataSources } = useQuery(qSources, {});
-  const { data: dataResources } = useQuery(qResources, {});
+  const { data: dataSources } = useQuery(qSources, {
+    fetchPolicy: 'network-only'
+  });
+  const { data: dataResources } = useQuery(qResources, {
+    fetchPolicy: 'network-only'
+  });
   const sources = dataSources ? dataSources.sources : [];
   const resources = dataResources ? dataResources.resources : [];
 
@@ -59,7 +63,7 @@ const FhirpipeView = () => {
   );
   const credentials = dataCredential && dataCredential.source.credential;
   const credentialsMissing =
-    selectedSource.name !== undefined && !loadingCredentials && !credentials;
+    !!selectedSource.name && !loadingCredentials && !credentials;
 
   const SourceSelect = Select.ofType<Source>();
   const ResourceMultiSelect = MultiSelect.ofType<Resource>();
@@ -143,7 +147,7 @@ const FhirpipeView = () => {
       });
     }
 
-    if (res.status === 200 && res.data.errors === undefined) {
+    if (res.status === 200 && !!res.data.errors) {
       toaster.show({
         message: 'Fhirpipe ran successfully',
         intent: 'success',
