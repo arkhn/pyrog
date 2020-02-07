@@ -55,7 +55,7 @@ jobs:
       - name: Build
         run: |
           cd client/
-          yarn build:docker
+          yarn docker:build:staging
 
       - name: Tag docker images
         run: |
