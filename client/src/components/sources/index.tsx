@@ -124,7 +124,6 @@ const SourcesView = () => {
                               id: source.id
                             }
                           });
-                          dispatch(deselectSource());
                         }
                       }}
                     >
