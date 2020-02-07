@@ -1,5 +1,4 @@
 import { objectType, FieldResolver } from 'nexus'
-import { getDefinition } from 'fhir'
 
 export const Resource = objectType({
   name: 'Resource',

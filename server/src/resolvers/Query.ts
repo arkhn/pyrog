@@ -1,7 +1,6 @@
 import { arg, idArg, queryType } from 'nexus'
 
 import { getUserId } from 'utils'
-import { getDefinition } from 'fhir'
 
 export const Query = queryType({
   definition(t) {
@@ -101,7 +100,7 @@ export const Query = queryType({
         definitionId: idArg({ nullable: false }),
       },
       nullable: true,
-      resolve: (_, { definitionId }, ctx) => ({ id: definitionId }),
+      resolve: (_, { definitionId }) => ({ id: definitionId }),
     })
   },
 })

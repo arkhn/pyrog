@@ -41,11 +41,7 @@ describe('import mapping V2', () => {
             id: sourceId,
           },
         },
-        definition: {
-          connect: {
-            id: 'EpisodeOfCare',
-          },
-        },
+        definitionId: 'EpisodeOfCare',
         attributes: {
           create: expect.arrayContaining([
             {

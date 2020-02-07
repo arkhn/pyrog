@@ -293,11 +293,7 @@ Array [
           },
         ],
       },
-      "definition": Object {
-        "connect": Object {
-          "id": "EpisodeOfCare",
-        },
-      },
+      "definitionId": "EpisodeOfCare",
       "label": "Hospital Stay",
       "primaryKeyColumn": "SECLEUNIK",
       "primaryKeyOwner": "OPS$ACHQ1ABC",
@@ -817,11 +813,7 @@ Array [
           },
         ],
       },
-      "definition": Object {
-        "connect": Object {
-          "id": "Patient",
-        },
-      },
+      "definitionId": "Patient",
       "label": "",
       "primaryKeyColumn": "PACLEUNIK",
       "primaryKeyOwner": "OPS$ACHQ1ABC",

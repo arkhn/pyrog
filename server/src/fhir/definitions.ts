@@ -1,4 +1,3 @@
-import { Photon } from '@prisma/photon'
 import NodeCache from 'node-cache'
 import set from 'lodash.set'
 import axios from 'axios'
@@ -6,7 +5,6 @@ import axios from 'axios'
 import { StructureDefinition } from 'types'
 import { FHIR_API_URL } from '../constants'
 
-const photon = new Photon()
 const cache = new NodeCache()
 
 const metaPrefix = '$meta'
