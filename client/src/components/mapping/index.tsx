@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Tab, Tabs, TabId, Icon } from '@blueprintjs/core';
+import { Tab, Tabs, TabId, Icon, Overlay } from '@blueprintjs/core';
 import { loader } from 'graphql.macro';
 import { useApolloClient } from 'react-apollo';
 import { useSelector } from 'react-redux';

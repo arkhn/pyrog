@@ -1,0 +1,32 @@
+@import "~@blueprintjs/core/lib/css/blueprint.css";
+@import "~@blueprintjs/core/lib/scss/variables";
+
+$window-padding: 20px;
+
+#main-div {
+  max-width: 600px;
+  margin: 0px auto;
+  padding: $window-padding;
+  
+  .align-right {
+    text-align: right;
+  }
+
+  .advanced-options {
+    margin: $window-padding 0px;
+    margin-top: 2 * $window-padding;
+
+    .hidden {
+      margin: $window-padding 0px;
+      margin-bottom: $window-padding;
+    }
+  }
+
+  .small-text-area {
+    width: 15%
+  }
+
+  .button-submit {
+    margin: $window-padding 0px;
+  }
+}
