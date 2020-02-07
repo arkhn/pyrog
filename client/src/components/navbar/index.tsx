@@ -15,11 +15,11 @@ import './style.scss';
 import { deselectSource } from 'services/selectedNode/actions';
 
 // Logo
-interface IProps {
+interface Props {
   exportMapping?: (event: any) => void;
 }
 
-const Navbar = ({ exportMapping }: IProps) => {
+const Navbar = ({ exportMapping }: Props) => {
   const dispatch = useDispatch();
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
   const user = useSelector((state: IReduxStore) => state.user);
@@ -32,15 +32,24 @@ const Navbar = ({ exportMapping }: IProps) => {
         <BPNavbar.Divider />
         {selectedNode.source.name}
         <BPNavbar.Divider />
-        <Button icon="export" minimal={true} onClick={exportMapping!}>
-          Export mapping
-        </Button>
         <Button
           icon="more"
           minimal={true}
           onClick={() => setDrawerIsOpen(true)}
         >
           Database
+        </Button>
+        <Button icon="export" minimal={true} onClick={exportMapping!}>
+          Export mapping
+        </Button>
+        <Button
+          icon="flame"
+          minimal={true}
+          onClick={() => {
+            history.push('/fhirpipe');
+          }}
+        >
+          Run fhir-pipe
         </Button>
         <Drawer
           title={selectedNode.source ? selectedNode.source.name : ''}

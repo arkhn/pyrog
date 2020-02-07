@@ -1,0 +1,10 @@
+query resources {
+  resources {
+    id
+    label
+    definition {
+      id
+      type
+    }
+  }
+}
