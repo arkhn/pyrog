@@ -91,7 +91,7 @@ const AddResource = ({ callback }: Props) => {
   );
 
   React.useEffect(() => {
-    async function fetchDefinitions() {
+    const fetchDefinitions = async () => {
       setLoadingDefinitions(true);
       const { data } = await axios.get(`${FHIR_API_URL!}/StructureDefinition`, {
         params: { derivation: 'specialization', kind: 'resource' }
@@ -99,7 +99,7 @@ const AddResource = ({ callback }: Props) => {
       const defs = data.items.map((i: any) => i._source);
       setDefinitions(defs);
       setLoadingDefinitions(false);
-    }
+    };
     fetchDefinitions();
   }, []);
 
