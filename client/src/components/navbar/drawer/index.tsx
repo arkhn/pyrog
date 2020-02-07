@@ -10,12 +10,13 @@ import {
 } from '@blueprintjs/core';
 import * as React from 'react';
 import { Mutation, useQuery } from 'react-apollo';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { loader } from 'graphql.macro';
 
 import StringSelect from 'components/selects/stringSelect';
 import { IReduxStore } from 'types';
 import './style.scss';
+import { updateSelectedSource } from 'services/selectedNode/actions';
 
 const qCredentialForSource = loader(
   'src/graphql/queries/credentialForSource.graphql'
@@ -33,6 +34,7 @@ interface IProps {
 const Drawer = ({ title, isOpen, onClose }: IProps) => {
   const models = ['POSTGRES'];
 
+  const dispatch = useDispatch();
   const [host, setHost] = React.useState('');
   const [port, setPort] = React.useState('');
   const [login, setLogin] = React.useState('');
@@ -81,6 +83,12 @@ const Drawer = ({ title, isOpen, onClose }: IProps) => {
             onCompleted={(data: any) => {
               setHasChanged(false);
               setHasSuccessfullyChanged(true);
+              dispatch(
+                updateSelectedSource({
+                  ...selectedNode.source,
+                  credential: data.upsertCredential
+                })
+              );
             }}
             onError={(error: any) => {
               console.log('ERROR', error);

@@ -24,8 +24,14 @@ export interface IUser {
 export interface ISelectedSource {
   id: string;
   name: string;
-  schemaFileName: string;
   hasOwner: boolean;
+  template: {
+    name: string;
+  };
+  credential: {
+    id: string;
+  };
+  schema?: ISourceSchema;
 }
 
 export interface ISelectedResource {
@@ -57,13 +63,6 @@ export interface IResourceInputs {
   attributesMap: any;
 }
 
-export interface ISourceSchemas {
-  loadingSourceSchema: boolean;
-  schemaByFileName: {
-    [fileName: string]: any;
-  };
-}
-
 export interface IRecommendedColumns {
   columnsByAttribute: {
     [fhirAttribute: string]: any;
@@ -71,7 +70,6 @@ export interface IRecommendedColumns {
 }
 
 export interface IData {
-  sourceSchemas: ISourceSchemas;
   recommendedColumns: IRecommendedColumns;
 }
 

@@ -25,7 +25,7 @@ const TableViewer = ({ rows, fields, isLoading }: IProps) => {
           <Column
             key={index}
             name={field}
-            cellRenderer={(i: number) => <Cell>{rows[i][field]}</Cell>}
+            cellRenderer={(i: number) => <Cell>{rows[i][index]}</Cell>}
           />
         );
       })

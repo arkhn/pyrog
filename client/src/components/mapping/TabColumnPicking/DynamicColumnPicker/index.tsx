@@ -15,7 +15,7 @@ import TableViewer from '../TableViewer';
 
 import { IReduxStore } from 'types';
 import { loader } from 'graphql.macro';
-import { HTTP_BACKEND_URL } from '../../../../constants';
+import { PAGAI_URL } from '../../../../constants';
 
 import { setAttributeInMap } from 'services/resourceInputs/actions';
 
@@ -38,6 +38,7 @@ interface Props {
 
 const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
   const dispatch = useDispatch();
+  const toaster = useSelector((state: IReduxStore) => state.toaster);
 
   const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
   const path = attribute.path;
@@ -110,31 +111,45 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
       update: addInputToCache
     });
   };
-
   React.useEffect(() => {
-    if (source && source.id && table) {
+    if (source && source.credential && table) {
       setTableIsLoading(true);
       axios
         .get(
-          `${HTTP_BACKEND_URL}/tableview/${source.id}/${
+          `${PAGAI_URL}/explore/${source.credential.id}/${
             owner ? owner + '.' : ''
           }${table}`
         )
         .then((res: any) => {
           setTableIsLoading(false);
           setRows(res.data.rows);
-          setFields(res.data.fields.map((field: any) => field.name));
+          setFields(res.data.fields);
         })
         .catch((err: any) => {
           setTableIsLoading(false);
-          console.log(err);
+          const { error } = err.response.data;
+          toaster.show({
+            message: error || err.response.statusText,
+            intent: 'danger',
+            icon: 'properties',
+            timeout: 10000
+          });
         });
     }
-  }, [source, owner, table]);
+  }, [source, owner, table, toaster]);
 
   return (
     <Card elevation={Elevation.ONE}>
-      <div className="card-tag">Dynamic</div>
+      <div className="card-absolute">
+        <div className="card-flex">
+          <div className="card-tag">Dynamic</div>
+          {!source.credential && (
+            <div className="card-credentials-missing">
+              Database credentials missing
+            </div>
+          )}
+        </div>
+      </div>
       <FormGroup labelFor="text-input" inline={true}>
         <ControlGroup>
           <ColumnPicker

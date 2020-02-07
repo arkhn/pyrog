@@ -1,4 +1,4 @@
-version: '3'
+version: "3.7"
 services:
   pyrog_client:
     image: arkhn/pyrog-client:latest
@@ -8,13 +8,31 @@ services:
     ports:
       - $PORT:$PORT
     env_file: .env.docker
-    restart: 'no'
+    restart: "no"
     depends_on:
       - cleaning-scripts
+      - pagai
+    networks:
+      - arkhn
 
   cleaning-scripts:
     image: arkhn/cleaning-scripts:latest
     container_name: cleaning-scripts
     env_file: .env.docker
     ports:
-      - 5001:5001
+      - 5000:5000
+    networks:
+      - arkhn
+
+  pagai:
+    image: arkhn/pagai:latest
+    container_name: pagai
+    env_file: .env.docker
+    ports:
+      - 4000:4000
+    networks:
+      - arkhn
+
+networks:
+  arkhn:
+    name: arkhn_network

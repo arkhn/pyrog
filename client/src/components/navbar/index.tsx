@@ -12,6 +12,7 @@ import { IReduxStore } from 'types';
 import { AUTH_TOKEN } from '../../constants';
 
 import './style.scss';
+import { deselectSource } from 'services/selectedNode/actions';
 
 // Logo
 interface IProps {
@@ -57,6 +58,7 @@ const Navbar = ({ exportMapping }: IProps) => {
       <BPNavbar.Group align={Alignment.LEFT}>
         <BPNavbar.Heading
           onClick={() => {
+            dispatch(deselectSource());
             history.push('/');
           }}
         >
@@ -66,7 +68,7 @@ const Navbar = ({ exportMapping }: IProps) => {
         <Header />
       </BPNavbar.Group>
 
-      {user.id && selectedNode.source && renderSourceContext()}
+      {selectedNode.source && renderSourceContext()}
 
       {user.id && (
         <BPNavbar.Group align={Alignment.RIGHT}>

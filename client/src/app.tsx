@@ -23,7 +23,6 @@ import {
 // Reducers
 
 // Data fetching reducers
-import sourceSchemas from './services/selectedNode/sourceSchemas/reducer';
 import recommendedColumns from './services/recommendedColumns/reducer';
 import selectedNodeReducer from './services/selectedNode/reducer';
 import resourceInputsReducer from 'services/resourceInputs/reducer';
@@ -54,7 +53,6 @@ if (process.env.NODE_ENV === 'development') {
 
 // Data reducer (also called canonical state)
 const dataReducer = combineReducers({
-  sourceSchemas,
   recommendedColumns
 });
 
@@ -87,7 +85,6 @@ const persistor = persistStore(store);
 // APOLLO
 
 // HttpLink
-console.log('----', process.env);
 const httpLink = new HttpLink({
   uri: HTTP_BACKEND_URL,
   fetch: fetch

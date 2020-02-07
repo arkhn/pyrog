@@ -1,6 +1,5 @@
-import { IAction } from 'types';
-
-import { fetchSourceSchema } from './sourceSchemas/actions';
+import { IAction, ISourceSchema } from 'types';
+import { HTTP_BACKEND_URL } from '../../constants';
 
 interface Resource {
   id: string;
@@ -15,36 +14,49 @@ interface Resource {
 }
 
 // Fhir Source
-export const updateSelectedSource = (
-  id: string,
-  name: string,
-  schemaFileName: string,
-  hasOwner: boolean
-): IAction => {
+export const updateSelectedSource = (source: {
+  id: string;
+  name: string;
+  hasOwner: boolean;
+  template: {
+    name: string;
+  };
+  credential: {
+    id: string;
+  };
+  schema?: ISourceSchema;
+}): IAction => {
   return {
     type: 'UPDATE_SELECTED_SOURCE',
-    payload: {
-      id,
-      name,
-      schemaFileName,
-      hasOwner
-    }
+    payload: source
   };
 };
 
-export const changeSelectedSource = (
-  id: string,
-  sourceName: string,
-  templateName: string,
-  hasOwner: boolean
-): IAction => {
-  const schemaFileName = templateName.concat('_', sourceName);
-  return (dispatch: any, getState: any) => {
-    dispatch(
-      fetchSourceSchema(schemaFileName, () =>
-        dispatch(updateSelectedSource(id, sourceName, schemaFileName, hasOwner))
-      )
-    );
+export const changeSelectedSource = (source: {
+  id: string;
+  name: string;
+  hasOwner: boolean;
+  template: {
+    name: string;
+  };
+  credential: {
+    id: string;
+  };
+}): IAction => {
+  return async dispatch => {
+    try {
+      const response = await fetch(
+        `${HTTP_BACKEND_URL}/schemas/${source.template.name}_${source.name}.json`
+      );
+      const body = await response.json();
+      if (response.status !== 200) {
+        throw new Error(body.error);
+      }
+      dispatch(updateSelectedSource({ ...source, schema: body }));
+    } catch (err) {
+      console.log(`error fetching source schema: ${err}`);
+      dispatch(updateSelectedSource(source));
+    }
   };
 };
 
