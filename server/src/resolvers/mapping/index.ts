@@ -8,7 +8,7 @@ import {
 } from '../../constants'
 import handleV1 from './v1'
 import handleV2 from './v2'
-import handleV3 from './v2'
+import handleV3 from './v3'
 
 // copy all the resources from the mapping and their attributes.
 // this is done through a single query matching the graph of the mapping.
