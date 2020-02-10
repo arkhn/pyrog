@@ -40,9 +40,7 @@ export const bootstrapDefinitions = async () => {
       },
     },
   )
-  standardDefinitions.items
-    .map(({ _source }: any) => _source)
-    .foreach((d: any) => cacheDefinition(d))
+  standardDefinitions.items.forEach((d: any) => cacheDefinition(d))
 
   //TODO: fix the ':not' modifier in fhir-api
   // console.log('Bootstrapping custom FHIR definitions...')
