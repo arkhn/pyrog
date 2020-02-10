@@ -96,8 +96,7 @@ const AddResource = ({ callback }: Props) => {
       const { data } = await axios.get(`${FHIR_API_URL!}/StructureDefinition`, {
         params: { derivation: 'specialization', kind: 'resource' }
       });
-      const defs = data.items.map((i: any) => i._source);
-      setDefinitions(defs);
+      setDefinitions(data.items);
       setLoadingDefinitions(false);
     };
     fetchDefinitions();
