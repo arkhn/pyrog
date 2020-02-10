@@ -4,6 +4,7 @@
   "license": "GPL-3.0",
   "scripts": {
     "start": "react-scripts start",
+    "start:staging": "env $(cat .env.staging) react-scripts start",
     "build": "react-scripts build",
     "docker:build:local": "docker build -t arkhn/pyrog-client:latest --build-arg ENV_FILE=.env .",
     "docker:build:staging": "docker build -t arkhn/pyrog-client:latest --build-arg ENV_FILE=.env.staging .",

@@ -1,94 +1,52 @@
-import { objectType, FieldResolver } from 'nexus'
-import {
-  StructureDefinitionCreateInput,
-  StructureDefinitionUpdateInput,
-} from '@prisma/photon'
-import { getUserId } from 'utils'
+import { objectType } from 'nexus'
 import { getDefinition } from 'fhir'
 
 export const StructureDefinition = objectType({
   name: 'StructureDefinition',
   definition(t) {
-    t.model.id()
-    t.model.name()
-    t.model.type()
-    t.model.description()
-    t.model.author()
-    t.model.kind()
-    t.model.derivation()
-
-    t.field('content', {
-      type: 'JSON',
-      resolve: () => t.model.content(),
+    t.field('id', {
+      type: 'String',
+      resolve: (parent: any) => {
+        const def = getDefinition(parent.id)
+        if (!def) {
+          throw new Error(`Could not find definition ${parent.id}`)
+        }
+        return def.$meta.id
+      },
     })
+
+    t.field('type', {
+      type: 'String',
+      resolve: (parent: any) => {
+        const def = getDefinition(parent.id)
+        if (!def) {
+          throw new Error(`Could not find definition ${parent.id}`)
+        }
+        return def.$meta.type
+      },
+    })
+
+    t.field('name', {
+      type: 'String',
+      resolve: (parent: any) => {
+        const def = getDefinition(parent.id)
+        if (!def) {
+          throw new Error(`Could not find definition ${parent.id}`)
+        }
+        return def.$meta.name
+      },
+    })
+
     t.field('display', {
       type: 'JSON',
       description: 'Structured version of a definition',
-      resolve: parent => getDefinition(parent.id),
+      resolve: (parent: any) => {
+        const def = getDefinition(parent.id)
+        if (!def) {
+          throw new Error(`Could not find definition ${parent.id}`)
+        }
+        return def
+      },
     })
-
-    t.model.updatedAt()
-    t.model.createdAt()
   },
 })
-
-export const createStructureDefinition: FieldResolver<
-  'Mutation',
-  'createStructureDefinition'
-> = async (_parent, { definition: rawDefinition }, ctx) => {
-  const definition = JSON.parse(rawDefinition)
-  if (
-    !definition.resourceType ||
-    definition.resourceType !== 'StructureDefinition'
-  ) {
-    throw new Error(`${definition.name} must be a FHIR definition resource`)
-  }
-
-  const data: StructureDefinitionCreateInput = {
-    id: definition.id,
-    name: definition.name,
-    type: definition.type,
-    description: definition.description,
-    kind: definition.kind,
-    derivation: definition.derivation,
-    author: definition.publisher || getUserId(ctx),
-    content: JSON.stringify(definition),
-  }
-  return ctx.photon.structureDefinitions.create({ data })
-}
-
-export const updateStructureDefinition: FieldResolver<
-  'Mutation',
-  'updateStructureDefinition'
-> = async (_parent, { id, definition: rawDefinition }, ctx) => {
-  const definition = JSON.parse(rawDefinition)
-  if (
-    !definition.resourceType ||
-    definition.resourceType !== 'StructureDefinition'
-  ) {
-    throw new Error(`${definition.name} must be a FHIR definition resource`)
-  }
-
-  if (definition.id !== id) {
-    throw new Error(
-      `Provided id ('${id}') must match the definition's id ('${definition.id}')`,
-    )
-  }
-
-  const data: StructureDefinitionUpdateInput = {
-    name: definition.name,
-    type: definition.type,
-    description: definition.description,
-    kind: definition.kind,
-    derivation: definition.derivation,
-    author: definition.publisher || getUserId(ctx),
-    content: JSON.stringify(definition),
-  }
-  return ctx.photon.structureDefinitions.update({ where: { id }, data })
-}
-
-export const deleteStructureDefinition: FieldResolver<
-  'Mutation',
-  'deleteStructureDefinition'
-> = async (_parent, { id }, ctx) =>
-  ctx.photon.structureDefinitions.delete({ where: { id } })

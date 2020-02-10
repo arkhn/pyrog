@@ -138,11 +138,6 @@ input DateTimeFilter {
   notIn: [DateTime!]
 }
 
-enum FhirDerivation {
-  constraint
-  specialization
-}
-
 type Input {
   attribute: Attribute!
   createdAt: DateTime!
@@ -212,10 +207,6 @@ type Mutation {
   createInput(attributeId: ID!, script: String, sql: ColumnInput, static: String): Input!
   createResource(definitionId: String!, sourceId: ID!): Resource!
   createSource(hasOwner: Boolean!, mapping: String, name: String!, templateName: String!): Source!
-  createStructureDefinition(
-    """The content of the StructureDefinition as a JSON string"""
-    definition: String!
-  ): StructureDefinition!
   createTemplate(name: String!): Template!
   deleteAttribute(id: ID!): Attribute!
   deleteAttributes(filter: AttributeWhereInput): [Attribute!]
@@ -224,7 +215,6 @@ type Mutation {
   deleteJoin(id: ID!): Join!
   deleteResource(id: ID!): Resource!
   deleteSource(id: ID!): Source!
-  deleteStructureDefinition(id: ID!): StructureDefinition!
   deleteTemplate(id: ID!): Template!
   login(email: String!, password: String!): AuthPayload!
   signup(email: String!, name: String!, password: String!): AuthPayload!
@@ -232,11 +222,6 @@ type Mutation {
   updateInput(data: UpdateInputInput!, inputId: ID!): Input!
   updateJoin(data: JoinInput!, joinId: ID!): Join!
   updateResource(data: UpdateResourceInput!, resourceId: ID!): Resource!
-  updateStructureDefinition(
-    """The content of the StructureDefinition as a JSON string"""
-    definition: String!
-    id: ID!
-  ): StructureDefinition!
   upsertCredential(database: String!, host: String!, login: String!, model: String!, password: String!, port: String!, sourceId: ID!): Credential!
 }
 
@@ -263,7 +248,6 @@ type Query {
   source(sourceId: ID!): Source
   sources: [Source!]
   structureDefinition(definitionId: ID!): StructureDefinition
-  structureDefinitions(filter: StructureDefinitionWhereInput): [StructureDefinition!]
   template(templateId: ID!): Template
   templates: [Template!]
 }
@@ -271,7 +255,10 @@ type Query {
 type Resource {
   attributes(after: ID, before: ID, first: Int, last: Int, skip: Int): [Attribute!]!
   createdAt: DateTime!
-  definition: StructureDefinition
+
+  """Structured version of a definition"""
+  definition: StructureDefinition!
+  definitionId: String!
   id: ID!
   label: String
   primaryKeyColumn: String
@@ -291,7 +278,7 @@ input ResourceWhereInput {
   AND: [ResourceWhereInput!]
   attributes: AttributeFilter
   createdAt: DateTimeFilter
-  definition: StructureDefinitionWhereInput
+  definitionId: StringFilter
   id: StringFilter
   label: NullableStringFilter
   NOT: [ResourceWhereInput!]
@@ -358,36 +345,11 @@ input StringFilter {
 }
 
 type StructureDefinition {
-  author: String!
-  content: JSON!
-  createdAt: DateTime!
-  derivation: FhirDerivation
-  description: String!
-
   """Structured version of a definition"""
   display: JSON!
   id: String!
-  kind: String!
   name: String!
   type: String!
-  updatedAt: DateTime!
-}
-
-input StructureDefinitionWhereInput {
-  AND: [StructureDefinitionWhereInput!]
-  author: StringFilter
-  content: StringFilter
-  createdAt: DateTimeFilter
-  derivation: FhirDerivation
-  description: StringFilter
-  id: StringFilter
-  kind: StringFilter
-  name: StringFilter
-  NOT: [StructureDefinitionWhereInput!]
-  OR: [StructureDefinitionWhereInput!]
-  resources: ResourceFilter
-  type: StringFilter
-  updatedAt: DateTimeFilter
 }
 
 type Template {

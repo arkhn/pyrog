@@ -94,28 +94,13 @@ export const Query = queryType({
         ctx.photon.attributes.findOne({ where: { id: attributeId } }),
     })
 
-    t.list.field('structureDefinitions', {
-      type: 'StructureDefinition',
-      nullable: true,
-      args: {
-        filter: arg({
-          type: 'StructureDefinitionWhereInput',
-        }),
-      },
-      resolve: (parent, { filter }, ctx) =>
-        ctx.photon.structureDefinitions({ where: filter }),
-    })
-
     t.field('structureDefinition', {
       type: 'StructureDefinition',
       args: {
         definitionId: idArg({ nullable: false }),
       },
       nullable: true,
-      resolve: (parent, { definitionId }, ctx) =>
-        ctx.photon.structureDefinitions.findOne({
-          where: { id: definitionId },
-        }),
+      resolve: (_, { definitionId }) => ({ id: definitionId }),
     })
   },
 })

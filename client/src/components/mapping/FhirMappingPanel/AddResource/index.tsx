@@ -1,15 +1,14 @@
 import { Button, FormGroup, ControlGroup } from '@blueprintjs/core';
 import React from 'react';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import { useSelector } from 'react-redux';
+import axios from 'axios';
 
 import { IReduxStore } from 'types';
 import AddResourceSelect from 'components/selects/addResourceSelect';
 import { loader } from 'graphql.macro';
+import { FHIR_API_URL } from '../../../../constants';
 
-const qAvailableResources = loader(
-  'src/graphql/queries/availableResources.graphql'
-);
 const qResourcesForSource = loader(
   'src/graphql/queries/resourcesForSource.graphql'
 );
@@ -25,13 +24,8 @@ interface ResourceState {
 }
 
 const AddResource = ({ callback }: Props) => {
-  const { loading: loadingAvailableResources, data } = useQuery(
-    qAvailableResources
-  );
-
-  const resourceNames = data
-    ? data.structureDefinitions.map((el: any) => el.name)
-    : [];
+  const [loadingDefinitions, setLoadingDefinitions] = React.useState(false);
+  const [definitions, setDefinitions] = React.useState([] as any[]);
 
   const { source } = useSelector((state: IReduxStore) => state.selectedNode);
   const toaster = useSelector((state: IReduxStore) => state.toaster);
@@ -96,17 +90,30 @@ const AddResource = ({ callback }: Props) => {
     }
   );
 
+  React.useEffect(() => {
+    const fetchDefinitions = async () => {
+      setLoadingDefinitions(true);
+      const { data } = await axios.get(`${FHIR_API_URL!}/StructureDefinition`, {
+        params: { derivation: 'specialization', kind: 'resource' }
+      });
+      const defs = data.items.map((i: any) => i._source);
+      setDefinitions(defs);
+      setLoadingDefinitions(false);
+    };
+    fetchDefinitions();
+  }, []);
+
   return (
     <FormGroup label={'Add Resource'}>
       <ControlGroup>
         <AddResourceSelect
-          loading={loadingAvailableResources}
+          loading={loadingDefinitions}
           disabled={!source}
           inputItem={selectedResource.name ? selectedResource.name : ''}
-          items={loadingAvailableResources ? [] : resourceNames}
+          items={loadingDefinitions ? [] : definitions.map(d => d.name)}
           onChange={(resource: any) => {
             setSelectedResource(
-              data.structureDefinitions.find((el: any) => el.name === resource)
+              definitions.find((el: any) => el.name === resource)
             );
           }}
         />

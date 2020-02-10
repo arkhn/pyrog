@@ -12,7 +12,13 @@ export const Resource = objectType({
     t.model.primaryKeyColumn()
 
     t.model.attributes()
-    t.model.definition()
+    t.model.definitionId()
+    t.field('definition', {
+      type: 'StructureDefinition',
+      description: 'Structured version of a definition',
+      resolve: parent => ({ id: parent.definitionId }),
+    })
+
     t.model.source()
 
     t.model.updatedAt()
@@ -26,11 +32,7 @@ export const createResource: FieldResolver<
 > = async (_parent, { sourceId, definitionId }, ctx) =>
   ctx.photon.resources.create({
     data: {
-      definition: {
-        connect: {
-          id: definitionId,
-        },
-      },
+      definitionId,
       source: {
         connect: {
           id: sourceId,
