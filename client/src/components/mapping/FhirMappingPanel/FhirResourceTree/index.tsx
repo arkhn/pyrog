@@ -268,6 +268,10 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     let existingChildrenIds = Object.keys(attributesForResource)
       .filter(key => key.startsWith(pathKey))
       .map(key => key.slice(pathKey.length + 1).split('.')[0]);
+    // Remove duplicates
+    existingChildrenIds = existingChildrenIds.filter(
+      (id, ind) => existingChildrenIds.indexOf(id) === ind
+    );
 
     const hasAttributes = existingChildrenIds.length > 0;
 
