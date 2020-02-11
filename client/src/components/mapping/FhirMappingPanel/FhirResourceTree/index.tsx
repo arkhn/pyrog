@@ -441,9 +441,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
   };
 
   useEffect(() => {
-    console.log(fhirStructure);
     if (!loading) setNodes(genTreeLevel(fhirStructure, []));
-    console.log(genTreeLevel(fhirStructure, []));
   }, [resource, loading]);
 
   // To update secondary label on user input
