@@ -1,6 +1,7 @@
-import { arg, idArg, queryType } from 'nexus'
+import { arg, idArg, queryType, inputObjectType } from 'nexus'
 
 import { getUserId } from 'utils'
+import { searchDefinitions } from './StructureDefinition'
 
 export const Query = queryType({
   definition(t) {
@@ -101,6 +102,15 @@ export const Query = queryType({
       },
       nullable: true,
       resolve: (_, { definitionId }) => ({ id: definitionId }),
+    })
+
+    t.list.field('structureDefinitions', {
+      type: 'StructureDefinition',
+      args: {
+        filter: arg({ type: 'StructureDefinitionWhereFilter', required: true }),
+      },
+      nullable: true,
+      resolve: (_, { filter }) => searchDefinitions(filter),
     })
   },
 })

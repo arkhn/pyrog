@@ -1,37 +1,45 @@
 import { Button, FormGroup, ControlGroup } from '@blueprintjs/core';
 import React from 'react';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useSelector } from 'react-redux';
-import axios from 'axios';
 
 import { IReduxStore } from 'types';
 import AddResourceSelect from 'components/selects/addResourceSelect';
 import { loader } from 'graphql.macro';
-import { FHIR_API_URL } from '../../../../constants';
 
 const qResourcesForSource = loader(
   'src/graphql/queries/resourcesForSource.graphql'
 );
 const mCreateResource = loader('src/graphql/mutations/createResource.graphql');
+const qAvailableResources = loader(
+  'src/graphql/queries/availableResources.graphql'
+);
 
 interface Props {
   callback: any;
 }
 
-interface ResourceState {
+interface Profile {
   id: string;
   name: string;
+  type: string;
+}
+interface Resource {
+  id: string;
+  name: string;
+  type: string;
+  profiles: Profile[];
 }
 
 const AddResource = ({ callback }: Props) => {
-  const [loadingDefinitions, setLoadingDefinitions] = React.useState(false);
-  const [definitions, setDefinitions] = React.useState([] as any[]);
-
   const { source } = useSelector((state: IReduxStore) => state.selectedNode);
   const toaster = useSelector((state: IReduxStore) => state.toaster);
   const [selectedResource, setSelectedResource] = React.useState(
-    {} as ResourceState
+    undefined as Resource | undefined
   );
+  const { data, loading } = useQuery(qAvailableResources, {
+    fetchPolicy: 'cache-first'
+  });
 
   const onCompleted = (data: any) => {
     toaster.show({
@@ -90,41 +98,27 @@ const AddResource = ({ callback }: Props) => {
     }
   );
 
-  React.useEffect(() => {
-    const fetchDefinitions = async () => {
-      setLoadingDefinitions(true);
-      const { data } = await axios.get(`${FHIR_API_URL!}/StructureDefinition`, {
-        params: { derivation: 'specialization', kind: 'resource', _count: 300 }
-      });
-      setDefinitions(data.items);
-      setLoadingDefinitions(false);
-    };
-    fetchDefinitions();
-  }, []);
-
   return (
-    <FormGroup label={'Add Resource'}>
+    <FormGroup>
       <ControlGroup>
         <AddResourceSelect
-          loading={loadingDefinitions}
+          loading={loading}
           disabled={!source}
-          inputItem={selectedResource.name ? selectedResource.name : ''}
-          items={loadingDefinitions ? [] : definitions.map(d => d.name)}
-          onChange={(resource: any) => {
-            setSelectedResource(
-              definitions.find((el: any) => el.name === resource)
-            );
+          inputItem={selectedResource}
+          items={loading || !data ? [] : data.structureDefinitions}
+          onChange={(r: Resource) => {
+            setSelectedResource(r);
           }}
         />
         <Button
           loading={creatingResource}
           icon={'plus'}
-          disabled={!selectedResource.name}
+          disabled={!selectedResource}
           onClick={() => {
             createResource({
               variables: {
                 sourceId: source.id,
-                definitionId: selectedResource.id
+                definitionId: selectedResource!.id
               }
             });
           }}

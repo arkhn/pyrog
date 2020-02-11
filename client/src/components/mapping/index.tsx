@@ -107,31 +107,6 @@ const MappingView = () => {
     );
   };
 
-  const renderHelp = () => {
-    return (
-      <div id="help-resource">
-        {!resource && (
-          <div id="help-pick-resource">
-            <p>Pick a resource</p>
-            <Icon icon="arrow-right" />
-          </div>
-        )}
-        {!resource && (
-          <div id="help-add-resource">
-            <p>Add a resource</p>
-            <Icon icon="arrow-right" />
-          </div>
-        )}
-        {resource && !attribute && (
-          <div id="help-pick-attribute">
-            <p>Pick an attribute</p>
-            <Icon icon="arrow-right" />
-          </div>
-        )}
-      </div>
-    );
-  };
-
   if (source && !source.schema) {
     toaster.show({
       icon: 'error',
@@ -151,12 +126,12 @@ const MappingView = () => {
       <Navbar exportMapping={exportMapping} />
       <div id="mapping-explorer-container">
         <div id="main-container">
-          <div id="exploration-panel">
-            {attribute && renderExistingRules()}
-            {attribute ? renderTabs() : renderHelp()}
-          </div>
           <div id="fhir-panel">
             <FhirMappingPanel />
+          </div>
+          <div id="exploration-panel">
+            {attribute && renderExistingRules()}
+            {attribute && renderTabs()}
           </div>
         </div>
       </div>

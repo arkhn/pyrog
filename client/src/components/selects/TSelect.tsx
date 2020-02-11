@@ -11,6 +11,8 @@ import * as React from 'react';
 interface ISelectProps<T> {
   disabled: boolean;
   displayItem: (item: any) => string;
+  className?: string;
+  rightIcon?: IconName;
   sortItems?: ItemListPredicate<T>;
   filterItems: ItemPredicate<T>;
   filterable?: boolean;
@@ -35,6 +37,8 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
     const {
       disabled,
       displayItem,
+      className,
+      rightIcon,
       sortItems,
       filterItems,
       filterable,
@@ -50,6 +54,7 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
     return (
       <this.CustomSelect
         disabled={disabled}
+        className={className}
         filterable={filterable}
         items={items}
         itemListPredicate={sortItems}
@@ -61,10 +66,12 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
       >
         <Button
           disabled={disabled}
+          fill={true}
+          alignText={'left'}
           icon={icon}
           intent={intent}
           loading={loading}
-          rightIcon="caret-down"
+          rightIcon={rightIcon || 'caret-down'}
           text={displayItem(inputItem)}
         />
       </this.CustomSelect>

@@ -177,7 +177,7 @@ export default class MainView extends React.Component<IMimicViewState, any> {
                     }
                   )
                 : null;
-
+            console.log(availableTypes);
             return (
               <div className={'question'} key={index}>
                 <Callout

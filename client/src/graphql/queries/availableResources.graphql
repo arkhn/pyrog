@@ -1,6 +1,13 @@
 query availableResources {
-  structureDefinitions(filter: {derivation: specialization, kind: {equals: "resource"}}) {
+  structureDefinitions(
+    filter: { kind: "resource", derivation: "specialization" }
+  ) {
     id
     name
+    type
+    profiles {
+      id
+      name
+    }
   }
 }

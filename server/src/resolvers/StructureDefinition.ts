@@ -1,5 +1,8 @@
 import { objectType } from 'nexus'
 import { getDefinition } from 'fhir'
+import { allDefinitions } from 'fhir/definitions'
+
+import { NexusGenInputs } from 'generated/nexus'
 
 export const StructureDefinition = objectType({
   name: 'StructureDefinition',
@@ -48,5 +51,23 @@ export const StructureDefinition = objectType({
         return def
       },
     })
+
+    t.list.field('profiles', {
+      type: 'StructureDefinition',
+      description: 'List of profiles on this resource',
+      resolve: (parent: any) => searchDefinitions({ type: parent.id }),
+    })
   },
 })
+
+export const searchDefinitions = (
+  filter: NexusGenInputs['StructureDefinitionWhereFilter'],
+) => {
+  const defs = allDefinitions()
+  const { derivation, kind, type } = filter
+  return defs
+    .filter(d => (derivation ? derivation === d.$meta.derivation : true))
+    .filter(d => (kind ? kind === d.$meta.kind : true))
+    .filter(d => (type ? type === d.$meta.type : true))
+    .map(({ $meta: { type, name, id } }) => ({ id, name, type, display: null }))
+}
