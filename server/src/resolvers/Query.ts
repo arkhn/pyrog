@@ -1,4 +1,4 @@
-import { arg, idArg, queryType, inputObjectType } from 'nexus'
+import { arg, idArg, queryType } from 'nexus'
 
 import { getUserId } from 'utils'
 import { searchDefinitions } from './StructureDefinition'

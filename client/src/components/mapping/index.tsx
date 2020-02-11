@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Tab, Tabs, TabId, Icon } from '@blueprintjs/core';
+import { Tab, Tabs, TabId } from '@blueprintjs/core';
 import { loader } from 'graphql.macro';
 import { useApolloClient } from 'react-apollo';
 import { useSelector } from 'react-redux';
@@ -21,7 +21,7 @@ const qExportMapping = loader('src/graphql/queries/exportMapping.graphql');
 
 const MappingView = () => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const { source, resource, attribute } = useSelector(
+  const { source, attribute } = useSelector(
     (state: IReduxStore) => state.selectedNode
   );
   const [selectedTabId, setSelectedTabId] = React.useState('picker' as TabId);

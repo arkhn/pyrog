@@ -115,10 +115,7 @@ export default class ColumnPicker extends React.Component<IProps, IState> {
             ] as string[])
           : (sourceSchema[table] as string[])) as any)
       : [];
-    console.log(table, sourceSchema);
-    console.log(owners);
-    console.log(tables);
-    console.log(columns);
+
     const controlGroup = (
       <ControlGroup vertical={vertical || false} fill={fill || false}>
         {hasOwner ? (
