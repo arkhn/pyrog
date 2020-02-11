@@ -79,10 +79,16 @@ const structurize = (definition: any): StructureDefinition => {
       // If the structure defines a primitive type (one which we don't need to unroll in UI)
       // we don't need the properties field, we only need the cardinality and constraints from the root
 
-      const elementName = element.id.split('.').pop()
+      // We want to remove the root path (for instance Patient.address becomes address) and add
+      // intermediary .$children between levels (for instance, Patient.contact.name becomes
+      // contact.$children.name)
+      const elementName = element.id
+        .split('.')
+        .slice(1)
+        .join('.$children.')
 
       // We skip some elements we don't need as id, extension
-      if (!elementBlackList.includes(elementName)) {
+      if (!elementBlackList.some(el => elementName.endsWith(el))) {
         // Add element fields
         Object.keys(element)
           .filter(el => elementFieldsWhiteList.includes(el))
