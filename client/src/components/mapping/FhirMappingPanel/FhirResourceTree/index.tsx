@@ -452,9 +452,22 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       node.nodeData?.isPrimitive &&
       !node.nodeData?.isArray &&
       Object.keys(attributesForResource).includes(pathString);
-    const hasChildAttributes = Object.keys(attributesForResource).some(el =>
-      el.startsWith(pathString)
-    );
+
+    let hasChildAttributes = false;
+    if (node.id.toString().endsWith('[x]')) {
+      // Check if any of the children have child attributes
+      hasChildAttributes = node
+        .childNodes!.map(n => n.id)
+        .some(childName =>
+          Object.keys(attributesForResource).some(el =>
+            el.startsWith(childName.toString())
+          )
+        );
+    } else {
+      hasChildAttributes = Object.keys(attributesForResource).some(el =>
+        el.startsWith(pathString)
+      );
+    }
 
     node.secondaryLabel = hasInputs ? (
       <Icon icon="small-tick" intent={'success'} />
