@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 services:
   pyrog:
@@ -13,6 +13,16 @@ services:
       - postgres
     volumes:
       - schemas:/home/node/app/schemas
+    networks:
+      - arkhn
+
+  redis:
+    image: redis:5.0.7-alpine
+    ports:
+      - 6379:6379
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+      - redis-data:/data
     networks:
       - arkhn
 
@@ -32,6 +42,7 @@ services:
 volumes:
   postgres-data:
   schemas:
+  redis-data:
 
 networks:
   arkhn:

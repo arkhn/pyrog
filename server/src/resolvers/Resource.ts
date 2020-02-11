@@ -1,4 +1,5 @@
 import { objectType, FieldResolver } from 'nexus'
+import { getDefinition } from 'fhir'
 
 export const Resource = objectType({
   name: 'Resource',
@@ -16,7 +17,10 @@ export const Resource = objectType({
     t.field('definition', {
       type: 'StructureDefinition',
       description: 'Structured version of a definition',
-      resolve: parent => ({ id: parent.definitionId }),
+      resolve: async parent => ({
+        def: await getDefinition(parent.definitionId),
+        id: parent.definitionId,
+      }),
     })
 
     t.model.source()
