@@ -9,6 +9,12 @@ import {
 import * as React from 'react';
 
 interface ISelectProps<T> {
+  createNewItemFromQuery?: (query: string) => T;
+  createNewItemRenderer?: (
+    query: string,
+    active: boolean,
+    handleClick: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void
+  ) => JSX.Element | undefined;
   disabled: boolean;
   displayItem: (item: any) => string;
   className?: string;
@@ -21,7 +27,7 @@ interface ISelectProps<T> {
   inputItem: T;
   intent?: Intent;
   loading?: boolean;
-  onChange: any;
+  onChange: Function;
   popoverProps?: IPopoverProps;
   renderItem: ItemRenderer<T>;
 }
@@ -35,6 +41,8 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
 
   public render() {
     const {
+      createNewItemFromQuery,
+      createNewItemRenderer,
       disabled,
       displayItem,
       className,
@@ -53,6 +61,8 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
 
     return (
       <this.CustomSelect
+        createNewItemFromQuery={createNewItemFromQuery}
+        createNewItemRenderer={createNewItemRenderer}
         disabled={disabled}
         className={className}
         filterable={filterable}

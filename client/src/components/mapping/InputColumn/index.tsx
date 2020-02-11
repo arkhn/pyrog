@@ -2,11 +2,13 @@ import {
   Breadcrumbs,
   Button,
   Card,
+  Classes,
   Elevation,
   IBreadcrumbProps,
+  Overlay,
   Tag
 } from '@blueprintjs/core';
-import * as React from 'react';
+import React, { useState } from 'react';
 import { useApolloClient, useMutation } from '@apollo/react-hooks';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -14,6 +16,7 @@ import { IReduxStore, ISelectedSource } from 'types';
 
 // COMPONENTS
 import Join from '../Join';
+import ConceptMap from 'components/mapping/ConceptMap';
 import ScriptSelect from 'components/selects/scriptSelect';
 import { loader } from 'graphql.macro';
 
@@ -46,11 +49,14 @@ const InputColumn = ({ input, schema, source }: Props) => {
   const {
     attribute: { path }
   } = useSelector((state: IReduxStore) => state.selectedNode);
-
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
   );
   const attributeId = attributesForResource[path].id;
+
+  const [isConceptMapOverlayVisible, setConceptMapOverlayVisible] = useState(
+    false
+  );
 
   const [deleteInput, { loading: loadDelInput }] = useMutation(mDeleteInput);
   const [deleteAttribute] = useMutation(mDeleteAttribute);
@@ -210,6 +216,25 @@ const InputColumn = ({ input, schema, source }: Props) => {
                   }}
                 />
               </div>
+              <div className="stacked-tags">
+                <Tag>CONCEPT MAP</Tag>
+                <Button
+                  // loading={loadUpdInput}
+                  text={input.conceptMap}
+                  onClick={(_e: React.MouseEvent) => {
+                    console.log(isConceptMapOverlayVisible);
+                    setConceptMapOverlayVisible(true);
+                  }}
+                  // onClear={(): any => {
+                  //   updateInput({
+                  //     variables: {
+                  //       inputId: input.id,
+                  //       data: { script: null }
+                  //     }
+                  //   });
+                  // }}
+                />
+              </div>
             </div>
             <div className="input-column-joins">
               <Button
@@ -239,6 +264,10 @@ const InputColumn = ({ input, schema, source }: Props) => {
           </div>
         )}
       </Card>
+      <ConceptMap
+        isOpen={isConceptMapOverlayVisible}
+        onClose={_ => setConceptMapOverlayVisible(false)}
+      />
     </div>
   );
 };

@@ -1,0 +1,39 @@
+@import "~@blueprintjs/core/lib/css/blueprint.css";
+@import "~@blueprintjs/core/lib/scss/variables";
+
+$window-padding: 20px;
+
+.main-div {
+  width: 95%;
+  margin: 0px auto;
+  padding: $window-padding;
+  color: black;
+
+  .center-text {
+    text-align: center;
+  }
+
+  .text-input {
+    height: 29px;
+    padding: 5px 5px;
+    margin: 0px auto;
+  }
+
+  .source {
+    float: left;
+    width: 50%;
+    text-align: center;
+  }
+
+  .target {
+    text-align: center;
+  }
+
+  .button-with-margin {
+    margin: 10px auto;
+  }
+
+  .align-right {
+    text-align: right;
+  }
+}
