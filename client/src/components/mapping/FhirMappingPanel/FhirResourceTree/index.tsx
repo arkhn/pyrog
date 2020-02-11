@@ -214,7 +214,8 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
 
   const addNodeToArray = (
     stateNodes: ITreeNode<NodeData>[],
-    path: string[]
+    path: string[],
+    contentChildren: ITreeNode<NodeData>[]
   ): ITreeNode<NodeData>[] => {
     const parent = findNode(stateNodes, path);
     if (!parent || !parent.childNodes) return stateNodes;
@@ -242,6 +243,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       isExpanded: false,
       isSelected: false,
       label: nodeLabel,
+      childNodes: genTreeLevel(contentChildren || [], [...path, nextId]),
       nodeData: {
         ...parent.childNodes[0].nodeData!,
         path: [...path, nextId]
@@ -258,7 +260,8 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     types: string[],
     isPrimitive: boolean,
     isRequired: boolean,
-    definition: string
+    definition: string,
+    contentChildren: ITreeNode<NodeData>[]
   ): ITreeNode<NodeData>[] => {
     // Check if there are already existing attributes for this node
     const pathKey = buildStringFromPath([...parentPath, name]);
@@ -268,7 +271,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
 
     const hasAttributes = existingChildrenIds.length > 0;
 
-    let childNodes = [] as ITreeNode<NodeData>[];
+    let nodesForArray = [] as ITreeNode<NodeData>[];
     if (!hasAttributes) {
       // If no child exists yet, we still build one with id 0
       existingChildrenIds = ['0'];
@@ -289,8 +292,8 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
         />
       );
 
-      childNodes = [
-        ...childNodes,
+      nodesForArray = [
+        ...nodesForArray,
         {
           hasCaret: !isPrimitive,
           icon: (isPrimitive ? 'tag' : 'folder-open') as any,
@@ -305,6 +308,11 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
             childNodeLabel
           ),
           secondaryLabel: hasAttributes ? <Icon icon="dot" /> : null,
+          childNodes: genTreeLevel(contentChildren || [], [
+            ...parentPath,
+            name,
+            childId
+          ]),
           nodeData: {
             types: types,
             isArray: false,
@@ -315,7 +323,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
         }
       ];
     }
-    return childNodes;
+    return nodesForArray;
   };
 
   const buildMultiTypeNode = (
@@ -362,7 +370,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     const nodeName = types.length > 1 ? `${name}[x]` : name;
 
     const addNodeCallback = (): void =>
-      setNodes(nodes => addNodeToArray(nodes, path));
+      setNodes(nodes => addNodeToArray(nodes, path, content.$children));
 
     const nodeLabel = (
       <NodeLabel
@@ -373,7 +381,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       />
     );
 
-    let childNodes = [] as ITreeNode<NodeData>[];
+    let childNodes = genTreeLevel(content.$children || [], path);
     if (types.length > 1) {
       childNodes = buildMultiTypeNode(types, [name, content], parentPath);
     } else if (isArray) {
@@ -386,7 +394,8 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
         types,
         isPrimitive,
         isRequired,
-        definition
+        definition,
+        content.$children
       );
     }
     return {
@@ -432,7 +441,9 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
   };
 
   useEffect(() => {
+    console.log(fhirStructure);
     if (!loading) setNodes(genTreeLevel(fhirStructure, []));
+    console.log(genTreeLevel(fhirStructure, []));
   }, [resource, loading]);
 
   // To update secondary label on user input
