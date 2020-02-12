@@ -103,9 +103,7 @@ export const Query = queryType({
       },
       nullable: true,
       resolve: async (_, { definitionId }) => {
-        console.error('before')
         const def = await getDefinition(definitionId)
-        console.error(!!def)
         if (!def) {
           return null
         }
