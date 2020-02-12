@@ -8,6 +8,7 @@ query availableResources {
     profiles {
       id
       name
+      type
     }
   }
 }
