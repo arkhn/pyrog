@@ -36,7 +36,7 @@ const SourcesView = () => {
   const dispatch = useDispatch();
   const { history } = useReactRouter();
 
-  const [alertDeleteSource, setAlertDeleteSource] = React.useState(
+  const [sourceToDelete, setSourceToDelete] = React.useState(
     undefined as Source | undefined
   );
 
@@ -122,12 +122,12 @@ const SourcesView = () => {
                     <Button
                       icon={'delete'}
                       loading={
-                        deletingSource && alertDeleteSource?.id === source.id
+                        deletingSource && sourceToDelete?.id === source.id
                       }
                       minimal={true}
                       onClick={(e: React.MouseEvent) => {
                         e.stopPropagation();
-                        setAlertDeleteSource(source);
+                        setSourceToDelete(source);
                       }}
                     />
                   </h2>
@@ -159,23 +159,23 @@ const SourcesView = () => {
           confirmButtonText="Confirm"
           icon="trash"
           intent={Intent.DANGER}
-          isOpen={!!alertDeleteSource}
+          isOpen={!!sourceToDelete}
           canOutsideClickCancel={true}
           onClose={async (confirmed): Promise<void> => {
             if (confirmed) {
               await deleteSource({
                 variables: {
-                  id: alertDeleteSource ? alertDeleteSource.id : ''
+                  id: sourceToDelete ? sourceToDelete.id : ''
                 }
               });
             }
-            setAlertDeleteSource(undefined);
+            setSourceToDelete(undefined);
           }}
         >
           <p>
             Etes-vous sûr de vouloir supprimer la source{' '}
-            <b>{alertDeleteSource ? alertDeleteSource.name : ''}</b>? Cette
-            action n'est pas réversible.
+            <b>{sourceToDelete ? sourceToDelete.name : ''}</b>? Cette action
+            n'est pas réversible.
           </p>
         </Alert>
       </div>
