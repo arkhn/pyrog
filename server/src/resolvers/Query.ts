@@ -1,6 +1,8 @@
 import { arg, idArg, queryType } from 'nexus'
 
 import { getUserId } from 'utils'
+import { searchDefinitions } from './StructureDefinition'
+import { getDefinition } from 'fhir'
 
 export const Query = queryType({
   definition(t) {
@@ -100,7 +102,25 @@ export const Query = queryType({
         definitionId: idArg({ nullable: false }),
       },
       nullable: true,
-      resolve: (_, { definitionId }) => ({ id: definitionId }),
+      resolve: async (_, { definitionId }) => {
+        const def = await getDefinition(definitionId)
+        if (!def) {
+          return null
+        }
+        return {
+          def,
+          id: definitionId,
+        }
+      },
+    })
+
+    t.list.field('structureDefinitions', {
+      type: 'StructureDefinition',
+      args: {
+        filter: arg({ type: 'StructureDefinitionWhereFilter', required: true }),
+      },
+      nullable: true,
+      resolve: searchDefinitions,
     })
   },
 })

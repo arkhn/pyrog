@@ -21,6 +21,7 @@ interface Resource {
   definition: {
     id: string;
     type: string;
+    name: string;
   };
 }
 

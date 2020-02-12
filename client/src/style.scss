@@ -1,6 +1,6 @@
-@import "~@blueprintjs/core/lib/css/blueprint.css";
-@import "~@blueprintjs/core/lib/scss/variables";
-@import "~react-json-pretty/src/JSONPretty.monikai.css";
+@import '~@blueprintjs/core/lib/css/blueprint.css';
+@import '~@blueprintjs/core/lib/scss/variables';
+@import '~react-json-pretty/src/JSONPretty.monikai.css';
 
 $window-padding: 20px;
 $border-radius: 6px;
@@ -319,4 +319,9 @@ body {
   & > * {
     overflow: hidden;
   }
+}
+
+.column-menu-item {
+  display: flex;
+  flex-direction: column;
 }

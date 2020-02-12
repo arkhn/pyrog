@@ -248,6 +248,7 @@ type Query {
   source(sourceId: ID!): Source
   sources: [Source!]
   structureDefinition(definitionId: ID!): StructureDefinition
+  structureDefinitions(filter: StructureDefinitionWhereFilter!): [StructureDefinition!]
   template(templateId: ID!): Template
   templates: [Template!]
 }
@@ -349,7 +350,16 @@ type StructureDefinition {
   display: JSON!
   id: String!
   name: String!
+
+  """List of profiles on this resource"""
+  profiles: [StructureDefinition!]!
   type: String!
+}
+
+input StructureDefinitionWhereFilter {
+  derivation: String
+  kind: String
+  type: String
 }
 
 type Template {

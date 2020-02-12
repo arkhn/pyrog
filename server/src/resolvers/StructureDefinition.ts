@@ -1,5 +1,7 @@
-import { objectType } from 'nexus'
-import { getDefinition } from 'fhir'
+import { objectType, FieldResolver } from 'nexus'
+import { resourceProfiles, resourcesPerKind } from 'fhir/definitions'
+
+import { StructureDefinition as StructDef } from 'types'
 
 export const StructureDefinition = objectType({
   name: 'StructureDefinition',
@@ -7,33 +9,21 @@ export const StructureDefinition = objectType({
     t.field('id', {
       type: 'String',
       resolve: (parent: any) => {
-        const def = getDefinition(parent.id)
-        if (!def) {
-          throw new Error(`Could not find definition ${parent.id}`)
-        }
-        return def.$meta.id
+        return parent.def.$meta.id
       },
     })
 
     t.field('type', {
       type: 'String',
       resolve: (parent: any) => {
-        const def = getDefinition(parent.id)
-        if (!def) {
-          throw new Error(`Could not find definition ${parent.id}`)
-        }
-        return def.$meta.type
+        return parent.def.$meta.type
       },
     })
 
     t.field('name', {
       type: 'String',
       resolve: (parent: any) => {
-        const def = getDefinition(parent.id)
-        if (!def) {
-          throw new Error(`Could not find definition ${parent.id}`)
-        }
-        return def.$meta.name
+        return parent.def.$meta.name
       },
     })
 
@@ -41,12 +31,41 @@ export const StructureDefinition = objectType({
       type: 'JSON',
       description: 'Structured version of a definition',
       resolve: (parent: any) => {
-        const def = getDefinition(parent.id)
-        if (!def) {
-          throw new Error(`Could not find definition ${parent.id}`)
-        }
-        return def
+        return parent.def
+      },
+    })
+
+    t.list.field('profiles', {
+      type: 'StructureDefinition',
+      description: 'List of profiles on this resource',
+      resolve: async (parent: any) => {
+        const res = await resourceProfiles(parent.def.$meta.type)
+        return res.map(graphqlize)
       },
     })
   },
+})
+
+export const searchDefinitions: FieldResolver<
+  'Query',
+  'structureDefinitions'
+> = async (_, { filter }) => {
+  const { derivation, kind, type } = filter
+
+  let res: StructDef[]
+  if (derivation && kind && !type) {
+    res = await resourcesPerKind(derivation, kind)
+  } else if (!derivation && !kind && type) {
+    res = await resourceProfiles(type)
+  } else {
+    throw new Error(
+      'Can only use filters derivation and kind together, and type alone',
+    )
+  }
+  return res.map(graphqlize)
+}
+
+const graphqlize = (r: StructDef) => ({
+  id: r.$meta.id,
+  def: r,
 })
