@@ -1,4 +1,4 @@
-import { objectType } from 'nexus'
+import { objectType, FieldResolver } from 'nexus'
 import { resourceProfiles, resourcesPerKind } from 'fhir/definitions'
 
 import { NexusGenInputs } from 'generated/nexus'
@@ -47,9 +47,10 @@ export const StructureDefinition = objectType({
   },
 })
 
-export const searchDefinitions = async (
-  filter: NexusGenInputs['StructureDefinitionWhereFilter'],
-) => {
+export const searchDefinitions: FieldResolver<
+  'Query',
+  'structureDefinitions'
+> = async (_, { filter }) => {
   const { derivation, kind, type } = filter
 
   let res: StructDef[]

@@ -120,7 +120,7 @@ export const Query = queryType({
         filter: arg({ type: 'StructureDefinitionWhereFilter', required: true }),
       },
       nullable: true,
-      resolve: (_, { filter }) => searchDefinitions(filter),
+      resolve: searchDefinitions,
     })
   },
 })
