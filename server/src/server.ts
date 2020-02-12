@@ -13,16 +13,6 @@ const server = new GraphQLServer({
   middlewares: [permissions],
 })
 
-// headers middleware
-server.express.use((req: any, res: any, next: any) => {
-  res.header('Access-Control-Allow-Origin', '*')
-  res.header(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept',
-  )
-  next()
-})
-
 register(server.express)
 
 const options = {
