@@ -91,6 +91,7 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
   const source = await ctx.photon.sources.findOne({
     where: { id },
     include: {
+      credential: true,
       resources: {
         include: {
           attributes: {
@@ -114,6 +115,11 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
       },
     },
   })
+  if (source!.credential) {
+    await ctx.photon.credentials.delete({
+      where: { id: source!.credential.id },
+    })
+  }
   await Promise.all(
     source!.resources.map(async r => {
       await Promise.all(

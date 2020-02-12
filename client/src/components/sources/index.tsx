@@ -23,6 +23,11 @@ import { HTTP_BACKEND_URL } from '../../constants';
 
 import './style.scss';
 
+interface Source {
+  name: string;
+  id: string;
+}
+
 // GRAPHQL
 const qSources = loader('src/graphql/queries/sources.graphql');
 const mDeleteSource = loader('src/graphql/mutations/deleteSource.graphql');
@@ -31,7 +36,9 @@ const SourcesView = () => {
   const dispatch = useDispatch();
   const { history } = useReactRouter();
 
-  const [alertIsOpen, setAlertIsOpen] = React.useState(false);
+  const [alertDeleteSource, setAlertDeleteSource] = React.useState(
+    undefined as Source | undefined
+  );
 
   const { data: dataSources, loading: loadingSources } = useQuery(qSources, {
     fetchPolicy: 'network-only'
@@ -114,37 +121,15 @@ const SourcesView = () => {
                     {source.template.name} - {source.name}
                     <Button
                       icon={'delete'}
-                      loading={deletingSource}
+                      loading={
+                        deletingSource && alertDeleteSource?.id === source.id
+                      }
                       minimal={true}
                       onClick={(e: React.MouseEvent) => {
                         e.stopPropagation();
-                        setAlertIsOpen(true);
+                        setAlertDeleteSource(source);
                       }}
                     />
-                    <Alert
-                      cancelButtonText="Cancel"
-                      confirmButtonText="Confirm"
-                      icon="trash"
-                      intent={Intent.DANGER}
-                      isOpen={alertIsOpen}
-                      canOutsideClickCancel={true}
-                      onClose={(confirmed, e) => {
-                        e?.stopPropagation();
-                        setAlertIsOpen(false);
-                        if (confirmed) {
-                          deleteSource({
-                            variables: {
-                              id: source.id
-                            }
-                          });
-                        }
-                      }}
-                    >
-                      <p>
-                        Etes-vous sûr de vouloir supprimer la source{' '}
-                        <b>{source.name}</b>? Cette action n'est pas réversible.
-                      </p>
-                    </Alert>
                   </h2>
                   <div className="tags">
                     <Tag>DPI</Tag>
@@ -169,6 +154,30 @@ const SourcesView = () => {
             })
           )}
         </div>
+        <Alert
+          cancelButtonText="Cancel"
+          confirmButtonText="Confirm"
+          icon="trash"
+          intent={Intent.DANGER}
+          isOpen={!!alertDeleteSource}
+          canOutsideClickCancel={true}
+          onClose={async (confirmed): Promise<void> => {
+            if (confirmed) {
+              await deleteSource({
+                variables: {
+                  id: alertDeleteSource ? alertDeleteSource.id : ''
+                }
+              });
+            }
+            setAlertDeleteSource(undefined);
+          }}
+        >
+          <p>
+            Etes-vous sûr de vouloir supprimer la source{' '}
+            <b>{alertDeleteSource ? alertDeleteSource.name : ''}</b>? Cette
+            action n'est pas réversible.
+          </p>
+        </Alert>
       </div>
     </div>
   );
