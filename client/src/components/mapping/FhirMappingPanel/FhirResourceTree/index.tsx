@@ -271,15 +271,15 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
   ): ITreeNode<NodeData>[] => {
     // Check if there are already existing attributes for this node
     const pathKey = buildStringFromPath([...parentPath, name]);
+    const endPathKey = pathKey.length + 1;
     // We use Set to remove duplicate ids
     let existingChildrenIds = [
       ...new Set(
         Object.keys(attributesForResource)
           .filter(key => key.startsWith(pathKey))
-          .map(key => key.slice(pathKey.length + 1).split('.')[0])
+          .map(key => key.substring(endPathKey, key.indexOf('.', endPathKey)))
       )
     ];
-
     const hasAttributes = existingChildrenIds.length > 0;
 
     let nodesForArray = [] as ITreeNode<NodeData>[];
