@@ -1,25 +1,9 @@
-import redis, { OverloadedKeyCommand } from 'redis'
 import set from 'lodash.set'
 import axios from 'axios'
-import { promisify } from 'util'
 
 import { StructureDefinition } from 'types'
-import { FHIR_API_URL, REDIS_URL } from '../constants'
-
-const rcache = redis.createClient({ url: REDIS_URL })
-const cacheGet = promisify(rcache.get).bind(rcache)
-const cacheMget = promisify(rcache.mget).bind(rcache) as OverloadedKeyCommand<
-  string[],
-  string[],
-  Promise<string[]>
->
-const cacheSet = promisify(rcache.set).bind(rcache)
-const cacheSadd = promisify(rcache.sadd).bind(rcache) as OverloadedKeyCommand<
-  string,
-  number,
-  Promise<number>
->
-const cacheSmembers = promisify(rcache.smembers).bind(rcache)
+import { FHIR_API_URL } from '../constants'
+import cache from 'cache'
 
 const metaPrefix = '$meta'
 
@@ -27,7 +11,7 @@ const metaPrefix = '$meta'
 export const getDefinition = async (
   key: string,
 ): Promise<StructureDefinition | undefined> => {
-  const res = await cacheGet(key)
+  const res = await cache().get(key)
   return res ? JSON.parse(res) : undefined
 }
 
@@ -35,8 +19,9 @@ export const getDefinition = async (
 export const resourceProfiles = async (
   resourceType: string,
 ): Promise<StructureDefinition[]> => {
-  const keys = await cacheSmembers(`type:${resourceType}`)
-  const res = await cacheMget(keys)
+  const { mget, smembers } = cache()
+  const keys = await cache().smembers(`type:${resourceType}`)
+  const res = await cache().mget(keys)
   return res.map(r => JSON.parse(r))
 }
 
@@ -45,8 +30,9 @@ export const resourcesPerKind = async (
   derivation: string,
   kind: string,
 ): Promise<StructureDefinition[]> => {
-  const keys = await cacheSmembers(`${derivation}:${kind}`)
-  const res = await cacheMget(keys)
+  const { mget, smembers } = cache()
+  const keys = await smembers(`${derivation}:${kind}`)
+  const res = await mget(keys)
   return res.map(r => JSON.parse(r))
 }
 
@@ -66,11 +52,11 @@ export const bootstrapDefinitions = async () => {
 
     // Cache definition in redis
     const cachedId = id || url
-    await cacheSet(cachedId, JSON.stringify(structured))
+    await cache().set(cachedId, JSON.stringify(structured))
     // Cache resource kinds (base resource, profiles, extension) using key <derivation>:<kind>
-    await cacheSadd(`${derivation}:${kind}`, cachedId)
+    await cache().sadd(`${derivation}:${kind}`, cachedId)
     // Cache profiles using key type:<type>
-    await cacheSadd(`type:${type}`, cachedId)
+    await cache().sadd(`type:${type}`, cachedId)
   }
 
   console.log('Bootstrapping standard FHIR definitions...')
