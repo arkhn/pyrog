@@ -15,8 +15,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { IReduxStore } from 'types';
 import ColumnPicker from 'components/mapping/ColumnPicker';
 import {
-  updateFhirResource,
-  deselectFhirResource
+  updateSelectedResource,
+  deselectResource
 } from 'services/selectedNode/actions';
 
 import './style.scss';
@@ -86,7 +86,7 @@ const Drawer = ({
         }
       });
       dispatch(
-        updateFhirResource({
+        updateSelectedResource({
           ...resource,
           label,
           primaryKeyOwner: pkOwner,
@@ -120,7 +120,7 @@ const Drawer = ({
       message: 'Resource deleted.',
       timeout: 4000
     });
-    dispatch(deselectFhirResource());
+    dispatch(deselectResource());
     deleteResourceCallback();
   };
 

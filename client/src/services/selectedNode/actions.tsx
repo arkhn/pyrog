@@ -1,5 +1,4 @@
 import { IAction, ISourceSchema } from 'types';
-import { HTTP_BACKEND_URL } from '../../constants';
 
 interface Resource {
   id: string;
@@ -27,65 +26,66 @@ export const updateSelectedSource = (source: {
   schema?: ISourceSchema;
 }): IAction => {
   return {
-    type: 'UPDATE_SELECTED_SOURCE',
+    type: 'UPDATE_SOURCE',
     payload: source
   };
 };
 
-export const changeSelectedSource = (source: {
-  id: string;
-  name: string;
-  hasOwner: boolean;
-  template: {
-    name: string;
-  };
-  credential: {
+export const changeSelectedSource = (
+  source: {
     id: string;
-  };
-}): IAction => {
-  return async dispatch => {
-    try {
-      const response = await fetch(
-        `${HTTP_BACKEND_URL}/schemas/${source.template.name}_${source.name}.json`
-      );
-      const body = await response.json();
-      if (response.status !== 200) {
-        throw new Error(body.error);
-      }
-      dispatch(updateSelectedSource({ ...source, schema: body }));
-    } catch (err) {
-      console.log(`error fetching source schema: ${err}`);
-      dispatch(updateSelectedSource(source));
-    }
+    name: string;
+    hasOwner: boolean;
+    template: {
+      name: string;
+    };
+    credential: {
+      id: string;
+    };
+  },
+  schema: any
+): IAction => {
+  return {
+    type: 'CHANGE_SOURCE',
+    payload: { ...source, schema }
   };
 };
 
 export const deselectSource = (): IAction => {
   return {
-    type: 'DESELECTED_SOURCE'
+    type: 'DESELECT_SOURCE'
   };
 };
 
 // Fhir Resource
-export const updateFhirResource = (resource: Resource): IAction => {
+export const updateSelectedResource = (resource: Resource): IAction => {
   return {
-    type: 'UPDATE_FHIR_RESOURCE',
+    type: 'UPDATE_RESOURCE',
     payload: {
       resource
     }
   };
 };
 
-export const deselectFhirResource = (): IAction => {
+export const changeSelectedResource = (resource: Resource): IAction => {
   return {
-    type: 'DESELECTED_FHIR_RESOURCE'
+    type: 'CHANGE_RESOURCE',
+    payload: {
+      resource
+    }
+  };
+};
+
+export const deselectResource = (): IAction => {
+  return {
+    type: 'DESELECT_RESOURCE'
   };
 };
 
 // Fhir Attribute
 export const updateFhirAttribute = (attributePath: string[]): IAction => {
   return {
-    type: 'UPDATE_FHIR_ATTRIBUTE',
+    type: 'UPDATE_ATTRIBUTE',
     payload: {
       attributePath
     }

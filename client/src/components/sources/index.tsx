@@ -19,6 +19,7 @@ import { loader } from 'graphql.macro';
 import Navbar from 'components/navbar';
 
 import { changeSelectedSource } from 'services/selectedNode/actions';
+import { HTTP_BACKEND_URL } from '../../constants';
 
 import './style.scss';
 
@@ -61,6 +62,28 @@ const SourcesView = () => {
     { update: removeSourceFromCache }
   );
 
+  const onClickedSource = async (source: any) => {
+    try {
+      const response = await fetch(
+        `${HTTP_BACKEND_URL}/schemas/${source.template.name}_${source.name}.json`
+      );
+      const body = await response.json();
+      if (response.status !== 200) {
+        throw new Error(body.error);
+      }
+      dispatch(changeSelectedSource(source, body));
+    } catch (err) {
+      console.log(`error fetching source schema: ${err}`);
+      dispatch(changeSelectedSource(source, undefined));
+    }
+    history.push({
+      pathname: '/mapping',
+      search: QueryString.stringify({
+        sourceId: source.id
+      })
+    });
+  };
+
   return (
     <div>
       <Navbar />
@@ -85,15 +108,7 @@ const SourcesView = () => {
                   elevation={Elevation.TWO}
                   interactive={true}
                   key={index}
-                  onClick={() => {
-                    dispatch(changeSelectedSource(source));
-                    history.push({
-                      pathname: '/mapping',
-                      search: QueryString.stringify({
-                        sourceId: source.id
-                      })
-                    });
-                  }}
+                  onClick={(): Promise<void> => onClickedSource(source)}
                 >
                   <h2>
                     {source.template.name} - {source.name}
@@ -114,6 +129,7 @@ const SourcesView = () => {
                       isOpen={alertIsOpen}
                       canOutsideClickCancel={true}
                       onClose={(confirmed, e) => {
+                        e?.stopPropagation();
                         setAlertIsOpen(false);
                         if (confirmed) {
                           deleteSource({
