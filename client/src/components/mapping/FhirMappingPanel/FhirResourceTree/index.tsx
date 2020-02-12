@@ -155,9 +155,15 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     return curNode;
   };
 
+  const hasMultipleTypes = (attributeName: string) =>
+    attributeName.endsWith('[x]');
+
   const buildStringFromPath = (path: string[]) => {
-    return path.filter(attr => !attr.endsWith('[x]')).join('.');
+    return path.filter(attr => !hasMultipleTypes(attr)).join('.');
   };
+
+  const checkHasChildAttributes = (pathString: string) =>
+    Object.keys(attributesForResource).some(el => el.startsWith(pathString));
 
   const deleteNodeFromArray = (
     stateNodes: ITreeNode<NodeData>[],
@@ -265,13 +271,14 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
   ): ITreeNode<NodeData>[] => {
     // Check if there are already existing attributes for this node
     const pathKey = buildStringFromPath([...parentPath, name]);
-    let existingChildrenIds = Object.keys(attributesForResource)
-      .filter(key => key.startsWith(pathKey))
-      .map(key => key.slice(pathKey.length + 1).split('.')[0]);
-    // Remove duplicates
-    existingChildrenIds = existingChildrenIds.filter(
-      (id, ind) => existingChildrenIds.indexOf(id) === ind
-    );
+    // We use Set to remove duplicate ids
+    let existingChildrenIds = [
+      ...new Set(
+        Object.keys(attributesForResource)
+          .filter(key => key.startsWith(pathKey))
+          .map(key => key.slice(pathKey.length + 1).split('.')[0])
+      )
+    ];
 
     const hasAttributes = existingChildrenIds.length > 0;
 
@@ -368,9 +375,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     const definition = content.definition;
     const pathString = buildStringFromPath(path);
     const hasInputs = Object.keys(attributesForResource).includes(pathString);
-    const hasChildAttributes = Object.keys(attributesForResource).some(el =>
-      el.startsWith(pathString)
-    );
+    const hasChildAttributes = checkHasChildAttributes(pathString);
     const nodeName = types.length > 1 ? `${name}[x]` : name;
 
     const addNodeCallback = (): void =>
@@ -458,19 +463,13 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       Object.keys(attributesForResource).includes(pathString);
 
     let hasChildAttributes = false;
-    if (node.id.toString().endsWith('[x]')) {
+    if (hasMultipleTypes(node.id.toString())) {
       // Check if any of the children have child attributes
-      hasChildAttributes = node
-        .childNodes!.map(n => n.id)
-        .some(childName =>
-          Object.keys(attributesForResource).some(el =>
-            el.startsWith(childName.toString())
-          )
-        );
-    } else {
-      hasChildAttributes = Object.keys(attributesForResource).some(el =>
-        el.startsWith(pathString)
+      hasChildAttributes = node.childNodes!.some(n =>
+        checkHasChildAttributes(buildStringFromPath(n.nodeData!.path))
       );
+    } else {
+      hasChildAttributes = checkHasChildAttributes(pathString);
     }
 
     node.secondaryLabel = hasInputs ? (

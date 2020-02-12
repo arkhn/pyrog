@@ -44,11 +44,11 @@ export const changeSelectedSource = (
       id: string;
     };
   },
-  body: any
+  schema: any
 ): IAction => {
   return {
     type: 'CHANGE_SOURCE',
-    payload: { ...source, schema: body }
+    payload: { ...source, schema }
   };
 };
 
