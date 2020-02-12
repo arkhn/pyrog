@@ -117,6 +117,7 @@ const SourcesView = () => {
                       isOpen={alertIsOpen}
                       canOutsideClickCancel={true}
                       onClose={(confirmed, e) => {
+                        e?.stopPropagation();
                         setAlertIsOpen(false);
                         if (confirmed) {
                           deleteSource({
