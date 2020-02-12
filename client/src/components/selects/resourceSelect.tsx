@@ -18,6 +18,7 @@ interface Resource {
   definition: {
     id: string;
     type: string;
+    name: string;
   };
 }
 
@@ -40,7 +41,7 @@ export default class ResourceSelect extends React.Component<SelectProps, any> {
       <MenuItem
         key={resource.id}
         onClick={handleClick}
-        text={resource.definition.type}
+        text={resource.definition.name}
         label={resource.label}
       />
     );
@@ -51,7 +52,7 @@ export default class ResourceSelect extends React.Component<SelectProps, any> {
     resource: Resource
   ) => {
     return (
-      `${resource.definition.type.toLowerCase()}`.indexOf(
+      `${resource.definition.name.toLowerCase()}`.indexOf(
         query.toLowerCase()
       ) >= 0
     );
@@ -62,8 +63,8 @@ export default class ResourceSelect extends React.Component<SelectProps, any> {
     resources: Resource[]
   ) => {
     resources.sort((r1, r2) => {
-      const name1 = r1.definition.type.toLowerCase();
-      const name2 = r2.definition.type.toLowerCase();
+      const name1 = r1.definition.name.toLowerCase();
+      const name2 = r2.definition.name.toLowerCase();
       if (name1 < name2) return -1;
       if (name1 > name2) return 1;
       return 0;
@@ -72,7 +73,7 @@ export default class ResourceSelect extends React.Component<SelectProps, any> {
   };
 
   private displayItem = function(resource: Resource): string {
-    return resource.definition ? resource.definition.type : 'None';
+    return resource.definition ? resource.definition.name : 'None';
   };
 
   public render() {

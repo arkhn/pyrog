@@ -57,3 +57,12 @@ export const JoinInput = inputObjectType({
     })
   },
 })
+
+export const StructureDefinitionWhereFilter = inputObjectType({
+  name: 'StructureDefinitionWhereFilter',
+  definition(t) {
+    t.field('derivation', { type: 'String' })
+    t.field('kind', { type: 'String' })
+    t.field('type', { type: 'String' })
+  },
+})

@@ -1,5 +1,5 @@
-@import "~@blueprintjs/core/lib/css/blueprint.css";
-@import "~@blueprintjs/core/lib/scss/variables";
+@import '~@blueprintjs/core/lib/css/blueprint.css';
+@import '~@blueprintjs/core/lib/scss/variables';
 
 $window-padding: 20px;
 $border-radius: 6px;
@@ -19,7 +19,7 @@ body {
   display: flex;
   flex-direction: column;
 
-  .bp3-tab-panel:not([aria-hidden="true"]) {
+  .bp3-tab-panel:not([aria-hidden='true']) {
     flex-grow: 1;
     display: flex;
     overflow: auto;
@@ -158,50 +158,6 @@ body {
     max-width: 75%;
     display: flex;
     flex-direction: column;
-
-    #help-resource {
-      text-align: right;
-      font-size: x-large;
-      flex-basis: 100%;
-      padding: 1rem;
-
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-
-      .bp3-icon svg {
-        width: 25px;
-        height: 25px;
-        position: relative;
-        top: 5px;
-      }
-
-      p {
-        padding-right: 10px;
-      }
-
-      #help-pick-resource {
-        display: flex;
-        flex-direction: row;
-      }
-
-      #help-add-resource {
-        display: flex;
-        flex-direction: row;
-
-        position: absolute;
-        bottom: 30px;
-      }
-
-      #help-pick-attribute {
-        display: flex;
-        flex-direction: row;
-
-        position: absolute;
-        top: 30%;
-      }
-    }
-
     .panel-header {
       background-color: $gray5;
     }

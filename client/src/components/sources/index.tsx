@@ -18,10 +18,7 @@ import { loader } from 'graphql.macro';
 
 import Navbar from 'components/navbar';
 
-import {
-  changeSelectedSource,
-  deselectSource
-} from 'services/selectedNode/actions';
+import { changeSelectedSource } from 'services/selectedNode/actions';
 
 import './style.scss';
 

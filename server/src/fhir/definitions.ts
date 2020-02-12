@@ -13,6 +13,10 @@ const metaPrefix = '$meta'
 export const getDefinition = (key: string): StructureDefinition | undefined =>
   cache.get(key)
 
+// Gets all definitions from the cache.
+export const allDefinitions = (): StructureDefinition[] =>
+  Object.values(cache.mget(cache.keys()))
+
 // Loads definitions from the database and cache a structured
 // version of the definition in an in-memory cache.
 export const bootstrapDefinitions = async () => {
