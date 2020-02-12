@@ -1,7 +1,6 @@
 import { objectType, FieldResolver } from 'nexus'
 import { resourceProfiles, resourcesPerKind } from 'fhir/definitions'
 
-import { NexusGenInputs } from 'generated/nexus'
 import { StructureDefinition as StructDef } from 'types'
 
 export const StructureDefinition = objectType({
