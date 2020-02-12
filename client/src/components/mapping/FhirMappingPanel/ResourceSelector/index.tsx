@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { loader } from 'graphql.macro';
 
-import { updateFhirResource } from 'services/selectedNode/actions';
+import { changeSelectedResource } from 'services/selectedNode/actions';
 import { initAttributesMap } from 'services/resourceInputs/actions';
 import { IReduxStore } from 'types';
 
@@ -59,7 +59,7 @@ const ResourceSelector = ({
 
     // Update Redux store
     dispatch(initAttributesMap(attributes));
-    dispatch(updateFhirResource(clickedResource));
+    dispatch(changeSelectedResource(clickedResource));
   };
 
   return (
