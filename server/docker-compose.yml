@@ -16,6 +16,15 @@ services:
     networks:
       - arkhn
 
+  redis:
+    image: redis:5.0.7-alpine
+    ports:
+      - 6379:6379
+    volumes:
+      - redis-data:/data
+    networks:
+      - arkhn
+
   postgres:
     image: postgres
     ports:
@@ -32,6 +41,7 @@ services:
 volumes:
   postgres-data:
   schemas:
+  redis-data:
 
 networks:
   arkhn:
