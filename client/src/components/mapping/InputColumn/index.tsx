@@ -2,10 +2,8 @@ import {
   Breadcrumbs,
   Button,
   Card,
-  Classes,
   Elevation,
   IBreadcrumbProps,
-  Overlay,
   Tag
 } from '@blueprintjs/core';
 import React, { useState } from 'react';
@@ -222,7 +220,6 @@ const InputColumn = ({ input, schema, source }: Props) => {
                   // loading={loadUpdInput}
                   text={input.conceptMap}
                   onClick={(_e: React.MouseEvent) => {
-                    console.log(isConceptMapOverlayVisible);
                     setConceptMapOverlayVisible(true);
                   }}
                   // onClear={(): any => {

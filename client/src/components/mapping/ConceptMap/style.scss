@@ -3,6 +3,10 @@
 
 $window-padding: 20px;
 
+.bp3-dialog {
+  width: 80%;
+}
+
 .main-div {
   width: 95%;
   margin: 0px auto;
@@ -25,15 +29,22 @@ $window-padding: 20px;
     text-align: center;
   }
 
-  .target {
-    text-align: center;
-  }
+  .div-with-margin {
+    width: auto;
+    margin: 0px auto;
+  } 
 
-  .button-with-margin {
+  .bp3-button {
     margin: 10px auto;
+    width: auto;
   }
 
   .align-right {
     text-align: right;
+
+    // .bp3-button {
+    //   margin: 10px auto;
+    //   width: auto;
+    // }
   }
 }

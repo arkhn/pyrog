@@ -33,6 +33,7 @@ interface Props {
 interface ConceptMap {
   source: string;
   target: string;
+  equivalences: string[][];
 }
 
 const ConceptMap = ({ isOpen, onClose }: Props) => {
@@ -42,26 +43,43 @@ const ConceptMap = ({ isOpen, onClose }: Props) => {
   const [sourceCodes, setSourceCodes] = useState([] as string[]);
   const [targetCodes, setTargetCodes] = useState([] as string[]);
 
-  const conceptMaps: ConceptMap[] = [{ source: 'system1', target: 'system2' }];
+  // TODO queries instead of these mock data
+  const conceptMaps: ConceptMap[] = [
+    {
+      source: 'system1',
+      target: 'system2',
+      equivalences: [
+        ['0', 'male'],
+        ['1', 'female'],
+        ['null', 'unknown']
+      ]
+    }
+  ];
+  const codeSystems = [{ name: 'system1' }, { name: 'system2' }];
 
-  const systems = [{ name: 'system1' }, { name: 'system2' }];
-
-  const creatingNewCodeSystem = systems
+  const creatingNewCodeSystem = codeSystems
     .map(s => s.name)
     .includes(selectedSourceSystem);
 
+  const conceptMapExists = conceptMaps.some(
+    m => m.source === selectedSourceSystem && m.target === selectedTargetSystem
+  );
+
   const codesForSystem = ['code1', 'code2', 'code3'];
+
+  const displayCode = (code: string) => (code ? code : 'Select code');
+
   const chooseSourceFields = () => {
     return [...Array(nbRowInMap).keys()].map(index => (
       <StringSelect
         key={index}
-        icon={'numerical'}
         inputItem={sourceCodes[index]}
         items={codesForSystem}
-        onChange={(code: string) =>
+        displayItem={displayCode}
+        onChange={(code: string): void =>
           setSourceCodes(prev => {
             prev[index] = code;
-            return prev;
+            return [...prev];
           })
         }
       />
@@ -71,13 +89,13 @@ const ConceptMap = ({ isOpen, onClose }: Props) => {
     return [...Array(nbRowInMap).keys()].map(index => (
       <StringSelect
         key={index}
-        icon={'numerical'}
         inputItem={targetCodes[index]}
         items={codesForSystem}
-        onChange={(code: string) =>
+        displayItem={displayCode}
+        onChange={(code: string): void =>
           setTargetCodes(prev => {
             prev[index] = code;
-            return prev;
+            return [...prev];
           })
         }
       />
@@ -87,6 +105,21 @@ const ConceptMap = ({ isOpen, onClose }: Props) => {
     return [...Array(nbRowInMap).keys()].map(index => (
       <input className="text-input" key={index} type="text" />
     ));
+  };
+  const displayConceptMap = (side: 'source' | 'target') => {
+    const conceptMap = conceptMaps.find(
+      m =>
+        m.source === selectedSourceSystem && m.target === selectedTargetSystem
+    );
+    if (side === 'source') {
+      return conceptMap?.equivalences.map((eq, index) => (
+        <input className="text-input" key={index} value={eq[0]} />
+      ));
+    } else if (side === 'target') {
+      return conceptMap?.equivalences.map((eq, index) => (
+        <input className="text-input" key={index} value={eq[1]} />
+      ));
+    }
   };
 
   const resetSourceCodes = () => {
@@ -100,20 +133,14 @@ const ConceptMap = ({ isOpen, onClose }: Props) => {
 
   const createCodeSystem = () => {
     // TODO complete fhir code system (there are missing fields we could fill)
-    const elements = sourceCodes.reduce((acc: any[], code: string) => {
-      return [...acc, { concept: { code } }];
+    const concepts = sourceCodes.reduce((acc: any[], code: string) => {
+      return [...acc, { code }];
     }, []);
 
     return {
-      sourceUri: '', // value set uri
-      targetUri: '', // value set uri
-      group: [
-        {
-          source: '', // code system urisss
-          target: '', // code system uri
-          element: elements
-        }
-      ]
+      name: '', // for computer
+      title: '', // for human
+      concept: concepts
     };
   };
 
@@ -139,11 +166,15 @@ const ConceptMap = ({ isOpen, onClose }: Props) => {
     };
   };
 
-  const onSubmit = async () => {
+  const onSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
+    e.preventDefault();
     if (creatingNewCodeSystem) {
       const codeSystem = createCodeSystem();
       try {
-        await axios.post(`${FHIR_API_URL}/CodeSystem`, codeSystem);
+        // await axios.post(`${FHIR_API_URL}/CodeSystem`, codeSystem);
+        console.log('create code system', codeSystem);
       } catch (err) {
         console.error(
           `Could not create CodeSystem: ${
@@ -154,7 +185,8 @@ const ConceptMap = ({ isOpen, onClose }: Props) => {
     }
     const conceptMap = createConceptMap();
     try {
-      await axios.post(`${FHIR_API_URL}/ConceptMap`, conceptMap);
+      // await axios.post(`${FHIR_API_URL}/ConceptMap`, conceptMap);
+      console.log('create concept map', conceptMap);
     } catch (err) {
       console.error(
         `Could not create ConceptMap: ${
@@ -175,11 +207,9 @@ const ConceptMap = ({ isOpen, onClose }: Props) => {
           <div>
             <div className="source">
               <h2>source</h2>
-              <div className="button-with-margin">
+              <div className="div-with-margin">
                 <CodeSystemSelect
-                  // icon={'group-objects'}
-                  // inputItem={'abc'}
-                  systems={systems}
+                  systems={codeSystems}
                   selectedSystem={selectedSourceSystem}
                   onChange={(s: string): void => {
                     setSelectedSourceSystem(s);
@@ -194,7 +224,9 @@ const ConceptMap = ({ isOpen, onClose }: Props) => {
               </div>
               <div>
                 <ButtonGroup vertical={true}>
-                  {selectedSourceSystem !== ''
+                  {conceptMapExists
+                    ? displayConceptMap('source')
+                    : selectedSourceSystem !== ''
                     ? creatingNewCodeSystem
                       ? chooseSourceFields()
                       : createSourceFields()
@@ -202,13 +234,11 @@ const ConceptMap = ({ isOpen, onClose }: Props) => {
                 </ButtonGroup>
               </div>
             </div>
-            <div className="target">
+            <div className="center-text">
               <h2>target</h2>
-              <div className="button-with-margin">
+              <div className="div-with-margin">
                 <CodeSystemSelect
-                  // icon={'group-objects'}
-                  // inputItem={'abc'}
-                  systems={systems}
+                  systems={codeSystems}
                   selectedSystem={selectedTargetSystem}
                   onChange={(s: string): void => {
                     setSelectedTargetSystem(s);
@@ -220,15 +250,21 @@ const ConceptMap = ({ isOpen, onClose }: Props) => {
                   }}
                 />
               </div>
+              <div>
+                <ButtonGroup vertical={true}>
+                  {conceptMapExists
+                    ? displayConceptMap('target')
+                    : selectedTargetSystem !== ''
+                    ? chooseTargetFields()
+                    : null}
+                </ButtonGroup>
+              </div>
             </div>
           </div>
-          <div>
-            <ButtonGroup vertical={true}>
-              {selectedTargetSystem !== '' ? chooseTargetFields() : null}
-            </ButtonGroup>
-          </div>
           <div className="center-text">
-            {selectedTargetSystem !== '' && selectedSourceSystem !== '' ? (
+            {selectedTargetSystem !== '' &&
+            selectedSourceSystem !== '' &&
+            !conceptMapExists ? (
               <Button
                 fill={true}
                 className="button-with-margin"
@@ -237,13 +273,15 @@ const ConceptMap = ({ isOpen, onClose }: Props) => {
               />
             ) : null}
           </div>
-          <div className="align-right">
+          <div className="align-right button-with-margin">
             <Button
               intent="primary"
               type="submit"
               text="Create concept map"
               disabled={
-                selectedSourceSystem === '' || selectedTargetSystem === ''
+                selectedSourceSystem === '' ||
+                selectedTargetSystem === '' ||
+                nbRowInMap < 1
               }
             />
           </div>

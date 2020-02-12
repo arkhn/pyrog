@@ -8,6 +8,7 @@ import TSelect from './TSelect';
 
 interface ISelectProps {
   disabled?: boolean;
+  displayItem?: (item: string) => string;
   icon?: IconName;
   inputItem: string;
   intent?: Intent;
@@ -48,6 +49,7 @@ export default class StringSelect extends React.Component<ISelectProps, any> {
   public render() {
     const {
       disabled,
+      displayItem,
       icon,
       inputItem,
       intent,
@@ -61,7 +63,7 @@ export default class StringSelect extends React.Component<ISelectProps, any> {
     return (
       <TSelect<string>
         disabled={!!disabled}
-        displayItem={this.displayItem}
+        displayItem={displayItem || this.displayItem}
         filterItems={this.filterByName}
         filterable={filterable}
         loading={loading}

@@ -53,7 +53,7 @@ const CodeSystemSelect = ({
       <TSelect<CodeSystem>
         disabled={false}
         displayItem={({ name }: CodeSystem) => {
-          return name || 'None';
+          return name || 'Choose a system';
         }}
         filterItems={filterByName}
         inputItem={{ name: selectedSystem }}
