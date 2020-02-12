@@ -1,5 +1,4 @@
 import { IAction, ISourceSchema } from 'types';
-// import { HTTP_BACKEND_URL } from '../../constants';
 
 interface Resource {
   id: string;
