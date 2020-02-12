@@ -11,7 +11,8 @@ const metaPrefix = '$meta'
 export const getDefinition = async (
   key: string,
 ): Promise<StructureDefinition | undefined> => {
-  const res = await cache().get(key)
+  const { get } = cache()
+  const res = await get(key)
   return res ? JSON.parse(res) : undefined
 }
 
@@ -20,8 +21,8 @@ export const resourceProfiles = async (
   resourceType: string,
 ): Promise<StructureDefinition[]> => {
   const { mget, smembers } = cache()
-  const keys = await cache().smembers(`type:${resourceType}`)
-  const res = await cache().mget(keys)
+  const keys = await smembers(`type:${resourceType}`)
+  const res = await mget(keys)
   return res.map(r => JSON.parse(r))
 }
 
@@ -51,12 +52,13 @@ export const bootstrapDefinitions = async () => {
     }
 
     // Cache definition in redis
+    const { set, sadd } = cache()
     const cachedId = id || url
-    await cache().set(cachedId, JSON.stringify(structured))
+    await set(cachedId, JSON.stringify(structured))
     // Cache resource kinds (base resource, profiles, extension) using key <derivation>:<kind>
-    await cache().sadd(`${derivation}:${kind}`, cachedId)
+    await sadd(`${derivation}:${kind}`, cachedId)
     // Cache profiles using key type:<type>
-    await cache().sadd(`type:${type}`, cachedId)
+    await sadd(`type:${type}`, cachedId)
   }
 
   console.log('Bootstrapping standard FHIR definitions...')

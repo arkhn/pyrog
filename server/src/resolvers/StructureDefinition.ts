@@ -3,7 +3,6 @@ import { resourceProfiles, resourcesPerKind } from 'fhir/definitions'
 
 import { NexusGenInputs } from 'generated/nexus'
 import { StructureDefinition as StructDef } from 'types'
-import { mapObj } from 'nexus/dist/core'
 
 export const StructureDefinition = objectType({
   name: 'StructureDefinition',
