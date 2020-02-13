@@ -1,4 +1,4 @@
-import { GraphQLServer } from 'graphql-yoga'
+import { GraphQLServer, Options } from 'graphql-yoga'
 
 import { permissions } from 'permissions'
 import register from 'rest'
@@ -15,10 +15,10 @@ const server = new GraphQLServer({
 
 register(server.express)
 
-const options = {
+const options: Options = {
+  cors: false,
   bodyParserOptions: { limit: '10mb', type: 'application/json' },
 }
-
 const { PORT } = process.env
 
 const main = async () => {
