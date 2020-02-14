@@ -118,13 +118,20 @@ const structurize = (definition: any): StructureDefinition => {
         .slice(1)
         .join('.$children.')
 
+      // if the element has mutliple types, prevent loadash from
+      // setting an 'x' element in the object.
+      const elementKey = elementName.includes('[x]')
+        ? elementName.replace('[x]', '')
+        : elementName
+
       // We skip some elements we don't need as id, extension
-      if (!elementBlackList.some(el => elementName.endsWith(el))) {
+      if (!elementBlackList.some(el => elementKey.endsWith(el))) {
         // Add element fields
+        set(customStruct, `${elementKey}.name`, elementName.split('.').pop())
         Object.keys(element)
           .filter(el => elementFieldsWhiteList.includes(el))
           .forEach(key =>
-            set(customStruct, `${elementName}.${key}`, element[key]),
+            set(customStruct, `${elementKey}.${key}`, element[key]),
           )
       }
     }
