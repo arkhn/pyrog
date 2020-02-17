@@ -45,13 +45,11 @@ const InputColumn = ({ input, schema, source }: Props) => {
   const client = useApolloClient();
   const dispatch = useDispatch();
 
-  const {
-    attribute: { path }
-  } = useSelector((state: IReduxStore) => state.selectedNode);
+  const { attribute } = useSelector((state: IReduxStore) => state.selectedNode);
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
   );
-  const attributeId = attributesForResource[path].id;
+  const attributeId = attributesForResource[attribute.path].id;
 
   const [isConceptMapOverlayVisible, setConceptMapOverlayVisible] = useState(
     false
@@ -107,7 +105,7 @@ const InputColumn = ({ input, schema, source }: Props) => {
           attributeId
         }
       });
-      dispatch(removeAttributeFromMap(path));
+      dispatch(removeAttributeFromMap(attribute.path));
     }
   };
 
@@ -215,31 +213,33 @@ const InputColumn = ({ input, schema, source }: Props) => {
                   }}
                 />
               </div>
-              <div className="stacked-tags">
-                <Tag>CONCEPT MAP</Tag>
-                <ButtonGroup>
-                  <Button
-                    text={input.conceptMap || 'None'}
-                    onClick={(_e: React.MouseEvent) => {
-                      setConceptMapOverlayVisible(true);
-                    }}
-                  />
-                  <Button
-                    className="delete-button"
-                    icon="cross"
-                    minimal={true}
-                    disabled={!input.conceptMap}
-                    onClick={(_e: React.MouseEvent) => {
-                      updateInput({
-                        variables: {
-                          inputId: input.id,
-                          data: { conceptMap: null }
-                        }
-                      });
-                    }}
-                  />
-                </ButtonGroup>
-              </div>
+              {attribute.types[0] === 'code' ? (
+                <div className="stacked-tags">
+                  <Tag>CONCEPT MAP</Tag>
+                  <ButtonGroup>
+                    <Button
+                      text={input.conceptMap || 'None'}
+                      onClick={(_e: React.MouseEvent) => {
+                        setConceptMapOverlayVisible(true);
+                      }}
+                    />
+                    <Button
+                      className="delete-button"
+                      icon="cross"
+                      minimal={true}
+                      disabled={!input.conceptMap}
+                      onClick={(_e: React.MouseEvent) => {
+                        updateInput({
+                          variables: {
+                            inputId: input.id,
+                            data: { conceptMap: null }
+                          }
+                        });
+                      }}
+                    />
+                  </ButtonGroup>
+                </div>
+              ) : null}
             </div>
             <div className="input-column-joins">
               <Button

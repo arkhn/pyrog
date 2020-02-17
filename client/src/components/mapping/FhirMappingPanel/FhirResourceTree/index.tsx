@@ -283,7 +283,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       }
       node.isSelected = true;
       setSelectedNode(node);
-      onClickCallback(node.nodeData.serialize());
+      onClickCallback(node.nodeData);
     }
     setNodes([...nodes]);
   };

@@ -1,20 +1,18 @@
 import * as React from 'react';
 
-import { ISelectedSource } from 'types';
+import { ISelectedSource, ISelectedAttribute } from 'types';
 
 import StaticValueForm from './StaticValueForm';
 import DynamicColumnPicker from './DynamicColumnPicker';
 import './style.scss';
 
-interface IProps {
-  attribute: {
-    path: string;
-  };
+interface Props {
+  attribute: ISelectedAttribute;
   schema: any;
   source: ISelectedSource;
 }
 
-const TabColumnPicking = ({ attribute, schema, source }: IProps) => {
+const TabColumnPicking = ({ attribute, schema, source }: Props) => {
   return (
     <div id={'column-picker'}>
       <StaticValueForm attribute={attribute} />
