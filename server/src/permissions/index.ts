@@ -28,6 +28,8 @@ export const permissions = shield({
     structureDefinition: rules.isAuthenticatedUser,
   },
   Mutation: {
+    signup: rules.isAdmin,
+
     createSource: rules.isAuthenticatedUser,
     deleteSource: rules.isAuthenticatedUser,
 
