@@ -2,6 +2,9 @@
 
 fragment entireInput on Input {
   id
+  script
+  conceptMap
+  staticValue
   sqlValue {
     id
     owner
@@ -11,6 +14,4 @@ fragment entireInput on Input {
       ...entireJoin
     }
   }
-  script
-  staticValue
 }

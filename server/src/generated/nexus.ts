@@ -117,6 +117,7 @@ export interface NexusGenInputs {
   InputWhereInput: { // input type
     AND?: NexusGenInputs['InputWhereInput'][] | null; // [InputWhereInput!]
     attribute?: NexusGenInputs['AttributeWhereInput'] | null; // AttributeWhereInput
+    conceptMap?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     NOT?: NexusGenInputs['InputWhereInput'][] | null; // [InputWhereInput!]
@@ -226,6 +227,7 @@ export interface NexusGenInputs {
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
   UpdateInputInput: { // input type
+    conceptMap?: string | null; // String
     script?: string | null; // String
   }
   UpdateResourceInput: { // input type
@@ -335,6 +337,7 @@ export interface NexusGenFieldTypes {
   }
   Input: { // field return type
     attribute: NexusGenRootTypes['Attribute']; // Attribute!
+    conceptMap: string | null; // String
     createdAt: any; // DateTime!
     id: string; // ID!
     script: string | null; // String

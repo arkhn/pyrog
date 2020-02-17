@@ -56,7 +56,6 @@ const InputColumn = ({ input, schema, source }: Props) => {
   const [isConceptMapOverlayVisible, setConceptMapOverlayVisible] = useState(
     false
   );
-  const [testConceptMapName, setTestConceptMapName] = useState('');
 
   const [deleteInput, { loading: loadDelInput }] = useMutation(mDeleteInput);
   const [deleteAttribute] = useMutation(mDeleteAttribute);
@@ -206,7 +205,7 @@ const InputColumn = ({ input, schema, source }: Props) => {
                       }
                     });
                   }}
-                  onClear={(): any => {
+                  onClear={(): void => {
                     updateInput({
                       variables: {
                         inputId: input.id,
@@ -220,12 +219,7 @@ const InputColumn = ({ input, schema, source }: Props) => {
                 <Tag>CONCEPT MAP</Tag>
                 <ButtonGroup>
                   <Button
-                    // loading={loadUpdInput}
-                    // text={
-                    //   input.conceptMap &&
-                    //   `${input.conceptMap.source} > ${input.conceptMap.target}`
-                    // }
-                    text={testConceptMapName || 'None'}
+                    text={input.conceptMap || 'None'}
                     onClick={(_e: React.MouseEvent) => {
                       setConceptMapOverlayVisible(true);
                     }}
@@ -234,10 +228,14 @@ const InputColumn = ({ input, schema, source }: Props) => {
                     className="delete-button"
                     icon="cross"
                     minimal={true}
-                    // disabled={!!input.conceptMap}
-                    disabled={testConceptMapName === ''}
+                    disabled={!input.conceptMap}
                     onClick={(_e: React.MouseEvent) => {
-                      setTestConceptMapName('');
+                      updateInput({
+                        variables: {
+                          inputId: input.id,
+                          data: { conceptMap: null }
+                        }
+                      });
                     }}
                   />
                 </ButtonGroup>
@@ -275,13 +273,12 @@ const InputColumn = ({ input, schema, source }: Props) => {
         isOpen={isConceptMapOverlayVisible}
         onClose={_ => setConceptMapOverlayVisible(false)}
         updateInputCallback={(conceptMap: string) => {
-          setTestConceptMapName(conceptMap);
-          // updateInput({
-          //   variables: {
-          //     inputId: input.id,
-          //     data: { conceptMap }
-          //   }
-          // });
+          updateInput({
+            variables: {
+              inputId: input.id,
+              data: { conceptMap }
+            }
+          });
           setConceptMapOverlayVisible(false);
         }}
       />

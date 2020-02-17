@@ -140,6 +140,7 @@ input DateTimeFilter {
 
 type Input {
   attribute: Attribute!
+  conceptMap: String
   createdAt: DateTime!
   id: ID!
   script: String
@@ -157,6 +158,7 @@ input InputFilter {
 input InputWhereInput {
   AND: [InputWhereInput!]
   attribute: AttributeWhereInput
+  conceptMap: NullableStringFilter
   createdAt: DateTimeFilter
   id: StringFilter
   NOT: [InputWhereInput!]
@@ -382,6 +384,7 @@ input TemplateWhereInput {
 }
 
 input UpdateInputInput {
+  conceptMap: String
   script: String
 }
 

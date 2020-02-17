@@ -7,6 +7,7 @@ export const Input = objectType({
 
     t.model.sqlValue()
     t.model.script()
+    t.model.conceptMap()
     t.model.staticValue()
 
     t.model.attribute()
