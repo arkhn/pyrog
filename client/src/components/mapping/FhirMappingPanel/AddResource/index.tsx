@@ -26,6 +26,7 @@ interface Profile {
   id: string;
   name: string;
   type: string;
+  publisher?: string;
 }
 interface Resource {
   id: string;

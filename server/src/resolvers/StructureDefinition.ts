@@ -33,6 +33,13 @@ export const StructureDefinition = objectType({
       },
     })
 
+    t.field('publisher', {
+      type: 'String',
+      resolve: (parent: any) => {
+        return parent.def.$meta.publisher
+      },
+    })
+
     t.field('display', {
       type: 'JSON',
       description: 'Structured version of a definition',

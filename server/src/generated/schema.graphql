@@ -354,6 +354,7 @@ type StructureDefinition {
 
   """List of profiles on this resource"""
   profiles: [StructureDefinition!]!
+  publisher: String!
   type: String!
 }
 

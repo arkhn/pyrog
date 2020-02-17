@@ -139,6 +139,7 @@ const structureFieldsWhiteList = [
   'kind',
   'baseDefinition',
   'derivation',
+  'publisher',
 ]
 const elementFieldsWhiteList = [
   'definition',

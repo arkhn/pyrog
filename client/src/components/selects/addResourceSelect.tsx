@@ -25,6 +25,7 @@ interface Profile {
   id: string;
   name: string;
   type: string;
+  publisher?: string;
 }
 interface Resource {
   id: string;
@@ -77,11 +78,15 @@ const AddResourceSelect = ({
     profile: Profile,
     { handleClick, modifiers, query }
   ) => {
+    const publisher =
+      profile.publisher && profile.publisher.length > 20
+        ? `${profile.publisher?.substr(0, 20)}...`
+        : profile.publisher;
     return (
       <MenuItem
         key={profile.id}
         onClick={handleClick}
-        label={profile.id === profile.type ? 'Default' : ''}
+        label={profile.id === profile.type ? 'Default' : publisher}
         text={
           <span>
             <strong>{profile.name}</strong>
@@ -97,9 +102,10 @@ const AddResourceSelect = ({
     items,
     itemsParentRef,
     query,
-    renderItem
+    renderItem,
+    filteredItems
   }) => {
-    const renderedItems = items.map(renderItem).filter(item => item != null);
+    const renderedItems = filteredItems.map(renderItem);
     return (
       <Menu ulRef={itemsParentRef}>
         <MenuItem

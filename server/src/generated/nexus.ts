@@ -416,6 +416,7 @@ export interface NexusGenFieldTypes {
     id: string; // String!
     name: string; // String!
     profiles: NexusGenRootTypes['StructureDefinition'][]; // [StructureDefinition!]!
+    publisher: string; // String!
     type: string; // String!
   }
   Template: { // field return type
