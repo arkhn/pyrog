@@ -1,0 +1,56 @@
+.dialog {
+  flex-basis: 40%;
+  min-width: 500px;
+  font-size: large;
+
+  .container {
+    display: flex;
+    flex-direction: row;
+    color: black;
+    padding: 20px;
+
+    .dropzone {
+      flex-basis: 30%;
+      text-align: center;
+      border-color: darkgray;
+      border-style: dashed;
+      padding: 5px;
+    }
+
+    .profileError {
+      flex-basis: 70%;
+
+      h4 {
+        text-align: center;
+        color: red;
+      }
+      li {
+        text-align: left;
+      }
+    }
+    .profileOverview {
+      flex-basis: 70%;
+      text-align: center;
+      padding-left: 2rem;
+
+      .profileAttributeRow {
+        display: flex;
+        flex-direction: row;
+        padding: 3px;
+        text-align: justify;
+
+        .profileAttributeValue {
+          font-size: large;
+          font-style: italic;
+          padding-left: 1rem;
+        }
+      }
+    }
+  }
+  .uploadButton {
+    width: 30%;
+    border-radius: 15px;
+    align-self: center;
+    font-size: large;
+  }
+}

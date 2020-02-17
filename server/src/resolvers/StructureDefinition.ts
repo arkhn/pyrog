@@ -1,7 +1,13 @@
 import { objectType, FieldResolver } from 'nexus'
-import { resourceProfiles, resourcesPerKind } from 'fhir/definitions'
+import axios from 'axios'
 
+import {
+  resourceProfiles,
+  resourcesPerKind,
+  cacheDefinition,
+} from 'fhir/definitions'
 import { StructureDefinition as StructDef } from 'types'
+import { FHIR_API_URL } from '../constants'
 
 export const StructureDefinition = objectType({
   name: 'StructureDefinition',
@@ -63,6 +69,21 @@ export const searchDefinitions: FieldResolver<
     )
   }
   return res.map(graphqlize)
+}
+
+export const refreshDefinition: FieldResolver<
+  'Mutation',
+  'refreshDefinition'
+> = async (_, { definitionId }) => {
+  try {
+    const { data } = await axios.get(
+      `${FHIR_API_URL}/StructureDefinition/${definitionId}`,
+    )
+    const def = await cacheDefinition(data)
+    return graphqlize(def)
+  } catch (err) {
+    throw new Error(err.response ? err.response.data : err.message)
+  }
 }
 
 const graphqlize = (r: StructDef) => ({

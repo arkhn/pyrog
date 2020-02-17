@@ -151,6 +151,7 @@ const AddResourceSelect = ({
         isOpen={!!uploadProfileOpen}
         resource={uploadProfileOpen}
         onClose={() => setUploadProfileOpen(undefined)}
+        onUpload={onChange}
       />
       <TSelect<Resource>
         disabled={!!disabled}

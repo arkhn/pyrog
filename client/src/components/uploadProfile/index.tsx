@@ -1,14 +1,13 @@
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Dialog, Button } from '@blueprintjs/core';
+import { ErrorObject } from 'ajv';
+import axios from 'axios';
+
+import { FHIR_API_URL } from '../../constants';
+import { validate } from './validate';
 
 import './style.scss';
-
-interface Props {
-  isOpen: boolean;
-  resource?: Resource;
-  onClose: () => void;
-}
 
 interface Resource {
   id: string;
@@ -16,7 +15,28 @@ interface Resource {
   type: string;
 }
 
-const UploadProfile = ({ isOpen, resource, onClose }: Props) => {
+interface Props {
+  isOpen: boolean;
+  resource?: Resource;
+  onClose: () => void;
+  onUpload: (r: Resource) => void;
+}
+
+const overviewAttributes = [
+  'id',
+  'name',
+  'description',
+  'fhirVersion',
+  'type',
+  'publisher'
+];
+const findMissingAttributes = (profile: any) =>
+  overviewAttributes.filter(a => !Object.keys(profile).includes(a));
+
+const formatErrors = (errors: ErrorObject[]): string[] =>
+  errors.map(err => `${err.message}: ${Object.values(err.params).join(',')}`);
+
+const UploadProfile = ({ isOpen, resource, onClose, onUpload }: Props) => {
   const {
     getRootProps,
     getInputProps,
@@ -30,8 +50,83 @@ const UploadProfile = ({ isOpen, resource, onClose }: Props) => {
   const [profileDefinition, setProfileDefinition] = React.useState(
     undefined as any
   );
-  const [invalidProfile, setInvalidProfile] = React.useState(false);
+  const [invalidProfileErrors, setinvalidProfileErrors] = React.useState(
+    undefined as string[] | undefined
+  );
   const [uploadingProfile, setUploadingProfile] = React.useState(false);
+
+  const validateProfile = (profile: any): boolean => {
+    if (!validate(profile)) {
+      const formattedErrors = formatErrors(validate.errors!);
+      setinvalidProfileErrors(formattedErrors);
+      return false;
+    }
+
+    const missingAttributes = findMissingAttributes(profile);
+    if (missingAttributes.length > 0) {
+      setinvalidProfileErrors(
+        missingAttributes.map(a => `Missing required attribute ${a}`)
+      );
+      return false;
+    }
+    if (profile.type !== resource!.type) {
+      setinvalidProfileErrors([
+        `Cannot create profile of type "${profile.type}" on resource ${
+          resource!.type
+        }`
+      ]);
+      return false;
+    }
+
+    return true;
+  };
+
+  const uploadProfile = async () => {
+    setUploadingProfile(true);
+    try {
+      await axios.post(
+        `${FHIR_API_URL}/StructureDefinition`,
+        profileDefinition
+      );
+
+      onUpload(profileDefinition);
+      onClose();
+    } catch (err) {
+      setinvalidProfileErrors([err.response ? err.response.data : err.message]);
+    }
+    setUploadingProfile(false);
+  };
+
+  React.useEffect(() => {
+    if (!acceptedFiles.length) return;
+
+    const [profileFile] = acceptedFiles;
+    const reader = new FileReader();
+
+    reader.onerror = () =>
+      setinvalidProfileErrors(['could not read selected file']);
+    reader.onload = () => {
+      const profile = JSON.parse(reader.result as string);
+      if (validateProfile(profile)) {
+        setProfileDefinition(profile);
+        setinvalidProfileErrors(undefined);
+      }
+    };
+    reader.readAsText(profileFile);
+  }, [acceptedFiles]);
+
+  const renderError = () => {
+    return (
+      <div className="profileError">
+        <h4>Invalid Profile</h4>
+        <ul>
+          {invalidProfileErrors!.map((err, i) => (
+            <li key={i}>{err} </li>
+          ))}
+        </ul>
+      </div>
+    );
+  };
 
   const renderProfileOverview = () => {
     if (rejectedFiles.length)
@@ -40,47 +135,33 @@ const UploadProfile = ({ isOpen, resource, onClose }: Props) => {
     if (!profileDefinition)
       return <div className="profileOverview">No profile selected</div>;
 
-    console.log(profileDefinition);
     return (
       <div className="profileOverview">
-        <title>Provile overview</title>
-        {profileDefinition ? (
-          <div>
-            <pre>{profileDefinition!.resourceType}</pre>
-            <pre>{profileDefinition!.name}</pre>
-            <pre>{profileDefinition!.type}</pre>
-            <pre>{profileDefinition!.publisher}</pre>
-          </div>
-        ) : (
-          <p>Loading...</p>
-        )}
+        <h4>Profile overview</h4>
+        <div>
+          {overviewAttributes.map(attribute => (
+            <div key={attribute} className="profileAttributeRow">
+              <strong>{attribute}: </strong>
+              <span className="profileAttributeValue">
+                {profileDefinition![attribute]}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
     );
   };
-
-  const uploadProfile = async () => {};
-
-  React.useEffect(() => {
-    if (!acceptedFiles.length) return;
-
-    const [profileFile] = acceptedFiles;
-    const reader = new FileReader();
-
-    reader.onabort = () => console.log('file reading was aborted');
-    reader.onerror = () => console.log('file reading has failed');
-    reader.onload = () => {
-      const profileDefinition = JSON.parse(reader.result as string);
-      setProfileDefinition(profileDefinition);
-    };
-    reader.readAsText(profileFile);
-  }, [acceptedFiles]);
 
   return (
     <Dialog
       className="dialog"
       isOpen={isOpen}
       title={resource ? `Create a new profile for ${resource.name}` : ''}
-      onClose={onClose}
+      onClose={() => {
+        setProfileDefinition(undefined);
+        setinvalidProfileErrors(undefined);
+        onClose();
+      }}
     >
       <div className="container">
         <div {...getRootProps({ className: 'dropzone' })}>
@@ -88,15 +169,15 @@ const UploadProfile = ({ isOpen, resource, onClose }: Props) => {
           {isDragActive ? (
             <p>Drop the files here ...</p>
           ) : (
-            <p>Drag 'n' drop the profile, or click to select it</p>
+            <p>Pick a profile</p>
           )}
         </div>
-        {renderProfileOverview()}
+        {!!invalidProfileErrors ? renderError() : renderProfileOverview()}
       </div>
       <Button
         className="uploadButton"
         loading={uploadingProfile}
-        disabled={!profileDefinition || invalidProfile}
+        disabled={!profileDefinition || !!invalidProfileErrors}
         onClick={uploadProfile}
       >
         Create profile
