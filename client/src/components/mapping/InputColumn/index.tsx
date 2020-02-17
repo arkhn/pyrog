@@ -1,6 +1,7 @@
 import {
   Breadcrumbs,
   Button,
+  ButtonGroup,
   Card,
   Elevation,
   IBreadcrumbProps,
@@ -55,6 +56,7 @@ const InputColumn = ({ input, schema, source }: Props) => {
   const [isConceptMapOverlayVisible, setConceptMapOverlayVisible] = useState(
     false
   );
+  const [testConceptMapName, setTestConceptMapName] = useState('');
 
   const [deleteInput, { loading: loadDelInput }] = useMutation(mDeleteInput);
   const [deleteAttribute] = useMutation(mDeleteAttribute);
@@ -216,21 +218,29 @@ const InputColumn = ({ input, schema, source }: Props) => {
               </div>
               <div className="stacked-tags">
                 <Tag>CONCEPT MAP</Tag>
-                <Button
-                  // loading={loadUpdInput}
-                  text={input.conceptMap}
-                  onClick={(_e: React.MouseEvent) => {
-                    setConceptMapOverlayVisible(true);
-                  }}
-                  // onClear={(): any => {
-                  //   updateInput({
-                  //     variables: {
-                  //       inputId: input.id,
-                  //       data: { script: null }
-                  //     }
-                  //   });
-                  // }}
-                />
+                <ButtonGroup>
+                  <Button
+                    // loading={loadUpdInput}
+                    // text={
+                    //   input.conceptMap &&
+                    //   `${input.conceptMap.source} > ${input.conceptMap.target}`
+                    // }
+                    text={testConceptMapName || 'None'}
+                    onClick={(_e: React.MouseEvent) => {
+                      setConceptMapOverlayVisible(true);
+                    }}
+                  />
+                  <Button
+                    className="delete-button"
+                    icon="cross"
+                    minimal={true}
+                    // disabled={!!input.conceptMap}
+                    disabled={testConceptMapName === ''}
+                    onClick={(_e: React.MouseEvent) => {
+                      setTestConceptMapName('');
+                    }}
+                  />
+                </ButtonGroup>
               </div>
             </div>
             <div className="input-column-joins">
@@ -264,6 +274,16 @@ const InputColumn = ({ input, schema, source }: Props) => {
       <ConceptMap
         isOpen={isConceptMapOverlayVisible}
         onClose={_ => setConceptMapOverlayVisible(false)}
+        updateInputCallback={(conceptMap: string) => {
+          setTestConceptMapName(conceptMap);
+          // updateInput({
+          //   variables: {
+          //     inputId: input.id,
+          //     data: { conceptMap }
+          //   }
+          // });
+          setConceptMapOverlayVisible(false);
+        }}
       />
     </div>
   );

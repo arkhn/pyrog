@@ -3,6 +3,7 @@ import { IconName } from '@blueprintjs/icons';
 import {
   ItemPredicate,
   ItemRenderer,
+  ItemListRenderer,
   Select,
   ItemListPredicate
 } from '@blueprintjs/select';
@@ -23,6 +24,7 @@ interface ISelectProps<T> {
   filterItems: ItemPredicate<T>;
   filterable?: boolean;
   items: T[];
+  itemDisabled?: (item: T, index: number) => boolean;
   icon?: IconName;
   inputItem: T;
   intent?: Intent;
@@ -30,6 +32,7 @@ interface ISelectProps<T> {
   onChange: Function;
   popoverProps?: IPopoverProps;
   renderItem: ItemRenderer<T>;
+  renderList?: ItemListRenderer<T>;
 }
 
 export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
@@ -54,9 +57,11 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
       inputItem,
       intent,
       items,
+      itemDisabled,
       loading,
       popoverProps,
-      renderItem
+      renderItem,
+      renderList
     } = this.props;
 
     return (
@@ -67,9 +72,11 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
         className={className}
         filterable={filterable}
         items={items}
+        itemDisabled={itemDisabled}
         itemListPredicate={sortItems}
         itemPredicate={filterItems}
         itemRenderer={renderItem}
+        itemListRenderer={renderList}
         noResults={<MenuItem disabled={true} text="No results." />}
         onItemSelect={this.handleValueChange}
         popoverProps={popoverProps}

@@ -12,27 +12,27 @@ import { useQuery } from 'react-apollo';
 
 const cleaningScripts = loader('src/graphql/queries/cleaningScripts.graphql');
 
-interface IOnChange {
+interface OnChange {
   (script: string): any;
 }
 
-interface IScript {
+interface Script {
   name: string;
   description?: string;
 }
 
-interface IProps {
+interface Props {
   selectedScript: string;
   loading?: boolean;
-  onChange: IOnChange;
+  onChange: OnChange;
   onClear: Function;
 }
 
-const filterByName: ItemPredicate<IScript> = (query, item) => {
+const filterByName: ItemPredicate<Script> = (query, item) => {
   return `${item.name.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0;
 };
 
-const sortItems: ItemListPredicate<IScript> = (query, resources: IScript[]) => {
+const sortItems: ItemListPredicate<Script> = (query, resources: Script[]) => {
   resources.sort((s1, s2) => {
     const name1 = s1.name.toLowerCase();
     const name2 = s2.name.toLowerCase();
@@ -43,7 +43,7 @@ const sortItems: ItemListPredicate<IScript> = (query, resources: IScript[]) => {
   return resources;
 };
 
-const renderItem: ItemRenderer<IScript> = (
+const renderItem: ItemRenderer<Script> = (
   item,
   { handleClick, modifiers, query }
 ) => {
@@ -62,17 +62,17 @@ const ScriptSelect = ({
   loading,
   onChange,
   onClear
-}: IProps) => {
+}: Props) => {
   const { loading: queryLoading, data } = useQuery(cleaningScripts);
-  let items: IScript[] = [];
+  let items: Script[] = [];
   if (data && data.cleaningScripts) {
     items = data.cleaningScripts.scripts;
   }
   return (
     <ButtonGroup>
-      <TSelect<IScript>
+      <TSelect<Script>
         disabled={false}
-        displayItem={({ name }: IScript) => {
+        displayItem={({ name }: Script): string => {
           return name || 'None';
         }}
         sortItems={sortItems}
@@ -80,10 +80,11 @@ const ScriptSelect = ({
         loading={loading || queryLoading}
         inputItem={{ name: selectedScript }}
         items={items}
-        onChange={(script: IScript) => onChange(script.name)}
+        onChange={(script: Script): void => onChange(script.name)}
         renderItem={renderItem}
       />
       <Button
+        className="delete-button"
         disabled={!selectedScript}
         loading={loading || queryLoading}
         icon={'cross'}

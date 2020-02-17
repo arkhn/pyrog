@@ -1,11 +1,22 @@
-import { ItemPredicate, ItemRenderer } from '@blueprintjs/select';
-import { MenuItem, Button, ButtonGroup } from '@blueprintjs/core';
+import { Menu, MenuItem, Button, ButtonGroup } from '@blueprintjs/core';
+import {
+  ItemPredicate,
+  ItemRenderer,
+  ItemListRenderer,
+  IItemListRendererProps
+} from '@blueprintjs/select';
 import React from 'react';
 
 import TSelect from './TSelect';
 
 interface CodeSystem {
+  title: string;
   name: string;
+  concept: Concept[];
+}
+
+interface Concept {
+  code: string;
 }
 
 interface Props {
@@ -14,14 +25,26 @@ interface Props {
   onChange: Function;
   onClear: Function;
   allowCreate?: boolean;
+  itemDisabled?: (item: CodeSystem, index: number) => boolean;
+  callbackCreatingNewSystem?: Function;
 }
 
 const filterByName: ItemPredicate<CodeSystem> = (query, item) => {
-  return `${item.name.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0;
+  return `${item.title.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0;
 };
 
-const renderItem: ItemRenderer<CodeSystem> = (item, { handleClick }) => {
-  return <MenuItem text={item.name} key={item.name} onClick={handleClick} />;
+const renderItem: ItemRenderer<CodeSystem> = (
+  item,
+  { handleClick, modifiers }
+) => {
+  return (
+    <MenuItem
+      text={item.title || ''}
+      key={item.title || ''}
+      onClick={handleClick}
+      disabled={modifiers.disabled}
+    />
+  );
 };
 
 const CodeSystemSelect = ({
@@ -29,41 +52,50 @@ const CodeSystemSelect = ({
   selectedSystem,
   onChange,
   onClear,
+  itemDisabled,
+  callbackCreatingNewSystem,
   allowCreate
 }: Props) => {
-  const createNewItemFromQuery = (name: string): CodeSystem => {
-    return { name: name };
+  const renderList: ItemListRenderer<CodeSystem> = ({
+    items,
+    itemsParentRef,
+    renderItem
+  }: IItemListRendererProps<CodeSystem>) => {
+    const renderedItems = items.map(renderItem).filter(item => item != null);
+    return (
+      <Menu ulRef={itemsParentRef}>
+        <MenuItem
+          onClick={(): void =>
+            callbackCreatingNewSystem ? callbackCreatingNewSystem() : null
+          }
+          icon={'plus'}
+          text={
+            <span>
+              <strong>Create new code system</strong>
+            </span>
+          }
+        />
+        {renderedItems}
+      </Menu>
+    );
   };
 
-  const createNewItemRenderer = (
-    query: string,
-    active: boolean,
-    handleClick: React.MouseEventHandler<HTMLElement>
-  ) => (
-    <MenuItem
-      icon="add"
-      text={`Create "${query}"`}
-      active={active}
-      onClick={handleClick}
-      shouldDismissPopover={false}
-    />
-  );
   return (
     <ButtonGroup>
       <TSelect<CodeSystem>
         disabled={false}
-        displayItem={({ name }: CodeSystem) => {
-          return name || 'Choose a system';
-        }}
-        filterItems={filterByName}
-        inputItem={{ name: selectedSystem }}
-        items={systems}
-        onChange={(script: CodeSystem) => onChange(script.name)}
-        renderItem={renderItem}
-        createNewItemFromQuery={
-          allowCreate ? createNewItemFromQuery : undefined
+        displayItem={({ title }: CodeSystem): string =>
+          title || 'Choose a system'
         }
-        createNewItemRenderer={allowCreate ? createNewItemRenderer : undefined}
+        filterItems={filterByName}
+        inputItem={
+          systems.find(s => s.title === selectedSystem) || ({} as CodeSystem)
+        }
+        items={systems}
+        itemDisabled={itemDisabled}
+        onChange={(s: CodeSystem) => onChange(s.title)}
+        renderItem={renderItem}
+        renderList={allowCreate ? renderList : undefined}
       />
       <Button
         disabled={!selectedSystem}
