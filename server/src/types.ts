@@ -20,9 +20,8 @@ export type AttributeWithChildren = AttributeWithInputs & {
   children: AttributeWithChildren[]
 }
 
-export type StructureDefinition = {
+export type CachedDefinition = {
   $meta: StructureMetadata
-  properties: any
 }
 
 export type ConstraintDefinition = {
