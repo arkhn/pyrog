@@ -6,6 +6,7 @@ import axios from 'axios';
 import CodeSystemSelect from 'components/selects/codeSystemSelect';
 import StringSelect from 'components/selects/stringSelect';
 import { FHIR_API_URL } from '../../../constants';
+import { IReduxStore } from 'types';
 
 import './style.scss';
 
