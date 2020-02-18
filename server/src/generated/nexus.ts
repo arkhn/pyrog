@@ -250,6 +250,7 @@ export interface NexusGenRootTypes {
     user: NexusGenRootTypes['User']; // User!
   }
   Column: photon.Column;
+  ConceptMap: {};
   Credential: photon.Credential;
   Input: photon.Input;
   Join: photon.Join;
@@ -323,6 +324,11 @@ export interface NexusGenFieldTypes {
     table: string | null; // String
     updatedAt: any; // DateTime!
   }
+  ConceptMap: { // field return type
+    id: string; // String!
+    name: string; // String!
+    title: string; // String!
+  }
   Credential: { // field return type
     createdAt: any; // DateTime!
     database: string; // String!
@@ -337,7 +343,7 @@ export interface NexusGenFieldTypes {
   }
   Input: { // field return type
     attribute: NexusGenRootTypes['Attribute']; // Attribute!
-    conceptMap: string | null; // String
+    conceptMap: NexusGenRootTypes['ConceptMap'] | null; // ConceptMap
     conceptMapId: string | null; // String
     createdAt: any; // DateTime!
     id: string; // ID!
@@ -615,7 +621,7 @@ export interface NexusGenAbstractResolveReturnTypes {
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "Attribute" | "AuthPayload" | "Column" | "Credential" | "Input" | "Join" | "Mutation" | "Query" | "Resource" | "Source" | "StructureDefinition" | "Template" | "User";
+export type NexusGenObjectNames = "Attribute" | "AuthPayload" | "Column" | "ConceptMap" | "Credential" | "Input" | "Join" | "Mutation" | "Query" | "Resource" | "Source" | "StructureDefinition" | "Template" | "User";
 
 export type NexusGenInputNames = "AttributeFilter" | "AttributeInput" | "AttributeWhereInput" | "BooleanFilter" | "ColumnFilter" | "ColumnInput" | "ColumnInputWithoutJoins" | "ColumnWhereInput" | "CredentialWhereInput" | "DateTimeFilter" | "InputFilter" | "InputWhereInput" | "JoinFilter" | "JoinInput" | "JoinWhereInput" | "NullableStringFilter" | "ResourceFilter" | "ResourceWhereInput" | "SourceFilter" | "SourceWhereInput" | "StringFilter" | "StructureDefinitionWhereFilter" | "TemplateWhereInput" | "UpdateInputInput" | "UpdateResourceInput";
 

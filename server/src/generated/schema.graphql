@@ -92,6 +92,12 @@ input ColumnWhereInput {
   updatedAt: DateTimeFilter
 }
 
+type ConceptMap {
+  id: String!
+  name: String!
+  title: String!
+}
+
 type Credential {
   createdAt: DateTime!
   database: String!
@@ -140,9 +146,7 @@ input DateTimeFilter {
 
 type Input {
   attribute: Attribute!
-
-  """Name of the concept map."""
-  conceptMap: String
+  conceptMap: ConceptMap
   conceptMapId: String
   createdAt: DateTime!
   id: ID!

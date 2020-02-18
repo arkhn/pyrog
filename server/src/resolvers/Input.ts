@@ -15,15 +15,18 @@ export const Input = objectType({
 
     t.model.conceptMapId()
     t.field('conceptMap', {
-      type: 'String',
-      description: 'Name of the concept map.',
+      type: 'ConceptMap',
       nullable: true,
       resolve: async (parent: any) => {
         if (!parent.conceptMapId) return null
-        const conceptMap = await axios.get(
-          `${FHIR_API_URL}/ConceptMap/${parent.conceptMapId}`,
-        )
-        return conceptMap.data.name
+        try {
+          const response = await axios.get(
+            `${FHIR_API_URL}/ConceptMap/${parent.conceptMapId}`,
+          )
+          return response.data
+        } catch (err) {
+          throw new Error(`Could not fetch concept map: ${err.response.data}`)
+        }
       },
     })
 
