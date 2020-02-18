@@ -364,6 +364,7 @@ export interface NexusGenFieldTypes {
     deleteSource: NexusGenRootTypes['Source']; // Source!
     deleteTemplate: NexusGenRootTypes['Template']; // Template!
     login: NexusGenRootTypes['AuthPayload']; // AuthPayload!
+    refreshDefinition: NexusGenRootTypes['StructureDefinition']; // StructureDefinition!
     signup: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     updateAttribute: NexusGenRootTypes['Attribute']; // Attribute!
     updateInput: NexusGenRootTypes['Input']; // Input!
@@ -415,6 +416,7 @@ export interface NexusGenFieldTypes {
     id: string; // String!
     name: string; // String!
     profiles: NexusGenRootTypes['StructureDefinition'][]; // [StructureDefinition!]!
+    publisher: string; // String!
     type: string; // String!
   }
   Template: { // field return type
@@ -518,6 +520,9 @@ export interface NexusGenArgTypes {
     login: { // args
       email: string; // String!
       password: string; // String!
+    }
+    refreshDefinition: { // args
+      definitionId: string; // ID!
     }
     signup: { // args
       email: string; // String!

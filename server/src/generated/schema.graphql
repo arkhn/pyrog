@@ -217,6 +217,7 @@ type Mutation {
   deleteSource(id: ID!): Source!
   deleteTemplate(id: ID!): Template!
   login(email: String!, password: String!): AuthPayload!
+  refreshDefinition(definitionId: ID!): StructureDefinition!
   signup(email: String!, name: String!, password: String!): AuthPayload!
   updateAttribute(attributeId: ID!, data: AttributeInput!): Attribute!
   updateInput(data: UpdateInputInput!, inputId: ID!): Input!
@@ -353,6 +354,7 @@ type StructureDefinition {
 
   """List of profiles on this resource"""
   profiles: [StructureDefinition!]!
+  publisher: String!
   type: String!
 }
 

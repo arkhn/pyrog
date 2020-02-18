@@ -4,7 +4,8 @@ import {
   ItemPredicate,
   ItemRenderer,
   Select,
-  ItemListPredicate
+  ItemListPredicate,
+  ItemListRenderer
 } from '@blueprintjs/select';
 import * as React from 'react';
 
@@ -24,6 +25,7 @@ interface ISelectProps<T> {
   onChange: any;
   popoverProps?: IPopoverProps;
   renderItem: ItemRenderer<T>;
+  renderList?: ItemListRenderer<T>;
 }
 
 export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
@@ -48,7 +50,8 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
       items,
       loading,
       popoverProps,
-      renderItem
+      renderItem,
+      renderList
     } = this.props;
 
     return (
@@ -60,6 +63,7 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
         itemListPredicate={sortItems}
         itemPredicate={filterItems}
         itemRenderer={renderItem}
+        itemListRenderer={renderList}
         noResults={<MenuItem disabled={true} text="No results." />}
         onItemSelect={this.handleValueChange}
         popoverProps={popoverProps}

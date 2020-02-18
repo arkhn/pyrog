@@ -14,6 +14,7 @@ import { deleteCredential, upsertCredential } from './Credential'
 import { createTemplate, deleteTemplate } from './Template'
 import { addJoinToColumn } from './Column'
 import { updateJoin, deleteJoin } from './Join'
+import { refreshDefinition } from './StructureDefinition'
 
 export const Mutation = mutationType({
   /*
@@ -137,6 +138,18 @@ export const Mutation = mutationType({
         data: arg({ type: 'UpdateResourceInput', required: true }),
       },
       resolve: updateResource,
+    })
+
+    /*
+     * StructureDefinition
+     */
+
+    t.field('refreshDefinition', {
+      type: 'StructureDefinition',
+      args: {
+        definitionId: idArg({ required: true }),
+      },
+      resolve: refreshDefinition,
     })
 
     /*

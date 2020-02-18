@@ -227,7 +227,6 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
         );
       }
     } catch (e) {
-      console.error(e);
       this.props.toaster.show(
         this.renderToastProps({
           message: e.message,
@@ -383,7 +382,6 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
                     inputProps={{
                       onChange: (event: React.FormEvent<HTMLInputElement>) => {
                         const target = event.target as any;
-                        console.log(target.files[0]);
                         this.setState({
                           ...this.state,
                           mappingFile: target.files[0]

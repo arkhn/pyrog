@@ -1,8 +1,13 @@
 import * as React from 'react';
-import { Intent, MenuItem, Position } from '@blueprintjs/core';
-import { ItemPredicate, ItemRenderer } from '@blueprintjs/select';
+import { Intent, MenuItem, Position, Menu } from '@blueprintjs/core';
+import {
+  ItemPredicate,
+  ItemRenderer,
+  ItemListRenderer
+} from '@blueprintjs/select';
 import { IconName } from '@blueprintjs/icons';
 
+import UploadProfile from 'components/uploadProfile';
 import TSelect from './TSelect';
 
 interface Props {
@@ -20,6 +25,7 @@ interface Profile {
   id: string;
   name: string;
   type: string;
+  publisher?: string;
 }
 interface Resource {
   id: string;
@@ -27,6 +33,33 @@ interface Resource {
   type: string;
   profiles: Profile[];
 }
+
+const filterByName: ItemPredicate<Profile> = (query, resource: Profile) => {
+  return resource.name.toLowerCase().indexOf(query.toLowerCase()) >= 0;
+};
+
+const sortAlphabetically = (
+  item1: Profile,
+  item2: Profile,
+  first: string | undefined
+): number => {
+  if (item1.id === first) return -1;
+  if (item2.id === first) return 1;
+
+  const name1 = item1.name.toLowerCase();
+  const name2 = item2.name.toLowerCase();
+
+  if (name1 < name2) return -1;
+  if (name1 > name2) return 1;
+  return 0;
+};
+
+// If the second argument is provided, the sort funcion puts
+// the resource which id matches on top of the list.
+const sortItems = (
+  profiles: Profile[],
+  first: string | undefined = undefined
+): Profile[] => profiles.sort((p1, p2) => sortAlphabetically(p1, p2, first));
 
 const AddResourceSelect = ({
   disabled,
@@ -37,15 +70,23 @@ const AddResourceSelect = ({
   loading,
   onChange
 }: Props) => {
+  const [uploadProfileOpen, setUploadProfileOpen] = React.useState(
+    undefined as Resource | undefined
+  );
+
   const renderMenuItem: ItemRenderer<Profile> = (
     profile: Profile,
     { handleClick, modifiers, query }
   ) => {
+    const publisher =
+      profile.publisher && profile.publisher.length > 20
+        ? `${profile.publisher?.substr(0, 20)}...`
+        : profile.publisher;
     return (
       <MenuItem
         key={profile.id}
         onClick={handleClick}
-        label={profile.id === profile.type ? 'Default' : ''}
+        label={profile.id === profile.type ? 'Default' : publisher}
         text={
           <span>
             <strong>{profile.name}</strong>
@@ -55,10 +96,31 @@ const AddResourceSelect = ({
     );
   };
 
-  const renderItem: ItemRenderer<Resource> = (
-    resource: Resource,
-    { handleClick, modifiers, query }
-  ) => {
+  const renderProfileList = (
+    resource: Resource
+  ): ItemListRenderer<Profile> => ({
+    itemsParentRef,
+    renderItem,
+    filteredItems
+  }) => {
+    const renderedItems = filteredItems.map(renderItem);
+    return (
+      <Menu ulRef={itemsParentRef}>
+        <MenuItem
+          onClick={() => setUploadProfileOpen(resource)}
+          icon={'plus'}
+          text={
+            <span>
+              <strong>Create new profile </strong>
+            </span>
+          }
+        />
+        {renderedItems}
+      </Menu>
+    );
+  };
+
+  const renderItem: ItemRenderer<Resource> = (resource: Resource) => {
     return (
       <TSelect<Profile>
         key={resource.id}
@@ -79,64 +141,40 @@ const AddResourceSelect = ({
           usePortal: true
         }}
         renderItem={renderMenuItem}
+        renderList={renderProfileList(resource)}
       />
     );
   };
 
-  const filterByName: ItemPredicate<Profile> = (query, resource: Profile) => {
-    return resource.name.toLowerCase().indexOf(query.toLowerCase()) >= 0;
-  };
-
-  const sortAlphabetically = (
-    item1: Profile,
-    item2: Profile,
-    first: string | undefined
-  ): number => {
-    if (item1.id === first) return -1;
-    if (item2.id === first) return 1;
-
-    const name1 = item1.name.toLowerCase();
-    const name2 = item2.name.toLowerCase();
-
-    if (name1 < name2) return -1;
-    if (name1 > name2) return 1;
-    return 0;
-  };
-
-  // If the second argument is provided, the sort funcion puts
-  // the resource which id matches on top of the list.
-  const sortItems = (
-    profiles: Profile[],
-    first: string | undefined = undefined
-  ): Profile[] => {
-    if (loading) {
-      return [];
-    }
-
-    return profiles.sort((p1, p2) => sortAlphabetically(p1, p2, first));
-  };
-
   return (
-    <TSelect<Resource>
-      disabled={!!disabled}
-      displayItem={(resource: Resource) => resource.name}
-      filterItems={filterByName}
-      loading={loading}
-      icon={icon}
-      inputItem={inputItem || ({ name: 'Select a resource' } as Resource)}
-      intent={intent}
-      items={sortItems(items || []) as Resource[]}
-      onChange={onChange}
-      popoverProps={{
-        autoFocus: true,
-        boundary: 'viewport',
-        canEscapeKeyClose: true,
-        lazy: true,
-        position: Position.RIGHT_TOP,
-        usePortal: true
-      }}
-      renderItem={renderItem}
-    />
+    <React.Fragment>
+      <UploadProfile
+        isOpen={!!uploadProfileOpen}
+        resource={uploadProfileOpen}
+        onClose={() => setUploadProfileOpen(undefined)}
+        onUpload={onChange}
+      />
+      <TSelect<Resource>
+        disabled={!!disabled}
+        displayItem={(resource: Resource) => resource.name}
+        filterItems={filterByName}
+        loading={loading}
+        icon={icon}
+        inputItem={inputItem || ({ name: 'Select a resource' } as Resource)}
+        intent={intent}
+        items={sortItems(items || []) as Resource[]}
+        onChange={onChange}
+        popoverProps={{
+          autoFocus: true,
+          boundary: 'viewport',
+          canEscapeKeyClose: true,
+          lazy: true,
+          position: Position.RIGHT_TOP,
+          usePortal: true
+        }}
+        renderItem={renderItem}
+      />
+    </React.Fragment>
   );
 };
 

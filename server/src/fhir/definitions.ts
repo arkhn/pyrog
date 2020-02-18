@@ -37,30 +37,32 @@ export const resourcesPerKind = async (
   return res.map(r => JSON.parse(r))
 }
 
+export const cacheDefinition = async (definition: any) => {
+  const structured = structurize(definition)
+
+  // Use id as key. If it isn't present, use url
+  const { id, url } = definition
+  const { derivation, kind, type } = structured.$meta
+
+  if (!id && !url) {
+    throw new Error('Structure definition has no id nor url field.')
+  }
+
+  // Cache definition in redis
+  const { set, sadd } = cache()
+  const cachedId = id || url
+  await set(cachedId, JSON.stringify(structured))
+  // Cache resource kinds (base resource, profiles, extension) using key <derivation>:<kind>
+  await sadd(`${derivation}:${kind}`, cachedId)
+  // Cache profiles using key type:<type>
+  await sadd(`type:${type}`, cachedId)
+
+  return structured
+}
+
 // Loads definitions from the database and cache a structured
 // version of the definition in an in-memory cache.
 export const bootstrapDefinitions = async () => {
-  const cacheDefinition = async (definition: any) => {
-    const structured = structurize(definition)
-
-    // Use id as key. If it isn't present, use url
-    const { id, url } = definition
-    const { derivation, kind, type } = structured.$meta
-
-    if (!id && !url) {
-      throw new Error('Structure definition has no id nor url field.')
-    }
-
-    // Cache definition in redis
-    const { set, sadd } = cache()
-    const cachedId = id || url
-    await set(cachedId, JSON.stringify(structured))
-    // Cache resource kinds (base resource, profiles, extension) using key <derivation>:<kind>
-    await sadd(`${derivation}:${kind}`, cachedId)
-    // Cache profiles using key type:<type>
-    await sadd(`type:${type}`, cachedId)
-  }
-
   console.log('Bootstrapping standard FHIR definitions...')
   const { data: standardDefinitions } = await axios.get(
     `${FHIR_API_URL}/StructureDefinition`,
@@ -72,20 +74,6 @@ export const bootstrapDefinitions = async () => {
   )
   await Promise.all(standardDefinitions.items.map(cacheDefinition))
   console.log('Done.')
-
-  //TODO: fix the ':not' modifier in fhir-api
-  // console.log('Bootstrapping custom FHIR definitions...')
-  // const { data: customDefinitions } = await axios.get(
-  //   `${FHIR_API_URL}/StructureDefinition`,
-  //   {
-  //     params: { 'publisher:not': HL7_AUTHOR },
-  //   },
-  // )
-  // for (const def of customDefinitions.items.map(
-  //   ({ _source }: any) => _source,
-  // )) {
-  //   cacheDefinition(def)
-  // }
 }
 
 const structurize = (definition: any): StructureDefinition => {
@@ -151,6 +139,7 @@ const structureFieldsWhiteList = [
   'kind',
   'baseDefinition',
   'derivation',
+  'publisher',
 ]
 const elementFieldsWhiteList = [
   'definition',
