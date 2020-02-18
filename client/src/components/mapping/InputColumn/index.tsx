@@ -7,14 +7,11 @@ import {
   IBreadcrumbProps,
   Tag
 } from '@blueprintjs/core';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useApolloClient, useMutation } from '@apollo/react-hooks';
 import { useSelector, useDispatch } from 'react-redux';
 
-import axios from 'axios';
-import { FHIR_API_URL } from '../../../constants';
-
-import { IReduxStore, ISelectedSource, CodeSystem, ConceptMap } from 'types';
+import { IReduxStore, ISelectedSource } from 'types';
 
 // COMPONENTS
 import Join from '../Join';
@@ -59,12 +56,6 @@ const InputColumn = ({ input, schema, source }: Props) => {
   const [isConceptMapOverlayVisible, setConceptMapOverlayVisible] = useState(
     false
   );
-  const [existingCodeSystems, setExistingCodeSystems] = useState(
-    [] as CodeSystem[]
-  );
-  const [existingConceptMaps, setExistingConceptMaps] = useState(
-    [] as ConceptMap[]
-  );
 
   const [deleteInput, { loading: loadDelInput }] = useMutation(mDeleteInput);
   const [deleteAttribute] = useMutation(mDeleteAttribute);
@@ -93,9 +84,7 @@ const InputColumn = ({ input, schema, source }: Props) => {
     });
   };
 
-  const conceptMapName = existingConceptMaps.find(
-    m => m.id === input.conceptMapId
-  )?.title;
+  console.log('=>', input.conceptMapId, input);
 
   const onClickDelete = async () => {
     // Mutation to remove from DB
@@ -123,37 +112,6 @@ const InputColumn = ({ input, schema, source }: Props) => {
       dispatch(removeAttributeFromMap(path));
     }
   };
-
-  useEffect(() => {
-    // fetch code systems
-    const fetchCodeSystems = async (): Promise<void> => {
-      try {
-        const codeSystems = await axios.get(`${FHIR_API_URL}/CodeSystem`);
-        setExistingCodeSystems(codeSystems.data.items);
-      } catch (err) {
-        console.error(
-          `Could not fecth code systems: ${
-            err.response ? err.response.data : err.message
-          }`
-        );
-      }
-    };
-    fetchCodeSystems();
-    // fetch concept maps
-    const fetchConceptMaps = async (): Promise<void> => {
-      try {
-        const conceptMaps = await axios.get(`${FHIR_API_URL}/ConceptMap`);
-        setExistingConceptMaps(conceptMaps.data.items);
-      } catch (err) {
-        console.error(
-          `Could not fecth concept maps: ${
-            err.response ? err.response.data : err.message
-          }`
-        );
-      }
-    };
-    fetchConceptMaps();
-  }, []);
 
   return (
     <div className="input-column">
@@ -263,7 +221,7 @@ const InputColumn = ({ input, schema, source }: Props) => {
                 <Tag>CONCEPT MAP</Tag>
                 <ButtonGroup>
                   <Button
-                    text={conceptMapName || 'None'}
+                    text={input.conceptMap || 'None'}
                     onClick={(_e: React.MouseEvent) => {
                       setConceptMapOverlayVisible(true);
                     }}
@@ -315,8 +273,6 @@ const InputColumn = ({ input, schema, source }: Props) => {
       </Card>
       <ConceptMapDialog
         isOpen={isConceptMapOverlayVisible}
-        existingCodeSystems={existingCodeSystems}
-        existingConceptMaps={existingConceptMaps}
         onClose={_ => setConceptMapOverlayVisible(false)}
         updateInputCallback={(conceptMapId: string) => {
           updateInput({

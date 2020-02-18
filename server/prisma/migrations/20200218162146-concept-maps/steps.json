@@ -4,7 +4,7 @@
     {
       "tag": "CreateField",
       "model": "Input",
-      "field": "conceptMap",
+      "field": "conceptMapId",
       "type": "String",
       "arity": "Optional"
     }

@@ -140,6 +140,9 @@ input DateTimeFilter {
 
 type Input {
   attribute: Attribute!
+
+  """Name of the concept map."""
+  conceptMap: String
   conceptMapId: String
   createdAt: DateTime!
   id: ID!

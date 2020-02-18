@@ -337,6 +337,7 @@ export interface NexusGenFieldTypes {
   }
   Input: { // field return type
     attribute: NexusGenRootTypes['Attribute']; // Attribute!
+    conceptMap: string | null; // String
     conceptMapId: string | null; // String
     createdAt: any; // DateTime!
     id: string; // ID!
