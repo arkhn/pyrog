@@ -102,11 +102,7 @@ class AuthenticationView extends React.Component<
               this.props.toaster.show({
                 icon: 'error',
                 intent: 'danger',
-                message:
-                  error.message ===
-                  'GraphQL error: A unique constraint would be violated on User. Details: Field name = email'
-                    ? "L'adresse mail est déjà enregistrée."
-                    : "Une erreur est survenue lors de l'inscription.",
+                message: error.message.replace('GraphQL error:', ''),
                 timeout: 4000
               });
             }}
@@ -252,14 +248,7 @@ class AuthenticationView extends React.Component<
               this.props.toaster.show({
                 icon: 'error',
                 intent: 'danger',
-                message:
-                  error.message === 'GraphQL error: Invalid password'
-                    ? 'Le mot de passe est incorrect.'
-                    : error.message.startsWith(
-                        'GraphQL error: No such user found for email'
-                      )
-                    ? "L'adresse utilisée n'est pas enregistrée."
-                    : "Une erreur est survenue lors de l'authentification.",
+                message: error.message.replace('GraphQL error:', ''),
                 timeout: 4000
               });
             }}

@@ -16,7 +16,11 @@ const server = new GraphQLServer({
 register(server.express)
 
 const options: Options = {
-  cors: false,
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Authorization', 'Content-Type'],
+  },
   bodyParserOptions: { limit: '10mb', type: 'application/json' },
 }
 const { PORT } = process.env
