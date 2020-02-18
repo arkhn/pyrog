@@ -22,6 +22,7 @@ export const UpdateInputInput = inputObjectType({
   name: 'UpdateInputInput',
   definition(t) {
     t.field('script', { type: 'String' })
+    t.field('conceptMapId', { type: 'String' })
   },
 })
 

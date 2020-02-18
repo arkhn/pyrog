@@ -3,13 +3,19 @@ import { IconName } from '@blueprintjs/icons';
 import {
   ItemPredicate,
   ItemRenderer,
+  ItemListRenderer,
   Select,
-  ItemListPredicate,
-  ItemListRenderer
+  ItemListPredicate
 } from '@blueprintjs/select';
 import * as React from 'react';
 
 interface ISelectProps<T> {
+  createNewItemFromQuery?: (query: string) => T;
+  createNewItemRenderer?: (
+    query: string,
+    active: boolean,
+    handleClick: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void
+  ) => JSX.Element | undefined;
   disabled: boolean;
   displayItem: (item: any) => string;
   className?: string;
@@ -18,11 +24,12 @@ interface ISelectProps<T> {
   filterItems: ItemPredicate<T>;
   filterable?: boolean;
   items: T[];
+  itemDisabled?: (item: T, index: number) => boolean;
   icon?: IconName;
   inputItem: T;
   intent?: Intent;
   loading?: boolean;
-  onChange: any;
+  onChange: Function;
   popoverProps?: IPopoverProps;
   renderItem: ItemRenderer<T>;
   renderList?: ItemListRenderer<T>;
@@ -37,6 +44,8 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
 
   public render() {
     const {
+      createNewItemFromQuery,
+      createNewItemRenderer,
       disabled,
       displayItem,
       className,
@@ -48,6 +57,7 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
       inputItem,
       intent,
       items,
+      itemDisabled,
       loading,
       popoverProps,
       renderItem,
@@ -56,10 +66,13 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
 
     return (
       <this.CustomSelect
+        createNewItemFromQuery={createNewItemFromQuery}
+        createNewItemRenderer={createNewItemRenderer}
         disabled={disabled}
         className={className}
         filterable={filterable}
         items={items}
+        itemDisabled={itemDisabled}
         itemListPredicate={sortItems}
         itemPredicate={filterItems}
         itemRenderer={renderItem}

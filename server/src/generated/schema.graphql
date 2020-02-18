@@ -92,6 +92,12 @@ input ColumnWhereInput {
   updatedAt: DateTimeFilter
 }
 
+type ConceptMap {
+  id: String!
+  name: String!
+  title: String!
+}
+
 type Credential {
   createdAt: DateTime!
   database: String!
@@ -140,6 +146,8 @@ input DateTimeFilter {
 
 type Input {
   attribute: Attribute!
+  conceptMap: ConceptMap
+  conceptMapId: String
   createdAt: DateTime!
   id: ID!
   script: String
@@ -157,6 +165,7 @@ input InputFilter {
 input InputWhereInput {
   AND: [InputWhereInput!]
   attribute: AttributeWhereInput
+  conceptMapId: NullableStringFilter
   createdAt: DateTimeFilter
   id: StringFilter
   NOT: [InputWhereInput!]
@@ -384,6 +393,7 @@ input TemplateWhereInput {
 }
 
 input UpdateInputInput {
+  conceptMapId: String
   script: String
 }
 

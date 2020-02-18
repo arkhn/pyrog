@@ -1,12 +1,13 @@
 import {
   Breadcrumbs,
   Button,
+  ButtonGroup,
   Card,
   Elevation,
   IBreadcrumbProps,
   Tag
 } from '@blueprintjs/core';
-import * as React from 'react';
+import React, { useState } from 'react';
 import { useApolloClient, useMutation } from '@apollo/react-hooks';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -14,6 +15,7 @@ import { IReduxStore, ISelectedSource } from 'types';
 
 // COMPONENTS
 import Join from '../Join';
+import ConceptMapDialog from 'components/mapping/ConceptMap';
 import ScriptSelect from 'components/selects/scriptSelect';
 import { loader } from 'graphql.macro';
 
@@ -46,11 +48,14 @@ const InputColumn = ({ input, schema, source }: Props) => {
   const {
     attribute: { path }
   } = useSelector((state: IReduxStore) => state.selectedNode);
-
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
   );
   const attributeId = attributesForResource[path].id;
+
+  const [isConceptMapOverlayVisible, setConceptMapOverlayVisible] = useState(
+    false
+  );
 
   const [deleteInput, { loading: loadDelInput }] = useMutation(mDeleteInput);
   const [deleteAttribute] = useMutation(mDeleteAttribute);
@@ -200,7 +205,7 @@ const InputColumn = ({ input, schema, source }: Props) => {
                       }
                     });
                   }}
-                  onClear={(): any => {
+                  onClear={(): void => {
                     updateInput({
                       variables: {
                         inputId: input.id,
@@ -209,6 +214,31 @@ const InputColumn = ({ input, schema, source }: Props) => {
                     });
                   }}
                 />
+              </div>
+              <div className="stacked-tags">
+                <Tag>CONCEPT MAP</Tag>
+                <ButtonGroup>
+                  <Button
+                    text={input.conceptMap ? input.conceptMap.title : 'None'}
+                    onClick={(_e: React.MouseEvent) => {
+                      setConceptMapOverlayVisible(true);
+                    }}
+                  />
+                  <Button
+                    className="delete-button"
+                    icon="cross"
+                    minimal={true}
+                    disabled={!input.conceptMapId}
+                    onClick={(_e: React.MouseEvent) => {
+                      updateInput({
+                        variables: {
+                          inputId: input.id,
+                          data: { conceptMapId: null }
+                        }
+                      });
+                    }}
+                  />
+                </ButtonGroup>
               </div>
             </div>
             <div className="input-column-joins">
@@ -239,6 +269,19 @@ const InputColumn = ({ input, schema, source }: Props) => {
           </div>
         )}
       </Card>
+      <ConceptMapDialog
+        isOpen={isConceptMapOverlayVisible}
+        onClose={_ => setConceptMapOverlayVisible(false)}
+        updateInputCallback={(conceptMapId: string) => {
+          updateInput({
+            variables: {
+              inputId: input.id,
+              data: { conceptMapId }
+            }
+          });
+          setConceptMapOverlayVisible(false);
+        }}
+      />
     </div>
   );
 };

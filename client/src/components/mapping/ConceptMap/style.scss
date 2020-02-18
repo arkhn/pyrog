@@ -1,0 +1,81 @@
+@import "~@blueprintjs/core/lib/css/blueprint.css";
+@import "~@blueprintjs/core/lib/scss/variables";
+
+$window-padding: 20px;
+
+.bp3-dialog {
+  width: 80%;
+}
+
+.main-div {
+  width: 95%;
+  margin: 0px auto;
+  padding: $window-padding;
+  color: black;
+
+  .center-text {
+    text-align: center;
+  }
+
+  .enter-code-name {
+    display: inline;
+  }
+
+  .text-input {
+    height: 29px;
+    padding: 5px 5px;
+    margin: 0px auto;
+  }
+
+  .meta-information {
+    .row {
+      display: flex;
+      .left {
+        flex-basis: 30%;
+      }
+      .right {
+        flex-basis: 50%;
+      }
+    }
+  }
+
+  .bp3-html-table {
+    width: 100%;
+
+    td, th {
+      text-align: center;
+    }
+    td {
+      padding: 2px;
+    } 
+
+    .head-col {
+      width: 5%;
+    }
+    .equivalence-col {
+      width: 15%;
+    }
+
+    .bp3-button {
+      width: auto;
+    }
+  }
+
+  .add-element-button {
+    width: 30%;
+    margin: 20px auto;
+  }
+
+  .align-right {
+    text-align: right;
+
+    .bp3-button-group {
+      margin: 10px auto; 
+    }
+
+    .bp3-button {
+      margin: 10px auto;
+    }
+  }
+
+}

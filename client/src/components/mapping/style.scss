@@ -279,6 +279,9 @@ body {
     .bp3-tag {
       text-align: center;
     }
+    .bp3-button {
+      word-wrap: break-word;
+    }
   }
 
   .input-column {
@@ -315,7 +318,7 @@ body {
 
       .input-column-joins {
         display: flex;
-        flex-basis: 50%;
+        flex-basis: 25%;
         flex-grow: 1;
         flex-direction: column;
         align-items: stretch;

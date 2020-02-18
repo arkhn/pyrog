@@ -27,6 +27,17 @@ h2 {
     min-width: 300px;
     margin: $window-padding;
 
+    .card-header {
+      display: flex;
+
+      .bp3-button {
+        position: absolute;
+        right: 5%;
+        border: 0;
+        margin: 0;
+      }
+    }
+
     .tags {
       display: flex;
       margin-bottom: $window-padding;
