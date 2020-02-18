@@ -99,9 +99,7 @@ const AddResourceSelect = ({
   const renderProfileList = (
     resource: Resource
   ): ItemListRenderer<Profile> => ({
-    items,
     itemsParentRef,
-    query,
     renderItem,
     filteredItems
   }) => {
@@ -122,10 +120,7 @@ const AddResourceSelect = ({
     );
   };
 
-  const renderItem: ItemRenderer<Resource> = (
-    resource: Resource,
-    { handleClick, modifiers, query }
-  ) => {
+  const renderItem: ItemRenderer<Resource> = (resource: Resource) => {
     return (
       <TSelect<Profile>
         key={resource.id}
