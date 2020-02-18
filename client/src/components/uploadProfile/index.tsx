@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Dialog, Button } from '@blueprintjs/core';
 import { ErrorObject } from 'ajv';
@@ -51,7 +51,7 @@ const UploadProfile = ({ isOpen, resource, onClose, onUpload }: Props) => {
     undefined as any
   );
   const [invalidProfileErrors, setinvalidProfileErrors] = React.useState(
-    undefined as string[] | undefined
+    [] as string[]
   );
   const [uploadingProfile, setUploadingProfile] = React.useState(false);
 
@@ -109,24 +109,22 @@ const UploadProfile = ({ isOpen, resource, onClose, onUpload }: Props) => {
       const profile = JSON.parse(reader.result as string);
       if (validateProfile(profile)) {
         setProfileDefinition(profile);
-        setinvalidProfileErrors(undefined);
+        setinvalidProfileErrors([]);
       }
     };
     reader.readAsText(profileFile);
   }, [acceptedFiles]);
 
-  const renderError = () => {
-    return (
-      <div className="profileError">
-        <h4>Invalid Profile</h4>
-        <ul>
-          {invalidProfileErrors!.map((err, i) => (
-            <li key={i}>{err} </li>
-          ))}
-        </ul>
-      </div>
-    );
-  };
+  const renderError = (
+    <div className="profileError">
+      <h4>Invalid Profile</h4>
+      <ul>
+        {invalidProfileErrors!.map((err, i) => (
+          <li key={i}>{err} </li>
+        ))}
+      </ul>
+    </div>
+  );
 
   const renderProfileOverview = () => {
     if (rejectedFiles.length)
@@ -159,7 +157,7 @@ const UploadProfile = ({ isOpen, resource, onClose, onUpload }: Props) => {
       title={resource ? `Create a new profile for ${resource.name}` : ''}
       onClose={() => {
         setProfileDefinition(undefined);
-        setinvalidProfileErrors(undefined);
+        setinvalidProfileErrors([]);
         onClose();
       }}
     >
@@ -172,12 +170,14 @@ const UploadProfile = ({ isOpen, resource, onClose, onUpload }: Props) => {
             <p>Pick a profile</p>
           )}
         </div>
-        {!!invalidProfileErrors ? renderError() : renderProfileOverview()}
+        {invalidProfileErrors.length > 0
+          ? renderError
+          : renderProfileOverview()}
       </div>
       <Button
         className="uploadButton"
         loading={uploadingProfile}
-        disabled={!profileDefinition || !!invalidProfileErrors}
+        disabled={!profileDefinition || invalidProfileErrors.length > 0}
         onClick={uploadProfile}
       >
         Create profile
