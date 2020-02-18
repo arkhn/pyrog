@@ -84,7 +84,7 @@ model Input {
   sqlValue    Column?   @relation(onDelete: CASCADE)
   // cleaning scripts for the sql column
   script      String?
-  // concept map to be applied to the sql columns
+  // title of the concept map to be applied to a mapped code
   conceptMap  String?
   // Or a static value is it's fixed
   staticValue String?

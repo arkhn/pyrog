@@ -1,5 +1,6 @@
 import { Button, ButtonGroup, Dialog, InputGroup } from '@blueprintjs/core';
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 import CodeSystemSelect from 'components/selects/codeSystemSelect';
@@ -57,6 +58,8 @@ interface MapRow {
 }
 
 const ConceptMap = ({ isOpen, onClose, updateInputCallback }: Props) => {
+  const toaster = useSelector((state: IReduxStore) => state.toaster);
+
   const [existingCodeSystems, setExistingCodeSystems] = useState(
     [] as CodeSystem[]
   );
@@ -77,29 +80,33 @@ const ConceptMap = ({ isOpen, onClose, updateInputCallback }: Props) => {
 
   useEffect(() => {
     // fetch code systems
-    try {
-      axios.get(`${FHIR_API_URL}/CodeSystem`).then(response => {
-        setExistingCodeSystems(response.data.items);
-      });
-    } catch (err) {
-      console.error(
-        `Could not fecth code systems: ${
-          err.response ? err.response.data : err.message
-        }`
-      );
-    }
+    const fetchCodeSystems = async (): Promise<void> => {
+      try {
+        const codeSystems = await axios.get(`${FHIR_API_URL}/CodeSystem`);
+        setExistingCodeSystems(codeSystems.data.items);
+      } catch (err) {
+        console.error(
+          `Could not fecth code systems: ${
+            err.response ? err.response.data : err.message
+          }`
+        );
+      }
+    };
+    fetchCodeSystems();
     // fetch concept maps
-    try {
-      axios.get(`${FHIR_API_URL}/ConceptMap`).then(response => {
-        setExistingConceptMaps(response.data.items);
-      });
-    } catch (err) {
-      console.error(
-        `Could not fecth concept maps: ${
-          err.response ? err.response.data : err.message
-        }`
-      );
-    }
+    const fetchConceptMaps = async (): Promise<void> => {
+      try {
+        const conceptMaps = await axios.get(`${FHIR_API_URL}/ConceptMap`);
+        setExistingConceptMaps(conceptMaps.data.items);
+      } catch (err) {
+        console.error(
+          `Could not fecth concept maps: ${
+            err.response ? err.response.data : err.message
+          }`
+        );
+      }
+    };
+    fetchConceptMaps();
   }, []);
 
   // TODO these are actually codes from a code system. Fetch them instead of hard coding them
@@ -124,7 +131,7 @@ const ConceptMap = ({ isOpen, onClose, updateInputCallback }: Props) => {
   const isTargetSystemDisabled = (system: CodeSystem): boolean =>
     system.title === sourceSystemName;
 
-  const emptyFields = conceptMap.some(
+  const areFieldsEmpty = conceptMap.some(
     row => !row.source || !row.equivalence || !row.target
   );
 
@@ -137,7 +144,7 @@ const ConceptMap = ({ isOpen, onClose, updateInputCallback }: Props) => {
     setExistingConceptMapId(undefined);
   };
 
-  const fetchCodesForCodeSystem = (systemName: string): string[] =>
+  const getCodesForCodeSystem = (systemName: string): string[] =>
     existingCodeSystems
       .find(s => s.title === systemName)
       ?.concept.map(c => c.code) || [];
@@ -235,44 +242,24 @@ const ConceptMap = ({ isOpen, onClose, updateInputCallback }: Props) => {
     />
   );
 
-  const chooseSourceCode = (index: number) => (
-    <StringSelect
-      inputItem={conceptMap[index].source}
-      items={fetchCodesForCodeSystem(sourceSystemName)}
-      displayItem={displayCode}
-      onChange={(code: string): void =>
-        setConceptMap(prev => {
-          prev[index].source = code;
-          return [...prev];
-        })
-      }
-    />
-  );
-
-  const chooseTargetCode = (index: number) => (
+  const chooseCode = (
+    index: number,
+    column: 'source' | 'target' | 'equivalence'
+  ): React.ReactElement => (
     <StringSelect
       key={index}
-      inputItem={conceptMap[index].target}
-      items={fetchCodesForCodeSystem(selectedTargetSystem)}
-      displayItem={displayCode}
-      onChange={(code: string): void =>
-        setConceptMap(prev => {
-          prev[index].target = code;
-          return [...prev];
-        })
+      inputItem={conceptMap[index][column]}
+      items={
+        column === 'equivalence'
+          ? choiceEquivalences
+          : getCodesForCodeSystem(
+              column === 'source' ? sourceSystemName : selectedTargetSystem
+            )
       }
-    />
-  );
-
-  const chooseEquivalence = (index: number) => (
-    <StringSelect
-      key={index}
-      inputItem={conceptMap[index].equivalence}
-      items={choiceEquivalences}
       displayItem={displayCode}
       onChange={(code: string): void =>
         setConceptMap(prev => {
-          prev[index].equivalence = code;
+          prev[index][column] = code;
           return [...prev];
         })
       }
@@ -295,10 +282,10 @@ const ConceptMap = ({ isOpen, onClose, updateInputCallback }: Props) => {
       <td>
         {creatingNewCodeSystem
           ? createSourceCode(index)
-          : chooseSourceCode(index)}
+          : chooseCode(index, 'source')}
       </td>
-      <td>{chooseEquivalence(index)}</td>
-      <td>{chooseTargetCode(index)}</td>
+      <td>{chooseCode(index, 'equivalence')}</td>
+      <td>{chooseCode(index, 'target')}</td>
     </tr>
   );
 
@@ -408,50 +395,55 @@ const ConceptMap = ({ isOpen, onClose, updateInputCallback }: Props) => {
       const codeSystem = createCodeSystem();
       try {
         await axios.post(`${FHIR_API_URL}/CodeSystem`, codeSystem);
-        console.log('created code system', codeSystem);
       } catch (err) {
-        console.error(
-          `Could not create CodeSystem: ${
+        toaster.show({
+          message: `Could not create CodeSystem: ${
             err.response ? err.response.data : err.message
-          }`
-        );
+          }`,
+          intent: 'danger',
+          icon: 'warning-sign',
+          timeout: 5000
+        });
       }
     }
     if (!existingConceptMapId) {
       const conceptMap = createConceptMap();
       try {
         await axios.post(`${FHIR_API_URL}/ConceptMap`, conceptMap);
-        console.log('created concept map', conceptMap);
       } catch (err) {
-        console.error(
-          `Could not create ConceptMap: ${
+        toaster.show({
+          message: `Could not create ConceptMap: ${
             err.response ? err.response.data : err.message
-          }`
-        );
+          }`,
+          intent: 'danger',
+          icon: 'warning-sign',
+          timeout: 5000
+        });
       }
     } else if (modifyAnyway) {
       const conceptMap = createConceptMap();
-      // TODO doesn't work
       try {
         await axios.put(
           `${FHIR_API_URL}/ConceptMap/${existingConceptMapId}`,
           conceptMap
         );
-        console.log('updated concept map', conceptMap);
       } catch (err) {
-        console.error(
-          `Could not update ConceptMap: ${
+        toaster.show({
+          message: `Could not update ConceptMap: ${
             err.response ? err.response.data : err.message
-          }`
-        );
+          }`,
+          intent: 'danger',
+          icon: 'warning-sign',
+          timeout: 5000
+        });
       }
     }
     updateInputCallback(conceptMapName);
   };
 
   useEffect(() => {
-    let existingConceptMapGroup: Group | undefined = undefined;
-    let existingConceptMap: ConceptMap | undefined = undefined;
+    let existingConceptMapGroup: Group | undefined;
+    let existingConceptMap: ConceptMap | undefined;
     for (const map of existingConceptMaps) {
       for (const group of map.group) {
         if (
@@ -482,8 +474,6 @@ const ConceptMap = ({ isOpen, onClose, updateInputCallback }: Props) => {
       setConceptMapName(existingConceptMap.name);
       setConceptMapDescription(existingConceptMap.description);
     }
-    console.log(existingConceptMaps);
-    console.log(existingConceptMap);
   }, [sourceSystemName, selectedTargetSystem]);
 
   return (
@@ -519,8 +509,8 @@ const ConceptMap = ({ isOpen, onClose, updateInputCallback }: Props) => {
             </tbody>
           </table>
           <div className="center-text">
-            {selectedTargetSystem !== '' &&
-            sourceSystemName !== '' &&
+            {!!selectedTargetSystem &&
+            !!sourceSystemName &&
             (!existingConceptMapId || modifyAnyway) ? (
               <Button
                 className="add-element-button"
@@ -552,9 +542,9 @@ const ConceptMap = ({ isOpen, onClose, updateInputCallback }: Props) => {
                 }
                 disabled={
                   !existingConceptMapId &&
-                  (sourceSystemName === '' ||
-                    selectedTargetSystem === '' ||
-                    emptyFields ||
+                  (!sourceSystemName ||
+                    !selectedTargetSystem ||
+                    areFieldsEmpty ||
                     conceptMap.length < 1)
                 }
               />
