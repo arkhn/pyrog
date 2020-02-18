@@ -43,6 +43,7 @@ export type StructureMetadata = {
   kind: string
   baseDefinition: string
   derivation: string
+  publisher: string
   min: string
   max: string
   constraint: ConstraintDefinition[]

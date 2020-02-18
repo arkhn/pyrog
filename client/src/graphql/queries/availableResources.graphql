@@ -9,6 +9,7 @@ query availableResources {
       id
       name
       type
+      publisher
     }
   }
 }

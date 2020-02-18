@@ -57,11 +57,11 @@ const CodeSystemSelect = ({
   allowCreate
 }: Props) => {
   const renderList: ItemListRenderer<CodeSystem> = ({
-    items,
+    filteredItems,
     itemsParentRef,
     renderItem
   }: IItemListRendererProps<CodeSystem>) => {
-    const renderedItems = items.map(renderItem).filter(item => item != null);
+    const renderedItems = filteredItems.map(renderItem);
     return (
       <Menu ulRef={itemsParentRef}>
         <MenuItem

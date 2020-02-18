@@ -1,5 +1,9 @@
 import { objectType, FieldResolver } from 'nexus'
 
+import axios from 'axios'
+
+import { FHIR_API_URL } from '../constants'
+
 export const Input = objectType({
   name: 'Input',
   definition(t) {
@@ -9,6 +13,23 @@ export const Input = objectType({
     t.model.script()
     t.model.conceptMap()
     t.model.staticValue()
+
+    t.model.conceptMapId()
+    t.field('conceptMap', {
+      type: 'ConceptMap',
+      nullable: true,
+      resolve: async (parent: any) => {
+        if (!parent.conceptMapId) return null
+        try {
+          const response = await axios.get(
+            `${FHIR_API_URL}/ConceptMap/${parent.conceptMapId}`,
+          )
+          return response.data
+        } catch (err) {
+          throw new Error(`Could not fetch concept map: ${err.response.data}`)
+        }
+      },
+    })
 
     t.model.attribute()
 

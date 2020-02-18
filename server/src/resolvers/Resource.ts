@@ -17,10 +17,16 @@ export const Resource = objectType({
     t.field('definition', {
       type: 'StructureDefinition',
       description: 'Structured version of a definition',
-      resolve: async parent => ({
-        def: await getDefinition(parent.definitionId),
-        id: parent.definitionId,
-      }),
+      resolve: async parent => {
+        const def = await getDefinition(parent.definitionId)
+        if (!def) {
+          throw new Error(`missing definition ${parent.definitionId}`)
+        }
+        return {
+          def,
+          id: parent.definitionId,
+        }
+      },
     })
 
     t.model.source()

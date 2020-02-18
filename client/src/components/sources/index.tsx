@@ -117,8 +117,10 @@ const SourcesView = () => {
                   key={index}
                   onClick={(): Promise<void> => onClickedSource(source)}
                 >
-                  <h2>
-                    {source.template.name} - {source.name}
+                  <div className="card-header">
+                    <h2>
+                      {source.template.name} - {source.name}
+                    </h2>
                     <Button
                       icon={'delete'}
                       loading={
@@ -130,7 +132,7 @@ const SourcesView = () => {
                         setSourceToDelete(source);
                       }}
                     />
-                  </h2>
+                  </div>
                   <div className="tags">
                     <Tag>DPI</Tag>
                     <Tag>Généraliste</Tag>

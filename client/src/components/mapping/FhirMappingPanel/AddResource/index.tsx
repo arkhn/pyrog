@@ -11,6 +11,9 @@ const qResourcesForSource = loader(
   'src/graphql/queries/resourcesForSource.graphql'
 );
 const mCreateResource = loader('src/graphql/mutations/createResource.graphql');
+const mRefreshDefinition = loader(
+  'src/graphql/mutations/refreshDefinition.graphql'
+);
 const qAvailableResources = loader(
   'src/graphql/queries/availableResources.graphql'
 );
@@ -23,6 +26,7 @@ interface Profile {
   id: string;
   name: string;
   type: string;
+  publisher?: string;
 }
 interface Resource {
   id: string;
@@ -40,6 +44,9 @@ const AddResource = ({ callback }: Props) => {
   const { data, loading } = useQuery(qAvailableResources, {
     fetchPolicy: 'cache-first'
   });
+  const [refreshDefinition, { loading: refreshingDefinition }] = useMutation(
+    mRefreshDefinition
+  );
 
   const onCompleted = (data: any) => {
     toaster.show({
@@ -88,7 +95,6 @@ const AddResource = ({ callback }: Props) => {
       console.log(error);
     }
   };
-
   const [createResource, { loading: creatingResource }] = useMutation(
     mCreateResource,
     {
@@ -111,10 +117,13 @@ const AddResource = ({ callback }: Props) => {
           }}
         />
         <Button
-          loading={creatingResource}
+          loading={creatingResource || refreshingDefinition}
           icon={'plus'}
           disabled={!selectedResource}
-          onClick={() => {
+          onClick={async () => {
+            await refreshDefinition({
+              variables: { definitionId: selectedResource!.id }
+            });
             createResource({
               variables: {
                 sourceId: source.id,

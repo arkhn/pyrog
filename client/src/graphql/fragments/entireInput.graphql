@@ -3,7 +3,10 @@
 fragment entireInput on Input {
   id
   script
-  conceptMap
+  conceptMapId
+  conceptMap {
+    title
+  }
   staticValue
   sqlValue {
     id

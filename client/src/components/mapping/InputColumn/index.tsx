@@ -15,7 +15,7 @@ import { IReduxStore, ISelectedSource } from 'types';
 
 // COMPONENTS
 import Join from '../Join';
-import ConceptMap from 'components/mapping/ConceptMap';
+import ConceptMapDialog from 'components/mapping/ConceptMap';
 import ScriptSelect from 'components/selects/scriptSelect';
 import { loader } from 'graphql.macro';
 
@@ -269,14 +269,14 @@ const InputColumn = ({ input, schema, source }: Props) => {
           </div>
         )}
       </Card>
-      <ConceptMap
+      <ConceptMapDialog
         isOpen={isConceptMapOverlayVisible}
         onClose={_ => setConceptMapOverlayVisible(false)}
-        updateInputCallback={(conceptMap: string) => {
+        updateInputCallback={(conceptMapId: string) => {
           updateInput({
             variables: {
               inputId: input.id,
-              data: { conceptMap }
+              data: { conceptMapId }
             }
           });
           setConceptMapOverlayVisible(false);

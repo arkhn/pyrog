@@ -117,7 +117,7 @@ export interface NexusGenInputs {
   InputWhereInput: { // input type
     AND?: NexusGenInputs['InputWhereInput'][] | null; // [InputWhereInput!]
     attribute?: NexusGenInputs['AttributeWhereInput'] | null; // AttributeWhereInput
-    conceptMap?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
+    conceptMapId?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     NOT?: NexusGenInputs['InputWhereInput'][] | null; // [InputWhereInput!]
@@ -227,7 +227,7 @@ export interface NexusGenInputs {
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
   UpdateInputInput: { // input type
-    conceptMap?: string | null; // String
+    conceptMapId?: string | null; // String
     script?: string | null; // String
   }
   UpdateResourceInput: { // input type
@@ -250,6 +250,7 @@ export interface NexusGenRootTypes {
     user: NexusGenRootTypes['User']; // User!
   }
   Column: photon.Column;
+  ConceptMap: {};
   Credential: photon.Credential;
   Input: photon.Input;
   Join: photon.Join;
@@ -323,6 +324,11 @@ export interface NexusGenFieldTypes {
     table: string | null; // String
     updatedAt: any; // DateTime!
   }
+  ConceptMap: { // field return type
+    id: string; // String!
+    name: string; // String!
+    title: string; // String!
+  }
   Credential: { // field return type
     createdAt: any; // DateTime!
     database: string; // String!
@@ -337,7 +343,8 @@ export interface NexusGenFieldTypes {
   }
   Input: { // field return type
     attribute: NexusGenRootTypes['Attribute']; // Attribute!
-    conceptMap: string | null; // String
+    conceptMap: NexusGenRootTypes['ConceptMap'] | null; // ConceptMap
+    conceptMapId: string | null; // String
     createdAt: any; // DateTime!
     id: string; // ID!
     script: string | null; // String
@@ -367,6 +374,7 @@ export interface NexusGenFieldTypes {
     deleteSource: NexusGenRootTypes['Source']; // Source!
     deleteTemplate: NexusGenRootTypes['Template']; // Template!
     login: NexusGenRootTypes['AuthPayload']; // AuthPayload!
+    refreshDefinition: NexusGenRootTypes['StructureDefinition']; // StructureDefinition!
     signup: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     updateAttribute: NexusGenRootTypes['Attribute']; // Attribute!
     updateInput: NexusGenRootTypes['Input']; // Input!
@@ -418,6 +426,7 @@ export interface NexusGenFieldTypes {
     id: string; // String!
     name: string; // String!
     profiles: NexusGenRootTypes['StructureDefinition'][]; // [StructureDefinition!]!
+    publisher: string; // String!
     type: string; // String!
   }
   Template: { // field return type
@@ -522,6 +531,9 @@ export interface NexusGenArgTypes {
       email: string; // String!
       password: string; // String!
     }
+    refreshDefinition: { // args
+      definitionId: string; // ID!
+    }
     signup: { // args
       email: string; // String!
       name: string; // String!
@@ -614,7 +626,7 @@ export interface NexusGenAbstractResolveReturnTypes {
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "Attribute" | "AuthPayload" | "Column" | "Credential" | "Input" | "Join" | "Mutation" | "Query" | "Resource" | "Source" | "StructureDefinition" | "Template" | "User";
+export type NexusGenObjectNames = "Attribute" | "AuthPayload" | "Column" | "ConceptMap" | "Credential" | "Input" | "Join" | "Mutation" | "Query" | "Resource" | "Source" | "StructureDefinition" | "Template" | "User";
 
 export type NexusGenInputNames = "AttributeFilter" | "AttributeInput" | "AttributeWhereInput" | "BooleanFilter" | "ColumnFilter" | "ColumnInput" | "ColumnInputWithoutJoins" | "ColumnWhereInput" | "CredentialWhereInput" | "DateTimeFilter" | "InputFilter" | "InputWhereInput" | "JoinFilter" | "JoinInput" | "JoinWhereInput" | "NullableStringFilter" | "ResourceFilter" | "ResourceWhereInput" | "SourceFilter" | "SourceWhereInput" | "StringFilter" | "StructureDefinitionWhereFilter" | "TemplateWhereInput" | "UpdateInputInput" | "UpdateResourceInput";
 

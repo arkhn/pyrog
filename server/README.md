@@ -6,6 +6,7 @@
 yarn # install dependencies
 docker-compose up postgres # launches postgres in docker
 yarn dev # runs pyrog-server with hot-reloading (using ts-node)
+yarn seed:superuser # inserts an admin user in the db (dont forget to have SUPERUSER_PASSWORD in your .env)
 ```
 
 ## Build

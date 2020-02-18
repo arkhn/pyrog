@@ -138,7 +138,6 @@ const FhirpipeView = () => {
     try {
       res = await axios.post(`${FHIRPIPE_URL}/run`, body, { headers: headers });
     } catch (err) {
-      console.log(err);
       toaster.show({
         message: err.response.data || err.response.statusText,
         intent: 'danger',
@@ -155,7 +154,6 @@ const FhirpipeView = () => {
         timeout: 4000
       });
     } else {
-      console.log(res);
       toaster.show({
         message: `Problem while running Fhirpipe: ${res.data.errors}`,
         intent: 'danger',
