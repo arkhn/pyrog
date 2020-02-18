@@ -49,8 +49,6 @@ export class Node {
         : primitiveTypes.includes(this.types[0])
         ? true
         : false;
-
-    console.log(this.serialize());
   }
 
   isChild(p: Node) {
@@ -82,7 +80,6 @@ export class Node {
 
   serialize(): string {
     // if not parent, return the definitionId
-    // console.log('here', this.current.serialize());
     if (!this.parent) {
       return this.tail();
     }

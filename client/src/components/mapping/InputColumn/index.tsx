@@ -7,15 +7,18 @@ import {
   IBreadcrumbProps,
   Tag
 } from '@blueprintjs/core';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApolloClient, useMutation } from '@apollo/react-hooks';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { IReduxStore, ISelectedSource } from 'types';
+import axios from 'axios';
+import { FHIR_API_URL } from '../../../constants';
+
+import { IReduxStore, ISelectedSource, CodeSystem, ConceptMap } from 'types';
 
 // COMPONENTS
 import Join from '../Join';
-import ConceptMap from 'components/mapping/ConceptMap';
+import ConceptMapDialog from 'components/mapping/ConceptMap';
 import ScriptSelect from 'components/selects/scriptSelect';
 import { loader } from 'graphql.macro';
 
@@ -56,6 +59,12 @@ const InputColumn = ({ input, schema, source }: Props) => {
   const [isConceptMapOverlayVisible, setConceptMapOverlayVisible] = useState(
     false
   );
+  const [existingCodeSystems, setExistingCodeSystems] = useState(
+    [] as CodeSystem[]
+  );
+  const [existingConceptMaps, setExistingConceptMaps] = useState(
+    [] as ConceptMap[]
+  );
 
   const [deleteInput, { loading: loadDelInput }] = useMutation(mDeleteInput);
   const [deleteAttribute] = useMutation(mDeleteAttribute);
@@ -84,6 +93,10 @@ const InputColumn = ({ input, schema, source }: Props) => {
     });
   };
 
+  const conceptMapName = existingConceptMaps.find(
+    m => m.id === input.conceptMapId
+  )?.title;
+
   const onClickDelete = async () => {
     // Mutation to remove from DB
     await deleteInput({
@@ -110,6 +123,37 @@ const InputColumn = ({ input, schema, source }: Props) => {
       dispatch(removeAttributeFromMap(path));
     }
   };
+
+  useEffect(() => {
+    // fetch code systems
+    const fetchCodeSystems = async (): Promise<void> => {
+      try {
+        const codeSystems = await axios.get(`${FHIR_API_URL}/CodeSystem`);
+        setExistingCodeSystems(codeSystems.data.items);
+      } catch (err) {
+        console.error(
+          `Could not fecth code systems: ${
+            err.response ? err.response.data : err.message
+          }`
+        );
+      }
+    };
+    fetchCodeSystems();
+    // fetch concept maps
+    const fetchConceptMaps = async (): Promise<void> => {
+      try {
+        const conceptMaps = await axios.get(`${FHIR_API_URL}/ConceptMap`);
+        setExistingConceptMaps(conceptMaps.data.items);
+      } catch (err) {
+        console.error(
+          `Could not fecth concept maps: ${
+            err.response ? err.response.data : err.message
+          }`
+        );
+      }
+    };
+    fetchConceptMaps();
+  }, []);
 
   return (
     <div className="input-column">
@@ -219,7 +263,7 @@ const InputColumn = ({ input, schema, source }: Props) => {
                 <Tag>CONCEPT MAP</Tag>
                 <ButtonGroup>
                   <Button
-                    text={input.conceptMap || 'None'}
+                    text={conceptMapName || 'None'}
                     onClick={(_e: React.MouseEvent) => {
                       setConceptMapOverlayVisible(true);
                     }}
@@ -228,12 +272,12 @@ const InputColumn = ({ input, schema, source }: Props) => {
                     className="delete-button"
                     icon="cross"
                     minimal={true}
-                    disabled={!input.conceptMap}
+                    disabled={!input.conceptMapId}
                     onClick={(_e: React.MouseEvent) => {
                       updateInput({
                         variables: {
                           inputId: input.id,
-                          data: { conceptMap: null }
+                          data: { conceptMapId: null }
                         }
                       });
                     }}
@@ -269,14 +313,16 @@ const InputColumn = ({ input, schema, source }: Props) => {
           </div>
         )}
       </Card>
-      <ConceptMap
+      <ConceptMapDialog
         isOpen={isConceptMapOverlayVisible}
+        existingCodeSystems={existingCodeSystems}
+        existingConceptMaps={existingConceptMaps}
         onClose={_ => setConceptMapOverlayVisible(false)}
-        updateInputCallback={(conceptMap: string) => {
+        updateInputCallback={(conceptMapId: string) => {
           updateInput({
             variables: {
               inputId: input.id,
-              data: { conceptMap }
+              data: { conceptMapId }
             }
           });
           setConceptMapOverlayVisible(false);

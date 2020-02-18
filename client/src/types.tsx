@@ -162,3 +162,37 @@ export interface IMapping {
     [fhirAttribute: string]: IFhirIntegrationSpec;
   };
 }
+
+export interface CodeSystem {
+  title: string;
+  name: string;
+  concept: Concept[];
+}
+
+interface Concept {
+  code: string;
+}
+
+export interface ConceptMap {
+  title: string;
+  name: string;
+  description: string;
+  id: string;
+  group: Group[];
+}
+
+export interface Group {
+  source: string;
+  target: string;
+  element: Element[];
+}
+
+export interface Element {
+  code: string;
+  target: Target[];
+}
+
+export interface Target {
+  code: string;
+  equivalence: string;
+}

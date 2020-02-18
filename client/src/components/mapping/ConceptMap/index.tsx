@@ -1,55 +1,24 @@
 import { Button, ButtonGroup, Dialog, InputGroup } from '@blueprintjs/core';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+
 import axios from 'axios';
+import { FHIR_API_URL } from '../../../constants';
 
 import CodeSystemSelect from 'components/selects/codeSystemSelect';
 import StringSelect from 'components/selects/stringSelect';
-import { FHIR_API_URL } from '../../../constants';
-import { IReduxStore } from 'types';
+import { IReduxStore, CodeSystem, ConceptMap, Group } from 'types';
 
 import './style.scss';
 
 interface Props {
   isOpen: boolean;
+  existingCodeSystems: CodeSystem[];
+  existingConceptMaps: ConceptMap[];
   onClose: (
     event?: React.SyntheticEvent<HTMLElement, Event> | undefined
   ) => void;
   updateInputCallback: (conceptMap: string) => void;
-}
-
-interface CodeSystem {
-  title: string;
-  name: string;
-  concept: Concept[];
-}
-
-interface Concept {
-  code: string;
-}
-
-interface ConceptMap {
-  title: string;
-  name: string;
-  description: string;
-  id: string;
-  group: Group[];
-}
-
-interface Group {
-  source: string;
-  target: string;
-  element: Element[];
-}
-
-interface Element {
-  code: string;
-  target: Target[];
-}
-
-interface Target {
-  code: string;
-  equivalence: string;
 }
 
 interface MapRow {
@@ -58,15 +27,15 @@ interface MapRow {
   target: string;
 }
 
-const ConceptMap = ({ isOpen, onClose, updateInputCallback }: Props) => {
+const ConceptMapDialog = ({
+  isOpen,
+  existingCodeSystems,
+  existingConceptMaps,
+  onClose,
+  updateInputCallback
+}: Props): React.ReactElement => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
 
-  const [existingCodeSystems, setExistingCodeSystems] = useState(
-    [] as CodeSystem[]
-  );
-  const [existingConceptMaps, setExistingConceptMaps] = useState(
-    [] as ConceptMap[]
-  );
   const [conceptMap, setConceptMap] = useState([] as MapRow[]);
   const [existingConceptMapId, setExistingConceptMapId] = useState(
     undefined as string | undefined
@@ -78,37 +47,6 @@ const ConceptMap = ({ isOpen, onClose, updateInputCallback }: Props) => {
   const [conceptMapDescription, setConceptMapDescription] = useState('');
   const [creatingNewCodeSystem, setCreatingNewCodeSystem] = useState(false);
   const [modifyAnyway, setModifyAnyway] = useState(false);
-
-  useEffect(() => {
-    // fetch code systems
-    const fetchCodeSystems = async (): Promise<void> => {
-      try {
-        const codeSystems = await axios.get(`${FHIR_API_URL}/CodeSystem`);
-        setExistingCodeSystems(codeSystems.data.items);
-      } catch (err) {
-        console.error(
-          `Could not fecth code systems: ${
-            err.response ? err.response.data : err.message
-          }`
-        );
-      }
-    };
-    fetchCodeSystems();
-    // fetch concept maps
-    const fetchConceptMaps = async (): Promise<void> => {
-      try {
-        const conceptMaps = await axios.get(`${FHIR_API_URL}/ConceptMap`);
-        setExistingConceptMaps(conceptMaps.data.items);
-      } catch (err) {
-        console.error(
-          `Could not fecth concept maps: ${
-            err.response ? err.response.data : err.message
-          }`
-        );
-      }
-    };
-    fetchConceptMaps();
-  }, []);
 
   // TODO these are actually codes from a code system. Fetch them instead of hard coding them
   const choiceEquivalences = [
@@ -407,10 +345,16 @@ const ConceptMap = ({ isOpen, onClose, updateInputCallback }: Props) => {
         });
       }
     }
+    let createdConceptMapId = '';
     if (!existingConceptMapId) {
       const conceptMap = createConceptMap();
       try {
-        await axios.post(`${FHIR_API_URL}/ConceptMap`, conceptMap);
+        const created = await axios.post(
+          `${FHIR_API_URL}/ConceptMap`,
+          conceptMap
+        );
+        console.log('created', created);
+        createdConceptMapId = created.data.id;
       } catch (err) {
         toaster.show({
           message: `Could not create ConceptMap: ${
@@ -439,7 +383,7 @@ const ConceptMap = ({ isOpen, onClose, updateInputCallback }: Props) => {
         });
       }
     }
-    updateInputCallback(conceptMapName);
+    updateInputCallback(existingConceptMapId || createdConceptMapId);
   };
 
   useEffect(() => {
@@ -557,4 +501,4 @@ const ConceptMap = ({ isOpen, onClose, updateInputCallback }: Props) => {
   );
 };
 
-export default ConceptMap;
+export default ConceptMapDialog;
