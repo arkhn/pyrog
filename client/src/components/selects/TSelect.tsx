@@ -5,7 +5,8 @@ import {
   ItemRenderer,
   ItemListRenderer,
   Select,
-  ItemListPredicate
+  ItemListPredicate,
+  ItemListRenderer
 } from '@blueprintjs/select';
 import * as React from 'react';
 
