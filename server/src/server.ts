@@ -1,4 +1,5 @@
 import { GraphQLServer, Options } from 'graphql-yoga'
+import cors from 'cors'
 
 import { permissions } from 'permissions'
 import register from 'rest'
@@ -13,6 +14,7 @@ const server = new GraphQLServer({
   middlewares: [permissions],
 })
 
+server.express.use(cors())
 register(server.express)
 
 const options: Options = {
