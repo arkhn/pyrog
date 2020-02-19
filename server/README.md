@@ -4,9 +4,11 @@
 
 ```sh
 yarn # install dependencies
-docker-compose up postgres # launches postgres in docker
+yarn generate # generate the "photon" dependency, required by prisma
+docker-compose up postgres redis # launches postgres and redis in docker (you may use the `-d` option to run in the background)
+yarn migrate # applies the prisma migrations on the postrges database
+yarn seed:superuser # inserts an admin@arkhn.com user in the db (dont forget to have SUPERUSER_PASSWORD in your .env)
 yarn dev # runs pyrog-server with hot-reloading (using ts-node)
-yarn seed:superuser # inserts an admin user in the db (dont forget to have SUPERUSER_PASSWORD in your .env)
 ```
 
 ## Build
