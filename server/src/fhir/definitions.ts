@@ -104,7 +104,7 @@ const structurize = (fhirDefinition: any): CachedDefinition => {
 
     // Iterate on the rest of the snapshot elements and add the properties on the definition object
     // Note that we filter out the properties which are inherited from different resources (Resource, DomainResource...)
-    const [_, ...elements] = fhirDefinition.snapshot.element.filter(
+    const [, ...elements] = fhirDefinition.snapshot.element.filter(
       (e: any) => e.base.path.split('.')[0] === fhirDefinition.type,
     )
     for (const element of elements) {
