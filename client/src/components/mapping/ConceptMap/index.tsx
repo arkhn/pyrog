@@ -21,7 +21,7 @@ interface Concept {
   code: string;
 }
 
-export interface ConceptMap {
+interface ConceptMap {
   title: string;
   name: string;
   description: string;
@@ -29,18 +29,18 @@ export interface ConceptMap {
   group: Group[];
 }
 
-export interface Group {
+interface Group {
   source: string;
   target: string;
   element: Element[];
 }
 
-export interface Element {
+interface Element {
   code: string;
   target: Target[];
 }
 
-export interface Target {
+interface Target {
   code: string;
   equivalence: string;
 }

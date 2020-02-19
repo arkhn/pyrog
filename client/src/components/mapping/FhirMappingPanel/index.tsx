@@ -13,6 +13,7 @@ import ResourceSelector from './ResourceSelector';
 import { IReduxStore } from 'types';
 
 import { loader } from 'graphql.macro';
+import { Node } from 'components/mapping/FhirMappingPanel/FhirResourceTree/node';
 
 // GRAPHQL
 const qResourcesForSource = loader(
@@ -41,8 +42,8 @@ const FhirMappingPanel = () => {
     return (
       <div id="fhir-resource-tree">
         <FhirResourceTree
-          onClickCallback={(path: any) => {
-            dispatch(updateFhirAttribute(path));
+          onClickCallback={(nodeData: Node) => {
+            dispatch(updateFhirAttribute(nodeData));
           }}
         />
       </div>

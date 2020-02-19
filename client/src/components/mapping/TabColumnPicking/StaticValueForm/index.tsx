@@ -11,7 +11,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
 import { loader } from 'graphql.macro';
 
-import { IReduxStore } from 'types';
+import { IReduxStore, SelectedAttribute } from 'types';
 
 import { setAttributeInMap } from 'services/resourceInputs/actions';
 
@@ -26,17 +26,16 @@ const mCreateStaticInput = loader(
   'src/graphql/mutations/createStaticInput.graphql'
 );
 
-interface IProps {
-  attribute: {
-    path: string;
-  };
+interface Props {
+  attribute: SelectedAttribute;
 }
 
-const StaticValueForm = ({ attribute }: IProps) => {
+const StaticValueForm = ({ attribute }: Props) => {
   const dispatch = useDispatch();
 
-  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
-  const path = selectedNode.attribute.path;
+  const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
+
+  const path = attribute.path;
 
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
@@ -83,7 +82,7 @@ const StaticValueForm = ({ attribute }: IProps) => {
       // First, we create the attribute if it doesn't exist
       const { data: attr } = await createAttribute({
         variables: {
-          resourceId: selectedNode.resource.id,
+          resourceId: resource.id,
           path
         }
       });

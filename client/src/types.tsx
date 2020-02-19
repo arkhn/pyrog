@@ -1,6 +1,8 @@
 import { IToaster } from '@blueprintjs/core';
 import * as redux from 'redux';
 
+import { Node } from 'components/mapping/FhirMappingPanel/FhirResourceTree/node';
+
 // REDUX
 export interface ISimpleAction {
   type: string;
@@ -46,14 +48,14 @@ export interface ISelectedResource {
   };
 }
 
-export interface ISelectedAttribute {
+export interface SelectedAttribute extends Node {
   path: string;
 }
 
 export interface ISelectedNode {
   source: ISelectedSource;
   resource: ISelectedResource;
-  attribute: ISelectedAttribute;
+  attribute: SelectedAttribute;
 }
 
 export interface IResourceInputs {

@@ -1,4 +1,5 @@
 import { IAction, ISourceSchema } from 'types';
+import { Node } from 'components/mapping/FhirMappingPanel/FhirResourceTree/node';
 
 interface Resource {
   id: string;
@@ -83,11 +84,11 @@ export const deselectResource = (): IAction => {
 };
 
 // Fhir Attribute
-export const updateFhirAttribute = (attributePath: string[]): IAction => {
+export const updateFhirAttribute = (attribute: Node): IAction => {
   return {
     type: 'UPDATE_ATTRIBUTE',
     payload: {
-      attributePath
+      attribute
     }
   };
 };

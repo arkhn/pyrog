@@ -13,7 +13,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import ColumnPicker from '../../ColumnPicker';
 import TableViewer from '../TableViewer';
 
-import { IReduxStore } from 'types';
+import { IReduxStore, SelectedAttribute, ISelectedSource } from 'types';
 import { loader } from 'graphql.macro';
 import { PAGAI_URL } from '../../../../constants';
 
@@ -29,11 +29,9 @@ const mCreateAttribute = loader(
 const mCreateSQLInput = loader('src/graphql/mutations/createSQLInput.graphql');
 
 interface Props {
-  attribute: {
-    path: string;
-  };
+  attribute: SelectedAttribute;
   schema: any;
-  source: any;
+  source: ISelectedSource;
 }
 
 const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
