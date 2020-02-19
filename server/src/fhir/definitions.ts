@@ -1,7 +1,7 @@
 import set from 'lodash.set'
 import axios from 'axios'
 
-import { StructureDefinition } from 'types'
+import { CachedDefinition } from 'types'
 import { FHIR_API_URL } from '../constants'
 import cache from 'cache'
 
@@ -10,7 +10,7 @@ const metaPrefix = '$meta'
 // Gets a definition from the cache.
 export const getDefinition = async (
   key: string,
-): Promise<StructureDefinition | undefined> => {
+): Promise<CachedDefinition | undefined> => {
   const { get } = cache()
   const res = await get(key)
   return res ? JSON.parse(res) : undefined
@@ -19,7 +19,7 @@ export const getDefinition = async (
 // Gets profiles of a resource.
 export const resourceProfiles = async (
   resourceType: string,
-): Promise<StructureDefinition[]> => {
+): Promise<CachedDefinition[]> => {
   const { mget, smembers } = cache()
   const keys = await smembers(`type:${resourceType}`)
   const res = await mget(keys)
@@ -30,7 +30,7 @@ export const resourceProfiles = async (
 export const resourcesPerKind = async (
   derivation: string,
   kind: string,
-): Promise<StructureDefinition[]> => {
+): Promise<CachedDefinition[]> => {
   const { mget, smembers } = cache()
   const keys = await smembers(`${derivation}:${kind}`)
   const res = await mget(keys)
@@ -76,61 +76,70 @@ export const bootstrapDefinitions = async () => {
   console.log('Done.')
 }
 
-const structurize = (definition: any): StructureDefinition => {
-  if (!definition.snapshot) {
+const structurize = (fhirDefinition: any): CachedDefinition => {
+  if (!fhirDefinition.snapshot) {
     throw new Error('Snapshot is needed in the structure definition.')
   }
 
-  // Create the new custom structure
-  var customStruct = {} as StructureDefinition
+  const buildMetadata = () => {
+    const res = {} as CachedDefinition
 
-  Object.keys(definition)
-    .filter(el => structureFieldsWhiteList.includes(el))
-    .forEach(key => set(customStruct, `${metaPrefix}.${key}`, definition[key]))
+    // Build the metadata structure on the definition object
+    Object.keys(fhirDefinition)
+      .filter(el => metaProperties.includes(el))
+      .forEach(key => set(res, `${metaPrefix}.${key}`, fhirDefinition[key]))
 
-  definition.snapshot.element.forEach((element: any, index: number) => {
-    // From the root, we only need the cardinality and constraints
-    if (index === 0) {
-      Object.keys(element)
-        .filter(el => rootProperties.includes(el))
-        .forEach(key => set(customStruct, `${metaPrefix}.${key}`, element[key]))
-    } else if (definition.kind !== 'primitive-type') {
-      // If the structure defines a primitive type (one which we don't need to unroll in UI)
-      // we don't need the properties field, we only need the cardinality and constraints from the root
+    // Extract the cardinality and constraints from the first element of the snapshot
+    for (const property of rootProperties) {
+      set(
+        res,
+        `${metaPrefix}.${property}`,
+        fhirDefinition.snapshot.element[0][property],
+      )
+    }
+    return res
+  }
+  const buildProperties = () => {
+    const res = {} as CachedDefinition
 
+    // Iterate on the rest of the snapshot elements and add the properties on the definition object
+    // Note that we filter out the properties which are inherited from different resources (Resource, DomainResource...)
+    const [, ...elements] = fhirDefinition.snapshot.element.filter(
+      (e: any) => e.base.path.split('.')[0] === fhirDefinition.type,
+    )
+    for (const element of elements) {
       // We want to remove the root path (for instance Patient.address becomes address) and add
       // intermediary .$children between levels (for instance, Patient.contact.name becomes
       // contact.$children.name)
-      const elementName = element.id
+      const name = element.id.split('.').pop()
+      const path: string = element.id
         .split('.')
         .slice(1)
         .join('.$children.')
+        .replace('[x]', '') // if the element has mutliple types, prevent loadash from setting an 'x' element in the object.
 
-      // if the element has mutliple types, prevent loadash from
-      // setting an 'x' element in the object.
-      const elementKey = elementName.includes('[x]')
-        ? elementName.replace('[x]', '')
-        : elementName
-
-      // We skip some elements we don't need as id, extension
-      if (!elementBlackList.some(el => elementKey.endsWith(el))) {
-        // Add element fields
-        set(customStruct, `${elementKey}.name`, elementName.split('.').pop())
-        Object.keys(element)
-          .filter(el => elementFieldsWhiteList.includes(el))
-          .forEach(key =>
-            set(customStruct, `${elementKey}.${key}`, element[key]),
-          )
+      // Set element properties
+      set(res, `${path}.name`, name)
+      for (const property of elementProperties) {
+        set(res, `${path}.${property}`, element[property])
       }
     }
-  })
+    return res
+  }
 
-  return customStruct
+  // If the structure defines a primitive type (one which we don't need to unroll in UI)
+  // we don't need additional properties, we only need the definition metadata.
+  if (fhirDefinition.kind === 'primitive-type') return buildMetadata()
+
+  return {
+    ...buildMetadata(),
+    ...buildProperties(),
+  }
 }
 
 // keys to filter out
 const rootProperties = ['min', 'max', 'constraint']
-const structureFieldsWhiteList = [
+const metaProperties = [
   'id',
   'url',
   'name',
@@ -141,11 +150,4 @@ const structureFieldsWhiteList = [
   'derivation',
   'publisher',
 ]
-const elementFieldsWhiteList = [
-  'definition',
-  'min',
-  'max',
-  'type',
-  'constraint',
-]
-const elementBlackList = ['id', 'extension']
+const elementProperties = ['definition', 'min', 'max', 'type', 'constraint']

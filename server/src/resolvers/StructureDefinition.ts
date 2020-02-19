@@ -6,7 +6,7 @@ import {
   resourcesPerKind,
   cacheDefinition,
 } from 'fhir/definitions'
-import { StructureDefinition as StructDef } from 'types'
+import { CachedDefinition } from 'types'
 import { FHIR_API_URL } from '../constants'
 
 export const StructureDefinition = objectType({
@@ -65,7 +65,7 @@ export const searchDefinitions: FieldResolver<
 > = async (_, { filter }) => {
   const { derivation, kind, type } = filter
 
-  let res: StructDef[]
+  let res: CachedDefinition[]
   if (derivation && kind && !type) {
     res = await resourcesPerKind(derivation, kind)
   } else if (!derivation && !kind && type) {
@@ -93,7 +93,7 @@ export const refreshDefinition: FieldResolver<
   }
 }
 
-const graphqlize = (r: StructDef) => ({
+const graphqlize = (r: CachedDefinition) => ({
   id: r.$meta.id,
   def: r,
 })
