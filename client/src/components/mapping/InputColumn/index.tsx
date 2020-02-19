@@ -213,7 +213,7 @@ const InputColumn = ({ input, schema, source }: Props) => {
                   }}
                 />
               </div>
-              {attribute.types[0] === 'code' ? (
+              {attribute.types[0] === 'code' && (
                 <div className="stacked-tags">
                   <Tag>CONCEPT MAP</Tag>
                   <ButtonGroup>
@@ -239,7 +239,7 @@ const InputColumn = ({ input, schema, source }: Props) => {
                     />
                   </ButtonGroup>
                 </div>
-              ) : null}
+              )}
             </div>
             <div className="input-column-joins">
               <Button

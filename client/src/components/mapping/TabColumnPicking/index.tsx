@@ -1,13 +1,13 @@
 import * as React from 'react';
 
-import { ISelectedSource, ISelectedAttribute } from 'types';
+import { ISelectedSource, SelectedAttribute } from 'types';
 
 import StaticValueForm from './StaticValueForm';
 import DynamicColumnPicker from './DynamicColumnPicker';
 import './style.scss';
 
 interface Props {
-  attribute: ISelectedAttribute;
+  attribute: SelectedAttribute;
   schema: any;
   source: ISelectedSource;
 }

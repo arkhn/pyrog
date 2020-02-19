@@ -48,14 +48,14 @@ export interface ISelectedResource {
   };
 }
 
-export interface ISelectedAttribute extends Node {
+export interface SelectedAttribute extends Node {
   path: string;
 }
 
 export interface ISelectedNode {
   source: ISelectedSource;
   resource: ISelectedResource;
-  attribute: ISelectedAttribute;
+  attribute: SelectedAttribute;
 }
 
 export interface IResourceInputs {

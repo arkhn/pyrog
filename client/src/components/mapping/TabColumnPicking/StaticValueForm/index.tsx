@@ -11,7 +11,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
 import { loader } from 'graphql.macro';
 
-import { IReduxStore, ISelectedAttribute } from 'types';
+import { IReduxStore, SelectedAttribute } from 'types';
 
 import { setAttributeInMap } from 'services/resourceInputs/actions';
 
@@ -27,7 +27,7 @@ const mCreateStaticInput = loader(
 );
 
 interface Props {
-  attribute: ISelectedAttribute;
+  attribute: SelectedAttribute;
 }
 
 const StaticValueForm = ({ attribute }: Props) => {
