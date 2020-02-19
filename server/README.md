@@ -26,21 +26,6 @@ For this to work, you need to have a postgres service up and running and configu
 
 You also need to apply the migrations to the database before importing the mapping.
 
-### Example
-
-```sh
-# run the postgres service in docker
-docker-compose up postgres
-
-# apply the migrations if needed
-yarn prisma2 lift up
-
-# import the mapping from a file.
-yarn seed:mapping <mapping.json>
-```
-
-This will create the template (if needed), the source and all its resources.
-
 ## Build a docker image
 
 ```sh
