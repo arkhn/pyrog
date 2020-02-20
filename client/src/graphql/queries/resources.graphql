@@ -2,9 +2,9 @@ query resources {
   resources {
     id
     label
-    definition {
+    definitionId
+    source {
       id
-      type
     }
   }
 }
