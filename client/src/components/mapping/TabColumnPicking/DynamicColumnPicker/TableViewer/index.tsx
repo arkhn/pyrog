@@ -3,20 +3,35 @@ import {
   Column,
   Cell,
   Utils,
-  TableLoadingOption
+  TableLoadingOption,
+  RowHeaderCell,
+  SelectionModes,
+  IRegion
 } from '@blueprintjs/table';
 import * as React from 'react';
 
 import './style.scss';
+import { Icon } from '@blueprintjs/core';
+import { useSelector } from 'react-redux';
+import { IReduxStore } from 'types';
 
 interface IProps {
+  selectedTable: string;
   fields: string[];
   rows: any[];
   isLoading: boolean;
+  previewFhirObject: (rowId: number) => void;
 }
 
-const TableViewer = ({ rows, fields, isLoading }: IProps) => {
+const TableViewer = ({
+  selectedTable,
+  rows,
+  fields,
+  isLoading,
+  previewFhirObject
+}: IProps) => {
   const [columns, setColumns] = React.useState([] as React.ReactElement[]);
+  const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
 
   React.useEffect(() => {
     setColumns(
@@ -31,6 +46,23 @@ const TableViewer = ({ rows, fields, isLoading }: IProps) => {
       })
     );
   }, [rows, fields]);
+
+  const onSelection = (regions: IRegion[]) => {
+    if (regions.length === 0) return;
+
+    const [{ rows: selectedRows }] = regions;
+    if (!selectedRows) return;
+
+    const [rowIndex] = selectedRows;
+    if (selectedTable !== resource.primaryKeyTable) {
+      console.error('not running fhir-pipe: wrong table');
+      return;
+    }
+
+    previewFhirObject(
+      rows[rowIndex][fields.indexOf(resource.primaryKeyColumn)]
+    );
+  };
 
   const handleColumnsReordered = (
     oldIndex: number,
@@ -49,11 +81,21 @@ const TableViewer = ({ rows, fields, isLoading }: IProps) => {
     setColumns(nextChildren);
   };
 
+  const renderRowHeader = (index: number) => (
+    <RowHeaderCell>
+      <Icon icon="flame" />
+    </RowHeaderCell>
+  );
+
   return (
     <Table
       numRows={rows.length}
       enableColumnReordering={true}
       onColumnsReordered={handleColumnsReordered}
+      rowHeaderCellRenderer={renderRowHeader}
+      enableMultipleSelection={false}
+      onSelection={onSelection}
+      selectionModes={SelectionModes.ROWS_ONLY}
       loadingOptions={
         isLoading
           ? [

@@ -11,7 +11,8 @@ import { useMutation } from '@apollo/react-hooks';
 import { useSelector, useDispatch } from 'react-redux';
 
 import ColumnPicker from '../../ColumnPicker';
-import TableViewer from '../TableViewer';
+import TableViewer from './TableViewer';
+import FhirPreview from './FhirPreview';
 
 import { IReduxStore, SelectedAttribute, ISelectedSource } from 'types';
 import { loader } from 'graphql.macro';
@@ -54,6 +55,10 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
   const [tableIsLoading, setTableIsLoading] = React.useState(false);
   const [rows, setRows] = React.useState([]);
   const [fields, setFields] = React.useState([]);
+  const [fhirPreviewEnabled, setFhirPreviewEnabled] = React.useState(false);
+  const [fhirPreviewRowId, setFhirPreviewRowId] = React.useState(
+    undefined as number | undefined
+  );
 
   const [createAttribute] = useMutation(mCreateAttribute);
   const [createSQLInput, { loading: creatingSQLInput }] = useMutation(
@@ -109,6 +114,12 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
       update: addInputToCache
     });
   };
+
+  const previewFhirObject = (rowId: number) => {
+    setFhirPreviewRowId(rowId);
+    setFhirPreviewEnabled(true);
+  };
+
   React.useEffect(() => {
     if (source && source.credential && table) {
       setTableIsLoading(true);
@@ -174,7 +185,14 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
           />
         </ControlGroup>
       </FormGroup>
-      <TableViewer fields={fields} rows={rows} isLoading={tableIsLoading} />
+      <TableViewer
+        selectedTable={table}
+        fields={fields}
+        rows={rows}
+        isLoading={tableIsLoading}
+        previewFhirObject={previewFhirObject}
+      />
+      {fhirPreviewEnabled && <FhirPreview rowId={fhirPreviewRowId!} />}
     </Card>
   );
 };
