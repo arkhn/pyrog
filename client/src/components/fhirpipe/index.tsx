@@ -24,9 +24,8 @@ interface Source {
 interface Resource {
   id: string;
   label: string;
-  definition: {
-    type: string;
-  };
+  definitionId: string;
+  source: Source;
 }
 
 // GRAPHQL
@@ -44,6 +43,7 @@ const FhirpipeView = () => {
   const [bypassValidation, setBypassValidation] = useState(false);
   const [resetStore, setResetStore] = useState(false);
   const [multiprocessing, setMultiprocessing] = useState(false);
+  const [running, setRunning] = useState(false);
 
   const { data: dataSources } = useQuery(qSources, {
     fetchPolicy: 'network-only'
@@ -53,6 +53,10 @@ const FhirpipeView = () => {
   });
   const sources = dataSources ? dataSources.sources : [];
   const resources = dataResources ? dataResources.resources : [];
+
+  const resourcesForSelectedSource = resources.filter(
+    (r: Resource) => r.source.id === selectedSource.id
+  );
 
   const { data: dataCredential, loading: loadingCredentials } = useQuery(
     qCredentialForSource,
@@ -97,7 +101,7 @@ const FhirpipeView = () => {
   const renderResource = (resource: Resource, { handleClick }: any) => (
     <MenuItem
       key={resource.id}
-      text={resource.definition.type}
+      text={resource.definitionId}
       label={resource.label}
       icon={isItemSelected(selectedResources, resource) ? 'tick' : 'blank'}
       onClick={handleClick}
@@ -118,6 +122,7 @@ const FhirpipeView = () => {
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     e.preventDefault();
+    setRunning(true);
 
     // The possible params for running fhirpipe are:
     // mapping, sources, resources, labels, reset_store,
@@ -125,7 +130,7 @@ const FhirpipeView = () => {
     // It is also needed to provide credentialId
     const body = {
       source: selectedSource.name,
-      resources: selectedResources.map(r => r.definition.type),
+      resources: selectedResources.map(r => r.definitionId),
       labels: selectedResources.map(r => r.label),
       credentialId: credentials.id,
       bypass_validation: bypassValidation,
@@ -134,33 +139,27 @@ const FhirpipeView = () => {
     };
     const headers = { 'Content-Type': 'application/json' };
 
-    let res: any;
     try {
-      res = await axios.post(`${FHIRPIPE_URL}/run`, body, { headers: headers });
-    } catch (err) {
-      toaster.show({
-        message: err.response.data || err.response.statusText,
-        intent: 'danger',
-        icon: 'warning-sign',
-        timeout: 6000
+      await axios.post(`${FHIRPIPE_URL}/run`, body, {
+        headers: headers
       });
-    }
 
-    if (res.status === 200 && !!res.data.errors) {
       toaster.show({
         message: 'Fhirpipe ran successfully',
         intent: 'success',
         icon: 'tick-circle',
         timeout: 4000
       });
-    } else {
+    } catch (err) {
+      const errMessage = err.response ? err.response.data : err.message;
       toaster.show({
-        message: `Problem while running Fhirpipe: ${res.data.errors}`,
+        message: `Problem while running Fhirpipe: ${errMessage}`,
         intent: 'danger',
         icon: 'warning-sign',
-        timeout: 4000
+        timeout: 6000
       });
     }
+    setRunning(false);
   };
 
   return (
@@ -199,11 +198,12 @@ const FhirpipeView = () => {
           <h1>Select resources</h1>
           <p>
             Choose all the resources you want to process with the ETL. If you
-            select none of them, all we be processed.
+            select none of them, all we be processed. Note that you need to
+            select a source before.
           </p>
           <ResourceMultiSelect
-            items={resources}
-            tagRenderer={resource => resource.definition.type}
+            items={resourcesForSelectedSource}
+            tagRenderer={resource => resource.definitionId}
             tagInputProps={{
               onRemove: handleTagRemove
             }}
@@ -212,6 +212,12 @@ const FhirpipeView = () => {
             selectedItems={selectedResources}
             itemsEqual="id"
             fill={true}
+            noResults={
+              <MenuItem
+                disabled={true}
+                text="No resources for the selected source."
+              />
+            }
           />
           <div className="advanced-options">
             <h2>Advanced options</h2>
@@ -239,6 +245,7 @@ const FhirpipeView = () => {
                 large
                 type="submit"
                 disabled={!selectedSource.id || credentialsMissing}
+                loading={running}
                 className="button-submit"
               >
                 Run the pipe
