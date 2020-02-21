@@ -7,7 +7,7 @@ import {
 } from '@blueprintjs/select';
 import { IconName } from '@blueprintjs/icons';
 
-import UploadProfile from 'components/uploadProfile';
+import UploadProfile from 'components/uploads/uploadProfile';
 import TSelect from './TSelect';
 
 interface Props {

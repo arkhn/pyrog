@@ -4,8 +4,9 @@ import { Dialog, Button } from '@blueprintjs/core';
 import { ErrorObject } from 'ajv';
 import axios from 'axios';
 
-import { FHIR_API_URL } from '../../constants';
-import { validate } from './validate';
+import { FHIR_API_URL } from '../../../constants';
+import fhirSchema from './StructureDefinition.schema.json';
+import { validator } from '../validate';
 
 import './style.scss';
 
@@ -54,6 +55,8 @@ const UploadProfile = ({ isOpen, resource, onClose, onUpload }: Props) => {
     [] as string[]
   );
   const [uploadingProfile, setUploadingProfile] = React.useState(false);
+
+  const validate = validator(fhirSchema);
 
   const validateProfile = (profile: any): boolean => {
     if (!validate(profile)) {

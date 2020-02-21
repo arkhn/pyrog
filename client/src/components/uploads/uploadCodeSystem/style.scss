@@ -1,0 +1,20 @@
+@import "~@blueprintjs/core/lib/css/blueprint.css";
+@import "~@blueprintjs/core/lib/scss/variables";
+
+#upload-code-system {
+
+  .invalid-alert {
+    margin-left: 10px;
+    color: #FFA500;
+  }
+  
+  .bp3-button-group {
+    margin: 10px auto; 
+  }
+  
+  .button {
+    position: left;
+    margin: 10px 0px;
+    width: 250px;
+  }
+}

@@ -1,4 +1,10 @@
-import { Button, ButtonGroup, Dialog, InputGroup } from '@blueprintjs/core';
+import {
+  Button,
+  ButtonGroup,
+  Dialog,
+  FileInput,
+  InputGroup
+} from '@blueprintjs/core';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -8,6 +14,10 @@ import { FHIR_API_URL } from '../../../constants';
 import CodeSystemSelect from 'components/selects/codeSystemSelect';
 import StringSelect from 'components/selects/stringSelect';
 import { IReduxStore } from 'types';
+
+import UploadCodeSystem from 'components/uploads/uploadCodeSystem';
+import { validator } from 'components/uploads/validate';
+import fhirSchema from 'components/uploads/uploadCodeSystem/CodeSystem.schema.json';
 
 import './style.scss';
 
@@ -474,81 +484,86 @@ const ConceptMapDialog = ({
   }, [sourceSystemTitle, selectedTargetSystem]);
 
   return (
-    <Dialog isOpen={isOpen} onClose={onClose}>
-      <div className="main-div">
-        <form onSubmit={onSubmit}>
-          <div className="center-text">
-            <h1>CONCEPT MAP</h1>
-          </div>
-          {!!selectedTargetSystem && !!sourceSystemTitle && metaData()}
-          <table className="bp3-html-table">
-            <thead>
-              <tr>
-                <th className="head-col"></th>
-                <th className="source-col">
-                  Source{':  '}
-                  {creatingNewCodeSystem
-                    ? enterNewCodeSystemName
-                    : selectSourceCodeSystem}
-                </th>
-                <th className="equivalence-col">Equivalence</th>
-                <th className="target-col">
-                  Target{':  '}
-                  {selectTargetCodeSystem}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {!!existingConceptMapId && !modifyAnyway
-                ? displayConceptMap()
-                : conceptMap.map(renderRows)}
-            </tbody>
-          </table>
-          <div className="center-text">
-            {!!selectedTargetSystem &&
-            !!sourceSystemTitle &&
-            (!existingConceptMapId || modifyAnyway) ? (
-              <Button
-                className="add-element-button"
-                fill={true}
-                text="add element"
-                onClick={() => setConceptMap(prev => [...prev, {} as MapRow])}
-              />
-            ) : null}
-          </div>
-          <div className="align-right">
-            <ButtonGroup vertical={true}>
-              {/* TODO display only if user is admin
-              TODO better place for this */}
-              {existingConceptMapId ? (
+    <React.Fragment>
+      <Dialog isOpen={isOpen} onClose={onClose}>
+        <div className="main-div">
+          <form onSubmit={onSubmit}>
+            <div className="center-text">
+              <h1>CONCEPT MAP</h1>
+            </div>
+            {!!selectedTargetSystem && !!sourceSystemTitle && metaData()}
+            <table className="bp3-html-table">
+              <thead>
+                <tr>
+                  <th className="head-col"></th>
+                  <th className="source-col">
+                    Source{':  '}
+                    {creatingNewCodeSystem
+                      ? enterNewCodeSystemName
+                      : selectSourceCodeSystem}
+                  </th>
+                  <th className="equivalence-col">Equivalence</th>
+                  <th className="target-col">
+                    Target{':  '}
+                    {selectTargetCodeSystem}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {!!existingConceptMapId && !modifyAnyway
+                  ? displayConceptMap()
+                  : conceptMap.map(renderRows)}
+              </tbody>
+            </table>
+            <div className="center-text">
+              {!!selectedTargetSystem &&
+              !!sourceSystemTitle &&
+              (!existingConceptMapId || modifyAnyway) ? (
                 <Button
-                  intent="danger"
-                  text={'Modify concept map'}
-                  onClick={(): void => setModifyAnyway(true)}
-                  disabled={modifyAnyway}
+                  className="add-element-button"
+                  fill={true}
+                  text="add element"
+                  onClick={() => setConceptMap(prev => [...prev, {} as MapRow])}
                 />
               ) : null}
-              <Button
-                intent="primary"
-                type="submit"
-                text={
-                  existingConceptMapId
-                    ? 'Choose concept map'
-                    : 'Create concept map'
-                }
-                disabled={
-                  !existingConceptMapId &&
-                  (!sourceSystemTitle ||
-                    !selectedTargetSystem ||
-                    areFieldsEmpty ||
-                    conceptMap.length < 1)
-                }
-              />
-            </ButtonGroup>
-          </div>
-        </form>
-      </div>
-    </Dialog>
+            </div>
+            <div className="align-right">
+              <ButtonGroup vertical={true}>
+                {/* TODO display only if user is admin
+              TODO better place for this */}
+                {existingConceptMapId ? (
+                  <Button
+                    intent="danger"
+                    text={'Modify concept map'}
+                    onClick={(): void => setModifyAnyway(true)}
+                    disabled={modifyAnyway}
+                  />
+                ) : null}
+                <Button
+                  intent="primary"
+                  type="submit"
+                  text={
+                    existingConceptMapId
+                      ? 'Choose concept map'
+                      : 'Create concept map'
+                  }
+                  disabled={
+                    !existingConceptMapId &&
+                    (!sourceSystemTitle ||
+                      !selectedTargetSystem ||
+                      areFieldsEmpty ||
+                      conceptMap.length < 1)
+                  }
+                />
+              </ButtonGroup>
+            </div>
+          </form>
+          {/* TODO Better place for this button */}
+          <h3>Upload new code system</h3>
+          <UploadCodeSystem />
+        </div>
+      </Dialog>
+    </React.Fragment>
   );
 };
 
