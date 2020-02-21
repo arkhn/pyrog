@@ -1,4 +1,3 @@
-import { useMutation } from '@apollo/react-hooks';
 import {
   InputGroup,
   FormGroup,
@@ -8,9 +7,11 @@ import {
   ControlGroup,
   Position
 } from '@blueprintjs/core';
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { loader } from 'graphql.macro';
 import { useSelector, useDispatch } from 'react-redux';
+import { useMutation } from '@apollo/react-hooks';
+import { ApolloError } from 'apollo-client/errors/ApolloError';
 
 import { IReduxStore } from 'types';
 import ColumnPicker from 'components/mapping/ColumnPicker';
@@ -20,6 +21,7 @@ import {
 } from 'services/selectedNode/actions';
 
 import './style.scss';
+import StringSelect from 'components/selects/stringSelect';
 
 interface Resource {
   id: string;
@@ -31,6 +33,14 @@ interface Resource {
     id: string;
     type: string;
   };
+}
+
+interface Filter {
+  owner: string;
+  table: string;
+  column: string;
+  relation: string;
+  value: string;
 }
 
 interface Props {
@@ -52,7 +62,7 @@ const Drawer = ({
   isOpen,
   deleteResourceCallback,
   onCloseCallback
-}: Props) => {
+}: Props): ReactElement => {
   const dispatch = useDispatch();
   const { source } = useSelector((state: IReduxStore) => state.selectedNode);
 
@@ -62,6 +72,34 @@ const Drawer = ({
   const [pkOwner, setPkOwner] = React.useState('');
   const [pkTable, setPkTable] = React.useState('');
   const [pkColumn, setPkColumn] = React.useState('');
+  const [filters, setFilters] = React.useState([] as Filter[]);
+
+  const onUpdateCompleted = (): void => {
+    toaster.show({
+      message: `Successfully updated ${resource.definition.type} properties`,
+      intent: 'success',
+      icon: 'properties'
+    });
+  };
+
+  const onUpdateError = (): void => {
+    toaster.show({
+      message: 'An error occurred while updating properties',
+      intent: 'danger',
+      icon: 'properties'
+    });
+  };
+
+  const [updateResource, { loading: updatingResource }] = useMutation(
+    mUpdateResource,
+    {
+      onCompleted: onUpdateCompleted,
+      onError: onUpdateError
+    }
+  );
+
+  // TODO add more relations
+  const relations = ['=', '>=', '<='];
 
   React.useEffect(() => {
     setLabel(resource.label || '');
@@ -70,50 +108,33 @@ const Drawer = ({
     setPkColumn(resource.primaryKeyColumn || '');
   }, [resource]);
 
-  const onFormSubmit = (updateResource: any) => {
-    return (e: React.FormEvent<HTMLElement>) => {
-      e.preventDefault();
+  const onFormSubmit = (e: React.FormEvent<HTMLElement>): void => {
+    e.preventDefault();
 
-      updateResource({
-        variables: {
-          resourceId: resource.id,
-          data: {
-            label,
-            primaryKeyOwner: pkOwner,
-            primaryKeyTable: pkTable,
-            primaryKeyColumn: pkColumn
-          }
-        }
-      });
-      dispatch(
-        updateSelectedResource({
-          ...resource,
+    updateResource({
+      variables: {
+        resourceId: resource.id,
+        data: {
           label,
           primaryKeyOwner: pkOwner,
           primaryKeyTable: pkTable,
-          primaryKeyColumn: pkColumn
-        })
-      );
-    };
-  };
-
-  const onUpdateCompleted = () => {
-    toaster.show({
-      message: `Successfully updated ${resource.definition.type} properties`,
-      intent: 'success',
-      icon: 'properties'
+          primaryKeyColumn: pkColumn,
+          filters
+        }
+      }
     });
+    dispatch(
+      updateSelectedResource({
+        ...resource,
+        label,
+        primaryKeyOwner: pkOwner,
+        primaryKeyTable: pkTable,
+        primaryKeyColumn: pkColumn
+      })
+    );
   };
 
-  const onUpdateError = (error: any) => {
-    toaster.show({
-      message: 'An error occurred while updating properties',
-      intent: 'danger',
-      icon: 'properties'
-    });
-  };
-
-  const onDeletionCompleted = (data: any) => {
+  const onDeletionCompleted = (): void => {
     toaster.show({
       icon: 'layout-hierarchy',
       intent: 'success',
@@ -124,7 +145,7 @@ const Drawer = ({
     deleteResourceCallback();
   };
 
-  const onDeletionError = (error: any) => {
+  const onDeletionError = (error: ApolloError): void => {
     toaster.show({
       icon: 'error',
       intent: 'danger',
@@ -134,19 +155,10 @@ const Drawer = ({
     deleteResourceCallback();
   };
 
-  // Mutation and query hooks
-  const [updateResource, { loading: updatingResource }] = useMutation(
-    mUpdateResource,
-    {
-      onCompleted: onUpdateCompleted,
-      onError: onUpdateError
-    }
-  );
-
   const removeResourceFromCache = (
     cache: any,
     { data: { deleteResource } }: any
-  ) => {
+  ): void => {
     try {
       const { source: cachedSource } = cache.readQuery({
         query: qResourcesForSource,
@@ -181,17 +193,150 @@ const Drawer = ({
     }
   );
 
+  const pickPrimaryKay = (
+    <FormGroup label="Primary Key" disabled={updatingResource || !resource}>
+      <ColumnPicker
+        hasOwner={source ? source.hasOwner : undefined}
+        ownerChangeCallback={(owner: string): void => {
+          setPkOwner(owner);
+          setPkTable('');
+          setPkColumn('');
+        }}
+        tableChangeCallback={(table: string): void => {
+          setPkTable(table);
+          setPkColumn('');
+        }}
+        columnChangeCallback={(column: string): void => {
+          setPkColumn(column);
+        }}
+        initialColumn={{
+          owner: pkOwner,
+          table: pkTable,
+          column: pkColumn
+        }}
+        sourceSchema={source.schema!}
+        vertical={true}
+        fill={true}
+        popoverProps={{
+          autoFocus: true,
+          boundary: 'viewport',
+          canEscapeKeyClose: true,
+          lazy: true,
+          position: Position.LEFT_TOP,
+          usePortal: true
+        }}
+        disabled={updatingResource || !resource}
+      />
+    </FormGroup>
+  );
+
+  const deleteFilterButton = (index: number): ReactElement => (
+    <Button
+      icon="trash"
+      minimal={true}
+      onClick={(): void => {
+        filters.splice(index, 1);
+        setFilters([...filters]);
+      }}
+    />
+  );
+
+  const renderFiltersForm = (
+    <FormGroup label="Filters" disabled={updatingResource || !resource}>
+      <table className="bp3-html-table">
+        <tbody>
+          {filters.map(({ owner, table, column, relation, value }, index) => (
+            <tr key={index}>
+              <td>{deleteFilterButton(index)}</td>
+              <td>
+                <ColumnPicker
+                  hasOwner={source ? source.hasOwner : undefined}
+                  ownerChangeCallback={(owner: string): void => {
+                    filters[index].owner = owner;
+                    filters[index].table = '';
+                    filters[index].column = '';
+                    setFilters([...filters]);
+                  }}
+                  tableChangeCallback={(table: string): void => {
+                    filters[index].table = table;
+                    filters[index].column = '';
+                    setFilters([...filters]);
+                  }}
+                  columnChangeCallback={(column: string): void => {
+                    filters[index].column = column;
+                    setFilters([...filters]);
+                  }}
+                  initialColumn={{
+                    owner,
+                    table,
+                    column
+                  }}
+                  sourceSchema={source.schema!}
+                  vertical={true}
+                  fill={true}
+                  popoverProps={{
+                    autoFocus: true,
+                    boundary: 'viewport',
+                    canEscapeKeyClose: true,
+                    lazy: true,
+                    position: Position.LEFT_TOP,
+                    usePortal: true
+                  }}
+                  disabled={updatingResource || !resource}
+                />
+              </td>
+              <td>
+                <StringSelect
+                  inputItem={relation}
+                  items={relations}
+                  displayItem={(r: string): string => r || 'select relation'}
+                  onChange={(relation: string): void => {
+                    filters[index].relation = relation;
+                    setFilters([...filters]);
+                  }}
+                />
+              </td>
+              <td>
+                <input
+                  className="bp3-input"
+                  type="text"
+                  placeholder="Text input"
+                  value={value}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
+                    filters[index].value = e.target.value;
+                    setFilters([...filters]);
+                  }}
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <Button
+        disabled={!resource}
+        loading={deletingResource}
+        icon={'add'}
+        onClick={() => {
+          setFilters(prev => [...prev, {} as Filter]);
+        }}
+        text="Add filter"
+      />
+    </FormGroup>
+  );
+
   return (
     <BPDrawer
       title={resource.definition ? resource.definition.type : ''}
       icon={resource.definition ? 'properties' : null}
       isOpen={isOpen}
       onClose={onCloseCallback}
-      size={BPDrawer.SIZE_SMALL}
+      // size={BPDrawer.SIZE_SMALL}
+      position={Position.LEFT}
     >
       <div className={Classes.DRAWER_BODY}>
         <div className={Classes.DIALOG_BODY}>
-          <form onSubmit={onFormSubmit(updateResource)}>
+          <form onSubmit={onFormSubmit}>
             <FormGroup
               label="Resource Label"
               className="resource-info"
@@ -206,43 +351,8 @@ const Drawer = ({
                 }}
               />
             </FormGroup>
-            <FormGroup
-              label="Primary Key"
-              disabled={updatingResource || !resource}
-            >
-              <ColumnPicker
-                hasOwner={source ? source.hasOwner : undefined}
-                ownerChangeCallback={(owner: string) => {
-                  setPkOwner(owner);
-                  setPkTable('');
-                  setPkColumn('');
-                }}
-                tableChangeCallback={(table: string) => {
-                  setPkTable(table);
-                  setPkColumn('');
-                }}
-                columnChangeCallback={(column: string) => {
-                  setPkColumn(column);
-                }}
-                initialColumn={{
-                  owner: pkOwner,
-                  table: pkTable,
-                  column: pkColumn
-                }}
-                sourceSchema={source.schema!}
-                vertical={true}
-                fill={true}
-                popoverProps={{
-                  autoFocus: true,
-                  boundary: 'viewport',
-                  canEscapeKeyClose: true,
-                  lazy: true,
-                  position: Position.LEFT_TOP,
-                  usePortal: true
-                }}
-                disabled={updatingResource || !resource}
-              />
-            </FormGroup>
+            {pickPrimaryKay}
+            {renderFiltersForm}
             <Button
               disabled={updatingResource || !resource}
               intent="primary"
