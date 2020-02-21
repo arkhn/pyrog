@@ -19,6 +19,7 @@ const FhirPreview = ({ rowId }: Props) => {
   React.useEffect(() => {
     const fetchPreview = async () => {
       try {
+        setLoading(true);
         const res = await axios.get(
           `${FHIRPIPE_URL}/preview/${resource.id}/${rowId}`
         );
@@ -34,11 +35,11 @@ const FhirPreview = ({ rowId }: Props) => {
       }
     };
     fetchPreview();
-  });
+  }, [rowId]);
 
   if (loading) return <Spinner />;
 
-  return <pre>{JSON.stringify(fhirObject)}</pre>;
+  return <pre>{JSON.stringify(fhirObject, null, 4)}</pre>;
 };
 
 export default FhirPreview;

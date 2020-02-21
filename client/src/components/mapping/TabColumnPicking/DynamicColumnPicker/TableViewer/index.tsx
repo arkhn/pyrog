@@ -19,7 +19,7 @@ interface IProps {
   selectedTable: string;
   fields: string[];
   rows: any[];
-  isLoading: boolean;
+  isTableLoading: boolean;
   previewFhirObject: (rowId: number) => void;
 }
 
@@ -27,10 +27,11 @@ const TableViewer = ({
   selectedTable,
   rows,
   fields,
-  isLoading,
+  isTableLoading,
   previewFhirObject
 }: IProps) => {
   const [columns, setColumns] = React.useState([] as React.ReactElement[]);
+  const [compatiblePreview, setCompatiblePreview] = React.useState(false);
   const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
 
   React.useEffect(() => {
@@ -47,57 +48,44 @@ const TableViewer = ({
     );
   }, [rows, fields]);
 
+  React.useEffect(() => {
+    selectedTable === resource.primaryKeyTable
+      ? setCompatiblePreview(true)
+      : setCompatiblePreview(false);
+  }, [selectedTable, resource]);
+
   const onSelection = (regions: IRegion[]) => {
+    if (!compatiblePreview) return;
     if (regions.length === 0) return;
 
     const [{ rows: selectedRows }] = regions;
     if (!selectedRows) return;
 
     const [rowIndex] = selectedRows;
-    if (selectedTable !== resource.primaryKeyTable) {
-      console.error('not running fhir-pipe: wrong table');
-      return;
-    }
 
     previewFhirObject(
       rows[rowIndex][fields.indexOf(resource.primaryKeyColumn)]
     );
   };
 
-  const handleColumnsReordered = (
-    oldIndex: number,
-    newIndex: number,
-    length: number
-  ) => {
-    if (oldIndex === newIndex) {
-      return;
-    }
-    const nextChildren = Utils.reorderArray(
-      columns,
-      oldIndex,
-      newIndex,
-      length
-    );
-    setColumns(nextChildren);
-  };
-
   const renderRowHeader = (index: number) => (
-    <RowHeaderCell>
-      <Icon icon="flame" />
-    </RowHeaderCell>
+    <RowHeaderCell
+      className="previewButton"
+      nameRenderer={() => <Icon icon="flame" />}
+    />
   );
 
   return (
     <Table
       numRows={rows.length}
-      enableColumnReordering={true}
-      onColumnsReordered={handleColumnsReordered}
-      rowHeaderCellRenderer={renderRowHeader}
+      enableColumnReordering={false}
+      enableRowResizing={false}
+      rowHeaderCellRenderer={compatiblePreview ? renderRowHeader : undefined}
       enableMultipleSelection={false}
       onSelection={onSelection}
       selectionModes={SelectionModes.ROWS_ONLY}
       loadingOptions={
-        isLoading
+        isTableLoading
           ? [
               TableLoadingOption.CELLS,
               TableLoadingOption.COLUMN_HEADERS,
