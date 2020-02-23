@@ -1,4 +1,4 @@
-import { IAction, ISourceSchema } from 'types';
+import { IAction, ISourceSchema, ISourceColumn } from 'types';
 import { Node } from 'components/mapping/FhirMappingPanel/FhirResourceTree/node';
 
 interface Resource {
@@ -7,10 +7,17 @@ interface Resource {
   primaryKeyOwner: string;
   primaryKeyTable: string;
   primaryKeyColumn: string;
+  filters: Filter[];
   definition: {
     id: string;
     type: string;
   };
+}
+
+interface Filter {
+  sqlColumn: ISourceColumn;
+  relation: string;
+  value: string;
 }
 
 // Fhir Source

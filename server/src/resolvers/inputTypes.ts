@@ -18,6 +18,15 @@ export const UpdateResourceInput = inputObjectType({
   },
 })
 
+export const FilterInput = inputObjectType({
+  name: 'FilterInput',
+  definition(t) {
+    t.field('sqlColumn', { type: 'ColumnInputWithoutJoins', required: true })
+    t.field('relation', { type: 'String', required: true })
+    t.field('value', { type: 'String', required: true })
+  },
+})
+
 export const UpdateInputInput = inputObjectType({
   name: 'UpdateInputInput',
   definition(t) {

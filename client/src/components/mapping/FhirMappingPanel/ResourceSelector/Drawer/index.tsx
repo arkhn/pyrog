@@ -13,7 +13,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
 import { ApolloError } from 'apollo-client/errors/ApolloError';
 
-import { IReduxStore } from 'types';
+import { IReduxStore, ISelectedResource, ISourceColumn } from 'types';
 import ColumnPicker from 'components/mapping/ColumnPicker';
 import {
   updateSelectedResource,
@@ -23,28 +23,14 @@ import {
 import './style.scss';
 import StringSelect from 'components/selects/stringSelect';
 
-interface Resource {
-  id: string;
-  label: string;
-  primaryKeyOwner: string;
-  primaryKeyTable: string;
-  primaryKeyColumn: string;
-  definition: {
-    id: string;
-    type: string;
-  };
-}
-
 interface Filter {
-  owner: string;
-  table: string;
-  column: string;
+  sqlColumn: ISourceColumn;
   relation: string;
   value: string;
 }
 
 interface Props {
-  resource: Resource;
+  resource: ISelectedResource;
   isOpen: boolean;
   deleteResourceCallback: () => void;
   onCloseCallback?: () => void;
@@ -106,6 +92,7 @@ const Drawer = ({
     setPkOwner(resource.primaryKeyOwner || '');
     setPkTable(resource.primaryKeyTable || '');
     setPkColumn(resource.primaryKeyColumn || '');
+    setFilters(resource.filters || []);
   }, [resource]);
 
   const onFormSubmit = (e: React.FormEvent<HTMLElement>): void => {
@@ -129,7 +116,8 @@ const Drawer = ({
         label,
         primaryKeyOwner: pkOwner,
         primaryKeyTable: pkTable,
-        primaryKeyColumn: pkColumn
+        primaryKeyColumn: pkColumn,
+        filters
       })
     );
   };
@@ -245,31 +233,31 @@ const Drawer = ({
     <FormGroup label="Filters" disabled={updatingResource || !resource}>
       <table className="bp3-html-table">
         <tbody>
-          {filters.map(({ owner, table, column, relation, value }, index) => (
+          {filters.map(({ sqlColumn, relation, value }, index) => (
             <tr key={index}>
               <td>{deleteFilterButton(index)}</td>
               <td>
                 <ColumnPicker
                   hasOwner={source ? source.hasOwner : undefined}
                   ownerChangeCallback={(owner: string): void => {
-                    filters[index].owner = owner;
-                    filters[index].table = '';
-                    filters[index].column = '';
+                    filters[index].sqlColumn.owner = owner;
+                    filters[index].sqlColumn.table = '';
+                    filters[index].sqlColumn.column = '';
                     setFilters([...filters]);
                   }}
                   tableChangeCallback={(table: string): void => {
-                    filters[index].table = table;
-                    filters[index].column = '';
+                    filters[index].sqlColumn.table = table;
+                    filters[index].sqlColumn.column = '';
                     setFilters([...filters]);
                   }}
                   columnChangeCallback={(column: string): void => {
-                    filters[index].column = column;
+                    filters[index].sqlColumn.column = column;
                     setFilters([...filters]);
                   }}
                   initialColumn={{
-                    owner,
-                    table,
-                    column
+                    owner: sqlColumn ? sqlColumn.owner : '',
+                    table: sqlColumn ? sqlColumn.table : '',
+                    column: sqlColumn ? sqlColumn.column : ''
                   }}
                   sourceSchema={source.schema!}
                   vertical={true}
@@ -318,7 +306,14 @@ const Drawer = ({
         loading={deletingResource}
         icon={'add'}
         onClick={() => {
-          setFilters(prev => [...prev, {} as Filter]);
+          setFilters(prev => [
+            ...prev,
+            {
+              sqlColumn: { owner: '', table: '', column: '' },
+              relation: '',
+              value: ''
+            }
+          ]);
         }}
         text="Add filter"
       />

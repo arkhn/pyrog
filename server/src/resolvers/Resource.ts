@@ -1,5 +1,6 @@
 import { objectType, FieldResolver } from 'nexus'
 import { getDefinition } from 'fhir'
+import { create } from 'domain'
 
 export const Resource = objectType({
   name: 'Resource',
@@ -11,6 +12,8 @@ export const Resource = objectType({
     t.model.primaryKeyOwner()
     t.model.primaryKeyTable()
     t.model.primaryKeyColumn()
+
+    t.model.filters()
 
     t.model.attributes()
     t.model.definitionId()
@@ -102,8 +105,48 @@ export const deleteResource: FieldResolver<
 export const updateResource: FieldResolver<
   'Mutation',
   'updateResource'
-> = async (_parent, { resourceId, data }, ctx) =>
-  ctx.photon.resources.update({
+> = async (_parent, { resourceId, data, filters }, ctx) => {
+  await ctx.photon.resources.update({
     where: { id: resourceId },
     data,
   })
+
+  const resource = await ctx.photon.resources.findOne({
+    where: { id: resourceId },
+    include: {
+      filters: true,
+    },
+  })
+  await Promise.all(
+    resource!.filters.map(f =>
+      ctx.photon.filters.delete({ where: { id: f.id } }),
+    ),
+  )
+  const newFilters = await Promise.all(
+    filters.map(f =>
+      ctx.photon.filters.create({
+        data: {
+          sqlColumn: {
+            create: {
+              owner: f.sqlColumn.owner,
+              table: f.sqlColumn.table,
+              column: f.sqlColumn.column,
+            },
+          },
+          relation: f.relation,
+          value: f.value,
+        },
+      }),
+    ),
+  )
+  return ctx.photon.resources.update({
+    where: { id: resourceId },
+    data: {
+      filters: {
+        connect: newFilters.map(f => ({
+          id: f.id,
+        })),
+      },
+    },
+  })
+}

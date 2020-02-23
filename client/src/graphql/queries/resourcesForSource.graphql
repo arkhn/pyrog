@@ -1,17 +1,10 @@
+#import "../fragments/entireResource.graphql"
+
 query resourcesForSource($sourceId: ID!) {
   source(sourceId: $sourceId) {
     id
     resources {
-      id
-      label
-      primaryKeyOwner
-      primaryKeyTable
-      primaryKeyColumn
-      definition {
-        id
-        type
-        name
-      }
+      ...entireResource
     }
   }
 }

@@ -57,12 +57,23 @@ model Resource {
   primaryKeyTable  String?
   primaryKeyColumn String?
 
+  // filters on db to avoid processing all the DB
+  filters Filter[]
+
   attributes   Attribute[] @relation(onDelete: CASCADE)
   definitionId String
   source       Source
 
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
+}
+
+model Filter {
+  id String @default(cuid()) @id
+
+  sqlColumn Column
+  relation  String
+  value     String
 }
 
 model Attribute {

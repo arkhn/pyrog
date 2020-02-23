@@ -81,6 +81,7 @@ input ColumnWhereInput {
   AND: [ColumnWhereInput!]
   column: NullableStringFilter
   createdAt: DateTimeFilter
+  filters: FilterFilter
   id: StringFilter
   inputs: InputFilter
   join: JoinWhereInput
@@ -142,6 +143,36 @@ input DateTimeFilter {
   lte: DateTime
   not: DateTime
   notIn: [DateTime!]
+}
+
+type Filter {
+  id: ID!
+  relation: String!
+  sqlColumn: Column!
+  value: String!
+}
+
+input FilterFilter {
+  every: FilterWhereInput
+  none: FilterWhereInput
+  some: FilterWhereInput
+}
+
+input FilterInput {
+  relation: String!
+  sqlColumn: ColumnInputWithoutJoins!
+  value: String!
+}
+
+input FilterWhereInput {
+  AND: [FilterWhereInput!]
+  id: StringFilter
+  NOT: [FilterWhereInput!]
+  OR: [FilterWhereInput!]
+  relation: StringFilter
+  resource: ResourceWhereInput
+  sqlColumn: ColumnWhereInput
+  value: StringFilter
 }
 
 type Input {
@@ -220,6 +251,7 @@ type Mutation {
   deleteAttribute(id: ID!): Attribute!
   deleteAttributes(filter: AttributeWhereInput): [Attribute!]
   deleteCredential(id: ID!): Credential!
+  deleteFilter(id: ID!): Filter!
   deleteInput(id: ID!): Input!
   deleteJoin(id: ID!): Join!
   deleteResource(id: ID!): Resource!
@@ -231,7 +263,7 @@ type Mutation {
   updateAttribute(attributeId: ID!, data: AttributeInput!): Attribute!
   updateInput(data: UpdateInputInput!, inputId: ID!): Input!
   updateJoin(data: JoinInput!, joinId: ID!): Join!
-  updateResource(data: UpdateResourceInput!, resourceId: ID!): Resource!
+  updateResource(data: UpdateResourceInput!, filters: [FilterInput!], resourceId: ID!): Resource!
   upsertCredential(database: String!, host: String!, login: String!, model: String!, password: String!, port: String!, sourceId: ID!): Credential!
 }
 
@@ -270,6 +302,7 @@ type Resource {
   """Structured version of a definition"""
   definition: StructureDefinition!
   definitionId: String!
+  filters(after: ID, before: ID, first: Int, last: Int, skip: Int): [Filter!]!
   id: ID!
   label: String
   primaryKeyColumn: String
@@ -290,6 +323,7 @@ input ResourceWhereInput {
   attributes: AttributeFilter
   createdAt: DateTimeFilter
   definitionId: StringFilter
+  filters: FilterFilter
   id: StringFilter
   label: NullableStringFilter
   NOT: [ResourceWhereInput!]

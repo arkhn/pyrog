@@ -1,6 +1,11 @@
 import { arg, idArg, mutationType, stringArg, booleanArg } from 'nexus'
 
-import { createResource, updateResource, deleteResource } from './Resource'
+import {
+  createResource,
+  updateResource,
+  updateResourceFilters,
+  deleteResource,
+} from './Resource'
 import { deleteSource, createSource } from './Source'
 import {
   createAttribute,
@@ -14,6 +19,7 @@ import { deleteCredential, upsertCredential } from './Credential'
 import { createTemplate, deleteTemplate } from './Template'
 import { addJoinToColumn } from './Column'
 import { updateJoin, deleteJoin } from './Join'
+import { deleteFilter } from './Filter'
 import { refreshDefinition } from './StructureDefinition'
 
 export const Mutation = mutationType({
@@ -136,6 +142,7 @@ export const Mutation = mutationType({
       args: {
         resourceId: idArg({ required: true }),
         data: arg({ type: 'UpdateResourceInput', required: true }),
+        filters: arg({ type: 'FilterInput', list: true }),
       },
       resolve: updateResource,
     })
@@ -260,6 +267,18 @@ export const Mutation = mutationType({
         id: idArg({ required: true }),
       },
       resolve: deleteJoin,
+    })
+
+    /*
+     * FILTER
+     */
+
+    t.field('deleteFilter', {
+      type: 'Filter',
+      args: {
+        id: idArg({ required: true }),
+      },
+      resolve: deleteFilter,
     })
   },
 })
