@@ -105,9 +105,9 @@ const Drawer = ({
           label,
           primaryKeyOwner: pkOwner,
           primaryKeyTable: pkTable,
-          primaryKeyColumn: pkColumn,
-          filters
-        }
+          primaryKeyColumn: pkColumn
+        },
+        filters
       }
     });
     dispatch(

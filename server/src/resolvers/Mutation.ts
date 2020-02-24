@@ -1,11 +1,6 @@
 import { arg, idArg, mutationType, stringArg, booleanArg } from 'nexus'
 
-import {
-  createResource,
-  updateResource,
-  updateResourceFilters,
-  deleteResource,
-} from './Resource'
+import { createResource, updateResource, deleteResource } from './Resource'
 import { deleteSource, createSource } from './Source'
 import {
   createAttribute,
