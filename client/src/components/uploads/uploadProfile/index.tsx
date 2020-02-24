@@ -37,6 +37,8 @@ const findMissingAttributes = (profile: any) =>
 const formatErrors = (errors: ErrorObject[]): string[] =>
   errors.map(err => `${err.message}: ${Object.values(err.params).join(',')}`);
 
+const validate = validator(fhirSchema);
+
 const UploadProfile = ({ isOpen, resource, onClose, onUpload }: Props) => {
   const {
     getRootProps,
@@ -55,8 +57,6 @@ const UploadProfile = ({ isOpen, resource, onClose, onUpload }: Props) => {
     [] as string[]
   );
   const [uploadingProfile, setUploadingProfile] = React.useState(false);
-
-  const validate = validator(fhirSchema);
 
   const validateProfile = (profile: any): boolean => {
     if (!validate(profile)) {

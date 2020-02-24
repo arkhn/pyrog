@@ -12,21 +12,14 @@ import fhirSchema from 'components/uploads/uploadCodeSystem/CodeSystem.schema.js
 
 import './style.scss';
 
+const validateCodeSystem = validator(fhirSchema);
+
 const UploadCodeSystem = (): React.ReactElement => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
 
   const [newCodeSystem, setNewCodeSystem] = useState(undefined as any);
-  const [uploading, setUploading] = useState(undefined as any);
+  const [uploading, setUploading] = useState(false);
   const [invalidFile, setInvalidFile] = useState(false);
-
-  const validate = validator(fhirSchema);
-
-  const validateCodeSystem = (codeSystem: any): boolean => {
-    if (!validate(codeSystem)) {
-      return false;
-    }
-    return true;
-  };
 
   const reader = new FileReader();
   reader.onerror = () => {

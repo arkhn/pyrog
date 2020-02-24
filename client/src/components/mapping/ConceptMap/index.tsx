@@ -497,14 +497,14 @@ const ConceptMapDialog = ({
                 <tr>
                   <th className="head-col"></th>
                   <th className="source-col">
-                    Source{':  '}
+                    {'Source:  '}
                     {creatingNewCodeSystem
                       ? enterNewCodeSystemName
                       : selectSourceCodeSystem}
                   </th>
                   <th className="equivalence-col">Equivalence</th>
                   <th className="target-col">
-                    Target{':  '}
+                    {'Target:  '}
                     {selectTargetCodeSystem}
                   </th>
                 </tr>
