@@ -1,8 +1,4 @@
-import {
-  ItemListPredicate,
-  ItemPredicate,
-  ItemRenderer
-} from '@blueprintjs/select';
+import { ItemPredicate, ItemRenderer } from '@blueprintjs/select';
 import { MenuItem, Button, ButtonGroup, Position } from '@blueprintjs/core';
 import * as React from 'react';
 import { loader } from 'graphql.macro';

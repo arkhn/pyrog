@@ -35,7 +35,7 @@ const FhirPreview = ({ rowId }: Props) => {
       }
     };
     fetchPreview();
-  }, [rowId]);
+  }, [rowId, resource.id, toaster]);
 
   if (loading) return <Spinner />;
 

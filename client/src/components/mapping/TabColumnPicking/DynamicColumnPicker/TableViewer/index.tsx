@@ -2,7 +2,6 @@ import {
   Table,
   Column,
   Cell,
-  Utils,
   TableLoadingOption,
   RowHeaderCell,
   SelectionModes,

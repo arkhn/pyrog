@@ -4,8 +4,7 @@ import {
   ItemPredicate,
   ItemRenderer,
   ItemListRenderer,
-  Select,
-  ItemListPredicate
+  Select
 } from '@blueprintjs/select';
 import * as React from 'react';
 
@@ -20,7 +19,6 @@ interface ISelectProps<T> {
   displayItem: (item: any) => string;
   className?: string;
   rightIcon?: IconName;
-  sortItems?: ItemListPredicate<T>;
   filterItems: ItemPredicate<T>;
   filterable?: boolean;
   items: T[];
@@ -50,7 +48,6 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
       displayItem,
       className,
       rightIcon,
-      sortItems,
       filterItems,
       filterable,
       icon,
@@ -73,7 +70,6 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
         filterable={filterable}
         items={items}
         itemDisabled={itemDisabled}
-        itemListPredicate={sortItems}
         itemPredicate={filterItems}
         itemRenderer={renderItem}
         itemListRenderer={renderList}

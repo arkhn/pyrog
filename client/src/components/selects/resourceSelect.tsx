@@ -1,10 +1,6 @@
 import * as React from 'react';
 import { MenuItem, Intent, Position } from '@blueprintjs/core';
-import {
-  ItemPredicate,
-  ItemListPredicate,
-  ItemRenderer
-} from '@blueprintjs/select';
+import { ItemPredicate, ItemRenderer } from '@blueprintjs/select';
 import { IconName } from '@blueprintjs/icons';
 
 import TSelect from './TSelect';
@@ -58,10 +54,7 @@ export default class ResourceSelect extends React.Component<SelectProps, any> {
     );
   };
 
-  private sortItems: ItemListPredicate<Resource> = (
-    query,
-    resources: Resource[]
-  ) => {
+  private sortItems = (resources: Resource[]) =>
     resources.sort((r1, r2) => {
       const name1 = r1.definition.name.toLowerCase();
       const name2 = r2.definition.name.toLowerCase();
@@ -69,8 +62,6 @@ export default class ResourceSelect extends React.Component<SelectProps, any> {
       if (name1 > name2) return 1;
       return 0;
     });
-    return resources;
-  };
 
   private displayItem = function(resource: Resource): string {
     return resource.definition ? resource.definition.name : 'None';
@@ -92,12 +83,11 @@ export default class ResourceSelect extends React.Component<SelectProps, any> {
         disabled={!!disabled}
         displayItem={this.displayItem}
         filterItems={this.filterByName}
-        sortItems={this.sortItems}
         loading={loading}
         icon={icon}
         inputItem={inputItem}
         intent={intent}
-        items={items}
+        items={this.sortItems(items)}
         onChange={onChange}
         popoverProps={{
           autoFocus: true,
