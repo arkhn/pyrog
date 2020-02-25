@@ -112,12 +112,17 @@ const structurize = (fhirDefinition: any): CachedDefinition => {
       // intermediary .$children between levels (for instance, Patient.contact.name becomes
       // contact.$children.name)
       const name = element.id.split('.').pop()
-      const path: string = element.id
+      let path: string = element.path
         .split('.')
         .slice(1)
         .join('.$children.')
         .replace('[x]', '') // if the element has mutliple types, prevent loadash from setting an 'x' element in the object.
 
+      if (element.sliceName) {
+        // This element is a slice definition.
+        // Enrich the exising definition with the $slice keyword.
+        path = `${path}.$slice.${element.sliceName}`
+      }
       // Set element properties
       set(res, `${path}.name`, name)
       for (const property of elementProperties) {
@@ -150,4 +155,12 @@ const metaProperties = [
   'derivation',
   'publisher',
 ]
-const elementProperties = ['definition', 'min', 'max', 'type', 'constraint']
+const elementProperties = [
+  'definition',
+  'min',
+  'max',
+  'type',
+  'constraint',
+  'slicing',
+  'sliceName',
+]
