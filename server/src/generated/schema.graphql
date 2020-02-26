@@ -356,15 +356,19 @@ input StringFilter {
 }
 
 type StructureDefinition {
+  derivation: String!
+
   """Structured version of a definition"""
   display: JSON!
   id: String!
+  kind: String!
   name: String!
 
   """List of profiles on this resource"""
   profiles: [StructureDefinition!]!
   publisher: String!
   type: String!
+  url: String!
 }
 
 input StructureDefinitionWhereFilter {

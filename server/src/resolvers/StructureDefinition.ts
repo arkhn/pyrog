@@ -33,6 +33,27 @@ export const StructureDefinition = objectType({
       },
     })
 
+    t.field('derivation', {
+      type: 'String',
+      resolve: (parent: any) => {
+        return parent.def.$meta.derivation
+      },
+    })
+
+    t.field('kind', {
+      type: 'String',
+      resolve: (parent: any) => {
+        return parent.def.$meta.kind
+      },
+    })
+
+    t.field('url', {
+      type: 'String',
+      resolve: (parent: any) => {
+        return parent.def.$meta.url
+      },
+    })
+
     t.field('publisher', {
       type: 'String',
       resolve: (parent: any) => {
