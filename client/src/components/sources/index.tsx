@@ -22,6 +22,7 @@ import { changeSelectedSource } from 'services/selectedNode/actions';
 import { HTTP_BACKEND_URL } from '../../constants';
 
 import './style.scss';
+import { ReactElement } from 'react';
 
 interface Source {
   name: string;
@@ -91,6 +92,50 @@ const SourcesView = () => {
     });
   };
 
+  function renderSource(source: any, index: number): ReactElement {
+    return (
+      <Card
+        elevation={Elevation.TWO}
+        interactive={true}
+        key={index}
+        onClick={(): Promise<void> => onClickedSource(source)}
+      >
+        <div className="card-header">
+          <h2>
+            {source.template.name} - {source.name}
+          </h2>
+          <Button
+            icon={'delete'}
+            loading={deletingSource && sourceToDelete?.id === source.id}
+            minimal={true}
+            onClick={(e: React.MouseEvent) => {
+              e.stopPropagation();
+              setSourceToDelete(source);
+            }}
+          />
+        </div>
+        <div className="tags">
+          <Tag>DPI</Tag>
+          <Tag>Généraliste</Tag>
+          <Tag>Prescription</Tag>
+        </div>
+
+        <div>
+          <div className="flexbox">
+            <span>
+              <Icon icon="layout-hierarchy" color="#5C7080" />
+              <span>{source.mappingProgress[0]} Ressources</span>
+            </span>
+            <span>
+              <Icon icon="tag" color="#5C7080" />
+              <span>{source.mappingProgress[1]} Attributs</span>
+            </span>
+          </div>
+        </div>
+      </Card>
+    );
+  }
+
   return (
     <div>
       <Navbar />
@@ -109,51 +154,9 @@ const SourcesView = () => {
           {loadingSources ? (
             <Spinner />
           ) : (
-            dataSources.sources.map((source: any, index: number) => {
-              return (
-                <Card
-                  elevation={Elevation.TWO}
-                  interactive={true}
-                  key={index}
-                  onClick={(): Promise<void> => onClickedSource(source)}
-                >
-                  <div className="card-header">
-                    <h2>
-                      {source.template.name} - {source.name}
-                    </h2>
-                    <Button
-                      icon={'delete'}
-                      loading={
-                        deletingSource && sourceToDelete?.id === source.id
-                      }
-                      minimal={true}
-                      onClick={(e: React.MouseEvent) => {
-                        e.stopPropagation();
-                        setSourceToDelete(source);
-                      }}
-                    />
-                  </div>
-                  <div className="tags">
-                    <Tag>DPI</Tag>
-                    <Tag>Généraliste</Tag>
-                    <Tag>Prescription</Tag>
-                  </div>
-
-                  <div>
-                    <div className="flexbox">
-                      <span>
-                        <Icon icon="layout-hierarchy" color="#5C7080" />
-                        <span>{source.mappingProgress[0]} Ressources</span>
-                      </span>
-                      <span>
-                        <Icon icon="tag" color="#5C7080" />
-                        <span>{source.mappingProgress[1]} Attributs</span>
-                      </span>
-                    </div>
-                  </div>
-                </Card>
-              );
-            })
+            dataSources.sources.map((source: any, index: number) =>
+              renderSource(source, index)
+            )
           )}
         </div>
         <Alert
