@@ -5,6 +5,9 @@ import Multer, { diskStorage } from 'multer'
 import * as fs from 'fs'
 import { SCHEMAS_DIR } from '../constants'
 
+if (!SCHEMAS_DIR) {
+  throw new Error('Error: SCHEMA_DIR must be defined first!');
+}
 
 if (!fs.existsSync(SCHEMAS_DIR)) {
   fs.mkdirSync(SCHEMAS_DIR);
