@@ -5,6 +5,11 @@ import Multer, { diskStorage } from 'multer'
 import * as fs from 'fs'
 import { SCHEMAS_DIR } from '../constants'
 
+
+if (!fs.existsSync(SCHEMAS_DIR)) {
+  fs.mkdirSync(SCHEMAS_DIR);
+}
+
 const storage = diskStorage({
   destination(req, file, cb) {
     cb(null, `${SCHEMAS_DIR!}/`)
