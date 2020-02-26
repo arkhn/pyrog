@@ -422,12 +422,15 @@ export interface NexusGenFieldTypes {
     version: string | null; // String
   }
   StructureDefinition: { // field return type
+    derivation: string; // String!
     display: any; // JSON!
     id: string; // String!
+    kind: string; // String!
     name: string; // String!
     profiles: NexusGenRootTypes['StructureDefinition'][]; // [StructureDefinition!]!
     publisher: string; // String!
     type: string; // String!
+    url: string; // String!
   }
   Template: { // field return type
     createdAt: any; // DateTime!
