@@ -9,16 +9,16 @@ const main = async (outputDirectory: string) => {
     mkdirSync(outputDirectory)
   }
 
-  let sources = await photon.sources.findMany()
+  const sources = await photon.sources.findMany()
+  console.log(`-> Exporting ${sources.length} source(s)...`)
   for (const source of sources) {
-    console.log('source:', source)
     const content = await exportMapping(photon, source.id)
     writeFileSync(`${outputDirectory}/${source.id}.json`, content)
   }
 }
 
 if (process.argv.length != 3) {
-  console.log('USAGE:\n> yarn export:mapping <DIRECTORY_TO_STORE_EXPORTS>')
+  console.log('USAGE:\n> yarn export:mappings <DIRECTORY_TO_STORE_EXPORTS>')
   process.exit(1)
 }
 
