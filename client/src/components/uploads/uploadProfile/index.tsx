@@ -4,8 +4,9 @@ import { Dialog, Button } from '@blueprintjs/core';
 import { ErrorObject } from 'ajv';
 import axios from 'axios';
 
-import { FHIR_API_URL } from '../../constants';
-import { validate } from './validate';
+import { FHIR_API_URL } from '../../../constants';
+import fhirSchema from './StructureDefinition.schema.json';
+import { validator } from '../validate';
 
 import './style.scss';
 
@@ -35,6 +36,8 @@ const findMissingAttributes = (profile: any) =>
 
 const formatErrors = (errors: ErrorObject[]): string[] =>
   errors.map(err => `${err.message}: ${Object.values(err.params).join(',')}`);
+
+const validate = validator(fhirSchema);
 
 const UploadProfile = ({ isOpen, resource, onClose, onUpload }: Props) => {
   const {

@@ -52,8 +52,14 @@ $window-padding: 20px;
     .head-col {
       width: 5%;
     }
+    .source-col {
+      width: 40%;
+    }
     .equivalence-col {
       width: 15%;
+    }
+    .target-col {
+      width: 40%;
     }
 
     .bp3-button {
@@ -77,5 +83,4 @@ $window-padding: 20px;
       margin: 10px auto;
     }
   }
-
 }
