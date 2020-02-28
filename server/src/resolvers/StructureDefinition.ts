@@ -15,67 +15,62 @@ export const StructureDefinition = objectType({
     t.field('id', {
       type: 'String',
       resolve: (parent: any) => {
-        return parent.def.$meta.id
+        return parent.$meta.id
       },
     })
 
     t.field('type', {
       type: 'String',
       resolve: (parent: any) => {
-        return parent.def.$meta.type
+        return parent.$meta.type
       },
     })
 
     t.field('name', {
       type: 'String',
       resolve: (parent: any) => {
-        return parent.def.$meta.name
+        return parent.$meta.name
       },
     })
 
     t.field('derivation', {
       type: 'String',
       resolve: (parent: any) => {
-        return parent.def.$meta.derivation
+        return parent.$meta.derivation
       },
     })
 
     t.field('kind', {
       type: 'String',
       resolve: (parent: any) => {
-        return parent.def.$meta.kind
+        return parent.$meta.kind
       },
     })
 
     t.field('url', {
       type: 'String',
       resolve: (parent: any) => {
-        return parent.def.$meta.url
+        return parent.$meta.url
       },
     })
 
     t.field('publisher', {
       type: 'String',
       resolve: (parent: any) => {
-        return parent.def.$meta.publisher
+        return parent.$meta.publisher
       },
     })
 
     t.field('display', {
       type: 'JSON',
       description: 'Structured version of a definition',
-      resolve: (parent: any) => {
-        return parent.def
-      },
+      resolve: (parent: any) => parent,
     })
 
     t.list.field('profiles', {
       type: 'StructureDefinition',
       description: 'List of profiles on this resource',
-      resolve: async (parent: any) => {
-        const res = await resourceProfiles(parent.def.$meta.type)
-        return res.map(graphqlize)
-      },
+      resolve: async (parent: any) => resourceProfiles(parent.$meta.type),
     })
   },
 })
@@ -96,7 +91,7 @@ export const searchDefinitions: FieldResolver<
       'Can only use filters derivation and kind together, and type alone',
     )
   }
-  return res.map(graphqlize)
+  return res
 }
 
 export const refreshDefinition: FieldResolver<
@@ -107,14 +102,8 @@ export const refreshDefinition: FieldResolver<
     const { data } = await axios.get(
       `${FHIR_API_URL}/StructureDefinition/${definitionId}`,
     )
-    const def = await cacheDefinition(data)
-    return graphqlize(def)
+    return cacheDefinition(data)
   } catch (err) {
     throw new Error(err.response ? err.response.data : err.message)
   }
 }
-
-const graphqlize = (r: CachedDefinition) => ({
-  id: r.$meta.id,
-  def: r,
-})

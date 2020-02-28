@@ -3,12 +3,15 @@ import { Photon } from '@prisma/photon'
 import {
   MAPPING_VERSION_1,
   MAPPING_VERSION_2,
-  CURRENT_MAPPING_VERSION,
   MAPPING_VERSION_3,
+  MAPPING_VERSION_4,
+  CURRENT_MAPPING_VERSION,
 } from '../../constants'
 import handleV1 from './v1'
 import handleV2 from './v2'
 import handleV3 from './v3'
+import handleV4 from './v4'
+import { getDefinition } from 'fhir'
 
 // copy all the resources from the mapping and their attributes.
 // this is done through a single query matching the graph of the mapping.
@@ -31,6 +34,8 @@ export const importMapping = async (
       return handleV2(photon, sourceId, resources)
     case MAPPING_VERSION_3:
       return handleV3(photon, sourceId, resources)
+    case MAPPING_VERSION_4:
+      return handleV4(photon, sourceId, resources)
     default:
       throw new Error(`Unknown mapping version: "${version}"`)
   }
@@ -48,7 +53,7 @@ export const exportMapping = async (
     throw new Error(`source ${sourceId} does not exist`)
   }
 
-  const resources = await photon.resources({
+  let resources = await photon.resources({
     where: { source: { id: source.id } },
     include: {
       attributes: {
@@ -64,6 +69,23 @@ export const exportMapping = async (
       },
     },
   })
+
+  // augment the mapping of each resource with its definition
+  // and its source id. This is now required by fhir-pipe when
+  // running from a mapping file.
+  resources = await Promise.all(
+    resources.map(async r => {
+      const def = await getDefinition(r.definitionId)
+      return {
+        ...r,
+        definition: def?.$meta,
+        source: {
+          id: sourceId,
+        },
+      }
+    }),
+  )
+
   return JSON.stringify({
     source: { name: source.name, hasOwner: source.hasOwner },
     template: { name: source.template.name },

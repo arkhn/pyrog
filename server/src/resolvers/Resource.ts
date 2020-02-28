@@ -22,10 +22,7 @@ export const Resource = objectType({
         if (!def) {
           throw new Error(`missing definition ${parent.definitionId}`)
         }
-        return {
-          def,
-          id: parent.definitionId,
-        }
+        return def
       },
     })
 

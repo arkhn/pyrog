@@ -1,7 +1,7 @@
 import { Photon } from '@prisma/photon'
 
-import importMappingV3 from './v3'
-import * as mappingV3 from '../../../test/fixtures/chimio-mapping-v3.json'
+import importMappingV4 from './v4'
+import * as mappingV4 from '../../../test/fixtures/chimio-mapping-v4.json'
 
 const mockCreateResource = jest.fn()
 jest.mock('@prisma/photon', () => ({
@@ -12,24 +12,24 @@ jest.mock('@prisma/photon', () => ({
   })),
 }))
 
-describe('import mapping V3', () => {
+describe('import mapping V4', () => {
   const sourceId = '01234567'
   const resourceCount = 2
-  const { resources } = mappingV3 as any
+  const { resources } = mappingV4 as any
 
   beforeEach(() => {
     mockCreateResource.mockClear()
   })
 
   it('should send a query per resource', async () => {
-    await importMappingV3(new Photon(), sourceId, resources)
+    await importMappingV4(new Photon(), sourceId, resources)
     expect(mockCreateResource).toHaveBeenCalledTimes(resourceCount)
     expect(mockCreateResource.mock.calls[0]).toMatchSnapshot() // EpisodeOfCare - HopitalStay
     expect(mockCreateResource.mock.calls[1]).toMatchSnapshot() // Patient
   })
 
   it('should have cleaned the resource and attributes', async () => {
-    await importMappingV3(new Photon(), sourceId, resources)
+    await importMappingV4(new Photon(), sourceId, resources)
     expect(mockCreateResource.mock.calls[0][0]).toEqual({
       data: {
         label: resources[0].label,
