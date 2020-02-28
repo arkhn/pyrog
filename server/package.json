@@ -13,11 +13,11 @@
     "generate:nexus": "ts-node --project tsconfig.build.json -r tsconfig-paths/register --transpile-only src/schema",
     "dev": "env $(cat .env) ts-node-dev --project tsconfig.build.json -r tsconfig-paths/register --no-notify --respawn --transpileOnly src/server",
     "lint": "eslint './src/**/*.ts'",
-    "migrate": "prisma2 lift up",
+    "migrate": "yarn -s run export:mappings && prisma2 lift up",
     "seed:superuser": "env $(cat .env) ts-node scripts/superuser.ts",
     "seed:mapping": "env $(cat .env) ts-node scripts/importMapping.ts",
     "seed:definitions": "env $(cat .env) ts-node scripts/fhirDefinitions.ts $(ls fhir/*.json)",
-    "export:mapping": "env $(cat .env) ts-node scripts/exportMapping.ts",
+    "export:mappings": "ts-node scripts/exportMapping.ts backup",
     "test": "jest --max-workers 1 --watch",
     "test:ci": "jest --max-workers 1 --coverage",
     "wait:db": "ts-node scripts/waitForDb.ts"

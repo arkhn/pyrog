@@ -13,6 +13,7 @@ services:
       - postgres
     volumes:
       - schemas:/home/node/app/schemas
+      - ./backup:/home/node/app/backup
     networks:
       - arkhn
 
