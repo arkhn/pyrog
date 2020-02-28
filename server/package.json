@@ -17,6 +17,7 @@
     "seed:superuser": "env $(cat .env) ts-node scripts/superuser.ts",
     "seed:mapping": "env $(cat .env) ts-node scripts/importMapping.ts",
     "seed:definitions": "env $(cat .env) ts-node scripts/fhirDefinitions.ts $(ls fhir/*.json)",
+    "export:mapping": "env $(cat .env) ts-node scripts/exportMapping.ts",
     "test": "jest --max-workers 1 --watch",
     "test:ci": "jest --max-workers 1 --coverage",
     "wait:db": "ts-node scripts/waitForDb.ts"
