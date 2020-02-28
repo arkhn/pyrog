@@ -68,6 +68,13 @@ export class Node {
     // if element has an index, return the index in brackets
     if (this.parent?.isArray) return `[${this.index}]`;
 
+    if (
+      this.definition.sliceName &&
+      this.parent?.definition.name.includes('[x]')
+    ) {
+      return this.definition.sliceName;
+    }
+
     // if the parent has multiple types, use the type in camelCase
     if (this.parent && this.parent.types.length > 1)
       return this.definition.name.replace(
@@ -89,7 +96,11 @@ export class Node {
     }
 
     // if parent is a multi-type node, we don't want to render the parent
-    if (this.parent.types.length > 1) {
+    if (
+      this.parent.types.length > 1 ||
+      (this.parent.definition.slicing &&
+        this.parent.definition.name.includes('[x]'))
+    ) {
       return this.parent.parent
         ? `${this.parent.parent.serialize()}.${this.tail()}`
         : this.tail();

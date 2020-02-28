@@ -11,7 +11,8 @@ import { useMutation } from '@apollo/react-hooks';
 import { useSelector, useDispatch } from 'react-redux';
 
 import ColumnPicker from '../../ColumnPicker';
-import TableViewer from '../TableViewer';
+import TableViewer from './TableViewer';
+import FhirPreview from './FhirPreview';
 
 import { IReduxStore, SelectedAttribute, ISelectedSource } from 'types';
 import { loader } from 'graphql.macro';
@@ -51,9 +52,13 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
   const [owner, setOwner] = React.useState('');
   const [table, setTable] = React.useState('');
   const [column, setColumn] = React.useState('');
-  const [tableIsLoading, setTableIsLoading] = React.useState(false);
+  const [isTableLoading, setIsTableLoading] = React.useState(false);
   const [rows, setRows] = React.useState([]);
   const [fields, setFields] = React.useState([]);
+  const [fhirPreviewEnabled, setFhirPreviewEnabled] = React.useState(false);
+  const [fhirPreviewRowId, setFhirPreviewRowId] = React.useState(
+    undefined as number | undefined
+  );
 
   const [createAttribute] = useMutation(mCreateAttribute);
   const [createSQLInput, { loading: creatingSQLInput }] = useMutation(
@@ -109,9 +114,15 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
       update: addInputToCache
     });
   };
+
+  const previewFhirObject = (rowId: number) => {
+    setFhirPreviewRowId(rowId);
+    setFhirPreviewEnabled(true);
+  };
+
   React.useEffect(() => {
     if (source && source.credential && table) {
-      setTableIsLoading(true);
+      setIsTableLoading(true);
       axios
         .get(
           `${PAGAI_URL}/explore/${source.credential.id}/${
@@ -119,12 +130,12 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
           }${table}`
         )
         .then((res: any) => {
-          setTableIsLoading(false);
+          setIsTableLoading(false);
           setRows(res.data.rows);
           setFields(res.data.fields);
         })
         .catch((err: any) => {
-          setTableIsLoading(false);
+          setIsTableLoading(false);
           const { error } = err.response.data;
           toaster.show({
             message: error || err.response.statusText,
@@ -156,10 +167,12 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
               setOwner(e);
               setTable('');
               setColumn('');
+              setFhirPreviewEnabled(false);
             }}
             tableChangeCallback={(e: string) => {
               setTable(e);
               setColumn('');
+              setFhirPreviewEnabled(false);
             }}
             columnChangeCallback={(e: string) => {
               setColumn(e);
@@ -174,7 +187,14 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
           />
         </ControlGroup>
       </FormGroup>
-      <TableViewer fields={fields} rows={rows} isLoading={tableIsLoading} />
+      <TableViewer
+        selectedTable={table}
+        fields={fields}
+        rows={rows}
+        isTableLoading={isTableLoading}
+        previewFhirObject={previewFhirObject}
+      />
+      {fhirPreviewEnabled && <FhirPreview rowId={fhirPreviewRowId!} />}
     </Card>
   );
 };

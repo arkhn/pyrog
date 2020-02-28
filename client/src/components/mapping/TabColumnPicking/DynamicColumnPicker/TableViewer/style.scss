@@ -1,0 +1,9 @@
+@import '~@blueprintjs/table/lib/css/table.css';
+
+.previewButton {
+  color: rgb(218, 115, 20);
+  :hover {
+    color: red;
+    cursor: pointer;
+  }
+}

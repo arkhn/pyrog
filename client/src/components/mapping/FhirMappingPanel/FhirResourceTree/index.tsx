@@ -176,8 +176,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
 
   const buildChildNodesForArray = (
     parent: Node,
-    definition: any,
-    contentChildren: ITreeNode<Node>[]
+    definition: any
   ): ITreeNode<Node>[] => {
     // Check if there are already existing attributes for this node
     const endNodeKey = parent.serialize().length + 1;
@@ -200,10 +199,18 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
 
     // create a node for each item of the array
     return existingChildrenIndices.map(childIndex => {
-      const childNode = new Node(parent, definition, childIndex);
+      let childNode: Node;
+      if (definition.$slice)
+        childNode = new Node(
+          parent,
+          Object.values(definition.$slice)[0],
+          childIndex
+        );
+      else childNode = new Node(parent, definition, childIndex);
+
       return createNode(
         childNode,
-        genTreeLevel(contentChildren || {}, childNode),
+        genTreeLevel(definition.$children || {}, childNode),
         undefined,
         () => setNodes(nodes => deleteNodeFromArray(nodes, childNode))
       );
@@ -218,36 +225,42 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     });
 
   const buildNodeFromDefinition = (
-    display: any,
+    definition: any,
     parent?: Node
   ): ITreeNode<Node> => {
-    // NOTE pb in parsing, remove this when solved
-    // display = display.x ? display.x : display;
-    const path = new Node(parent, display);
+    const node = new Node(parent, definition);
 
     let childNodes: ITreeNode<Node>[];
 
-    if (path.types.length > 1) {
+    if (node.types.length > 1) {
       // if the node has multiple types, we have to create as many
       // children as there  are types.
-      childNodes = buildMultiTypeNode(display, path!);
-    } else if (path.isArray) {
+      childNodes = buildMultiTypeNode(definition, node!);
+    } else if (node.isArray) {
       // If node is array, we need to replicate the root node for this type
       // childNode will be the node really having the structure defined by
       // the structure definition.
-      childNodes = buildChildNodesForArray(path, display, display.$children);
-    } else if (display.$children) {
+      childNodes = buildChildNodesForArray(node, definition);
+    } else if (node.definition.$slice) {
+      // if the node is a slicing, generate the sliced children
+      childNodes = genSlicedChildren(node.definition.$slice, node);
+    } else if (node.definition.$children) {
       // if the node has children we already know about, create them.
-      childNodes = genTreeLevel(display.$children, path);
+      childNodes = genTreeLevel(node.definition.$children, node);
     } else {
       // otherwise the node has no children for now.
       childNodes = [];
     }
 
-    return createNode(path, childNodes, () =>
-      setNodes(nodes => addNodeToArray(nodes, path, display.$children))
+    return createNode(node, childNodes, () =>
+      setNodes(nodes => addNodeToArray(nodes, node, definition.$children))
     );
   };
+
+  const genSlicedChildren = (slices: any, parent: Node): ITreeNode<Node>[] =>
+    Object.values(slices).map(sliceDef =>
+      buildNodeFromDefinition(sliceDef, parent)
+    );
 
   const genTreeLevel = (display: any, parent?: Node): ITreeNode<Node>[] => {
     return (

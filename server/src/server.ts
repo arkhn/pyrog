@@ -20,7 +20,7 @@ register(server.express)
 const options: Options = {
   cors: {
     origin: '*',
-    methods: ['GET', 'POST'],
+    methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Authorization', 'Content-Type'],
   },
   bodyParserOptions: { limit: '10mb', type: 'application/json' },

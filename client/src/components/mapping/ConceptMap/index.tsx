@@ -481,7 +481,7 @@ const ConceptMapDialog = ({
       setConceptMapTitle(existingConceptMap.title);
       setConceptMapDescription(existingConceptMap.description);
     }
-  }, [sourceSystemTitle, selectedTargetSystem]);
+  }, [sourceSystemTitle, selectedTargetSystem, existingConceptMaps]);
 
   return (
     <React.Fragment>

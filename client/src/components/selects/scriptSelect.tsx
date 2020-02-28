@@ -1,9 +1,5 @@
-import {
-  ItemListPredicate,
-  ItemPredicate,
-  ItemRenderer
-} from '@blueprintjs/select';
-import { MenuItem, Button, ButtonGroup } from '@blueprintjs/core';
+import { ItemPredicate, ItemRenderer } from '@blueprintjs/select';
+import { MenuItem, Button, ButtonGroup, Position } from '@blueprintjs/core';
 import * as React from 'react';
 import { loader } from 'graphql.macro';
 
@@ -28,31 +24,25 @@ interface Props {
   onClear: Function;
 }
 
-const filterByName: ItemPredicate<Script> = (query, item) => {
-  return `${item.name.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0;
-};
+const filterByName: ItemPredicate<Script> = (query, item) =>
+  item.name.toLowerCase().indexOf(query.toLowerCase()) >= 0;
 
-const sortItems: ItemListPredicate<Script> = (query, resources: Script[]) => {
-  resources.sort((s1, s2) => {
+const sortItems = (scripts: Script[]) =>
+  scripts.sort((s1, s2) => {
     const name1 = s1.name.toLowerCase();
     const name2 = s2.name.toLowerCase();
     if (name1 < name2) return -1;
     if (name1 > name2) return 1;
     return 0;
   });
-  return resources;
-};
 
-const renderItem: ItemRenderer<Script> = (
-  item,
-  { handleClick, modifiers, query }
-) => {
+const renderItem: ItemRenderer<Script> = (item, { handleClick }) => {
   return (
     <MenuItem
       key={item.name}
       onClick={handleClick}
-      label={item.name}
-      text={item.description}
+      label={item.description}
+      text={item.name}
     />
   );
 };
@@ -64,10 +54,13 @@ const ScriptSelect = ({
   onClear
 }: Props) => {
   const { loading: queryLoading, data } = useQuery(cleaningScripts);
-  let items: Script[] = [];
-  if (data && data.cleaningScripts) {
-    items = data.cleaningScripts.scripts;
-  }
+  const [items, setItems] = React.useState([] as Script[]);
+  React.useEffect(() => {
+    if (data && data.cleaningScripts) {
+      setItems(data.cleaningScripts.scripts);
+    }
+  }, [data]);
+
   return (
     <ButtonGroup>
       <TSelect<Script>
@@ -75,13 +68,20 @@ const ScriptSelect = ({
         displayItem={({ name }: Script): string => {
           return name || 'None';
         }}
-        sortItems={sortItems}
         filterItems={filterByName}
         loading={loading || queryLoading}
         inputItem={{ name: selectedScript }}
-        items={items}
+        items={sortItems(items)}
         onChange={(script: Script): void => onChange(script.name)}
         renderItem={renderItem}
+        popoverProps={{
+          autoFocus: true,
+          boundary: 'viewport',
+          canEscapeKeyClose: true,
+          lazy: true,
+          position: Position.RIGHT_TOP,
+          usePortal: true
+        }}
       />
       <Button
         className="delete-button"
