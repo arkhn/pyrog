@@ -41,7 +41,7 @@ const FhirpipeView = () => {
   const [selectedSource, setSelectedSource] = useState({} as Source);
   const [selectedResources, setSelectedResources] = useState([] as Resource[]);
   const [bypassValidation, setBypassValidation] = useState(false);
-  const [resetStore, setResetStore] = useState(false);
+  const [override, setOverride] = useState(false);
   const [multiprocessing, setMultiprocessing] = useState(false);
   const [running, setRunning] = useState(false);
 
@@ -125,7 +125,7 @@ const FhirpipeView = () => {
     setRunning(true);
 
     // The possible params for running fhirpipe are:
-    // mapping, sources, resources, labels, reset_store,
+    // mapping, sources, resources, labels, override,
     // chunksize, bypass_validation, multiprocessing
     // It is also needed to provide credentialId
     const body = {
@@ -134,7 +134,7 @@ const FhirpipeView = () => {
       labels: selectedResources.map(r => r.label),
       credentialId: credentials.id,
       bypass_validation: bypassValidation,
-      reset_store: resetStore,
+      override: override,
       multiprocessing: multiprocessing
     };
     const headers = { 'Content-Type': 'application/json' };
@@ -224,9 +224,9 @@ const FhirpipeView = () => {
             {/* TODO utlimately, these options should only be accessible to admin users. */}
             <div>
               <Switch
-                checked={resetStore}
-                label="reset_store"
-                onChange={(): void => setResetStore(prev => !prev)}
+                checked={override}
+                label="override"
+                onChange={(): void => setOverride(prev => !prev)}
               />
               <Switch
                 checked={bypassValidation}
