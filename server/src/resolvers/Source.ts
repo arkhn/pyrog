@@ -94,6 +94,11 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
       credential: true,
       resources: {
         include: {
+          filters: {
+            include: {
+              sqlColumn: true,
+            },
+          },
           attributes: {
             include: {
               inputs: {
@@ -122,6 +127,12 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
   }
   await Promise.all(
     source!.resources.map(async r => {
+      await Promise.all(
+        r.filters.map(async f => {
+          await ctx.photon.filters.delete({ where: { id: f.id } })
+          ctx.photon.columns.delete({ where: { id: f.sqlColumn.id } })
+        }),
+      )
       await Promise.all(
         r.attributes.map(async a => {
           await Promise.all(

@@ -57,6 +57,11 @@ export const deleteResource: FieldResolver<
   const res = await ctx.photon.resources.findOne({
     where: { id },
     include: {
+      filters: {
+        include: {
+          sqlColumn: true,
+        },
+      },
       attributes: {
         include: {
           inputs: {
@@ -76,6 +81,13 @@ export const deleteResource: FieldResolver<
       },
     },
   })
+
+  await Promise.all(
+    res!.filters.map(async f => {
+      await ctx.photon.filters.delete({ where: { id: f.id } })
+      ctx.photon.columns.delete({ where: { id: f.sqlColumn.id } })
+    }),
+  )
   await Promise.all(
     res!.attributes.map(async a => {
       await Promise.all(
