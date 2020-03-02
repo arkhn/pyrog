@@ -1,1 +1,1069 @@
-{"source":{"name":"APHP2","hasOwner":false},"template":{"name":"Mimic"},"resources":[{"id":"ck6c9hoc1000152le3mpxrij5","label":"Hospital Stay","primaryKeyOwner":"OPS$ACHQ1ABC","primaryKeyTable":"SEJOUR","primaryKeyColumn":"SECLEUNIK","definitionId":"EpisodeOfCare","updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","attributes":[{"id":"ck6c9hoc2000352led1h9n1gl","path":"managingOrganization.reference","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","inputs":[{"id":"ck6c9hoc4000552lekea0bofi","script":null,"staticValue":"internal","updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","sqlValue":null}]},{"id":"ck6c9hoc5000752le321rtzum","path":"managingOrganization.identifier.system","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","inputs":[{"id":"ck6c9hoc6000852le9bkw5vpl","script":null,"staticValue":"/Organization/{id}","updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","sqlValue":null}]},{"id":"ck6c9hoc7001052lesc6wjvog","path":"managingOrganization.identifier.value","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","inputs":[{"id":"ck6c9hoc9001452leo6e9yb96","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","sqlValue":{"id":"ck6c9hoc8001252levrrp3u2n","owner":"OPS$ACHQ1ABC","table":"SEJOUR","column":"SERVICE","updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","joins":[]}}]},{"id":"ck6c9hoca001652le76agyk8f","path":"status","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","inputs":[{"id":"ck6c9hocb002052leixa44qa3","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","sqlValue":{"id":"ck6c9hoca001852lew9ac5n7m","owner":"OPS$ACHQ1ABC","table":"SEJOUR","column":"ETATSEJ","updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","joins":[]}}]},{"id":"ck6c9hocc002252le63ofcgq0","path":"identifier[0].value","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","inputs":[{"id":"ck6c9hocd002652leouc49vj3","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","sqlValue":{"id":"ck6c9hocc002452lexxtwjeft","owner":"OPS$ACHQ1ABC","table":"SEJOUR","column":"SECLEUNIK","updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","joins":[]}}]},{"id":"ck6c9hoce002852le5v42jzjk","path":"identifier[1].value","mergingScript":"select_first_not_empty","comments":null,"updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","inputs":[{"id":"ck6c9hocf003252le2mown7tf","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","sqlValue":{"id":"ck6c9hocf003052lehrkb8axg","owner":"OPS$ACHQ1ABC","table":"SEJOUR","column":"ADMISSION","updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","joins":[]}},{"id":"ck6c9hoch003752lei1n64rxe","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","sqlValue":{"id":"ck6c9hocg003452ler5l7qgy4","owner":"OPS$ACHQ1ABC","table":"SEJOUR","column":"ADMISSION2","updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","joins":[]}}]},{"id":"ck6c9hoci003952le9b633z11","path":"type[0].coding[0].code","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","inputs":[{"id":"ck6c9hock004352lenbkq8o0g","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","sqlValue":{"id":"ck6c9hocj004152lejdas9vs2","owner":"OPS$ACHQ1ABC","table":"SEJOUR","column":"TWCLEUNIK","updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","joins":[]}}]},{"id":"ck6c9hock004552le6lgilo3o","path":"type[0].coding[0].display","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","inputs":[{"id":"ck6c9hocp005652lehp1rqae7","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","sqlValue":{"id":"ck6c9hocl004752le7e35xfg6","owner":"OPS$ACHQ1ABC","table":"TYPESEJ","column":"LIBELTW","updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","joins":[{"id":"ck6c9hocm004952leyc8yzswc","updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","tables":[{"id":"ck6c9hoco005252le1oeeayts","owner":"OPS$ACHQ1ABC","table":"SEJOUR","column":"TWCLEUNIK","updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z"},{"id":"ck6c9hocp005452le5p7nlip3","owner":"OPS$ACHQ1ABC","table":"TYPESEJ","column":"TWCLEUNIK","updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z"}]}]}}]},{"id":"ck6c9hocq005852leuaz6wxc5","path":"period.end","mergingScript":"merge_concat","comments":null,"updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","inputs":[{"id":"ck6c9hocr006252lelobc8hvd","script":"clean_date","staticValue":null,"updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","sqlValue":{"id":"ck6c9hocr006052leccm6bko8","owner":"OPS$ACHQ1ABC","table":"SEJOUR","column":"DATEOUT","updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","joins":[]}},{"id":"ck6c9hoct006652leerssakmc","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","sqlValue":{"id":"ck6c9hocs006452lepp9o4uvw","owner":"OPS$ACHQ1ABC","table":"SEJOUR","column":"HEUREOUT","updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","joins":[]}}]},{"id":"ck6c9hocu006852le8d202mfg","path":"period.start","mergingScript":"merge_concat","comments":null,"updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","inputs":[{"id":"ck6c9hocw007252ler30pmh00","script":"clean_date","staticValue":null,"updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","sqlValue":{"id":"ck6c9hocu007052lew1k5z6yq","owner":"OPS$ACHQ1ABC","table":"SEJOUR","column":"DATEIN","updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","joins":[]}},{"id":"ck6c9hocx007552le1dbrvsm5","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","sqlValue":{"id":"ck6c9hocw007352lemocjx2f6","owner":"OPS$ACHQ1ABC","table":"SEJOUR","column":"HEUREIN","updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","joins":[]}}]},{"id":"ck6c9hocy007752leei7i9gd9","path":"patient.reference","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","inputs":[{"id":"ck6c9hocy007952le5djvooph","script":null,"staticValue":"internal","updatedAt":"2020-02-07T14:25:11.279Z","createdAt":"2020-02-07T14:25:11.279Z","sqlValue":null}]},{"id":"ck6c9hocz008152leutkt1w8b","path":"patient.identifier.system","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","inputs":[{"id":"ck6c9hod0008352lesbiyay30","script":null,"staticValue":"/Patient/{id}","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":null}]},{"id":"ck6c9hod0008552le3kfhx1av","path":"patient.identifier.value","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","inputs":[{"id":"ck6c9hod2008952les07nukxh","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":{"id":"ck6c9hod1008752leqt7ftwb8","owner":"OPS$ACHQ1ABC","table":"SEJOUR","column":"PACLEUNIK","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","joins":[]}}]}]},{"id":"ck6c9hoc2000252le3554r26g","label":"","primaryKeyOwner":"OPS$ACHQ1ABC","primaryKeyTable":"PATIENT","primaryKeyColumn":"PACLEUNIK","definitionId":"Patient","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","attributes":[{"id":"ck6c9hoc3000452le66hv802c","path":"active","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","inputs":[{"id":"ck6c9hoc6000952lekmwr53z3","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":{"id":"ck6c9hoc5000652lev5bhu3c4","owner":"OPS$ACHQ1ABC","table":"PATIENT","column":"INACTIVPAT","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","joins":[]}}]},{"id":"ck6c9hoc7001152ledgis9hbo","path":"address[0].line[0]","mergingScript":"merge_concat","comments":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","inputs":[{"id":"ck6c9hoc9001552legdtofhey","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":{"id":"ck6c9hoc8001352leonr15aqd","owner":"OPS$ACHQ1ABC","table":"PATIENT","column":"ADR1PAT","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","joins":[]}},{"id":"ck6c9hoca001952lerxmg1pv8","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":{"id":"ck6c9hoca001752le2gh3usvw","owner":"OPS$ACHQ1ABC","table":"PATIENT","column":"ADR2PAT","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","joins":[]}},{"id":"ck6c9hocc002352le4c4l4a9f","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":{"id":"ck6c9hocb002152lefo615hje","owner":"OPS$ACHQ1ABC","table":"PATIENT","column":"ADR3PAT","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","joins":[]}}]},{"id":"ck6c9hocd002552le4om96bg8","path":"address[0].city","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","inputs":[{"id":"ck6c9hoce002952lezn4ub86x","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":{"id":"ck6c9hocd002752le5bchnc19","owner":"OPS$ACHQ1ABC","table":"PATIENT","column":"VILLEPAT","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","joins":[]}}]},{"id":"ck6c9hocf003152le4yxoz1xg","path":"address[0].postalCode","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","inputs":[{"id":"ck6c9hocg003552lexgb1tkj9","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":{"id":"ck6c9hocg003352le5y0hloph","owner":"OPS$ACHQ1ABC","table":"PATIENT","column":"CPOSTPAT","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","joins":[]}}]},{"id":"ck6c9hoch003652lexr7zle5u","path":"deceasedBoolean","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","inputs":[{"id":"ck6c9hocj004052leksupnvge","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":{"id":"ck6c9hoci003852leuzr1fwsu","owner":"OPS$ACHQ1ABC","table":"PATIENT","column":"INACTIVPAT","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","joins":[]}},{"id":"ck6c9hock004452lejs5itq4b","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":{"id":"ck6c9hocj004252lehdu4vjy0","owner":"OPS$ACHQ1ABC","table":"PATIENT","column":"IDMOTIFINAC","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","joins":[]}}]},{"id":"ck6c9hocl004652le77jkvctr","path":"deceasedDateTime","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","inputs":[{"id":"ck6c9hocn005052leur3xfow6","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":{"id":"ck6c9hocm004852ledhcj0jvb","owner":"OPS$ACHQ1ABC","table":"PATIENT","column":"DATEINACPAT","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","joins":[]}}]},{"id":"ck6c9hoco005152let11cu8xh","path":"telecom[0].value","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","inputs":[{"id":"ck6c9hocp005552lelmyfier1","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":{"id":"ck6c9hoco005352letl34ilih","owner":"OPS$ACHQ1ABC","table":"PATIENT","column":"TELPAT","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","joins":[]}}]},{"id":"ck6c9hocq005752lemi79hwo8","path":"name[0].use","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","inputs":[{"id":"ck6c9hocr005952leunnj787h","script":null,"staticValue":"official","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":null}]},{"id":"ck6c9hocr006152lek5hpyp6n","path":"name[0].family","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","inputs":[{"id":"ck6c9hoct006552le1h3p818o","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":{"id":"ck6c9hocs006352le5cwyv87w","owner":"OPS$ACHQ1ABC","table":"PATIENT","column":"NOMPAT","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","joins":[]}}]},{"id":"ck6c9hoct006752le4sinq2yy","path":"name[0].given[0]","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","inputs":[{"id":"ck6c9hocv007152leinhmtme6","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":{"id":"ck6c9hocu006952len22rag0q","owner":"OPS$ACHQ1ABC","table":"PATIENT","column":"PRENOMPAT","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","joins":[]}}]},{"id":"ck6c9hocw007452lexbg3xm7g","path":"name[1].use","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","inputs":[{"id":"ck6c9hocx007652le7eed6nzr","script":null,"staticValue":"maiden","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":null}]},{"id":"ck6c9hocy007852le22qf95lq","path":"name[1].family","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","inputs":[{"id":"ck6c9hocz008252leblj0aitl","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":{"id":"ck6c9hocy008052le469gcf0q","owner":"OPS$ACHQ1ABC","table":"PATIENT","column":"NOMJFPAT","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","joins":[]}}]},{"id":"ck6c9hod0008452lep12nluk0","path":"birthDate","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","inputs":[{"id":"ck6c9hod1008852leyrtzs6xv","script":"clean_date","staticValue":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":{"id":"ck6c9hod1008652leo1a6jji9","owner":"OPS$ACHQ1ABC","table":"PATIENT","column":"DATENAISPA","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","joins":[]}}]},{"id":"ck6c9hod2009052lerawxzddp","path":"gender","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","inputs":[{"id":"ck6c9hod3009252lexksll1gn","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":{"id":"ck6c9hod3009152le1a3leiuu","owner":"OPS$ACHQ1ABC","table":"PATIENT","column":"SEXEPAT","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","joins":[]}}]},{"id":"ck6c9hod4009352lej18xrum4","path":"identifier[0].type.coding[0].system","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","inputs":[{"id":"ck6c9hod5009452le6vvy7su0","script":null,"staticValue":"http://terminology.interopsante.org/CodeSystem/v2-0203","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":null}]},{"id":"ck6c9hod6009552le90c7xg7g","path":"identifier[0].type.coding[0].code","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","inputs":[{"id":"ck6c9hod6009652leqrc455cg","script":null,"staticValue":"PI","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":null}]},{"id":"ck6c9hod7009752lexnyw8dcc","path":"identifier[0].type.coding[0].display","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","inputs":[{"id":"ck6c9hod8009852letalwarm8","script":null,"staticValue":"Patient internal identifier","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":null}]},{"id":"ck6c9hod8009952leermgl3m7","path":"identifier[0].type.coding[0].userSelected","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","inputs":[{"id":"ck6c9hod9010052le1dvi0o6h","script":null,"staticValue":"false","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":null}]},{"id":"ck6c9hoda010152lez1jhdo5i","path":"identifier[0].value","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","inputs":[{"id":"ck6c9hodb010352leg9yadw4i","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":{"id":"ck6c9hoda010252lefpzij305","owner":"OPS$ACHQ1ABC","table":"PATIENT","column":"NOOBSPAT","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","joins":[]}}]},{"id":"ck6c9hodb010452levozo9ovy","path":"identifier[1].value","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","inputs":[{"id":"ck6c9hodd010652le77umzyt8","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":{"id":"ck6c9hodc010552lecxg5fmr4","owner":"OPS$ACHQ1ABC","table":"PATIENT","column":"PACLEUNIK","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","joins":[]}}]},{"id":"ck6c9hodd010752legfdvnpws","path":"identifier[2].value","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","inputs":[{"id":"ck6c9hode010952lep3mpphp5","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":{"id":"ck6c9hode010852leivckf58t","owner":"OPS$ACHQ1ABC","table":"PATIENT","column":"DOSSIERPAT","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","joins":[]}}]},{"id":"ck6c9hodf011052lev2uu0wdf","path":"identifier[2].period.start","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","inputs":[{"id":"ck6c9hodg011252leyt8loaju","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":{"id":"ck6c9hodf011152lewa4ytkor","owner":"OPS$ACHQ1ABC","table":"PATIENT","column":"DATEINPAT","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","joins":[]}}]},{"id":"ck6c9hodh011352lergwvx9ww","path":"identifier[2].period.end","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","inputs":[{"id":"ck6c9hodi011552lew9yrzfj2","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":{"id":"ck6c9hodh011452levbikpuqb","owner":"OPS$ACHQ1ABC","table":"PATIENT","column":"DATEOUTPAT","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","joins":[]}}]},{"id":"ck6c9hodi011652le98bg8htm","path":"managingOrganization.type","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","inputs":[{"id":"ck6c9hodj011752ler8wbayv7","script":null,"staticValue":"/Organization","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":null}]},{"id":"ck6c9hodk011852led97vwwii","path":"managingOrganization.identifier.system","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","inputs":[{"id":"ck6c9hodl011952lez7zo9gb7","script":null,"staticValue":"/Organization/{id}","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":null}]},{"id":"ck6c9hodl012052let1i8itnu","path":"managingOrganization.identifier.value","mergingScript":null,"comments":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","inputs":[{"id":"ck6c9hodm012252lesd4gu0ry","script":null,"staticValue":null,"updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","sqlValue":{"id":"ck6c9hodm012152leeg0q5s0u","owner":"OPS$ACHQ1ABC","table":"PATIENT","column":"CODESERV","updatedAt":"2020-02-07T14:25:11.280Z","createdAt":"2020-02-07T14:25:11.280Z","joins":[]}}]}]}],"version":2}
+{
+  "source": { "name": "APHP2", "hasOwner": false },
+  "template": { "name": "Mimic" },
+  "resources": [
+    {
+      "id": "ck6c9hoc1000152le3mpxrij5",
+      "label": "Hospital Stay",
+      "primaryKeyOwner": "OPS$ACHQ1ABC",
+      "primaryKeyTable": "SEJOUR",
+      "primaryKeyColumn": "SECLEUNIK",
+      "definitionId": "EpisodeOfCare",
+      "updatedAt": "2020-02-07T14:25:11.279Z",
+      "createdAt": "2020-02-07T14:25:11.279Z",
+      "attributes": [
+        {
+          "id": "ck6c9hoc2000352led1h9n1gl",
+          "path": "managingOrganization.reference",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.279Z",
+          "createdAt": "2020-02-07T14:25:11.279Z",
+          "inputs": [
+            {
+              "id": "ck6c9hoc4000552lekea0bofi",
+              "script": null,
+              "staticValue": "internal",
+              "updatedAt": "2020-02-07T14:25:11.279Z",
+              "createdAt": "2020-02-07T14:25:11.279Z",
+              "sqlValue": null
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hoc5000752le321rtzum",
+          "path": "managingOrganization.identifier.system",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.279Z",
+          "createdAt": "2020-02-07T14:25:11.279Z",
+          "inputs": [
+            {
+              "id": "ck6c9hoc6000852le9bkw5vpl",
+              "script": null,
+              "staticValue": "/Organization/{id}",
+              "updatedAt": "2020-02-07T14:25:11.279Z",
+              "createdAt": "2020-02-07T14:25:11.279Z",
+              "sqlValue": null
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hoc7001052lesc6wjvog",
+          "path": "managingOrganization.identifier.value",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.279Z",
+          "createdAt": "2020-02-07T14:25:11.279Z",
+          "inputs": [
+            {
+              "id": "ck6c9hoc9001452leo6e9yb96",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.279Z",
+              "createdAt": "2020-02-07T14:25:11.279Z",
+              "sqlValue": {
+                "id": "ck6c9hoc8001252levrrp3u2n",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "SEJOUR",
+                "column": "SERVICE",
+                "updatedAt": "2020-02-07T14:25:11.279Z",
+                "createdAt": "2020-02-07T14:25:11.279Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hoca001652le76agyk8f",
+          "path": "status",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.279Z",
+          "createdAt": "2020-02-07T14:25:11.279Z",
+          "inputs": [
+            {
+              "id": "ck6c9hocb002052leixa44qa3",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.279Z",
+              "createdAt": "2020-02-07T14:25:11.279Z",
+              "sqlValue": {
+                "id": "ck6c9hoca001852lew9ac5n7m",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "SEJOUR",
+                "column": "ETATSEJ",
+                "updatedAt": "2020-02-07T14:25:11.279Z",
+                "createdAt": "2020-02-07T14:25:11.279Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hocc002252le63ofcgq0",
+          "path": "identifier[0].value",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.279Z",
+          "createdAt": "2020-02-07T14:25:11.279Z",
+          "inputs": [
+            {
+              "id": "ck6c9hocd002652leouc49vj3",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.279Z",
+              "createdAt": "2020-02-07T14:25:11.279Z",
+              "sqlValue": {
+                "id": "ck6c9hocc002452lexxtwjeft",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "SEJOUR",
+                "column": "SECLEUNIK",
+                "updatedAt": "2020-02-07T14:25:11.279Z",
+                "createdAt": "2020-02-07T14:25:11.279Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hoce002852le5v42jzjk",
+          "path": "identifier[1].value",
+          "mergingScript": "select_first_not_empty",
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.279Z",
+          "createdAt": "2020-02-07T14:25:11.279Z",
+          "inputs": [
+            {
+              "id": "ck6c9hocf003252le2mown7tf",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.279Z",
+              "createdAt": "2020-02-07T14:25:11.279Z",
+              "sqlValue": {
+                "id": "ck6c9hocf003052lehrkb8axg",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "SEJOUR",
+                "column": "ADMISSION",
+                "updatedAt": "2020-02-07T14:25:11.279Z",
+                "createdAt": "2020-02-07T14:25:11.279Z",
+                "joins": []
+              }
+            },
+            {
+              "id": "ck6c9hoch003752lei1n64rxe",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.279Z",
+              "createdAt": "2020-02-07T14:25:11.279Z",
+              "sqlValue": {
+                "id": "ck6c9hocg003452ler5l7qgy4",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "SEJOUR",
+                "column": "ADMISSION2",
+                "updatedAt": "2020-02-07T14:25:11.279Z",
+                "createdAt": "2020-02-07T14:25:11.279Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hoci003952le9b633z11",
+          "path": "type[0].coding[0].code",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.279Z",
+          "createdAt": "2020-02-07T14:25:11.279Z",
+          "inputs": [
+            {
+              "id": "ck6c9hock004352lenbkq8o0g",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.279Z",
+              "createdAt": "2020-02-07T14:25:11.279Z",
+              "sqlValue": {
+                "id": "ck6c9hocj004152lejdas9vs2",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "SEJOUR",
+                "column": "TWCLEUNIK",
+                "updatedAt": "2020-02-07T14:25:11.279Z",
+                "createdAt": "2020-02-07T14:25:11.279Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hock004552le6lgilo3o",
+          "path": "type[0].coding[0].display",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.279Z",
+          "createdAt": "2020-02-07T14:25:11.279Z",
+          "inputs": [
+            {
+              "id": "ck6c9hocp005652lehp1rqae7",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.279Z",
+              "createdAt": "2020-02-07T14:25:11.279Z",
+              "sqlValue": {
+                "id": "ck6c9hocl004752le7e35xfg6",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "TYPESEJ",
+                "column": "LIBELTW",
+                "updatedAt": "2020-02-07T14:25:11.279Z",
+                "createdAt": "2020-02-07T14:25:11.279Z",
+                "joins": [
+                  {
+                    "id": "ck6c9hocm004952leyc8yzswc",
+                    "updatedAt": "2020-02-07T14:25:11.279Z",
+                    "createdAt": "2020-02-07T14:25:11.279Z",
+                    "tables": [
+                      {
+                        "id": "ck6c9hoco005252le1oeeayts",
+                        "owner": "OPS$ACHQ1ABC",
+                        "table": "SEJOUR",
+                        "column": "TWCLEUNIK",
+                        "updatedAt": "2020-02-07T14:25:11.279Z",
+                        "createdAt": "2020-02-07T14:25:11.279Z"
+                      },
+                      {
+                        "id": "ck6c9hocp005452le5p7nlip3",
+                        "owner": "OPS$ACHQ1ABC",
+                        "table": "TYPESEJ",
+                        "column": "TWCLEUNIK",
+                        "updatedAt": "2020-02-07T14:25:11.279Z",
+                        "createdAt": "2020-02-07T14:25:11.279Z"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hocq005852leuaz6wxc5",
+          "path": "period.end",
+          "mergingScript": "merge_concat",
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.279Z",
+          "createdAt": "2020-02-07T14:25:11.279Z",
+          "inputs": [
+            {
+              "id": "ck6c9hocr006252lelobc8hvd",
+              "script": "clean_date",
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.279Z",
+              "createdAt": "2020-02-07T14:25:11.279Z",
+              "sqlValue": {
+                "id": "ck6c9hocr006052leccm6bko8",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "SEJOUR",
+                "column": "DATEOUT",
+                "updatedAt": "2020-02-07T14:25:11.279Z",
+                "createdAt": "2020-02-07T14:25:11.279Z",
+                "joins": []
+              }
+            },
+            {
+              "id": "ck6c9hoct006652leerssakmc",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.279Z",
+              "createdAt": "2020-02-07T14:25:11.279Z",
+              "sqlValue": {
+                "id": "ck6c9hocs006452lepp9o4uvw",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "SEJOUR",
+                "column": "HEUREOUT",
+                "updatedAt": "2020-02-07T14:25:11.279Z",
+                "createdAt": "2020-02-07T14:25:11.279Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hocu006852le8d202mfg",
+          "path": "period.start",
+          "mergingScript": "merge_concat",
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.279Z",
+          "createdAt": "2020-02-07T14:25:11.279Z",
+          "inputs": [
+            {
+              "id": "ck6c9hocw007252ler30pmh00",
+              "script": "clean_date",
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.279Z",
+              "createdAt": "2020-02-07T14:25:11.279Z",
+              "sqlValue": {
+                "id": "ck6c9hocu007052lew1k5z6yq",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "SEJOUR",
+                "column": "DATEIN",
+                "updatedAt": "2020-02-07T14:25:11.279Z",
+                "createdAt": "2020-02-07T14:25:11.279Z",
+                "joins": []
+              }
+            },
+            {
+              "id": "ck6c9hocx007552le1dbrvsm5",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.279Z",
+              "createdAt": "2020-02-07T14:25:11.279Z",
+              "sqlValue": {
+                "id": "ck6c9hocw007352lemocjx2f6",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "SEJOUR",
+                "column": "HEUREIN",
+                "updatedAt": "2020-02-07T14:25:11.279Z",
+                "createdAt": "2020-02-07T14:25:11.279Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hocy007752leei7i9gd9",
+          "path": "patient.reference",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.279Z",
+          "createdAt": "2020-02-07T14:25:11.279Z",
+          "inputs": [
+            {
+              "id": "ck6c9hocy007952le5djvooph",
+              "script": null,
+              "staticValue": "internal",
+              "updatedAt": "2020-02-07T14:25:11.279Z",
+              "createdAt": "2020-02-07T14:25:11.279Z",
+              "sqlValue": null
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hocz008152leutkt1w8b",
+          "path": "patient.identifier.system",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.280Z",
+          "createdAt": "2020-02-07T14:25:11.280Z",
+          "inputs": [
+            {
+              "id": "ck6c9hod0008352lesbiyay30",
+              "script": null,
+              "staticValue": "/Patient/{id}",
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": null
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hod0008552le3kfhx1av",
+          "path": "patient.identifier.value",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.280Z",
+          "createdAt": "2020-02-07T14:25:11.280Z",
+          "inputs": [
+            {
+              "id": "ck6c9hod2008952les07nukxh",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": {
+                "id": "ck6c9hod1008752leqt7ftwb8",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "SEJOUR",
+                "column": "PACLEUNIK",
+                "updatedAt": "2020-02-07T14:25:11.280Z",
+                "createdAt": "2020-02-07T14:25:11.280Z",
+                "joins": []
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ck6c9hoc2000252le3554r26g",
+      "label": "",
+      "primaryKeyOwner": "OPS$ACHQ1ABC",
+      "primaryKeyTable": "PATIENT",
+      "primaryKeyColumn": "PACLEUNIK",
+      "definitionId": "Patient",
+      "updatedAt": "2020-02-07T14:25:11.280Z",
+      "createdAt": "2020-02-07T14:25:11.280Z",
+      "attributes": [
+        {
+          "id": "ck6c9hoc3000452le66hv802c",
+          "path": "active",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.280Z",
+          "createdAt": "2020-02-07T14:25:11.280Z",
+          "inputs": [
+            {
+              "id": "ck6c9hoc6000952lekmwr53z3",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": {
+                "id": "ck6c9hoc5000652lev5bhu3c4",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "INACTIVPAT",
+                "updatedAt": "2020-02-07T14:25:11.280Z",
+                "createdAt": "2020-02-07T14:25:11.280Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hoc7001152ledgis9hbo",
+          "path": "address[0].line[0]",
+          "mergingScript": "merge_concat",
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.280Z",
+          "createdAt": "2020-02-07T14:25:11.280Z",
+          "inputs": [
+            {
+              "id": "ck6c9hoc9001552legdtofhey",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": {
+                "id": "ck6c9hoc8001352leonr15aqd",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "ADR1PAT",
+                "updatedAt": "2020-02-07T14:25:11.280Z",
+                "createdAt": "2020-02-07T14:25:11.280Z",
+                "joins": []
+              }
+            },
+            {
+              "id": "ck6c9hoca001952lerxmg1pv8",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": {
+                "id": "ck6c9hoca001752le2gh3usvw",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "ADR2PAT",
+                "updatedAt": "2020-02-07T14:25:11.280Z",
+                "createdAt": "2020-02-07T14:25:11.280Z",
+                "joins": []
+              }
+            },
+            {
+              "id": "ck6c9hocc002352le4c4l4a9f",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": {
+                "id": "ck6c9hocb002152lefo615hje",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "ADR3PAT",
+                "updatedAt": "2020-02-07T14:25:11.280Z",
+                "createdAt": "2020-02-07T14:25:11.280Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hocd002552le4om96bg8",
+          "path": "address[0].city",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.280Z",
+          "createdAt": "2020-02-07T14:25:11.280Z",
+          "inputs": [
+            {
+              "id": "ck6c9hoce002952lezn4ub86x",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": {
+                "id": "ck6c9hocd002752le5bchnc19",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "VILLEPAT",
+                "updatedAt": "2020-02-07T14:25:11.280Z",
+                "createdAt": "2020-02-07T14:25:11.280Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hocf003152le4yxoz1xg",
+          "path": "address[0].postalCode",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.280Z",
+          "createdAt": "2020-02-07T14:25:11.280Z",
+          "inputs": [
+            {
+              "id": "ck6c9hocg003552lexgb1tkj9",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": {
+                "id": "ck6c9hocg003352le5y0hloph",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "CPOSTPAT",
+                "updatedAt": "2020-02-07T14:25:11.280Z",
+                "createdAt": "2020-02-07T14:25:11.280Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hoch003652lexr7zle5u",
+          "path": "deceasedBoolean",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.280Z",
+          "createdAt": "2020-02-07T14:25:11.280Z",
+          "inputs": [
+            {
+              "id": "ck6c9hocj004052leksupnvge",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": {
+                "id": "ck6c9hoci003852leuzr1fwsu",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "INACTIVPAT",
+                "updatedAt": "2020-02-07T14:25:11.280Z",
+                "createdAt": "2020-02-07T14:25:11.280Z",
+                "joins": []
+              }
+            },
+            {
+              "id": "ck6c9hock004452lejs5itq4b",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": {
+                "id": "ck6c9hocj004252lehdu4vjy0",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "IDMOTIFINAC",
+                "updatedAt": "2020-02-07T14:25:11.280Z",
+                "createdAt": "2020-02-07T14:25:11.280Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hocl004652le77jkvctr",
+          "path": "deceasedDateTime",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.280Z",
+          "createdAt": "2020-02-07T14:25:11.280Z",
+          "inputs": [
+            {
+              "id": "ck6c9hocn005052leur3xfow6",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": {
+                "id": "ck6c9hocm004852ledhcj0jvb",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "DATEINACPAT",
+                "updatedAt": "2020-02-07T14:25:11.280Z",
+                "createdAt": "2020-02-07T14:25:11.280Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hoco005152let11cu8xh",
+          "path": "telecom[0].value",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.280Z",
+          "createdAt": "2020-02-07T14:25:11.280Z",
+          "inputs": [
+            {
+              "id": "ck6c9hocp005552lelmyfier1",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": {
+                "id": "ck6c9hoco005352letl34ilih",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "TELPAT",
+                "updatedAt": "2020-02-07T14:25:11.280Z",
+                "createdAt": "2020-02-07T14:25:11.280Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hocq005752lemi79hwo8",
+          "path": "name[0].use",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.280Z",
+          "createdAt": "2020-02-07T14:25:11.280Z",
+          "inputs": [
+            {
+              "id": "ck6c9hocr005952leunnj787h",
+              "script": null,
+              "staticValue": "official",
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": null
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hocr006152lek5hpyp6n",
+          "path": "name[0].family",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.280Z",
+          "createdAt": "2020-02-07T14:25:11.280Z",
+          "inputs": [
+            {
+              "id": "ck6c9hoct006552le1h3p818o",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": {
+                "id": "ck6c9hocs006352le5cwyv87w",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "NOMPAT",
+                "updatedAt": "2020-02-07T14:25:11.280Z",
+                "createdAt": "2020-02-07T14:25:11.280Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hoct006752le4sinq2yy",
+          "path": "name[0].given[0]",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.280Z",
+          "createdAt": "2020-02-07T14:25:11.280Z",
+          "inputs": [
+            {
+              "id": "ck6c9hocv007152leinhmtme6",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": {
+                "id": "ck6c9hocu006952len22rag0q",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "PRENOMPAT",
+                "updatedAt": "2020-02-07T14:25:11.280Z",
+                "createdAt": "2020-02-07T14:25:11.280Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hocw007452lexbg3xm7g",
+          "path": "name[1].use",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.280Z",
+          "createdAt": "2020-02-07T14:25:11.280Z",
+          "inputs": [
+            {
+              "id": "ck6c9hocx007652le7eed6nzr",
+              "script": null,
+              "staticValue": "maiden",
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": null
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hocy007852le22qf95lq",
+          "path": "name[1].family",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.280Z",
+          "createdAt": "2020-02-07T14:25:11.280Z",
+          "inputs": [
+            {
+              "id": "ck6c9hocz008252leblj0aitl",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": {
+                "id": "ck6c9hocy008052le469gcf0q",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "NOMJFPAT",
+                "updatedAt": "2020-02-07T14:25:11.280Z",
+                "createdAt": "2020-02-07T14:25:11.280Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hod0008452lep12nluk0",
+          "path": "birthDate",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.280Z",
+          "createdAt": "2020-02-07T14:25:11.280Z",
+          "inputs": [
+            {
+              "id": "ck6c9hod1008852leyrtzs6xv",
+              "script": "clean_date",
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": {
+                "id": "ck6c9hod1008652leo1a6jji9",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "DATENAISPA",
+                "updatedAt": "2020-02-07T14:25:11.280Z",
+                "createdAt": "2020-02-07T14:25:11.280Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hod2009052lerawxzddp",
+          "path": "gender",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.280Z",
+          "createdAt": "2020-02-07T14:25:11.280Z",
+          "inputs": [
+            {
+              "id": "ck6c9hod3009252lexksll1gn",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": {
+                "id": "ck6c9hod3009152le1a3leiuu",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "SEXEPAT",
+                "updatedAt": "2020-02-07T14:25:11.280Z",
+                "createdAt": "2020-02-07T14:25:11.280Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hod4009352lej18xrum4",
+          "path": "identifier[0].type.coding[0].system",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.280Z",
+          "createdAt": "2020-02-07T14:25:11.280Z",
+          "inputs": [
+            {
+              "id": "ck6c9hod5009452le6vvy7su0",
+              "script": null,
+              "staticValue": "http://terminology.interopsante.org/CodeSystem/v2-0203",
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": null
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hod6009552le90c7xg7g",
+          "path": "identifier[0].type.coding[0].code",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.280Z",
+          "createdAt": "2020-02-07T14:25:11.280Z",
+          "inputs": [
+            {
+              "id": "ck6c9hod6009652leqrc455cg",
+              "script": null,
+              "staticValue": "PI",
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": null
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hod7009752lexnyw8dcc",
+          "path": "identifier[0].type.coding[0].display",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.280Z",
+          "createdAt": "2020-02-07T14:25:11.280Z",
+          "inputs": [
+            {
+              "id": "ck6c9hod8009852letalwarm8",
+              "script": null,
+              "staticValue": "Patient internal identifier",
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": null
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hod8009952leermgl3m7",
+          "path": "identifier[0].type.coding[0].userSelected",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.280Z",
+          "createdAt": "2020-02-07T14:25:11.280Z",
+          "inputs": [
+            {
+              "id": "ck6c9hod9010052le1dvi0o6h",
+              "script": null,
+              "staticValue": "false",
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": null
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hoda010152lez1jhdo5i",
+          "path": "identifier[0].value",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.280Z",
+          "createdAt": "2020-02-07T14:25:11.280Z",
+          "inputs": [
+            {
+              "id": "ck6c9hodb010352leg9yadw4i",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": {
+                "id": "ck6c9hoda010252lefpzij305",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "NOOBSPAT",
+                "updatedAt": "2020-02-07T14:25:11.280Z",
+                "createdAt": "2020-02-07T14:25:11.280Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hodb010452levozo9ovy",
+          "path": "identifier[1].value",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.280Z",
+          "createdAt": "2020-02-07T14:25:11.280Z",
+          "inputs": [
+            {
+              "id": "ck6c9hodd010652le77umzyt8",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": {
+                "id": "ck6c9hodc010552lecxg5fmr4",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "PACLEUNIK",
+                "updatedAt": "2020-02-07T14:25:11.280Z",
+                "createdAt": "2020-02-07T14:25:11.280Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hodd010752legfdvnpws",
+          "path": "identifier[2].value",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.280Z",
+          "createdAt": "2020-02-07T14:25:11.280Z",
+          "inputs": [
+            {
+              "id": "ck6c9hode010952lep3mpphp5",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": {
+                "id": "ck6c9hode010852leivckf58t",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "DOSSIERPAT",
+                "updatedAt": "2020-02-07T14:25:11.280Z",
+                "createdAt": "2020-02-07T14:25:11.280Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hodf011052lev2uu0wdf",
+          "path": "identifier[2].period.start",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.280Z",
+          "createdAt": "2020-02-07T14:25:11.280Z",
+          "inputs": [
+            {
+              "id": "ck6c9hodg011252leyt8loaju",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": {
+                "id": "ck6c9hodf011152lewa4ytkor",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "DATEINPAT",
+                "updatedAt": "2020-02-07T14:25:11.280Z",
+                "createdAt": "2020-02-07T14:25:11.280Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hodh011352lergwvx9ww",
+          "path": "identifier[2].period.end",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.280Z",
+          "createdAt": "2020-02-07T14:25:11.280Z",
+          "inputs": [
+            {
+              "id": "ck6c9hodi011552lew9yrzfj2",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": {
+                "id": "ck6c9hodh011452levbikpuqb",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "DATEOUTPAT",
+                "updatedAt": "2020-02-07T14:25:11.280Z",
+                "createdAt": "2020-02-07T14:25:11.280Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hodi011652le98bg8htm",
+          "path": "managingOrganization.type",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.280Z",
+          "createdAt": "2020-02-07T14:25:11.280Z",
+          "inputs": [
+            {
+              "id": "ck6c9hodj011752ler8wbayv7",
+              "script": null,
+              "staticValue": "/Organization",
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": null
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hodk011852led97vwwii",
+          "path": "managingOrganization.identifier.system",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.280Z",
+          "createdAt": "2020-02-07T14:25:11.280Z",
+          "inputs": [
+            {
+              "id": "ck6c9hodl011952lez7zo9gb7",
+              "script": null,
+              "staticValue": "/Organization/{id}",
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": null
+            }
+          ]
+        },
+        {
+          "id": "ck6c9hodl012052let1i8itnu",
+          "path": "managingOrganization.identifier.value",
+          "mergingScript": null,
+          "comments": null,
+          "updatedAt": "2020-02-07T14:25:11.280Z",
+          "createdAt": "2020-02-07T14:25:11.280Z",
+          "inputs": [
+            {
+              "id": "ck6c9hodm012252lesd4gu0ry",
+              "script": null,
+              "staticValue": null,
+              "updatedAt": "2020-02-07T14:25:11.280Z",
+              "createdAt": "2020-02-07T14:25:11.280Z",
+              "sqlValue": {
+                "id": "ck6c9hodm012152leeg0q5s0u",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "CODESERV",
+                "updatedAt": "2020-02-07T14:25:11.280Z",
+                "createdAt": "2020-02-07T14:25:11.280Z",
+                "joins": []
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "version": 3
+}

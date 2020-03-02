@@ -102,16 +102,7 @@ export const Query = queryType({
         definitionId: idArg({ nullable: false }),
       },
       nullable: true,
-      resolve: async (_, { definitionId }) => {
-        const def = await getDefinition(definitionId)
-        if (!def) {
-          return null
-        }
-        return {
-          def,
-          id: definitionId,
-        }
-      },
+      resolve: async (_, { definitionId }) => getDefinition(definitionId),
     })
 
     t.list.field('structureDefinitions', {

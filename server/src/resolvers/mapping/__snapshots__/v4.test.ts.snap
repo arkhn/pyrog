@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`import mapping V3 should send a query per resource 1`] = `
+exports[`import mapping V4 should send a query per resource 1`] = `
 Array [
   Object {
     "data": Object {
@@ -11,6 +11,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "staticValue": "internal",
                 },
@@ -24,6 +25,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "staticValue": "/Organization/{id}",
                 },
@@ -37,6 +39,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
@@ -57,6 +60,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
@@ -77,6 +81,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
@@ -97,6 +102,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
@@ -108,6 +114,7 @@ Array [
                   "staticValue": null,
                 },
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
@@ -128,6 +135,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
@@ -148,6 +156,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
@@ -188,6 +197,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": "clean_date",
                   "sqlValue": Object {
                     "create": Object {
@@ -199,6 +209,7 @@ Array [
                   "staticValue": null,
                 },
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
@@ -219,6 +230,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": "clean_date",
                   "sqlValue": Object {
                     "create": Object {
@@ -230,6 +242,7 @@ Array [
                   "staticValue": null,
                 },
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
@@ -250,6 +263,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "staticValue": "internal",
                 },
@@ -263,6 +277,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "staticValue": "/Patient/{id}",
                 },
@@ -276,6 +291,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
@@ -308,7 +324,7 @@ Array [
 ]
 `;
 
-exports[`import mapping V3 should send a query per resource 2`] = `
+exports[`import mapping V4 should send a query per resource 2`] = `
 Array [
   Object {
     "data": Object {
@@ -319,6 +335,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
@@ -339,6 +356,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
@@ -350,6 +368,7 @@ Array [
                   "staticValue": null,
                 },
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
@@ -361,6 +380,7 @@ Array [
                   "staticValue": null,
                 },
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
@@ -381,6 +401,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
@@ -401,6 +422,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
@@ -421,6 +443,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
@@ -432,6 +455,7 @@ Array [
                   "staticValue": null,
                 },
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
@@ -452,6 +476,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
@@ -472,6 +497,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
@@ -492,6 +518,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "staticValue": "official",
                 },
@@ -505,6 +532,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
@@ -525,6 +553,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
@@ -545,6 +574,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "staticValue": "maiden",
                 },
@@ -558,6 +588,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
@@ -578,6 +609,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": "clean_date",
                   "sqlValue": Object {
                     "create": Object {
@@ -598,6 +630,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
@@ -618,6 +651,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "staticValue": "http://terminology.interopsante.org/CodeSystem/v2-0203",
                 },
@@ -631,6 +665,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "staticValue": "PI",
                 },
@@ -644,6 +679,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "staticValue": "Patient internal identifier",
                 },
@@ -657,6 +693,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "staticValue": "false",
                 },
@@ -670,6 +707,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
@@ -690,6 +728,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
@@ -710,6 +749,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
@@ -730,6 +770,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
@@ -750,6 +791,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
@@ -770,6 +812,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "staticValue": "/Organization",
                 },
@@ -783,6 +826,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "staticValue": "/Organization/{id}",
                 },
@@ -796,6 +840,7 @@ Array [
             "inputs": Object {
               "create": Array [
                 Object {
+                  "conceptMapId": null,
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
