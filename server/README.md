@@ -2,13 +2,16 @@
 
 ## Dev
 
+In dev, .env file must be used to run commands. You can use `env $(cat .env) yarn ...`
+but the simplest solution is to install dotenv globallay (`yarn global add dotenv`).
+
 ```sh
 yarn # install dependencies
-yarn generate # generate the "photon" dependency, required by prisma
+dotenv yarn generate # generate the "photon" dependency, required by prisma
 docker-compose up postgres redis # launches postgres and redis in docker (you may use the `-d` option to run in the background)
-yarn migrate # applies the prisma migrations on the postrges database
-yarn seed:superuser # inserts an admin@arkhn.com user in the db (dont forget to have SUPERUSER_PASSWORD in your .env)
-yarn dev # runs pyrog-server with hot-reloading (using ts-node)
+dotenv yarn migrate # applies the prisma migrations on the postrges database
+dotenv yarn seed:superuser # inserts an admin@arkhn.com user in the db (dont forget to have SUPERUSER_PASSWORD in your .env)
+dotenv yarn dev # runs pyrog-server with hot-reloading (using ts-node)
 ```
 
 ## Build

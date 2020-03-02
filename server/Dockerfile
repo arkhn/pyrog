@@ -29,4 +29,4 @@ COPY scripts scripts
 # Start the app
 ENV NODE_PATH dist/
 
-CMD yarn wait:db && yarn prisma2 lift up && yarn start:docker
+CMD yarn wait:db && yarn migrate && yarn start
