@@ -1,3 +1,20 @@
+@import "~@blueprintjs/core/lib/css/blueprint.css";
+@import "~@blueprintjs/core/lib/scss/variables";
+
 .bp3-form-group {
   margin-bottom: 20px;
+}
+
+.filters-form {
+
+  .bp3-html-table {
+
+    td {
+      vertical-align: middle;
+
+      .bp3-popover-target {
+        width: -webkit-fill-available;
+      }
+    }
+  }
 }

@@ -85,7 +85,17 @@ const Drawer = ({
   );
 
   // TODO add more relations
-  const relations = ['=', '>=', '<='];
+  const sqlRelations = [
+    '=',
+    '>',
+    '<',
+    '>=',
+    '<=',
+    '<>',
+    'BETWEEN',
+    'LIKE',
+    'IN'
+  ];
 
   React.useEffect(() => {
     setLabel(resource.label || '');
@@ -203,8 +213,6 @@ const Drawer = ({
           column: pkColumn
         }}
         sourceSchema={source.schema!}
-        vertical={true}
-        fill={true}
         popoverProps={{
           autoFocus: true,
           boundary: 'viewport',
@@ -230,7 +238,11 @@ const Drawer = ({
   );
 
   const renderFiltersForm = (
-    <FormGroup label="Filters" disabled={updatingResource || !resource}>
+    <FormGroup
+      className="filters-form"
+      label="Filters"
+      disabled={updatingResource || !resource}
+    >
       <table className="bp3-html-table">
         <tbody>
           {filters.map(({ sqlColumn, relation, value }, index) => (
@@ -276,7 +288,7 @@ const Drawer = ({
               <td>
                 <StringSelect
                   inputItem={relation}
-                  items={relations}
+                  items={sqlRelations}
                   displayItem={(r: string): string => r || 'select relation'}
                   onChange={(relation: string): void => {
                     filters[index].relation = relation;
