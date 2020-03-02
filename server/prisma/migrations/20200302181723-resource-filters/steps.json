@@ -56,6 +56,31 @@
       "arity": "Required"
     },
     {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Filter",
+          "field": "sqlColumn"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Filter",
+          "field": "sqlColumn"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
+    },
+    {
       "tag": "CreateField",
       "model": "Filter",
       "field": "relation",
@@ -75,6 +100,34 @@
       "field": "filters",
       "type": "Filter",
       "arity": "List"
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Input",
+          "field": "sqlValue"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Column",
+      "field": "filter",
+      "type": "Filter",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Column",
+      "field": "input",
+      "type": "Input",
+      "arity": "Optional"
     }
   ]
 }

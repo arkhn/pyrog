@@ -71,7 +71,7 @@ model Resource {
 model Filter {
   id String @default(cuid()) @id
 
-  sqlColumn Column
+  sqlColumn Column @relation(references: [id])
   relation  String
   value     String
 }
@@ -92,7 +92,7 @@ model Attribute {
 model Input {
   id           String    @default(cuid()) @id
   // Sql column containing the value
-  sqlValue     Column?   @relation(onDelete: CASCADE)
+  sqlValue     Column?   @relation(references: [id], onDelete: CASCADE)
   // cleaning scripts for the sql column
   script       String?
   // id of the concept map to be applied to a mapped code
@@ -114,6 +114,9 @@ model Column {
 
   joins Join[] @relation(name: "ColumnJoins", onDelete: CASCADE)
 
+  filter Filter?
+  input  Input?
+
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
 }
@@ -128,8 +131,7 @@ model Join {
 }
 
 enum Role {
-  ADMIN
-  USER
+  ADMIN USER
 }
 
 model User {
