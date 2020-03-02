@@ -8,6 +8,7 @@ const cleanResourceV4 = (resource: Resource) => {
   delete r.source
   return r
 }
+
 export default (photon: Photon, sourceId: string, resources: any[]) =>
   Promise.all(
     resources.map(async (r: any) => {

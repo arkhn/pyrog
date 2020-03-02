@@ -56,6 +56,7 @@ export const exportMapping = async (
   let resources = await photon.resources({
     where: { source: { id: source.id } },
     include: {
+      source: true,
       attributes: {
         include: {
           inputs: {
@@ -79,9 +80,6 @@ export const exportMapping = async (
       return {
         ...r,
         definition: def?.$meta,
-        source: {
-          id: sourceId,
-        },
       }
     }),
   )
