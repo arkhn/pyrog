@@ -218,7 +218,7 @@ const InputColumn = ({ input, schema, source }: Props) => {
                   <Tag>CONCEPT MAP</Tag>
                   <ButtonGroup>
                     <Button
-                      text={input.conceptMap || 'None'}
+                      text={input.conceptMap ? input.conceptMap.title : 'None'}
                       onClick={(_e: React.MouseEvent) => {
                         setConceptMapOverlayVisible(true);
                       }}

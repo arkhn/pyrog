@@ -74,9 +74,9 @@ export interface NexusGenInputs {
     AND?: NexusGenInputs['ColumnWhereInput'][] | null; // [ColumnWhereInput!]
     column?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
-    filters?: NexusGenInputs['FilterFilter'] | null; // FilterFilter
+    filter?: NexusGenInputs['FilterWhereInput'] | null; // FilterWhereInput
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
-    inputs?: NexusGenInputs['InputFilter'] | null; // InputFilter
+    input?: NexusGenInputs['InputWhereInput'] | null; // InputWhereInput
     join?: NexusGenInputs['JoinWhereInput'] | null; // JoinWhereInput
     joins?: NexusGenInputs['JoinFilter'] | null; // JoinFilter
     NOT?: NexusGenInputs['ColumnWhereInput'][] | null; // [ColumnWhereInput!]

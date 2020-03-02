@@ -57,6 +57,7 @@ export const exportMapping = async (
     where: { source: { id: source.id } },
     include: {
       source: true,
+      filters: { include: { sqlColumn: true } },
       attributes: {
         include: {
           inputs: {

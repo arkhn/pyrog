@@ -70,7 +70,7 @@ export default class StringSelect extends React.Component<ISelectProps, any> {
         icon={icon}
         inputItem={inputItem}
         intent={intent}
-        items={this.sortItems(items)}
+        items={items ? this.sortItems(items) : []}
         onChange={onChange}
         renderItem={this.renderItem}
         popoverProps={popoverProps}

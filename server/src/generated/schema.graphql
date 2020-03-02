@@ -81,9 +81,9 @@ input ColumnWhereInput {
   AND: [ColumnWhereInput!]
   column: NullableStringFilter
   createdAt: DateTimeFilter
-  filters: FilterFilter
+  filter: FilterWhereInput
   id: StringFilter
-  inputs: InputFilter
+  input: InputWhereInput
   join: JoinWhereInput
   joins: JoinFilter
   NOT: [ColumnWhereInput!]
