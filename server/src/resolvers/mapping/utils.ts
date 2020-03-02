@@ -1,8 +1,10 @@
 import {
+  Column,
   InputCreateWithoutAttributeInput,
-  ColumnCreateWithoutInputsInput,
+  ColumnCreateWithoutInputInput,
   JoinCreateWithoutColumnInput,
   AttributeCreateWithoutResourceInput,
+  FilterCreateInput,
 } from '@prisma/photon'
 
 import {
@@ -10,6 +12,7 @@ import {
   ColumnWithJoins,
   InputWithColumn,
   AttributeWithInputs,
+  FilterWithSqlColumn,
 } from 'types'
 
 export const clean = (entry: any): any => {
@@ -35,8 +38,8 @@ const buildJoinsQuery = (
 
 const buildColumnQuery = (
   c: ColumnWithJoins,
-): ColumnCreateWithoutInputsInput | null => {
-  let column: ColumnCreateWithoutInputsInput = clean(c)
+): ColumnCreateWithoutInputInput | null => {
+  let column: ColumnCreateWithoutInputInput = clean(c)
   if (c.joins && c.joins.length) {
     column.joins = { create: buildJoinsQuery(c.joins) }
   } else {
@@ -69,4 +72,17 @@ export const buildAttributesQuery = (
       delete attr.inputs
     }
     return attr
+  })
+
+const buildColumnWithoutJoinsQuery = (
+  c: Column,
+): ColumnCreateWithoutInputInput => clean(c)
+
+export const buildFiltersQuery = (
+  filters: FilterWithSqlColumn[],
+): FilterCreateInput[] | null =>
+  filters.map(f => {
+    let filter: FilterCreateInput = clean(f)
+    filter.sqlColumn = { create: buildColumnWithoutJoinsQuery(f.sqlColumn) }
+    return filter
   })

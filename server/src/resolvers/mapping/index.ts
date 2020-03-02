@@ -5,12 +5,14 @@ import {
   MAPPING_VERSION_2,
   MAPPING_VERSION_3,
   MAPPING_VERSION_4,
+  MAPPING_VERSION_5,
   CURRENT_MAPPING_VERSION,
 } from '../../constants'
 import handleV1 from './v1'
 import handleV2 from './v2'
 import handleV3 from './v3'
 import handleV4 from './v4'
+import handleV5 from './v5'
 import { getDefinition } from 'fhir'
 
 // copy all the resources from the mapping and their attributes.
@@ -36,6 +38,8 @@ export const importMapping = async (
       return handleV3(photon, sourceId, resources)
     case MAPPING_VERSION_4:
       return handleV4(photon, sourceId, resources)
+    case MAPPING_VERSION_5:
+      return handleV5(photon, sourceId, resources)
     default:
       throw new Error(`Unknown mapping version: "${version}"`)
   }

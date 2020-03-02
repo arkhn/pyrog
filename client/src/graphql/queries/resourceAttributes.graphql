@@ -1,6 +1,11 @@
+#import "../fragments/entireFilter.graphql"
+
 query resourceAttributes($resourceId: ID!) {
   resource(resourceId: $resourceId) {
     id
+    filters {
+      ...entireFilter
+    }
     attributes {
       id
       path
