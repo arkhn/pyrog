@@ -1,4 +1,5 @@
 #import "../fragments/entireAttribute.graphql"
+#import "../fragments/entireFilter.graphql"
 
 fragment entireResource on Resource {
   id
@@ -8,5 +9,13 @@ fragment entireResource on Resource {
   primaryKeyColumn
   attributes {
     ...entireAttribute
+  }
+  filters {
+    ...entireFilter
+  }
+  definition {
+    id
+    type
+    name
   }
 }

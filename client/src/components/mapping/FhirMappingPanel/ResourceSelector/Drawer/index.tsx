@@ -1,4 +1,3 @@
-import { useMutation } from '@apollo/react-hooks';
 import {
   InputGroup,
   FormGroup,
@@ -8,11 +7,13 @@ import {
   ControlGroup,
   Position
 } from '@blueprintjs/core';
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { loader } from 'graphql.macro';
 import { useSelector, useDispatch } from 'react-redux';
+import { useMutation } from '@apollo/react-hooks';
+import { ApolloError } from 'apollo-client/errors/ApolloError';
 
-import { IReduxStore } from 'types';
+import { IReduxStore, ISelectedResource, ISourceColumn } from 'types';
 import ColumnPicker from 'components/mapping/ColumnPicker';
 import {
   updateSelectedResource,
@@ -20,21 +21,16 @@ import {
 } from 'services/selectedNode/actions';
 
 import './style.scss';
+import StringSelect from 'components/selects/stringSelect';
 
-interface Resource {
-  id: string;
-  label: string;
-  primaryKeyOwner: string;
-  primaryKeyTable: string;
-  primaryKeyColumn: string;
-  definition: {
-    id: string;
-    type: string;
-  };
+interface Filter {
+  sqlColumn: ISourceColumn;
+  relation: string;
+  value: string;
 }
 
 interface Props {
-  resource: Resource;
+  resource: ISelectedResource;
   isOpen: boolean;
   deleteResourceCallback: () => void;
   onCloseCallback?: () => void;
@@ -52,7 +48,7 @@ const Drawer = ({
   isOpen,
   deleteResourceCallback,
   onCloseCallback
-}: Props) => {
+}: Props): ReactElement => {
   const dispatch = useDispatch();
   const { source } = useSelector((state: IReduxStore) => state.selectedNode);
 
@@ -62,42 +58,9 @@ const Drawer = ({
   const [pkOwner, setPkOwner] = React.useState('');
   const [pkTable, setPkTable] = React.useState('');
   const [pkColumn, setPkColumn] = React.useState('');
+  const [filters, setFilters] = React.useState([] as Filter[]);
 
-  React.useEffect(() => {
-    setLabel(resource.label || '');
-    setPkOwner(resource.primaryKeyOwner || '');
-    setPkTable(resource.primaryKeyTable || '');
-    setPkColumn(resource.primaryKeyColumn || '');
-  }, [resource]);
-
-  const onFormSubmit = (updateResource: any) => {
-    return (e: React.FormEvent<HTMLElement>) => {
-      e.preventDefault();
-
-      updateResource({
-        variables: {
-          resourceId: resource.id,
-          data: {
-            label,
-            primaryKeyOwner: pkOwner,
-            primaryKeyTable: pkTable,
-            primaryKeyColumn: pkColumn
-          }
-        }
-      });
-      dispatch(
-        updateSelectedResource({
-          ...resource,
-          label,
-          primaryKeyOwner: pkOwner,
-          primaryKeyTable: pkTable,
-          primaryKeyColumn: pkColumn
-        })
-      );
-    };
-  };
-
-  const onUpdateCompleted = () => {
+  const onUpdateCompleted = (): void => {
     toaster.show({
       message: `Successfully updated ${resource.definition.type} properties`,
       intent: 'success',
@@ -105,7 +68,7 @@ const Drawer = ({
     });
   };
 
-  const onUpdateError = (error: any) => {
+  const onUpdateError = (): void => {
     toaster.show({
       message: 'An error occurred while updating properties',
       intent: 'danger',
@@ -113,7 +76,63 @@ const Drawer = ({
     });
   };
 
-  const onDeletionCompleted = (data: any) => {
+  const [updateResource, { loading: updatingResource }] = useMutation(
+    mUpdateResource,
+    {
+      onCompleted: onUpdateCompleted,
+      onError: onUpdateError
+    }
+  );
+
+  // TODO add more relations
+  const sqlRelations = [
+    '=',
+    '>',
+    '<',
+    '>=',
+    '<=',
+    '<>',
+    'BETWEEN',
+    'LIKE',
+    'IN'
+  ];
+
+  React.useEffect(() => {
+    setLabel(resource.label || '');
+    setPkOwner(resource.primaryKeyOwner || '');
+    setPkTable(resource.primaryKeyTable || '');
+    setPkColumn(resource.primaryKeyColumn || '');
+    setFilters(resource.filters || []);
+  }, [resource]);
+
+  const onFormSubmit = (e: React.FormEvent<HTMLElement>): void => {
+    e.preventDefault();
+
+    updateResource({
+      variables: {
+        resourceId: resource.id,
+        data: {
+          label,
+          primaryKeyOwner: pkOwner,
+          primaryKeyTable: pkTable,
+          primaryKeyColumn: pkColumn
+        },
+        filters
+      }
+    });
+    dispatch(
+      updateSelectedResource({
+        ...resource,
+        label,
+        primaryKeyOwner: pkOwner,
+        primaryKeyTable: pkTable,
+        primaryKeyColumn: pkColumn,
+        filters
+      })
+    );
+  };
+
+  const onDeletionCompleted = (): void => {
     toaster.show({
       icon: 'layout-hierarchy',
       intent: 'success',
@@ -124,7 +143,7 @@ const Drawer = ({
     deleteResourceCallback();
   };
 
-  const onDeletionError = (error: any) => {
+  const onDeletionError = (error: ApolloError): void => {
     toaster.show({
       icon: 'error',
       intent: 'danger',
@@ -134,19 +153,10 @@ const Drawer = ({
     deleteResourceCallback();
   };
 
-  // Mutation and query hooks
-  const [updateResource, { loading: updatingResource }] = useMutation(
-    mUpdateResource,
-    {
-      onCompleted: onUpdateCompleted,
-      onError: onUpdateError
-    }
-  );
-
   const removeResourceFromCache = (
     cache: any,
     { data: { deleteResource } }: any
-  ) => {
+  ): void => {
     try {
       const { source: cachedSource } = cache.readQuery({
         query: qResourcesForSource,
@@ -181,17 +191,158 @@ const Drawer = ({
     }
   );
 
+  const pickPrimaryKey = (
+    <FormGroup label="Primary Key" disabled={updatingResource || !resource}>
+      <ColumnPicker
+        hasOwner={source ? source.hasOwner : undefined}
+        ownerChangeCallback={(owner: string): void => {
+          setPkOwner(owner);
+          setPkTable('');
+          setPkColumn('');
+        }}
+        tableChangeCallback={(table: string): void => {
+          setPkTable(table);
+          setPkColumn('');
+        }}
+        columnChangeCallback={(column: string): void => {
+          setPkColumn(column);
+        }}
+        initialColumn={{
+          owner: pkOwner,
+          table: pkTable,
+          column: pkColumn
+        }}
+        sourceSchema={source.schema!}
+        popoverProps={{
+          autoFocus: true,
+          boundary: 'viewport',
+          canEscapeKeyClose: true,
+          lazy: true,
+          position: Position.LEFT_TOP,
+          usePortal: true
+        }}
+        disabled={updatingResource || !resource}
+      />
+    </FormGroup>
+  );
+
+  const deleteFilterButton = (index: number): ReactElement => (
+    <Button
+      icon="trash"
+      minimal={true}
+      onClick={(): void => {
+        filters.splice(index, 1);
+        setFilters([...filters]);
+      }}
+    />
+  );
+
+  const renderFiltersForm = (
+    <FormGroup
+      className="filters-form"
+      label="Filters"
+      disabled={updatingResource || !resource}
+    >
+      <table className="bp3-html-table">
+        <tbody>
+          {filters.map(({ sqlColumn, relation, value }, index) => (
+            <tr key={index}>
+              <td>{deleteFilterButton(index)}</td>
+              <td>
+                <ColumnPicker
+                  hasOwner={source ? source.hasOwner : undefined}
+                  ownerChangeCallback={(owner: string): void => {
+                    filters[index].sqlColumn.owner = owner;
+                    filters[index].sqlColumn.table = '';
+                    filters[index].sqlColumn.column = '';
+                    setFilters([...filters]);
+                  }}
+                  tableChangeCallback={(table: string): void => {
+                    filters[index].sqlColumn.table = table;
+                    filters[index].sqlColumn.column = '';
+                    setFilters([...filters]);
+                  }}
+                  columnChangeCallback={(column: string): void => {
+                    filters[index].sqlColumn.column = column;
+                    setFilters([...filters]);
+                  }}
+                  initialColumn={{
+                    owner: sqlColumn ? sqlColumn.owner : '',
+                    table: sqlColumn ? sqlColumn.table : '',
+                    column: sqlColumn ? sqlColumn.column : ''
+                  }}
+                  sourceSchema={source.schema!}
+                  vertical={true}
+                  fill={true}
+                  popoverProps={{
+                    autoFocus: true,
+                    boundary: 'viewport',
+                    canEscapeKeyClose: true,
+                    lazy: true,
+                    position: Position.LEFT_TOP,
+                    usePortal: true
+                  }}
+                  disabled={updatingResource || !resource}
+                />
+              </td>
+              <td>
+                <StringSelect
+                  inputItem={relation}
+                  items={sqlRelations}
+                  displayItem={(r: string): string => r || 'select relation'}
+                  onChange={(relation: string): void => {
+                    filters[index].relation = relation;
+                    setFilters([...filters]);
+                  }}
+                />
+              </td>
+              <td>
+                <input
+                  className="bp3-input"
+                  type="text"
+                  placeholder="Text input"
+                  value={value}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
+                    filters[index].value = e.target.value;
+                    setFilters([...filters]);
+                  }}
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <Button
+        disabled={!resource}
+        loading={deletingResource}
+        icon={'add'}
+        onClick={() => {
+          setFilters(prev => [
+            ...prev,
+            {
+              sqlColumn: { owner: '', table: '', column: '' },
+              relation: '',
+              value: ''
+            }
+          ]);
+        }}
+        text="Add filter"
+      />
+    </FormGroup>
+  );
+
   return (
     <BPDrawer
       title={resource.definition ? resource.definition.type : ''}
       icon={resource.definition ? 'properties' : null}
       isOpen={isOpen}
       onClose={onCloseCallback}
-      size={BPDrawer.SIZE_SMALL}
+      position={Position.LEFT}
     >
       <div className={Classes.DRAWER_BODY}>
         <div className={Classes.DIALOG_BODY}>
-          <form onSubmit={onFormSubmit(updateResource)}>
+          <form onSubmit={onFormSubmit}>
             <FormGroup
               label="Resource Label"
               className="resource-info"
@@ -206,43 +357,8 @@ const Drawer = ({
                 }}
               />
             </FormGroup>
-            <FormGroup
-              label="Primary Key"
-              disabled={updatingResource || !resource}
-            >
-              <ColumnPicker
-                hasOwner={source ? source.hasOwner : undefined}
-                ownerChangeCallback={(owner: string) => {
-                  setPkOwner(owner);
-                  setPkTable('');
-                  setPkColumn('');
-                }}
-                tableChangeCallback={(table: string) => {
-                  setPkTable(table);
-                  setPkColumn('');
-                }}
-                columnChangeCallback={(column: string) => {
-                  setPkColumn(column);
-                }}
-                initialColumn={{
-                  owner: pkOwner,
-                  table: pkTable,
-                  column: pkColumn
-                }}
-                sourceSchema={source.schema!}
-                vertical={true}
-                fill={true}
-                popoverProps={{
-                  autoFocus: true,
-                  boundary: 'viewport',
-                  canEscapeKeyClose: true,
-                  lazy: true,
-                  position: Position.LEFT_TOP,
-                  usePortal: true
-                }}
-                disabled={updatingResource || !resource}
-              />
-            </FormGroup>
+            {pickPrimaryKey}
+            {renderFiltersForm}
             <Button
               disabled={updatingResource || !resource}
               intent="primary"

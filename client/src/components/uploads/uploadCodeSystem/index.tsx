@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, InputGroup } from '@blueprintjs/core';
+import { Button, ButtonGroup } from '@blueprintjs/core';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 

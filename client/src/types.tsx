@@ -42,10 +42,17 @@ export interface ISelectedResource {
   primaryKeyOwner: string;
   primaryKeyTable: string;
   primaryKeyColumn: string;
+  filters: Filters[];
   definition: {
     id: string;
     type: string;
   };
+}
+
+export interface Filters {
+  sqlColumn: ISourceColumn;
+  relation: string;
+  value: string;
 }
 
 export interface SelectedAttribute extends Node {

@@ -12,6 +12,8 @@ export const Resource = objectType({
     t.model.primaryKeyTable()
     t.model.primaryKeyColumn()
 
+    t.model.filters({ pagination: false })
+
     t.model.attributes()
     t.model.definitionId()
     t.field('definition', {
@@ -55,6 +57,11 @@ export const deleteResource: FieldResolver<
   const res = await ctx.photon.resources.findOne({
     where: { id },
     include: {
+      filters: {
+        include: {
+          sqlColumn: true,
+        },
+      },
       attributes: {
         include: {
           inputs: {
@@ -74,6 +81,13 @@ export const deleteResource: FieldResolver<
       },
     },
   })
+
+  await Promise.all(
+    res!.filters.map(async f => {
+      await ctx.photon.filters.delete({ where: { id: f.id } })
+      ctx.photon.columns.delete({ where: { id: f.sqlColumn.id } })
+    }),
+  )
   await Promise.all(
     res!.attributes.map(async a => {
       await Promise.all(
@@ -102,8 +116,49 @@ export const deleteResource: FieldResolver<
 export const updateResource: FieldResolver<
   'Mutation',
   'updateResource'
-> = async (_parent, { resourceId, data }, ctx) =>
-  ctx.photon.resources.update({
+> = async (_parent, { resourceId, data, filters }, ctx) => {
+  if (filters) {
+    const resource = await ctx.photon.resources.findOne({
+      where: { id: resourceId },
+      include: {
+        filters: true,
+      },
+    })
+    await Promise.all(
+      resource!.filters.map(f =>
+        ctx.photon.filters.delete({ where: { id: f.id } }),
+      ),
+    )
+    const newFilters = await Promise.all(
+      filters.map(f =>
+        ctx.photon.filters.create({
+          data: {
+            sqlColumn: {
+              create: {
+                owner: f.sqlColumn.owner,
+                table: f.sqlColumn.table,
+                column: f.sqlColumn.column,
+              },
+            },
+            relation: f.relation,
+            value: f.value,
+          },
+        }),
+      ),
+    )
+    await ctx.photon.resources.update({
+      where: { id: resourceId },
+      data: {
+        filters: {
+          connect: newFilters.map(f => ({
+            id: f.id,
+          })),
+        },
+      },
+    })
+  }
+  return ctx.photon.resources.update({
     where: { id: resourceId },
     data,
   })
+}

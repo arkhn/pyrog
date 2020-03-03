@@ -1,10 +1,4 @@
-import {
-  Button,
-  ButtonGroup,
-  Dialog,
-  FileInput,
-  InputGroup
-} from '@blueprintjs/core';
+import { Button, ButtonGroup, Dialog, InputGroup } from '@blueprintjs/core';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -16,8 +10,6 @@ import StringSelect from 'components/selects/stringSelect';
 import { IReduxStore } from 'types';
 
 import UploadCodeSystem from 'components/uploads/uploadCodeSystem';
-import { validator } from 'components/uploads/validate';
-import fhirSchema from 'components/uploads/uploadCodeSystem/CodeSystem.schema.json';
 
 import './style.scss';
 
@@ -122,7 +114,7 @@ const ConceptMapDialog = ({
       }
     };
     fetchConceptMaps();
-  }, []);
+  }, [isOpen]);
 
   // TODO these are actually codes from a code system. Fetch them instead of hard coding them
   const choiceEquivalences = [
@@ -523,7 +515,12 @@ const ConceptMapDialog = ({
                   className="add-element-button"
                   fill={true}
                   text="add element"
-                  onClick={() => setConceptMap(prev => [...prev, {} as MapRow])}
+                  onClick={() =>
+                    setConceptMap(prev => [
+                      ...prev,
+                      { source: '', equivalence: '', target: '' } as MapRow
+                    ])
+                  }
                 />
               ) : null}
             </div>

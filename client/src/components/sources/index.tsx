@@ -33,13 +33,14 @@ interface Source {
 const qSources = loader('src/graphql/queries/sources.graphql');
 const mDeleteSource = loader('src/graphql/mutations/deleteSource.graphql');
 
-const SourcesView = () => {
+const SourcesView = (): React.ReactElement => {
   const dispatch = useDispatch();
   const { history } = useReactRouter();
 
   const [sourceToDelete, setSourceToDelete] = React.useState(
     undefined as Source | undefined
   );
+  const [isAlertOpen, setIsAlertOpen] = React.useState(false);
 
   const { data: dataSources, loading: loadingSources } = useQuery(qSources, {
     fetchPolicy: 'network-only'
@@ -48,7 +49,7 @@ const SourcesView = () => {
   const removeSourceFromCache = (
     cache: any,
     { data: { deleteSource } }: any
-  ) => {
+  ): void => {
     try {
       const { sources } = cache.readQuery({
         query: qSources
@@ -111,6 +112,7 @@ const SourcesView = () => {
             onClick={(e: React.MouseEvent) => {
               e.stopPropagation();
               setSourceToDelete(source);
+              setIsAlertOpen(true);
             }}
           />
         </div>
@@ -164,9 +166,10 @@ const SourcesView = () => {
           confirmButtonText="Confirm"
           icon="trash"
           intent={Intent.DANGER}
-          isOpen={!!sourceToDelete}
+          isOpen={isAlertOpen}
           canOutsideClickCancel={true}
           onClose={async (confirmed): Promise<void> => {
+            setIsAlertOpen(false);
             if (confirmed) {
               await deleteSource({
                 variables: {

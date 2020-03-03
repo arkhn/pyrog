@@ -1,4 +1,4 @@
-import { Attribute, Input, Join, Column } from '@prisma/photon'
+import { Attribute, Input, Join, Column, Filter } from '@prisma/photon'
 
 export type JoinWithColumn = Join & {
   tables: Column[]
@@ -18,6 +18,10 @@ export type AttributeWithInputs = Attribute & {
 
 export type AttributeWithChildren = AttributeWithInputs & {
   children: AttributeWithChildren[]
+}
+
+export type FilterWithSqlColumn = Filter & {
+  sqlColumn: Column
 }
 
 export type CachedDefinition = {
