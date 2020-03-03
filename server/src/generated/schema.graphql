@@ -302,7 +302,7 @@ type Resource {
   """Structured version of a definition"""
   definition: StructureDefinition!
   definitionId: String!
-  filters(after: ID, before: ID, first: Int, last: Int, skip: Int): [Filter!]!
+  filters: [Filter!]!
   id: ID!
   label: String
   primaryKeyColumn: String

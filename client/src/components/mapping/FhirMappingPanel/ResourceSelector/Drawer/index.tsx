@@ -191,7 +191,7 @@ const Drawer = ({
     }
   );
 
-  const pickPrimaryKay = (
+  const pickPrimaryKey = (
     <FormGroup label="Primary Key" disabled={updatingResource || !resource}>
       <ColumnPicker
         hasOwner={source ? source.hasOwner : undefined}
@@ -338,7 +338,6 @@ const Drawer = ({
       icon={resource.definition ? 'properties' : null}
       isOpen={isOpen}
       onClose={onCloseCallback}
-      // size={BPDrawer.SIZE_SMALL}
       position={Position.LEFT}
     >
       <div className={Classes.DRAWER_BODY}>
@@ -358,7 +357,7 @@ const Drawer = ({
                 }}
               />
             </FormGroup>
-            {pickPrimaryKay}
+            {pickPrimaryKey}
             {renderFiltersForm}
             <Button
               disabled={updatingResource || !resource}

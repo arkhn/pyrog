@@ -27,7 +27,7 @@ const buildJoinsQuery = (
   joins: JoinWithColumn[],
 ): JoinCreateWithoutColumnInput[] | null =>
   joins.map(j => {
-    let join: JoinCreateWithoutColumnInput = clean(j)
+    const join: JoinCreateWithoutColumnInput = clean(j)
     if (j.tables && j.tables.length) {
       join.tables = { create: j.tables.map(clean) }
     } else {
@@ -39,7 +39,7 @@ const buildJoinsQuery = (
 const buildColumnQuery = (
   c: ColumnWithJoins,
 ): ColumnCreateWithoutInputInput | null => {
-  let column: ColumnCreateWithoutInputInput = clean(c)
+  const column: ColumnCreateWithoutInputInput = clean(c)
   if (c.joins && c.joins.length) {
     column.joins = { create: buildJoinsQuery(c.joins) }
   } else {
@@ -52,7 +52,7 @@ const buildInputsQuery = (
   inputs: InputWithColumn[],
 ): InputCreateWithoutAttributeInput[] | null =>
   inputs.map(i => {
-    let input: InputCreateWithoutAttributeInput = clean(i)
+    const input: InputCreateWithoutAttributeInput = clean(i)
     if (i.sqlValue) {
       input.sqlValue = { create: buildColumnQuery(i.sqlValue) }
     } else {
@@ -65,7 +65,7 @@ export const buildAttributesQuery = (
   attributes: AttributeWithInputs[],
 ): AttributeCreateWithoutResourceInput[] | null =>
   attributes.map(a => {
-    let attr: AttributeCreateWithoutResourceInput = clean(a)
+    const attr: AttributeCreateWithoutResourceInput = clean(a)
     if (a.inputs && a.inputs.length) {
       attr.inputs = { create: buildInputsQuery(a.inputs) }
     } else {
@@ -82,7 +82,7 @@ export const buildFiltersQuery = (
   filters: FilterWithSqlColumn[],
 ): FilterCreateInput[] | null =>
   filters.map(f => {
-    let filter: FilterCreateInput = clean(f)
+    const filter: FilterCreateInput = clean(f)
     filter.sqlColumn = { create: buildColumnWithoutJoinsQuery(f.sqlColumn) }
     return filter
   })

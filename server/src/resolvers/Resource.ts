@@ -12,7 +12,7 @@ export const Resource = objectType({
     t.model.primaryKeyTable()
     t.model.primaryKeyColumn()
 
-    t.model.filters()
+    t.model.filters({ pagination: false })
 
     t.model.attributes()
     t.model.definitionId()
