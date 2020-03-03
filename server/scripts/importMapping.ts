@@ -52,7 +52,7 @@ const main = async (path: string) => {
 
   console.log(
     `Creating resources ${mapping.resources
-      .map((r: any) => r.fhirType)
+      .map((r: any) => r.definitionId)
       .join(', ')}...`,
   )
   return importMapping(photon, source.id, content)

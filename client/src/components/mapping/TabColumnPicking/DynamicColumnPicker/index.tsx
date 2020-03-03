@@ -124,11 +124,9 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
     if (source && source.credential && table) {
       setIsTableLoading(true);
       axios
-        .get(
-          `${PAGAI_URL}/explore/${source.credential.id}/${
-            owner ? owner + '.' : ''
-          }${table}`
-        )
+        .get(`${PAGAI_URL}/explore/${source.credential.id}/${table}`, {
+          params: { schema: owner }
+        })
         .then((res: any) => {
           setIsTableLoading(false);
           setRows(res.data.rows);
