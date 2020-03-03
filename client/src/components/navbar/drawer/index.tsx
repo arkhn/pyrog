@@ -9,7 +9,7 @@ import {
   Spinner
 } from '@blueprintjs/core';
 import * as React from 'react';
-import { Mutation, useQuery } from 'react-apollo';
+import { useQuery, useMutation } from 'react-apollo';
 import { useSelector, useDispatch } from 'react-redux';
 import { loader } from 'graphql.macro';
 
@@ -21,18 +21,21 @@ import { updateSelectedSource } from 'services/selectedNode/actions';
 const qCredentialForSource = loader(
   'src/graphql/queries/credentialForSource.graphql'
 );
-const upsertCredential = loader(
+const mUpsertCredential = loader(
   'src/graphql/mutations/upsertCredential.graphql'
 );
 
-interface IProps {
+interface Props {
   title: string;
   isOpen: boolean;
-  onClose: any;
+  onClose: () => void;
 }
 
-const Drawer = ({ title, isOpen, onClose }: IProps) => {
-  const models = ['POSTGRES'];
+const Drawer = ({ title, isOpen, onClose }: Props): React.ReactElement => {
+  const models = ['POSTGRES', 'ORACLE'];
+
+  const toaster = useSelector((state: IReduxStore) => state.toaster);
+  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
 
   const dispatch = useDispatch();
   const [host, setHost] = React.useState('');
@@ -45,11 +48,36 @@ const Drawer = ({ title, isOpen, onClose }: IProps) => {
   const [hasSuccessfullyChanged, setHasSuccessfullyChanged] = React.useState(
     false
   );
-  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
+
   const { data, loading } = useQuery(qCredentialForSource, {
     variables: {
       sourceId: selectedNode.source.id
     }
+  });
+
+  const onUpsertCompleted = (data: any) => {
+    setHasChanged(false);
+    setHasSuccessfullyChanged(true);
+    dispatch(
+      updateSelectedSource({
+        ...selectedNode.source,
+        credential: data.upsertCredential
+      })
+    );
+  };
+
+  const onUpsertError = (error: any): void => {
+    toaster.show({
+      icon: 'error',
+      intent: 'danger',
+      message: error.message,
+      timeout: 4000
+    });
+  };
+
+  const [upsertCredential] = useMutation(mUpsertCredential, {
+    onCompleted: onUpsertCompleted,
+    onError: onUpsertError
   });
 
   React.useEffect(() => {
@@ -78,135 +106,110 @@ const Drawer = ({ title, isOpen, onClose }: IProps) => {
             <span>Database credentials</span>
             <span>{loading && <Spinner size={15} />}</span>
           </H3>
-          <Mutation
-            mutation={upsertCredential}
-            onCompleted={(data: any) => {
-              setHasChanged(false);
-              setHasSuccessfullyChanged(true);
-              dispatch(
-                updateSelectedSource({
-                  ...selectedNode.source,
-                  credential: data.upsertCredential
-                })
-              );
-            }}
-            onError={(error: any) => {
-              console.log('ERROR', error);
+          <form
+            onSubmit={(e: any): void => {
+              e.preventDefault();
+              upsertCredential({
+                variables: {
+                  host,
+                  port,
+                  login,
+                  database,
+                  password,
+                  model,
+                  sourceId: selectedNode.source.id
+                }
+              });
             }}
           >
-            {(upsert: any, { loading }: any) => {
-              return (
-                <form
-                  onSubmit={(e: any) => {
-                    e.preventDefault();
-                    upsert({
-                      variables: {
-                        host,
-                        port,
-                        login,
-                        database,
-                        password,
-                        model,
-                        sourceId: selectedNode.source.id
-                      }
-                    });
-                  }}
-                >
-                  <FormGroup label="Host">
-                    <InputGroup
-                      value={host}
-                      disabled={loading}
-                      leftIcon={'desktop'}
-                      onChange={(event: any) => {
-                        setHost(event.target.value);
-                        setHasChanged(true);
-                      }}
-                      placeholder={'Host'}
-                    />
-                  </FormGroup>
-                  <FormGroup label="Port">
-                    <InputGroup
-                      value={port}
-                      disabled={loading}
-                      leftIcon={'numerical'}
-                      onChange={(event: any) => {
-                        setPort(event.target.value);
-                        setHasChanged(true);
-                      }}
-                      placeholder={'Port'}
-                    />
-                  </FormGroup>
-                  <FormGroup label="Database name">
-                    <InputGroup
-                      value={database}
-                      disabled={loading}
-                      leftIcon={'database'}
-                      onChange={(event: any) => {
-                        setDatabase(event.target.value);
-                        setHasChanged(true);
-                      }}
-                      placeholder={'Database name'}
-                    />
-                  </FormGroup>
-                  <FormGroup label="Login">
-                    <InputGroup
-                      value={login}
-                      disabled={loading}
-                      leftIcon={'user'}
-                      onChange={(event: any) => {
-                        setLogin(event.target.value);
-                        setHasChanged(true);
-                      }}
-                      placeholder={'Login'}
-                    />
-                  </FormGroup>
-                  <FormGroup label="Password">
-                    <InputGroup
-                      value={password}
-                      disabled={loading}
-                      leftIcon={'key'}
-                      onChange={(event: any) => {
-                        setPassword(event.target.value);
-                        setHasChanged(true);
-                      }}
-                      placeholder={'Password'}
-                      type={'password'}
-                    />
-                  </FormGroup>
-                  <FormGroup label="Type">
-                    <StringSelect
-                      filterable={false}
-                      items={models}
-                      disabled={loading}
-                      inputItem={model}
-                      onChange={(item: string) => {
-                        setHasChanged(true);
-                        setModel(item);
-                      }}
-                    />
-                  </FormGroup>
-                  <Button
-                    intent={
-                      hasSuccessfullyChanged && !hasChanged
-                        ? 'success'
-                        : 'primary'
-                    }
-                    disabled={
-                      (hasSuccessfullyChanged && !hasChanged) || !hasChanged
-                    }
-                    loading={loading}
-                    icon={
-                      hasSuccessfullyChanged &&
-                      !hasChanged && <Icon intent={'success'} icon={'tick'} />
-                    }
-                    type={'submit'}
-                  >
-                    Save
-                  </Button>
-                </form>
-              );
-            }}
-          </Mutation>
+            <FormGroup label="Host">
+              <InputGroup
+                value={host}
+                disabled={loading}
+                leftIcon={'desktop'}
+                onChange={(event: any): void => {
+                  setHost(event.target.value);
+                  setHasChanged(true);
+                }}
+                placeholder={'Host'}
+              />
+            </FormGroup>
+            <FormGroup label="Port">
+              <InputGroup
+                value={port}
+                disabled={loading}
+                leftIcon={'numerical'}
+                onChange={(event: any): void => {
+                  setPort(event.target.value);
+                  setHasChanged(true);
+                }}
+                placeholder={'Port'}
+              />
+            </FormGroup>
+            <FormGroup label="Database name">
+              <InputGroup
+                value={database}
+                disabled={loading}
+                leftIcon={'database'}
+                onChange={(event: any): void => {
+                  setDatabase(event.target.value);
+                  setHasChanged(true);
+                }}
+                placeholder={'Database name'}
+              />
+            </FormGroup>
+            <FormGroup label="Login">
+              <InputGroup
+                value={login}
+                disabled={loading}
+                leftIcon={'user'}
+                onChange={(event: any): void => {
+                  setLogin(event.target.value);
+                  setHasChanged(true);
+                }}
+                placeholder={'Login'}
+              />
+            </FormGroup>
+            <FormGroup label="Password">
+              <InputGroup
+                value={password}
+                disabled={loading}
+                leftIcon={'key'}
+                onChange={(event: any): void => {
+                  setPassword(event.target.value);
+                  setHasChanged(true);
+                }}
+                placeholder={'Password'}
+                type={'password'}
+              />
+            </FormGroup>
+            <FormGroup label="Type">
+              <StringSelect
+                filterable={false}
+                items={models}
+                disabled={loading}
+                inputItem={model}
+                onChange={(item: string): void => {
+                  setHasChanged(true);
+                  setModel(item);
+                }}
+              />
+            </FormGroup>
+            <Button
+              intent={
+                hasSuccessfullyChanged && !hasChanged ? 'success' : 'primary'
+              }
+              disabled={(hasSuccessfullyChanged && !hasChanged) || !hasChanged}
+              loading={loading}
+              icon={
+                hasSuccessfullyChanged &&
+                !hasChanged && <Icon intent={'success'} icon={'tick'} />
+              }
+              type={'submit'}
+            >
+              Save
+            </Button>
+          </form>
         </div>
       </div>
     </BPDrawer>
