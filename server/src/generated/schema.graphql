@@ -129,6 +129,7 @@ input CredentialWhereInput {
 }
 
 enum DatabaseType {
+  ORACLE
   POSTGRES
 }
 
