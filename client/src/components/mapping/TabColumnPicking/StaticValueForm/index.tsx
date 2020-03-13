@@ -6,17 +6,19 @@ import {
   FormGroup,
   Elevation
 } from '@blueprintjs/core';
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useMutation } from '@apollo/react-hooks';
+import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 import { loader } from 'graphql.macro';
 // TODO write a module to replace this file
 import { Node } from '../../FhirMappingPanel/FhirResourceTree/node';
 import { IReduxStore, SelectedAttribute } from 'types';
 
 import { setAttributeInMap } from 'services/resourceInputs/actions';
+import StringSelect from 'components/selects/stringSelect';
 
 // GRAPHQL
+const qBasicFhirTypes = loader('src/graphql/queries/basicFhirTypes.graphql');
 const qInputsForAttribute = loader(
   'src/graphql/queries/inputsForAttribute.graphql'
 );
@@ -35,17 +37,32 @@ const StaticValueForm = ({ attribute }: Props) => {
   const dispatch = useDispatch();
 
   const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
-
-  const path = attribute.path;
-
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
   );
+
+  const [
+    getFhirTypes,
+    { data: dataFhirTypes, loading: loadingFhirTypes }
+  ] = useLazyQuery(qBasicFhirTypes, {
+    fetchPolicy: 'cache-first'
+  });
+
+  const [staticValue, setStaticValue] = React.useState('');
+
+  const path = attribute.path;
   let attributeId = attributesForResource[path]
     ? attributesForResource[path].id
     : null;
+  const isReferenceType =
+    attribute.types[0] === 'uri' && attribute.parent?.types[0] === 'Reference';
 
-  const [staticValue, setStaticValue] = React.useState('');
+  useEffect(() => {
+    if (isReferenceType) {
+      setStaticValue('');
+      getFhirTypes();
+    }
+  }, [attribute]);
 
   const addInputToCache = (cache: any, { data: { createInput } }: any) => {
     try {
@@ -128,15 +145,30 @@ const StaticValueForm = ({ attribute }: Props) => {
       </div>
       <FormGroup labelFor="text-input" inline={true}>
         <ControlGroup>
-          <InputGroup
-            id="static-value-input"
-            onChange={(event: React.FormEvent<HTMLElement>) => {
-              const target = event.target as HTMLInputElement;
-              setStaticValue(target.value);
-            }}
-            placeholder="Column static value"
-            value={staticValue}
-          />
+          {isReferenceType ? (
+            <>
+              <StringSelect
+                items={
+                  loadingFhirTypes || !dataFhirTypes
+                    ? []
+                    : dataFhirTypes.structureDefinitions.map((t: any) => t.name)
+                }
+                onChange={setStaticValue}
+                loading={loadingFhirTypes}
+                inputItem={staticValue}
+              />
+            </>
+          ) : (
+            <InputGroup
+              id="static-value-input"
+              onChange={(event: React.FormEvent<HTMLElement>) => {
+                const target = event.target as HTMLInputElement;
+                setStaticValue(target.value);
+              }}
+              placeholder="Static input"
+              value={staticValue}
+            />
+          )}
           <Button
             disabled={!attribute || staticValue.length === 0}
             icon={'add'}
