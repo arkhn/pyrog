@@ -36,9 +36,19 @@ export interface ISelectedSource {
   schema?: ISourceSchema;
 }
 
-export interface ISelectedResource {
+export interface Profile {
+  id: string;
+  name: string;
+  type: string;
+  publisher?: string;
+}
+
+export interface Resource {
   id: string;
   label: string;
+  name: string;
+  type: string;
+  profiles: Profile[];
   primaryKeyOwner: string;
   primaryKeyTable: string;
   primaryKeyColumn: string;
@@ -46,6 +56,7 @@ export interface ISelectedResource {
   definition: {
     id: string;
     type: string;
+    name: string;
   };
 }
 
@@ -61,7 +72,7 @@ export interface SelectedAttribute extends Node {
 
 export interface ISelectedNode {
   source: ISelectedSource;
-  resource: ISelectedResource;
+  resource: Resource;
   attribute: SelectedAttribute;
 }
 

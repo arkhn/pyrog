@@ -1,10 +1,12 @@
 import { Button, FormGroup, ControlGroup } from '@blueprintjs/core';
 import React from 'react';
-import { useMutation, useQuery } from '@apollo/react-hooks';
-import { useSelector } from 'react-redux';
+import { useApolloClient, useMutation, useQuery } from '@apollo/react-hooks';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { IReduxStore } from 'types';
 import AddResourceSelect from 'components/selects/addResourceSelect';
+import { changeSelectedResource } from 'services/selectedNode/actions';
+import { initAttributesMap } from 'services/resourceInputs/actions';
+import { IReduxStore, Resource } from 'types';
 import { loader } from 'graphql.macro';
 
 const qResourcesForSource = loader(
@@ -22,20 +24,14 @@ interface Props {
   callback: any;
 }
 
-interface Profile {
-  id: string;
-  name: string;
-  type: string;
-  publisher?: string;
-}
-interface Resource {
-  id: string;
-  name: string;
-  type: string;
-  profiles: Profile[];
-}
+const qResourceAttributes = loader(
+  'src/graphql/queries/resourceAttributes.graphql'
+);
 
 const AddResource = ({ callback }: Props) => {
+  const client = useApolloClient();
+  const dispatch = useDispatch();
+
   const { source } = useSelector((state: IReduxStore) => state.selectedNode);
   const toaster = useSelector((state: IReduxStore) => state.toaster);
   const [selectedResource, setSelectedResource] = React.useState(
@@ -104,6 +100,26 @@ const AddResource = ({ callback }: Props) => {
     }
   );
 
+  const onAdd = async () => {
+    await refreshDefinition({
+      variables: { definitionId: selectedResource!.id }
+    });
+
+    // Create the new resource
+    const {
+      data: { createResource: createdResource }
+    } = await createResource({
+      variables: {
+        sourceId: source.id,
+        definitionId: selectedResource!.id
+      }
+    });
+
+    // Update Redux store
+    dispatch(initAttributesMap([]));
+    dispatch(changeSelectedResource(createdResource));
+  };
+
   return (
     <FormGroup>
       <ControlGroup>
@@ -120,17 +136,7 @@ const AddResource = ({ callback }: Props) => {
           loading={creatingResource || refreshingDefinition}
           icon={'plus'}
           disabled={!selectedResource}
-          onClick={async () => {
-            await refreshDefinition({
-              variables: { definitionId: selectedResource!.id }
-            });
-            createResource({
-              variables: {
-                sourceId: source.id,
-                definitionId: selectedResource!.id
-              }
-            });
-          }}
+          onClick={onAdd}
         />
       </ControlGroup>
     </FormGroup>

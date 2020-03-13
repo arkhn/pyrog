@@ -13,7 +13,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
 import { ApolloError } from 'apollo-client/errors/ApolloError';
 
-import { IReduxStore, ISelectedResource, ISourceColumn } from 'types';
+import { IReduxStore, Resource, ISourceColumn } from 'types';
 import ColumnPicker from 'components/mapping/ColumnPicker';
 import {
   updateSelectedResource,
@@ -30,7 +30,7 @@ interface Filter {
 }
 
 interface Props {
-  resource: ISelectedResource;
+  resource: Resource;
   isOpen: boolean;
   deleteResourceCallback: () => void;
   onCloseCallback?: () => void;

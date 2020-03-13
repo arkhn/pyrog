@@ -4,19 +4,7 @@ import { ItemPredicate, ItemRenderer } from '@blueprintjs/select';
 import { IconName } from '@blueprintjs/icons';
 
 import TSelect from './TSelect';
-
-interface Resource {
-  id: string;
-  label: string;
-  primaryKeyOwner: string;
-  primaryKeyTable: string;
-  primaryKeyColumn: string;
-  definition: {
-    id: string;
-    type: string;
-    name: string;
-  };
-}
+import { Resource } from 'types';
 
 interface SelectProps {
   disabled?: boolean;
