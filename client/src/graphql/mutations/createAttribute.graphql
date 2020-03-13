@@ -1,7 +1,17 @@
 #import "../fragments/entireAttribute.graphql"
 
-mutation createAttribute($resourceId: ID!, $path: String!, $data: AttributeInput) {
-  createAttribute(resourceId: $resourceId, path: $path, data: $data) {
+mutation createAttribute(
+  $resourceId: ID!,
+  $definitionId: ID!,
+  $path: String!,
+  $data: AttributeInput
+) {
+  createAttribute(
+    resourceId: $resourceId,
+    definitionId: $definitionId,
+    path: $path,
+    data: $data
+  ) {
     ...entireAttribute
   }
 }

@@ -10,7 +10,8 @@ import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
 import { loader } from 'graphql.macro';
-
+// TODO write a module to replace this file
+import { Node } from '../../FhirMappingPanel/FhirResourceTree/node';
 import { IReduxStore, SelectedAttribute } from 'types';
 
 import { setAttributeInMap } from 'services/resourceInputs/actions';
@@ -83,11 +84,32 @@ const StaticValueForm = ({ attribute }: Props) => {
       const { data: attr } = await createAttribute({
         variables: {
           resourceId: resource.id,
+          definitionId: attribute.types[0],
           path
         }
       });
       attributeId = attr.createAttribute.id;
       dispatch(setAttributeInMap(path, attr.createAttribute));
+    }
+    // Also, we create the parent attributes if they don't exist
+    let curNode = attribute as Node;
+    while (curNode.parent) {
+      curNode = curNode.parent;
+      const parentPath = curNode.path;
+      if (
+        !Object.keys(attributesForResource).includes(parentPath) &&
+        !curNode.isArray &&
+        !(curNode.types.length > 1)
+      ) {
+        const { data: attr } = await createAttribute({
+          variables: {
+            resourceId: resource.id,
+            definitionId: curNode.types[0],
+            path: parentPath
+          }
+        });
+        dispatch(setAttributeInMap(parentPath, attr.createAttribute));
+      }
     }
     createStaticInput({
       variables: {

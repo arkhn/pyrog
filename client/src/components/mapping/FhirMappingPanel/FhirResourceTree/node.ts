@@ -32,6 +32,7 @@ export class Node {
   definition: any;
   types: string[];
   index?: number;
+  path: string;
 
   constructor(parent?: Node, definition?: any, index?: number) {
     this.parent = parent;
@@ -49,6 +50,8 @@ export class Node {
         : primitiveTypes.includes(this.types[0])
         ? true
         : false;
+    // add path because method can't be use when object is stored in redux
+    this.path = this.serialize();
   }
 
   isChild(p: Node) {

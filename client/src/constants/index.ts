@@ -8,4 +8,3 @@ export const {
   REACT_APP_PAGAI_URL: PAGAI_URL,
   REACT_APP_FHIR_API_URL: FHIR_API_URL
 } = process.env;
-console.log(process.env);
