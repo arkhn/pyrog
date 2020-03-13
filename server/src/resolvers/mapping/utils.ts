@@ -71,6 +71,8 @@ export const buildAttributesQuery = (
     } else {
       delete attr.inputs
     }
+    // TODO can we retrieve the definition id that should be here?
+    if (!attr.definitionId) attr.definitionId = ''
     return attr
   })
 
