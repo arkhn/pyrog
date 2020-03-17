@@ -10,7 +10,6 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 import { loader } from 'graphql.macro';
-// TODO write a module to replace this file
 import { Node } from '../../FhirMappingPanel/FhirResourceTree/node';
 import { IReduxStore, SelectedAttribute } from 'types';
 
@@ -54,11 +53,9 @@ const StaticValueForm = ({ attribute }: Props) => {
   let attributeId = attributesForResource[path]
     ? attributesForResource[path].id
     : null;
-  const isReferenceType =
-    attribute.types[0] === 'uri' && attribute.parent?.types[0] === 'Reference';
 
   useEffect(() => {
-    if (isReferenceType) {
+    if (attribute.isReferenceType) {
       setStaticValue('');
       getFhirTypes();
     }
@@ -114,8 +111,8 @@ const StaticValueForm = ({ attribute }: Props) => {
       curNode = curNode.parent;
       const parentPath = curNode.path;
       if (
-        !Object.keys(attributesForResource).includes(parentPath) &&
-        !curNode.isArray &&
+        !attributesForResource[parentPath] &&
+        !(curNode.parent && curNode.parent.isArray) &&
         !(curNode.types.length > 1)
       ) {
         const { data: attr } = await createAttribute({
@@ -145,7 +142,7 @@ const StaticValueForm = ({ attribute }: Props) => {
       </div>
       <FormGroup labelFor="text-input" inline={true}>
         <ControlGroup>
-          {isReferenceType ? (
+          {attribute.isReferenceType ? (
             <>
               <StringSelect
                 items={

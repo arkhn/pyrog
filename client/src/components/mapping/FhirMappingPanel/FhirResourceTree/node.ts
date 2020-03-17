@@ -29,6 +29,7 @@ export class Node {
   isArray: boolean;
   isRequired: boolean;
   isPrimitive: boolean;
+  isReferenceType: boolean;
   definition: any;
   types: string[];
   index?: number;
@@ -50,6 +51,8 @@ export class Node {
         : primitiveTypes.includes(this.types[0])
         ? true
         : false;
+    this.isReferenceType =
+      this.types[0] === 'uri' && this.parent?.types[0] === 'Reference';
     // add path because method can't be use when object is stored in redux
     this.path = this.serialize();
   }
