@@ -48,7 +48,7 @@ const buildColumnQuery = (
   return column
 }
 
-const buildInputsQuery = (
+export const buildInputsQuery = (
   inputs: InputWithColumn[],
 ): InputCreateWithoutAttributeInput[] | null =>
   inputs.map(i => {
@@ -71,8 +71,12 @@ export const buildAttributesQuery = (
     } else {
       delete attr.inputs
     }
-    // TODO can we retrieve the definition id that should be here?
-    if (!attr.definitionId) attr.definitionId = ''
+    if (!attr.definitionId) {
+      attr.definitionId = ''
+      console.warn(
+        'Attribute did not have a definitionId so an empty string was used',
+      )
+    }
     return attr
   })
 
