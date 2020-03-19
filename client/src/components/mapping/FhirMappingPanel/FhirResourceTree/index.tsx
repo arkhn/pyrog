@@ -61,16 +61,38 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
   const checkHasChildAttributes = (pathString: string) =>
     Object.keys(attributesForResource).some(el => el.startsWith(pathString));
 
+  const checkHasAttribute = (pathString: string) =>
+    Object.keys(attributesForResource).includes(pathString);
+
+  const secondaryLabel = (
+    node: Node,
+    childNodes: ITreeNode<Node>[]
+  ): React.ReactElement | null => {
+    const hasInputs = checkHasAttribute(node.serialize());
+
+    let hasChildAttributes: boolean;
+    if (node.types.length > 1) {
+      // Check if any of the children have child attributes
+      hasChildAttributes = childNodes.some(n =>
+        checkHasChildAttributes(n.nodeData!.serialize())
+      );
+    } else {
+      hasChildAttributes = checkHasChildAttributes(node.serialize());
+    }
+
+    if (hasInputs && node.isPrimitive)
+      return <Icon icon="small-tick" intent={'success'} />;
+    else if (node.isRequired) return <Icon icon="dot" intent="warning" />;
+    else if (hasChildAttributes || hasInputs) return <Icon icon="dot" />;
+    else return null;
+  };
+
   const createNode = (
     path: Node,
     childNodes: ITreeNode<Node>[],
     addNodeCallback?: Function,
     deleteNodeCallback?: Function
   ): ITreeNode<Node> => {
-    const hasChildAttributes = checkHasChildAttributes(path.serialize());
-    const hasInputs = Object.keys(attributesForResource).includes(
-      path.serialize()
-    );
     const renderNodeLabel = () => {
       const nodeLabel = (
         <NodeLabel
@@ -89,13 +111,6 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       );
     };
 
-    const renderSecondaryLabel = () => {
-      if (hasInputs) return <Icon icon="small-tick" intent={'success'} />;
-      else if (path.isRequired) return <Icon icon="dot" intent="warning" />;
-      else if (hasChildAttributes) return <Icon icon="dot" />;
-      else return null;
-    };
-
     return {
       childNodes: childNodes,
       hasCaret: !path.isPrimitive || path.isArray,
@@ -106,7 +121,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
         : 'tag',
       id: path.tail(),
       label: renderNodeLabel(),
-      secondaryLabel: renderSecondaryLabel(),
+      secondaryLabel: secondaryLabel(path, childNodes),
       nodeData: path
     };
   };
@@ -304,30 +319,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
   // To update secondary label on user input
   const updateSecondaryLabel = (node: ITreeNode<Node>) => {
     if (!node.nodeData) return;
-    const { isRequired, isArray, isPrimitive, types } = node.nodeData;
-    const pathString = node.nodeData.serialize();
-    const hasInputs =
-      isPrimitive &&
-      !isArray &&
-      Object.keys(attributesForResource).includes(pathString);
-
-    let hasChildAttributes = false;
-    if (types.length > 1) {
-      // Check if any of the children have child attributes@
-      hasChildAttributes = node.childNodes!.some(n =>
-        checkHasChildAttributes(n.nodeData!.serialize())
-      );
-    } else {
-      hasChildAttributes = checkHasChildAttributes(pathString);
-    }
-
-    node.secondaryLabel = hasInputs ? (
-      <Icon icon="small-tick" intent={'success'} />
-    ) : isRequired ? (
-      <Icon icon="dot" intent="warning" />
-    ) : hasChildAttributes ? (
-      <Icon icon="dot" />
-    ) : null;
+    node.secondaryLabel = secondaryLabel(node.nodeData, node.childNodes || []);
 
     if (node.childNodes !== undefined) {
       for (const child of node.childNodes) {

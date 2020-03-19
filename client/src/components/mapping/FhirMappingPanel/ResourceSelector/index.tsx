@@ -7,23 +7,10 @@ import { loader } from 'graphql.macro';
 
 import { changeSelectedResource } from 'services/selectedNode/actions';
 import { initAttributesMap } from 'services/resourceInputs/actions';
-import { IReduxStore } from 'types';
+import { IReduxStore, Resource } from 'types';
 
 import Drawer from './Drawer';
 import ResourceSelect from 'components/selects/resourceSelect';
-
-interface Resource {
-  id: string;
-  label: string;
-  primaryKeyOwner: string;
-  primaryKeyTable: string;
-  primaryKeyColumn: string;
-  definition: {
-    id: string;
-    type: string;
-    name: string;
-  };
-}
 
 interface Props {
   resources: Resource[];

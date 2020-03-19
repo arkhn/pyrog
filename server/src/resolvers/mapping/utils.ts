@@ -48,7 +48,7 @@ const buildColumnQuery = (
   return column
 }
 
-const buildInputsQuery = (
+export const buildInputsQuery = (
   inputs: InputWithColumn[],
 ): InputCreateWithoutAttributeInput[] | null =>
   inputs.map(i => {
@@ -70,6 +70,12 @@ export const buildAttributesQuery = (
       attr.inputs = { create: buildInputsQuery(a.inputs) }
     } else {
       delete attr.inputs
+    }
+    if (!attr.definitionId) {
+      attr.definitionId = ''
+      console.warn(
+        'Attribute did not have a definitionId so an empty string was used',
+      )
     }
     return attr
   })

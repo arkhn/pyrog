@@ -48,6 +48,7 @@ describe('import mapping V1', () => {
             {
               path: 'period.start',
               comments: null,
+              definitionId: '',
               mergingScript: 'merge_concat',
               inputs: {
                 create: expect.any(Array),

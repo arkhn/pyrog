@@ -5,6 +5,10 @@
 type Attribute {
   comments: String
   createdAt: DateTime!
+
+  """Structured version of a definition"""
+  definition: StructureDefinition!
+  definitionId: String!
   id: ID!
   inputs(after: ID, before: ID, first: Int, last: Int, skip: Int): [Input!]!
   mergingScript: String
@@ -28,6 +32,7 @@ input AttributeWhereInput {
   AND: [AttributeWhereInput!]
   comments: NullableStringFilter
   createdAt: DateTimeFilter
+  definitionId: StringFilter
   id: StringFilter
   inputs: InputFilter
   mergingScript: NullableStringFilter
@@ -244,7 +249,7 @@ scalar JSON
 
 type Mutation {
   addJoinToColumn(columnId: ID!, join: JoinInput): Column!
-  createAttribute(data: AttributeInput, path: String!, resourceId: ID!): Attribute!
+  createAttribute(data: AttributeInput, definitionId: ID!, path: String!, resourceId: ID!): Attribute!
   createInput(attributeId: ID!, script: String, sql: ColumnInput, static: String): Input!
   createResource(definitionId: String!, sourceId: ID!): Resource!
   createSource(hasOwner: Boolean!, mapping: String, name: String!, templateName: String!): Source!

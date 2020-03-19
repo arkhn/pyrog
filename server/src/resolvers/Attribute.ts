@@ -1,10 +1,23 @@
 import { objectType, FieldResolver } from 'nexus'
+import { getDefinition } from 'fhir'
 
 export const Attribute = objectType({
   name: 'Attribute',
   definition(t) {
     t.model.id()
     t.model.path()
+    t.model.definitionId()
+    t.field('definition', {
+      type: 'StructureDefinition',
+      description: 'Structured version of a definition',
+      resolve: async parent => {
+        const def = await getDefinition(parent.definitionId)
+        if (!def) {
+          throw new Error(`missing definition ${parent.definitionId}`)
+        }
+        return def
+      },
+    })
 
     t.model.mergingScript()
     t.model.comments()
@@ -20,7 +33,7 @@ export const Attribute = objectType({
 export const createAttribute: FieldResolver<
   'Mutation',
   'createAttribute'
-> = async (_, { resourceId, path, data }, ctx) => {
+> = async (_, { resourceId, definitionId, path, data }, ctx) => {
   const existing = await ctx.photon.attributes.findMany({
     where: { path, resource: { id: resourceId } },
     include: {
@@ -36,6 +49,7 @@ export const createAttribute: FieldResolver<
   return ctx.photon.attributes.create({
     data: {
       ...data,
+      definitionId,
       path,
       resource: {
         connect: { id: resourceId },

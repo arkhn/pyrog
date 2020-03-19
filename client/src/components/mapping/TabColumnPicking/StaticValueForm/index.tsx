@@ -6,16 +6,18 @@ import {
   FormGroup,
   Elevation
 } from '@blueprintjs/core';
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useMutation } from '@apollo/react-hooks';
+import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 import { loader } from 'graphql.macro';
-
+import { Node } from '../../FhirMappingPanel/FhirResourceTree/node';
 import { IReduxStore, SelectedAttribute } from 'types';
 
 import { setAttributeInMap } from 'services/resourceInputs/actions';
+import StringSelect from 'components/selects/stringSelect';
 
 // GRAPHQL
+const qBasicFhirTypes = loader('src/graphql/queries/basicFhirTypes.graphql');
 const qInputsForAttribute = loader(
   'src/graphql/queries/inputsForAttribute.graphql'
 );
@@ -34,17 +36,30 @@ const StaticValueForm = ({ attribute }: Props) => {
   const dispatch = useDispatch();
 
   const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
-
-  const path = attribute.path;
-
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
   );
+
+  const [
+    getFhirTypes,
+    { data: dataFhirTypes, loading: loadingFhirTypes }
+  ] = useLazyQuery(qBasicFhirTypes, {
+    fetchPolicy: 'cache-first'
+  });
+
+  const [staticValue, setStaticValue] = React.useState('');
+
+  const path = attribute.path;
   let attributeId = attributesForResource[path]
     ? attributesForResource[path].id
     : null;
 
-  const [staticValue, setStaticValue] = React.useState('');
+  useEffect(() => {
+    if (attribute.isReferenceType) {
+      setStaticValue('');
+      getFhirTypes();
+    }
+  }, [attribute]);
 
   const addInputToCache = (cache: any, { data: { createInput } }: any) => {
     try {
@@ -83,11 +98,32 @@ const StaticValueForm = ({ attribute }: Props) => {
       const { data: attr } = await createAttribute({
         variables: {
           resourceId: resource.id,
+          definitionId: attribute.types[0],
           path
         }
       });
       attributeId = attr.createAttribute.id;
       dispatch(setAttributeInMap(path, attr.createAttribute));
+    }
+    // Also, we create the parent attributes if they don't exist
+    let curNode = attribute as Node;
+    while (curNode.parent) {
+      curNode = curNode.parent;
+      const parentPath = curNode.path;
+      if (
+        !attributesForResource[parentPath] &&
+        !(curNode.parent && curNode.parent.isArray) &&
+        !(curNode.types.length > 1)
+      ) {
+        const { data: attr } = await createAttribute({
+          variables: {
+            resourceId: resource.id,
+            definitionId: curNode.types[0],
+            path: parentPath
+          }
+        });
+        dispatch(setAttributeInMap(parentPath, attr.createAttribute));
+      }
     }
     createStaticInput({
       variables: {
@@ -106,15 +142,30 @@ const StaticValueForm = ({ attribute }: Props) => {
       </div>
       <FormGroup labelFor="text-input" inline={true}>
         <ControlGroup>
-          <InputGroup
-            id="static-value-input"
-            onChange={(event: React.FormEvent<HTMLElement>) => {
-              const target = event.target as HTMLInputElement;
-              setStaticValue(target.value);
-            }}
-            placeholder="Column static value"
-            value={staticValue}
-          />
+          {attribute.isReferenceType ? (
+            <>
+              <StringSelect
+                items={
+                  loadingFhirTypes || !dataFhirTypes
+                    ? []
+                    : dataFhirTypes.structureDefinitions.map((t: any) => t.name)
+                }
+                onChange={setStaticValue}
+                loading={loadingFhirTypes}
+                inputItem={staticValue}
+              />
+            </>
+          ) : (
+            <InputGroup
+              id="static-value-input"
+              onChange={(event: React.FormEvent<HTMLElement>) => {
+                const target = event.target as HTMLInputElement;
+                setStaticValue(target.value);
+              }}
+              placeholder="Static input"
+              value={staticValue}
+            />
+          )}
           <Button
             disabled={!attribute || staticValue.length === 0}
             icon={'add'}

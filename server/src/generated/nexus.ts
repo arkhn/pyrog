@@ -41,6 +41,7 @@ export interface NexusGenInputs {
     AND?: NexusGenInputs['AttributeWhereInput'][] | null; // [AttributeWhereInput!]
     comments?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    definitionId?: NexusGenInputs['StringFilter'] | null; // StringFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     inputs?: NexusGenInputs['InputFilter'] | null; // InputFilter
     mergingScript?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
@@ -330,6 +331,8 @@ export interface NexusGenFieldTypes {
   Attribute: { // field return type
     comments: string | null; // String
     createdAt: any; // DateTime!
+    definition: NexusGenRootTypes['StructureDefinition']; // StructureDefinition!
+    definitionId: string; // String!
     id: string; // ID!
     inputs: NexusGenRootTypes['Input'][]; // [Input!]!
     mergingScript: string | null; // String
@@ -518,6 +521,7 @@ export interface NexusGenArgTypes {
     }
     createAttribute: { // args
       data?: NexusGenInputs['AttributeInput'] | null; // AttributeInput
+      definitionId: string; // ID!
       path: string; // String!
       resourceId: string; // ID!
     }

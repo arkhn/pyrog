@@ -1,7 +1,7 @@
 import { Photon } from '@prisma/photon'
 
-import importMappingV2 from './v2'
-import * as mappingV2 from '../../../test/fixtures/chimio-mapping-v2.json'
+import importMappingV6 from './v6'
+import * as mappingV6 from '../../../test/fixtures/chimio-mapping-v6.json'
 
 const mockCreateResource = jest.fn()
 jest.mock('@prisma/photon', () => ({
@@ -12,24 +12,24 @@ jest.mock('@prisma/photon', () => ({
   })),
 }))
 
-describe('import mapping V2', () => {
+describe('import mapping V6', () => {
   const sourceId = '01234567'
   const resourceCount = 2
-  const { resources } = mappingV2 as any
+  const { resources } = mappingV6 as any
 
   beforeEach(() => {
     mockCreateResource.mockClear()
   })
 
   it('should send a query per resource', async () => {
-    await importMappingV2(new Photon(), sourceId, resources)
+    await importMappingV6(new Photon(), sourceId, resources)
     expect(mockCreateResource).toHaveBeenCalledTimes(resourceCount)
     expect(mockCreateResource.mock.calls[0]).toMatchSnapshot() // EpisodeOfCare - HopitalStay
     expect(mockCreateResource.mock.calls[1]).toMatchSnapshot() // Patient
   })
 
   it('should have cleaned the resource and attributes', async () => {
-    await importMappingV2(new Photon(), sourceId, resources)
+    await importMappingV6(new Photon(), sourceId, resources)
     expect(mockCreateResource.mock.calls[0][0]).toEqual({
       data: {
         label: resources[0].label,
@@ -47,13 +47,28 @@ describe('import mapping V2', () => {
             {
               path: 'period.start',
               comments: null,
-              definitionId: '',
+              definitionId: 'dateTime',
               mergingScript: 'merge_concat',
               inputs: {
                 create: expect.any(Array),
               },
             },
           ]),
+        },
+        filters: {
+          create: [
+            {
+              value: '200',
+              relation: '<=',
+              sqlColumn: {
+                create: {
+                  column: 'CHAMBRE',
+                  owner: 'OPS$ACHQ1ABC',
+                  table: 'SEJOUR',
+                },
+              },
+            },
+          ],
         },
       },
     })
