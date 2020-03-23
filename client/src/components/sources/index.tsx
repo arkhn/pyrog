@@ -9,10 +9,10 @@ import {
   Tag
 } from '@blueprintjs/core';
 import * as QueryString from 'query-string';
-import * as React from 'react';
+import React, { ReactElement } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from '@apollo/react-hooks';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import useReactRouter from 'use-react-router';
 import { loader } from 'graphql.macro';
 
@@ -20,9 +20,9 @@ import Navbar from 'components/navbar';
 
 import { changeSelectedSource } from 'services/selectedNode/actions';
 import { HTTP_BACKEND_URL } from '../../constants';
+import { IReduxStore } from 'types';
 
 import './style.scss';
-import { ReactElement } from 'react';
 
 interface Source {
   name: string;
@@ -30,12 +30,14 @@ interface Source {
 }
 
 // GRAPHQL
-const qSources = loader('src/graphql/queries/sources.graphql');
+const qSources = loader('src/graphql/queries/sourcesForUser.graphql');
 const mDeleteSource = loader('src/graphql/mutations/deleteSource.graphql');
 
 const SourcesView = (): React.ReactElement => {
   const dispatch = useDispatch();
   const { history } = useReactRouter();
+
+  const { id: userId } = useSelector((state: IReduxStore) => state.user);
 
   const [sourceToDelete, setSourceToDelete] = React.useState(
     undefined as Source | undefined
@@ -43,6 +45,9 @@ const SourcesView = (): React.ReactElement => {
   const [isAlertOpen, setIsAlertOpen] = React.useState(false);
 
   const { data: dataSources, loading: loadingSources } = useQuery(qSources, {
+    variables: {
+      userId
+    },
     fetchPolicy: 'network-only'
   });
 
@@ -52,13 +57,19 @@ const SourcesView = (): React.ReactElement => {
   ): void => {
     try {
       const { sources } = cache.readQuery({
-        query: qSources
+        query: qSources,
+        variables: {
+          userId
+        }
       });
 
       const newSources = sources.filter((s: any) => s.id !== deleteSource.id);
 
       cache.writeQuery({
         query: qSources,
+        variables: {
+          userId
+        },
         data: { sources: newSources }
       });
     } catch (error) {
@@ -109,7 +120,7 @@ const SourcesView = (): React.ReactElement => {
             icon={'delete'}
             loading={deletingSource && sourceToDelete?.id === source.id}
             minimal={true}
-            onClick={(e: React.MouseEvent) => {
+            onClick={(e: React.MouseEvent): void => {
               e.stopPropagation();
               setSourceToDelete(source);
               setIsAlertOpen(true);
@@ -156,7 +167,7 @@ const SourcesView = (): React.ReactElement => {
           {loadingSources ? (
             <Spinner />
           ) : (
-            dataSources.sources.map((source: any, index: number) =>
+            dataSources.sourcesForUser.map((source: any, index: number) =>
               renderSource(source, index)
             )
           )}

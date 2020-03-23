@@ -462,12 +462,12 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     attribute: NexusGenRootTypes['Attribute'] | null; // Attribute
     credential: NexusGenRootTypes['Credential'] | null; // Credential
-    getSourcesForUser: NexusGenRootTypes['Source'][] | null; // [Source!]
     me: NexusGenRootTypes['User'] | null; // User
     resource: NexusGenRootTypes['Resource'] | null; // Resource
     resources: NexusGenRootTypes['Resource'][] | null; // [Resource!]
     source: NexusGenRootTypes['Source'] | null; // Source
     sources: NexusGenRootTypes['Source'][] | null; // [Source!]
+    sourcesForUser: NexusGenRootTypes['Source'][] | null; // [Source!]
     structureDefinition: NexusGenRootTypes['StructureDefinition'] | null; // StructureDefinition
     structureDefinitions: NexusGenRootTypes['StructureDefinition'][] | null; // [StructureDefinition!]
     template: NexusGenRootTypes['Template'] | null; // Template
@@ -665,9 +665,6 @@ export interface NexusGenArgTypes {
     credential: { // args
       credentialId: string; // ID!
     }
-    getSourcesForUser: { // args
-      userId: string; // ID!
-    }
     resource: { // args
       resourceId: string; // ID!
     }
@@ -676,6 +673,9 @@ export interface NexusGenArgTypes {
     }
     source: { // args
       sourceId: string; // ID!
+    }
+    sourcesForUser: { // args
+      userId: string; // ID!
     }
     structureDefinition: { // args
       definitionId: string; // ID!

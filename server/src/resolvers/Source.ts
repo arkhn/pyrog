@@ -170,10 +170,11 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
   return ctx.photon.sources.delete({ where: { id } })
 }
 
-export const getSourcesForUser: FieldResolver<
-  'Query',
-  'getSourcesForUser'
-> = async (_parent, { userId }, ctx) => {
+export const sourcesForUser: FieldResolver<'Query', 'sourcesForUser'> = async (
+  _parent,
+  { userId },
+  ctx,
+) => {
   const accesses = await ctx.photon.accessControls({
     where: { user: { id: userId } },
     include: { source: true },
