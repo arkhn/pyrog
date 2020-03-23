@@ -1,6 +1,6 @@
 import { Button, FormGroup, ControlGroup } from '@blueprintjs/core';
 import React from 'react';
-import { useApolloClient, useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useDispatch, useSelector } from 'react-redux';
 
 import AddResourceSelect from 'components/selects/addResourceSelect';
@@ -24,12 +24,7 @@ interface Props {
   callback: any;
 }
 
-const qResourceAttributes = loader(
-  'src/graphql/queries/resourceAttributes.graphql'
-);
-
 const AddResource = ({ callback }: Props) => {
-  const client = useApolloClient();
   const dispatch = useDispatch();
 
   const { source } = useSelector((state: IReduxStore) => state.selectedNode);
