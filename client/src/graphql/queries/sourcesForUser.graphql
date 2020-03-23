@@ -1,0 +1,15 @@
+query sourcesForUser($userId: ID!) {
+  sourcesForUser(userId: $userId) {
+    id
+    name
+    hasOwner
+    mappingProgress
+    template {
+      id
+      name
+    }
+    credential {
+      id
+    }
+  }
+}
