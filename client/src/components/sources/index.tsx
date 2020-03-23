@@ -11,6 +11,7 @@ import {
 import * as QueryString from 'query-string';
 import React, { ReactElement } from 'react';
 import { useMutation, useQuery } from '@apollo/react-hooks';
+import { ApolloError } from 'apollo-client/errors/ApolloError';
 import { useDispatch, useSelector } from 'react-redux';
 import useReactRouter from 'use-react-router';
 import { loader } from 'graphql.macro';
@@ -36,6 +37,7 @@ const SourcesView = (): React.ReactElement => {
   const dispatch = useDispatch();
   const { history } = useReactRouter();
 
+  const toaster = useSelector((state: IReduxStore) => state.toaster);
   const { id: userId } = useSelector((state: IReduxStore) => state.user);
 
   const [sourceToDelete, setSourceToDelete] = React.useState(
@@ -77,9 +79,22 @@ const SourcesView = (): React.ReactElement => {
     }
   };
 
+  const onError = (error: ApolloError): void => {
+    const msg =
+      error.message === 'GraphQL error: Not Authorised!'
+        ? 'You only have read access on this source.'
+        : error.message;
+    toaster.show({
+      icon: 'error',
+      intent: 'danger',
+      message: msg,
+      timeout: 4000
+    });
+  };
+
   const [deleteSource, { loading: deletingSource }] = useMutation(
     mDeleteSource,
-    { update: removeSourceFromCache }
+    { update: removeSourceFromCache, onError }
   );
 
   const onClickedSource = async (source: any) => {

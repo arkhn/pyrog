@@ -3,6 +3,7 @@ import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { IReduxStore } from 'types';
 import { useMutation } from '@apollo/react-hooks';
+import { ApolloError } from 'apollo-client/errors/ApolloError';
 
 import { ISelectedSource } from 'types';
 
@@ -24,6 +25,7 @@ interface Props {
 }
 
 const Join = ({ joinData, schema, source }: Props) => {
+  const toaster = useSelector((state: IReduxStore) => state.toaster);
   const {
     attribute: { path }
   } = useSelector((state: IReduxStore) => state.selectedNode);
@@ -35,8 +37,25 @@ const Join = ({ joinData, schema, source }: Props) => {
     ? attributesForResource[path].id
     : null;
 
-  const [updateJoin, { loading: updatingJoin }] = useMutation(mUpdateJoin);
-  const [deleteJoin, { loading: deletingJoin }] = useMutation(mDeleteJoin);
+  const onError = (error: ApolloError): void => {
+    const msg =
+      error.message === 'GraphQL error: Not Authorised!'
+        ? 'You only have read access on this source.'
+        : error.message;
+    toaster.show({
+      icon: 'error',
+      intent: 'danger',
+      message: msg,
+      timeout: 4000
+    });
+  };
+
+  const [updateJoin, { loading: updatingJoin }] = useMutation(mUpdateJoin, {
+    onError
+  });
+  const [deleteJoin, { loading: deletingJoin }] = useMutation(mDeleteJoin, {
+    onError
+  });
 
   const removeJoin = (input: any) => {
     return {

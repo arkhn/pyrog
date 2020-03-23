@@ -1,5 +1,6 @@
 import { Tag, Spinner } from '@blueprintjs/core';
 import * as React from 'react';
+import { ApolloError } from 'apollo-client/errors/ApolloError';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { useSelector } from 'react-redux';
 
@@ -27,6 +28,7 @@ const InputColumns = ({ schema, source }: Props) => {
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
   const path = selectedNode.attribute.path;
 
+  const toaster = useSelector((state: IReduxStore) => state.toaster);
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
   );
@@ -40,9 +42,24 @@ const InputColumns = ({ schema, source }: Props) => {
     },
     skip: !attributeId
   });
-  const [updateAttribute, { loading: loadingMutation }] = useMutation(
-    mUpdateAttribute
-  );
+
+  const onError = (error: ApolloError): void => {
+    const msg =
+      error.message === 'GraphQL error: Not Authorised!'
+        ? 'You only have read access on this source.'
+        : error.message;
+    toaster.show({
+      icon: 'error',
+      intent: 'danger',
+      message: msg,
+      timeout: 4000
+    });
+  };
+
+  const [
+    updateAttribute,
+    { loading: loadingMutation }
+  ] = useMutation(mUpdateAttribute, { onError });
 
   if (loadingData) {
     return <Spinner />;

@@ -3,6 +3,7 @@ import { useApolloClient, useMutation } from '@apollo/react-hooks';
 import { Classes, Icon, ITreeNode, Tooltip, Tree } from '@blueprintjs/core';
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { ApolloError } from 'apollo-client/errors/ApolloError';
 import { useQuery } from '@apollo/react-hooks';
 import { IReduxStore } from 'types';
 import { loader } from 'graphql.macro';
@@ -27,13 +28,31 @@ export interface Props {
 const FhirResourceTree = ({ onClickCallback }: Props) => {
   const client = useApolloClient();
   const dispatch = useDispatch();
+
+  const toaster = useSelector((state: IReduxStore) => state.toaster);
   const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
   const baseDefinitionId = resource.definition.id;
 
   const { data, loading } = useQuery(qStructureDisplay, {
     variables: { definitionId: baseDefinitionId }
   });
-  const [deleteAttributes] = useMutation(mDeleteAttributesStartingWith);
+
+  const onError = (error: ApolloError): void => {
+    const msg =
+      error.message === 'GraphQL error: Not Authorised!'
+        ? 'You only have read access on this source.'
+        : error.message;
+    toaster.show({
+      icon: 'error',
+      intent: 'danger',
+      message: msg,
+      timeout: 4000
+    });
+  };
+
+  const [deleteAttributes] = useMutation(mDeleteAttributesStartingWith, {
+    onError
+  });
 
   const [nodes, setNodes] = useState([] as ITreeNode<Node>[]);
   const [selectedNode, setSelectedNode] = useState(

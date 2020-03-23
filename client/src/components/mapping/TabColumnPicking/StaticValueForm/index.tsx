@@ -9,6 +9,7 @@ import {
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLazyQuery, useMutation } from '@apollo/react-hooks';
+import { ApolloError } from 'apollo-client/errors/ApolloError';
 import { loader } from 'graphql.macro';
 import { Node } from '../../FhirMappingPanel/FhirResourceTree/node';
 import { IReduxStore, SelectedAttribute } from 'types';
@@ -35,6 +36,7 @@ interface Props {
 const StaticValueForm = ({ attribute }: Props) => {
   const dispatch = useDispatch();
 
+  const toaster = useSelector((state: IReduxStore) => state.toaster);
   const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
@@ -86,51 +88,68 @@ const StaticValueForm = ({ attribute }: Props) => {
     }
   };
 
-  const [createAttribute] = useMutation(mCreateAttribute);
+  const onError = (error: ApolloError): void => {
+    const msg =
+      error.message === 'GraphQL error: Not Authorised!'
+        ? 'You only have read access on this source.'
+        : error.message;
+    toaster.show({
+      icon: 'error',
+      intent: 'danger',
+      message: msg,
+      timeout: 4000
+    });
+  };
+
+  const [createAttribute] = useMutation(mCreateAttribute, { onError });
   const [
     createStaticInput,
     { loading: creatingStaticInput }
-  ] = useMutation(mCreateStaticInput, { update: addInputToCache });
+  ] = useMutation(mCreateStaticInput, { update: addInputToCache, onError });
 
   const onAddStaticValue = async (): Promise<void> => {
-    if (!attributeId) {
-      // First, we create the attribute if it doesn't exist
-      const { data: attr } = await createAttribute({
-        variables: {
-          resourceId: resource.id,
-          definitionId: attribute.types[0],
-          path
-        }
-      });
-      attributeId = attr.createAttribute.id;
-      dispatch(setAttributeInMap(path, attr.createAttribute));
-    }
-    // Also, we create the parent attributes if they don't exist
-    let curNode = attribute as Node;
-    while (curNode.parent) {
-      curNode = curNode.parent;
-      const parentPath = curNode.path;
-      if (
-        !attributesForResource[parentPath] &&
-        !curNode.isArray &&
-        !(curNode.types.length > 1)
-      ) {
+    try {
+      if (!attributeId) {
+        // First, we create the attribute if it doesn't exist
         const { data: attr } = await createAttribute({
           variables: {
             resourceId: resource.id,
-            definitionId: curNode.types[0],
-            path: parentPath
+            definitionId: attribute.types[0],
+            path
           }
         });
-        dispatch(setAttributeInMap(parentPath, attr.createAttribute));
+        attributeId = attr.createAttribute.id;
+        dispatch(setAttributeInMap(path, attr.createAttribute));
       }
+      // Also, we create the parent attributes if they don't exist
+      let curNode = attribute as Node;
+      while (curNode.parent) {
+        curNode = curNode.parent;
+        const parentPath = curNode.path;
+        if (
+          !attributesForResource[parentPath] &&
+          !curNode.isArray &&
+          !(curNode.types.length > 1)
+        ) {
+          const { data: attr } = await createAttribute({
+            variables: {
+              resourceId: resource.id,
+              definitionId: curNode.types[0],
+              path: parentPath
+            }
+          });
+          dispatch(setAttributeInMap(parentPath, attr.createAttribute));
+        }
+      }
+      createStaticInput({
+        variables: {
+          attributeId,
+          staticValue
+        }
+      });
+    } catch (e) {
+      console.log(e);
     }
-    createStaticInput({
-      variables: {
-        attributeId,
-        staticValue
-      }
-    });
   };
 
   return (

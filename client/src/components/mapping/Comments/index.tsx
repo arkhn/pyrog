@@ -49,27 +49,31 @@ const Comments = () => {
   }, [data]);
 
   const onSaveComment = async (): Promise<void> => {
-    if (attributeForNode) {
-      updateAttribute({
-        variables: {
-          attributeId: attributeForNode.id,
-          data: {
-            comments
+    try {
+      if (attributeForNode) {
+        updateAttribute({
+          variables: {
+            attributeId: attributeForNode.id,
+            data: {
+              comments
+            }
           }
-        }
-      });
-    } else {
-      const { data } = await createAttribute({
-        variables: {
-          resourceId: resource.id,
-          path: attribute.path,
-          data: {
-            comments
+        });
+      } else {
+        const { data } = await createAttribute({
+          variables: {
+            resourceId: resource.id,
+            path: attribute.path,
+            data: {
+              comments
+            }
           }
-        }
-      });
-      const newAttr = data.createAttribute;
-      dispatch(setAttributeInMap(attribute.path, newAttr));
+        });
+        const newAttr = data.createAttribute;
+        dispatch(setAttributeInMap(attribute.path, newAttr));
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 

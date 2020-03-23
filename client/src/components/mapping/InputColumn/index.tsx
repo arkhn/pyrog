@@ -8,6 +8,7 @@ import {
   Tag
 } from '@blueprintjs/core';
 import React, { useState } from 'react';
+import { ApolloError } from 'apollo-client/errors/ApolloError';
 import { useApolloClient, useMutation } from '@apollo/react-hooks';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -45,6 +46,7 @@ const InputColumn = ({ input, schema, source }: Props) => {
   const client = useApolloClient();
   const dispatch = useDispatch();
 
+  const toaster = useSelector((state: IReduxStore) => state.toaster);
   const { attribute } = useSelector((state: IReduxStore) => state.selectedNode);
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
@@ -55,12 +57,30 @@ const InputColumn = ({ input, schema, source }: Props) => {
     false
   );
 
-  const [deleteInput, { loading: loadDelInput }] = useMutation(mDeleteInput);
-  const [deleteAttribute] = useMutation(mDeleteAttribute);
-  const [addJoinToColumn, { loading: loadAddJoin }] = useMutation(
-    mAddJoinToColumn
-  );
-  const [updateInput, { loading: loadUpdInput }] = useMutation(mUpdateInput);
+  const onError = (error: ApolloError): void => {
+    const msg =
+      error.message === 'GraphQL error: Not Authorised!'
+        ? 'You only have read access on this source.'
+        : error.message;
+    toaster.show({
+      icon: 'error',
+      intent: 'danger',
+      message: msg,
+      timeout: 4000
+    });
+  };
+
+  const [deleteInput, { loading: loadDelInput }] = useMutation(mDeleteInput, {
+    onError
+  });
+  const [deleteAttribute] = useMutation(mDeleteAttribute, { onError });
+  const [
+    addJoinToColumn,
+    { loading: loadAddJoin }
+  ] = useMutation(mAddJoinToColumn, { onError });
+  const [updateInput, { loading: loadUpdInput }] = useMutation(mUpdateInput, {
+    onError
+  });
 
   const removeInputFromCache = (cache: any) => {
     const { attribute: dataAttribute } = cache.readQuery({

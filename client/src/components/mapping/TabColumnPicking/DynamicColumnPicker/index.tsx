@@ -8,6 +8,7 @@ import {
 } from '@blueprintjs/core';
 import * as React from 'react';
 import { useMutation } from '@apollo/react-hooks';
+import { ApolloError } from 'apollo-client/errors/ApolloError';
 import { useSelector, useDispatch } from 'react-redux';
 import { loader } from 'graphql.macro';
 
@@ -61,10 +62,24 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
     undefined as number | undefined
   );
 
-  const [createAttribute] = useMutation(mCreateAttribute);
-  const [createSQLInput, { loading: creatingSQLInput }] = useMutation(
-    mCreateSQLInput
-  );
+  const onError = (error: ApolloError): void => {
+    const msg =
+      error.message === 'GraphQL error: Not Authorised!'
+        ? 'You only have read access on this source.'
+        : error.message;
+    toaster.show({
+      icon: 'error',
+      intent: 'danger',
+      message: msg,
+      timeout: 4000
+    });
+  };
+
+  const [createAttribute] = useMutation(mCreateAttribute, { onError });
+  const [
+    createSQLInput,
+    { loading: creatingSQLInput }
+  ] = useMutation(mCreateSQLInput, { onError });
 
   const addInputToCache = (cache: any, { data: { createInput } }: any) => {
     try {
@@ -92,49 +107,53 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
   };
 
   const createInput = async (): Promise<void> => {
-    if (!attributeId) {
-      // First, we create the attribute if it doesn't exist
-      const { data: attr } = await createAttribute({
-        variables: {
-          resourceId: resource.id,
-          definitionId: attribute.types[0],
-          path
-        }
-      });
-      attributeId = attr.createAttribute.id;
-      dispatch(setAttributeInMap(path, attr.createAttribute));
-    }
-    // Also, we create the parent attributes if they don't exist
-    let curNode = attribute as Node;
-    while (curNode.parent) {
-      curNode = curNode.parent;
-      const parentPath = curNode.path;
-      if (
-        !attributesForResource[parentPath] &&
-        !curNode.isArray &&
-        !(curNode.types.length > 1)
-      ) {
+    try {
+      if (!attributeId) {
+        // First, we create the attribute if it doesn't exist
         const { data: attr } = await createAttribute({
           variables: {
             resourceId: resource.id,
-            definitionId: curNode.types[0],
-            path: parentPath
+            definitionId: attribute.types[0],
+            path
           }
         });
-        dispatch(setAttributeInMap(parentPath, attr.createAttribute));
+        attributeId = attr.createAttribute.id;
+        dispatch(setAttributeInMap(path, attr.createAttribute));
       }
-    }
-    createSQLInput({
-      variables: {
-        attributeId,
-        columnInput: {
-          owner: owner || '',
-          table: table,
-          column: column
+      // Also, we create the parent attributes if they don't exist
+      let curNode = attribute as Node;
+      while (curNode.parent) {
+        curNode = curNode.parent;
+        const parentPath = curNode.path;
+        if (
+          !attributesForResource[parentPath] &&
+          !curNode.isArray &&
+          !(curNode.types.length > 1)
+        ) {
+          const { data: attr } = await createAttribute({
+            variables: {
+              resourceId: resource.id,
+              definitionId: curNode.types[0],
+              path: parentPath
+            }
+          });
+          dispatch(setAttributeInMap(parentPath, attr.createAttribute));
         }
-      },
-      update: addInputToCache
-    });
+      }
+      createSQLInput({
+        variables: {
+          attributeId,
+          columnInput: {
+            owner: owner || '',
+            table: table,
+            column: column
+          }
+        },
+        update: addInputToCache
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const previewFhirObject = (rowId: number) => {
