@@ -104,6 +104,10 @@ const FhirpipeView = () => {
     return source.name.toLowerCase().indexOf(query.toLowerCase()) >= 0;
   };
 
+  const filterResources: ItemPredicate<Resource> = (query, source) => {
+    return source.definitionId.toLowerCase().indexOf(query.toLowerCase()) >= 0;
+  };
+
   const onFormSubmit = async (
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
@@ -193,6 +197,7 @@ const FhirpipeView = () => {
               onRemove: handleTagRemove
             }}
             itemRenderer={renderResource}
+            itemPredicate={filterResources}
             onItemSelect={handleResourceSelect}
             selectedItems={selectedResources}
             itemsEqual="id"
