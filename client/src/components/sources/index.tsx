@@ -10,8 +10,7 @@ import {
 } from '@blueprintjs/core';
 import * as QueryString from 'query-string';
 import React, { ReactElement } from 'react';
-import { useMutation } from '@apollo/react-hooks';
-import { useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import useReactRouter from 'use-react-router';
 import { loader } from 'graphql.macro';

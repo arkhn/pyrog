@@ -9,10 +9,12 @@ import {
   IToaster
 } from '@blueprintjs/core';
 import axios, { AxiosResponse } from 'axios';
-import * as React from 'react';
+import React, { useState } from 'react';
+import { useApolloClient, useMutation, useQuery } from '@apollo/react-hooks';
 import { Query, withApollo } from 'react-apollo';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import useReactRouter from 'use-react-router';
 
 import Navbar from 'components/navbar';
 
@@ -32,15 +34,6 @@ const mCreateSource = loader('src/graphql/mutations/createSource.graphql');
 
 export interface INewSourceState {}
 
-interface IState {
-  hasOwner: boolean;
-  templateName: string;
-  templateExists: boolean;
-  sourceName: string;
-  schemaFile?: File;
-  mappingFile?: File;
-}
-
 interface INewSourceViewState extends IView, INewSourceState {
   toaster: IToaster;
 }
@@ -54,20 +47,21 @@ const mapReduxStateToReactProps = (state: IReduxStore): INewSourceViewState => {
   };
 };
 
-class NewSourceView extends React.Component<INewSourceViewState, IState> {
-  constructor(props: INewSourceViewState) {
-    super(props);
-    this.state = {
-      hasOwner: false,
-      templateName: '',
-      templateExists: false,
-      sourceName: '',
-      schemaFile: undefined,
-      mappingFile: undefined
-    };
-  }
+const NewSourceView = (): React.ReactElement => {
+  const client = useApolloClient();
+  const { history } = useReactRouter();
 
-  renderToastProps = ({
+  const toaster = useSelector((state: IReduxStore) => state.toaster);
+  const { id: userId } = useSelector((state: IReduxStore) => state.user);
+
+  const [hasOwner, setHasOwner] = useState(false);
+  const [templateName, setTemplateName] = useState('');
+  const [templateExists, setTemplateExists] = useState(false);
+  const [sourceName, setSourceName] = useState('');
+  const [schemaFile, setSchemaFile] = useState(undefined as File | undefined);
+  const [mappingFile, setMappingFile] = useState(undefined as File | undefined);
+
+  const renderToastProps = ({
     action,
     uploadProgress,
     success,
@@ -94,20 +88,20 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
     };
   };
 
-  uploadSchema = async (toastID: string): Promise<AxiosResponse> => {
-    if (!this.state.schemaFile) {
+  const uploadSchema = async (toastID: string): Promise<AxiosResponse> => {
+    if (!schemaFile) {
       throw new Error('Database schema is missing');
     }
-    if (!this.state.templateName) {
+    if (!templateName) {
       throw new Error('Template name is missing');
     }
-    if (!this.state.sourceName) {
+    if (!sourceName) {
       throw new Error('Source name is missing');
     }
 
-    const fileName = this.state.templateName.concat('_', this.state.sourceName);
+    const fileName = templateName.concat('_', sourceName);
     const formData = new FormData();
-    formData.append('schema', this.state.schemaFile, fileName);
+    formData.append('schema', schemaFile, fileName);
 
     const CancelToken = axios.CancelToken;
     let cancel: any;
@@ -120,8 +114,8 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
       method: 'post',
       url: `${HTTP_BACKEND_URL}/upload`,
       onUploadProgress: p => {
-        this.props.toaster.show(
-          this.renderToastProps({
+        toaster.show(
+          renderToastProps({
             action: {
               onClick: () => {
                 cancel();
@@ -136,19 +130,18 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
     });
   };
 
-  createTemplate = () =>
-    this.props.client.mutate({
+  const createTemplate = () =>
+    client.mutate({
       mutation: mCreateTemplate,
       variables: {
-        name: this.state.templateName
+        name: templateName
       }
     });
 
-  createSource = () =>
+  const createSource = () =>
     new Promise(async (resolve, reject) => {
-      const { templateName, sourceName, hasOwner, mappingFile } = this.state;
       if (mappingFile) {
-        var reader = new FileReader();
+        const reader = new FileReader();
         reader.onload = async (e: ProgressEvent<FileReader>) => {
           const mapping = e.target?.result;
           if (!mapping) {
@@ -159,12 +152,13 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
           } catch (e) {
             reject(new Error(`could not parse ${mappingFile.name} as JSON`));
           }
-          await this.props.client.mutate({
+          await client.mutate({
             mutation: mCreateSource,
             variables: {
               templateName,
               hasOwner,
               mapping,
+              userId,
               name: sourceName
             }
           });
@@ -173,11 +167,12 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
         reader.onerror = (e: ProgressEvent<FileReader>) => reject(e);
         reader.readAsText(mappingFile);
       } else {
-        await this.props.client.mutate({
+        await client.mutate({
           mutation: mCreateSource,
           variables: {
             templateName,
             hasOwner,
+            userId,
             name: sourceName
           }
         });
@@ -185,11 +180,11 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
       }
     });
 
-  onFormSubmit = async (e: any) => {
+  const onFormSubmit = async (e: any) => {
     e.preventDefault();
 
-    const toastID = this.props.toaster.show(
-      this.renderToastProps({
+    const toastID = toaster.show(
+      renderToastProps({
         action: {
           text: 'Interrompre'
         },
@@ -198,28 +193,28 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
     );
 
     try {
-      const uploadResponse = await this.uploadSchema(toastID);
+      const uploadResponse = await uploadSchema(toastID);
 
       if (uploadResponse.data.success) {
         // Create new template in Graphql if it doesn't exist
-        if (!this.state.templateExists) {
-          await this.createTemplate();
+        if (!templateExists) {
+          await createTemplate();
         }
         // Create new source in Graphql
-        await this.createSource();
+        await createSource();
         // After source is created,
         // redirect to /sources page.
-        this.props.toaster.show(
-          this.renderToastProps({
-            message: `Source ${this.state.sourceName} was created`,
+        toaster.show(
+          renderToastProps({
+            message: `Source ${sourceName} was created`,
             success: true
           }),
           toastID
         );
-        this.props.history.push('/');
+        history.push('/');
       } else {
-        this.props.toaster.show(
-          this.renderToastProps({
+        toaster.show(
+          renderToastProps({
             message: uploadResponse.data.message,
             success: uploadResponse.data.success
           }),
@@ -227,8 +222,8 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
         );
       }
     } catch (e) {
-      this.props.toaster.show(
-        this.renderToastProps({
+      toaster.show(
+        renderToastProps({
           message: e.message,
           success: false
         }),
@@ -237,15 +232,12 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
     }
   };
 
-  public render = () => {
-    const { templateName, sourceName, schemaFile, mappingFile } = this.state;
-
-    const schemaType = `
+  const schemaType = `
     [owner: string] : {
         [table: string]: string[]
     }`;
 
-    const schemaExample = `
+  const schemaExample = `
     {
         "$SYSTEM": {
             "PATIENT": [
@@ -256,11 +248,11 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
         },
     }`;
 
-    const sqlCommand = `
+  const sqlCommand = `
     SELECT OWNER, TABLE_NAME, COLUMN_NAME, DATA_TYPE FROM all_tab_columns;
     `;
 
-    const sqlplusCommand = `
+  const sqlplusCommand = `
     set heading off;
     set underline off;
     set pagesize 0;
@@ -273,188 +265,171 @@ class NewSourceView extends React.Component<INewSourceViewState, IState> {
     SELECT OWNER, TABLE_NAME, COLUMN_NAME, DATA_TYPE FROM all_tab_columns;
     `;
 
-    return (
-      <div>
-        <Navbar />
-        <div id="main-container-newsource">
-          <Query fetchPolicy="network-only" query={qSourceAndTemplateNames}>
-            {({ data, loading }: any) => {
-              // Build a map where keys are template names
-              // and values are lists of source names for each template
-              const mapTemplateToSourceNames = data
-                ? data.templates
-                  ? data.templates.reduce(
-                      (map: Record<string, string[]>, template: ITemplate) => {
-                        map[template.name] = template.sources
-                          ? template.sources.map(s => s.name)
-                          : [];
-                        return map;
-                      },
-                      {}
-                    )
-                  : {}
-                : {};
+  return (
+    <div>
+      <Navbar />
+      <div id="main-container-newsource">
+        <Query fetchPolicy="network-only" query={qSourceAndTemplateNames}>
+          {({ data, loading }: any) => {
+            // Build a map where keys are template names
+            // and values are lists of source names for each template
+            const mapTemplateToSourceNames = data
+              ? data.templates
+                ? data.templates.reduce(
+                    (map: Record<string, string[]>, template: ITemplate) => {
+                      map[template.name] = template.sources
+                        ? template.sources.map(s => s.name)
+                        : [];
+                      return map;
+                    },
+                    {}
+                  )
+                : {}
+              : {};
 
-              return (
-                <form onSubmit={this.onFormSubmit}>
-                  <h1>Nom du template</h1>
+            return (
+              <form onSubmit={onFormSubmit}>
+                <h1>Nom du template</h1>
+                <InputGroup
+                  onChange={(event: React.FormEvent<HTMLElement>) => {
+                    const target = event.target as HTMLInputElement;
+                    setTemplateName(target.value);
+                    setTemplateExists(
+                      !!target.value && target.value in mapTemplateToSourceNames
+                    );
+                  }}
+                  name={'templateName'}
+                  placeholder="Nom du template..."
+                  value={templateName}
+                />
+
+                <h1>Nom de la source</h1>
+                <FormGroup
+                  helperText={
+                    templateName &&
+                    templateName in mapTemplateToSourceNames &&
+                    mapTemplateToSourceNames[templateName].indexOf(
+                      sourceName
+                    ) >= 0 ? (
+                      <p className={'warning'}>
+                        Ce nom existe déjà pour ce template et n'est pas
+                        disponible.
+                      </p>
+                    ) : null
+                  }
+                >
                   <InputGroup
                     onChange={(event: React.FormEvent<HTMLElement>) => {
                       const target = event.target as HTMLInputElement;
-                      this.setState({
-                        ...this.state,
-                        templateName: target.value,
-                        templateExists:
-                          !!target.value &&
-                          target.value in mapTemplateToSourceNames
-                      });
+                      setSourceName(target.value);
                     }}
-                    name={'templateName'}
-                    placeholder="Nom du template..."
-                    value={templateName}
+                    name={'sourceName'}
+                    placeholder="Nom de la source..."
+                    value={sourceName}
                   />
+                </FormGroup>
 
-                  <h1>Nom de la source</h1>
-                  <FormGroup
-                    helperText={
-                      templateName &&
-                      templateName in mapTemplateToSourceNames &&
-                      mapTemplateToSourceNames[templateName].indexOf(
-                        sourceName
-                      ) >= 0 ? (
-                        <p className={'warning'}>
-                          Ce nom existe déjà pour ce template et n'est pas
-                          disponible.
-                        </p>
-                      ) : null
+                <h1>Schéma de la base *</h1>
+                <FileInput
+                  fill
+                  inputProps={{
+                    onChange: (event: React.FormEvent<HTMLInputElement>) => {
+                      const target = event.target as any;
+                      setSchemaFile(target.files[0]);
+                    },
+                    name: 'schema'
+                  }}
+                  text={
+                    schemaFile ? (
+                      schemaFile.name
+                    ) : (
+                      <p className="disabled-text">Importer un schéma...</p>
+                    )
+                  }
+                />
+                <br />
+                <Checkbox
+                  checked={hasOwner}
+                  label="Le schéma a un OWNER"
+                  onChange={(event: React.FormEvent<HTMLElement>) =>
+                    setHasOwner(!hasOwner)
+                  }
+                />
+                <br />
+                <h1>Importer un mapping existant (optionnel)</h1>
+                <FileInput
+                  fill
+                  inputProps={{
+                    onChange: (event: React.FormEvent<HTMLInputElement>) => {
+                      const target = event.target as any;
+                      console.log(target.files[0]);
+                      setMappingFile(target.files[0]);
+                    },
+                    name: 'mapping'
+                  }}
+                  text={
+                    mappingFile ? (
+                      mappingFile.name
+                    ) : (
+                      <p className="disabled-text">Importer un mapping...</p>
+                    )
+                  }
+                />
+                <div className="align-right">
+                  <Button
+                    disabled={
+                      !templateName ||
+                      !sourceName ||
+                      (templateName in mapTemplateToSourceNames &&
+                        mapTemplateToSourceNames[templateName].indexOf(
+                          sourceName
+                        ) >= 0)
                     }
+                    intent="primary"
+                    large
+                    type="submit"
                   >
-                    <InputGroup
-                      onChange={(event: React.FormEvent<HTMLElement>) => {
-                        const target = event.target as HTMLInputElement;
+                    Ajouter
+                  </Button>
+                </div>
 
-                        this.setState({
-                          ...this.state,
-                          sourceName: target.value
-                        });
-                      }}
-                      name={'sourceName'}
-                      placeholder="Nom de la source..."
-                      value={sourceName}
-                    />
-                  </FormGroup>
-
-                  <h1>Schéma de la base *</h1>
-                  <FileInput
-                    fill
-                    inputProps={{
-                      onChange: (event: React.FormEvent<HTMLInputElement>) => {
-                        const target = event.target as any;
-                        this.setState({
-                          ...this.state,
-                          schemaFile: target.files[0]
-                        });
-                      },
-                      name: 'schema'
-                    }}
-                    text={
-                      schemaFile ? (
-                        schemaFile.name
-                      ) : (
-                        <p className="disabled-text">Importer un schéma...</p>
-                      )
-                    }
-                  />
-                  <br />
-                  <Checkbox
-                    checked={this.state.hasOwner}
-                    label="Le schéma a un OWNER"
-                    onChange={(event: React.FormEvent<HTMLElement>) =>
-                      this.setState({
-                        hasOwner: !this.state.hasOwner
-                      })
-                    }
-                  />
-                  <br />
-                  <h1>Importer un mapping existant (optionnel)</h1>
-                  <FileInput
-                    fill
-                    inputProps={{
-                      onChange: (event: React.FormEvent<HTMLInputElement>) => {
-                        const target = event.target as any;
-                        this.setState({
-                          ...this.state,
-                          mappingFile: target.files[0]
-                        });
-                      },
-                      name: 'mapping'
-                    }}
-                    text={
-                      mappingFile ? (
-                        mappingFile.name
-                      ) : (
-                        <p className="disabled-text">Importer un mapping...</p>
-                      )
-                    }
-                  />
-                  <div className="align-right">
-                    <Button
-                      disabled={
-                        !templateName ||
-                        !sourceName ||
-                        (templateName in mapTemplateToSourceNames &&
-                          mapTemplateToSourceNames[templateName].indexOf(
-                            sourceName
-                          ) >= 0)
-                      }
-                      intent="primary"
-                      large
-                      type="submit"
-                    >
-                      Ajouter
-                    </Button>
-                  </div>
-
-                  <p>
-                    * Une source de données doit nécessairement être importée
-                    avec un schéma de données SQL. Ce schéma doit être importé
-                    au format JSON et organisé comme suit :
-                  </p>
-                  <pre>
-                    <code dangerouslySetInnerHTML={{ __html: schemaType }} />
-                  </pre>
-                  <p>
-                    Voici un exemple minimaliste de fichier représentant un
-                    schéma de base de données JSON tel qu'il est requis par
-                    notre application à l'heure actuelle :
-                  </p>
-                  <pre>
-                    <code dangerouslySetInnerHTML={{ __html: schemaExample }} />
-                  </pre>
-                  <p>
-                    Le schéma de données peut-être extrait en utilisant le
-                    logiciel Toad avec cette commande SQL :
-                  </p>
-                  <pre>
-                    <code dangerouslySetInnerHTML={{ __html: sqlCommand }} />
-                  </pre>
-                  <p>
-                    ou en ligne de commande avec <code>sqlplus</code> :
-                  </p>
-                  <pre>
-                    <code
-                      dangerouslySetInnerHTML={{ __html: sqlplusCommand }}
-                    />
-                  </pre>
-                </form>
-              );
-            }}
-          </Query>
-        </div>
+                <p>
+                  * Une source de données doit nécessairement être importée avec
+                  un schéma de données SQL. Ce schéma doit être importé au
+                  format JSON et organisé comme suit :
+                </p>
+                <pre>
+                  <code dangerouslySetInnerHTML={{ __html: schemaType }} />
+                </pre>
+                <p>
+                  Voici un exemple minimaliste de fichier représentant un schéma
+                  de base de données JSON tel qu'il est requis par notre
+                  application à l'heure actuelle :
+                </p>
+                <pre>
+                  <code dangerouslySetInnerHTML={{ __html: schemaExample }} />
+                </pre>
+                <p>
+                  Le schéma de données peut-être extrait en utilisant le
+                  logiciel Toad avec cette commande SQL :
+                </p>
+                <pre>
+                  <code dangerouslySetInnerHTML={{ __html: sqlCommand }} />
+                </pre>
+                <p>
+                  ou en ligne de commande avec <code>sqlplus</code> :
+                </p>
+                <pre>
+                  <code dangerouslySetInnerHTML={{ __html: sqlplusCommand }} />
+                </pre>
+              </form>
+            );
+          }}
+        </Query>
       </div>
-    );
-  };
-}
+    </div>
+  );
+};
 
 export default withRouter(
   withApollo(connect(mapReduxStateToReactProps)(NewSourceView) as any) as any
