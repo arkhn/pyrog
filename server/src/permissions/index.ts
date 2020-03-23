@@ -3,6 +3,92 @@ import { rule, shield } from 'graphql-shield'
 import { getUserId } from 'utils'
 import { Context } from 'context'
 
+const getSourceFromResource = async (resourceId: any, ctx: Context) => {
+  const resource = await ctx.photon.resources.findOne({
+    where: { id: resourceId },
+    include: {
+      source: true,
+    },
+  })
+  return resource?.source.id
+}
+const getSourceFromAttribute = async (attributeId: any, ctx: Context) => {
+  const attribute = await ctx.photon.attributes.findOne({
+    where: { id: attributeId },
+    include: {
+      resource: {
+        include: {
+          source: true,
+        },
+      },
+    },
+  })
+  return attribute?.resource?.source.id
+}
+const getSourceFromInput = async (inputId: any, ctx: Context) => {
+  const input = await ctx.photon.inputs.findOne({
+    where: { id: inputId },
+    include: {
+      attribute: {
+        include: {
+          resource: {
+            include: {
+              source: true,
+            },
+          },
+        },
+      },
+    },
+  })
+  return input?.attribute.resource?.source.id
+}
+const getSourceFromColumn = async (columnId: any, ctx: Context) => {
+  const column = await ctx.photon.columns.findOne({
+    where: { id: columnId },
+    include: {
+      input: {
+        include: {
+          attribute: {
+            include: {
+              resource: {
+                include: {
+                  source: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  return column?.input?.attribute.resource?.source.id
+}
+const getSourceFromJoin = async (JoinId: any, ctx: Context) => {
+  const join = await ctx.photon.joins.findOne({
+    where: { id: JoinId },
+    include: {
+      column: {
+        include: {
+          input: {
+            include: {
+              attribute: {
+                include: {
+                  resource: {
+                    include: {
+                      source: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  return join?.column?.input?.attribute.resource?.source.id
+}
+
 const rules = {
   isAuthenticatedUser: rule()((_, __, ctx: Context) => {
     const userId = getUserId(ctx)
@@ -15,173 +101,40 @@ const rules = {
     })
     return Boolean(user && user.role == 'ADMIN')
   }),
-  isSourceWriter: rule()(async (_, args, ctx: Context) => {
+  isWriter: rule()(async (_, args, ctx: Context) => {
     // Get user id
     const userId = getUserId(ctx)
 
     // Get source
-    const sourceId = args.sourceId || args.id
+    const {
+      sourceId,
+      resourceId,
+      attributeId,
+      inputId,
+      columnId,
+      joinId,
+    } = args
+
+    let id
+    if (sourceId) {
+      id = sourceId
+    } else if (resourceId) {
+      id = getSourceFromResource(resourceId, ctx)
+    } else if (attributeId) {
+      id = getSourceFromAttribute(attributeId, ctx)
+    } else if (inputId) {
+      id = getSourceFromInput(inputId, ctx)
+    } else if (columnId) {
+      id = getSourceFromColumn(columnId, ctx)
+    } else if (joinId) {
+      id = getSourceFromJoin(joinId, ctx)
+    }
 
     // Check access rights
     const access = await ctx.photon.accessControls({
       where: {
         user: { id: userId },
-        source: { id: sourceId },
-        rights: 'WRITER',
-      },
-    })
-    return Boolean(access.length > 0)
-  }),
-  isResourceWriter: rule()(async (_, args, ctx: Context) => {
-    // Get user id
-    const userId = getUserId(ctx)
-
-    // Get source
-    const { resourceId, id } = args
-    const resource = await ctx.photon.resources.findOne({
-      where: { id: resourceId || id },
-      include: {
-        source: true,
-      },
-    })
-
-    // Check access rights
-    const access = await ctx.photon.accessControls({
-      where: {
-        user: { id: userId },
-        source: { id: resource?.source.id },
-        rights: 'WRITER',
-      },
-    })
-    return Boolean(access.length > 0)
-  }),
-  isAttributeWriter: rule()(async (_, args, ctx: Context) => {
-    // Get user id
-    const userId = getUserId(ctx)
-
-    // Get source
-    const { attributeId, id } = args
-    const attribute = await ctx.photon.attributes.findOne({
-      where: { id: attributeId || id },
-      include: {
-        resource: {
-          include: {
-            source: true,
-          },
-        },
-      },
-    })
-
-    // Check access rights
-    const access = await ctx.photon.accessControls({
-      where: {
-        user: { id: userId },
-        source: { id: attribute?.resource?.source.id },
-        rights: 'WRITER',
-      },
-    })
-    return Boolean(access.length > 0)
-  }),
-  isInputWriter: rule()(async (_, args, ctx: Context) => {
-    // Get user id
-    const userId = getUserId(ctx)
-
-    // Get source
-    const { inputId, id } = args
-    const input = await ctx.photon.inputs.findOne({
-      where: { id: inputId || id },
-      include: {
-        attribute: {
-          include: {
-            resource: {
-              include: {
-                source: true,
-              },
-            },
-          },
-        },
-      },
-    })
-
-    // Check access rights
-    const access = await ctx.photon.accessControls({
-      where: {
-        user: { id: userId },
-        source: { id: input?.attribute.resource?.source.id },
-        rights: 'WRITER',
-      },
-    })
-    return Boolean(access.length > 0)
-  }),
-  isColumnWriter: rule()(async (_, args, ctx: Context) => {
-    // Get user id
-    const userId = getUserId(ctx)
-
-    // Get source
-    const { columnId } = args
-    const column = await ctx.photon.columns.findOne({
-      where: { id: columnId },
-      include: {
-        input: {
-          include: {
-            attribute: {
-              include: {
-                resource: {
-                  include: {
-                    source: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    })
-
-    // Check access rights
-    const access = await ctx.photon.accessControls({
-      where: {
-        user: { id: userId },
-        source: { id: column?.input?.attribute.resource?.source.id },
-        rights: 'WRITER',
-      },
-    })
-    return Boolean(access.length > 0)
-  }),
-  isJoinWriter: rule()(async (_, args, ctx: Context) => {
-    // Get user id
-    const userId = getUserId(ctx)
-
-    // Get source
-    const { joinId } = args
-    const join = await ctx.photon.joins.findOne({
-      where: { id: joinId },
-      include: {
-        column: {
-          include: {
-            input: {
-              include: {
-                attribute: {
-                  include: {
-                    resource: {
-                      include: {
-                        source: true,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    })
-
-    // Check access rights
-    const access = await ctx.photon.accessControls({
-      where: {
-        user: { id: userId },
-        source: { id: join?.column?.input?.attribute.resource?.source.id },
+        source: { id },
         rights: 'WRITER',
       },
     })
@@ -204,22 +157,22 @@ export const permissions = shield({
     signup: rules.isAdmin,
 
     createSource: rules.isAuthenticatedUser,
-    deleteSource: rules.isSourceWriter,
+    deleteSource: rules.isWriter,
 
-    createResource: rules.isSourceWriter,
-    updateResource: rules.isResourceWriter,
-    deleteResource: rules.isResourceWriter,
+    createResource: rules.isWriter,
+    updateResource: rules.isWriter,
+    deleteResource: rules.isWriter,
 
-    createAttribute: rules.isResourceWriter,
-    updateAttribute: rules.isAttributeWriter,
-    deleteAttribute: rules.isAttributeWriter,
+    createAttribute: rules.isWriter,
+    updateAttribute: rules.isWriter,
+    deleteAttribute: rules.isWriter,
 
-    createInput: rules.isAttributeWriter,
-    updateInput: rules.isInputWriter,
-    deleteInput: rules.isInputWriter,
+    createInput: rules.isWriter,
+    updateInput: rules.isWriter,
+    deleteInput: rules.isWriter,
 
-    addJoinToColumn: rules.isColumnWriter,
-    updateJoin: rules.isJoinWriter,
-    deleteJoin: rules.isJoinWriter,
+    addJoinToColumn: rules.isWriter,
+    updateJoin: rules.isWriter,
+    deleteJoin: rules.isWriter,
   },
 })
