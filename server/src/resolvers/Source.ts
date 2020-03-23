@@ -134,6 +134,7 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
       where: { id: source!.credential.id },
     })
   }
+  await ctx.photon.accessControls.deleteMany({ where: { source: { id } } })
   await Promise.all(
     source!.resources.map(async r => {
       await Promise.all(

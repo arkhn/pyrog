@@ -55,21 +55,22 @@ const SourcesView = (): React.ReactElement => {
     { data: { deleteSource } }: any
   ): void => {
     try {
-      const { sources } = cache.readQuery({
+      const { sourcesForUser } = cache.readQuery({
         query: qSources,
         variables: {
           userId
         }
       });
-
-      const newSources = sources.filter((s: any) => s.id !== deleteSource.id);
+      const newSources = sourcesForUser.filter(
+        (s: any) => s.id !== deleteSource.id
+      );
 
       cache.writeQuery({
         query: qSources,
         variables: {
           userId
         },
-        data: { sources: newSources }
+        data: { sourcesForUser: newSources }
       });
     } catch (error) {
       console.log(error);
