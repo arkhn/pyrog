@@ -194,18 +194,11 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     definition: any
   ): ITreeNode<Node>[] => {
     // Check if there are already existing attributes for this node
-    const endNodeKey = parent.serialize().length + 1;
-    // We use Set to remove duplicate ids
     // we extract the index from the path
-    let existingChildrenIndices = [
-      ...new Set(
-        Object.keys(attributesForResource)
-          .filter(key => key.startsWith(parent.serialize()))
-          .map(key =>
-            Number(key.substring(endNodeKey, key.indexOf(']', endNodeKey)))
-          )
-      )
-    ];
+    const regex = new RegExp(`^${parent.serialize()}\\[(\\d+)\\]$`);
+    let existingChildrenIndices = Object.keys(attributesForResource)
+      .filter(key => regex.test(key))
+      .map(key => Number(regex.exec(key)![1]));
 
     if (existingChildrenIndices.length === 0) {
       // If no child exists yet, we still build one with index 0
