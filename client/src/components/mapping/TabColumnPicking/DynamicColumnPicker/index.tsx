@@ -111,7 +111,7 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
       const parentPath = curNode.path;
       if (
         !attributesForResource[parentPath] &&
-        !(curNode.parent && curNode.parent.isArray) &&
+        !curNode.isArray &&
         !(curNode.types.length > 1)
       ) {
         const { data: attr } = await createAttribute({
