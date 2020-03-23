@@ -314,6 +314,7 @@ input NullableStringFilter {
 type Query {
   attribute(attributeId: ID!): Attribute
   credential(credentialId: ID!): Credential
+  getSourcesForUser(userId: ID!): [Source!]
   me: User
   resource(resourceId: ID!): Resource
   resources(filter: ResourceWhereInput): [Resource!]

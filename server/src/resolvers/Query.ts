@@ -1,6 +1,7 @@
 import { arg, idArg, queryType } from 'nexus'
 
 import { getUserId } from 'utils'
+import { getSourcesForUser } from './Source'
 import { searchDefinitions } from './StructureDefinition'
 import { getDefinition } from 'fhir'
 
@@ -49,6 +50,15 @@ export const Query = queryType({
       type: 'Source',
       nullable: true,
       resolve: (parent, args, ctx) => ctx.photon.sources(),
+    })
+
+    t.list.field('getSourcesForUser', {
+      type: 'Source',
+      args: {
+        userId: idArg({ nullable: false }),
+      },
+      nullable: true,
+      resolve: getSourcesForUser,
     })
 
     t.field('source', {
