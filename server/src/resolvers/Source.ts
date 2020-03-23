@@ -53,7 +53,7 @@ export const Source = objectType({
 
 export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
   _parent,
-  { templateName, name, hasOwner, mapping },
+  { templateName, name, hasOwner, userId, mapping },
   ctx,
 ) => {
   // make sure the source does not already exist
@@ -72,6 +72,15 @@ export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
       name,
       hasOwner,
       template: { connect: { name: templateName } },
+    },
+  })
+
+  // create a row in ACL
+  await ctx.photon.accessControls.create({
+    data: {
+      user: { connect: { id: userId } },
+      source: { connect: { id: source.id } },
+      rights: 'WRITER',
     },
   })
 

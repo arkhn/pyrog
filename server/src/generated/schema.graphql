@@ -2,6 +2,29 @@
 ### Do not make changes to this file directly
 
 
+type AccessControl {
+  id: ID!
+  rights: Rights!
+  source: Source!
+  user: User!
+}
+
+input AccessControlFilter {
+  every: AccessControlWhereInput
+  none: AccessControlWhereInput
+  some: AccessControlWhereInput
+}
+
+input AccessControlWhereInput {
+  AND: [AccessControlWhereInput!]
+  id: StringFilter
+  NOT: [AccessControlWhereInput!]
+  OR: [AccessControlWhereInput!]
+  rights: Rights
+  source: SourceWhereInput
+  user: UserWhereInput
+}
+
 type Attribute {
   comments: String
   createdAt: DateTime!
@@ -249,10 +272,11 @@ scalar JSON
 
 type Mutation {
   addJoinToColumn(columnId: ID!, join: JoinInput): Column!
+  createAccessControl(rights: Rights!, sourceId: ID!, userId: ID!): AccessControl!
   createAttribute(data: AttributeInput, definitionId: ID!, path: String!, resourceId: ID!): Attribute!
   createInput(attributeId: ID!, script: String, sql: ColumnInput, static: String): Input!
   createResource(definitionId: String!, sourceId: ID!): Resource!
-  createSource(hasOwner: Boolean!, mapping: String, name: String!, templateName: String!): Source!
+  createSource(hasOwner: Boolean!, mapping: String, name: String!, templateName: String!, userId: ID!): Source!
   createTemplate(name: String!): Template!
   deleteAttribute(id: ID!): Attribute!
   deleteAttributes(filter: AttributeWhereInput): [Attribute!]
@@ -341,6 +365,11 @@ input ResourceWhereInput {
   updatedAt: DateTimeFilter
 }
 
+enum Rights {
+  READER
+  WRITER
+}
+
 enum Role {
   ADMIN
   USER
@@ -367,6 +396,7 @@ input SourceFilter {
 }
 
 input SourceWhereInput {
+  accessControls: AccessControlFilter
   AND: [SourceWhereInput!]
   createdAt: DateTimeFilter
   credential: CredentialWhereInput
@@ -455,4 +485,18 @@ type User {
   name: String!
   role: Role!
   updatedAt: DateTime!
+}
+
+input UserWhereInput {
+  accessControls: AccessControlFilter
+  AND: [UserWhereInput!]
+  createdAt: DateTimeFilter
+  email: StringFilter
+  id: StringFilter
+  name: StringFilter
+  NOT: [UserWhereInput!]
+  OR: [UserWhereInput!]
+  password: StringFilter
+  role: Role
+  updatedAt: DateTimeFilter
 }

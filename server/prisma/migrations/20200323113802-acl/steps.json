@@ -1,0 +1,81 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "CreateEnum",
+      "enum": "Rights",
+      "values": [
+        "READER",
+        "WRITER"
+      ]
+    },
+    {
+      "tag": "CreateModel",
+      "model": "AccessControl"
+    },
+    {
+      "tag": "CreateField",
+      "model": "AccessControl",
+      "field": "id",
+      "type": "String",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "AccessControl",
+          "field": "id"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "AccessControl",
+          "field": "id"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "cuid()"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "AccessControl",
+          "field": "id"
+        },
+        "directive": "id"
+      }
+    },
+    {
+      "tag": "CreateField",
+      "model": "AccessControl",
+      "field": "user",
+      "type": "User",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateField",
+      "model": "AccessControl",
+      "field": "source",
+      "type": "Source",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateField",
+      "model": "AccessControl",
+      "field": "rights",
+      "type": "Rights",
+      "arity": "Required"
+    }
+  ]
+}

@@ -1,21 +1,22 @@
 import { arg, idArg, mutationType, stringArg, booleanArg } from 'nexus'
 
-import { createResource, updateResource, deleteResource } from './Resource'
-import { deleteSource, createSource } from './Source'
 import {
   createAttribute,
   updateAttribute,
   deleteAttribute,
   deleteAttributes,
 } from './Attribute'
-import { signup, login } from './User'
-import { createInput, deleteInput, updateInput } from './Input'
-import { deleteCredential, upsertCredential } from './Credential'
-import { createTemplate, deleteTemplate } from './Template'
+import { createAccessControl } from './AccessControl'
 import { addJoinToColumn } from './Column'
-import { updateJoin, deleteJoin } from './Join'
+import { deleteCredential, upsertCredential } from './Credential'
 import { deleteFilter } from './Filter'
+import { createInput, deleteInput, updateInput } from './Input'
+import { updateJoin, deleteJoin } from './Join'
+import { createResource, updateResource, deleteResource } from './Resource'
+import { deleteSource, createSource } from './Source'
 import { refreshDefinition } from './StructureDefinition'
+import { createTemplate, deleteTemplate } from './Template'
+import { signup, login } from './User'
 
 export const Mutation = mutationType({
   /*
@@ -72,6 +73,7 @@ export const Mutation = mutationType({
         templateName: stringArg({ required: true }),
         name: stringArg({ required: true }),
         hasOwner: booleanArg({ required: true }),
+        userId: idArg({ required: true }),
         mapping: stringArg({ required: false }),
       },
       resolve: createSource,
@@ -275,6 +277,20 @@ export const Mutation = mutationType({
         id: idArg({ required: true }),
       },
       resolve: deleteFilter,
+    })
+
+    /*
+     * ACCESS CONTROL
+     */
+
+    t.field('createAccessControl', {
+      type: 'AccessControl',
+      args: {
+        userId: idArg({ required: true }),
+        sourceId: idArg({ required: true }),
+        rights: arg({ type: 'Rights', required: true }),
+      },
+      resolve: createAccessControl,
     })
   },
 })
