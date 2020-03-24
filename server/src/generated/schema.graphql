@@ -318,7 +318,6 @@ type Query {
   credential(credentialId: ID!): Credential
   me: User
   resource(resourceId: ID!): Resource
-  resourcesForUser(filter: ResourceWhereInput, userId: ID!): [Resource!]
   source(sourceId: ID!): Source
   sources: [Source!]
   structureDefinition(definitionId: ID!): StructureDefinition

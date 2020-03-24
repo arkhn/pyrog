@@ -3,7 +3,6 @@ import { arg, idArg, queryType } from 'nexus'
 import { getDefinition } from 'fhir'
 import { getUserId } from 'utils'
 import { sources } from './Source'
-import { resourcesForUser } from './Resource'
 import { searchDefinitions } from './StructureDefinition'
 
 export const Query = queryType({
@@ -80,18 +79,6 @@ export const Query = queryType({
           where: { id: resourceId },
           include: { attributes: true },
         }),
-    })
-
-    t.list.field('resourcesForUser', {
-      type: 'Resource',
-      nullable: true,
-      args: {
-        userId: idArg({ nullable: false }),
-        filter: arg({
-          type: 'ResourceWhereInput',
-        }),
-      },
-      resolve: resourcesForUser,
     })
 
     t.field('attribute', {

@@ -3,7 +3,7 @@
   "steps": [
     {
       "tag": "CreateEnum",
-      "enum": "Rights",
+      "enum": "SourceRole",
       "values": [
         "READER",
         "WRITER"
@@ -73,8 +73,8 @@
     {
       "tag": "CreateField",
       "model": "AccessControl",
-      "field": "rights",
-      "type": "Rights",
+      "field": "role",
+      "type": "SourceRole",
       "arity": "Required"
     }
   ]

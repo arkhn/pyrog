@@ -1,0 +1,18 @@
+query sourcesAndResources {
+  sources {
+    id
+    name
+    template {
+      id
+      name
+    }
+    credential {
+      id
+    }
+    resources {
+      id
+      label
+      definitionId
+    }
+  }
+}

@@ -20,24 +20,24 @@ interface Source {
   template: {
     name: string;
   };
+  credential: {
+    id: string;
+  };
+  resources: Resource[];
 }
 interface Resource {
   id: string;
   label: string;
   definitionId: string;
-  source: Source;
 }
 
 // GRAPHQL
-const qSources = loader('src/graphql/queries/sources.graphql');
-const qResources = loader('src/graphql/queries/resourcesForUser.graphql');
-const qCredentialForSource = loader(
-  'src/graphql/queries/credentialIdForSource.graphql'
+const qSourcesAndResources = loader(
+  'src/graphql/queries/sourcesAndResources.graphql'
 );
 
 const FhirpipeView = () => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const { id: userId } = useSelector((state: IReduxStore) => state.user);
 
   const [selectedSource, setSelectedSource] = useState({} as Source);
   const [selectedResources, setSelectedResources] = useState([] as Resource[]);
@@ -46,32 +46,13 @@ const FhirpipeView = () => {
   const [multiprocessing, setMultiprocessing] = useState(false);
   const [running, setRunning] = useState(false);
 
-  const { data: dataSources } = useQuery(qSources, {
+  const { data } = useQuery(qSourcesAndResources, {
     fetchPolicy: 'network-only'
   });
-  const { data: dataResources } = useQuery(qResources, {
-    variables: {
-      userId
-    },
-    fetchPolicy: 'network-only'
-  });
-  const sources = dataSources ? dataSources.sources : [];
-  const resources = dataResources ? dataResources.resourcesForUser : [];
 
-  const resourcesForSelectedSource = resources.filter(
-    (r: Resource) => r.source.id === selectedSource.id
-  );
-
-  const { data: dataCredential, loading: loadingCredentials } = useQuery(
-    qCredentialForSource,
-    {
-      variables: { sourceId: selectedSource.id },
-      skip: !selectedSource.id
-    }
-  );
-  const credentials = dataCredential && dataCredential.source.credential;
-  const credentialsMissing =
-    !!selectedSource.name && !loadingCredentials && !credentials;
+  const sources = data ? data.sources : [];
+  const credentials = selectedSource.id ? selectedSource.credential : undefined;
+  const credentialsMissing = !!selectedSource.id && !credentials;
 
   const SourceSelect = Select.ofType<Source>();
   const ResourceMultiSelect = MultiSelect.ofType<Resource>();
@@ -136,7 +117,7 @@ const FhirpipeView = () => {
       source: selectedSource.name,
       resources: selectedResources.map(r => r.definitionId),
       labels: selectedResources.map(r => r.label),
-      credentialId: credentials.id,
+      credentialId: credentials && credentials.id,
       bypass_validation: bypassValidation,
       override: override,
       multiprocessing: multiprocessing
@@ -206,7 +187,7 @@ const FhirpipeView = () => {
             select a source before.
           </p>
           <ResourceMultiSelect
-            items={resourcesForSelectedSource}
+            items={selectedSource.resources || []}
             tagRenderer={resource => resource.definitionId}
             tagInputProps={{
               onRemove: handleTagRemove
