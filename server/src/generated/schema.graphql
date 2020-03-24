@@ -278,14 +278,14 @@ type Mutation {
   createResource(definitionId: String!, sourceId: ID!): Resource!
   createSource(hasOwner: Boolean!, mapping: String, name: String!, templateName: String!): Source!
   createTemplate(name: String!): Template!
-  deleteAttribute(id: ID!): Attribute!
+  deleteAttribute(attributeId: ID!): Attribute!
   deleteAttributes(filter: AttributeWhereInput): [Attribute!]
-  deleteCredential(id: ID!): Credential!
-  deleteFilter(id: ID!): Filter!
-  deleteInput(id: ID!): Input!
-  deleteJoin(id: ID!): Join!
-  deleteResource(id: ID!): Resource!
-  deleteSource(id: ID!): Source!
+  deleteCredential(credentialId: ID!): Credential!
+  deleteFilter(filterId: ID!): Filter!
+  deleteInput(inputId: ID!): Input!
+  deleteJoin(joinId: ID!): Join!
+  deleteResource(resourceId: ID!): Resource!
+  deleteSource(sourceId: ID!): Source!
   deleteTemplate(id: ID!): Template!
   login(email: String!, password: String!): AuthPayload!
   refreshDefinition(definitionId: ID!): StructureDefinition!

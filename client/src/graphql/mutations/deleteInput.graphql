@@ -1,5 +1,5 @@
-mutation deleteInput($id: ID!) {
-  deleteInput(id: $id) {
+mutation deleteInput($inputId: ID!) {
+  deleteInput(inputId: $inputId) {
     id
   }
 }

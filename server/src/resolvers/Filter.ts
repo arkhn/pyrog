@@ -13,6 +13,6 @@ export const Filter = objectType({
 
 export const deleteFilter: FieldResolver<'Mutation', 'deleteFilter'> = async (
   _parent,
-  { id },
+  { filterId },
   ctx,
-) => ctx.photon.filters.delete({ where: { id } })
+) => ctx.photon.filters.delete({ where: { id: filterId } })

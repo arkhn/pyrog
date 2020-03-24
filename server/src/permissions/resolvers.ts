@@ -1,5 +1,18 @@
 import { Context } from 'context'
 
+export const getSourceFromCredential = async (
+  credentialId: any,
+  ctx: Context,
+) => {
+  const credential = await ctx.photon.credentials.findOne({
+    where: { id: credentialId },
+    include: {
+      source: true,
+    },
+  })
+  return credential?.source.id
+}
+
 export const getSourceFromResource = async (resourceId: any, ctx: Context) => {
   const resource = await ctx.photon.resources.findOne({
     where: { id: resourceId },

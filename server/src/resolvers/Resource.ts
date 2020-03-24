@@ -53,9 +53,9 @@ export const createResource: FieldResolver<
 export const deleteResource: FieldResolver<
   'Mutation',
   'deleteResource'
-> = async (_parent, { id }, ctx) => {
+> = async (_parent, { resourceId }, ctx) => {
   const res = await ctx.photon.resources.findOne({
-    where: { id },
+    where: { id: resourceId },
     include: {
       filters: {
         include: {
@@ -110,7 +110,7 @@ export const deleteResource: FieldResolver<
       return ctx.photon.attributes.delete({ where: { id: a.id } })
     }),
   )
-  return ctx.photon.resources.delete({ where: { id } })
+  return ctx.photon.resources.delete({ where: { id: resourceId } })
 }
 
 export const updateResource: FieldResolver<

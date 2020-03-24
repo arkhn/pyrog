@@ -96,11 +96,11 @@ export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
 
 export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
   _parent,
-  { id },
+  { sourceId },
   ctx,
 ) => {
   const source = await ctx.photon.sources.findOne({
-    where: { id },
+    where: { id: sourceId },
     include: {
       credential: true,
       resources: {
@@ -136,7 +136,9 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
       where: { id: source!.credential.id },
     })
   }
-  await ctx.photon.accessControls.deleteMany({ where: { source: { id } } })
+  await ctx.photon.accessControls.deleteMany({
+    where: { source: { id: sourceId } },
+  })
   await Promise.all(
     source!.resources.map(async r => {
       await Promise.all(
@@ -170,7 +172,7 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
       return ctx.photon.resources.delete({ where: { id: r.id } })
     }),
   )
-  return ctx.photon.sources.delete({ where: { id } })
+  return ctx.photon.sources.delete({ where: { id: sourceId } })
 }
 
 export const sources: FieldResolver<'Query', 'sources'> = async (

@@ -184,7 +184,7 @@ const Drawer = ({ resource, isOpen, onCloseCallback }: Props): ReactElement => {
   const onClickDelete = (): void => {
     deleteResource({
       variables: {
-        id: resource.id
+        resourceId: resource.id
       }
     });
   };

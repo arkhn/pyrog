@@ -593,28 +593,28 @@ export interface NexusGenArgTypes {
       name: string; // String!
     }
     deleteAttribute: { // args
-      id: string; // ID!
+      attributeId: string; // ID!
     }
     deleteAttributes: { // args
       filter?: NexusGenInputs['AttributeWhereInput'] | null; // AttributeWhereInput
     }
     deleteCredential: { // args
-      id: string; // ID!
+      credentialId: string; // ID!
     }
     deleteFilter: { // args
-      id: string; // ID!
+      filterId: string; // ID!
     }
     deleteInput: { // args
-      id: string; // ID!
+      inputId: string; // ID!
     }
     deleteJoin: { // args
-      id: string; // ID!
+      joinId: string; // ID!
     }
     deleteResource: { // args
-      id: string; // ID!
+      resourceId: string; // ID!
     }
     deleteSource: { // args
-      id: string; // ID!
+      sourceId: string; // ID!
     }
     deleteTemplate: { // args
       id: string; // ID!

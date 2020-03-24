@@ -3,6 +3,7 @@ import { rule, shield } from 'graphql-shield'
 import { getUserId } from 'utils'
 import { Context } from 'context'
 import {
+  getSourceFromCredential,
   getSourceFromResource,
   getSourceFromAttribute,
   getSourceFromInput,
@@ -35,6 +36,7 @@ const rules = {
     // Get source
     const {
       sourceId,
+      credentialId,
       resourceId,
       attributeId,
       inputId,
@@ -45,6 +47,8 @@ const rules = {
     let id
     if (sourceId) {
       id = sourceId
+    } else if (credentialId) {
+      id = getSourceFromCredential(credentialId, ctx)
     } else if (resourceId) {
       id = getSourceFromResource(resourceId, ctx)
     } else if (attributeId) {
@@ -89,6 +93,9 @@ export const permissions = shield({
 
     createSource: rules.isAuthenticatedUser,
     deleteSource: rules.isSourceWriter,
+
+    upsertCredential: rules.isSourceWriter,
+    deleteCredential: rules.isSourceWriter,
 
     createResource: rules.isSourceWriter,
     updateResource: rules.isSourceWriter,

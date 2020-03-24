@@ -106,7 +106,7 @@ const InputColumn = ({ input, schema, source }: Props) => {
     // Mutation to remove from DB
     await deleteInput({
       variables: {
-        id: input.id
+        inputId: input.id
       },
       update: removeInputFromCache
     });

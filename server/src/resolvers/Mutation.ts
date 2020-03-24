@@ -81,7 +81,7 @@ export const Mutation = mutationType({
     t.field('deleteSource', {
       type: 'Source',
       args: {
-        id: idArg({ required: true }),
+        sourceId: idArg({ required: true }),
       },
       resolve: deleteSource,
     })
@@ -107,7 +107,7 @@ export const Mutation = mutationType({
     t.field('deleteCredential', {
       type: 'Credential',
       args: {
-        id: idArg({ required: true }),
+        credentialId: idArg({ required: true }),
       },
       resolve: deleteCredential,
     })
@@ -128,7 +128,7 @@ export const Mutation = mutationType({
     t.field('deleteResource', {
       type: 'Resource',
       args: {
-        id: idArg({ required: true }),
+        resourceId: idArg({ required: true }),
       },
       resolve: deleteResource,
     })
@@ -197,7 +197,7 @@ export const Mutation = mutationType({
     t.field('deleteAttribute', {
       type: 'Attribute',
       args: {
-        id: idArg({ required: true }),
+        attributeId: idArg({ required: true }),
       },
       resolve: deleteAttribute,
     })
@@ -242,7 +242,7 @@ export const Mutation = mutationType({
     t.field('deleteInput', {
       type: 'Input',
       args: {
-        id: idArg({ required: true }),
+        inputId: idArg({ required: true }),
       },
       resolve: deleteInput,
     })
@@ -276,7 +276,7 @@ export const Mutation = mutationType({
     t.field('deleteJoin', {
       type: 'Join',
       args: {
-        id: idArg({ required: true }),
+        joinId: idArg({ required: true }),
       },
       resolve: deleteJoin,
     })
@@ -288,7 +288,7 @@ export const Mutation = mutationType({
     t.field('deleteFilter', {
       type: 'Filter',
       args: {
-        id: idArg({ required: true }),
+        filterId: idArg({ required: true }),
       },
       resolve: deleteFilter,
     })

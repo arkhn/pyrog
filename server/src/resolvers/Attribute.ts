@@ -74,8 +74,8 @@ export const updateAttribute: FieldResolver<
 export const deleteAttribute: FieldResolver<
   'Mutation',
   'deleteAttribute'
-> = async (_parent, { id }, ctx) =>
-  ctx.photon.attributes.delete({ where: { id } })
+> = async (_parent, { attributeId }, ctx) =>
+  ctx.photon.attributes.delete({ where: { id: attributeId } })
 
 export const deleteAttributes: FieldResolver<
   'Mutation',

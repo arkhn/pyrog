@@ -85,6 +85,6 @@ export const updateJoin: FieldResolver<'Mutation', 'updateJoin'> = async (
 
 export const deleteJoin: FieldResolver<'Mutation', 'deleteJoin'> = async (
   _parent,
-  { id },
+  { joinId },
   ctx,
-) => ctx.photon.joins.delete({ where: { id } })
+) => ctx.photon.joins.delete({ where: { id: joinId } })

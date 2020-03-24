@@ -96,7 +96,7 @@ const Join = ({ joinData, schema, source }: Props) => {
         onClick={() => {
           deleteJoin({
             variables: {
-              id: joinData.id
+              joinId: joinData.id
             },
             update: removeJoinFromCache
           });

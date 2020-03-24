@@ -188,7 +188,7 @@ const SourcesView = (): React.ReactElement => {
             if (confirmed) {
               await deleteSource({
                 variables: {
-                  id: sourceToDelete ? sourceToDelete.id : ''
+                  sourceId: sourceToDelete ? sourceToDelete.id : ''
                 }
               });
             }
