@@ -11,13 +11,13 @@ import { useMutation } from '@apollo/react-hooks';
 import { ApolloError } from 'apollo-client/errors/ApolloError';
 import { useSelector, useDispatch } from 'react-redux';
 import { loader } from 'graphql.macro';
+import { Attribute } from '@arkhn/fhir.ts';
 
 import ColumnPicker from '../../ColumnPicker';
 import TableViewer from './TableViewer';
 import FhirPreview from './FhirPreview';
 
-import { Node } from '../../FhirMappingPanel/FhirResourceTree/node';
-import { IReduxStore, SelectedAttribute, ISelectedSource } from 'types';
+import { IReduxStore, ISelectedSource } from 'types';
 import { PAGAI_URL } from '../../../../constants';
 
 import { setAttributeInMap } from 'services/resourceInputs/actions';
@@ -32,7 +32,7 @@ const mCreateAttribute = loader(
 const mCreateSQLInput = loader('src/graphql/mutations/createSQLInput.graphql');
 
 interface Props {
-  attribute: SelectedAttribute;
+  attribute: Attribute;
   schema: any;
   source: ISelectedSource;
 }
@@ -121,26 +121,27 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
         dispatch(setAttributeInMap(path, attr.createAttribute));
       }
       // Also, we create the parent attributes if they don't exist
-      let curNode = attribute as Node;
-      while (curNode.parent) {
-        curNode = curNode.parent;
-        const parentPath = curNode.path;
+      let currentAttribute = attribute;
+      while (currentAttribute.parent) {
+        currentAttribute = currentAttribute.parent;
+        const parentPath = currentAttribute.path;
         if (
           !attributesForResource[parentPath] &&
-          !curNode.isArray &&
-          !(curNode.types.length > 1)
+          !currentAttribute.isArray &&
+          !(currentAttribute.types.length > 1)
         ) {
           const { data: attr } = await createAttribute({
             variables: {
               resourceId: resource.id,
-              definitionId: curNode.types[0],
+              definitionId: currentAttribute.types[0],
               path: parentPath
             }
           });
-          dispatch(setAttributeInMap(parentPath, attr.createAttribute));
+          attributeId = attr.createAttribute.id;
+          dispatch(setAttributeInMap(path, attr.createAttribute));
         }
       }
-      createSQLInput({
+      await createSQLInput({
         variables: {
           attributeId,
           columnInput: {

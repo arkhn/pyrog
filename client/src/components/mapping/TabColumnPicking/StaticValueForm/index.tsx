@@ -11,8 +11,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 import { ApolloError } from 'apollo-client/errors/ApolloError';
 import { loader } from 'graphql.macro';
-import { Node } from '../../FhirMappingPanel/FhirResourceTree/node';
-import { IReduxStore, SelectedAttribute } from 'types';
+import { Attribute } from '@arkhn/fhir.ts';
+
+import { IReduxStore } from 'types';
 
 import { setAttributeInMap } from 'services/resourceInputs/actions';
 import StringSelect from 'components/selects/stringSelect';
@@ -30,7 +31,7 @@ const mCreateStaticInput = loader(
 );
 
 interface Props {
-  attribute: SelectedAttribute;
+  attribute: Attribute;
 }
 
 const StaticValueForm = ({ attribute }: Props) => {
@@ -122,26 +123,27 @@ const StaticValueForm = ({ attribute }: Props) => {
         dispatch(setAttributeInMap(path, attr.createAttribute));
       }
       // Also, we create the parent attributes if they don't exist
-      let curNode = attribute as Node;
-      while (curNode.parent) {
-        curNode = curNode.parent;
-        const parentPath = curNode.path;
+      let currentAttribute = attribute;
+      while (currentAttribute.parent) {
+        currentAttribute = currentAttribute.parent;
+        const parentPath = currentAttribute.path;
         if (
           !attributesForResource[parentPath] &&
-          !curNode.isArray &&
-          !(curNode.types.length > 1)
+          !currentAttribute.isArray &&
+          !(currentAttribute.types.length > 1)
         ) {
           const { data: attr } = await createAttribute({
             variables: {
               resourceId: resource.id,
-              definitionId: curNode.types[0],
+              definitionId: currentAttribute.types[0],
               path: parentPath
             }
           });
-          dispatch(setAttributeInMap(parentPath, attr.createAttribute));
+          attributeId = attr.createAttribute.id;
+          dispatch(setAttributeInMap(path, attr.createAttribute));
         }
       }
-      createStaticInput({
+      await createStaticInput({
         variables: {
           attributeId,
           staticValue

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { useSelector, useDispatch } from 'react-redux';
+import { Attribute } from '@arkhn/fhir.ts';
 
 // ACTIONS
 import { updateFhirAttribute } from 'services/selectedNode/actions';
@@ -13,7 +14,6 @@ import ResourceSelector from './ResourceSelector';
 import { IReduxStore } from 'types';
 
 import { loader } from 'graphql.macro';
-import { Node } from 'components/mapping/FhirMappingPanel/FhirResourceTree/node';
 
 // GRAPHQL
 const qResourcesForSource = loader(
@@ -40,8 +40,8 @@ const FhirMappingPanel = () => {
     return (
       <div id="fhir-resource-tree">
         <FhirResourceTree
-          onClickCallback={(nodeData: Node) => {
-            dispatch(updateFhirAttribute(nodeData));
+          onClickCallback={(attribute: Attribute) => {
+            dispatch(updateFhirAttribute(attribute));
           }}
         />
       </div>

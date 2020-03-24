@@ -1,12 +1,12 @@
 import { objectType, FieldResolver } from 'nexus'
 import axios from 'axios'
+import { Definition } from '@arkhn/fhir.ts'
 
 import {
   resourceProfiles,
   resourcesPerKind,
   cacheDefinition,
 } from 'fhir/definitions'
-import { CachedDefinition } from 'types'
 import { FHIR_API_URL } from '../constants'
 
 export const StructureDefinition = objectType({
@@ -15,62 +15,62 @@ export const StructureDefinition = objectType({
     t.field('id', {
       type: 'String',
       resolve: (parent: any) => {
-        return parent.$meta.id
+        return parent.meta.id
       },
     })
 
     t.field('type', {
       type: 'String',
       resolve: (parent: any) => {
-        return parent.$meta.type
+        return parent.meta.type
       },
     })
 
     t.field('name', {
       type: 'String',
       resolve: (parent: any) => {
-        return parent.$meta.name
+        return parent.meta.name
       },
     })
 
     t.field('derivation', {
       type: 'String',
       resolve: (parent: any) => {
-        return parent.$meta.derivation
+        return parent.meta.derivation
       },
     })
 
     t.field('kind', {
       type: 'String',
       resolve: (parent: any) => {
-        return parent.$meta.kind
+        return parent.meta.kind
       },
     })
 
     t.field('url', {
       type: 'String',
       resolve: (parent: any) => {
-        return parent.$meta.url
+        return parent.meta.url
       },
     })
 
     t.field('publisher', {
       type: 'String',
       resolve: (parent: any) => {
-        return parent.$meta.publisher
+        return parent.meta.publisher
       },
     })
 
-    t.field('display', {
+    t.field('attributes', {
       type: 'JSON',
-      description: 'Structured version of a definition',
-      resolve: (parent: any) => parent,
+      description: 'Structured version of the attributes',
+      resolve: (parent: any) => parent.attributes,
     })
 
     t.list.field('profiles', {
       type: 'StructureDefinition',
       description: 'List of profiles on this resource',
-      resolve: async (parent: any) => resourceProfiles(parent.$meta.type),
+      resolve: async (parent: any) => resourceProfiles(parent.meta.type),
     })
   },
 })
@@ -81,7 +81,7 @@ export const searchDefinitions: FieldResolver<
 > = async (_, { filter }) => {
   const { derivation, kind, type } = filter
 
-  let res: CachedDefinition[]
+  let res: Definition[]
   if (derivation && kind && !type) {
     res = await resourcesPerKind(derivation, kind)
   } else if (!derivation && !kind && type) {

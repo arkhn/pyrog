@@ -426,10 +426,9 @@ input StringFilter {
 }
 
 type StructureDefinition {
+  """Structured version of the attributes"""
+  attributes: JSON!
   derivation: String!
-
-  """Structured version of a definition"""
-  display: JSON!
   id: String!
   kind: String!
   name: String!

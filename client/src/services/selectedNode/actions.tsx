@@ -1,5 +1,6 @@
+import { Attribute } from '@arkhn/fhir.ts';
+
 import { IAction, ISourceSchema, ISourceColumn } from 'types';
-import { Node } from 'components/mapping/FhirMappingPanel/FhirResourceTree/node';
 
 interface Resource {
   id: string;
@@ -91,7 +92,7 @@ export const deselectResource = (): IAction => {
 };
 
 // Fhir Attribute
-export const updateFhirAttribute = (attribute: Node): IAction => {
+export const updateFhirAttribute = (attribute: Attribute): IAction => {
   return {
     type: 'UPDATE_ATTRIBUTE',
     payload: {
