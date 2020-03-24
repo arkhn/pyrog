@@ -465,7 +465,7 @@ export interface NexusGenFieldTypes {
     credential: NexusGenRootTypes['Credential'] | null; // Credential
     me: NexusGenRootTypes['User'] | null; // User
     resource: NexusGenRootTypes['Resource'] | null; // Resource
-    resources: NexusGenRootTypes['Resource'][] | null; // [Resource!]
+    resourcesForUser: NexusGenRootTypes['Resource'][] | null; // [Resource!]
     source: NexusGenRootTypes['Source'] | null; // Source
     sources: NexusGenRootTypes['Source'][] | null; // [Source!]
     sourcesForUser: NexusGenRootTypes['Source'][] | null; // [Source!]
@@ -673,8 +673,9 @@ export interface NexusGenArgTypes {
     resource: { // args
       resourceId: string; // ID!
     }
-    resources: { // args
+    resourcesForUser: { // args
       filter?: NexusGenInputs['ResourceWhereInput'] | null; // ResourceWhereInput
+      userId: string; // ID!
     }
     source: { // args
       sourceId: string; // ID!

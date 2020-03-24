@@ -162,3 +162,23 @@ export const updateResource: FieldResolver<
     data,
   })
 }
+
+export const resourcesForUser: FieldResolver<
+  'Query',
+  'resourcesForUser'
+> = async (_parent, { userId, filter }, ctx) => {
+  const accesses = await ctx.photon.accessControls({
+    where: { user: { id: userId } },
+    include: { source: true },
+  })
+
+  const sourceIds = accesses.map(a => a.source.id)
+  return ctx.photon.resources.findMany({
+    where: {
+      ...filter,
+      source: {
+        id: { in: sourceIds },
+      },
+    },
+  })
+}

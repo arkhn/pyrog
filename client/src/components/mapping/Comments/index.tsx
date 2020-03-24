@@ -12,9 +12,7 @@ import { setAttributeInMap } from 'services/resourceInputs/actions';
 const qCommentsForAttribute = loader(
   'src/graphql/queries/commentsForAttribute.graphql'
 );
-const mUpdateComments = loader(
-  'src/graphql/mutations/updateComments.graphql'
-);
+const mUpdateComments = loader('src/graphql/mutations/updateComments.graphql');
 const mCreateAttribute = loader(
   'src/graphql/mutations/createAttribute.graphql'
 );

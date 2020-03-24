@@ -29,14 +29,15 @@ interface Resource {
 }
 
 // GRAPHQL
-const qSources = loader('src/graphql/queries/sources.graphql');
-const qResources = loader('src/graphql/queries/resources.graphql');
+const qSources = loader('src/graphql/queries/sourcesForUser.graphql');
+const qResources = loader('src/graphql/queries/resourcesForUser.graphql');
 const qCredentialForSource = loader(
   'src/graphql/queries/credentialIdForSource.graphql'
 );
 
 const FhirpipeView = () => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
+  const { id: userId } = useSelector((state: IReduxStore) => state.user);
 
   const [selectedSource, setSelectedSource] = useState({} as Source);
   const [selectedResources, setSelectedResources] = useState([] as Resource[]);
@@ -46,13 +47,19 @@ const FhirpipeView = () => {
   const [running, setRunning] = useState(false);
 
   const { data: dataSources } = useQuery(qSources, {
+    variables: {
+      userId
+    },
     fetchPolicy: 'network-only'
   });
   const { data: dataResources } = useQuery(qResources, {
+    variables: {
+      userId
+    },
     fetchPolicy: 'network-only'
   });
-  const sources = dataSources ? dataSources.sources : [];
-  const resources = dataResources ? dataResources.resources : [];
+  const sources = dataSources ? dataSources.sourcesForUser : [];
+  const resources = dataResources ? dataResources.resourcesForUser : [];
 
   const resourcesForSelectedSource = resources.filter(
     (r: Resource) => r.source.id === selectedSource.id

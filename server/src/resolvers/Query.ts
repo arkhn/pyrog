@@ -1,9 +1,10 @@
 import { arg, idArg, queryType } from 'nexus'
 
+import { getDefinition } from 'fhir'
 import { getUserId } from 'utils'
 import { sourcesForUser } from './Source'
+import { resourcesForUser } from './Resource'
 import { searchDefinitions } from './StructureDefinition'
-import { getDefinition } from 'fhir'
 
 export const Query = queryType({
   definition(t) {
@@ -84,16 +85,16 @@ export const Query = queryType({
         }),
     })
 
-    t.list.field('resources', {
+    t.list.field('resourcesForUser', {
       type: 'Resource',
       nullable: true,
       args: {
+        userId: idArg({ nullable: false }),
         filter: arg({
           type: 'ResourceWhereInput',
         }),
       },
-      resolve: (parent, { filter }, ctx) =>
-        ctx.photon.resources({ where: filter }),
+      resolve: resourcesForUser,
     })
 
     t.field('attribute', {

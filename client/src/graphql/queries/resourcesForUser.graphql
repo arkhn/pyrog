@@ -1,0 +1,10 @@
+query resourcesForUser($userId: ID!, $filter: ResourceWhereInput) {
+  resourcesForUser(userId: $userId, filter: $filter) {
+    id
+    label
+    definitionId
+    source {
+      id
+    }
+  }
+}
