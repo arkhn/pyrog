@@ -7,18 +7,18 @@ export const AccessControl = objectType({
 
     t.model.user()
     t.model.source()
-    t.model.rights()
+    t.model.role()
   },
 })
 
 export const createAccessControl: FieldResolver<
   'Mutation',
   'createAccessControl'
-> = (_parent, { userId, sourceId, rights }, ctx) =>
+> = (_parent, { userId, sourceId, role }, ctx) =>
   ctx.photon.accessControls.create({
     data: {
       user: { connect: { id: userId } },
       source: { connect: { id: sourceId } },
-      rights,
+      role,
     },
   })

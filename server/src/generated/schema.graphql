@@ -4,7 +4,7 @@
 
 type AccessControl {
   id: ID!
-  rights: Rights!
+  role: SourceRole!
   source: Source!
   user: User!
 }
@@ -20,7 +20,7 @@ input AccessControlWhereInput {
   id: StringFilter
   NOT: [AccessControlWhereInput!]
   OR: [AccessControlWhereInput!]
-  rights: Rights
+  role: SourceRole
   source: SourceWhereInput
   user: UserWhereInput
 }
@@ -272,11 +272,11 @@ scalar JSON
 
 type Mutation {
   addJoinToColumn(columnId: ID!, join: JoinInput): Column!
-  createAccessControl(rights: Rights!, sourceId: ID!, userId: ID!): AccessControl!
+  createAccessControl(role: SourceRole!, sourceId: ID!, userId: ID!): AccessControl!
   createAttribute(data: AttributeInput, definitionId: ID!, path: String!, resourceId: ID!): Attribute!
   createInput(attributeId: ID!, script: String, sql: ColumnInput, static: String): Input!
   createResource(definitionId: String!, sourceId: ID!): Resource!
-  createSource(hasOwner: Boolean!, mapping: String, name: String!, templateName: String!, userId: ID!): Source!
+  createSource(hasOwner: Boolean!, mapping: String, name: String!, templateName: String!): Source!
   createTemplate(name: String!): Template!
   deleteAttribute(id: ID!): Attribute!
   deleteAttributes(filter: AttributeWhereInput): [Attribute!]
@@ -313,6 +313,7 @@ input NullableStringFilter {
 }
 
 type Query {
+  allSources: [Source!]
   attribute(attributeId: ID!): Attribute
   credential(credentialId: ID!): Credential
   me: User
@@ -320,7 +321,6 @@ type Query {
   resourcesForUser(filter: ResourceWhereInput, userId: ID!): [Resource!]
   source(sourceId: ID!): Source
   sources: [Source!]
-  sourcesForUser(userId: ID!): [Source!]
   structureDefinition(definitionId: ID!): StructureDefinition
   structureDefinitions(filter: StructureDefinitionWhereFilter!): [StructureDefinition!]
   template(templateId: ID!): Template
@@ -367,11 +367,6 @@ input ResourceWhereInput {
   updatedAt: DateTimeFilter
 }
 
-enum Rights {
-  READER
-  WRITER
-}
-
 enum Role {
   ADMIN
   USER
@@ -395,6 +390,11 @@ input SourceFilter {
   every: SourceWhereInput
   none: SourceWhereInput
   some: SourceWhereInput
+}
+
+enum SourceRole {
+  READER
+  WRITER
 }
 
 input SourceWhereInput {

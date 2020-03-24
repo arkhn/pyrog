@@ -146,7 +146,7 @@ model User {
   createdAt DateTime @default(now())
 }
 
-enum Rights {
+enum SourceRole {
   READER WRITER
 }
 
@@ -155,5 +155,5 @@ model AccessControl {
 
   user   User
   source Source
-  rights Rights
+  role   SourceRole
 }

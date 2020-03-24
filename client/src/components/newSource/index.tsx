@@ -171,7 +171,6 @@ const NewSourceView = (): React.ReactElement => {
             templateName,
             hasOwner,
             mapping,
-            userId,
             name: sourceName
           }
         });
@@ -192,7 +191,6 @@ const NewSourceView = (): React.ReactElement => {
         variables: {
           templateName,
           hasOwner,
-          userId,
           name: sourceName
         }
       });

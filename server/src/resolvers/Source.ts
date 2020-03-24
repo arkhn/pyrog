@@ -1,6 +1,7 @@
 import { objectType, FieldResolver } from 'nexus'
 
 import { importMapping, exportMapping } from 'resolvers/mapping'
+import { getUserId } from 'utils'
 
 export const Source = objectType({
   name: 'Source',
@@ -53,7 +54,7 @@ export const Source = objectType({
 
 export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
   _parent,
-  { templateName, name, hasOwner, userId, mapping },
+  { templateName, name, hasOwner, mapping },
   ctx,
 ) => {
   // make sure the source does not already exist
@@ -76,11 +77,12 @@ export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
   })
 
   // create a row in ACL
+  const userId = getUserId(ctx)
   await ctx.photon.accessControls.create({
     data: {
       user: { connect: { id: userId } },
       source: { connect: { id: source.id } },
-      rights: 'WRITER',
+      role: 'WRITER',
     },
   })
 
@@ -171,17 +173,15 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
   return ctx.photon.sources.delete({ where: { id } })
 }
 
-export const sourcesForUser: FieldResolver<'Query', 'sourcesForUser'> = async (
+export const sources: FieldResolver<'Query', 'sources'> = async (
   _parent,
-  { userId },
+  _args,
   ctx,
 ) => {
+  const userId = getUserId(ctx)
   const accesses = await ctx.photon.accessControls({
     where: { user: { id: userId } },
     include: { source: true },
   })
-  const sourceIds = accesses.map(a => a.source.id)
-  return ctx.photon.sources.findMany({
-    where: { id: { in: sourceIds } },
-  })
+  return accesses.map(a => a.source)
 }

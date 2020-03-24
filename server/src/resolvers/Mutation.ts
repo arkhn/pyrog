@@ -73,7 +73,6 @@ export const Mutation = mutationType({
         templateName: stringArg({ required: true }),
         name: stringArg({ required: true }),
         hasOwner: booleanArg({ required: true }),
-        userId: idArg({ required: true }),
         mapping: stringArg({ required: false }),
       },
       resolve: createSource,
@@ -303,7 +302,7 @@ export const Mutation = mutationType({
       args: {
         userId: idArg({ required: true }),
         sourceId: idArg({ required: true }),
-        rights: arg({ type: 'Rights', required: true }),
+        role: arg({ type: 'SourceRole', required: true }),
       },
       resolve: createAccessControl,
     })

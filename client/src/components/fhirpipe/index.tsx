@@ -29,7 +29,7 @@ interface Resource {
 }
 
 // GRAPHQL
-const qSources = loader('src/graphql/queries/sourcesForUser.graphql');
+const qSources = loader('src/graphql/queries/sources.graphql');
 const qResources = loader('src/graphql/queries/resourcesForUser.graphql');
 const qCredentialForSource = loader(
   'src/graphql/queries/credentialIdForSource.graphql'
@@ -47,9 +47,6 @@ const FhirpipeView = () => {
   const [running, setRunning] = useState(false);
 
   const { data: dataSources } = useQuery(qSources, {
-    variables: {
-      userId
-    },
     fetchPolicy: 'network-only'
   });
   const { data: dataResources } = useQuery(qResources, {
@@ -58,7 +55,7 @@ const FhirpipeView = () => {
     },
     fetchPolicy: 'network-only'
   });
-  const sources = dataSources ? dataSources.sourcesForUser : [];
+  const sources = dataSources ? dataSources.sources : [];
   const resources = dataResources ? dataResources.resourcesForUser : [];
 
   const resourcesForSelectedSource = resources.filter(

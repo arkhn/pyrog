@@ -2,92 +2,13 @@ import { rule, shield } from 'graphql-shield'
 
 import { getUserId } from 'utils'
 import { Context } from 'context'
-
-const getSourceFromResource = async (resourceId: any, ctx: Context) => {
-  const resource = await ctx.photon.resources.findOne({
-    where: { id: resourceId },
-    include: {
-      source: true,
-    },
-  })
-  return resource?.source.id
-}
-const getSourceFromAttribute = async (attributeId: any, ctx: Context) => {
-  const attribute = await ctx.photon.attributes.findOne({
-    where: { id: attributeId },
-    include: {
-      resource: {
-        include: {
-          source: true,
-        },
-      },
-    },
-  })
-  return attribute?.resource?.source.id
-}
-const getSourceFromInput = async (inputId: any, ctx: Context) => {
-  const input = await ctx.photon.inputs.findOne({
-    where: { id: inputId },
-    include: {
-      attribute: {
-        include: {
-          resource: {
-            include: {
-              source: true,
-            },
-          },
-        },
-      },
-    },
-  })
-  return input?.attribute.resource?.source.id
-}
-const getSourceFromColumn = async (columnId: any, ctx: Context) => {
-  const column = await ctx.photon.columns.findOne({
-    where: { id: columnId },
-    include: {
-      input: {
-        include: {
-          attribute: {
-            include: {
-              resource: {
-                include: {
-                  source: true,
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  })
-  return column?.input?.attribute.resource?.source.id
-}
-const getSourceFromJoin = async (JoinId: any, ctx: Context) => {
-  const join = await ctx.photon.joins.findOne({
-    where: { id: JoinId },
-    include: {
-      column: {
-        include: {
-          input: {
-            include: {
-              attribute: {
-                include: {
-                  resource: {
-                    include: {
-                      source: true,
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  })
-  return join?.column?.input?.attribute.resource?.source.id
-}
+import {
+  getSourceFromResource,
+  getSourceFromAttribute,
+  getSourceFromInput,
+  getSourceFromColumn,
+  getSourceFromJoin,
+} from './resolvers'
 
 const rules = {
   isAuthenticatedUser: rule()((_, __, ctx: Context) => {
@@ -101,9 +22,15 @@ const rules = {
     })
     return Boolean(user && user.role == 'ADMIN')
   }),
-  isWriter: rule()(async (_, args, ctx: Context) => {
+  isSourceWriter: rule()(async (_, args, ctx: Context) => {
     // Get user id
     const userId = getUserId(ctx)
+
+    // Return true if the user is admin
+    const user = await ctx.photon.users.findOne({
+      where: { id: userId },
+    })
+    if (user && user.role == 'ADMIN') return true
 
     // Get source
     const {
@@ -128,14 +55,16 @@ const rules = {
       id = getSourceFromColumn(columnId, ctx)
     } else if (joinId) {
       id = getSourceFromJoin(joinId, ctx)
+    } else {
+      throw Error('Could not resolve source id.')
     }
 
-    // Check access rights
+    // Check role
     const access = await ctx.photon.accessControls({
       where: {
         user: { id: userId },
         source: { id },
-        rights: 'WRITER',
+        role: 'WRITER',
       },
     })
     return Boolean(access.length > 0)
@@ -146,8 +75,8 @@ export const permissions = shield({
   Query: {
     me: rules.isAuthenticatedUser,
     credential: rules.isAuthenticatedUser,
-    sources: rules.isAdmin,
-    sourcesForUser: rules.isAuthenticatedUser,
+    allSources: rules.isAdmin,
+    sources: rules.isAuthenticatedUser,
     source: rules.isAuthenticatedUser,
     resource: rules.isAuthenticatedUser,
     attribute: rules.isAuthenticatedUser,
@@ -156,24 +85,26 @@ export const permissions = shield({
   Mutation: {
     signup: rules.isAdmin,
 
+    createAccessControl: rules.isAdmin,
+
     createSource: rules.isAuthenticatedUser,
-    deleteSource: rules.isWriter,
+    deleteSource: rules.isSourceWriter,
 
-    createResource: rules.isWriter,
-    updateResource: rules.isWriter,
-    deleteResource: rules.isWriter,
+    createResource: rules.isSourceWriter,
+    updateResource: rules.isSourceWriter,
+    deleteResource: rules.isSourceWriter,
 
-    createAttribute: rules.isWriter,
-    updateAttribute: rules.isWriter,
+    createAttribute: rules.isSourceWriter,
+    updateAttribute: rules.isSourceWriter,
     updateComments: rules.isAuthenticatedUser,
-    deleteAttribute: rules.isWriter,
+    deleteAttribute: rules.isSourceWriter,
 
-    createInput: rules.isWriter,
-    updateInput: rules.isWriter,
-    deleteInput: rules.isWriter,
+    createInput: rules.isSourceWriter,
+    updateInput: rules.isSourceWriter,
+    deleteInput: rules.isSourceWriter,
 
-    addJoinToColumn: rules.isWriter,
-    updateJoin: rules.isWriter,
-    deleteJoin: rules.isWriter,
+    addJoinToColumn: rules.isSourceWriter,
+    updateJoin: rules.isSourceWriter,
+    deleteJoin: rules.isSourceWriter,
   },
 })

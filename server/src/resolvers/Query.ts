@@ -2,7 +2,7 @@ import { arg, idArg, queryType } from 'nexus'
 
 import { getDefinition } from 'fhir'
 import { getUserId } from 'utils'
-import { sourcesForUser } from './Source'
+import { sources } from './Source'
 import { resourcesForUser } from './Resource'
 import { searchDefinitions } from './StructureDefinition'
 
@@ -47,19 +47,16 @@ export const Query = queryType({
         ctx.photon.templates.findOne({ where: { id: templateId } }),
     })
 
-    t.list.field('sources', {
+    t.list.field('allSources', {
       type: 'Source',
       nullable: true,
       resolve: (parent, args, ctx) => ctx.photon.sources(),
     })
 
-    t.list.field('sourcesForUser', {
+    t.list.field('sources', {
       type: 'Source',
-      args: {
-        userId: idArg({ nullable: false }),
-      },
       nullable: true,
-      resolve: sourcesForUser,
+      resolve: sources,
     })
 
     t.field('source', {

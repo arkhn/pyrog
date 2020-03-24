@@ -30,7 +30,7 @@ interface Source {
 }
 
 // GRAPHQL
-const qSources = loader('src/graphql/queries/sourcesForUser.graphql');
+const qSources = loader('src/graphql/queries/sources.graphql');
 const mDeleteSource = loader('src/graphql/mutations/deleteSource.graphql');
 
 const SourcesView = (): React.ReactElement => {
@@ -46,9 +46,6 @@ const SourcesView = (): React.ReactElement => {
   const [isAlertOpen, setIsAlertOpen] = React.useState(false);
 
   const { data: dataSources, loading: loadingSources } = useQuery(qSources, {
-    variables: {
-      userId
-    },
     fetchPolicy: 'network-only'
   });
 
@@ -57,22 +54,14 @@ const SourcesView = (): React.ReactElement => {
     { data: { deleteSource } }: any
   ): void => {
     try {
-      const { sourcesForUser } = cache.readQuery({
-        query: qSources,
-        variables: {
-          userId
-        }
+      const { sources } = cache.readQuery({
+        query: qSources
       });
-      const newSources = sourcesForUser.filter(
-        (s: any) => s.id !== deleteSource.id
-      );
+      const newSources = sources.filter((s: any) => s.id !== deleteSource.id);
 
       cache.writeQuery({
         query: qSources,
-        variables: {
-          userId
-        },
-        data: { sourcesForUser: newSources }
+        data: { sources: newSources }
       });
     } catch (error) {
       console.log(error);
@@ -182,7 +171,7 @@ const SourcesView = (): React.ReactElement => {
           {loadingSources ? (
             <Spinner />
           ) : (
-            dataSources.sourcesForUser.map((source: any, index: number) =>
+            dataSources.sources.map((source: any, index: number) =>
               renderSource(source, index)
             )
           )}
