@@ -165,6 +165,7 @@ export const permissions = shield({
 
     createAttribute: rules.isWriter,
     updateAttribute: rules.isWriter,
+    updateComments: rules.isAuthenticatedUser,
     deleteAttribute: rules.isWriter,
 
     createInput: rules.isWriter,

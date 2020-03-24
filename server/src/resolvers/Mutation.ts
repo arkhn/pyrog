@@ -180,6 +180,21 @@ export const Mutation = mutationType({
       resolve: updateAttribute,
     })
 
+    t.field('updateComments', {
+      type: 'Attribute',
+      args: {
+        attributeId: idArg({ required: true }),
+        comments: stringArg({ required: true }),
+      },
+      resolve: (_parent, { attributeId, comments }, ctx, info) =>
+        updateAttribute(
+          _parent,
+          { attributeId, data: { comments } },
+          ctx,
+          info,
+        ),
+    })
+
     t.field('deleteAttribute', {
       type: 'Attribute',
       args: {

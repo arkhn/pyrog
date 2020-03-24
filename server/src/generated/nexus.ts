@@ -454,6 +454,7 @@ export interface NexusGenFieldTypes {
     refreshDefinition: NexusGenRootTypes['StructureDefinition']; // StructureDefinition!
     signup: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     updateAttribute: NexusGenRootTypes['Attribute']; // Attribute!
+    updateComments: NexusGenRootTypes['Attribute']; // Attribute!
     updateInput: NexusGenRootTypes['Input']; // Input!
     updateJoin: NexusGenRootTypes['Join']; // Join!
     updateResource: NexusGenRootTypes['Resource']; // Resource!
@@ -634,6 +635,10 @@ export interface NexusGenArgTypes {
     updateAttribute: { // args
       attributeId: string; // ID!
       data: NexusGenInputs['AttributeInput']; // AttributeInput!
+    }
+    updateComments: { // args
+      attributeId: string; // ID!
+      comments: string; // String!
     }
     updateInput: { // args
       data: NexusGenInputs['UpdateInputInput']; // UpdateInputInput!

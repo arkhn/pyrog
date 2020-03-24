@@ -12,8 +12,8 @@ import { setAttributeInMap } from 'services/resourceInputs/actions';
 const qCommentsForAttribute = loader(
   'src/graphql/queries/commentsForAttribute.graphql'
 );
-const mUpdateAttribute = loader(
-  'src/graphql/mutations/updateAttribute.graphql'
+const mUpdateComments = loader(
+  'src/graphql/mutations/updateComments.graphql'
 );
 const mCreateAttribute = loader(
   'src/graphql/mutations/createAttribute.graphql'
@@ -31,7 +31,7 @@ const Comments = () => {
   const attributeForNode = attributesForResource[attribute.path];
 
   const [createAttribute] = useMutation(mCreateAttribute);
-  const [updateAttribute] = useMutation(mUpdateAttribute);
+  const [updateComments] = useMutation(mUpdateComments);
 
   const [comments, setComments] = React.useState(
     attributeForNode ? attributeForNode.comments : ''
@@ -51,12 +51,10 @@ const Comments = () => {
   const onSaveComment = async (): Promise<void> => {
     try {
       if (attributeForNode) {
-        updateAttribute({
+        updateComments({
           variables: {
             attributeId: attributeForNode.id,
-            data: {
-              comments
-            }
+            comments
           }
         });
       } else {
