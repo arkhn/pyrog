@@ -281,7 +281,6 @@ type Mutation {
   deleteAttribute(attributeId: ID!): Attribute!
   deleteAttributes(filter: AttributeWhereInput): [Attribute!]
   deleteCredential(credentialId: ID!): Credential!
-  deleteFilter(filterId: ID!): Filter!
   deleteInput(inputId: ID!): Input!
   deleteJoin(joinId: ID!): Join!
   deleteResource(resourceId: ID!): Resource!

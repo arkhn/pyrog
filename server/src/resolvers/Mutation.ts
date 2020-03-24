@@ -9,7 +9,6 @@ import {
 import { createAccessControl } from './AccessControl'
 import { addJoinToColumn } from './Column'
 import { deleteCredential, upsertCredential } from './Credential'
-import { deleteFilter } from './Filter'
 import { createInput, deleteInput, updateInput } from './Input'
 import { updateJoin, deleteJoin } from './Join'
 import { createResource, updateResource, deleteResource } from './Resource'
@@ -279,18 +278,6 @@ export const Mutation = mutationType({
         joinId: idArg({ required: true }),
       },
       resolve: deleteJoin,
-    })
-
-    /*
-     * FILTER
-     */
-
-    t.field('deleteFilter', {
-      type: 'Filter',
-      args: {
-        filterId: idArg({ required: true }),
-      },
-      resolve: deleteFilter,
     })
 
     /*
