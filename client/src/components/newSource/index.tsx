@@ -34,7 +34,6 @@ const NewSourceView = (): React.ReactElement => {
   const { history } = useReactRouter();
 
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const { id: userId } = useSelector((state: IReduxStore) => state.user);
 
   const [hasOwner, setHasOwner] = useState(false);
   const [templateName, setTemplateName] = useState('');

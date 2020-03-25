@@ -8,7 +8,6 @@ import {
 } from '@blueprintjs/core';
 import * as React from 'react';
 import { useMutation } from '@apollo/react-hooks';
-import { ApolloError } from 'apollo-client/errors/ApolloError';
 import { useSelector, useDispatch } from 'react-redux';
 import { loader } from 'graphql.macro';
 import { Attribute } from '@arkhn/fhir.ts';
@@ -17,6 +16,7 @@ import ColumnPicker from '../../ColumnPicker';
 import TableViewer from './TableViewer';
 import FhirPreview from './FhirPreview';
 
+import { onError } from 'services/apollo';
 import { IReduxStore, ISelectedSource } from 'types';
 import { PAGAI_URL } from '../../../../constants';
 
@@ -62,24 +62,13 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
     undefined as number | undefined
   );
 
-  const onError = (error: ApolloError): void => {
-    const msg =
-      error.message === 'GraphQL error: Not Authorised!'
-        ? 'You only have read access on this source.'
-        : error.message;
-    toaster.show({
-      icon: 'error',
-      intent: 'danger',
-      message: msg,
-      timeout: 4000
-    });
-  };
-
-  const [createAttribute] = useMutation(mCreateAttribute, { onError });
+  const [createAttribute] = useMutation(mCreateAttribute, {
+    onError: onError(toaster)
+  });
   const [
     createSQLInput,
     { loading: creatingSQLInput }
-  ] = useMutation(mCreateSQLInput, { onError });
+  ] = useMutation(mCreateSQLInput, { onError: onError(toaster) });
 
   const addInputToCache = (cache: any, { data: { createInput } }: any) => {
     try {

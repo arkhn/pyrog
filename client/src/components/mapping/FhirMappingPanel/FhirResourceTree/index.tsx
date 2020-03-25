@@ -1,6 +1,6 @@
 import { Spinner } from '@blueprintjs/core';
 import { useApolloClient, useMutation } from '@apollo/react-hooks';
-import { Classes, Icon, ITreeNode, Tooltip, Tree } from '@blueprintjs/core';
+import { Classes, Icon, ITreeNode, Tree } from '@blueprintjs/core';
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ApolloError } from 'apollo-client/errors/ApolloError';
@@ -12,6 +12,7 @@ import { Attribute } from '@arkhn/fhir.ts';
 
 // ACTIONS
 import { removeAttributesFromMap } from 'services/resourceInputs/actions';
+import { onError } from 'services/apollo';
 
 import { NodeLabel } from './nodeLabel';
 // GRAPHQL
@@ -41,21 +42,8 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     variables: { definitionId: baseDefinitionId }
   });
 
-  const onError = (error: ApolloError): void => {
-    const msg =
-      error.message === 'GraphQL error: Not Authorised!'
-        ? 'You only have read access on this source.'
-        : error.message;
-    toaster.show({
-      icon: 'error',
-      intent: 'danger',
-      message: msg,
-      timeout: 4000
-    });
-  };
-
   const [deleteAttributes] = useMutation(mDeleteAttributesStartingWith, {
-    onError
+    onError: onError(toaster)
   });
 
   const [nodes, setNodes] = useState([] as ITreeNode<Attribute>[]);

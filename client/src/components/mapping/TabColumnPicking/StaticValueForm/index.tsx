@@ -9,10 +9,10 @@ import {
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLazyQuery, useMutation } from '@apollo/react-hooks';
-import { ApolloError } from 'apollo-client/errors/ApolloError';
 import { loader } from 'graphql.macro';
 import { Attribute } from '@arkhn/fhir.ts';
 
+import { onError } from 'services/apollo';
 import { IReduxStore } from 'types';
 
 import { setAttributeInMap } from 'services/resourceInputs/actions';
@@ -89,24 +89,16 @@ const StaticValueForm = ({ attribute }: Props) => {
     }
   };
 
-  const onError = (error: ApolloError): void => {
-    const msg =
-      error.message === 'GraphQL error: Not Authorised!'
-        ? 'You only have read access on this source.'
-        : error.message;
-    toaster.show({
-      icon: 'error',
-      intent: 'danger',
-      message: msg,
-      timeout: 4000
-    });
-  };
-
-  const [createAttribute] = useMutation(mCreateAttribute, { onError });
+  const [createAttribute] = useMutation(mCreateAttribute, {
+    onError: onError(toaster)
+  });
   const [
     createStaticInput,
     { loading: creatingStaticInput }
-  ] = useMutation(mCreateStaticInput, { update: addInputToCache, onError });
+  ] = useMutation(mCreateStaticInput, {
+    update: addInputToCache,
+    onError: onError(toaster)
+  });
 
   const onAddStaticValue = async (): Promise<void> => {
     try {
