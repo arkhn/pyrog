@@ -89,7 +89,9 @@ const ConceptMapDialog = ({
     // fetch code systems
     const fetchCodeSystems = async (): Promise<void> => {
       try {
-        const codeSystems = await axios.get(`${FHIR_API_URL}/CodeSystem`);
+        const codeSystems = await axios.get(
+          `${FHIR_API_URL}/CodeSystem?_count=1000`
+        );
         setExistingCodeSystems(codeSystems.data.items);
       } catch (err) {
         console.error(

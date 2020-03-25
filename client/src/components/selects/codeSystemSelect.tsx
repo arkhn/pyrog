@@ -30,7 +30,8 @@ interface Props {
 }
 
 const filterByName: ItemPredicate<CodeSystem> = (query, item) => {
-  return `${item.title.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0;
+  const title = item.title || item.name;
+  return title.toLowerCase().indexOf(query.toLowerCase()) >= 0;
 };
 
 const renderItem: ItemRenderer<CodeSystem> = (
