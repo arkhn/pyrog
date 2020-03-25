@@ -14,6 +14,9 @@ const FhirPreview = ({ rowId }: Props) => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
   const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
   const [fhirObject, setFhirObject] = React.useState(undefined as any);
+  const [validationErrors, setValidationErrors] = React.useState(
+    [] as string[]
+  );
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
@@ -23,7 +26,8 @@ const FhirPreview = ({ rowId }: Props) => {
         const res = await axios.get(
           `${FHIRPIPE_URL}/preview/${resource.id}/${rowId}`
         );
-        setFhirObject(res.data);
+        setFhirObject(res.data.preview);
+        setValidationErrors(res.data.errors);
         setLoading(false);
       } catch (err) {
         toaster.show({
@@ -39,7 +43,22 @@ const FhirPreview = ({ rowId }: Props) => {
 
   if (loading) return <Spinner />;
 
-  return <pre>{JSON.stringify(fhirObject, null, 4)}</pre>;
+  const renderValidationErrors = () => (
+    <React.Fragment>
+      <h3> Validation errors </h3>
+      {validationErrors.map((error, ind) => (
+        <pre key={ind}>{error}</pre>
+      ))}
+    </React.Fragment>
+  );
+
+  return (
+    <div>
+      {validationErrors.length > 0 && renderValidationErrors()}
+      <h3> Fhir instance preview </h3>
+      <pre>{JSON.stringify(fhirObject, null, 4)}</pre>
+    </div>
+  );
 };
 
 export default FhirPreview;
