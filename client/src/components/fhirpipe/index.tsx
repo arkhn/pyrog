@@ -114,9 +114,7 @@ const FhirpipeView = () => {
     // chunksize, bypass_validation, multiprocessing
     // It is also needed to provide credentialId
     const body = {
-      source: selectedSource.name,
-      resources: selectedResources.map(r => r.definitionId),
-      labels: selectedResources.map(r => r.label),
+      resource_ids: selectedResources.map(r => r.id),
       credentialId: credentials && credentials.id,
       bypass_validation: bypassValidation,
       override: override,
