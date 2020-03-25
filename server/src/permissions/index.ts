@@ -2,14 +2,7 @@ import { rule, shield } from 'graphql-shield'
 
 import { getUserId } from 'utils'
 import { Context } from 'context'
-import {
-  getSourceFromCredential,
-  getSourceFromResource,
-  getSourceFromAttribute,
-  getSourceFromInput,
-  getSourceFromColumn,
-  getSourceFromJoin,
-} from './resolvers'
+import { getSourceIdFromMutationArgs } from './resolvers'
 
 const rules = {
   isAuthenticatedUser: rule()((_, __, ctx: Context) => {
@@ -23,6 +16,27 @@ const rules = {
     })
     return Boolean(user && user.role == 'ADMIN')
   }),
+  isSourceReader: rule()(async (_, args, ctx: Context) => {
+    // Get user id
+    const userId = getUserId(ctx)
+
+    // Return true if the user is admin
+    const user = await ctx.photon.users.findOne({
+      where: { id: userId },
+    })
+    if (user && user.role == 'ADMIN') return true
+
+    let sourceId = getSourceIdFromMutationArgs(args, ctx)
+
+    // Check access
+    const access = await ctx.photon.accessControls({
+      where: {
+        user: { id: userId },
+        source: { id: sourceId },
+      },
+    })
+    return Boolean(access.length > 0)
+  }),
   isSourceWriter: rule()(async (_, args, ctx: Context) => {
     // Get user id
     const userId = getUserId(ctx)
@@ -33,41 +47,13 @@ const rules = {
     })
     if (user && user.role == 'ADMIN') return true
 
-    // Get source
-    const {
-      sourceId,
-      credentialId,
-      resourceId,
-      attributeId,
-      inputId,
-      columnId,
-      joinId,
-    } = args
-
-    let id
-    if (sourceId) {
-      id = sourceId
-    } else if (credentialId) {
-      id = getSourceFromCredential(credentialId, ctx)
-    } else if (resourceId) {
-      id = getSourceFromResource(resourceId, ctx)
-    } else if (attributeId) {
-      id = getSourceFromAttribute(attributeId, ctx)
-    } else if (inputId) {
-      id = getSourceFromInput(inputId, ctx)
-    } else if (columnId) {
-      id = getSourceFromColumn(columnId, ctx)
-    } else if (joinId) {
-      id = getSourceFromJoin(joinId, ctx)
-    } else {
-      throw Error('Could not resolve source id.')
-    }
+    let sourceId = getSourceIdFromMutationArgs(args, ctx)
 
     // Check role
     const access = await ctx.photon.accessControls({
       where: {
         user: { id: userId },
-        source: { id },
+        source: { id: sourceId },
         role: 'WRITER',
       },
     })
@@ -103,8 +89,9 @@ export const permissions = shield({
 
     createAttribute: rules.isSourceWriter,
     updateAttribute: rules.isSourceWriter,
-    updateComments: rules.isAuthenticatedUser,
     deleteAttribute: rules.isSourceWriter,
+
+    updateComments: rules.isSourceReader,
 
     createInput: rules.isSourceWriter,
     updateInput: rules.isSourceWriter,

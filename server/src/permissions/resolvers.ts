@@ -1,9 +1,39 @@
 import { Context } from 'context'
 
-export const getSourceFromCredential = async (
-  credentialId: any,
-  ctx: Context,
-) => {
+export const getSourceIdFromMutationArgs = (args: any, ctx: Context) => {
+  // Get source
+  const {
+    sourceId,
+    credentialId,
+    resourceId,
+    attributeId,
+    inputId,
+    columnId,
+    joinId,
+  } = args
+
+  let id
+  if (sourceId) {
+    id = sourceId
+  } else if (credentialId) {
+    id = getSourceFromCredential(credentialId, ctx)
+  } else if (resourceId) {
+    id = getSourceFromResource(resourceId, ctx)
+  } else if (attributeId) {
+    id = getSourceFromAttribute(attributeId, ctx)
+  } else if (inputId) {
+    id = getSourceFromInput(inputId, ctx)
+  } else if (columnId) {
+    id = getSourceFromColumn(columnId, ctx)
+  } else if (joinId) {
+    id = getSourceFromJoin(joinId, ctx)
+  } else {
+    throw Error('Could not resolve source id.')
+  }
+  return id
+}
+
+const getSourceFromCredential = async (credentialId: any, ctx: Context) => {
   const credential = await ctx.photon.credentials.findOne({
     where: { id: credentialId },
     include: {
@@ -13,7 +43,7 @@ export const getSourceFromCredential = async (
   return credential?.source.id
 }
 
-export const getSourceFromResource = async (resourceId: any, ctx: Context) => {
+const getSourceFromResource = async (resourceId: any, ctx: Context) => {
   const resource = await ctx.photon.resources.findOne({
     where: { id: resourceId },
     include: {
@@ -23,10 +53,7 @@ export const getSourceFromResource = async (resourceId: any, ctx: Context) => {
   return resource?.source.id
 }
 
-export const getSourceFromAttribute = async (
-  attributeId: any,
-  ctx: Context,
-) => {
+const getSourceFromAttribute = async (attributeId: any, ctx: Context) => {
   const attribute = await ctx.photon.attributes.findOne({
     where: { id: attributeId },
     include: {
@@ -40,7 +67,7 @@ export const getSourceFromAttribute = async (
   return attribute?.resource?.source.id
 }
 
-export const getSourceFromInput = async (inputId: any, ctx: Context) => {
+const getSourceFromInput = async (inputId: any, ctx: Context) => {
   const input = await ctx.photon.inputs.findOne({
     where: { id: inputId },
     include: {
@@ -58,7 +85,7 @@ export const getSourceFromInput = async (inputId: any, ctx: Context) => {
   return input?.attribute.resource?.source.id
 }
 
-export const getSourceFromColumn = async (columnId: any, ctx: Context) => {
+const getSourceFromColumn = async (columnId: any, ctx: Context) => {
   const column = await ctx.photon.columns.findOne({
     where: { id: columnId },
     include: {
@@ -80,7 +107,7 @@ export const getSourceFromColumn = async (columnId: any, ctx: Context) => {
   return column?.input?.attribute.resource?.source.id
 }
 
-export const getSourceFromJoin = async (JoinId: any, ctx: Context) => {
+const getSourceFromJoin = async (JoinId: any, ctx: Context) => {
   const join = await ctx.photon.joins.findOne({
     where: { id: JoinId },
     include: {
