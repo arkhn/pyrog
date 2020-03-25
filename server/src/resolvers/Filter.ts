@@ -1,4 +1,4 @@
-import { objectType, FieldResolver } from 'nexus'
+import { objectType } from 'nexus'
 
 export const Filter = objectType({
   name: 'Filter',
@@ -10,9 +10,3 @@ export const Filter = objectType({
     t.model.value()
   },
 })
-
-export const deleteFilter: FieldResolver<'Mutation', 'deleteFilter'> = async (
-  _parent,
-  { id },
-  ctx,
-) => ctx.photon.filters.delete({ where: { id } })

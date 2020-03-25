@@ -12,9 +12,7 @@ import { setAttributeInMap } from 'services/resourceInputs/actions';
 const qCommentsForAttribute = loader(
   'src/graphql/queries/commentsForAttribute.graphql'
 );
-const mUpdateAttribute = loader(
-  'src/graphql/mutations/updateAttribute.graphql'
-);
+const mUpdateComments = loader('src/graphql/mutations/updateComments.graphql');
 const mCreateAttribute = loader(
   'src/graphql/mutations/createAttribute.graphql'
 );
@@ -31,7 +29,7 @@ const Comments = () => {
   const attributeForNode = attributesForResource[attribute.path];
 
   const [createAttribute] = useMutation(mCreateAttribute);
-  const [updateAttribute] = useMutation(mUpdateAttribute);
+  const [updateComments] = useMutation(mUpdateComments);
 
   const [comments, setComments] = React.useState(
     attributeForNode ? attributeForNode.comments : ''
@@ -49,27 +47,29 @@ const Comments = () => {
   }, [data]);
 
   const onSaveComment = async (): Promise<void> => {
-    if (attributeForNode) {
-      updateAttribute({
-        variables: {
-          attributeId: attributeForNode.id,
-          data: {
+    try {
+      if (attributeForNode) {
+        updateComments({
+          variables: {
+            attributeId: attributeForNode.id,
             comments
           }
-        }
-      });
-    } else {
-      const { data } = await createAttribute({
-        variables: {
-          resourceId: resource.id,
-          path: attribute.path,
-          data: {
-            comments
+        });
+      } else {
+        const { data } = await createAttribute({
+          variables: {
+            resourceId: resource.id,
+            path: attribute.path,
+            data: {
+              comments
+            }
           }
-        }
-      });
-      const newAttr = data.createAttribute;
-      dispatch(setAttributeInMap(attribute.path, newAttr));
+        });
+        const newAttr = data.createAttribute;
+        dispatch(setAttributeInMap(attribute.path, newAttr));
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 

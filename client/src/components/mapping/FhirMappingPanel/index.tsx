@@ -26,8 +26,6 @@ const FhirMappingPanel = () => {
     (state: IReduxStore) => state.selectedNode
   );
 
-  const [createdResources, setCreatedResources] = React.useState(0);
-
   const { data: dataResources, loading: loadingResources } = useQuery(
     qResourcesForSource,
     {
@@ -61,19 +59,12 @@ const FhirMappingPanel = () => {
                 : dataResources.source.resources
             }
             loading={loadingResources}
-            deleteResourceCallback={() => {
-              setCreatedResources(createdResources - 1);
-            }}
           />
         </div>
         {resource && renderResourceTree()}
       </div>
       <div id="resource-add">
-        <AddResource
-          callback={() => {
-            setCreatedResources(createdResources + 1);
-          }}
-        />
+        <AddResource />
       </div>
     </>
   );

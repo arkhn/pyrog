@@ -1,3 +1,4 @@
+export * from './AccessControl'
 export * from './Attribute'
 export * from './AuthPayload'
 export * from './ConceptMap'

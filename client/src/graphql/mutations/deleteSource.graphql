@@ -1,5 +1,5 @@
-mutation deleteSource($id: ID!) {
-  deleteSource(id: $id) {
+mutation deleteSource($sourceId: ID!) {
+  deleteSource(sourceId: $sourceId) {
     id
   }
 }

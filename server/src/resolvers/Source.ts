@@ -1,6 +1,7 @@
 import { objectType, FieldResolver } from 'nexus'
 
 import { importMapping, exportMapping } from 'resolvers/mapping'
+import { getUserId } from 'utils'
 
 export const Source = objectType({
   name: 'Source',
@@ -75,6 +76,16 @@ export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
     },
   })
 
+  // create a row in ACL
+  const userId = getUserId(ctx)
+  await ctx.photon.accessControls.create({
+    data: {
+      user: { connect: { id: userId } },
+      source: { connect: { id: source.id } },
+      role: 'WRITER',
+    },
+  })
+
   // import mapping if present
   if (mapping) {
     await importMapping(ctx.photon, source.id, mapping)
@@ -85,11 +96,11 @@ export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
 
 export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
   _parent,
-  { id },
+  { sourceId },
   ctx,
 ) => {
   const source = await ctx.photon.sources.findOne({
-    where: { id },
+    where: { id: sourceId },
     include: {
       credential: true,
       resources: {
@@ -125,6 +136,9 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
       where: { id: source!.credential.id },
     })
   }
+  await ctx.photon.accessControls.deleteMany({
+    where: { source: { id: sourceId } },
+  })
   await Promise.all(
     source!.resources.map(async r => {
       await Promise.all(
@@ -158,5 +172,18 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
       return ctx.photon.resources.delete({ where: { id: r.id } })
     }),
   )
-  return ctx.photon.sources.delete({ where: { id } })
+  return ctx.photon.sources.delete({ where: { id: sourceId } })
+}
+
+export const sources: FieldResolver<'Query', 'sources'> = async (
+  _parent,
+  _args,
+  ctx,
+) => {
+  const userId = getUserId(ctx)
+  const accesses = await ctx.photon.accessControls({
+    where: { user: { id: userId } },
+    include: { source: true },
+  })
+  return accesses.map(a => a.source)
 }

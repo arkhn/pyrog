@@ -10,6 +10,7 @@ import {
 } from '@blueprintjs/core';
 import * as React from 'react';
 import { useQuery, useMutation } from 'react-apollo';
+import { ApolloError } from 'apollo-client/errors/ApolloError';
 import { useSelector, useDispatch } from 'react-redux';
 import { loader } from 'graphql.macro';
 
@@ -66,18 +67,22 @@ const Drawer = ({ title, isOpen, onClose }: Props): React.ReactElement => {
     );
   };
 
-  const onUpsertError = (error: any): void => {
+  const onError = (error: ApolloError): void => {
+    const msg =
+      error.message === 'GraphQL error: Not Authorised!'
+        ? 'You only have read access on this source.'
+        : error.message;
     toaster.show({
       icon: 'error',
       intent: 'danger',
-      message: error.message,
+      message: msg,
       timeout: 4000
     });
   };
 
   const [upsertCredential] = useMutation(mUpsertCredential, {
     onCompleted: onUpsertCompleted,
-    onError: onUpsertError
+    onError
   });
 
   React.useEffect(() => {

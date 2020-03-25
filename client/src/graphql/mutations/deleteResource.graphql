@@ -1,5 +1,5 @@
-mutation deleteResource($id: ID!) {
-  deleteResource(id: $id) {
+mutation deleteResource($resourceId: ID!) {
+  deleteResource(resourceId: $resourceId) {
     id
   }
 }

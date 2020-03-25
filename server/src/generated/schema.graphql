@@ -2,6 +2,29 @@
 ### Do not make changes to this file directly
 
 
+type AccessControl {
+  id: ID!
+  role: SourceRole!
+  source: Source!
+  user: User!
+}
+
+input AccessControlFilter {
+  every: AccessControlWhereInput
+  none: AccessControlWhereInput
+  some: AccessControlWhereInput
+}
+
+input AccessControlWhereInput {
+  AND: [AccessControlWhereInput!]
+  id: StringFilter
+  NOT: [AccessControlWhereInput!]
+  OR: [AccessControlWhereInput!]
+  role: SourceRole
+  source: SourceWhereInput
+  user: UserWhereInput
+}
+
 type Attribute {
   comments: String
   createdAt: DateTime!
@@ -249,24 +272,25 @@ scalar JSON
 
 type Mutation {
   addJoinToColumn(columnId: ID!, join: JoinInput): Column!
+  createAccessControl(role: SourceRole!, sourceId: ID!, userId: ID!): AccessControl!
   createAttribute(data: AttributeInput, definitionId: ID!, path: String!, resourceId: ID!): Attribute!
   createInput(attributeId: ID!, script: String, sql: ColumnInput, static: String): Input!
   createResource(definitionId: String!, sourceId: ID!): Resource!
   createSource(hasOwner: Boolean!, mapping: String, name: String!, templateName: String!): Source!
   createTemplate(name: String!): Template!
-  deleteAttribute(id: ID!): Attribute!
+  deleteAttribute(attributeId: ID!): Attribute!
   deleteAttributes(filter: AttributeWhereInput): [Attribute!]
-  deleteCredential(id: ID!): Credential!
-  deleteFilter(id: ID!): Filter!
-  deleteInput(id: ID!): Input!
-  deleteJoin(id: ID!): Join!
-  deleteResource(id: ID!): Resource!
-  deleteSource(id: ID!): Source!
+  deleteCredential(credentialId: ID!): Credential!
+  deleteInput(inputId: ID!): Input!
+  deleteJoin(joinId: ID!): Join!
+  deleteResource(resourceId: ID!): Resource!
+  deleteSource(sourceId: ID!): Source!
   deleteTemplate(id: ID!): Template!
   login(email: String!, password: String!): AuthPayload!
   refreshDefinition(definitionId: ID!): StructureDefinition!
   signup(email: String!, name: String!, password: String!): AuthPayload!
   updateAttribute(attributeId: ID!, data: AttributeInput!): Attribute!
+  updateComments(attributeId: ID!, comments: String!): Attribute!
   updateInput(data: UpdateInputInput!, inputId: ID!): Input!
   updateJoin(data: JoinInput!, joinId: ID!): Join!
   updateResource(data: UpdateResourceInput!, filters: [FilterInput!], resourceId: ID!): Resource!
@@ -288,11 +312,11 @@ input NullableStringFilter {
 }
 
 type Query {
+  allSources: [Source!]
   attribute(attributeId: ID!): Attribute
   credential(credentialId: ID!): Credential
   me: User
   resource(resourceId: ID!): Resource
-  resources(filter: ResourceWhereInput): [Resource!]
   source(sourceId: ID!): Source
   sources: [Source!]
   structureDefinition(definitionId: ID!): StructureDefinition
@@ -366,7 +390,13 @@ input SourceFilter {
   some: SourceWhereInput
 }
 
+enum SourceRole {
+  READER
+  WRITER
+}
+
 input SourceWhereInput {
+  accessControls: AccessControlFilter
   AND: [SourceWhereInput!]
   createdAt: DateTimeFilter
   credential: CredentialWhereInput
@@ -455,4 +485,18 @@ type User {
   name: String!
   role: Role!
   updatedAt: DateTime!
+}
+
+input UserWhereInput {
+  accessControls: AccessControlFilter
+  AND: [UserWhereInput!]
+  createdAt: DateTimeFilter
+  email: StringFilter
+  id: StringFilter
+  name: StringFilter
+  NOT: [UserWhereInput!]
+  OR: [UserWhereInput!]
+  password: StringFilter
+  role: Role
+  updatedAt: DateTimeFilter
 }

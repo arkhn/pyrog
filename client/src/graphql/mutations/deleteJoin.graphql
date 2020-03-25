@@ -1,5 +1,5 @@
-mutation deleteJoin($id: ID!) {
-  deleteJoin(id: $id) {
+mutation deleteJoin($joinId: ID!) {
+  deleteJoin(joinId: $joinId) {
     id
   }
 }

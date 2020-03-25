@@ -73,5 +73,5 @@ export const upsertCredential: FieldResolver<
 export const deleteCredential: FieldResolver<
   'Mutation',
   'deleteCredential'
-> = async (_parent, { id }, ctx) =>
-  ctx.photon.credentials.delete({ where: { id } })
+> = async (_parent, { credentialId }, ctx) =>
+  ctx.photon.credentials.delete({ where: { id: credentialId } })

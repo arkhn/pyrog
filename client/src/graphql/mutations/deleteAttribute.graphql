@@ -1,5 +1,5 @@
 mutation deleteAttribute($attributeId: ID!) {
-  deleteAttribute(id: $attributeId) {
+  deleteAttribute(attributeId: $attributeId) {
     id
   }
 }

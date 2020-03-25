@@ -1,21 +1,21 @@
 import { arg, idArg, mutationType, stringArg, booleanArg } from 'nexus'
 
-import { createResource, updateResource, deleteResource } from './Resource'
-import { deleteSource, createSource } from './Source'
 import {
   createAttribute,
   updateAttribute,
   deleteAttribute,
   deleteAttributes,
 } from './Attribute'
-import { signup, login } from './User'
-import { createInput, deleteInput, updateInput } from './Input'
-import { deleteCredential, upsertCredential } from './Credential'
-import { createTemplate, deleteTemplate } from './Template'
+import { createAccessControl } from './AccessControl'
 import { addJoinToColumn } from './Column'
+import { deleteCredential, upsertCredential } from './Credential'
+import { createInput, deleteInput, updateInput } from './Input'
 import { updateJoin, deleteJoin } from './Join'
-import { deleteFilter } from './Filter'
+import { createResource, updateResource, deleteResource } from './Resource'
+import { deleteSource, createSource } from './Source'
 import { refreshDefinition } from './StructureDefinition'
+import { createTemplate, deleteTemplate } from './Template'
+import { signup, login } from './User'
 
 export const Mutation = mutationType({
   /*
@@ -80,7 +80,7 @@ export const Mutation = mutationType({
     t.field('deleteSource', {
       type: 'Source',
       args: {
-        id: idArg({ required: true }),
+        sourceId: idArg({ required: true }),
       },
       resolve: deleteSource,
     })
@@ -106,7 +106,7 @@ export const Mutation = mutationType({
     t.field('deleteCredential', {
       type: 'Credential',
       args: {
-        id: idArg({ required: true }),
+        credentialId: idArg({ required: true }),
       },
       resolve: deleteCredential,
     })
@@ -127,7 +127,7 @@ export const Mutation = mutationType({
     t.field('deleteResource', {
       type: 'Resource',
       args: {
-        id: idArg({ required: true }),
+        resourceId: idArg({ required: true }),
       },
       resolve: deleteResource,
     })
@@ -178,10 +178,25 @@ export const Mutation = mutationType({
       resolve: updateAttribute,
     })
 
+    t.field('updateComments', {
+      type: 'Attribute',
+      args: {
+        attributeId: idArg({ required: true }),
+        comments: stringArg({ required: true }),
+      },
+      resolve: (_parent, { attributeId, comments }, ctx, info) =>
+        updateAttribute(
+          _parent,
+          { attributeId, data: { comments } },
+          ctx,
+          info,
+        ),
+    })
+
     t.field('deleteAttribute', {
       type: 'Attribute',
       args: {
-        id: idArg({ required: true }),
+        attributeId: idArg({ required: true }),
       },
       resolve: deleteAttribute,
     })
@@ -226,7 +241,7 @@ export const Mutation = mutationType({
     t.field('deleteInput', {
       type: 'Input',
       args: {
-        id: idArg({ required: true }),
+        inputId: idArg({ required: true }),
       },
       resolve: deleteInput,
     })
@@ -260,21 +275,23 @@ export const Mutation = mutationType({
     t.field('deleteJoin', {
       type: 'Join',
       args: {
-        id: idArg({ required: true }),
+        joinId: idArg({ required: true }),
       },
       resolve: deleteJoin,
     })
 
     /*
-     * FILTER
+     * ACCESS CONTROL
      */
 
-    t.field('deleteFilter', {
-      type: 'Filter',
+    t.field('createAccessControl', {
+      type: 'AccessControl',
       args: {
-        id: idArg({ required: true }),
+        userId: idArg({ required: true }),
+        sourceId: idArg({ required: true }),
+        role: arg({ type: 'SourceRole', required: true }),
       },
-      resolve: deleteFilter,
+      resolve: createAccessControl,
     })
   },
 })

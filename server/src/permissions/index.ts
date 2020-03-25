@@ -2,6 +2,7 @@ import { rule, shield } from 'graphql-shield'
 
 import { getUserId } from 'utils'
 import { Context } from 'context'
+import { getSourceIdFromMutationArgs } from './resolvers'
 
 const rules = {
   isAuthenticatedUser: rule()((_, __, ctx: Context) => {
@@ -15,12 +16,56 @@ const rules = {
     })
     return Boolean(user && user.role == 'ADMIN')
   }),
+  isSourceReader: rule()(async (_, args, ctx: Context) => {
+    // Get user id
+    const userId = getUserId(ctx)
+
+    // Return true if the user is admin
+    const user = await ctx.photon.users.findOne({
+      where: { id: userId },
+    })
+    if (user && user.role == 'ADMIN') return true
+
+    let sourceId = getSourceIdFromMutationArgs(args, ctx)
+
+    // Check access
+    const access = await ctx.photon.accessControls({
+      where: {
+        user: { id: userId },
+        source: { id: sourceId },
+      },
+    })
+    return Boolean(access.length > 0)
+  }),
+  isSourceWriter: rule()(async (_, args, ctx: Context) => {
+    // Get user id
+    const userId = getUserId(ctx)
+
+    // Return true if the user is admin
+    const user = await ctx.photon.users.findOne({
+      where: { id: userId },
+    })
+    if (user && user.role == 'ADMIN') return true
+
+    let sourceId = getSourceIdFromMutationArgs(args, ctx)
+
+    // Check role
+    const access = await ctx.photon.accessControls({
+      where: {
+        user: { id: userId },
+        source: { id: sourceId },
+        role: 'WRITER',
+      },
+    })
+    return Boolean(access.length > 0)
+  }),
 }
 
 export const permissions = shield({
   Query: {
     me: rules.isAuthenticatedUser,
     credential: rules.isAuthenticatedUser,
+    allSources: rules.isAdmin,
     sources: rules.isAuthenticatedUser,
     source: rules.isAuthenticatedUser,
     resource: rules.isAuthenticatedUser,
@@ -30,19 +75,30 @@ export const permissions = shield({
   Mutation: {
     signup: rules.isAdmin,
 
+    createAccessControl: rules.isAdmin,
+
     createSource: rules.isAuthenticatedUser,
-    deleteSource: rules.isAuthenticatedUser,
+    deleteSource: rules.isSourceWriter,
 
-    createAttribute: rules.isAuthenticatedUser,
-    updateAttribute: rules.isAuthenticatedUser,
-    deleteAttribute: rules.isAuthenticatedUser,
+    upsertCredential: rules.isSourceWriter,
+    deleteCredential: rules.isSourceWriter,
 
-    createInput: rules.isAuthenticatedUser,
-    updateInput: rules.isAuthenticatedUser,
-    deleteInput: rules.isAuthenticatedUser,
+    createResource: rules.isSourceWriter,
+    updateResource: rules.isSourceWriter,
+    deleteResource: rules.isSourceWriter,
 
-    addJoinToColumn: rules.isAuthenticatedUser,
-    updateJoin: rules.isAuthenticatedUser,
-    deleteJoin: rules.isAuthenticatedUser,
+    createAttribute: rules.isSourceWriter,
+    updateAttribute: rules.isSourceWriter,
+    deleteAttribute: rules.isSourceWriter,
+
+    updateComments: rules.isSourceReader,
+
+    createInput: rules.isSourceWriter,
+    updateInput: rules.isSourceWriter,
+    deleteInput: rules.isSourceWriter,
+
+    addJoinToColumn: rules.isSourceWriter,
+    updateJoin: rules.isSourceWriter,
+    deleteJoin: rules.isSourceWriter,
   },
 })

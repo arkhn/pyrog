@@ -32,7 +32,6 @@ interface Filter {
 interface Props {
   resource: Resource;
   isOpen: boolean;
-  deleteResourceCallback: () => void;
   onCloseCallback?: () => void;
 }
 
@@ -43,12 +42,7 @@ const qResourcesForSource = loader(
 const mDeleteResource = loader('src/graphql/mutations/deleteResource.graphql');
 const mUpdateResource = loader('src/graphql/mutations/updateResource.graphql');
 
-const Drawer = ({
-  resource,
-  isOpen,
-  deleteResourceCallback,
-  onCloseCallback
-}: Props): ReactElement => {
+const Drawer = ({ resource, isOpen, onCloseCallback }: Props): ReactElement => {
   const dispatch = useDispatch();
   const { source } = useSelector((state: IReduxStore) => state.selectedNode);
 
@@ -68,70 +62,6 @@ const Drawer = ({
     });
   };
 
-  const onUpdateError = (): void => {
-    toaster.show({
-      message: 'An error occurred while updating properties',
-      intent: 'danger',
-      icon: 'properties'
-    });
-  };
-
-  const [updateResource, { loading: updatingResource }] = useMutation(
-    mUpdateResource,
-    {
-      onCompleted: onUpdateCompleted,
-      onError: onUpdateError
-    }
-  );
-
-  // TODO add more relations
-  const sqlRelations = [
-    '=',
-    '>',
-    '<',
-    '>=',
-    '<=',
-    '<>',
-    'BETWEEN',
-    'LIKE',
-    'IN'
-  ];
-
-  React.useEffect(() => {
-    setLabel(resource.label || '');
-    setPkOwner(resource.primaryKeyOwner || '');
-    setPkTable(resource.primaryKeyTable || '');
-    setPkColumn(resource.primaryKeyColumn || '');
-    setFilters(resource.filters || []);
-  }, [resource]);
-
-  const onFormSubmit = (e: React.FormEvent<HTMLElement>): void => {
-    e.preventDefault();
-
-    updateResource({
-      variables: {
-        resourceId: resource.id,
-        data: {
-          label,
-          primaryKeyOwner: pkOwner,
-          primaryKeyTable: pkTable,
-          primaryKeyColumn: pkColumn
-        },
-        filters
-      }
-    });
-    dispatch(
-      updateSelectedResource({
-        ...resource,
-        label,
-        primaryKeyOwner: pkOwner,
-        primaryKeyTable: pkTable,
-        primaryKeyColumn: pkColumn,
-        filters
-      })
-    );
-  };
-
   const onDeletionCompleted = (): void => {
     toaster.show({
       icon: 'layout-hierarchy',
@@ -140,17 +70,19 @@ const Drawer = ({
       timeout: 4000
     });
     dispatch(deselectResource());
-    deleteResourceCallback();
   };
 
-  const onDeletionError = (error: ApolloError): void => {
+  const onError = (error: ApolloError): void => {
+    const msg =
+      error.message === 'GraphQL error: Not Authorised!'
+        ? 'You only have read access on this source.'
+        : error.message;
     toaster.show({
       icon: 'error',
       intent: 'danger',
-      message: error.message,
+      message: msg,
       timeout: 4000
     });
-    deleteResourceCallback();
   };
 
   const removeResourceFromCache = (
@@ -182,14 +114,80 @@ const Drawer = ({
     }
   };
 
+  const [updateResource, { loading: updatingResource }] = useMutation(
+    mUpdateResource,
+    {
+      onCompleted: onUpdateCompleted,
+      onError
+    }
+  );
+
   const [deleteResource, { loading: deletingResource }] = useMutation(
     mDeleteResource,
     {
       update: removeResourceFromCache,
       onCompleted: onDeletionCompleted,
-      onError: onDeletionError
+      onError
     }
   );
+
+  // TODO add more relations
+  const sqlRelations = [
+    '=',
+    '>',
+    '<',
+    '>=',
+    '<=',
+    '<>',
+    'BETWEEN',
+    'LIKE',
+    'IN'
+  ];
+
+  React.useEffect(() => {
+    setLabel(resource.label || '');
+    setPkOwner(resource.primaryKeyOwner || '');
+    setPkTable(resource.primaryKeyTable || '');
+    setPkColumn(resource.primaryKeyColumn || '');
+    setFilters(resource.filters || []);
+  }, [resource]);
+
+  const onFormSubmit = (e: React.FormEvent<HTMLElement>): void => {
+    e.preventDefault();
+
+    const updatedResource = updateResource({
+      variables: {
+        resourceId: resource.id,
+        data: {
+          label,
+          primaryKeyOwner: pkOwner,
+          primaryKeyTable: pkTable,
+          primaryKeyColumn: pkColumn
+        },
+        filters
+      }
+    });
+    if (updatedResource) {
+      dispatch(
+        updateSelectedResource({
+          ...resource,
+          label,
+          primaryKeyOwner: pkOwner,
+          primaryKeyTable: pkTable,
+          primaryKeyColumn: pkColumn,
+          filters
+        })
+      );
+    }
+  };
+
+  const onClickDelete = (): void => {
+    deleteResource({
+      variables: {
+        resourceId: resource.id
+      }
+    });
+  };
 
   const pickPrimaryKey = (
     <FormGroup label="Primary Key" disabled={updatingResource || !resource}>
@@ -375,13 +373,7 @@ const Drawer = ({
             loading={deletingResource}
             icon={'trash'}
             intent={'danger'}
-            onClick={() => {
-              deleteResource({
-                variables: {
-                  id: resource.id
-                }
-              });
-            }}
+            onClick={onClickDelete}
             text="Delete Resource"
           />
         </ControlGroup>

@@ -15,18 +15,13 @@ import ResourceSelect from 'components/selects/resourceSelect';
 interface Props {
   resources: Resource[];
   loading: boolean;
-  deleteResourceCallback: any;
 }
 
 const qResourceAttributes = loader(
   'src/graphql/queries/resourceAttributes.graphql'
 );
 
-const ResourceSelector = ({
-  resources,
-  loading,
-  deleteResourceCallback
-}: Props) => {
+const ResourceSelector = ({ resources, loading }: Props) => {
   const client = useApolloClient();
   const dispatch = useDispatch();
   const { source, resource } = useSelector(
@@ -81,7 +76,6 @@ const ResourceSelector = ({
         <Drawer
           resource={resource}
           isOpen={drawerIsOpen}
-          deleteResourceCallback={deleteResourceCallback}
           onCloseCallback={() => {
             setDrawerIsOpen(false);
           }}

@@ -1,6 +1,7 @@
 import { Button, FormGroup, ControlGroup } from '@blueprintjs/core';
 import React from 'react';
-import { useApolloClient, useMutation, useQuery } from '@apollo/react-hooks';
+import { ApolloError } from 'apollo-client/errors/ApolloError';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useDispatch, useSelector } from 'react-redux';
 
 import AddResourceSelect from 'components/selects/addResourceSelect';
@@ -20,16 +21,7 @@ const qAvailableResources = loader(
   'src/graphql/queries/availableResources.graphql'
 );
 
-interface Props {
-  callback: any;
-}
-
-const qResourceAttributes = loader(
-  'src/graphql/queries/resourceAttributes.graphql'
-);
-
-const AddResource = ({ callback }: Props) => {
-  const client = useApolloClient();
+const AddResource = () => {
   const dispatch = useDispatch();
 
   const { source } = useSelector((state: IReduxStore) => state.selectedNode);
@@ -40,9 +32,6 @@ const AddResource = ({ callback }: Props) => {
   const { data, loading } = useQuery(qAvailableResources, {
     fetchPolicy: 'cache-first'
   });
-  const [refreshDefinition, { loading: refreshingDefinition }] = useMutation(
-    mRefreshDefinition
-  );
 
   const onCompleted = (data: any) => {
     toaster.show({
@@ -51,18 +40,25 @@ const AddResource = ({ callback }: Props) => {
       message: `Ressource ${data.createResource.definition.type} créée pour ${source.name}.`,
       timeout: 4000
     });
-
-    callback();
   };
 
-  const onError = (error: any) => {
+  const onError = (error: ApolloError): void => {
+    const msg =
+      error.message === 'GraphQL error: Not Authorised!'
+        ? 'You only have read access on this source.'
+        : error.message;
     toaster.show({
       icon: 'error',
       intent: 'danger',
-      message: error.message,
+      message: msg,
       timeout: 4000
     });
   };
+
+  const [
+    refreshDefinition,
+    { loading: refreshingDefinition }
+  ] = useMutation(mRefreshDefinition, { onError });
 
   const addResourceToCache = (
     cache: any,
@@ -91,6 +87,7 @@ const AddResource = ({ callback }: Props) => {
       console.log(error);
     }
   };
+
   const [createResource, { loading: creatingResource }] = useMutation(
     mCreateResource,
     {
@@ -106,18 +103,19 @@ const AddResource = ({ callback }: Props) => {
     });
 
     // Create the new resource
-    const {
-      data: { createResource: createdResource }
-    } = await createResource({
+    const responseCreateResource = await createResource({
       variables: {
         sourceId: source.id,
         definitionId: selectedResource!.id
       }
     });
-
-    // Update Redux store
-    dispatch(initAttributesMap([]));
-    dispatch(changeSelectedResource(createdResource));
+    if (responseCreateResource) {
+      // Update Redux store
+      dispatch(initAttributesMap([]));
+      dispatch(
+        changeSelectedResource(responseCreateResource.data.createResource)
+      );
+    }
   };
 
   return (
