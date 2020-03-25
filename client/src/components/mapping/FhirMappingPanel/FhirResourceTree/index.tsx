@@ -22,6 +22,9 @@ const mDeleteAttributesStartingWith = loader(
   'src/graphql/mutations/deleteAttributesStartingWith.graphql'
 );
 
+const escapeRegExp = (str: string) =>
+  str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+
 export interface Props {
   onClickCallback: any;
 }
@@ -69,17 +72,6 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       ? data.structureDefinition.attributes.map(Attribute.from)
       : [];
 
-  const findNode = (
-    treeNodes: ITreeNode<Attribute>[],
-    attribute: Attribute
-  ): ITreeNode<Attribute> | undefined => {
-    let curNode = treeNodes.find(n => attribute.isChild(n.nodeData!));
-    while (curNode?.childNodes && !curNode?.nodeData!.equals(attribute)) {
-      curNode = curNode!.childNodes!.find(n => attribute.isChild(n.nodeData!));
-    }
-    return curNode;
-  };
-
   const checkHasChildAttributes = (pathString: string) =>
     Object.keys(attributesForResource).some(el => el.startsWith(pathString));
 
@@ -119,107 +111,90 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
   const createNode = (
     attribute: Attribute,
     childNodes: ITreeNode<Attribute>[],
-    addNodeCallback?: Function,
-    deleteNodeCallback?: Function
-  ): ITreeNode<Attribute> => ({
-    childNodes: childNodes,
-    hasCaret: !attribute.isPrimitive || attribute.isArray,
-    icon: attribute.isArray
-      ? 'multi-select'
-      : !attribute.isPrimitive
-      ? 'folder-open'
-      : 'tag',
-    id: attribute.tail,
-    label: (
+    parentArray?: ITreeNode<Attribute>
+  ): ITreeNode<Attribute> => {
+    const node: ITreeNode<Attribute> = {
+      childNodes: childNodes,
+      hasCaret: !attribute.isPrimitive || attribute.isArray,
+      icon: attribute.isArray
+        ? 'multi-select'
+        : !attribute.isPrimitive
+        ? 'folder-open'
+        : 'tag',
+      id: attribute.tail,
+      secondaryLabel: secondaryLabel(attribute, childNodes),
+      nodeData: attribute,
+      label: ''
+    };
+    node.label = (
       <NodeLabel
         attribute={attribute}
-        addNodeCallback={addNodeCallback}
-        deleteNodeCallback={deleteNodeCallback}
+        addNodeCallback={() => addNodeToArray(node)}
+        deleteNodeCallback={() => deleteNodeFromArray(node, parentArray!)}
       />
-    ),
-    secondaryLabel: secondaryLabel(attribute, childNodes),
-    nodeData: attribute
-  });
+    );
+    return node;
+  };
 
   const deleteNodeFromArray = (
-    stateNodes: ITreeNode<Attribute>[],
-    attribute: Attribute
-  ): ITreeNode<Attribute>[] => {
+    deletedNode: ITreeNode<Attribute>,
+    arrayNode: ITreeNode<Attribute>
+  ) => {
     // First, we delete all the corresponding attributes in DB
+    const deleted = deletedNode.nodeData!;
+    const array = arrayNode.nodeData!;
     deleteAttributes({
       variables: {
-        startsWith: attribute.path
+        startsWith: deleted.path
       }
     });
     // Same in Redux store
-    dispatch(removeAttributesFromMap(attribute.path));
+    dispatch(removeAttributesFromMap(deleted.path));
+    // and remove the item in the parent attribute as well
+    array.removeItem(deleted);
 
-    // Then we find the parent from which we want to remove
-    // the child node.
-    const parent = findNode(stateNodes, attribute.parent!);
-    if (!parent || !parent.childNodes) return stateNodes;
-
-    if (parent.childNodes.length === 1) {
+    if (arrayNode.childNodes?.length === 1) {
       // If only one child is left, we simply rebuild an empty one
-      const item = new Attribute(attribute.definition);
-      parent.nodeData?.addItem(item);
-      parent.nodeData?.children.forEach(child =>
-        item.addChild(new Attribute(child.definition))
-      );
-      parent.nodeData?.slices.forEach(slice =>
-        item.addSlice(new Attribute(slice.definition))
-      );
-      parent.childNodes = [
-        createNode(item, [], undefined, () =>
-          setNodes(nodes => deleteNodeFromArray(nodes, item))
-        )
-      ];
+      arrayNode.childNodes = [newItemNode(arrayNode)];
     } else {
       // else we remove the childNode from the parent
-      parent.childNodes = parent.childNodes.filter(
-        child => child.id !== attribute.tail
+      arrayNode.childNodes = arrayNode.childNodes?.filter(
+        child => child.id !== deleted.tail
       );
     }
 
-    return stateNodes;
+    setNodes(nodes => [...nodes]);
   };
 
-  const addNodeToArray = (
-    stateNodes: ITreeNode<Attribute>[],
-    attribute: Attribute
-  ): ITreeNode<Attribute>[] => {
-    const parent = findNode(stateNodes, attribute);
-    if (!parent || !parent.childNodes) return stateNodes;
+  const newItemNode = (arrayNode: ITreeNode<Attribute>, index?: number) => {
+    const array = arrayNode.nodeData!;
+    array.definition.max = '1';
+    const item = Attribute.from(array);
+    array.addItem(item, index);
 
-    // build a new child node
-    const item = new Attribute(attribute.definition);
-    attribute.addItem(item);
-    // if the parent array has children, add the same children to the item
-    attribute.children.forEach(child =>
-      item.addChild(new Attribute(child.definition))
-    );
-    attribute.slices.forEach(slice =>
-      item.addSlice(new Attribute(slice.definition))
-    );
-    const newNode = createNode(
+    const node = createNode(
       item,
-      genTreeLevel(item.children),
-      undefined,
-      () => setNodes(nodes => deleteNodeFromArray(nodes, item))
+      genTreeLevel([...item.children, ...item.slices]),
+      arrayNode
     );
+    array.definition.max = '*';
+    return node;
+  };
 
+  const addNodeToArray = (arrayNode: ITreeNode<Attribute>) => {
     // add it to the parent
-    parent.childNodes = [...parent.childNodes, newNode];
-
-    return [...stateNodes];
+    arrayNode.childNodes = [...arrayNode.childNodes!, newItemNode(arrayNode)];
+    setNodes(nodes => [...nodes]);
   };
 
   const buildChildNodesForArray = (
-    array: Attribute
+    arrayNode: ITreeNode<Attribute>
   ): ITreeNode<Attribute>[] => {
+    const array = arrayNode.nodeData!;
     // Check if there are already existing attributes for this node
     // we extract the index from the path
-    const regex = new RegExp(`^${array.path}\\[(\\d+)\\]$`);
+
+    const regex = new RegExp(`^${escapeRegExp(array.path)}\\[(\\d+)\\]$`);
     let existingChildrenIndices = Object.keys(attributesForResource)
       .filter(key => regex.test(key))
       .map(key => Number(regex.exec(key)![1]));
@@ -230,18 +205,9 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     }
 
     // create a node for each item of the array
-    return existingChildrenIndices.map(childIndex => {
-      array.definition.max = '1';
-      let item = Attribute.from(array);
-      array.addItem(item);
-
-      return createNode(
-        item,
-        genTreeLevel([...item.children, ...item.slices]),
-        undefined,
-        () => setNodes(nodes => deleteNodeFromArray(nodes, item))
-      );
-    });
+    return existingChildrenIndices.map(childIndex =>
+      newItemNode(arrayNode, childIndex)
+    );
   };
 
   const buildMultiTypeNode = (attribute: Attribute): ITreeNode<Attribute>[] =>
@@ -251,37 +217,32 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
   const buildNodeFromAttribute = (
     attribute: Attribute
   ): ITreeNode<Attribute> => {
-    let childNodes: ITreeNode<Attribute>[];
+    const node = createNode(attribute, []);
 
     if (attribute.types.length > 1) {
       // if the attribute has multiple types, we have to create as many
       // children as there are types.
-      childNodes = buildMultiTypeNode(attribute);
+      node.childNodes = buildMultiTypeNode(attribute);
     } else if (attribute.isArray) {
       // If node is array, we need to replicate the root node for this type
       // childNode will be the node really having the structure defined by
       // the structure definition.
-      childNodes = buildChildNodesForArray(attribute);
+      node.childNodes = buildChildNodesForArray(node);
     } else if (attribute.slices.length > 0) {
       // if the node has slices, create a node for each of them
-      childNodes = genTreeLevel(attribute.slices);
+      node.childNodes = genTreeLevel(attribute.slices);
     } else if (attribute.children.length > 0) {
       // if the node has children we already know about, create them.
-      childNodes = genTreeLevel(attribute.children);
-    } else {
-      // otherwise the node has no children for now.
-      childNodes = [];
+      node.childNodes = genTreeLevel(attribute.children);
     }
 
-    return createNode(attribute, childNodes, () =>
-      setNodes(nodes => addNodeToArray(nodes, attribute))
-    );
+    return node;
   };
 
   const genTreeLevel = (attributes: Attribute[]): ITreeNode<Attribute>[] =>
     attributes.map(buildNodeFromAttribute);
 
-  const fetchAttributes = async (
+  const fetchAttributeDefinition = async (
     definitionId: string
   ): Promise<Attribute[]> => {
     const { data } = await client.query({
@@ -294,8 +255,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
 
   const handleNodeClick = async (node: ITreeNode<Attribute>): Promise<void> => {
     const attribute = node.nodeData!;
-
-    console.log(attribute.path, attribute, node.childNodes);
+    console.debug(attribute.path);
     if (!attribute.isPrimitive) {
       // if the node is of composite type, expand (or collapse) it
       node.isExpanded = !node.isExpanded;
@@ -303,7 +263,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       // and add them as children of the clicked node.
       if (!node.childNodes || node.childNodes.length === 0) {
         // TODO what if several types are possible?
-        const children = await fetchAttributes(attribute.types[0]);
+        const children = await fetchAttributeDefinition(attribute.types[0]);
         children.forEach(child => attribute.addChild(child));
         node.childNodes = genTreeLevel(attribute.children);
       }

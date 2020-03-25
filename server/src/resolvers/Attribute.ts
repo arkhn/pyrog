@@ -116,7 +116,6 @@ export const deleteAttributes: FieldResolver<
               }),
             )
           }
-          console.log('delete input -- ', i.id)
           return ctx.photon.inputs.delete({ where: { id: i.id } })
         }),
       )

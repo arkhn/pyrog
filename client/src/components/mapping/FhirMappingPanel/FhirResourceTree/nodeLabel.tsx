@@ -9,7 +9,7 @@ interface NodeLabelProps {
 }
 
 export const NodeLabel = ({
-  attribute: { types, definition, id, isArray, isItem },
+  attribute: { types, definition, id, isArray, isItem, isSlice },
   addNodeCallback,
   deleteNodeCallback
 }: NodeLabelProps) => {
@@ -24,7 +24,7 @@ export const NodeLabel = ({
           text={'Ajouter un item'}
         />
       </Menu>
-    ) : isItem ? (
+    ) : isItem && !isSlice ? (
       <Menu>
         <MenuItem
           icon={'delete'}
