@@ -42,6 +42,7 @@ const FhirpipeView = () => {
   const [selectedSource, setSelectedSource] = useState({} as Source);
   const [selectedResources, setSelectedResources] = useState([] as Resource[]);
   const [bypassValidation, setBypassValidation] = useState(false);
+  const [skipRefBinding, setSkipRefBinding] = useState(false);
   const [override, setOverride] = useState(false);
   const [multiprocessing, setMultiprocessing] = useState(false);
   const [running, setRunning] = useState(false);
@@ -114,11 +115,10 @@ const FhirpipeView = () => {
     // chunksize, bypass_validation, multiprocessing
     // It is also needed to provide credentialId
     const body = {
-      source: selectedSource.name,
-      resources: selectedResources.map(r => r.definitionId),
-      labels: selectedResources.map(r => r.label),
+      resource_ids: selectedResources.map(r => r.id),
       credentialId: credentials && credentials.id,
       bypass_validation: bypassValidation,
+      skip_ref_binding: skipRefBinding,
       override: override,
       multiprocessing: multiprocessing
     };
@@ -217,6 +217,11 @@ const FhirpipeView = () => {
                 checked={bypassValidation}
                 label="bypass_validation"
                 onChange={(): void => setBypassValidation(prev => !prev)}
+              />
+              <Switch
+                checked={skipRefBinding}
+                label="skip_reference_binding"
+                onChange={(): void => setSkipRefBinding(prev => !prev)}
               />
               <Switch
                 checked={multiprocessing}
