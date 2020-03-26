@@ -1,23 +1,22 @@
 import React from 'react';
-import { Menu, MenuItem, ContextMenu } from '@blueprintjs/core';
+import { Menu, MenuItem, ContextMenu, Tooltip } from '@blueprintjs/core';
+import { Attribute } from '@arkhn/fhir.ts';
 
 interface NodeLabelProps {
-  name: string;
-  type: any;
+  attribute: Attribute;
   addNodeCallback: any;
   deleteNodeCallback: any;
 }
 
 export const NodeLabel = ({
-  name,
-  type,
+  attribute: { types, definition, id, isArray, isItem, isSlice },
   addNodeCallback,
   deleteNodeCallback
 }: NodeLabelProps) => {
   const showContextMenu = async (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
 
-    const menu = addNodeCallback ? (
+    const menu = isArray ? (
       <Menu>
         <MenuItem
           icon={'add'}
@@ -25,7 +24,7 @@ export const NodeLabel = ({
           text={'Ajouter un item'}
         />
       </Menu>
-    ) : deleteNodeCallback ? (
+    ) : isItem && !isSlice ? (
       <Menu>
         <MenuItem
           icon={'delete'}
@@ -40,11 +39,17 @@ export const NodeLabel = ({
     }
   };
 
-  // TODO what if several types?
-  return (
+  const label = (
     <div className={'node-label'} onContextMenu={showContextMenu}>
-      <div>{name}</div>
-      <div className={'node-type'}>{type}</div>
+      <div>{id}</div>
+      <div className={'node-type'}>{types.join(' | ')}</div>
     </div>
+  );
+
+  if (!definition.definition) return label;
+  return (
+    <Tooltip boundary={'viewport'} content={definition.definition}>
+      {label}
+    </Tooltip>
   );
 };

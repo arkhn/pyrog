@@ -1,12 +1,12 @@
 import { Button, FormGroup, ControlGroup } from '@blueprintjs/core';
 import React from 'react';
-import { ApolloError } from 'apollo-client/errors/ApolloError';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useDispatch, useSelector } from 'react-redux';
 
 import AddResourceSelect from 'components/selects/addResourceSelect';
 import { changeSelectedResource } from 'services/selectedNode/actions';
 import { initAttributesMap } from 'services/resourceInputs/actions';
+import { onError } from 'services/apollo';
 import { IReduxStore, Resource } from 'types';
 import { loader } from 'graphql.macro';
 
@@ -42,23 +42,10 @@ const AddResource = () => {
     });
   };
 
-  const onError = (error: ApolloError): void => {
-    const msg =
-      error.message === 'GraphQL error: Not Authorised!'
-        ? 'You only have read access on this source.'
-        : error.message;
-    toaster.show({
-      icon: 'error',
-      intent: 'danger',
-      message: msg,
-      timeout: 4000
-    });
-  };
-
   const [
     refreshDefinition,
     { loading: refreshingDefinition }
-  ] = useMutation(mRefreshDefinition, { onError });
+  ] = useMutation(mRefreshDefinition, { onError: onError(toaster) });
 
   const addResourceToCache = (
     cache: any,
@@ -92,7 +79,7 @@ const AddResource = () => {
     mCreateResource,
     {
       onCompleted,
-      onError,
+      onError: onError(toaster),
       update: addResourceToCache
     }
   );

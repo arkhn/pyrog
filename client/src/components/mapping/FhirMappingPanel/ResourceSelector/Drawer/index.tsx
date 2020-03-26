@@ -11,7 +11,6 @@ import React, { ReactElement } from 'react';
 import { loader } from 'graphql.macro';
 import { useSelector, useDispatch } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
-import { ApolloError } from 'apollo-client/errors/ApolloError';
 
 import { IReduxStore, Resource, ISourceColumn } from 'types';
 import ColumnPicker from 'components/mapping/ColumnPicker';
@@ -19,6 +18,7 @@ import {
   updateSelectedResource,
   deselectResource
 } from 'services/selectedNode/actions';
+import { onError } from 'services/apollo';
 
 import './style.scss';
 import StringSelect from 'components/selects/stringSelect';
@@ -72,19 +72,6 @@ const Drawer = ({ resource, isOpen, onCloseCallback }: Props): ReactElement => {
     dispatch(deselectResource());
   };
 
-  const onError = (error: ApolloError): void => {
-    const msg =
-      error.message === 'GraphQL error: Not Authorised!'
-        ? 'You only have read access on this source.'
-        : error.message;
-    toaster.show({
-      icon: 'error',
-      intent: 'danger',
-      message: msg,
-      timeout: 4000
-    });
-  };
-
   const removeResourceFromCache = (
     cache: any,
     { data: { deleteResource } }: any
@@ -118,7 +105,7 @@ const Drawer = ({ resource, isOpen, onCloseCallback }: Props): ReactElement => {
     mUpdateResource,
     {
       onCompleted: onUpdateCompleted,
-      onError
+      onError: onError(toaster)
     }
   );
 
@@ -127,7 +114,7 @@ const Drawer = ({ resource, isOpen, onCloseCallback }: Props): ReactElement => {
     {
       update: removeResourceFromCache,
       onCompleted: onDeletionCompleted,
-      onError
+      onError: onError(toaster)
     }
   );
 

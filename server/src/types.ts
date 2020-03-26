@@ -23,31 +23,3 @@ export type AttributeWithChildren = AttributeWithInputs & {
 export type FilterWithSqlColumn = Filter & {
   sqlColumn: Column
 }
-
-export type CachedDefinition = {
-  $meta: StructureMetadata
-}
-
-export type ConstraintDefinition = {
-  key: string
-  severity: string
-  human: string
-  expression: string
-  xpath: string
-  source: string
-}
-
-export type StructureMetadata = {
-  id: string
-  url: string
-  name: string
-  type: string
-  description: string
-  kind: string
-  baseDefinition: string
-  derivation: string
-  publisher: string
-  min: string
-  max: string
-  constraint: ConstraintDefinition[]
-}

@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.2",
+    "@arkhn/fhir.ts": "^3.0.0",
     "@babel/core": "^7.4.3",
     "@blueprintjs/core": "^3.18.1",
     "@blueprintjs/icons": "^3.10.0",

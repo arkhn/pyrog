@@ -500,8 +500,8 @@ export interface NexusGenFieldTypes {
     version: string | null; // String
   }
   StructureDefinition: { // field return type
+    attributes: any; // JSON!
     derivation: string; // String!
-    display: any; // JSON!
     id: string; // String!
     kind: string; // String!
     name: string; // String!

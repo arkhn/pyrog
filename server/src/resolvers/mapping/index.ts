@@ -88,7 +88,7 @@ export const exportMapping = async (
       const def = await getDefinition(r.definitionId)
       return {
         ...r,
-        definition: def?.$meta,
+        definition: def?.meta,
       }
     }),
   )

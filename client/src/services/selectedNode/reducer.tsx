@@ -43,7 +43,7 @@ const selectedNodeReducer = (
         ...state,
         attribute: {
           ...action.payload.attribute,
-          path: action.payload.attribute.serialize()
+          path: action.payload.attribute.path
         }
       };
 
