@@ -19,7 +19,6 @@ RUN yarn cache clean --force
 
 COPY prisma prisma
 COPY src src
-COPY fhir fhir
 
 RUN yarn prisma2 generate
 RUN yarn build
