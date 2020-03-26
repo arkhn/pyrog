@@ -22,7 +22,7 @@
     "wait:db": "ts-node scripts/waitForDb.ts"
   },
   "dependencies": {
-    "@arkhn/fhir.ts": "^2.0.0",
+    "@arkhn/fhir.ts": "^3.0.0",
     "@prisma/photon": "^2.0.0-preview019",
     "axios": "^0.19.2",
     "bcryptjs": "2.4.3",

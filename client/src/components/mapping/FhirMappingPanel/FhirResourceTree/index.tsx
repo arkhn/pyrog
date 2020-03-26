@@ -156,16 +156,13 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
 
   const newItemNode = (arrayNode: ITreeNode<Attribute>, index?: number) => {
     const array = arrayNode.nodeData!;
-    array.definition.max = '1';
-    const item = Attribute.from(array);
-    array.addItem(item, index);
+    const item = array.addItem(index);
 
     const node = createNode(
       item,
       genTreeLevel([...item.children, ...item.slices]),
       arrayNode
     );
-    array.definition.max = '*';
     return node;
   };
 
