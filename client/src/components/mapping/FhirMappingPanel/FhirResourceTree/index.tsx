@@ -250,7 +250,6 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       // if the node has no children yet, fetch the attributes definitions
       // and add them as children of the clicked node.
       if (!node.childNodes || node.childNodes.length === 0) {
-        // TODO what if several types are possible?
         const children = await fetchAttributeDefinition(attribute.types[0]);
         children.forEach(child => attribute.addChild(child));
         node.childNodes = genTreeLevel(attribute.children);
