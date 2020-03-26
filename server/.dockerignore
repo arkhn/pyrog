@@ -12,4 +12,3 @@
 !prisma
 !scripts
 !.env*
-!fhir
