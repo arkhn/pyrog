@@ -15,7 +15,6 @@
     "migrate": "prisma2 lift up",
     "seed:superuser": "ts-node scripts/superuser.ts",
     "seed:mapping": "ts-node scripts/importMapping.ts",
-    "seed:definitions": "ts-node scripts/fhirDefinitions.ts $(ls fhir/*.json)",
     "export:mappings": "ts-node scripts/exportMapping.ts backup",
     "test": "jest --max-workers 1 --watch",
     "test:ci": "jest --max-workers 1 --coverage",

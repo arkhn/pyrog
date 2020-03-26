@@ -1,6 +1,5 @@
 dist
 schemas
-fhir/definitions
 
 node_modules
 .idea
