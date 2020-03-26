@@ -30,6 +30,7 @@ interface Props {
 }
 
 const filterByName: ItemPredicate<CodeSystem> = (query, item) => {
+  // TODO this is gross. Find a better way to handle code systems
   const title = item.title || item.name;
   return title.toLowerCase().indexOf(query.toLowerCase()) >= 0;
 };
