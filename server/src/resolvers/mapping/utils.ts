@@ -5,7 +5,7 @@ import {
   JoinCreateWithoutColumnInput,
   AttributeCreateWithoutResourceInput,
   FilterCreateInput,
-} from '@prisma/photon'
+} from '@prisma/client'
 
 import {
   JoinWithColumn,

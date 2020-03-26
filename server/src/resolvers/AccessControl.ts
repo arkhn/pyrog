@@ -14,8 +14,8 @@ export const AccessControl = objectType({
 export const createAccessControl: FieldResolver<
   'Mutation',
   'createAccessControl'
-> = (_parent, { userId, sourceId, role }, ctx) =>
-  ctx.photon.accessControls.create({
+> = async (_parent, { userId, sourceId, role }, ctx) =>
+  ctx.prismaClient.accessControl.create({
     data: {
       user: { connect: { id: userId } },
       source: { connect: { id: sourceId } },

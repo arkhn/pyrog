@@ -1,8 +1,8 @@
 import {
-  Photon,
+  PrismaClient,
   Resource,
   AttributeCreateWithoutResourceInput,
-} from '@prisma/photon'
+} from '@prisma/client'
 import { AttributeWithInputs } from 'types'
 
 import { clean, buildInputsQuery, buildFiltersQuery } from './utils'
@@ -27,10 +27,14 @@ export const buildAttributesV6 = (
     return attr
   })
 
-export default (photon: Photon, sourceId: string, resources: any[]) =>
+export default (
+  prismaClient: PrismaClient,
+  sourceId: string,
+  resources: any[],
+) =>
   Promise.all(
     resources.map(async (r: any) => {
-      return photon.resources.create({
+      return prismaClient.resource.create({
         data: {
           ...cleanResourceV6(r),
           attributes: {

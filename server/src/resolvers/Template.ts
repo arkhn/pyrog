@@ -17,10 +17,10 @@ export const createTemplate: FieldResolver<
   'Mutation',
   'createTemplate'
 > = async (_parent, { name }, ctx) =>
-  ctx.photon.templates.create({ data: { name } })
+  ctx.prismaClient.template.create({ data: { name } })
 
 export const deleteTemplate: FieldResolver<
   'Mutation',
   'deleteTemplate'
 > = async (_parent, { id }, ctx) =>
-  ctx.photon.templates.delete({ where: { id } })
+  ctx.prismaClient.template.delete({ where: { id } })

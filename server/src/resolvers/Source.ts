@@ -22,14 +22,14 @@ export const Source = objectType({
     t.field('mapping', {
       type: 'String',
       nullable: false,
-      resolve: (parent, _, ctx) => exportMapping(ctx.photon, parent.id),
+      resolve: (parent, _, ctx) => exportMapping(ctx.prismaClient, parent.id),
     })
 
     t.list.field('mappingProgress', {
       type: 'Int',
       nullable: true,
       resolve: async (parent, __, ctx) => {
-        const resources = await ctx.photon.resources({
+        const resources = await ctx.prismaClient.resource.findMany({
           include: {
             attributes: {
               include: {
@@ -58,7 +58,7 @@ export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
   ctx,
 ) => {
   // make sure the source does not already exist
-  const exists = await ctx.photon.sources.findMany({
+  const exists = await ctx.prismaClient.source.findMany({
     where: { template: { name: templateName }, name },
   })
   if (exists.length) {
@@ -68,7 +68,7 @@ export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
   }
 
   // create the source
-  const source = await ctx.photon.sources.create({
+  const source = await ctx.prismaClient.source.create({
     data: {
       name,
       hasOwner,
@@ -78,7 +78,7 @@ export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
 
   // create a row in ACL
   const userId = getUserId(ctx)
-  await ctx.photon.accessControls.create({
+  await ctx.prismaClient.accessControl.create({
     data: {
       user: { connect: { id: userId } },
       source: { connect: { id: source.id } },
@@ -88,7 +88,7 @@ export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
 
   // import mapping if present
   if (mapping) {
-    await importMapping(ctx.photon, source.id, mapping)
+    await importMapping(ctx.prismaClient, source.id, mapping)
   }
 
   return source
@@ -99,7 +99,7 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
   { sourceId },
   ctx,
 ) => {
-  const source = await ctx.photon.sources.findOne({
+  const source = await ctx.prismaClient.source.findOne({
     where: { id: sourceId },
     include: {
       credential: true,
@@ -132,19 +132,19 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
     },
   })
   if (source!.credential) {
-    await ctx.photon.credentials.delete({
+    await ctx.prismaClient.credential.delete({
       where: { id: source!.credential.id },
     })
   }
-  await ctx.photon.accessControls.deleteMany({
+  await ctx.prismaClient.accessControl.deleteMany({
     where: { source: { id: sourceId } },
   })
   await Promise.all(
     source!.resources.map(async r => {
       await Promise.all(
         r.filters.map(async f => {
-          await ctx.photon.filters.delete({ where: { id: f.id } })
-          ctx.photon.columns.delete({ where: { id: f.sqlColumn.id } })
+          await ctx.prismaClient.filter.delete({ where: { id: f.id } })
+          ctx.prismaClient.column.delete({ where: { id: f.sqlColumn.id } })
         }),
       )
       await Promise.all(
@@ -156,23 +156,27 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
                   i.sqlValue.joins.map(async j => {
                     await Promise.all(
                       j.tables.map(t =>
-                        ctx.photon.columns.delete({ where: { id: t.id } }),
+                        ctx.prismaClient.column.delete({
+                          where: { id: t.id },
+                        }),
                       ),
                     )
-                    return ctx.photon.joins.delete({ where: { id: j.id } })
+                    return ctx.prismaClient.join.delete({
+                      where: { id: j.id },
+                    })
                   }),
                 )
               }
-              return ctx.photon.inputs.delete({ where: { id: i.id } })
+              return ctx.prismaClient.input.delete({ where: { id: i.id } })
             }),
           )
-          return ctx.photon.attributes.delete({ where: { id: a.id } })
+          return ctx.prismaClient.attribute.delete({ where: { id: a.id } })
         }),
       )
-      return ctx.photon.resources.delete({ where: { id: r.id } })
+      return ctx.prismaClient.resource.delete({ where: { id: r.id } })
     }),
   )
-  return ctx.photon.sources.delete({ where: { id: sourceId } })
+  return ctx.prismaClient.source.delete({ where: { id: sourceId } })
 }
 
 export const sources: FieldResolver<'Query', 'sources'> = async (
@@ -181,7 +185,7 @@ export const sources: FieldResolver<'Query', 'sources'> = async (
   ctx,
 ) => {
   const userId = getUserId(ctx)
-  const accesses = await ctx.photon.accessControls({
+  const accesses = await ctx.prismaClient.accessControl.findMany({
     where: { user: { id: userId } },
     include: { source: true },
   })

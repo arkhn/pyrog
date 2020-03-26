@@ -20,7 +20,7 @@ export const addJoinToColumn: FieldResolver<
   'Mutation',
   'addJoinToColumn'
 > = async (_parent, { columnId, join }, ctx) => {
-  const newJoin = await ctx.photon.joins.create({
+  const newJoin = await ctx.prismaClient.join.create({
     data: {
       tables: {
         create: [
@@ -49,7 +49,7 @@ export const addJoinToColumn: FieldResolver<
     },
   })
 
-  return ctx.photon.columns.update({
+  return ctx.prismaClient.column.update({
     where: { id: columnId },
     data: {
       joins: {

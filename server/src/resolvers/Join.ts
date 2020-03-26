@@ -21,12 +21,12 @@ export const updateJoin: FieldResolver<'Mutation', 'updateJoin'> = async (
     throw new Error('Update payload cannot be null')
   }
 
-  const join = await ctx.photon.joins.findOne({
+  const join = await ctx.prismaClient.join.findOne({
     where: { id: joinId },
     include: { tables: true },
   })
 
-  return ctx.photon.joins.update({
+  return ctx.prismaClient.join.update({
     where: { id: joinId },
     data: {
       tables: {
@@ -87,4 +87,4 @@ export const deleteJoin: FieldResolver<'Mutation', 'deleteJoin'> = async (
   _parent,
   { joinId },
   ctx,
-) => ctx.photon.joins.delete({ where: { id: joinId } })
+) => ctx.prismaClient.join.delete({ where: { id: joinId } })

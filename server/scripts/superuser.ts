@@ -1,7 +1,7 @@
 import { hash } from 'bcryptjs'
-import { Photon } from '@prisma/photon'
+import { PrismaClient } from '@prisma/client'
 
-const photon = new Photon()
+const prismaClient = new PrismaClient()
 
 const { SUPERUSER_PASSWORD } = process.env
 if (!SUPERUSER_PASSWORD) {
@@ -11,7 +11,7 @@ if (!SUPERUSER_PASSWORD) {
 
 async function main() {
   const hashedPassword = await hash(SUPERUSER_PASSWORD!, 10)
-  const user = await photon.users.create({
+  const user = await prismaClient.user.create({
     data: {
       name: 'admin',
       email: 'admin@arkhn.com',
@@ -22,5 +22,5 @@ async function main() {
 }
 
 main().finally(async () => {
-  await photon.disconnect()
+  await prismaClient.disconnect()
 })

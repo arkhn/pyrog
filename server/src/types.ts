@@ -1,4 +1,4 @@
-import { Attribute, Input, Join, Column, Filter } from '@prisma/photon'
+import { Attribute, Input, Join, Column, Filter } from '@prisma/client'
 
 export type JoinWithColumn = Join & {
   tables: Column[]

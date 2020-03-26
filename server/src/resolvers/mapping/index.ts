@@ -1,4 +1,4 @@
-import { Photon } from '@prisma/photon'
+import { PrismaClient } from '@prisma/client'
 
 import {
   MAPPING_VERSION_1,
@@ -20,7 +20,7 @@ import { getDefinition } from 'fhir'
 // copy all the resources from the mapping and their attributes.
 // this is done through a single query matching the graph of the mapping.
 export const importMapping = async (
-  photon: Photon,
+  prismaClient: PrismaClient,
   sourceId: string,
   mapping: string,
 ) => {
@@ -33,27 +33,27 @@ export const importMapping = async (
   }
   switch (version) {
     case MAPPING_VERSION_1:
-      return handleV1(photon, sourceId, resources)
+      return handleV1(prismaClient, sourceId, resources)
     case MAPPING_VERSION_2:
-      return handleV2(photon, sourceId, resources)
+      return handleV2(prismaClient, sourceId, resources)
     case MAPPING_VERSION_3:
-      return handleV3(photon, sourceId, resources)
+      return handleV3(prismaClient, sourceId, resources)
     case MAPPING_VERSION_4:
-      return handleV4(photon, sourceId, resources)
+      return handleV4(prismaClient, sourceId, resources)
     case MAPPING_VERSION_5:
-      return handleV5(photon, sourceId, resources)
+      return handleV5(prismaClient, sourceId, resources)
     case MAPPING_VERSION_6:
-      return handleV6(photon, sourceId, resources)
+      return handleV6(prismaClient, sourceId, resources)
     default:
       throw new Error(`Unknown mapping version: "${version}"`)
   }
 }
 
 export const exportMapping = async (
-  photon: Photon,
+  prismaClient: PrismaClient,
   sourceId: string,
 ): Promise<string> => {
-  const source = await photon.sources.findOne({
+  const source = await prismaClient.source.findOne({
     where: { id: sourceId },
     include: { template: true },
   })
@@ -61,7 +61,7 @@ export const exportMapping = async (
     throw new Error(`source ${sourceId} does not exist`)
   }
 
-  let resources = await photon.resources({
+  let resources = await prismaClient.resource.findMany({
     where: { source: { id: source.id } },
     include: {
       source: true,

@@ -1,15 +1,15 @@
-import { Photon } from '@prisma/photon'
+import { PrismaClient } from '@prisma/client'
 import { ContextParameters } from 'graphql-yoga/dist/types'
-const photon = new Photon()
+const prismaClient = new PrismaClient()
 
 export interface Context {
-  photon: Photon
+  prismaClient: PrismaClient
   request: any
 }
 
 export function createContext(request: ContextParameters) {
   return {
     ...request,
-    photon,
+    prismaClient,
   }
 }

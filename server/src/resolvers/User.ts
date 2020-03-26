@@ -23,7 +23,7 @@ export const login: FieldResolver<'Mutation', 'login'> = async (
   { email, password },
   context,
 ) => {
-  const user = await context.photon.users.findOne({
+  const user = await context.prismaClient.user.findOne({
     where: {
       email,
     },
@@ -47,7 +47,7 @@ export const signup: FieldResolver<'Mutation', 'signup'> = async (
   ctx,
 ) => {
   const hashedPassword = await hash(password, 10)
-  const user = await ctx.photon.users.create({
+  const user = await ctx.prismaClient.user.create({
     data: {
       name,
       email,

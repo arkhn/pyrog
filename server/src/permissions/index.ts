@@ -11,7 +11,7 @@ const rules = {
   }),
   isAdmin: rule()(async (_, __, ctx: Context) => {
     const userId = getUserId(ctx)
-    const user = await ctx.photon.users.findOne({
+    const user = await ctx.prismaClient.user.findOne({
       where: { id: userId },
     })
     return Boolean(user && user.role == 'ADMIN')
@@ -21,7 +21,7 @@ const rules = {
     const userId = getUserId(ctx)
 
     // Return true if the user is admin
-    const user = await ctx.photon.users.findOne({
+    const user = await ctx.prismaClient.user.findOne({
       where: { id: userId },
     })
     if (user && user.role == 'ADMIN') return true
@@ -29,7 +29,7 @@ const rules = {
     let sourceId = getSourceIdFromMutationArgs(args, ctx)
 
     // Check access
-    const access = await ctx.photon.accessControls({
+    const access = await ctx.prismaClient.accessControl.findMany({
       where: {
         user: { id: userId },
         source: { id: sourceId },
@@ -42,7 +42,7 @@ const rules = {
     const userId = getUserId(ctx)
 
     // Return true if the user is admin
-    const user = await ctx.photon.users.findOne({
+    const user = await ctx.prismaClient.user.findOne({
       where: { id: userId },
     })
     if (user && user.role == 'ADMIN') return true
@@ -50,7 +50,7 @@ const rules = {
     let sourceId = getSourceIdFromMutationArgs(args, ctx)
 
     // Check role
-    const access = await ctx.photon.accessControls({
+    const access = await ctx.prismaClient.accessControl.findMany({
       where: {
         user: { id: userId },
         source: { id: sourceId },

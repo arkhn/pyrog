@@ -10,9 +10,9 @@ export const Query = queryType({
     t.field('me', {
       type: 'User',
       nullable: true,
-      resolve: (parent, args, ctx) => {
+      resolve: async (parent, args, ctx) => {
         const userId = getUserId(ctx)
-        return ctx.photon.users.findOne({
+        return ctx.prismaClient.user.findOne({
           where: {
             id: userId,
           },
@@ -26,14 +26,14 @@ export const Query = queryType({
         credentialId: idArg({ nullable: false }),
       },
       nullable: true,
-      resolve: (parent, { credentialId }, ctx) =>
-        ctx.photon.credentials.findOne({ where: { id: credentialId } }),
+      resolve: async (parent, { credentialId }, ctx) =>
+        ctx.prismaClient.credential.findOne({ where: { id: credentialId } }),
     })
 
     t.list.field('templates', {
       type: 'Template',
       nullable: true,
-      resolve: (parent, args, ctx) => ctx.photon.templates(),
+      resolve: (parent, args, ctx) => ctx.prismaClient.template?.findMany(),
     })
 
     t.field('template', {
@@ -42,14 +42,14 @@ export const Query = queryType({
         templateId: idArg({ nullable: false }),
       },
       nullable: true,
-      resolve: (parent, { templateId }, ctx) =>
-        ctx.photon.templates.findOne({ where: { id: templateId } }),
+      resolve: async (parent, { templateId }, ctx) =>
+        ctx.prismaClient.template.findOne({ where: { id: templateId } }),
     })
 
     t.list.field('allSources', {
       type: 'Source',
       nullable: true,
-      resolve: (parent, args, ctx) => ctx.photon.sources(),
+      resolve: (parent, args, ctx) => ctx.prismaClient.source.findMany(),
     })
 
     t.list.field('sources', {
@@ -64,8 +64,8 @@ export const Query = queryType({
         sourceId: idArg({ nullable: false }),
       },
       nullable: true,
-      resolve: (parent, { sourceId }, ctx) =>
-        ctx.photon.sources.findOne({ where: { id: sourceId } }),
+      resolve: async (parent, { sourceId }, ctx) =>
+        ctx.prismaClient.source.findOne({ where: { id: sourceId } }),
     })
 
     t.field('resource', {
@@ -74,8 +74,8 @@ export const Query = queryType({
         resourceId: idArg({ nullable: false }),
       },
       nullable: true,
-      resolve: (parent, { resourceId }, ctx) =>
-        ctx.photon.resources.findOne({
+      resolve: async (parent, { resourceId }, ctx) =>
+        ctx.prismaClient.resource.findOne({
           where: { id: resourceId },
           include: { attributes: true },
         }),
@@ -87,8 +87,8 @@ export const Query = queryType({
         attributeId: idArg({ nullable: false }),
       },
       nullable: true,
-      resolve: (parent, { attributeId }, ctx) =>
-        ctx.photon.attributes.findOne({ where: { id: attributeId } }),
+      resolve: async (parent, { attributeId }, ctx) =>
+        ctx.prismaClient.attribute.findOne({ where: { id: attributeId } }),
     })
 
     t.field('structureDefinition', {
