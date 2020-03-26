@@ -32,8 +32,8 @@ migration 20200206193616-move-structuredefs-to-api..20200218162146-concept-maps
 -  id          String    @default(cuid()) @id
 +  id           String    @default(cuid()) @id
    // Sql column containing the value
--  sqlValue    Column?   @relation(onDelete: CASCADE)
-+  sqlValue     Column?   @relation(onDelete: CASCADE)
+-  sqlValue    Column?
++  sqlValue     Column?
    // cleaning scripts for the sql column
 -  script      String?
 +  script       String?
@@ -49,5 +49,3 @@ migration 20200206193616-move-structuredefs-to-api..20200218162146-concept-maps
    createdAt DateTime @default(now())
  }
 ```
-
-

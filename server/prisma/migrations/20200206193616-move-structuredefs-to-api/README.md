@@ -72,15 +72,13 @@ migration 20200120163303-flatten-attributes..20200206193616-move-structuredefs-t
    primaryKeyOwner  String?
    primaryKeyTable  String?
    primaryKeyColumn String?
--  attributes Attribute[]          @relation(onDelete: CASCADE)
+-  attributes Attribute[]
 -  definition StructureDefinition?
 -  source     Source
-+  attributes   Attribute[] @relation(onDelete: CASCADE)
++  attributes   Attribute[]
 +  definitionId String
 +  source       Source
    updatedAt DateTime @updatedAt
    createdAt DateTime @default(now())
  }
 ```
-
-

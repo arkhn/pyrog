@@ -134,8 +134,8 @@ migration ..20200107161936-bootstrap
 --- datamodel.dml
 +++ datamodel.dml
 @@ -1,0 +1,139 @@
-+generator photon {
-+  provider = "photonjs"
++generator client {
++  provider = "prisma-client-js"
 +}
 +
 +datasource db {
@@ -147,7 +147,7 @@ migration ..20200107161936-bootstrap
 +model Template {
 +  id      String   @default(cuid()) @id
 +  name    String   @unique
-+  sources Source[] @relation(onDelete: CASCADE)
++  sources Source[]
 +
 +  updatedAt DateTime @updatedAt
 +  createdAt DateTime @default(now())
@@ -158,8 +158,8 @@ migration ..20200107161936-bootstrap
 +  name       String      @unique
 +  version    String?
 +  hasOwner   Boolean     @default(false)
-+  resources  Resource[]  @relation(onDelete: CASCADE)
-+  credential Credential? @relation(onDelete: CASCADE)
++  resources  Resource[]
++  credential Credential?
 +  template   Template
 +
 +  updatedAt DateTime @updatedAt
@@ -193,7 +193,7 @@ migration ..20200107161936-bootstrap
 +  primaryKeyOwner  String?
 +  primaryKeyTable  String?
 +  primaryKeyColumn String?
-+  attributes       Attribute[] @relation(onDelete: CASCADE)
++  attributes       Attribute[]
 +  // Parent
 +  source           Source
 +
@@ -211,9 +211,9 @@ migration ..20200107161936-bootstrap
 +  description   String?
 +  comments      String?
 +  // Children input columns
-+  inputs        Input[]     @relation(onDelete: CASCADE)
++  inputs        Input[]
 +  // Children attributes
-+  children      Attribute[] @relation(name: "AttributeToAttributes", onDelete: CASCADE)
++  children      Attribute[] @relation(name: "AttributeToAttributes")
 +  // Parent attribute or resource
 +  parent        Attribute?  @relation(name: "AttributeToAttributes")
 +  resource      Resource?
@@ -225,7 +225,7 @@ migration ..20200107161936-bootstrap
 +model Input {
 +  id          String    @default(cuid()) @id
 +  // Sql column containing the value
-+  sqlValue    Column?   @relation(onDelete: CASCADE)
++  sqlValue    Column?
 +  // cleaning scripts for the sql column
 +  script      String?
 +  // Or a static value is it's fixed
@@ -243,7 +243,7 @@ migration ..20200107161936-bootstrap
 +  table  String?
 +  column String?
 +
-+  joins Join[] @relation(name: "ColumnJoins", onDelete: CASCADE)
++  joins Join[] @relation(name: "ColumnJoins")
 +
 +  updatedAt DateTime @updatedAt
 +  createdAt DateTime @default(now())
@@ -252,7 +252,7 @@ migration ..20200107161936-bootstrap
 +model Join {
 +  id String @default(cuid()) @id
 +
-+  tables Column[] @relation(name: "JoinedColumns", onDelete: CASCADE)
++  tables Column[] @relation(name: "JoinedColumns")
 +
 +  updatedAt DateTime @updatedAt
 +  createdAt DateTime @default(now())
@@ -274,5 +274,3 @@ migration ..20200107161936-bootstrap
 +  createdAt DateTime @default(now())
 +}
 ```
-
-

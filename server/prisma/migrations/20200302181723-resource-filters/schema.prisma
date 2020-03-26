@@ -1,18 +1,17 @@
-generator photon {
-  provider = "photonjs"
+generator client {
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  url = "***"
+  url      = "***"
 }
 
 // One per software (Chimio, Crossway, etc)
 model Template {
-  id      String   @default(cuid()) @id
-  name    String   @unique
-  sources Source[] @relation(onDelete: CASCADE)
-
+  id        String   @default(cuid()) @id
+  name      String   @unique
+  sources   Source[]
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
 }
@@ -22,12 +21,11 @@ model Source {
   name       String
   version    String?
   hasOwner   Boolean     @default(false)
-  resources  Resource[]  @relation(onDelete: CASCADE)
-  credential Credential? @relation(onDelete: CASCADE)
-  template   Template
-
-  updatedAt DateTime @updatedAt
-  createdAt DateTime @default(now())
+  resources  Resource[]
+  credential Credential?
+  template   Template    @relation(references: [id])
+  updatedAt  DateTime    @updatedAt
+  createdAt  DateTime    @default(now())
 }
 
 enum DatabaseType {
@@ -35,64 +33,57 @@ enum DatabaseType {
 }
 
 model Credential {
-  id       String       @default(cuid()) @id
-  host     String
-  port     String
-  database String
-  login    String
-  password String
-  model    DatabaseType
+  id        String       @default(cuid()) @id
+  host      String
+  port      String
+  database  String
+  login     String
+  password  String
+  model     DatabaseType
   // Parent
-  source   Source
-
-  updatedAt DateTime @updatedAt
-  createdAt DateTime @default(now())
+  source    Source       @relation(references: [id])
+  updatedAt DateTime     @updatedAt
+  createdAt DateTime     @default(now())
 }
 
 model Resource {
-  id    String  @default(cuid()) @id
-  label String?
-
+  id               String      @default(cuid()) @id
+  label            String?
   primaryKeyOwner  String?
   primaryKeyTable  String?
   primaryKeyColumn String?
-
   // filters on db to avoid processing all the DB
-  filters Filter[]
-
-  attributes   Attribute[] @relation(onDelete: CASCADE)
-  definitionId String
-  source       Source
-
-  updatedAt DateTime @updatedAt
-  createdAt DateTime @default(now())
+  filters          Filter[]
+  attributes       Attribute[]
+  definitionId     String
+  source           Source      @relation(references: [id])
+  updatedAt        DateTime    @updatedAt
+  createdAt        DateTime    @default(now())
 }
 
 model Filter {
-  id String @default(cuid()) @id
-
-  sqlColumn Column @relation(references: [id])
+  id        String    @default(cuid()) @id
+  sqlColumn Column    @relation(references: [id])
   relation  String
   value     String
+  resource  Resource? @relation(references: [id])
 }
 
 model Attribute {
-  id            String  @default(cuid()) @id
+  id            String    @default(cuid()) @id
   path          String
   mergingScript String?
   comments      String?
-
-  inputs   Input[]   @relation(onDelete: CASCADE)
-  resource Resource?
-
-  updatedAt DateTime @updatedAt
-  createdAt DateTime @default(now())
+  inputs        Input[]
+  resource      Resource? @relation(references: [id])
+  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime  @default(now())
 }
 
 model Input {
   id           String    @default(cuid()) @id
   // Sql column containing the value
-  sqlValue     Column?   @relation(references: [id], onDelete: CASCADE)
+  sqlValue     Column?   @relation(references: [id])
   // cleaning scripts for the sql column
   script       String?
   // id of the concept map to be applied to a mapped code
@@ -100,47 +91,43 @@ model Input {
   // Or a static value is it's fixed
   staticValue  String?
   // parent
-  attribute    Attribute
-
-  updatedAt DateTime @updatedAt
-  createdAt DateTime @default(now())
+  attribute    Attribute @relation(references: [id])
+  updatedAt    DateTime  @updatedAt
+  createdAt    DateTime  @default(now())
 }
 
 model Column {
-  id     String  @default(cuid()) @id
-  owner  String?
-  table  String?
-  column String?
-
-  joins Join[] @relation(name: "ColumnJoins", onDelete: CASCADE)
-
-  filter Filter?
-  input  Input?
-
+  id        String   @default(cuid()) @id
+  owner     String?
+  table     String?
+  column    String?
+  joins     Join[]   @relation("ColumnJoins")
+  filter    Filter?
+  input     Input?
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
+  join      Join?    @relation("JoinedColumns", references: [id])
 }
 
 model Join {
-  id String @default(cuid()) @id
-
-  tables Column[] @relation(name: "JoinedColumns", onDelete: CASCADE)
-
+  id        String   @default(cuid()) @id
+  tables    Column[] @relation("JoinedColumns")
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
+  column    Column?  @relation("ColumnJoins", references: [id])
 }
 
 enum Role {
-  ADMIN USER
+  ADMIN
+  USER
 }
 
 model User {
-  id       String @default(cuid()) @id
-  email    String @unique
-  name     String
-  password String
-  role     Role   @default(USER)
-
+  id        String   @default(cuid()) @id
+  email     String   @unique
+  name      String
+  password  String
+  role      Role     @default(USER)
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
 }

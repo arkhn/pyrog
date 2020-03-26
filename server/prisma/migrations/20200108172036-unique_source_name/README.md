@@ -33,8 +33,6 @@ migration 20200107161936-bootstrap..20200108172036-unique_source_name
 +  name       String
    version    String?
    hasOwner   Boolean     @default(false)
-   resources  Resource[]  @relation(onDelete: CASCADE)
-   credential Credential? @relation(onDelete: CASCADE)
+   resources  Resource[]
+   credential Credential?
 ```
-
-
