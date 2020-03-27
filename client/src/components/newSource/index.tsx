@@ -141,49 +141,32 @@ const NewSourceView = (): React.ReactElement => {
 
   const createSource = async (): Promise<void> => {
     if (mappingFile) {
-      const reader = new FileReader();
-      reader.onload = async (e: ProgressEvent<FileReader>) => {
-        const mapping = e.target?.result;
-        if (!mapping) {
-          toaster.show(
-            renderToastProps({
-              message: e.target?.error,
-              success: false
-            })
-          );
-          return;
-        }
-        try {
-          JSON.parse(mapping as string);
-        } catch (e) {
-          toaster.show(
-            renderToastProps({
-              message: `could not parse ${mappingFile.name} as JSON`,
-              success: false
-            })
-          );
-          return;
-        }
-        await client.mutate({
-          mutation: mCreateSource,
-          variables: {
-            templateName,
-            hasOwner,
-            mapping,
-            name: sourceName
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsText(mappingFile);
+        reader.onload = async (e: ProgressEvent<FileReader>): Promise<void> => {
+          const mapping = e.target?.result;
+          if (!mapping) {
+            reject(e.target?.error);
           }
-        });
-      };
-      reader.onerror = (e): void => {
-        toaster.show(
-          renderToastProps({
-            message: e.toString(),
-            success: false
-          })
-        );
-        return;
-      };
-      reader.readAsText(mappingFile);
+          try {
+            JSON.parse(mapping as string);
+          } catch (e) {
+            reject(new Error(`could not parse ${mappingFile.name} as JSON`));
+          }
+          await client.mutate({
+            mutation: mCreateSource,
+            variables: {
+              templateName,
+              hasOwner,
+              mapping,
+              name: sourceName
+            }
+          });
+          resolve();
+        };
+        reader.onerror = (e: ProgressEvent<FileReader>): void => reject(e);
+      });
     } else {
       await client.mutate({
         mutation: mCreateSource,
