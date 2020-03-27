@@ -5,6 +5,7 @@ import { REDIS_URL } from './constants'
 
 let rcache: RedisClient
 let get: (arg: string) => Promise<string>
+let del: (arg: string) => Promise<number>
 let mget: OverloadedKeyCommand<string[], string[], Promise<string[]>>
 let set: (arg1: string, arg2: string) => Promise<unknown>
 let sadd: OverloadedKeyCommand<string, number, Promise<number>>
@@ -17,6 +18,7 @@ export default () => {
   if (rcache)
     return {
       get,
+      del,
       mget,
       set,
       sadd,
@@ -24,6 +26,7 @@ export default () => {
     }
   rcache = redis.createClient({ url: REDIS_URL })
   get = promisify(rcache.get).bind(rcache)
+  del = promisify(rcache.del).bind(rcache)
   mget = promisify(rcache.mget).bind(rcache)
   set = promisify(rcache.set).bind(rcache)
   sadd = promisify(rcache.sadd).bind(rcache)
