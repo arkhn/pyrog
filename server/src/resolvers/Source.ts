@@ -29,7 +29,6 @@ export const Source = objectType({
       type: 'Int',
       nullable: true,
       resolve: async (parent, __, ctx) => {
-        throw new Error('test')
         const resources = await ctx.prisma.resource.findMany({
           include: {
             attributes: {

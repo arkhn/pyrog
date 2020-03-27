@@ -64,10 +64,8 @@ export const Query = queryType({
         sourceId: idArg({ nullable: false }),
       },
       nullable: true,
-      resolve: async (parent, { sourceId }, ctx) => {
-        console.log('here')
-        return ctx.prisma.source.findOne({ where: { id: sourceId } })
-      },
+      resolve: async (parent, { sourceId }, ctx) =>
+        ctx.prisma.source.findOne({ where: { id: sourceId } }),
     })
 
     t.field('resource', {
