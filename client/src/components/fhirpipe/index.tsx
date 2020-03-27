@@ -108,8 +108,8 @@ const FhirpipeView = () => {
     return source.definitionId.toLowerCase().indexOf(query.toLowerCase()) >= 0;
   };
 
-  const onFormSubmit = async (
-    e: React.FormEvent<HTMLFormElement>
+  const onClickRun = async (
+    e: React.MouseEvent<HTMLElement, MouseEvent>
   ): Promise<void> => {
     e.preventDefault();
     setRunning(true);
@@ -155,99 +155,99 @@ const FhirpipeView = () => {
     <div>
       <Navbar />
       <div id="main-div">
-        <form onSubmit={onFormSubmit}>
-          <h1>Select source</h1>
-          <p>
-            Choose the source you want to process with the ETL. Note that you
-            need to provide the credentials for the source database before.
-          </p>
-          <SourceSelect
-            items={sources}
-            itemRenderer={renderSource}
-            onItemSelect={handleSourceSelect}
-            itemPredicate={filterSource}
-            noResults={<MenuItem disabled={true} text="No results." />}
-            itemsEqual="id"
-          >
-            <Button
-              icon="database"
-              rightIcon="caret-down"
-              text={
-                selectedSource.name
-                  ? `${selectedSource.name} (${selectedSource.template.name})`
-                  : '(Select a source)'
-              }
-            />
-          </SourceSelect>
-          {credentialsMissing && (
-            <b className="creds-alert">
-              No credentials provided for this source.
-            </b>
-          )}
-          <h1>Select resources</h1>
-          <p>
-            Choose all the resources you want to process with the ETL. If you
-            select none of them, all we be processed. Note that you need to
-            select a source before.
-          </p>
-          <ResourceMultiSelect
-            items={selectedSource.resources || []}
-            tagRenderer={resource => resource.definitionId}
-            tagInputProps={{
-              onRemove: handleTagRemove
-            }}
-            itemRenderer={renderResource}
-            itemPredicate={filterResources}
-            onItemSelect={handleResourceSelect}
-            selectedItems={selectedResources}
-            itemsEqual="id"
-            fill={true}
-            noResults={
-              <MenuItem
-                disabled={true}
-                text="No resources for the selected source."
-              />
+        <h1>Select source</h1>
+        <p>
+          Choose the source you want to process with the ETL. Note that you need
+          to provide the credentials for the source database before.
+        </p>
+        <SourceSelect
+          items={sources}
+          itemRenderer={renderSource}
+          onItemSelect={handleSourceSelect}
+          itemPredicate={filterSource}
+          noResults={<MenuItem disabled={true} text="No results." />}
+          itemsEqual="id"
+        >
+          <Button
+            icon="database"
+            rightIcon="caret-down"
+            text={
+              selectedSource.name
+                ? `${selectedSource.name} (${selectedSource.template.name})`
+                : '(Select a source)'
             }
           />
-          <div className="advanced-options">
-            <h2>Advanced options</h2>
-            {/* TODO utlimately, these options should only be accessible to admin users. */}
-            <div>
-              <Switch
-                checked={override}
-                label="override"
-                onChange={(): void => setOverride(prev => !prev)}
-              />
-              <Switch
-                checked={bypassValidation}
-                label="bypass_validation"
-                onChange={(): void => setBypassValidation(prev => !prev)}
-              />
-              <Switch
-                checked={skipRefBinding}
-                label="skip_reference_binding"
-                onChange={(): void => setSkipRefBinding(prev => !prev)}
-              />
-              <Switch
-                checked={multiprocessing}
-                label="multiprocessing"
-                onChange={(): void => setMultiprocessing(prev => !prev)}
-              />
-            </div>
-            <div className="align-right">
-              <Button
-                intent="primary"
-                large
-                type="submit"
-                disabled={!selectedSource.id || credentialsMissing}
-                loading={running}
-                className="button-submit"
-              >
-                Run the pipe
-              </Button>
-            </div>
+        </SourceSelect>
+        {credentialsMissing && (
+          <b className="creds-alert">
+            No credentials provided for this source.
+          </b>
+        )}
+        <h1>Select resources</h1>
+        <p>
+          Choose all the resources you want to process with the ETL. If you
+          select none of them, all we be processed. Note that you need to select
+          a source before.
+        </p>
+        <ResourceMultiSelect
+          items={selectedSource.resources || []}
+          tagRenderer={resource => resource.definitionId}
+          tagInputProps={{
+            onRemove: handleTagRemove
+          }}
+          itemRenderer={renderResource}
+          itemPredicate={filterResources}
+          onItemSelect={handleResourceSelect}
+          resetOnSelect={true}
+          selectedItems={selectedResources}
+          itemsEqual="id"
+          fill={true}
+          noResults={
+            <MenuItem
+              disabled={true}
+              text="No resources for the selected source."
+            />
+          }
+        />
+        <div className="advanced-options">
+          <h2>Advanced options</h2>
+          {/* TODO utlimately, these options should only be accessible to admin users. */}
+          <div>
+            <Switch
+              checked={override}
+              label="override"
+              onChange={(): void => setOverride(prev => !prev)}
+            />
+            <Switch
+              checked={bypassValidation}
+              label="bypass_validation"
+              onChange={(): void => setBypassValidation(prev => !prev)}
+            />
+            <Switch
+              checked={skipRefBinding}
+              label="skip_reference_binding"
+              onChange={(): void => setSkipRefBinding(prev => !prev)}
+            />
+            <Switch
+              checked={multiprocessing}
+              label="multiprocessing"
+              onChange={(): void => setMultiprocessing(prev => !prev)}
+            />
           </div>
-        </form>
+          <div className="align-right">
+            <Button
+              intent="primary"
+              large
+              type="submit"
+              disabled={!selectedSource.id || credentialsMissing}
+              loading={running}
+              className="button-submit"
+              onClick={onClickRun}
+            >
+              Run the pipe
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );
