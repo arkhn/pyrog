@@ -1,0 +1,60 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "DeleteDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Template",
+          "field": "sources"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "DeleteDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Source",
+          "field": "resources"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "DeleteDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Source",
+          "field": "credential"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "DeleteDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Resource",
+          "field": "attributes"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "DeleteDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Attribute",
+          "field": "inputs"
+        },
+        "directive": "relation"
+      }
+    }
+  ]
+}

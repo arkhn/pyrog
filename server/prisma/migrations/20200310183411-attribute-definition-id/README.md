@@ -42,7 +42,5 @@ migration 20200303140454-enable-oracle..20200310183411-attribute-definition-id
 +  definitionId  String
    mergingScript String?
    comments      String?
-   inputs   Input[]   @relation(onDelete: CASCADE)
+   inputs   Input[]
 ```
-
-

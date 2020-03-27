@@ -1,4 +1,4 @@
-import { Photon, Resource } from '@prisma/photon'
+import { PrismaClient, Resource } from '@prisma/client'
 
 import { clean, buildAttributesQuery } from './utils'
 
@@ -12,11 +12,15 @@ const cleanResourceV2 = (resource: ResourceV2) => {
   return r
 }
 
-export default (photon: Photon, sourceId: string, resources: any[]) =>
+export default (
+  prismaClient: PrismaClient,
+  sourceId: string,
+  resources: any[],
+) =>
   Promise.all(
     resources.map(async (r: any) => {
       const definitionId = r.definition.id
-      return photon.resources.create({
+      return prismaClient.resource.create({
         data: {
           ...cleanResourceV2(r),
           definitionId,

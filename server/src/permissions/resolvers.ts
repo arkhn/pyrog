@@ -34,7 +34,7 @@ export const getSourceIdFromMutationArgs = (args: any, ctx: Context) => {
 }
 
 const getSourceFromCredential = async (credentialId: any, ctx: Context) => {
-  const credential = await ctx.photon.credentials.findOne({
+  const credential = await ctx.prisma.credential.findOne({
     where: { id: credentialId },
     include: {
       source: true,
@@ -44,7 +44,7 @@ const getSourceFromCredential = async (credentialId: any, ctx: Context) => {
 }
 
 const getSourceFromResource = async (resourceId: any, ctx: Context) => {
-  const resource = await ctx.photon.resources.findOne({
+  const resource = await ctx.prisma.resource.findOne({
     where: { id: resourceId },
     include: {
       source: true,
@@ -54,7 +54,7 @@ const getSourceFromResource = async (resourceId: any, ctx: Context) => {
 }
 
 const getSourceFromAttribute = async (attributeId: any, ctx: Context) => {
-  const attribute = await ctx.photon.attributes.findOne({
+  const attribute = await ctx.prisma.attribute.findOne({
     where: { id: attributeId },
     include: {
       resource: {
@@ -68,7 +68,7 @@ const getSourceFromAttribute = async (attributeId: any, ctx: Context) => {
 }
 
 const getSourceFromInput = async (inputId: any, ctx: Context) => {
-  const input = await ctx.photon.inputs.findOne({
+  const input = await ctx.prisma.input.findOne({
     where: { id: inputId },
     include: {
       attribute: {
@@ -86,7 +86,7 @@ const getSourceFromInput = async (inputId: any, ctx: Context) => {
 }
 
 const getSourceFromColumn = async (columnId: any, ctx: Context) => {
-  const column = await ctx.photon.columns.findOne({
+  const column = await ctx.prisma.column.findOne({
     where: { id: columnId },
     include: {
       input: {
@@ -108,7 +108,7 @@ const getSourceFromColumn = async (columnId: any, ctx: Context) => {
 }
 
 const getSourceFromJoin = async (JoinId: any, ctx: Context) => {
-  const join = await ctx.photon.joins.findOne({
+  const join = await ctx.prisma.join.findOne({
     where: { id: JoinId },
     include: {
       column: {

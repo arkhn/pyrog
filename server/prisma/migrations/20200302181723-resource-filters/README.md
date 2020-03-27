@@ -43,7 +43,7 @@ migration 20200218162146-concept-maps..20200302181723-resource-filters
 +  // filters on db to avoid processing all the DB
 +  filters Filter[]
 +
-   attributes   Attribute[] @relation(onDelete: CASCADE)
+   attributes   Attribute[]
    definitionId String
    source       Source
    updatedAt DateTime @updatedAt
@@ -65,15 +65,15 @@ migration 20200218162146-concept-maps..20200302181723-resource-filters
  model Input {
    id           String    @default(cuid()) @id
    // Sql column containing the value
--  sqlValue     Column?   @relation(onDelete: CASCADE)
-+  sqlValue     Column?   @relation(references: [id], onDelete: CASCADE)
+-  sqlValue     Column?
++  sqlValue     Column?   @relation(references: [id])
    // cleaning scripts for the sql column
    script       String?
    // id of the concept map to be applied to a mapped code
    conceptMapId String?
 @@ -102,8 +113,11 @@
    column String?
-   joins Join[] @relation(name: "ColumnJoins", onDelete: CASCADE)
+   joins Join[] @relation(name: "ColumnJoins")
 +  filter Filter?
 +  input  Input?
 +
@@ -91,5 +91,3 @@ migration 20200218162146-concept-maps..20200302181723-resource-filters
  model User {
    id       String @default(cuid()) @id
 ```
-
-

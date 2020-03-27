@@ -48,8 +48,8 @@ migration 20200117183910-structuredefinition..20200120163303-flatten-attributes
    primaryKeyOwner  String?
    primaryKeyTable  String?
    primaryKeyColumn String?
--  attributes       Attribute[] @relation(onDelete: CASCADE)
-+  attributes Attribute[]          @relation(onDelete: CASCADE)
+-  attributes       Attribute[]
++  attributes Attribute[]
    definition StructureDefinition?
 +  source     Source
 -  // Parent
@@ -69,15 +69,13 @@ migration 20200117183910-structuredefinition..20200120163303-flatten-attributes
 -  description   String?
    comments      String?
 -  // Children input columns
--  inputs   Input[]     @relation(onDelete: CASCADE)
+-  inputs   Input[]
 -  // Children attributes
--  children Attribute[] @relation(name: "AttributeToAttributes", onDelete: CASCADE)
+-  children Attribute[] @relation(name: "AttributeToAttributes")
 -  // Parent attribute or resource
 -  parent   Attribute?  @relation(name: "AttributeToAttributes")
-+  inputs   Input[]   @relation(onDelete: CASCADE)
++  inputs   Input[]
    resource Resource?
    updatedAt DateTime @updatedAt
    createdAt DateTime @default(now())
 ```
-
-

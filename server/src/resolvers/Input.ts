@@ -1,4 +1,4 @@
-import { objectType, FieldResolver } from 'nexus'
+import { objectType, FieldResolver } from '@nexus/schema'
 
 import axios from 'axios'
 
@@ -49,7 +49,7 @@ export const createInput: FieldResolver<'Mutation', 'createInput'> = async (
   }
 
   if (staticValue) {
-    return ctx.photon.inputs.create({
+    return ctx.prisma.input.create({
       data: {
         staticValue,
         script,
@@ -65,7 +65,7 @@ export const createInput: FieldResolver<'Mutation', 'createInput'> = async (
   const joins = sqlValue!.joins
     ? await Promise.all(
         sqlValue!.joins.map(j =>
-          ctx.photon.joins.create({
+          ctx.prisma.join.create({
             include: { tables: true },
             data: {
               tables: {
@@ -87,7 +87,7 @@ export const createInput: FieldResolver<'Mutation', 'createInput'> = async (
         ),
       )
     : []
-  return ctx.photon.inputs.create({
+  return ctx.prisma.input.create({
     data: {
       sqlValue: {
         create: {
@@ -113,14 +113,14 @@ export const deleteInput: FieldResolver<'Mutation', 'deleteInput'> = async (
   _parent,
   { inputId },
   ctx,
-) => ctx.photon.inputs.delete({ where: { id: inputId } })
+) => ctx.prisma.input.delete({ where: { id: inputId } })
 
 export const updateInput: FieldResolver<'Mutation', 'updateInput'> = async (
   _parent,
   { inputId, data },
   ctx,
 ) => {
-  return ctx.photon.inputs.update({
+  return ctx.prisma.input.update({
     where: { id: inputId },
     data,
   })

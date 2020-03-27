@@ -1,11 +1,15 @@
-import { Photon } from '@prisma/photon'
+import { PrismaClient } from '@prisma/client'
 
 import { clean, buildAttributesQuery } from './utils'
 
-export default (photon: Photon, sourceId: string, resources: any[]) =>
+export default (
+  prismaClient: PrismaClient,
+  sourceId: string,
+  resources: any[],
+) =>
   Promise.all(
     resources.map(async (r: any) => {
-      return photon.resources.create({
+      return prismaClient.resource.create({
         data: {
           ...clean(r),
           attributes: {

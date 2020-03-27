@@ -1,4 +1,4 @@
-import { Photon, Attribute, Resource } from '@prisma/photon'
+import { PrismaClient, Attribute, Resource } from '@prisma/client'
 
 import { clean, buildAttributesQuery } from './utils'
 
@@ -61,7 +61,11 @@ const flatten = (
   return acc
 }
 
-export default (photon: Photon, sourceId: string, resources: any[]) => {
+export default (
+  prismaClient: PrismaClient,
+  sourceId: string,
+  resources: any[],
+) => {
   return Promise.all(
     resources.map(async (r: any) => {
       const attributes = r.attributes
@@ -69,7 +73,7 @@ export default (photon: Photon, sourceId: string, resources: any[]) => {
         .map(cleanAttributeV1)
         .filter((a: any) => a.inputs && a.inputs.length > 0)
 
-      return photon.resources.create({
+      return prismaClient.resource.create({
         data: {
           ...cleanResourceV1(r),
           attributes: {

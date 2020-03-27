@@ -1,6 +1,6 @@
 # IF THERE'S A GIT CONFLICT IN THIS FILE, DON'T SOLVE IT MANUALLY!
-# INSTEAD EXECUTE `prisma lift fix`
-# lift lockfile v1
+# INSTEAD EXECUTE `prisma2 migrate fix`
+# Prisma Migrate lockfile v1
 # Read more about conflict resolution here: TODO
 
 20200107161936-bootstrap
@@ -13,3 +13,4 @@
 20200303140454-enable-oracle
 20200310183411-attribute-definition-id
 20200324142947-acl
+20200327121708-cleanup-prisma-preview24

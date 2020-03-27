@@ -1,12 +1,12 @@
-import { Photon } from '@prisma/photon'
+import { PrismaClient } from '@prisma/client'
 
 import importMappingV5 from './v5'
 import * as mappingV5 from '../../../test/fixtures/chimio-mapping-v5.json'
 
 const mockCreateResource = jest.fn()
-jest.mock('@prisma/photon', () => ({
-  Photon: jest.fn().mockImplementation(() => ({
-    resources: {
+jest.mock('@prisma/client', () => ({
+  PrismaClient: jest.fn().mockImplementation(() => ({
+    resource: {
       create: (data: any) => mockCreateResource(data),
     },
   })),
@@ -22,14 +22,14 @@ describe('import mapping V5', () => {
   })
 
   it('should send a query per resource', async () => {
-    await importMappingV5(new Photon(), sourceId, resources)
+    await importMappingV5(new PrismaClient(), sourceId, resources)
     expect(mockCreateResource).toHaveBeenCalledTimes(resourceCount)
     expect(mockCreateResource.mock.calls[0]).toMatchSnapshot() // EpisodeOfCare - HopitalStay
     expect(mockCreateResource.mock.calls[1]).toMatchSnapshot() // Patient
   })
 
   it('should have cleaned the resource and attributes', async () => {
-    await importMappingV5(new Photon(), sourceId, resources)
+    await importMappingV5(new PrismaClient(), sourceId, resources)
     expect(mockCreateResource.mock.calls[0][0]).toEqual({
       data: {
         label: resources[0].label,

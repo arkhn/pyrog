@@ -28,4 +28,4 @@ COPY scripts scripts
 # Start the app
 ENV NODE_PATH dist/
 
-CMD yarn wait:db && yarn migrate && yarn start
+CMD yarn wait:db && yarn migrate:up && yarn start

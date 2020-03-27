@@ -1,5 +1,5 @@
-import { objectType, FieldResolver } from 'nexus'
-import { DatabaseType } from '@prisma/photon'
+import { objectType, FieldResolver } from '@nexus/schema'
+import { DatabaseType } from '@prisma/client'
 
 import { encrypt, decrypt } from 'utils'
 
@@ -35,7 +35,7 @@ export const upsertCredential: FieldResolver<
 ) => {
   const encryptedPassword = encrypt(password)
 
-  const source = await ctx.photon.sources.findOne({
+  const source = await ctx.prisma.source.findOne({
     where: { id: sourceId },
     include: { credential: true },
   })
@@ -44,7 +44,7 @@ export const upsertCredential: FieldResolver<
   }
 
   if (source.credential) {
-    return ctx.photon.credentials.update({
+    return ctx.prisma.credential.update({
       where: { id: source.credential.id },
       data: {
         host,
@@ -56,7 +56,7 @@ export const upsertCredential: FieldResolver<
       },
     })
   } else {
-    return ctx.photon.credentials.create({
+    return ctx.prisma.credential.create({
       data: {
         source: { connect: { id: sourceId } },
         login,
@@ -74,4 +74,4 @@ export const deleteCredential: FieldResolver<
   'Mutation',
   'deleteCredential'
 > = async (_parent, { credentialId }, ctx) =>
-  ctx.photon.credentials.delete({ where: { id: credentialId } })
+  ctx.prisma.credential.delete({ where: { id: credentialId } })

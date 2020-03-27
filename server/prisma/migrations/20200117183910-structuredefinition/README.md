@@ -98,7 +98,7 @@ migration 20200108172036-unique_source_name..20200117183910-structuredefinition
    primaryKeyOwner  String?
    primaryKeyTable  String?
    primaryKeyColumn String?
-   attributes       Attribute[] @relation(onDelete: CASCADE)
+   attributes       Attribute[]
 +
 +  definition StructureDefinition?
 +
@@ -122,11 +122,11 @@ migration 20200108172036-unique_source_name..20200117183910-structuredefinition
    comments      String?
 +
    // Children input columns
--  inputs        Input[]     @relation(onDelete: CASCADE)
-+  inputs   Input[]     @relation(onDelete: CASCADE)
+-  inputs        Input[]
++  inputs   Input[]
    // Children attributes
--  children      Attribute[] @relation(name: "AttributeToAttributes", onDelete: CASCADE)
-+  children Attribute[] @relation(name: "AttributeToAttributes", onDelete: CASCADE)
+-  children      Attribute[] @relation(name: "AttributeToAttributes")
++  children Attribute[] @relation(name: "AttributeToAttributes")
    // Parent attribute or resource
 -  parent        Attribute?  @relation(name: "AttributeToAttributes")
 -  resource      Resource?
@@ -136,5 +136,3 @@ migration 20200108172036-unique_source_name..20200117183910-structuredefinition
    createdAt DateTime @default(now())
  }
 ```
-
-

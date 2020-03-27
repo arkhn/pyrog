@@ -1,18 +1,18 @@
 import { writeFileSync, existsSync, mkdirSync } from 'fs'
-import { Photon } from '@prisma/photon'
+import { PrismaClient } from '@prisma/client'
 import { exportMapping } from '../src/resolvers/mapping'
 
-const photon = new Photon()
+const prismaClient = new PrismaClient()
 
 const main = async (outputDirectory: string) => {
   if (!existsSync(outputDirectory)) {
     mkdirSync(outputDirectory)
   }
 
-  const sources = await photon.sources.findMany()
+  const sources = await prismaClient.source.findMany()
   console.log(`-> Exporting ${sources.length} source(s)...`)
   for (const source of sources) {
-    const content = await exportMapping(photon, source.id)
+    const content = await exportMapping(prismaClient, source.id)
     writeFileSync(`${outputDirectory}/${source.id}.json`, content)
   }
 }
@@ -22,12 +22,12 @@ if (process.argv.length != 3) {
   process.exit(1)
 }
 
-photon
+prismaClient
   .connect()
   .then(() => main(process.argv[2]))
-  .then(() => photon.disconnect())
+  .then(() => prismaClient.disconnect())
   .then(() => process.exit(0))
   .catch(err => {
     console.error(err)
-    photon.disconnect().then(() => process.exit(1))
+    prismaClient.disconnect().then(() => process.exit(1))
   })

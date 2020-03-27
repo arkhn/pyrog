@@ -1,4 +1,4 @@
-import { objectType, FieldResolver } from 'nexus'
+import { objectType, FieldResolver } from '@nexus/schema'
 import axios from 'axios'
 import { Definition } from '@arkhn/fhir.ts'
 
