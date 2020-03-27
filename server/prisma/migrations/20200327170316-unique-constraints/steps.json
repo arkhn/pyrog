@@ -6,6 +6,22 @@
       "location": {
         "path": {
           "tag": "Model",
+          "model": "Source",
+          "arguments": [
+            {
+              "name": "",
+              "value": "[template, name]"
+            }
+          ]
+        },
+        "directive": "unique"
+      }
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Model",
           "model": "AccessControl",
           "arguments": [
             {

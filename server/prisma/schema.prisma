@@ -28,6 +28,8 @@ model Source {
 
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
+
+  @@unique([template, name])
 }
 
 enum DatabaseType {

@@ -70,16 +70,6 @@ export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
   { templateName, name, hasOwner, mapping },
   ctx,
 ) => {
-  // make sure the source does not already exist
-  const exists = await ctx.prisma.source.findMany({
-    where: { template: { name: templateName }, name },
-  })
-  if (exists.length) {
-    throw new Error(
-      `Source ${name} already exists for template ${templateName}`,
-    )
-  }
-
   // create the source
   const source = await ctx.prisma.source.create({
     data: {
