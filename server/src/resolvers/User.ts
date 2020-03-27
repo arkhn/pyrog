@@ -38,6 +38,7 @@ export const login: FieldResolver<'Mutation', 'login'> = async (
   }
 
   // cache user in redis
+  // TODO: remove user from cache on logout
   const { set } = cache()
   await set(`user:${user.id}`, JSON.stringify(user))
 
