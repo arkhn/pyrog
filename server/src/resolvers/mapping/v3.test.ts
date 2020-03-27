@@ -6,7 +6,7 @@ import * as mappingV3 from '../../../test/fixtures/chimio-mapping-v3.json'
 const mockCreateResource = jest.fn()
 jest.mock('@prisma/client', () => ({
   PrismaClient: jest.fn().mockImplementation(() => ({
-    resources: {
+    resource: {
       create: (data: any) => mockCreateResource(data),
     },
   })),
