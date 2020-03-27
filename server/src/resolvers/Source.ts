@@ -1,7 +1,7 @@
 import { objectType, FieldResolver } from '@nexus/schema'
 
 import { importMapping, exportMapping } from 'resolvers/mapping'
-import { getUserId } from 'utils'
+import { userInfo } from 'os'
 
 export const Source = objectType({
   name: 'Source',
@@ -57,12 +57,13 @@ export const sources: FieldResolver<'Query', 'sources'> = async (
   _args,
   ctx,
 ) => {
-  const userId = getUserId(ctx)
-  const accesses = await ctx.prisma.accessControl.findMany({
-    where: { user: { id: userId } },
-    include: { source: true },
+  const { role, id } = ctx.user!
+
+  if (role === 'ADMIN') return ctx.prisma.source.findMany()
+
+  return ctx.prisma.source.findMany({
+    where: { accessControls: { some: { user: { id } } } },
   })
-  return accesses.map(a => a.source)
 }
 
 export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
@@ -90,10 +91,9 @@ export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
   })
 
   // create a row in ACL
-  const userId = getUserId(ctx)
   await ctx.prisma.accessControl.create({
     data: {
-      user: { connect: { id: userId } },
+      user: { connect: { id: ctx.user!.id } },
       source: { connect: { id: source.id } },
       role: 'WRITER',
     },

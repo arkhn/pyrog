@@ -1,7 +1,6 @@
 import { arg, idArg, queryType } from '@nexus/schema'
 
 import { getDefinition } from 'fhir'
-import { getUserId } from 'utils'
 import { sources } from './Source'
 import { searchDefinitions } from './StructureDefinition'
 
@@ -10,14 +9,7 @@ export const Query = queryType({
     t.field('me', {
       type: 'User',
       nullable: true,
-      resolve: async (parent, args, ctx) => {
-        const userId = getUserId(ctx)
-        return ctx.prisma.user.findOne({
-          where: {
-            id: userId,
-          },
-        })
-      },
+      resolve: async (_, __, ctx) => ctx.user || null,
     })
 
     t.field('credential', {
