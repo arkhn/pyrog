@@ -3,6 +3,7 @@ import { compare, hash } from 'bcryptjs'
 import { sign } from 'jsonwebtoken'
 
 import { APP_SECRET } from '../constants'
+import cache from 'cache'
 
 export const User = objectType({
   name: 'User',
@@ -35,6 +36,12 @@ export const login: FieldResolver<'Mutation', 'login'> = async (
   if (!passwordValid) {
     throw new Error('Invalid password')
   }
+
+  // cache user in redis
+  // TODO: remove user from cache on logout
+  const { set } = cache()
+  await set(`user:${user.id}`, JSON.stringify(user))
+
   return {
     token: sign({ userId: user.id }, APP_SECRET!),
     user,
@@ -54,6 +61,11 @@ export const signup: FieldResolver<'Mutation', 'signup'> = async (
       password: hashedPassword,
     },
   })
+
+  // cache user in redis
+  const { set } = cache()
+  await set(`user:${user.id}`, JSON.stringify(user))
+
   return {
     token: sign({ userId: user.id }, APP_SECRET!),
     user,

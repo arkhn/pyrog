@@ -1,37 +1,30 @@
 import { rule, shield } from 'graphql-shield'
 
-import { getUserId } from 'utils'
 import { Context } from 'context'
 import { getSourceIdFromMutationArgs } from './resolvers'
 
 const rules = {
   isAuthenticatedUser: rule()((_, __, ctx: Context) => {
-    const userId = getUserId(ctx)
-    return Boolean(userId)
+    return !!ctx.user
   }),
   isAdmin: rule()(async (_, __, ctx: Context) => {
-    const userId = getUserId(ctx)
-    const user = await ctx.prisma.user.findOne({
-      where: { id: userId },
-    })
+    const { user } = ctx
     return Boolean(user && user.role == 'ADMIN')
   }),
   isSourceReader: rule()(async (_, args, ctx: Context) => {
     // Get user id
-    const userId = getUserId(ctx)
+    const { user } = ctx
+    if (!user) return false
 
     // Return true if the user is admin
-    const user = await ctx.prisma.user.findOne({
-      where: { id: userId },
-    })
-    if (user && user.role == 'ADMIN') return true
+    if (user.role == 'ADMIN') return true
 
     let sourceId = getSourceIdFromMutationArgs(args, ctx)
 
     // Check access
     const access = await ctx.prisma.accessControl.findMany({
       where: {
-        user: { id: userId },
+        user: { id: user.id },
         source: { id: sourceId },
       },
     })
@@ -39,20 +32,18 @@ const rules = {
   }),
   isSourceWriter: rule()(async (_, args, ctx: Context) => {
     // Get user id
-    const userId = getUserId(ctx)
+    const { user } = ctx
+    if (!user) return false
 
     // Return true if the user is admin
-    const user = await ctx.prisma.user.findOne({
-      where: { id: userId },
-    })
-    if (user && user.role == 'ADMIN') return true
+    if (user.role == 'ADMIN') return true
 
     let sourceId = getSourceIdFromMutationArgs(args, ctx)
 
     // Check role
     const access = await ctx.prisma.accessControl.findMany({
       where: {
-        user: { id: userId },
+        user: { id: user.id },
         source: { id: sourceId },
         role: 'WRITER',
       },
