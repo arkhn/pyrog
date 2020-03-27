@@ -1,6 +1,5 @@
 import { rule, shield } from 'graphql-shield'
 
-import { getUser } from 'utils'
 import { Context } from 'context'
 import { getSourceIdFromMutationArgs } from './resolvers'
 

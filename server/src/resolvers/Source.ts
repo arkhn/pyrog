@@ -1,7 +1,6 @@
 import { objectType, FieldResolver } from '@nexus/schema'
 
 import { importMapping, exportMapping } from 'resolvers/mapping'
-import { userInfo } from 'os'
 
 export const Source = objectType({
   name: 'Source',
