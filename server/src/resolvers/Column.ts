@@ -1,4 +1,4 @@
-import { objectType, FieldResolver } from 'nexus'
+import { objectType, FieldResolver } from '@nexus/schema'
 
 export const Column = objectType({
   name: 'Column',
@@ -20,7 +20,7 @@ export const addJoinToColumn: FieldResolver<
   'Mutation',
   'addJoinToColumn'
 > = async (_parent, { columnId, join }, ctx) => {
-  const newJoin = await ctx.prismaClient.join.create({
+  const newJoin = await ctx.prisma.join.create({
     data: {
       tables: {
         create: [
@@ -49,7 +49,7 @@ export const addJoinToColumn: FieldResolver<
     },
   })
 
-  return ctx.prismaClient.column.update({
+  return ctx.prisma.column.update({
     where: { id: columnId },
     data: {
       joins: {

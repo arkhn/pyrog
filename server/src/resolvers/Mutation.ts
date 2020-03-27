@@ -1,4 +1,4 @@
-import { arg, idArg, mutationType, stringArg, booleanArg } from 'nexus'
+import { arg, idArg, mutationType, stringArg, booleanArg } from '@nexus/schema'
 
 import {
   createAttribute,

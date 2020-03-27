@@ -4,8 +4,8 @@
  */
 
 import * as Context from "../context"
-import * as prismaClient from "@prisma/client"
-import { core } from "nexus"
+import * as prisma from "@prisma/client"
+import { core } from "@nexus/schema"
 declare global {
   interface NexusGenCustomInputMethods<TypeName extends string> {
     JSON<FieldName extends string>(fieldName: FieldName, opts?: core.ScalarInputFieldConfig<core.GetGen3<"inputTypes", TypeName, FieldName>>): void // "JSON";
@@ -308,31 +308,31 @@ export interface NexusGenInputs {
 }
 
 export interface NexusGenEnums {
-  DatabaseType: prismaClient.DatabaseType
-  Role: prismaClient.Role
-  SourceRole: prismaClient.SourceRole
+  DatabaseType: prisma.DatabaseType
+  Role: prisma.Role
+  SourceRole: prisma.SourceRole
 }
 
 export interface NexusGenRootTypes {
-  AccessControl: prismaClient.AccessControl;
-  Attribute: prismaClient.Attribute;
+  AccessControl: prisma.AccessControl;
+  Attribute: prisma.Attribute;
   AuthPayload: { // root type
     token: string; // String!
     user: NexusGenRootTypes['User']; // User!
   }
-  Column: prismaClient.Column;
+  Column: prisma.Column;
   ConceptMap: {};
-  Credential: prismaClient.Credential;
-  Filter: prismaClient.Filter;
-  Input: prismaClient.Input;
-  Join: prismaClient.Join;
+  Credential: prisma.Credential;
+  Filter: prisma.Filter;
+  Input: prisma.Input;
+  Join: prisma.Join;
   Mutation: {};
   Query: {};
-  Resource: prismaClient.Resource;
-  Source: prismaClient.Source;
+  Resource: prisma.Resource;
+  Source: prisma.Source;
   StructureDefinition: {};
-  Template: prismaClient.Template;
-  User: prismaClient.User;
+  Template: prisma.Template;
+  User: prisma.User;
   String: string;
   Int: number;
   Float: number;

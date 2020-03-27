@@ -1,4 +1,4 @@
-import { objectType, FieldResolver } from 'nexus'
+import { objectType, FieldResolver } from '@nexus/schema'
 import { compare, hash } from 'bcryptjs'
 import { sign } from 'jsonwebtoken'
 
@@ -21,9 +21,9 @@ export const User = objectType({
 export const login: FieldResolver<'Mutation', 'login'> = async (
   _parent,
   { email, password },
-  context,
+  ctx,
 ) => {
-  const user = await context.prismaClient.user.findOne({
+  const user = await ctx.prisma.user.findOne({
     where: {
       email,
     },
@@ -47,7 +47,7 @@ export const signup: FieldResolver<'Mutation', 'signup'> = async (
   ctx,
 ) => {
   const hashedPassword = await hash(password, 10)
-  const user = await ctx.prismaClient.user.create({
+  const user = await ctx.prisma.user.create({
     data: {
       name,
       email,

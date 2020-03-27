@@ -1,4 +1,4 @@
-import { objectType, FieldResolver } from 'nexus'
+import { objectType, FieldResolver } from '@nexus/schema'
 import { getDefinition } from 'fhir'
 
 export const Resource = objectType({
@@ -39,7 +39,7 @@ export const createResource: FieldResolver<
   'Mutation',
   'createResource'
 > = async (_parent, { sourceId, definitionId }, ctx) =>
-  ctx.prismaClient.resource.create({
+  ctx.prisma.resource.create({
     data: {
       definitionId,
       source: {
@@ -54,7 +54,7 @@ export const deleteResource: FieldResolver<
   'Mutation',
   'deleteResource'
 > = async (_parent, { resourceId }, ctx) => {
-  const res = await ctx.prismaClient.resource.findOne({
+  const res = await ctx.prisma.resource.findOne({
     where: { id: resourceId },
     include: {
       filters: {
@@ -84,8 +84,8 @@ export const deleteResource: FieldResolver<
 
   await Promise.all(
     res!.filters.map(async f => {
-      await ctx.prismaClient.filter.delete({ where: { id: f.id } })
-      ctx.prismaClient.column.delete({ where: { id: f.sqlColumn.id } })
+      await ctx.prisma.filter.delete({ where: { id: f.id } })
+      ctx.prisma.column.delete({ where: { id: f.sqlColumn.id } })
     }),
   )
   await Promise.all(
@@ -97,20 +97,20 @@ export const deleteResource: FieldResolver<
               i.sqlValue.joins.map(async j => {
                 await Promise.all(
                   j.tables.map(t =>
-                    ctx.prismaClient.column.delete({ where: { id: t.id } }),
+                    ctx.prisma.column.delete({ where: { id: t.id } }),
                   ),
                 )
-                return ctx.prismaClient.join.delete({ where: { id: j.id } })
+                return ctx.prisma.join.delete({ where: { id: j.id } })
               }),
             )
           }
-          return ctx.prismaClient.input.delete({ where: { id: i.id } })
+          return ctx.prisma.input.delete({ where: { id: i.id } })
         }),
       )
-      return ctx.prismaClient.attribute.delete({ where: { id: a.id } })
+      return ctx.prisma.attribute.delete({ where: { id: a.id } })
     }),
   )
-  return ctx.prismaClient.resource.delete({ where: { id: resourceId } })
+  return ctx.prisma.resource.delete({ where: { id: resourceId } })
 }
 
 export const updateResource: FieldResolver<
@@ -118,7 +118,7 @@ export const updateResource: FieldResolver<
   'updateResource'
 > = async (_parent, { resourceId, data, filters }, ctx) => {
   if (filters) {
-    const resource = await ctx.prismaClient.resource.findOne({
+    const resource = await ctx.prisma.resource.findOne({
       where: { id: resourceId },
       include: {
         filters: true,
@@ -126,12 +126,12 @@ export const updateResource: FieldResolver<
     })
     await Promise.all(
       resource!.filters.map(f =>
-        ctx.prismaClient.filter.delete({ where: { id: f.id } }),
+        ctx.prisma.filter.delete({ where: { id: f.id } }),
       ),
     )
     const newFilters = await Promise.all(
       filters.map(f =>
-        ctx.prismaClient.filter.create({
+        ctx.prisma.filter.create({
           data: {
             sqlColumn: {
               create: {
@@ -146,7 +146,7 @@ export const updateResource: FieldResolver<
         }),
       ),
     )
-    await ctx.prismaClient.resource.update({
+    await ctx.prisma.resource.update({
       where: { id: resourceId },
       data: {
         filters: {
@@ -157,7 +157,7 @@ export const updateResource: FieldResolver<
       },
     })
   }
-  return ctx.prismaClient.resource.update({
+  return ctx.prisma.resource.update({
     where: { id: resourceId },
     data,
   })

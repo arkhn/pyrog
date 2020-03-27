@@ -1,4 +1,4 @@
-import { objectType, FieldResolver } from 'nexus'
+import { objectType, FieldResolver } from '@nexus/schema'
 import { getDefinition } from 'fhir'
 
 export const Attribute = objectType({
@@ -34,7 +34,7 @@ export const createAttribute: FieldResolver<
   'Mutation',
   'createAttribute'
 > = async (_, { resourceId, definitionId, path, data }, ctx) => {
-  const existing = await ctx.prismaClient.attribute.findMany({
+  const existing = await ctx.prisma.attribute.findMany({
     where: { path, resource: { id: resourceId } },
     include: {
       resource: true,
@@ -46,7 +46,7 @@ export const createAttribute: FieldResolver<
     )
   }
 
-  return ctx.prismaClient.attribute.create({
+  return ctx.prisma.attribute.create({
     data: {
       ...data,
       definitionId,
@@ -65,7 +65,7 @@ export const updateAttribute: FieldResolver<
   if (!data) {
     throw new Error('Update payload cannot be null')
   }
-  return ctx.prismaClient.attribute.update({
+  return ctx.prisma.attribute.update({
     where: { id: attributeId },
     data,
   })
@@ -75,13 +75,13 @@ export const deleteAttribute: FieldResolver<
   'Mutation',
   'deleteAttribute'
 > = async (_parent, { attributeId }, ctx) =>
-  ctx.prismaClient.attribute.delete({ where: { id: attributeId } })
+  ctx.prisma.attribute.delete({ where: { id: attributeId } })
 
 export const deleteAttributes: FieldResolver<
   'Mutation',
   'deleteAttributes'
 > = async (_parent, { filter }, ctx) => {
-  const res = await ctx.prismaClient.attribute.findMany({
+  const res = await ctx.prisma.attribute.findMany({
     where: filter,
     include: {
       inputs: {
@@ -109,20 +109,20 @@ export const deleteAttributes: FieldResolver<
               i.sqlValue.joins.map(async j => {
                 await Promise.all(
                   j.tables.map(t =>
-                    ctx.prismaClient.column.delete({ where: { id: t.id } }),
+                    ctx.prisma.column.delete({ where: { id: t.id } }),
                   ),
                 )
-                return ctx.prismaClient.join.delete({ where: { id: j.id } })
+                return ctx.prisma.join.delete({ where: { id: j.id } })
               }),
             )
           }
-          return ctx.prismaClient.input.delete({ where: { id: i.id } })
+          return ctx.prisma.input.delete({ where: { id: i.id } })
         }),
       )
-      return ctx.prismaClient.attribute.delete({ where: { id: a.id } })
+      return ctx.prisma.attribute.delete({ where: { id: a.id } })
     }),
   )
 
-  await ctx.prismaClient.attribute.deleteMany({ where: filter })
+  await ctx.prisma.attribute.deleteMany({ where: filter })
   return res
 }

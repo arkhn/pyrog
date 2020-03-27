@@ -1,4 +1,4 @@
-import { arg, idArg, queryType } from 'nexus'
+import { arg, idArg, queryType } from '@nexus/schema'
 
 import { getDefinition } from 'fhir'
 import { getUserId } from 'utils'
@@ -12,7 +12,7 @@ export const Query = queryType({
       nullable: true,
       resolve: async (parent, args, ctx) => {
         const userId = getUserId(ctx)
-        return ctx.prismaClient.user.findOne({
+        return ctx.prisma.user.findOne({
           where: {
             id: userId,
           },
@@ -27,13 +27,13 @@ export const Query = queryType({
       },
       nullable: true,
       resolve: async (parent, { credentialId }, ctx) =>
-        ctx.prismaClient.credential.findOne({ where: { id: credentialId } }),
+        ctx.prisma.credential.findOne({ where: { id: credentialId } }),
     })
 
     t.list.field('templates', {
       type: 'Template',
       nullable: true,
-      resolve: (parent, args, ctx) => ctx.prismaClient.template?.findMany(),
+      resolve: (parent, args, ctx) => ctx.prisma.template?.findMany(),
     })
 
     t.field('template', {
@@ -43,13 +43,13 @@ export const Query = queryType({
       },
       nullable: true,
       resolve: async (parent, { templateId }, ctx) =>
-        ctx.prismaClient.template.findOne({ where: { id: templateId } }),
+        ctx.prisma.template.findOne({ where: { id: templateId } }),
     })
 
     t.list.field('allSources', {
       type: 'Source',
       nullable: true,
-      resolve: (parent, args, ctx) => ctx.prismaClient.source.findMany(),
+      resolve: (parent, args, ctx) => ctx.prisma.source.findMany(),
     })
 
     t.list.field('sources', {
@@ -64,8 +64,10 @@ export const Query = queryType({
         sourceId: idArg({ nullable: false }),
       },
       nullable: true,
-      resolve: async (parent, { sourceId }, ctx) =>
-        ctx.prismaClient.source.findOne({ where: { id: sourceId } }),
+      resolve: async (parent, { sourceId }, ctx) => {
+        console.log('here')
+        return ctx.prisma.source.findOne({ where: { id: sourceId } })
+      },
     })
 
     t.field('resource', {
@@ -75,7 +77,7 @@ export const Query = queryType({
       },
       nullable: true,
       resolve: async (parent, { resourceId }, ctx) =>
-        ctx.prismaClient.resource.findOne({
+        ctx.prisma.resource.findOne({
           where: { id: resourceId },
           include: { attributes: true },
         }),
@@ -88,7 +90,7 @@ export const Query = queryType({
       },
       nullable: true,
       resolve: async (parent, { attributeId }, ctx) =>
-        ctx.prismaClient.attribute.findOne({ where: { id: attributeId } }),
+        ctx.prisma.attribute.findOne({ where: { id: attributeId } }),
     })
 
     t.field('structureDefinition', {
