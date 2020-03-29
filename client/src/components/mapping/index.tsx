@@ -72,7 +72,7 @@ const MappingView = () => {
 
   const renderTabs = () => {
     return (
-      <div>
+      <div id="exploration-tabs">
         <div id="column-selection">
           <Tabs
             onChange={(tabId: TabId) => {
