@@ -51,7 +51,7 @@ const Navbar = ({ exportMapping }: Props) => {
         <Button icon="export" minimal={true} onClick={exportMapping!}>
           Export mapping
         </Button>
-        {isAdmin ? (
+        {isAdmin && (
           <Button
             icon="flame"
             minimal={true}
@@ -61,7 +61,7 @@ const Navbar = ({ exportMapping }: Props) => {
           >
             Run fhir-pipe
           </Button>
-        ) : null}
+        )}
         <Drawer
           title={selectedNode.source ? selectedNode.source.name : ''}
           isOpen={drawerIsOpen}
