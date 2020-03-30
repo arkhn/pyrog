@@ -7,7 +7,8 @@ import Mapping from './components/mapping';
 import NewSource from './components/newSource';
 import Sources from './components/sources';
 import Fhirpipe from './components/fhirpipe';
-import PrivateRoute from './components/privateRoute';
+import PrivateRoute from './components/routes/privateRoute';
+import AdminRoute from './components/routes/adminRoute';
 
 const Routes = () => (
   <BrowserRouter>
@@ -16,7 +17,7 @@ const Routes = () => (
       <PrivateRoute exact path="/" component={Sources} />
       <PrivateRoute exact path="/mapping" component={Mapping} />
       <PrivateRoute exact path="/newSource" component={NewSource} />
-      <PrivateRoute exact path="/fhirpipe" component={Fhirpipe} />
+      <AdminRoute exact path="/fhirpipe" component={Fhirpipe} />
     </Switch>
   </BrowserRouter>
 );
