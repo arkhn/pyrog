@@ -5,37 +5,45 @@ import { IconName } from '@blueprintjs/icons';
 
 import TSelect from './TSelect';
 
-interface ISource {
+interface Source {
   id: string;
   name: string;
+  template: {
+    name: string;
+  };
 }
 
-interface ISelectProps {
+interface SelectProps {
   disabled?: boolean;
   icon?: IconName;
-  inputItem: ISource;
+  inputItem: Source;
   intent?: Intent;
-  items: ISource[];
+  items: Source[];
   loading?: boolean;
   onChange: any;
 }
 
-export default class SourceSelect extends React.Component<ISelectProps, any> {
-  private renderItem: ItemRenderer<ISource> = (
-    source: ISource,
-    { handleClick, modifiers, query }
+export default class SourceSelect extends React.Component<SelectProps, any> {
+  private renderItem: ItemRenderer<Source> = (
+    source: Source,
+    { handleClick }
   ) => {
     return (
-      <MenuItem key={source.id} onClick={handleClick} text={source.name} />
+      <MenuItem
+        key={source.id}
+        onClick={handleClick}
+        text={source.name}
+        label={source.template.name}
+      />
     );
   };
 
-  private filterByName: ItemPredicate<ISource> = (query, source: ISource) => {
+  private filterByName: ItemPredicate<Source> = (query, source: Source) => {
     return `${source.name.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0;
   };
 
-  private displayItem = function(source: ISource): string {
-    return source.name ? source.name : 'None';
+  private displayItem = function(source: Source): string {
+    return source.name ? source.name : '(Select a source)';
   };
 
   public render() {
@@ -50,7 +58,7 @@ export default class SourceSelect extends React.Component<ISelectProps, any> {
     } = this.props;
 
     return (
-      <TSelect<ISource>
+      <TSelect<Source>
         disabled={!!disabled}
         displayItem={this.displayItem}
         filterItems={this.filterByName}
