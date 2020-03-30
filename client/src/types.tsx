@@ -52,6 +52,7 @@ export interface Resource {
   primaryKeyTable: string;
   primaryKeyColumn: string;
   filters: Filters[];
+  definitionId: string;
   definition: {
     id: string;
     type: string;
