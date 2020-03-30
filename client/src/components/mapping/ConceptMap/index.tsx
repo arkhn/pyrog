@@ -348,7 +348,9 @@ const ConceptMapDialog = ({
             className="right"
             onChange={(e: React.FormEvent<HTMLElement>): void => {
               const target = e.target as HTMLInputElement;
-              setConceptMapTitle(target.value);
+              if (/^\S*$/.test(target.value)) {
+                setConceptMapTitle(target.value);
+              }
             }}
             placeholder="Concept map title..."
             value={conceptMapTitle}
@@ -441,7 +443,9 @@ const ConceptMapDialog = ({
   useEffect(() => {
     // Set default concept map title
     if (!!sourceSystemTitle && !!selectedTargetSystem)
-      setConceptMapTitle(`${sourceSystemTitle} > ${selectedTargetSystem}`);
+      setConceptMapTitle(
+        `${sourceSystemTitle}>${selectedTargetSystem}`.replace(/\s/g, '')
+      );
 
     // Use existing concept map if there is one
     let existingConceptMapGroup: Group | undefined;
