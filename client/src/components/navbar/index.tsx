@@ -3,6 +3,9 @@ import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useReactRouter from 'use-react-router';
 
+import { loader } from 'graphql.macro';
+import { useQuery } from '@apollo/react-hooks';
+
 import Drawer from './drawer';
 import Header from './header';
 
@@ -19,12 +22,18 @@ interface Props {
   exportMapping?: (event: any) => void;
 }
 
+// Graphql
+const meQuery = loader('src/graphql/queries/me.graphql');
+
 const Navbar = ({ exportMapping }: Props) => {
   const dispatch = useDispatch();
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
   const user = useSelector((state: IReduxStore) => state.user);
   const { history } = useReactRouter();
   const [drawerIsOpen, setDrawerIsOpen] = React.useState(false);
+
+  const { data } = useQuery(meQuery);
+  const isAdmin = data && data.me.role === 'ADMIN';
 
   const renderSourceContext = () => {
     return (
@@ -42,15 +51,17 @@ const Navbar = ({ exportMapping }: Props) => {
         <Button icon="export" minimal={true} onClick={exportMapping!}>
           Export mapping
         </Button>
-        <Button
-          icon="flame"
-          minimal={true}
-          onClick={() => {
-            history.push('/fhirpipe');
-          }}
-        >
-          Run fhir-pipe
-        </Button>
+        {isAdmin && (
+          <Button
+            icon="flame"
+            minimal={true}
+            onClick={() => {
+              history.push('/fhirpipe');
+            }}
+          >
+            Run fhir-pipe
+          </Button>
+        )}
         <Drawer
           title={selectedNode.source ? selectedNode.source.name : ''}
           isOpen={drawerIsOpen}

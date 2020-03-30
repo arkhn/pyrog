@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom';
 import { Spinner } from '@blueprintjs/core';
 import { loader } from 'graphql.macro';
 // Graphql
-const meQuery = loader('../../graphql/queries/me.graphql');
+const meQuery = loader('src/graphql/queries/me.graphql');
 
 const PrivateRoute = ({ component: Component, ...rest }: any) => {
   const { loading, error } = useQuery(meQuery, {
