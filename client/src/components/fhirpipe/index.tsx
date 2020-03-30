@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { Button, MenuItem, Switch } from '@blueprintjs/core';
-import { ItemPredicate, MultiSelect, Select } from '@blueprintjs/select';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useQuery } from '@apollo/react-hooks';
@@ -9,6 +8,9 @@ import { loader } from 'graphql.macro';
 
 import Navbar from 'components/navbar';
 import { IReduxStore } from 'types';
+
+import SourceSelect from 'components/selects/sourceSelect';
+import ResourceMultiSelect from 'components/selects/resourceMultiSelect';
 
 import { FHIRPIPE_URL } from '../../constants';
 
@@ -36,7 +38,7 @@ const qSourcesAndResources = loader(
   'src/graphql/queries/sourcesAndResources.graphql'
 );
 
-const FhirpipeView = () => {
+const FhirpipeView = (): React.ReactElement => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
 
   const [selectedSource, setSelectedSource] = useState({} as Source);
@@ -54,9 +56,7 @@ const FhirpipeView = () => {
   const sources = data ? data.sources : [];
   const credentials = selectedSource.id ? selectedSource.credential : undefined;
   const credentialsMissing = !!selectedSource.id && !credentials;
-
-  const SourceSelect = Select.ofType<Source>();
-  const ResourceMultiSelect = MultiSelect.ofType<Resource>();
+  // const ResourceMultiSelect = MultiSelect.ofType<Resource>();
 
   const isItemSelected = (list: any[], item: any): boolean => {
     return list.includes(item);
@@ -74,38 +74,9 @@ const FhirpipeView = () => {
     }
   };
 
-  const renderSource = (source: Source, { handleClick }: any) => (
-    <MenuItem
-      key={source.id}
-      text={source.name}
-      label={source.template.name}
-      onClick={handleClick}
-      shouldDismissPopover={false}
-    />
-  );
-
-  const renderResource = (resource: Resource, { handleClick }: any) => (
-    <MenuItem
-      key={resource.id}
-      text={resource.definitionId}
-      label={resource.label}
-      icon={isItemSelected(selectedResources, resource) ? 'tick' : 'blank'}
-      onClick={handleClick}
-      shouldDismissPopover={false}
-    />
-  );
-
   const handleTagRemove = (_value: string, index: number): void => {
     selectedResources.splice(index, 1);
     setSelectedResources([...selectedResources]);
-  };
-
-  const filterSource: ItemPredicate<Source> = (query, source) => {
-    return source.name.toLowerCase().indexOf(query.toLowerCase()) >= 0;
-  };
-
-  const filterResources: ItemPredicate<Resource> = (query, source) => {
-    return source.definitionId.toLowerCase().indexOf(query.toLowerCase()) >= 0;
   };
 
   const onClickRun = async (
@@ -162,22 +133,9 @@ const FhirpipeView = () => {
         </p>
         <SourceSelect
           items={sources}
-          itemRenderer={renderSource}
-          onItemSelect={handleSourceSelect}
-          itemPredicate={filterSource}
-          noResults={<MenuItem disabled={true} text="No results." />}
-          itemsEqual="id"
-        >
-          <Button
-            icon="database"
-            rightIcon="caret-down"
-            text={
-              selectedSource.name
-                ? `${selectedSource.name} (${selectedSource.template.name})`
-                : '(Select a source)'
-            }
-          />
-        </SourceSelect>
+          onChange={handleSourceSelect}
+          inputItem={selectedSource}
+        />
         {credentialsMissing && (
           <b className="creds-alert">
             No credentials provided for this source.
@@ -190,24 +148,10 @@ const FhirpipeView = () => {
           a source before.
         </p>
         <ResourceMultiSelect
-          items={selectedSource.resources || []}
-          tagRenderer={resource => resource.definitionId}
-          tagInputProps={{
-            onRemove: handleTagRemove
-          }}
-          itemRenderer={renderResource}
-          itemPredicate={filterResources}
-          onItemSelect={handleResourceSelect}
-          resetOnSelect={true}
-          selectedItems={selectedResources}
-          itemsEqual="id"
-          fill={true}
-          noResults={
-            <MenuItem
-              disabled={true}
-              text="No resources for the selected source."
-            />
-          }
+          resources={selectedSource.resources || []}
+          selectedResources={selectedResources}
+          onResourceSelect={handleResourceSelect}
+          onRemoveTag={handleTagRemove}
         />
         <div className="advanced-options">
           <h2>Advanced options</h2>
