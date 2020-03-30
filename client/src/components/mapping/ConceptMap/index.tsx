@@ -222,13 +222,13 @@ const ConceptMapDialog = ({
     />
   );
 
-  const createSourceCode = (index: number) => (
+  const createSourceCode = (index: number): React.ReactElement => (
     <input
       className="text-input"
       key={index}
       value={conceptMap[index].source}
       type="text"
-      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+      onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
         setConceptMap(prev => {
           prev[index].source = e.target.value;
           return [...prev];
@@ -237,7 +237,7 @@ const ConceptMapDialog = ({
     />
   );
 
-  const deleteRowButton = (index: number) => (
+  const deleteRowButton = (index: number): React.ReactElement => (
     <Button
       icon="trash"
       minimal={true}
@@ -274,7 +274,7 @@ const ConceptMapDialog = ({
     />
   );
 
-  const displayConceptMap = () =>
+  const displayConceptMap = (): React.ReactElement[] =>
     conceptMap.map((row, index) => (
       <tr key={index}>
         <td></td>
@@ -284,7 +284,7 @@ const ConceptMapDialog = ({
       </tr>
     ));
 
-  const renderRows = (_row: MapRow, index: number) => (
+  const renderRows = (_row: MapRow, index: number): React.ReactElement => (
     <tr key={index}>
       <td>{deleteRowButton(index)}</td>
       <td>
@@ -297,7 +297,7 @@ const ConceptMapDialog = ({
     </tr>
   );
 
-  const createCodeSystem = () => {
+  const createCodeSystem = (): CodeSystem => {
     // TODO complete fhir code system (there are missing fields we could fill)
     const concepts = conceptMap.reduce((acc: any[], row: MapRow) => {
       return [...acc, { code: row.source }];
@@ -313,7 +313,7 @@ const ConceptMapDialog = ({
   const createConceptMap = () => {
     // TODO complete fhir concept map (there are missing fields we could fill)
     const elements = conceptMap.reduce(
-      (acc: any[], row: MapRow) => [
+      (acc: Element[], row: MapRow) => [
         ...acc,
         {
           code: row.source,
@@ -326,7 +326,7 @@ const ConceptMapDialog = ({
     return {
       name: conceptMapTitle, // for computer
       title: conceptMapTitle, // for human
-      description: conceptMapDescription,
+      ...(conceptMapDescription && { description: conceptMapDescription }),
       sourceUri: '', // value set uri
       targetUri: '', // value set uri
       group: [
@@ -339,7 +339,7 @@ const ConceptMapDialog = ({
     };
   };
 
-  const metaData = () => (
+  const metaData = (): React.ReactElement => (
     <div className="meta-information">
       <div className="row">
         <h2 className="left">Title</h2>
@@ -348,7 +348,9 @@ const ConceptMapDialog = ({
             className="right"
             onChange={(e: React.FormEvent<HTMLElement>): void => {
               const target = e.target as HTMLInputElement;
-              setConceptMapTitle(target.value);
+              if (/^\S*$/.test(target.value)) {
+                setConceptMapTitle(target.value);
+              }
             }}
             placeholder="Concept map title..."
             value={conceptMapTitle}
@@ -441,7 +443,9 @@ const ConceptMapDialog = ({
   useEffect(() => {
     // Set default concept map title
     if (!!sourceSystemTitle && !!selectedTargetSystem)
-      setConceptMapTitle(`${sourceSystemTitle} > ${selectedTargetSystem}`);
+      setConceptMapTitle(
+        `${sourceSystemTitle}>${selectedTargetSystem}`.replace(/\s/g, '')
+      );
 
     // Use existing concept map if there is one
     let existingConceptMapGroup: Group | undefined;
@@ -517,7 +521,7 @@ const ConceptMapDialog = ({
                   className="add-element-button"
                   fill={true}
                   text="add element"
-                  onClick={() =>
+                  onClick={(): void =>
                     setConceptMap(prev => [
                       ...prev,
                       { source: '', equivalence: '', target: '' } as MapRow

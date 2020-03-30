@@ -200,8 +200,12 @@ body {
       }
     }
 
-    #column-selection {
-      background-color: $light-gray3;
+    #exploration-tabs {
+      overflow: scroll;
+
+      #column-selection {
+        background-color: $light-gray3;
+      }
     }
   }
 }
