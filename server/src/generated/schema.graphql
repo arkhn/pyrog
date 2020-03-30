@@ -433,6 +433,7 @@ input SourceWhereInput {
 
 input SourceWhereUniqueInput {
   id: String
+  template_name: TemplateNameCompoundUniqueInput
 }
 
 input StringFilter {
@@ -476,6 +477,11 @@ type Template {
   name: String!
   sources(after: SourceWhereUniqueInput, before: SourceWhereUniqueInput, first: Int, last: Int, skip: Int): [Source!]!
   updatedAt: DateTime!
+}
+
+input TemplateNameCompoundUniqueInput {
+  name: String!
+  template: String!
 }
 
 input TemplateWhereInput {
