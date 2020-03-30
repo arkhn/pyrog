@@ -32,12 +32,8 @@ const Navbar = ({ exportMapping }: Props) => {
   const { history } = useReactRouter();
   const [drawerIsOpen, setDrawerIsOpen] = React.useState(false);
 
-  const {
-    data: {
-      me: { role: userRole }
-    }
-  }: any = useQuery(meQuery);
-  const isAdmin = userRole === 'ADMIN';
+  const { data } = useQuery(meQuery);
+  const isAdmin = data && data.me.role === 'ADMIN';
 
   const renderSourceContext = () => {
     return (
