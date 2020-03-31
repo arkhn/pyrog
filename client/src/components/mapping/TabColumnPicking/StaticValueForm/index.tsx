@@ -55,18 +55,23 @@ const StaticValueForm = ({ attribute }: Props) => {
   const dispatch = useDispatch();
 
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
+  const { source, resource } = useSelector(
+    (state: IReduxStore) => state.selectedNode
+  );
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
   );
 
+  // If the current attribute is the identifier of the resource and not a Reference identifier
+  const isIdentifierSystem = /^identifier\[\d+\]\.system$/.test(attribute.path);
+
   const [staticValue, setStaticValue] = useState('');
   const [customSystem, setCustomSystem] = useState(false);
   const [selectedSource, setSelectedSource] = useState(
-    undefined as Source | undefined
+    isIdentifierSystem ? source : (undefined as Source | undefined)
   );
   const [selectedResource, setSelectedResource] = useState(
-    undefined as Resource | undefined
+    isIdentifierSystem ? resource : (undefined as Resource | undefined)
   );
 
   const [
@@ -204,22 +209,13 @@ const StaticValueForm = ({ attribute }: Props) => {
             items={sources}
             onChange={handleSourceSelect}
             inputItem={selectedSource || ({} as Source)}
-          >
-            <Button
-              icon="database"
-              rightIcon="caret-down"
-              text={
-                selectedSource
-                  ? `${selectedSource.name} (${selectedSource.template.name})`
-                  : '(Select a source)'
-              }
-            />
-          </SourceSelect>
+            disabled={isIdentifierSystem}
+          />
           <ResourceSelect
             items={selectedSource?.resources || []}
             onChange={handleResourceSelect}
             inputItem={selectedResource || ({} as Resource)}
-            disabled={selectedSource === undefined}
+            disabled={selectedSource === undefined || isIdentifierSystem}
           />
         </>
       ) : (

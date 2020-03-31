@@ -33,6 +33,7 @@ export interface ISelectedSource {
     id: string;
   };
   schema?: ISourceSchema;
+  resources: Resource[];
 }
 
 export interface Profile {
