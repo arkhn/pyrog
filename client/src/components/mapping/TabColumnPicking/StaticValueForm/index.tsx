@@ -153,6 +153,47 @@ const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
     }
   };
 
+  const renderReferenceTypeDropDown = (): React.ReactElement => (
+    <React.Fragment>
+      <StringSelect
+        items={
+          loadingFhirTypes || !dataFhirTypes
+            ? []
+            : dataFhirTypes.structureDefinitions.map((t: any) => t.name)
+        }
+        onChange={setStaticValue}
+        loading={loadingFhirTypes}
+        inputItem={staticValue}
+      />
+      <Button
+        disabled={staticValue.length === 0}
+        icon={'add'}
+        loading={creatingStaticInput}
+        onClick={() => addStaticValue(staticValue)}
+      />
+    </React.Fragment>
+  );
+
+  const renderTextInput = (): React.ReactElement => (
+    <React.Fragment>
+      <InputGroup
+        id="static-value-input"
+        onChange={(event: React.FormEvent<HTMLElement>): void => {
+          const target = event.target as HTMLInputElement;
+          setStaticValue(target.value);
+        }}
+        placeholder="Static input"
+        value={staticValue}
+      />
+      <Button
+        disabled={staticValue.length === 0}
+        icon={'add'}
+        loading={creatingStaticInput}
+        onClick={() => addStaticValue(staticValue)}
+      />
+    </React.Fragment>
+  );
+
   return (
     <Card elevation={Elevation.ONE}>
       <div className="card-absolute">
@@ -163,24 +204,7 @@ const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
       <FormGroup labelFor="text-input" inline={true}>
         <ControlGroup>
           {attribute.definition.id === 'Reference.type' ? (
-            <>
-              <StringSelect
-                items={
-                  loadingFhirTypes || !dataFhirTypes
-                    ? []
-                    : dataFhirTypes.structureDefinitions.map((t: any) => t.name)
-                }
-                onChange={setStaticValue}
-                loading={loadingFhirTypes}
-                inputItem={staticValue}
-              />
-              <Button
-                disabled={staticValue.length === 0}
-                icon={'add'}
-                loading={creatingStaticInput}
-                onClick={() => addStaticValue(staticValue)}
-              />
-            </>
+            renderReferenceTypeDropDown()
           ) : attribute.definition.id === 'Identifier.system' ? (
             <IdentifierSystemInput
               attribute={attribute}
@@ -189,23 +213,7 @@ const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
               addStaticValue={addStaticValue}
             />
           ) : (
-            <>
-              <InputGroup
-                id="static-value-input"
-                onChange={(event: React.FormEvent<HTMLElement>): void => {
-                  const target = event.target as HTMLInputElement;
-                  setStaticValue(target.value);
-                }}
-                placeholder="Static input"
-                value={staticValue}
-              />
-              <Button
-                disabled={staticValue.length === 0}
-                icon={'add'}
-                loading={creatingStaticInput}
-                onClick={() => addStaticValue(staticValue)}
-              />
-            </>
+            renderTextInput()
           )}
         </ControlGroup>
       </FormGroup>

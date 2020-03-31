@@ -103,7 +103,10 @@ const IdentifierSystemInput = ({
         />
       )}
       <Button
-        disabled={customSystem && selectedResource === undefined}
+        disabled={
+          (customSystem && selectedResource === undefined) ||
+          (!customSystem && staticValue.length === 0)
+        }
         icon={'add'}
         loading={creatingStaticInput}
         onClick={() =>
