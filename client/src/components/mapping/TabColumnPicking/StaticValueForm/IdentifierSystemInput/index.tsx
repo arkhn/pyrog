@@ -19,7 +19,6 @@ import ResourceSelect from 'components/selects/resourceSelect';
 import { Resource } from 'types';
 
 interface Props {
-  // TODO real types
   attribute: Attribute;
   sources: Source[];
   creatingStaticInput: boolean;
@@ -41,6 +40,9 @@ const IdentifierSystemInput = ({
   creatingStaticInput,
   addStaticValue
 }: Props): React.ReactElement => {
+  // If the current attribute is the identifier of the resource and not a Reference identifier
+  const isRootIdentifierSystem = !attribute.parent?.parent;
+
   const { source, resource } = useSelector(
     (state: IReduxStore) => state.selectedNode
   );
@@ -54,11 +56,8 @@ const IdentifierSystemInput = ({
     undefined as Resource | undefined
   );
 
-  // If the current attribute is the identifier of the resource and not a Reference identifier
-  const isIdentifierSystem = /^identifier\[\d+\]\.system$/.test(attribute.path);
-
   useEffect(() => {
-    if (isIdentifierSystem) {
+    if (isRootIdentifierSystem) {
       setSelectedSource(source);
       setSelectedResource(resource);
     } else {
@@ -83,13 +82,13 @@ const IdentifierSystemInput = ({
             items={sources}
             onChange={handleSourceSelect}
             inputItem={selectedSource || ({} as Source)}
-            disabled={isIdentifierSystem}
+            disabled={isRootIdentifierSystem}
           />
           <ResourceSelect
             items={selectedSource?.resources || []}
             onChange={handleResourceSelect}
             inputItem={selectedResource || ({} as Resource)}
-            disabled={selectedSource === undefined || isIdentifierSystem}
+            disabled={selectedSource === undefined || isRootIdentifierSystem}
           />
         </>
       ) : (
