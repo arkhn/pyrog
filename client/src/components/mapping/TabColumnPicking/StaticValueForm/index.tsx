@@ -5,7 +5,9 @@ import {
   ControlGroup,
   Elevation,
   FormGroup,
-  InputGroup
+  InputGroup,
+  Popover,
+  Position
 } from '@blueprintjs/core';
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -68,10 +70,10 @@ const StaticValueForm = ({ attribute }: Props) => {
   const [staticValue, setStaticValue] = useState('');
   const [customSystem, setCustomSystem] = useState(false);
   const [selectedSource, setSelectedSource] = useState(
-    isIdentifierSystem ? source : (undefined as Source | undefined)
+    undefined as Source | undefined
   );
   const [selectedResource, setSelectedResource] = useState(
-    isIdentifierSystem ? resource : (undefined as Resource | undefined)
+    undefined as Resource | undefined
   );
 
   const [
@@ -92,6 +94,13 @@ const StaticValueForm = ({ attribute }: Props) => {
     if (attribute.isReferenceType) {
       setStaticValue('');
       getFhirTypes();
+    }
+    if (isIdentifierSystem) {
+      setSelectedSource(source);
+      setSelectedResource(resource);
+    } else {
+      setSelectedSource(undefined);
+      setSelectedResource(undefined);
     }
   }, [attribute]);
 
@@ -235,6 +244,27 @@ const StaticValueForm = ({ attribute }: Props) => {
         label="Custom system"
         onChange={(): void => setCustomSystem(!customSystem)}
       />
+      <Popover
+        interactionKind="hover"
+        boundary="viewport"
+        className="help-popover"
+        position={Position.BOTTOM_RIGHT}
+      >
+        <Button icon="help" minimal={true} small={true} />
+        {
+          <div>
+            <p className="text">
+              The identifier system is a URI that defines a set of identifiers
+              (i.e. how the value is made unique). For istance, we use
+              "http://hl7.org/fhir/sid/us-ssn" for United States Social Security
+              Number (SSN) identifier values. Sometimes, the identifiers are not
+              a recognized standard so we need to use a custom system. Pyrog's
+              custom systems have the form
+              "http://terminology.arkhn.org/sourceId/resourceId".
+            </p>
+          </div>
+        }
+      </Popover>
     </ControlGroup>
   );
 
