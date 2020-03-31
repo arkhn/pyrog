@@ -6,7 +6,7 @@ import {
   deleteAttribute,
   deleteAttributes,
 } from './Attribute'
-import { createAccessControl } from './AccessControl'
+import { createAccessControl, deleteAccessControl } from './AccessControl'
 import { addJoinToColumn } from './Column'
 import { deleteCredential, upsertCredential } from './Credential'
 import { createInput, deleteInput, updateInput } from './Input'
@@ -287,11 +287,19 @@ export const Mutation = mutationType({
     t.field('createAccessControl', {
       type: 'AccessControl',
       args: {
-        userId: idArg({ required: true }),
+        userEmail: stringArg({ required: true }),
         sourceId: idArg({ required: true }),
         role: arg({ type: 'SourceRole', required: true }),
       },
       resolve: createAccessControl,
+    })
+
+    t.field('deleteAccessControl', {
+      type: 'AccessControl',
+      args: {
+        accessControlId: idArg({ required: true }),
+      },
+      resolve: deleteAccessControl,
     })
   },
 })

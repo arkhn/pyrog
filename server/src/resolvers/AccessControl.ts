@@ -14,11 +14,19 @@ export const AccessControl = objectType({
 export const createAccessControl: FieldResolver<
   'Mutation',
   'createAccessControl'
-> = async (_parent, { userId, sourceId, role }, ctx) =>
+> = async (_parent, { userEmail, sourceId, role }, ctx) =>
   ctx.prisma.accessControl.create({
     data: {
-      user: { connect: { id: userId } },
+      user: { connect: { email: userEmail } },
       source: { connect: { id: sourceId } },
       role,
     },
+  })
+
+export const deleteAccessControl: FieldResolver<
+  'Mutation',
+  'deleteAccessControl'
+> = async (_parent, { accessControlId }, ctx) =>
+  ctx.prisma.accessControl.delete({
+    where: { id: accessControlId },
   })

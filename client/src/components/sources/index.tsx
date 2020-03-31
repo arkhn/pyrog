@@ -1,15 +1,6 @@
-import {
-  Alert,
-  Button,
-  Card,
-  Elevation,
-  Icon,
-  Intent,
-  Spinner,
-  Tag
-} from '@blueprintjs/core';
+import { Alert, Button, Intent, Spinner } from '@blueprintjs/core';
 import * as QueryString from 'query-string';
-import React, { ReactElement } from 'react';
+import React from 'react';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import useReactRouter from 'use-react-router';
@@ -20,14 +11,10 @@ import Navbar from 'components/navbar';
 import { changeSelectedSource } from 'services/selectedNode/actions';
 import { HTTP_BACKEND_URL } from '../../constants';
 import { onError } from 'services/apollo';
-import { IReduxStore } from 'types';
+import { IReduxStore, ISelectedSource } from 'types';
 
+import { SourceCard } from './sourceCard';
 import './style.scss';
-
-interface Source {
-  name: string;
-  id: string;
-}
 
 // GRAPHQL
 const qSources = loader('src/graphql/queries/sources.graphql');
@@ -40,24 +27,37 @@ const SourcesView = (): React.ReactElement => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
 
   const [sourceToDelete, setSourceToDelete] = React.useState(
-    undefined as Source | undefined
+    undefined as ISelectedSource | undefined
   );
   const [isAlertOpen, setIsAlertOpen] = React.useState(false);
 
   const { data: dataSources, loading: loadingSources } = useQuery(qSources, {
-    fetchPolicy: 'network-only'
+    fetchPolicy: 'cache-and-network'
   });
 
   const removeSourceFromCache = (
     cache: any,
     { data: { deleteSource } }: any
+  ): void => updateCachedSource(cache, deleteSource, true);
+
+  const updateCachedSource = (
+    cache: any,
+    source: ISelectedSource,
+    toDelete?: boolean
   ): void => {
     try {
       const { sources } = cache.readQuery({
         query: qSources
       });
-      const newSources = sources.filter((s: any) => s.id !== deleteSource.id);
-
+      const newSources = sources.reduce(
+        (acc: ISelectedSource[], val: ISelectedSource) => {
+          if (val.id === source.id) {
+            if (!toDelete) acc.push(source);
+          } else acc.push(val);
+          return acc;
+        },
+        []
+      );
       cache.writeQuery({
         query: qSources,
         data: { sources: newSources }
@@ -72,7 +72,7 @@ const SourcesView = (): React.ReactElement => {
     { update: removeSourceFromCache, onError: onError(toaster) }
   );
 
-  const onClickedSource = async (source: any) => {
+  const onSelectSource = async (source: ISelectedSource) => {
     try {
       const response = await fetch(
         `${HTTP_BACKEND_URL}/schemas/${source.template.name}_${source.name}.json`
@@ -94,50 +94,14 @@ const SourcesView = (): React.ReactElement => {
     });
   };
 
-  function renderSource(source: any, index: number): ReactElement {
-    return (
-      <Card
-        elevation={Elevation.TWO}
-        interactive={true}
-        key={index}
-        onClick={(): Promise<void> => onClickedSource(source)}
-      >
-        <div className="card-header">
-          <h2>
-            {source.template.name} - {source.name}
-          </h2>
-          <Button
-            icon={'delete'}
-            loading={deletingSource && sourceToDelete?.id === source.id}
-            minimal={true}
-            onClick={(e: React.MouseEvent): void => {
-              e.stopPropagation();
-              setSourceToDelete(source);
-              setIsAlertOpen(true);
-            }}
-          />
-        </div>
-        <div className="tags">
-          <Tag>DPI</Tag>
-          <Tag>Généraliste</Tag>
-          <Tag>Prescription</Tag>
-        </div>
-
-        <div>
-          <div className="flexbox">
-            <span>
-              <Icon icon="layout-hierarchy" color="#5C7080" />
-              <span>{source.mappingProgress[0]} Ressources</span>
-            </span>
-            <span>
-              <Icon icon="tag" color="#5C7080" />
-              <span>{source.mappingProgress[1]} Attributs</span>
-            </span>
-          </div>
-        </div>
-      </Card>
-    );
-  }
+  const onDeleteButton = (
+    source: ISelectedSource,
+    e: React.MouseEvent
+  ): void => {
+    e.stopPropagation();
+    setSourceToDelete(source);
+    setIsAlertOpen(true);
+  };
 
   return (
     <div>
@@ -157,9 +121,16 @@ const SourcesView = (): React.ReactElement => {
           {loadingSources ? (
             <Spinner />
           ) : (
-            dataSources.sources.map((source: any, index: number) =>
-              renderSource(source, index)
-            )
+            dataSources.sources.map((source: ISelectedSource) => (
+              <SourceCard
+                key={source.id}
+                source={source}
+                onSelect={onSelectSource}
+                onDelete={onDeleteButton}
+                onUpdate={updateCachedSource}
+                deleting={deletingSource && sourceToDelete?.id === source.id}
+              />
+            ))
           )}
         </div>
         <Alert
@@ -169,15 +140,15 @@ const SourcesView = (): React.ReactElement => {
           intent={Intent.DANGER}
           isOpen={isAlertOpen}
           canOutsideClickCancel={true}
-          onClose={async (confirmed): Promise<void> => {
+          onConfirm={async () => {
+            await deleteSource({
+              variables: {
+                sourceId: sourceToDelete ? sourceToDelete.id : ''
+              }
+            });
+          }}
+          onClose={() => {
             setIsAlertOpen(false);
-            if (confirmed) {
-              await deleteSource({
-                variables: {
-                  sourceId: sourceToDelete ? sourceToDelete.id : ''
-                }
-              });
-            }
             setSourceToDelete(undefined);
           }}
         >

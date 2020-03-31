@@ -11,5 +11,13 @@ query sources {
     credential {
       id
     }
+    accessControls {
+      id
+      user {
+        id
+        email
+      }
+      role
+    }
   }
 }
