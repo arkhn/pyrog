@@ -1,0 +1,17 @@
+mutation createPermission(
+  $userEmail: String!
+  $sourceId: ID!
+  $role: SourceRole!
+) {
+  createAccessControl(userEmail: $userEmail, sourceId: $sourceId, role: $role) {
+    id
+    role
+    user {
+      id
+      email
+    }
+    source {
+      id
+    }
+  }
+}
