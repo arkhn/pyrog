@@ -152,10 +152,10 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
   };
 
   React.useEffect(() => {
-    if (source && source.credential && table) {
+    if (resource && table) {
       setIsTableLoading(true);
       axios
-        .get(`${PAGAI_URL}/explore/${source.credential.id}/${table}`, {
+        .get(`${PAGAI_URL}/explore/${resource.id}/${table}`, {
           params: { schema: owner }
         })
         .then((res: any) => {
@@ -174,7 +174,7 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
           });
         });
     }
-  }, [source, owner, table, toaster]);
+  }, [resource, owner, table, toaster]);
 
   return (
     <Card elevation={Elevation.ONE}>
