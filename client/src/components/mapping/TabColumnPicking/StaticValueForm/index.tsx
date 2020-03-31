@@ -1,13 +1,10 @@
 import {
   Button,
   Card,
-  Checkbox,
   ControlGroup,
   Elevation,
   FormGroup,
-  InputGroup,
-  Popover,
-  Position
+  InputGroup
 } from '@blueprintjs/core';
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -20,10 +17,8 @@ import { IReduxStore } from 'types';
 
 import { setAttributeInMap } from 'services/resourceInputs/actions';
 import StringSelect from 'components/selects/stringSelect';
-import SourceSelect from 'components/selects/sourceSelect';
-import ResourceSelect from 'components/selects/resourceSelect';
 
-import { Resource } from 'types';
+import IdentifierSystemInput from './IdentifierSystemInput';
 
 // GRAPHQL
 const qBasicFhirTypes = loader('src/graphql/queries/basicFhirTypes.graphql');
@@ -44,37 +39,16 @@ interface Props {
   attribute: Attribute;
 }
 
-interface Source {
-  id: string;
-  name: string;
-  template: {
-    name: string;
-  };
-  resources: Resource[];
-}
-
-const StaticValueForm = ({ attribute }: Props) => {
+const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
   const dispatch = useDispatch();
 
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const { source, resource } = useSelector(
-    (state: IReduxStore) => state.selectedNode
-  );
+  const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
   );
 
-  // If the current attribute is the identifier of the resource and not a Reference identifier
-  const isIdentifierSystem = /^identifier\[\d+\]\.system$/.test(attribute.path);
-
   const [staticValue, setStaticValue] = useState('');
-  const [customSystem, setCustomSystem] = useState(false);
-  const [selectedSource, setSelectedSource] = useState(
-    undefined as Source | undefined
-  );
-  const [selectedResource, setSelectedResource] = useState(
-    undefined as Resource | undefined
-  );
 
   const [
     getFhirTypes,
@@ -94,13 +68,6 @@ const StaticValueForm = ({ attribute }: Props) => {
     if (attribute.isReferenceType) {
       setStaticValue('');
       getFhirTypes();
-    }
-    if (isIdentifierSystem) {
-      setSelectedSource(source);
-      setSelectedResource(resource);
-    } else {
-      setSelectedSource(undefined);
-      setSelectedResource(undefined);
     }
   }, [attribute]);
 
@@ -140,7 +107,7 @@ const StaticValueForm = ({ attribute }: Props) => {
     }
   );
 
-  const onAddStaticValue = async (): Promise<void> => {
+  const addStaticValue = async (value: string): Promise<void> => {
     try {
       if (!attributeId) {
         // First, we create the attribute if it doesn't exist
@@ -178,95 +145,13 @@ const StaticValueForm = ({ attribute }: Props) => {
       await createStaticInput({
         variables: {
           attributeId,
-          staticValue: customSystem
-            ? `http://terminology.arkhn.org/${selectedSource!.id}/${
-                selectedResource!.id
-              }`
-            : staticValue
+          staticValue: value
         }
       });
     } catch (e) {
       console.log(e);
     }
   };
-
-  const renderAddStaticValueButton = (): React.ReactElement => (
-    <Button
-      disabled={
-        (!customSystem && staticValue.length === 0) ||
-        (customSystem && selectedResource === undefined)
-      }
-      icon={'add'}
-      loading={creatingStaticInput}
-      onClick={onAddStaticValue}
-    />
-  );
-
-  const handleSourceSelect = (source: Source): void => {
-    setSelectedSource(source);
-    setSelectedResource(undefined);
-  };
-  const handleResourceSelect = (resource: Resource): void => {
-    setSelectedResource(resource);
-  };
-
-  const renderCustomSystemInput = (): React.ReactElement => (
-    <ControlGroup>
-      {customSystem ? (
-        <>
-          <SourceSelect
-            items={sources}
-            onChange={handleSourceSelect}
-            inputItem={selectedSource || ({} as Source)}
-            disabled={isIdentifierSystem}
-          />
-          <ResourceSelect
-            items={selectedSource?.resources || []}
-            onChange={handleResourceSelect}
-            inputItem={selectedResource || ({} as Resource)}
-            disabled={selectedSource === undefined || isIdentifierSystem}
-          />
-        </>
-      ) : (
-        <InputGroup
-          onChange={(event: React.FormEvent<HTMLElement>): void => {
-            const target = event.target as HTMLInputElement;
-            setStaticValue(target.value);
-          }}
-          placeholder="Static input"
-          value={staticValue}
-        />
-      )}
-      {renderAddStaticValueButton()}
-      <Checkbox
-        className="custom-checkbox"
-        checked={customSystem}
-        label="Custom system"
-        onChange={(): void => setCustomSystem(!customSystem)}
-      />
-      <Popover
-        interactionKind="hover"
-        boundary="viewport"
-        className="help-popover"
-        position={Position.BOTTOM_RIGHT}
-      >
-        <Button icon="help" minimal={true} small={true} />
-        {
-          <div>
-            <p className="text">
-              The identifier system is a URI that defines a set of identifiers
-              (i.e. how the value is made unique). For istance, we use
-              "http://hl7.org/fhir/sid/us-ssn" for United States Social Security
-              Number (SSN) identifier values. Sometimes, the identifiers are not
-              a recognized standard so we need to use a custom system. Pyrog's
-              custom systems have the form
-              "http://terminology.arkhn.org/sourceId/resourceId".
-            </p>
-          </div>
-        }
-      </Popover>
-    </ControlGroup>
-  );
 
   return (
     <Card elevation={Elevation.ONE}>
@@ -289,10 +174,20 @@ const StaticValueForm = ({ attribute }: Props) => {
                 loading={loadingFhirTypes}
                 inputItem={staticValue}
               />
-              {renderAddStaticValueButton()}
+              <Button
+                disabled={staticValue.length === 0}
+                icon={'add'}
+                loading={creatingStaticInput}
+                onClick={() => addStaticValue(staticValue)}
+              />
             </>
           ) : attribute.definition.id === 'Identifier.system' ? (
-            renderCustomSystemInput()
+            <IdentifierSystemInput
+              attribute={attribute}
+              sources={sources}
+              creatingStaticInput={creatingStaticInput}
+              addStaticValue={addStaticValue}
+            />
           ) : (
             <>
               <InputGroup
@@ -304,7 +199,12 @@ const StaticValueForm = ({ attribute }: Props) => {
                 placeholder="Static input"
                 value={staticValue}
               />
-              {renderAddStaticValueButton()}
+              <Button
+                disabled={staticValue.length === 0}
+                icon={'add'}
+                loading={creatingStaticInput}
+                onClick={() => addStaticValue(staticValue)}
+              />
             </>
           )}
         </ControlGroup>

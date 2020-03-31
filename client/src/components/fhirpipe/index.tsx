@@ -56,7 +56,6 @@ const FhirpipeView = (): React.ReactElement => {
   const sources = data ? data.sources : [];
   const credentials = selectedSource.id ? selectedSource.credential : undefined;
   const credentialsMissing = !!selectedSource.id && !credentials;
-  // const ResourceMultiSelect = MultiSelect.ofType<Resource>();
 
   const isItemSelected = (list: any[], item: any): boolean => {
     return list.includes(item);
