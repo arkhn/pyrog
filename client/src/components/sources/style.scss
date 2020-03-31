@@ -13,6 +13,13 @@ h2 {
   .bp3-button {
     margin: 15px;
   }
+
+  .add-collaborator-button {
+    margin: 0px;
+    margin-top: 5px;
+    padding: 0px;
+    display: flex;
+  }
 }
 
 #software-cards {
@@ -57,8 +64,25 @@ h2 {
   }
 }
 
-.flexbox {
+.flex-row {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.collaboratorsTable {
+  text-align: center;
+  width: 30%;
+  tr.collaboratorsRow {
+    td {
+      font-weight: bold;
+      vertical-align: middle;
+    }
+  }
 }

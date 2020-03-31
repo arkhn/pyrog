@@ -14,6 +14,7 @@ export const Source = objectType({
     t.model.resources({ filtering: true })
     t.model.credential()
     t.model.template()
+    t.model.accessControls({ filtering: false })
 
     t.model.updatedAt()
     t.model.createdAt()
