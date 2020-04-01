@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Button, MenuItem, Switch } from '@blueprintjs/core';
+import { Button, Switch } from '@blueprintjs/core';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useQuery } from '@apollo/react-hooks';

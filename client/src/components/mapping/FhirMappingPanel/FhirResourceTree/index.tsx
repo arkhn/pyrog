@@ -3,7 +3,6 @@ import { useApolloClient, useMutation } from '@apollo/react-hooks';
 import { Classes, Icon, ITreeNode, Tree } from '@blueprintjs/core';
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { ApolloError } from 'apollo-client/errors/ApolloError';
 import { useQuery } from '@apollo/react-hooks';
 import { IReduxStore } from 'types';
 import { loader } from 'graphql.macro';

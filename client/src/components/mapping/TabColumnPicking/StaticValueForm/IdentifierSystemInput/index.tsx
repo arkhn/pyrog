@@ -64,7 +64,7 @@ const IdentifierSystemInput = ({
       setSelectedSource(undefined);
       setSelectedResource(undefined);
     }
-  }, [attribute]);
+  }, [attribute, source, resource]);
 
   const handleSourceSelect = (source: Source): void => {
     setSelectedSource(source);
