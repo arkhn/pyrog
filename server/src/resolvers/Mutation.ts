@@ -7,6 +7,7 @@ import {
   deleteAttributes,
 } from './Attribute'
 import { createAccessControl, deleteAccessControl } from './AccessControl'
+import { createComment } from './Comment'
 import { addJoinToColumn } from './Column'
 import { deleteCredential, upsertCredential } from './Credential'
 import { createInput, deleteInput, updateInput } from './Input'
@@ -178,19 +179,13 @@ export const Mutation = mutationType({
       resolve: updateAttribute,
     })
 
-    t.field('updateComments', {
-      type: 'Attribute',
+    t.field('createComment', {
+      type: 'Comment',
       args: {
         attributeId: idArg({ required: true }),
-        comments: stringArg({ required: true }),
+        content: stringArg({ required: true }),
       },
-      resolve: (_parent, { attributeId, comments }, ctx, info) =>
-        updateAttribute(
-          _parent,
-          { attributeId, data: { comments } },
-          ctx,
-          info,
-        ),
+      resolve: createComment,
     })
 
     t.field('deleteAttribute', {

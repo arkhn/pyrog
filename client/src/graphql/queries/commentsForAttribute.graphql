@@ -1,6 +1,14 @@
 query commentsForAttribute($attributeId: ID!) {
   attribute(attributeId: $attributeId) {
     id
-    comments
+    comments {
+      id
+      author {
+        id
+        name
+      }
+      content
+      createdAt
+    }
   }
 }

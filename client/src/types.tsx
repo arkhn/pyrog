@@ -90,6 +90,12 @@ export interface IResourceInputs {
   primaryKeyColumn: string;
   attributesMap: any;
 }
+export interface IComment {
+  id: string;
+  author: IUser;
+  content: string;
+  createdAt: string;
+}
 
 export interface IRecommendedColumns {
   columnsByAttribute: {

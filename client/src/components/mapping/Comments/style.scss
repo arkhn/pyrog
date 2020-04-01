@@ -1,0 +1,33 @@
+@import '~@blueprintjs/core/lib/css/blueprint.css';
+@import '~@blueprintjs/core/lib/scss/variables';
+
+$border-radius: 6px;
+
+#comment-input {
+  display: flex;
+}
+
+#send-comment-button {
+  font-size: large;
+  border-style: solid $light-gray3;
+  border-radius: $border-radius;
+}
+
+.comment-history {
+  display: flex;
+  flex-direction: column;
+
+  .my-comment {
+    width: 50%;
+    align-self: flex-end;
+    margin: 10px;
+    border-radius: $border-radius;
+  }
+
+  .other-comment {
+    width: 50%;
+    align-self: flex-start;
+    margin: 10px;
+    border-radius: $border-radius;
+  }
+}

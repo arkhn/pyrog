@@ -4,7 +4,15 @@ fragment entireAttribute on Attribute {
   id
   path
   mergingScript
-  comments
+  comments {
+    id
+    content
+    author {
+      id
+      name
+    }
+    createdAt
+  }
   inputs {
     ...entireInput
   }
