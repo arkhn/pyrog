@@ -13,6 +13,9 @@ query sourcesAndResources {
       id
       label
       definitionId
+      definition {
+        name
+      }
     }
   }
 }

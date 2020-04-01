@@ -52,7 +52,9 @@ export default class ResourceSelect extends React.Component<SelectProps, any> {
     });
 
   private displayItem = function(resource: Resource): string {
-    return resource.definition ? resource.definition.name : 'None';
+    return resource.definition
+      ? resource.definition.name
+      : '(Select a resource)';
   };
 
   public render() {

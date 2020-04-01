@@ -2,13 +2,13 @@ import {
   Button,
   Card,
   ControlGroup,
-  InputGroup,
+  Elevation,
   FormGroup,
-  Elevation
+  InputGroup
 } from '@blueprintjs/core';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useLazyQuery, useMutation } from '@apollo/react-hooks';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/react-hooks';
 import { loader } from 'graphql.macro';
 import { Attribute } from '@arkhn/fhir.ts';
 
@@ -18,10 +18,15 @@ import { IReduxStore } from 'types';
 import { setAttributeInMap } from 'services/resourceInputs/actions';
 import StringSelect from 'components/selects/stringSelect';
 
+import IdentifierSystemInput from './IdentifierSystemInput';
+
 // GRAPHQL
 const qBasicFhirTypes = loader('src/graphql/queries/basicFhirTypes.graphql');
 const qInputsForAttribute = loader(
   'src/graphql/queries/inputsForAttribute.graphql'
+);
+const qSourcesAndResources = loader(
+  'src/graphql/queries/sourcesAndResources.graphql'
 );
 const mCreateAttribute = loader(
   'src/graphql/mutations/createAttribute.graphql'
@@ -34,7 +39,7 @@ interface Props {
   attribute: Attribute;
 }
 
-const StaticValueForm = ({ attribute }: Props) => {
+const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
   const dispatch = useDispatch();
 
   const toaster = useSelector((state: IReduxStore) => state.toaster);
@@ -43,15 +48,19 @@ const StaticValueForm = ({ attribute }: Props) => {
     (state: IReduxStore) => state.resourceInputs.attributesMap
   );
 
+  const [staticValue, setStaticValue] = useState('');
+
   const [
     getFhirTypes,
     { data: dataFhirTypes, loading: loadingFhirTypes }
   ] = useLazyQuery(qBasicFhirTypes, {
     fetchPolicy: 'cache-first'
   });
+  const { data: dataSources } = useQuery(qSourcesAndResources, {
+    fetchPolicy: 'no-cache'
+  });
 
-  const [staticValue, setStaticValue] = React.useState('');
-
+  const sources = dataSources ? dataSources.sources : [];
   const path = attribute.path;
   let attributeId = attributesForResource[path]
     ? attributesForResource[path].id
@@ -64,7 +73,10 @@ const StaticValueForm = ({ attribute }: Props) => {
     }
   }, [attribute]);
 
-  const addInputToCache = (cache: any, { data: { createInput } }: any) => {
+  const addInputToCache = (
+    cache: any,
+    { data: { createInput } }: any
+  ): void => {
     try {
       const { attribute: dataAttribute } = cache.readQuery({
         query: qInputsForAttribute,
@@ -92,15 +104,15 @@ const StaticValueForm = ({ attribute }: Props) => {
   const [createAttribute] = useMutation(mCreateAttribute, {
     onError: onError(toaster)
   });
-  const [
-    createStaticInput,
-    { loading: creatingStaticInput }
-  ] = useMutation(mCreateStaticInput, {
-    update: addInputToCache,
-    onError: onError(toaster)
-  });
+  const [createStaticInput, { loading: creatingStaticInput }] = useMutation(
+    mCreateStaticInput,
+    {
+      update: addInputToCache,
+      onError: onError(toaster)
+    }
+  );
 
-  const onAddStaticValue = async (): Promise<void> => {
+  const addStaticValue = async (value: string): Promise<void> => {
     try {
       if (!attributeId) {
         // First, we create the attribute if it doesn't exist
@@ -138,13 +150,53 @@ const StaticValueForm = ({ attribute }: Props) => {
       await createStaticInput({
         variables: {
           attributeId,
-          staticValue
+          staticValue: value
         }
       });
     } catch (e) {
       console.log(e);
     }
   };
+
+  const renderReferenceTypeDropDown = (): React.ReactElement => (
+    <React.Fragment>
+      <StringSelect
+        items={
+          loadingFhirTypes || !dataFhirTypes
+            ? []
+            : dataFhirTypes.structureDefinitions.map((t: any) => t.name)
+        }
+        onChange={setStaticValue}
+        loading={loadingFhirTypes}
+        inputItem={staticValue}
+      />
+      <Button
+        disabled={staticValue.length === 0}
+        icon={'add'}
+        loading={creatingStaticInput}
+        onClick={() => addStaticValue(staticValue)}
+      />
+    </React.Fragment>
+  );
+
+  const renderTextInput = (): React.ReactElement => (
+    <React.Fragment>
+      <InputGroup
+        onChange={(event: React.FormEvent<HTMLElement>): void => {
+          const target = event.target as HTMLInputElement;
+          setStaticValue(target.value);
+        }}
+        placeholder="Static input"
+        value={staticValue}
+      />
+      <Button
+        disabled={staticValue.length === 0}
+        icon={'add'}
+        loading={creatingStaticInput}
+        onClick={() => addStaticValue(staticValue)}
+      />
+    </React.Fragment>
+  );
 
   return (
     <Card elevation={Elevation.ONE}>
@@ -155,36 +207,18 @@ const StaticValueForm = ({ attribute }: Props) => {
       </div>
       <FormGroup labelFor="text-input" inline={true}>
         <ControlGroup>
-          {attribute.isReferenceType ? (
-            <>
-              <StringSelect
-                items={
-                  loadingFhirTypes || !dataFhirTypes
-                    ? []
-                    : dataFhirTypes.structureDefinitions.map((t: any) => t.name)
-                }
-                onChange={setStaticValue}
-                loading={loadingFhirTypes}
-                inputItem={staticValue}
-              />
-            </>
-          ) : (
-            <InputGroup
-              id="static-value-input"
-              onChange={(event: React.FormEvent<HTMLElement>) => {
-                const target = event.target as HTMLInputElement;
-                setStaticValue(target.value);
-              }}
-              placeholder="Static input"
-              value={staticValue}
+          {attribute.definition.id === 'Reference.type' ? (
+            renderReferenceTypeDropDown()
+          ) : attribute.definition.id === 'Identifier.system' ? (
+            <IdentifierSystemInput
+              attribute={attribute}
+              sources={sources}
+              creatingStaticInput={creatingStaticInput}
+              addStaticValue={addStaticValue}
             />
+          ) : (
+            renderTextInput()
           )}
-          <Button
-            disabled={!attribute || staticValue.length === 0}
-            icon={'add'}
-            loading={creatingStaticInput}
-            onClick={onAddStaticValue}
-          />
         </ControlGroup>
       </FormGroup>
     </Card>

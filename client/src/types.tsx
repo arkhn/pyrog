@@ -37,6 +37,7 @@ export interface ISelectedSource {
   };
   accessControls: IAccessControl[];
   schema?: ISourceSchema;
+  resources: Resource[];
 }
 
 export interface IAccessControl {
@@ -63,6 +64,7 @@ export interface Resource {
   primaryKeyTable: string;
   primaryKeyColumn: string;
   filters: Filters[];
+  definitionId: string;
   definition: {
     id: string;
     type: string;

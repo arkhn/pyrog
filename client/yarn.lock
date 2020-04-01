@@ -52,9 +52,9 @@
     tslib "^1.10.0"
 
 "@arkhn/fhir.ts@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@arkhn/fhir.ts/-/fhir.ts-3.0.0.tgz#4b6358a462af695d865ac119fb2899a7b370d3cb"
-  integrity sha512-lJayJOaQKufQ9K/Z6HPTf90q6wPNKWEqIF0Ts2zkLm4bLiKk0yfk9MW4zQYvy97xw2Nf8QXZH7i+/8LtW8VpHQ==
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@arkhn/fhir.ts/-/fhir.ts-3.1.0.tgz#9bd8cc7f410561663a246796be7cc521dcd053ce"
+  integrity sha512-MVNZh+xGZ+nRJkuvsMSd/1mqya3Cs3wGC2R/2EfWztn485hKZMZe9qmwfbE8E8OX/ZU4FaSdlPjDBUhqPUi3Rw==
 
 "@babel/code-frame@7.5.5":
   version "7.5.5"

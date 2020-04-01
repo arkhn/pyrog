@@ -39,4 +39,25 @@
     position: absolute;
     top: -7px;
   }
+
+  .custom-checkbox {
+    margin: auto;
+    margin-left: 8px;
+  }
+
+  .help-popover {
+    margin-left: 8px;
+
+    .bp3-popover-target {
+      vertical-align: sub;
+    }
+  }
+}
+
+.bp3-popover-content {
+
+  .text {
+    width: min-content;
+    margin: 5px;
+  }
 }
