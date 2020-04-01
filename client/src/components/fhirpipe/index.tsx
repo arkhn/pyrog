@@ -50,7 +50,7 @@ const FhirpipeView = (): React.ReactElement => {
   const [running, setRunning] = useState(false);
 
   const { data } = useQuery(qSourcesAndResources, {
-    fetchPolicy: 'network-only'
+    fetchPolicy: 'no-cache'
   });
 
   const sources = data ? data.sources : [];

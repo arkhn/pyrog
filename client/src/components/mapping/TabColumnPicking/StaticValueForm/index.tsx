@@ -56,7 +56,9 @@ const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
   ] = useLazyQuery(qBasicFhirTypes, {
     fetchPolicy: 'cache-first'
   });
-  const { data: dataSources } = useQuery(qSourcesAndResources);
+  const { data: dataSources } = useQuery(qSourcesAndResources, {
+    fetchPolicy: 'no-cache'
+  });
 
   const sources = dataSources ? dataSources.sources : [];
   const path = attribute.path;
