@@ -22,18 +22,29 @@ export interface IUser {
   email: string;
 }
 
+export type ISourceRole = 'READER' | 'WRITER';
+
 export interface ISelectedSource {
   id: string;
   name: string;
   hasOwner: boolean;
+  mappingProgress: number[];
   template: {
     name: string;
   };
   credential: {
     id: string;
   };
+  accessControls: IAccessControl[];
   schema?: ISourceSchema;
   resources: Resource[];
+}
+
+export interface IAccessControl {
+  id: string;
+  user: IUser;
+  role: ISourceRole;
+  __typename: 'AccessControl';
 }
 
 export interface Profile {

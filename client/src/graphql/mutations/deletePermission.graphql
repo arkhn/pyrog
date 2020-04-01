@@ -1,0 +1,5 @@
+mutation deletePermission($accessControlId: ID!) {
+  deleteAccessControl(accessControlId: $accessControlId) {
+    id
+  }
+}
