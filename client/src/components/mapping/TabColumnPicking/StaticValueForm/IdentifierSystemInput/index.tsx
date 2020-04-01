@@ -46,6 +46,7 @@ const IdentifierSystemInput = ({
 
   const [staticValue, setStaticValue] = useState('');
   const [customSystem, setCustomSystem] = useState(false);
+  const [customKeyName, setCustomKeyName] = useState('');
   const [selectedSource, setSelectedSource] = useState(
     undefined as Source | undefined
   );
@@ -89,6 +90,14 @@ const IdentifierSystemInput = ({
               selectedSource === undefined || attribute.parent?.isRootIdentifier
             }
           />
+          <InputGroup
+            onChange={(event: React.FormEvent<HTMLElement>): void => {
+              const target = event.target as HTMLInputElement;
+              setCustomKeyName(target.value);
+            }}
+            placeholder="Custom key name"
+            value={customKeyName}
+          />
         </>
       ) : (
         <InputGroup
@@ -111,7 +120,7 @@ const IdentifierSystemInput = ({
           addStaticValue(
             `http://terminology.arkhn.org/${selectedSource!.id}/${
               selectedResource!.id
-            }`
+            }${customKeyName ? '/' + customKeyName : ''}`
           )
         }
       />

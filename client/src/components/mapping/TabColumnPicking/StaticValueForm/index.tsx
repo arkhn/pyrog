@@ -71,7 +71,10 @@ const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
     }
   }, [attribute]);
 
-  const addInputToCache = (cache: any, { data: { createInput } }: any) => {
+  const addInputToCache = (
+    cache: any,
+    { data: { createInput } }: any
+  ): void => {
     try {
       const { attribute: dataAttribute } = cache.readQuery({
         query: qInputsForAttribute,
@@ -177,7 +180,6 @@ const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
   const renderTextInput = (): React.ReactElement => (
     <React.Fragment>
       <InputGroup
-        id="static-value-input"
         onChange={(event: React.FormEvent<HTMLElement>): void => {
           const target = event.target as HTMLInputElement;
           setStaticValue(target.value);
