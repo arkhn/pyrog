@@ -3,8 +3,19 @@
 
 $border-radius: 6px;
 
+#comment-block {
+  text-align: center;
+}
+
 #comment-input {
   display: flex;
+  margin: 20px;
+
+  .text-input {
+    margin-right: 30px;
+    width: 90%;
+    align-self: flex-end;
+  }
 }
 
 #send-comment-button {
@@ -16,6 +27,7 @@ $border-radius: 6px;
 .comment-history {
   display: flex;
   flex-direction: column;
+  text-align: left;
 
   .my-comment {
     width: 50%;

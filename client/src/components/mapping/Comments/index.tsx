@@ -77,7 +77,7 @@ const Comments = () => {
   };
 
   const renderComment = (c: IComment) => {
-    const isMyComment = c.author.id == me.id;
+    const isMyComment = c.author.id === me.id;
     const formattedDate = new Date(c.createdAt).toLocaleString('fr-FR');
 
     return (
@@ -92,11 +92,11 @@ const Comments = () => {
   };
 
   return (
-    <div>
+    <div id="comment-block">
       <FormGroup label={<h3>Comments</h3>}>
         <div id="comment-input">
           <TextArea
-            className="bp3-fill"
+            className="text-input"
             value={newComment}
             disabled={loading || !attribute}
             onChange={e => {
