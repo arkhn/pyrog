@@ -31,7 +31,7 @@ input AccessControlWhereUniqueInput {
 }
 
 type Attribute {
-  comments: String
+  comments(after: CommentWhereUniqueInput, before: CommentWhereUniqueInput, first: Int, last: Int, skip: Int): [Comment!]!
   createdAt: DateTime!
 
   """Structured version of a definition"""
@@ -52,13 +52,12 @@ input AttributeFilter {
 }
 
 input AttributeInput {
-  comments: String
   mergingScript: String
 }
 
 input AttributeWhereInput {
   AND: [AttributeWhereInput!]
-  comments: NullableStringFilter
+  comments: CommentFilter
   createdAt: DateTimeFilter
   definitionId: StringFilter
   id: StringFilter
@@ -131,6 +130,35 @@ input ColumnWhereInput {
 }
 
 input ColumnWhereUniqueInput {
+  id: String
+}
+
+type Comment {
+  author: User!
+  content: String!
+  createdAt: DateTime!
+  id: String!
+}
+
+input CommentFilter {
+  every: CommentWhereInput
+  none: CommentWhereInput
+  some: CommentWhereInput
+}
+
+input CommentWhereInput {
+  AND: [CommentWhereInput!]
+  attribute: AttributeWhereInput
+  author: UserWhereInput
+  content: StringFilter
+  createdAt: DateTimeFilter
+  id: StringFilter
+  NOT: [CommentWhereInput!]
+  OR: [CommentWhereInput!]
+  updatedAt: DateTimeFilter
+}
+
+input CommentWhereUniqueInput {
   id: String
 }
 
@@ -295,6 +323,7 @@ type Mutation {
   addJoinToColumn(columnId: ID!, join: JoinInput): Column!
   createAccessControl(role: SourceRole!, sourceId: ID!, userEmail: String!): AccessControl!
   createAttribute(data: AttributeInput, definitionId: ID!, path: String!, resourceId: ID!): Attribute!
+  createComment(attributeId: ID!, content: String!): Comment!
   createInput(attributeId: ID!, script: String, sql: ColumnInput, static: String): Input!
   createResource(definitionId: String!, sourceId: ID!): Resource!
   createSource(hasOwner: Boolean!, mapping: String, name: String!, templateName: String!): Source!
@@ -312,7 +341,6 @@ type Mutation {
   refreshDefinition(definitionId: ID!): StructureDefinition!
   signup(email: String!, name: String!, password: String!): AuthPayload!
   updateAttribute(attributeId: ID!, data: AttributeInput!): Attribute!
-  updateComments(attributeId: ID!, comments: String!): Attribute!
   updateInput(data: UpdateInputInput!, inputId: ID!): Input!
   updateJoin(data: JoinInput!, joinId: ID!): Join!
   updateResource(data: UpdateResourceInput!, filters: [FilterInput!], resourceId: ID!): Resource!
@@ -531,6 +559,7 @@ input UserSourceCompoundUniqueInput {
 input UserWhereInput {
   accessControls: AccessControlFilter
   AND: [UserWhereInput!]
+  comments: CommentFilter
   createdAt: DateTimeFilter
   email: StringFilter
   id: StringFilter

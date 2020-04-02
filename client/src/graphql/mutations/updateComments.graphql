@@ -1,7 +1,0 @@
-#import "../fragments/entireAttribute.graphql"
-
-mutation updateComments($attributeId: ID!, $comments: String!) {
-  updateComments(attributeId: $attributeId, comments: $comments) {
-    ...entireAttribute
-  }
-}

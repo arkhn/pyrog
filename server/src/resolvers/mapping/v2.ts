@@ -1,6 +1,6 @@
 import { PrismaClient, Resource } from '@prisma/client'
 
-import { clean, buildAttributesQuery } from './utils'
+import { clean, buildAttributesQueryPreV7 } from './utils'
 
 type ResourceV2 = Resource & {
   definition: any
@@ -25,7 +25,7 @@ export default (
           ...cleanResourceV2(r),
           definitionId,
           attributes: {
-            create: buildAttributesQuery(r.attributes),
+            create: buildAttributesQueryPreV7(r.attributes),
           },
           source: {
             connect: { id: sourceId },

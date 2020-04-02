@@ -1,8 +1,12 @@
 import { Context } from 'context'
 
-export const getSourceIdFromMutationArgs = (args: any, ctx: Context) => {
+export const getSourceIdFromMutationArgs = async (
+  args: any,
+  ctx: Context,
+): Promise<string> => {
   // Get source
   const {
+    accessControlId,
     sourceId,
     credentialId,
     resourceId,
@@ -15,22 +19,37 @@ export const getSourceIdFromMutationArgs = (args: any, ctx: Context) => {
   let id
   if (sourceId) {
     id = sourceId
+  } else if (accessControlId) {
+    id = await getSourceFromAccessControl(accessControlId, ctx)
   } else if (credentialId) {
-    id = getSourceFromCredential(credentialId, ctx)
+    id = await getSourceFromCredential(credentialId, ctx)
   } else if (resourceId) {
-    id = getSourceFromResource(resourceId, ctx)
+    id = await getSourceFromResource(resourceId, ctx)
   } else if (attributeId) {
-    id = getSourceFromAttribute(attributeId, ctx)
+    id = await getSourceFromAttribute(attributeId, ctx)
   } else if (inputId) {
-    id = getSourceFromInput(inputId, ctx)
+    id = await getSourceFromInput(inputId, ctx)
   } else if (columnId) {
-    id = getSourceFromColumn(columnId, ctx)
+    id = await getSourceFromColumn(columnId, ctx)
   } else if (joinId) {
-    id = getSourceFromJoin(joinId, ctx)
+    id = await getSourceFromJoin(joinId, ctx)
   } else {
     throw Error('Could not resolve source id.')
   }
   return id
+}
+
+const getSourceFromAccessControl = async (
+  accessControlId: any,
+  ctx: Context,
+) => {
+  const acl = await ctx.prisma.accessControl.findOne({
+    where: { id: accessControlId },
+    include: {
+      source: true,
+    },
+  })
+  return acl?.source.id
 }
 
 const getSourceFromCredential = async (credentialId: any, ctx: Context) => {

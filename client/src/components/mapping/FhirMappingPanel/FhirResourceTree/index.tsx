@@ -34,7 +34,9 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
   const dispatch = useDispatch();
 
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
+  const { resource, attribute: selectedAttribute } = useSelector(
+    (state: IReduxStore) => state.selectedNode
+  );
   const baseDefinitionId = resource.definition.id;
 
   const { data, loading } = useQuery(qStructureDisplay, {
@@ -111,7 +113,9 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       id: attribute.tail,
       secondaryLabel: secondaryLabel(attribute, childNodes),
       nodeData: attribute,
-      label: ''
+      label: '',
+      isSelected:
+        !!selectedAttribute && attribute.path == selectedAttribute.path
     };
     node.label = (
       <NodeLabel

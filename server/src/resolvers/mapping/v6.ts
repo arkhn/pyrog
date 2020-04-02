@@ -3,9 +3,14 @@ import {
   Resource,
   AttributeCreateWithoutResourceInput,
 } from '@prisma/client'
-import { AttributeWithInputs } from 'types'
+import { AttributeWithCommentsPreV7 } from 'types'
 
-import { clean, buildInputsQuery, buildFiltersQuery } from './utils'
+import {
+  clean,
+  buildInputsQuery,
+  buildFiltersQuery,
+  buildCommentQueryPreV7,
+} from './utils'
 
 const cleanResourceV6 = (resource: Resource) => {
   const r = clean(resource)
@@ -15,7 +20,7 @@ const cleanResourceV6 = (resource: Resource) => {
 }
 
 export const buildAttributesV6 = (
-  attributes: AttributeWithInputs[],
+  attributes: AttributeWithCommentsPreV7[],
 ): AttributeCreateWithoutResourceInput[] | null =>
   attributes.map(a => {
     const attr: AttributeCreateWithoutResourceInput = clean(a)
@@ -24,6 +29,13 @@ export const buildAttributesV6 = (
     } else {
       delete attr.inputs
     }
+
+    if (a.comments) {
+      attr.comments = { create: buildCommentQueryPreV7(a.comments) }
+    } else {
+      delete attr.comments
+    }
+
     return attr
   })
 

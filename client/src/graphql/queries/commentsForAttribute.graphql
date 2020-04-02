@@ -1,6 +1,10 @@
+#import "../fragments/comment.graphql"
+
 query commentsForAttribute($attributeId: ID!) {
   attribute(attributeId: $attributeId) {
     id
-    comments
+    comments {
+      ...comment
+    }
   }
 }

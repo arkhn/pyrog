@@ -1,6 +1,6 @@
 import { PrismaClient, Attribute, Resource } from '@prisma/client'
 
-import { clean, buildAttributesQuery } from './utils'
+import { clean, buildAttributesQueryPreV7 } from './utils'
 
 type AttributeV1 = Attribute & {
   name: string
@@ -77,7 +77,7 @@ export default (
         data: {
           ...cleanResourceV1(r),
           attributes: {
-            create: buildAttributesQuery(attributes),
+            create: buildAttributesQueryPreV7(attributes),
           },
           definitionId: r.fhirType,
           source: {

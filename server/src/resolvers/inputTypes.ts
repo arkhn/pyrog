@@ -3,7 +3,6 @@ import { inputObjectType } from '@nexus/schema'
 export const AttributeInput = inputObjectType({
   name: 'AttributeInput',
   definition(t) {
-    t.string('comments')
     t.string('mergingScript')
   },
 })

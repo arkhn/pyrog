@@ -7,6 +7,7 @@ import {
   MAPPING_VERSION_4,
   MAPPING_VERSION_5,
   MAPPING_VERSION_6,
+  MAPPING_VERSION_7,
   CURRENT_MAPPING_VERSION,
 } from '../../constants'
 import handleV1 from './v1'
@@ -15,6 +16,7 @@ import handleV3 from './v3'
 import handleV4 from './v4'
 import handleV5 from './v5'
 import handleV6 from './v6'
+import handleV7 from './v7'
 import { getDefinition } from 'fhir'
 
 // copy all the resources from the mapping and their attributes.
@@ -44,6 +46,8 @@ export const importMapping = async (
       return handleV5(prismaClient, sourceId, resources)
     case MAPPING_VERSION_6:
       return handleV6(prismaClient, sourceId, resources)
+    case MAPPING_VERSION_7:
+      return handleV7(prismaClient, sourceId, resources)
     default:
       throw new Error(`Unknown mapping version: "${version}"`)
   }
@@ -68,6 +72,7 @@ export const exportMapping = async (
       filters: { include: { sqlColumn: true } },
       attributes: {
         include: {
+          comments: { include: { author: { select: { email: true } } } },
           inputs: {
             include: {
               sqlValue: {

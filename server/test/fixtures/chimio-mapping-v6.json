@@ -324,7 +324,7 @@
                     "path": "managingOrganization.reference",
                     "definitionId": "string",
                     "mergingScript": null,
-                    "comments": null,
+                    "comments": "test",
                     "updatedAt": "2020-03-18T10:45:35.708Z",
                     "createdAt": "2020-03-18T10:45:35.708Z",
                     "inputs": [

@@ -1,0 +1,7 @@
+#import "../fragments/comment.graphql"
+
+mutation createComment($attributeId: ID!, $content: String!) {
+  createComment(attributeId: $attributeId, content: $content) {
+    ...comment
+  }
+}
