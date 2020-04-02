@@ -66,6 +66,7 @@ export const permissions = shield(
     },
     Mutation: {
       createAccessControl: rules.isSourceWriter,
+      deleteAccessControl: rules.isSourceWriter,
 
       createSource: rules.isAuthenticatedUser,
       deleteSource: rules.isSourceWriter,
