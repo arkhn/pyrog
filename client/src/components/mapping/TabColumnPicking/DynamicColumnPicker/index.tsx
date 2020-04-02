@@ -126,7 +126,6 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
               path: parentPath
             }
           });
-          attributeId = attr.createAttribute.id;
           dispatch(setAttributeInMap(path, attr.createAttribute));
         }
       }

@@ -72,6 +72,18 @@ const IdentifierSystemInput = ({
     setSelectedResource(resource);
   };
 
+  const onClickAddButton = () => {
+    if (customSystem) {
+      addStaticValue(
+        `http://terminology.arkhn.org/${selectedSource!.id}/${
+          selectedResource!.id
+        }${customKeyName ? '/' + customKeyName : ''}`
+      );
+    } else {
+      addStaticValue(staticValue);
+    }
+  };
+
   return (
     <ControlGroup>
       {customSystem ? (
@@ -116,13 +128,7 @@ const IdentifierSystemInput = ({
         }
         icon={'add'}
         loading={creatingStaticInput}
-        onClick={() =>
-          addStaticValue(
-            `http://terminology.arkhn.org/${selectedSource!.id}/${
-              selectedResource!.id
-            }${customKeyName ? '/' + customKeyName : ''}`
-          )
-        }
+        onClick={onClickAddButton}
       />
       <Checkbox
         className="custom-checkbox"
