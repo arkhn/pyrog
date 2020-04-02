@@ -19,7 +19,7 @@ const rules = {
     // Return true if the user is admin
     if (user.role == 'ADMIN') return true
 
-    let sourceId = getSourceIdFromMutationArgs(args, ctx)
+    let sourceId = await getSourceIdFromMutationArgs(args, ctx)
 
     // Check access
     const access = await ctx.prisma.accessControl.findMany({
