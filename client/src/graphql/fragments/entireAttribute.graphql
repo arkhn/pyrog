@@ -1,17 +1,12 @@
 #import "../fragments/entireInput.graphql"
+#import "../fragments/comment.graphql"
 
 fragment entireAttribute on Attribute {
   id
   path
   mergingScript
   comments {
-    id
-    content
-    author {
-      id
-      name
-    }
-    createdAt
+    ...comment
   }
   inputs {
     ...entireInput

@@ -1,14 +1,10 @@
+#import "../fragments/comment.graphql"
+
 query commentsForAttribute($attributeId: ID!) {
   attribute(attributeId: $attributeId) {
     id
     comments {
-      id
-      author {
-        id
-        name
-      }
-      content
-      createdAt
+      ...comment
     }
   }
 }

@@ -114,7 +114,8 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       secondaryLabel: secondaryLabel(attribute, childNodes),
       nodeData: attribute,
       label: '',
-      isSelected: attribute.path == selectedAttribute.path
+      isSelected:
+        !!selectedAttribute && attribute.path == selectedAttribute.path
     };
     node.label = (
       <NodeLabel
