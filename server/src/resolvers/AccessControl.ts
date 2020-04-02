@@ -14,15 +14,18 @@ export const AccessControl = objectType({
 export const createAccessControl: FieldResolver<
   'Mutation',
   'createAccessControl'
-> = async (_parent, { userEmail, sourceId, role }, ctx) =>
-  ctx.prisma.accessControl.create({
+> = async (_parent, { userEmail, sourceId, role }, ctx) => {
+  const user = await ctx.prisma.user.findOne({ where: { email: userEmail } })
+  if (!user) throw new Error(`user ${userEmail} does not exist`)
+
+  return ctx.prisma.accessControl.create({
     data: {
       user: { connect: { email: userEmail } },
       source: { connect: { id: sourceId } },
       role,
     },
   })
-
+}
 export const deleteAccessControl: FieldResolver<
   'Mutation',
   'deleteAccessControl'

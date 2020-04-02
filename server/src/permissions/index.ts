@@ -38,7 +38,7 @@ const rules = {
     // Return true if the user is admin
     if (user.role == 'ADMIN') return true
 
-    let sourceId = getSourceIdFromMutationArgs(args, ctx)
+    let sourceId = await getSourceIdFromMutationArgs(args, ctx)
 
     // Check role
     const access = await ctx.prisma.accessControl.findMany({
@@ -48,6 +48,7 @@ const rules = {
         role: 'WRITER',
       },
     })
+
     return Boolean(access.length > 0)
   }),
 }
