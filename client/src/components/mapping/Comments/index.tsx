@@ -46,7 +46,12 @@ const Comments = () => {
 
   React.useEffect(() => {
     if (attrWithComments)
-      setComments(attrWithComments.attribute.comments.slice().reverse());
+      setComments(
+        attrWithComments.attribute.comments.sort(
+          (c1: IComment, c2: IComment) =>
+            new Date(c2.createdAt).getTime() - new Date(c1.createdAt).getTime()
+        )
+      );
   }, [attrWithComments]);
 
   React.useEffect(() => {
