@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 
-import { clean, buildAttributesQuery } from './utils'
+import { clean, buildAttributesQueryPreV7 } from './utils'
 
 export default (
   prismaClient: PrismaClient,
@@ -13,7 +13,7 @@ export default (
         data: {
           ...clean(r),
           attributes: {
-            create: buildAttributesQuery(r.attributes),
+            create: buildAttributesQueryPreV7(r.attributes),
           },
           source: {
             connect: { id: sourceId },

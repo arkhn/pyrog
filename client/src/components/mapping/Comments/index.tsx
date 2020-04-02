@@ -30,11 +30,11 @@ const Comments = () => {
     (state: IReduxStore) => state.resourceInputs.attributesMap
   );
   const attributeForNode = attributesForResource[attribute.path];
-  console.log(attributeForNode);
+
   const [createAttribute] = useMutation(mCreateAttribute);
   const [createComment] = useMutation(mCreateComment);
 
-  const [newComment, setNewComments] = React.useState('');
+  const [newComment, setNewComment] = React.useState('');
   const [comments, setComments] = React.useState([] as IComment[]);
 
   const { data: attrWithComments, loading } = useQuery(qCommentsForAttribute, {
@@ -46,10 +46,38 @@ const Comments = () => {
 
   React.useEffect(() => {
     if (attrWithComments)
-      setComments(attrWithComments.attribute.comments.reverse());
+      setComments(attrWithComments.attribute.comments.slice().reverse());
   }, [attrWithComments]);
 
-  const onCreateComment = async (): Promise<void> => {
+  React.useEffect(() => {
+    if (!attributeForNode) setComments([]);
+  }, [attributeForNode]);
+
+  const onCreateComment = (
+    cache: any,
+    { data: { createComment: newComment } }: any
+  ) => {
+    const { attribute } = cache.readQuery({
+      query: qCommentsForAttribute,
+      variables: {
+        attributeId: attributeForNode.id
+      }
+    });
+    cache.writeQuery({
+      query: qCommentsForAttribute,
+      variables: {
+        attributeId: attributeForNode.id
+      },
+      data: {
+        attribute: {
+          ...attribute,
+          comments: [...attribute.comments, newComment]
+        }
+      }
+    });
+  };
+
+  const actionCreateComment = async (): Promise<void> => {
     let attributeId = attributeForNode?.id;
     try {
       if (!attributeForNode) {
@@ -68,9 +96,11 @@ const Comments = () => {
         variables: {
           attributeId: attributeId,
           content: newComment
-        }
+        },
+        update: onCreateComment
       });
       setComments([data.createComment, ...comments]);
+      setNewComment('');
     } catch (e) {
       console.log(e);
     }
@@ -100,13 +130,13 @@ const Comments = () => {
             value={newComment}
             disabled={loading || !attribute}
             onChange={e => {
-              setNewComments(e.target.value);
+              setNewComment(e.target.value);
             }}
           />
           <Button
             id="send-comment-button"
             disabled={!attribute}
-            onClick={onCreateComment}
+            onClick={actionCreateComment}
           >
             Send
           </Button>

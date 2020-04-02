@@ -46,9 +46,26 @@ describe('import mapping V6', () => {
           create: expect.arrayContaining([
             {
               path: 'period.start',
-              comments: null,
               definitionId: 'dateTime',
               mergingScript: 'merge_concat',
+              inputs: {
+                create: expect.any(Array),
+              },
+            },
+            {
+              path: 'managingOrganization.reference',
+              comments: {
+                create: {
+                  author: {
+                    connect: {
+                      email: 'admin@arkhn.com',
+                    },
+                  },
+                  content: 'test',
+                },
+              },
+              definitionId: 'string',
+              mergingScript: null,
               inputs: {
                 create: expect.any(Array),
               },

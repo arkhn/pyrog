@@ -1,0 +1,1520 @@
+{
+  "source": {
+    "name": "2",
+    "hasOwner": false
+  },
+  "template": {
+    "name": "v7"
+  },
+  "resources": [
+    {
+      "id": "ck8iiui3g0872euut6adjvfnr",
+      "label": "Hospital Stay",
+      "primaryKeyOwner": "OPS$ACHQ1ABC",
+      "primaryKeyTable": "SEJOUR",
+      "primaryKeyColumn": "SECLEUNIK",
+      "definitionId": "EpisodeOfCare",
+      "updatedAt": "2020-04-02T08:53:07.998Z",
+      "createdAt": "2020-04-02T08:53:07.996Z",
+      "source": {
+        "id": "ck8iiui2h0870euut7kknhgvu",
+        "name": "2",
+        "version": null,
+        "hasOwner": false,
+        "updatedAt": "2020-04-02T08:53:07.962Z",
+        "createdAt": "2020-04-02T08:53:07.961Z"
+      },
+      "filters": [
+        {
+          "id": "ck8iiui3h0997euutcwndk9e7",
+          "relation": "<=",
+          "value": "200",
+          "sqlColumn": {
+            "id": "ck8iiui3h1000euutdbxfu1pc",
+            "owner": "OPS$ACHQ1ABC",
+            "table": "SEJOUR",
+            "column": "CHAMBRE",
+            "updatedAt": "2020-04-02T08:53:07.998Z",
+            "createdAt": "2020-04-02T08:53:07.997Z"
+          }
+        }
+      ],
+      "attributes": [
+        {
+          "id": "ck8iiui3g0874euutj38hg2w3",
+          "path": "type[0].coding[0].display",
+          "definitionId": "string",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.996Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3g0878euut1905dqpz",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.998Z",
+              "createdAt": "2020-04-02T08:53:07.996Z",
+              "sqlValue": {
+                "id": "ck8iiui3g0880euutb7uo17il",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "TYPESEJ",
+                "column": "LIBELTW",
+                "updatedAt": "2020-04-02T08:53:07.998Z",
+                "createdAt": "2020-04-02T08:53:07.996Z",
+                "joins": [
+                  {
+                    "id": "ck8iiui3g0882euutl4qtkhzn",
+                    "updatedAt": "2020-04-02T08:53:07.998Z",
+                    "createdAt": "2020-04-02T08:53:07.996Z",
+                    "tables": [
+                      {
+                        "id": "ck8iiui3g0884euutbugm7n1r",
+                        "owner": "OPS$ACHQ1ABC",
+                        "table": "SEJOUR",
+                        "column": "TWCLEUNIK",
+                        "updatedAt": "2020-04-02T08:53:07.998Z",
+                        "createdAt": "2020-04-02T08:53:07.996Z"
+                      },
+                      {
+                        "id": "ck8iiui3g0887euutfbeg2q1w",
+                        "owner": "OPS$ACHQ1ABC",
+                        "table": "TYPESEJ",
+                        "column": "TWCLEUNIK",
+                        "updatedAt": "2020-04-02T08:53:07.998Z",
+                        "createdAt": "2020-04-02T08:53:07.996Z"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0893euut2mt8id45",
+          "path": "patient",
+          "definitionId": "Reference",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": []
+        },
+        {
+          "id": "ck8iiui3h0895euut8qejc3lo",
+          "path": "patient.identifier.system",
+          "definitionId": "uri",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0897euut1i0ztmbq",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": "/Patient/{id}",
+              "updatedAt": "2020-04-02T08:53:07.998Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": null
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0900euutkj9nrxmn",
+          "path": "patient.identifier.value",
+          "definitionId": "string",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0902euutt8bfiib1",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.998Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": {
+                "id": "ck8iiui3h0904euutow06q7fr",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "SEJOUR",
+                "column": "PACLEUNIK",
+                "updatedAt": "2020-04-02T08:53:07.998Z",
+                "createdAt": "2020-04-02T08:53:07.997Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0908euutbfu6jg9b",
+          "path": "managingOrganization.identifier",
+          "definitionId": "Identifier",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": []
+        },
+        {
+          "id": "ck8iiui3h0909euutyv68l658",
+          "path": "managingOrganization.identifier.value",
+          "definitionId": "string",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0911euutqiqpvomq",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.998Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": {
+                "id": "ck8iiui3h0913euut4pe1okd6",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "SEJOUR",
+                "column": "SERVICE",
+                "updatedAt": "2020-04-02T08:53:07.998Z",
+                "createdAt": "2020-04-02T08:53:07.997Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0915euut8x2qfzks",
+          "path": "period.start",
+          "definitionId": "dateTime",
+          "mergingScript": "merge_concat",
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0918euutvumtyf8l",
+              "script": "clean_date",
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.998Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": {
+                "id": "ck8iiui3h0920euutrnmfy23u",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "SEJOUR",
+                "column": "DATEIN",
+                "updatedAt": "2020-04-02T08:53:07.998Z",
+                "createdAt": "2020-04-02T08:53:07.997Z",
+                "joins": []
+              }
+            },
+            {
+              "id": "ck8iiui3h0921euut6xx53utp",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.998Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": {
+                "id": "ck8iiui3h0923euut0o9d529y",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "SEJOUR",
+                "column": "HEUREIN",
+                "updatedAt": "2020-04-02T08:53:07.998Z",
+                "createdAt": "2020-04-02T08:53:07.997Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0927euutvs85rc77",
+          "path": "identifier[0].value",
+          "definitionId": "string",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0929euutc5hvt0g8",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.998Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": {
+                "id": "ck8iiui3h0931euut41jpxelx",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "SEJOUR",
+                "column": "SECLEUNIK",
+                "updatedAt": "2020-04-02T08:53:07.998Z",
+                "createdAt": "2020-04-02T08:53:07.997Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0933euutk1aasv6p",
+          "path": "status",
+          "definitionId": "code",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0935euutdt3suu39",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.998Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": {
+                "id": "ck8iiui3h0937euutgp9bkpn7",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "SEJOUR",
+                "column": "ETATSEJ",
+                "updatedAt": "2020-04-02T08:53:07.998Z",
+                "createdAt": "2020-04-02T08:53:07.997Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0939euut7b7rn1ej",
+          "path": "type",
+          "definitionId": "CodeableConcept",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": []
+        },
+        {
+          "id": "ck8iiui3h0941euutleuqj86l",
+          "path": "patient.reference",
+          "definitionId": "string",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0944euutjgdyuh29",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": "internal",
+              "updatedAt": "2020-04-02T08:53:07.998Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": null
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0945euuth5wnmtns",
+          "path": "managingOrganization.reference",
+          "definitionId": "string",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [
+            {
+              "id": "ck8iiui3h0947euutwsuxgysp",
+              "content": "test",
+              "updatedAt": "2020-04-02T08:53:07.998Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "author": {
+                "email": "admin@arkhn.com"
+              }
+            }
+          ],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0950euutatcsermm",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": "internal",
+              "updatedAt": "2020-04-02T08:53:07.998Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": null
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0952euuttenzso2y",
+          "path": "period",
+          "definitionId": "Period",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": []
+        },
+        {
+          "id": "ck8iiui3h0954euut8zwfbntz",
+          "path": "period.end",
+          "definitionId": "dateTime",
+          "mergingScript": "merge_concat",
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0956euutld7dnc4g",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.998Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": {
+                "id": "ck8iiui3h0957euut2ymeffbb",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "SEJOUR",
+                "column": "HEUREOUT",
+                "updatedAt": "2020-04-02T08:53:07.998Z",
+                "createdAt": "2020-04-02T08:53:07.997Z",
+                "joins": []
+              }
+            },
+            {
+              "id": "ck8iiui3h0959euut53yev1mp",
+              "script": "clean_date",
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.998Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": {
+                "id": "ck8iiui3h0961euutboxn52xy",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "SEJOUR",
+                "column": "DATEOUT",
+                "updatedAt": "2020-04-02T08:53:07.998Z",
+                "createdAt": "2020-04-02T08:53:07.997Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0964euuty3asc0h8",
+          "path": "type[0].coding",
+          "definitionId": "Coding",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": []
+        },
+        {
+          "id": "ck8iiui3h0965euutj05zb0ym",
+          "path": "identifier",
+          "definitionId": "Identifier",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": []
+        },
+        {
+          "id": "ck8iiui3h0967euut4u14vpqo",
+          "path": "identifier[1].value",
+          "definitionId": "string",
+          "mergingScript": "select_first_not_empty",
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0970euutcv8h5wls",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.998Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": {
+                "id": "ck8iiui3h0972euutm5dcshse",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "SEJOUR",
+                "column": "ADMISSION",
+                "updatedAt": "2020-04-02T08:53:07.998Z",
+                "createdAt": "2020-04-02T08:53:07.997Z",
+                "joins": []
+              }
+            },
+            {
+              "id": "ck8iiui3h0973euutvuifu98j",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.998Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": {
+                "id": "ck8iiui3h0975euutx0l30vvb",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "SEJOUR",
+                "column": "ADMISSION2",
+                "updatedAt": "2020-04-02T08:53:07.998Z",
+                "createdAt": "2020-04-02T08:53:07.997Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0979euut1t9f8v80",
+          "path": "type[0].coding[0].code",
+          "definitionId": "code",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0980euutozr9mpeq",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.998Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": {
+                "id": "ck8iiui3h0982euutxt0rkzix",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "SEJOUR",
+                "column": "TWCLEUNIK",
+                "updatedAt": "2020-04-02T08:53:07.998Z",
+                "createdAt": "2020-04-02T08:53:07.997Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0985euutjzzfkrdp",
+          "path": "patient.identifier",
+          "definitionId": "Identifier",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": []
+        },
+        {
+          "id": "ck8iiui3h0987euutru6fv2k9",
+          "path": "managingOrganization",
+          "definitionId": "Reference",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": []
+        },
+        {
+          "id": "ck8iiui3h0989euuta109k4fo",
+          "path": "managingOrganization.identifier.system",
+          "definitionId": "uri",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0990euuttt00zl6b",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": "/Organization/{id}",
+              "updatedAt": "2020-04-02T08:53:07.998Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": null
+            }
+          ]
+        }
+      ],
+      "definition": {
+        "id": "EpisodeOfCare",
+        "url": "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare",
+        "name": "EpisodeOfCare",
+        "type": "EpisodeOfCare",
+        "description": "An association between a patient and an organization / healthcare provider(s) during which time encounters may occur. The managing organization assumes a level of responsibility for the patient during this time.",
+        "kind": "resource",
+        "baseDefinition": "http://hl7.org/fhir/StructureDefinition/DomainResource",
+        "derivation": "specialization",
+        "publisher": "Health Level Seven International (Patient Administration)",
+        "min": 0,
+        "max": "*",
+        "constraint": [
+          {
+            "expression": "contained.contained.empty()",
+            "human": "If the resource is contained in another resource, it SHALL NOT contain nested Resources",
+            "key": "dom-2",
+            "severity": "error",
+            "source": "http://hl7.org/fhir/StructureDefinition/DomainResource",
+            "xpath": "not(parent::f:contained and f:contained)"
+          },
+          {
+            "expression": "contained.where((('#'+id in (%resource.descendants().reference | %resource.descendants().as(canonical) | %resource.descendants().as(uri) | %resource.descendants().as(url))) or descendants().where(reference = '#').exists() or descendants().where(as(canonical) = '#').exists() or descendants().where(as(canonical) = '#').exists()).not()).trace('unmatched', id).empty()",
+            "human": "If the resource is contained in another resource, it SHALL be referred to from elsewhere in the resource or SHALL refer to the containing resource",
+            "key": "dom-3",
+            "severity": "error",
+            "source": "http://hl7.org/fhir/StructureDefinition/DomainResource",
+            "xpath": "not(exists(for $id in f:contained/*/f:id/@value return $contained[not(parent::*/descendant::f:reference/@value=concat('#', $contained/*/id/@value) or descendant::f:reference[@value='#'])]))"
+          },
+          {
+            "expression": "contained.meta.versionId.empty() and contained.meta.lastUpdated.empty()",
+            "human": "If a resource is contained in another resource, it SHALL NOT have a meta.versionId or a meta.lastUpdated",
+            "key": "dom-4",
+            "severity": "error",
+            "source": "http://hl7.org/fhir/StructureDefinition/DomainResource",
+            "xpath": "not(exists(f:contained/*/f:meta/f:versionId)) and not(exists(f:contained/*/f:meta/f:lastUpdated))"
+          },
+          {
+            "expression": "contained.meta.security.empty()",
+            "human": "If a resource is contained in another resource, it SHALL NOT have a security label",
+            "key": "dom-5",
+            "severity": "error",
+            "source": "http://hl7.org/fhir/StructureDefinition/DomainResource",
+            "xpath": "not(exists(f:contained/*/f:meta/f:security))"
+          },
+          {
+            "expression": "text.`div`.exists()",
+            "extension": [
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bestpractice",
+                "valueBoolean": true
+              },
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bestpractice-explanation",
+                "valueMarkdown": "When a resource has no narrative, only systems that fully understand the data can display the resource to a human safely. Including a human readable representation in the resource makes for a much more robust eco-system and cheaper handling of resources by intermediary systems. Some ecosystems restrict distribution of resources to only those systems that do fully understand the resources, and as a consequence implementers may believe that the narrative is superfluous. However experience shows that such eco-systems often open up to new participants over time."
+              }
+            ],
+            "human": "A resource should have narrative for robust management",
+            "key": "dom-6",
+            "severity": "warning",
+            "source": "http://hl7.org/fhir/StructureDefinition/DomainResource",
+            "xpath": "exists(f:text/h:div)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ck8iiui3g0873euutm08fnyrf",
+      "label": "",
+      "primaryKeyOwner": "OPS$ACHQ1ABC",
+      "primaryKeyTable": "PATIENT",
+      "primaryKeyColumn": "PACLEUNIK",
+      "definitionId": "Patient",
+      "updatedAt": "2020-04-02T08:53:07.998Z",
+      "createdAt": "2020-04-02T08:53:07.996Z",
+      "source": {
+        "id": "ck8iiui2h0870euut7kknhgvu",
+        "name": "2",
+        "version": null,
+        "hasOwner": false,
+        "updatedAt": "2020-04-02T08:53:07.962Z",
+        "createdAt": "2020-04-02T08:53:07.961Z"
+      },
+      "filters": [],
+      "attributes": [
+        {
+          "id": "ck8iiui3g0875euutkf6uodqk",
+          "path": "identifier[0].type.coding",
+          "definitionId": "Coding",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.996Z",
+          "comments": [],
+          "inputs": []
+        },
+        {
+          "id": "ck8iiui3g0876euutexvf69o0",
+          "path": "identifier[0].type.coding[0].code",
+          "definitionId": "code",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.996Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3g0877euuto7i0cdak",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": "PI",
+              "updatedAt": "2020-04-02T08:53:07.998Z",
+              "createdAt": "2020-04-02T08:53:07.996Z",
+              "sqlValue": null
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3g0879euut9967t9d4",
+          "path": "identifier[0].type.coding[0].display",
+          "definitionId": "string",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.996Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3g0881euuth0l41cz7",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": "Patient internal identifier",
+              "updatedAt": "2020-04-02T08:53:07.998Z",
+              "createdAt": "2020-04-02T08:53:07.996Z",
+              "sqlValue": null
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3g0883euut839w3p6a",
+          "path": "identifier[2].value",
+          "definitionId": "string",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.996Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3g0885euutkmpy55f1",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.998Z",
+              "createdAt": "2020-04-02T08:53:07.996Z",
+              "sqlValue": {
+                "id": "ck8iiui3g0886euutuxs3pf18",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "DOSSIERPAT",
+                "updatedAt": "2020-04-02T08:53:07.998Z",
+                "createdAt": "2020-04-02T08:53:07.996Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3g0888euutesfyyhsb",
+          "path": "identifier[2].period",
+          "definitionId": "Period",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.996Z",
+          "comments": [],
+          "inputs": []
+        },
+        {
+          "id": "ck8iiui3g0889euut5ggfp6q7",
+          "path": "name",
+          "definitionId": "HumanName",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.996Z",
+          "comments": [],
+          "inputs": []
+        },
+        {
+          "id": "ck8iiui3h0890euut17jb4j1r",
+          "path": "name[1].use",
+          "definitionId": "code",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0891euutd2ztrof3",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": "maiden",
+              "updatedAt": "2020-04-02T08:53:07.998Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": null
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0892euut4600qeo2",
+          "path": "name[1].family",
+          "definitionId": "string",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0894euut7no7sir4",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.998Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": {
+                "id": "ck8iiui3h0896euutbs1keubp",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "NOMJFPAT",
+                "updatedAt": "2020-04-02T08:53:07.998Z",
+                "createdAt": "2020-04-02T08:53:07.997Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0898euut6a1dr77q",
+          "path": "gender",
+          "definitionId": "code",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0899euutaixgu3e2",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.998Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": {
+                "id": "ck8iiui3h0901euutwnkvkkce",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "SEXEPAT",
+                "updatedAt": "2020-04-02T08:53:07.998Z",
+                "createdAt": "2020-04-02T08:53:07.997Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0903euutkmr3v7ds",
+          "path": "address",
+          "definitionId": "Address",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": []
+        },
+        {
+          "id": "ck8iiui3h0905euutf90c2ltg",
+          "path": "managingOrganization",
+          "definitionId": "Reference",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.998Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": []
+        },
+        {
+          "id": "ck8iiui3h0906euutomx5t0cc",
+          "path": "managingOrganization.identifier.system",
+          "definitionId": "uri",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.999Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0907euutgscl8qh8",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": "/Organization/{id}",
+              "updatedAt": "2020-04-02T08:53:07.999Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": null
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0910euutnp9k1y22",
+          "path": "managingOrganization.identifier.value",
+          "definitionId": "string",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.999Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0912euutd49yrtfy",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.999Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": {
+                "id": "ck8iiui3h0914euutdsg7bypv",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "CODESERV",
+                "updatedAt": "2020-04-02T08:53:07.999Z",
+                "createdAt": "2020-04-02T08:53:07.997Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0916euutdo1lqnj5",
+          "path": "identifier[0].value",
+          "definitionId": "string",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.999Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0917euutopu6v5y7",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.999Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": {
+                "id": "ck8iiui3h0919euutq84e5y4s",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "NOOBSPAT",
+                "updatedAt": "2020-04-02T08:53:07.999Z",
+                "createdAt": "2020-04-02T08:53:07.997Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0922euutk1avxzu4",
+          "path": "identifier[0].type",
+          "definitionId": "CodeableConcept",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.999Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": []
+        },
+        {
+          "id": "ck8iiui3h0924euut1lrx4wpb",
+          "path": "identifier",
+          "definitionId": "Identifier",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.999Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": []
+        },
+        {
+          "id": "ck8iiui3h0925euut34vf7oot",
+          "path": "identifier[0].type.coding[0].userSelected",
+          "definitionId": "boolean",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.999Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0926euutsbhh849y",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": "false",
+              "updatedAt": "2020-04-02T08:53:07.999Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": null
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0928euutab26dn9j",
+          "path": "identifier[1].value",
+          "definitionId": "string",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.999Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0930euutoh4ziwrs",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.999Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": {
+                "id": "ck8iiui3h0932euutxe8cyhzl",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "PACLEUNIK",
+                "updatedAt": "2020-04-02T08:53:07.999Z",
+                "createdAt": "2020-04-02T08:53:07.997Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0934euutgylav4oi",
+          "path": "identifier[2].period.start",
+          "definitionId": "dateTime",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.999Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0936euutc7v7pazv",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.999Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": {
+                "id": "ck8iiui3h0938euut659vuw8z",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "DATEINPAT",
+                "updatedAt": "2020-04-02T08:53:07.999Z",
+                "createdAt": "2020-04-02T08:53:07.997Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0940euutscrthm2f",
+          "path": "identifier[2].period.end",
+          "definitionId": "dateTime",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.999Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0942euut7uvubpg9",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.999Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": {
+                "id": "ck8iiui3h0943euutg93n40ko",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "DATEOUTPAT",
+                "updatedAt": "2020-04-02T08:53:07.999Z",
+                "createdAt": "2020-04-02T08:53:07.997Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0946euutdz2z58cn",
+          "path": "name[0].family",
+          "definitionId": "string",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.999Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0948euut96dbj7j0",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.999Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": {
+                "id": "ck8iiui3h0949euutvljkeug7",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "NOMPAT",
+                "updatedAt": "2020-04-02T08:53:07.999Z",
+                "createdAt": "2020-04-02T08:53:07.997Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0951euut7snrof9e",
+          "path": "telecom[0].value",
+          "definitionId": "string",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.999Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0953euuthluoxzsl",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.999Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": {
+                "id": "ck8iiui3h0955euutakdfx2xz",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "TELPAT",
+                "updatedAt": "2020-04-02T08:53:07.999Z",
+                "createdAt": "2020-04-02T08:53:07.997Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0958euutnwve00s0",
+          "path": "birthDate",
+          "definitionId": "date",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.999Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0960euutgwqivaht",
+              "script": "clean_date",
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.999Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": {
+                "id": "ck8iiui3h0962euutf0oxkj75",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "DATENAISPA",
+                "updatedAt": "2020-04-02T08:53:07.999Z",
+                "createdAt": "2020-04-02T08:53:07.997Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0963euute7h6ujpd",
+          "path": "deceasedBoolean",
+          "definitionId": "boolean",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.999Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0966euuta660ktzr",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.999Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": {
+                "id": "ck8iiui3h0968euut23dh97gd",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "IDMOTIFINAC",
+                "updatedAt": "2020-04-02T08:53:07.999Z",
+                "createdAt": "2020-04-02T08:53:07.997Z",
+                "joins": []
+              }
+            },
+            {
+              "id": "ck8iiui3h0969euutyjv4icnl",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.999Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": {
+                "id": "ck8iiui3h0971euutj3twzt8e",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "INACTIVPAT",
+                "updatedAt": "2020-04-02T08:53:07.999Z",
+                "createdAt": "2020-04-02T08:53:07.997Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0974euuteh2qez1w",
+          "path": "address[0].line",
+          "definitionId": "string",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.999Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": []
+        },
+        {
+          "id": "ck8iiui3h0976euutj8u39lki",
+          "path": "address[0].city",
+          "definitionId": "string",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.999Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0977euutajddkw84",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.999Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": {
+                "id": "ck8iiui3h0978euut83bd52kx",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "VILLEPAT",
+                "updatedAt": "2020-04-02T08:53:07.999Z",
+                "createdAt": "2020-04-02T08:53:07.997Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0981euut49d3l3w9",
+          "path": "identifier[0].type.coding[0].system",
+          "definitionId": "uri",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.999Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0983euutcuqi5vgm",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": "http://terminology.interopsante.org/CodeSystem/v2-0203",
+              "updatedAt": "2020-04-02T08:53:07.999Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": null
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0984euut920wkr1a",
+          "path": "active",
+          "definitionId": "boolean",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.999Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0986euuthbh3ieqk",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.999Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": {
+                "id": "ck8iiui3h0988euutxsvmfd7x",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "INACTIVPAT",
+                "updatedAt": "2020-04-02T08:53:07.999Z",
+                "createdAt": "2020-04-02T08:53:07.997Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0991euutjuo0d0iy",
+          "path": "name[0].use",
+          "definitionId": "code",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.999Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0992euutkchrs1zr",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": "official",
+              "updatedAt": "2020-04-02T08:53:07.999Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": null
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0993euut7o6kldza",
+          "path": "name[0].given[0]",
+          "definitionId": "string",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.999Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h0994euutl8qzwjbn",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.999Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": {
+                "id": "ck8iiui3h0995euuteec5thl9",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "PRENOMPAT",
+                "updatedAt": "2020-04-02T08:53:07.999Z",
+                "createdAt": "2020-04-02T08:53:07.997Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h0996euuttnkh9882",
+          "path": "name[0].given",
+          "definitionId": "string",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.999Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": []
+        },
+        {
+          "id": "ck8iiui3h0998euutg2ndrcq7",
+          "path": "telecom",
+          "definitionId": "ContactPoint",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.999Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": []
+        },
+        {
+          "id": "ck8iiui3h0999euutzmj34tuj",
+          "path": "deceasedDateTime",
+          "definitionId": "dateTime",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.999Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h1001euutxvy0picm",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.999Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": {
+                "id": "ck8iiui3h1002euutq3m8i7s4",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "DATEINACPAT",
+                "updatedAt": "2020-04-02T08:53:07.999Z",
+                "createdAt": "2020-04-02T08:53:07.997Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3h1003euut9o2r3w8a",
+          "path": "address[0].line[0]",
+          "definitionId": "string",
+          "mergingScript": "merge_concat",
+          "updatedAt": "2020-04-02T08:53:07.999Z",
+          "createdAt": "2020-04-02T08:53:07.997Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3h1004euut66nveayc",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.999Z",
+              "createdAt": "2020-04-02T08:53:07.997Z",
+              "sqlValue": {
+                "id": "ck8iiui3i1005euutkkjejufb",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "ADR3PAT",
+                "updatedAt": "2020-04-02T08:53:07.999Z",
+                "createdAt": "2020-04-02T08:53:07.998Z",
+                "joins": []
+              }
+            },
+            {
+              "id": "ck8iiui3i1006euuta9wvm09q",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.999Z",
+              "createdAt": "2020-04-02T08:53:07.998Z",
+              "sqlValue": {
+                "id": "ck8iiui3i1007euut6w476cku",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "ADR1PAT",
+                "updatedAt": "2020-04-02T08:53:07.999Z",
+                "createdAt": "2020-04-02T08:53:07.998Z",
+                "joins": []
+              }
+            },
+            {
+              "id": "ck8iiui3i1008euut9o21ki3b",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.999Z",
+              "createdAt": "2020-04-02T08:53:07.998Z",
+              "sqlValue": {
+                "id": "ck8iiui3i1009euutn19nzf2n",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "ADR2PAT",
+                "updatedAt": "2020-04-02T08:53:07.999Z",
+                "createdAt": "2020-04-02T08:53:07.998Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3i1010euutolkkbser",
+          "path": "address[0].postalCode",
+          "definitionId": "string",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.999Z",
+          "createdAt": "2020-04-02T08:53:07.998Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3i1011euutapr9pdal",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": null,
+              "updatedAt": "2020-04-02T08:53:07.999Z",
+              "createdAt": "2020-04-02T08:53:07.998Z",
+              "sqlValue": {
+                "id": "ck8iiui3i1012euut314ev1fh",
+                "owner": "OPS$ACHQ1ABC",
+                "table": "PATIENT",
+                "column": "CPOSTPAT",
+                "updatedAt": "2020-04-02T08:53:07.999Z",
+                "createdAt": "2020-04-02T08:53:07.998Z",
+                "joins": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3i1013euutj23mrx86",
+          "path": "managingOrganization.type",
+          "definitionId": "uri",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.999Z",
+          "createdAt": "2020-04-02T08:53:07.998Z",
+          "comments": [],
+          "inputs": [
+            {
+              "id": "ck8iiui3i1014euut6ylie60l",
+              "script": null,
+              "conceptMapId": null,
+              "staticValue": "Organization",
+              "updatedAt": "2020-04-02T08:53:07.999Z",
+              "createdAt": "2020-04-02T08:53:07.998Z",
+              "sqlValue": null
+            }
+          ]
+        },
+        {
+          "id": "ck8iiui3i1015euutgv9wqdv3",
+          "path": "managingOrganization.identifier",
+          "definitionId": "Identifier",
+          "mergingScript": null,
+          "updatedAt": "2020-04-02T08:53:07.999Z",
+          "createdAt": "2020-04-02T08:53:07.998Z",
+          "comments": [],
+          "inputs": []
+        }
+      ],
+      "definition": {
+        "id": "Patient",
+        "url": "http://hl7.org/fhir/StructureDefinition/Patient",
+        "name": "Patient",
+        "type": "Patient",
+        "description": "Demographics and other administrative information about an individual or animal receiving care or other health-related services.",
+        "kind": "resource",
+        "baseDefinition": "http://hl7.org/fhir/StructureDefinition/DomainResource",
+        "derivation": "specialization",
+        "publisher": "Health Level Seven International (Patient Administration)",
+        "min": 0,
+        "max": "*",
+        "constraint": [
+          {
+            "expression": "contained.contained.empty()",
+            "human": "If the resource is contained in another resource, it SHALL NOT contain nested Resources",
+            "key": "dom-2",
+            "severity": "error",
+            "source": "http://hl7.org/fhir/StructureDefinition/DomainResource",
+            "xpath": "not(parent::f:contained and f:contained)"
+          },
+          {
+            "expression": "contained.where((('#'+id in (%resource.descendants().reference | %resource.descendants().as(canonical) | %resource.descendants().as(uri) | %resource.descendants().as(url))) or descendants().where(reference = '#').exists() or descendants().where(as(canonical) = '#').exists() or descendants().where(as(canonical) = '#').exists()).not()).trace('unmatched', id).empty()",
+            "human": "If the resource is contained in another resource, it SHALL be referred to from elsewhere in the resource or SHALL refer to the containing resource",
+            "key": "dom-3",
+            "severity": "error",
+            "source": "http://hl7.org/fhir/StructureDefinition/DomainResource",
+            "xpath": "not(exists(for $id in f:contained/*/f:id/@value return $contained[not(parent::*/descendant::f:reference/@value=concat('#', $contained/*/id/@value) or descendant::f:reference[@value='#'])]))"
+          },
+          {
+            "expression": "contained.meta.versionId.empty() and contained.meta.lastUpdated.empty()",
+            "human": "If a resource is contained in another resource, it SHALL NOT have a meta.versionId or a meta.lastUpdated",
+            "key": "dom-4",
+            "severity": "error",
+            "source": "http://hl7.org/fhir/StructureDefinition/DomainResource",
+            "xpath": "not(exists(f:contained/*/f:meta/f:versionId)) and not(exists(f:contained/*/f:meta/f:lastUpdated))"
+          },
+          {
+            "expression": "contained.meta.security.empty()",
+            "human": "If a resource is contained in another resource, it SHALL NOT have a security label",
+            "key": "dom-5",
+            "severity": "error",
+            "source": "http://hl7.org/fhir/StructureDefinition/DomainResource",
+            "xpath": "not(exists(f:contained/*/f:meta/f:security))"
+          },
+          {
+            "expression": "text.`div`.exists()",
+            "extension": [
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bestpractice",
+                "valueBoolean": true
+              },
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bestpractice-explanation",
+                "valueMarkdown": "When a resource has no narrative, only systems that fully understand the data can display the resource to a human safely. Including a human readable representation in the resource makes for a much more robust eco-system and cheaper handling of resources by intermediary systems. Some ecosystems restrict distribution of resources to only those systems that do fully understand the resources, and as a consequence implementers may believe that the narrative is superfluous. However experience shows that such eco-systems often open up to new participants over time."
+              }
+            ],
+            "human": "A resource should have narrative for robust management",
+            "key": "dom-6",
+            "severity": "warning",
+            "source": "http://hl7.org/fhir/StructureDefinition/DomainResource",
+            "xpath": "exists(f:text/h:div)"
+          }
+        ]
+      }
+    }
+  ],
+  "version": 7
+}

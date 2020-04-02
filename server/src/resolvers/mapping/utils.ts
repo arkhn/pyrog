@@ -5,14 +5,17 @@ import {
   JoinCreateWithoutColumnInput,
   AttributeCreateWithoutResourceInput,
   FilterCreateInput,
+  CommentCreateWithoutAttributeInput,
 } from '@prisma/client'
 
 import {
   JoinWithColumn,
   ColumnWithJoins,
   InputWithColumn,
-  AttributeWithInputs,
+  AttributeWithComments,
+  AttributeWithCommentsPreV7,
   FilterWithSqlColumn,
+  CommentWithAuthor,
 } from 'types'
 
 export const clean = (entry: any): any => {
@@ -61,8 +64,15 @@ export const buildInputsQuery = (
     return input
   })
 
-export const buildAttributesQuery = (
-  attributes: AttributeWithInputs[],
+export const buildCommentQueryPreV7 = (
+  comment: string,
+): CommentCreateWithoutAttributeInput => ({
+  content: comment,
+  author: { connect: { email: 'admin@arkhn.com' } },
+})
+
+export const buildAttributesQueryPreV7 = (
+  attributes: AttributeWithCommentsPreV7[],
 ): AttributeCreateWithoutResourceInput[] | null =>
   attributes.map(a => {
     const attr: AttributeCreateWithoutResourceInput = clean(a)
@@ -71,10 +81,50 @@ export const buildAttributesQuery = (
     } else {
       delete attr.inputs
     }
+
+    if (attr.comments) {
+      attr.comments = { create: buildCommentQueryPreV7(a.comments) }
+    } else {
+      delete attr.comments
+    }
     if (!attr.definitionId) {
       attr.definitionId = ''
       console.warn(
         'Attribute did not have a definitionId so an empty string was used',
+      )
+    }
+    return attr
+  })
+
+export const buildCommentsQuery = (
+  comments: CommentWithAuthor[],
+): CommentCreateWithoutAttributeInput[] =>
+  comments.map(c => ({
+    content: c.content,
+    author: { connect: { email: c.author.email } },
+    createdAt: c.createdAt,
+  }))
+
+export const buildAttributesQuery = (
+  attributes: AttributeWithComments[],
+): AttributeCreateWithoutResourceInput[] | null =>
+  attributes.map(a => {
+    const attr: AttributeCreateWithoutResourceInput = clean(a)
+    if (a.inputs && a.inputs.length) {
+      attr.inputs = { create: buildInputsQuery(a.inputs) }
+    } else {
+      delete attr.inputs
+    }
+
+    if (a.comments && a.comments.length) {
+      attr.comments = { create: buildCommentsQuery(a.comments) }
+    } else {
+      delete attr.comments
+    }
+
+    if (!attr.definitionId) {
+      throw new Error(
+        `Attribute ${a.id} (${a.path}) did not have a definitionId`,
       )
     }
     return attr

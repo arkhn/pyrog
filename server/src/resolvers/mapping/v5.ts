@@ -1,6 +1,6 @@
 import { PrismaClient, Resource } from '@prisma/client'
 
-import { clean, buildAttributesQuery, buildFiltersQuery } from './utils'
+import { clean, buildFiltersQuery, buildAttributesQueryPreV7 } from './utils'
 
 const cleanResourceV5 = (resource: Resource) => {
   const r = clean(resource)
@@ -20,7 +20,7 @@ export default (
         data: {
           ...cleanResourceV5(r),
           attributes: {
-            create: buildAttributesQuery(r.attributes),
+            create: buildAttributesQueryPreV7(r.attributes),
           },
           filters: {
             create: buildFiltersQuery(r.filters),

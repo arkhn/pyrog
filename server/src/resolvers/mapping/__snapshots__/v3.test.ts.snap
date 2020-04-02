@@ -7,7 +7,16 @@ Array [
       "attributes": Object {
         "create": Array [
           Object {
-            "comments": null,
+            "comments": Object {
+              "create": Object {
+                "author": Object {
+                  "connect": Object {
+                    "email": "admin@arkhn.com",
+                  },
+                },
+                "content": "test",
+              },
+            },
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -21,7 +30,6 @@ Array [
             "path": "managingOrganization.reference",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -35,7 +43,6 @@ Array [
             "path": "managingOrganization.identifier.system",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -56,7 +63,6 @@ Array [
             "path": "managingOrganization.identifier.value",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -77,7 +83,6 @@ Array [
             "path": "status",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -98,7 +103,6 @@ Array [
             "path": "identifier[0].value",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -130,7 +134,6 @@ Array [
             "path": "identifier[1].value",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -151,7 +154,6 @@ Array [
             "path": "type[0].coding[0].code",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -192,7 +194,6 @@ Array [
             "path": "type[0].coding[0].display",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -224,7 +225,6 @@ Array [
             "path": "period.end",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -256,7 +256,6 @@ Array [
             "path": "period.start",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -270,7 +269,6 @@ Array [
             "path": "patient.reference",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -284,7 +282,6 @@ Array [
             "path": "patient.identifier.system",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -328,7 +325,6 @@ Array [
       "attributes": Object {
         "create": Array [
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -349,7 +345,6 @@ Array [
             "path": "active",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -392,7 +387,6 @@ Array [
             "path": "address[0].line[0]",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -413,7 +407,6 @@ Array [
             "path": "address[0].city",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -434,7 +427,6 @@ Array [
             "path": "address[0].postalCode",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -466,7 +458,6 @@ Array [
             "path": "deceasedBoolean",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -487,7 +478,6 @@ Array [
             "path": "deceasedDateTime",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -508,7 +498,6 @@ Array [
             "path": "telecom[0].value",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -522,7 +511,6 @@ Array [
             "path": "name[0].use",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -543,7 +531,6 @@ Array [
             "path": "name[0].family",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -564,7 +551,6 @@ Array [
             "path": "name[0].given[0]",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -578,7 +564,6 @@ Array [
             "path": "name[1].use",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -599,7 +584,6 @@ Array [
             "path": "name[1].family",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -620,7 +604,6 @@ Array [
             "path": "birthDate",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -641,7 +624,6 @@ Array [
             "path": "gender",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -655,7 +637,6 @@ Array [
             "path": "identifier[0].type.coding[0].system",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -669,7 +650,6 @@ Array [
             "path": "identifier[0].type.coding[0].code",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -683,7 +663,6 @@ Array [
             "path": "identifier[0].type.coding[0].display",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -697,7 +676,6 @@ Array [
             "path": "identifier[0].type.coding[0].userSelected",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -718,7 +696,6 @@ Array [
             "path": "identifier[0].value",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -739,7 +716,6 @@ Array [
             "path": "identifier[1].value",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -760,7 +736,6 @@ Array [
             "path": "identifier[2].value",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -781,7 +756,6 @@ Array [
             "path": "identifier[2].period.start",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -802,7 +776,6 @@ Array [
             "path": "identifier[2].period.end",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -816,7 +789,6 @@ Array [
             "path": "managingOrganization.type",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [
@@ -830,7 +802,6 @@ Array [
             "path": "managingOrganization.identifier.system",
           },
           Object {
-            "comments": null,
             "definitionId": "",
             "inputs": Object {
               "create": Array [

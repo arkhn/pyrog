@@ -1,8 +1,8 @@
 import { PrismaClient, Resource } from '@prisma/client'
 
-import { clean, buildAttributesQueryPreV7 } from './utils'
+import { clean, buildFiltersQuery, buildAttributesQuery } from './utils'
 
-const cleanResourceV4 = (resource: Resource) => {
+const cleanResourceV7 = (resource: Resource) => {
   const r = clean(resource)
   delete r.definition
   delete r.source
@@ -18,9 +18,12 @@ export default (
     resources.map(async (r: any) => {
       return prismaClient.resource.create({
         data: {
-          ...cleanResourceV4(r),
+          ...cleanResourceV7(r),
           attributes: {
-            create: buildAttributesQueryPreV7(r.attributes),
+            create: buildAttributesQuery(r.attributes),
+          },
+          filters: {
+            create: buildFiltersQuery(r.filters),
           },
           source: {
             connect: { id: sourceId },

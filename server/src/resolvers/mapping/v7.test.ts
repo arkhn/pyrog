@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 
-import importMappingV4 from './v4'
-import * as mappingV4 from '../../../test/fixtures/chimio-mapping-v4.json'
+import importMappingV7 from './v7'
+import * as mappingV7 from '../../../test/fixtures/chimio-mapping-v7.json'
 
 const mockCreateResource = jest.fn()
 jest.mock('@prisma/client', () => ({
@@ -12,24 +12,24 @@ jest.mock('@prisma/client', () => ({
   })),
 }))
 
-describe('import mapping V4', () => {
+describe('import mapping V7', () => {
   const sourceId = '01234567'
   const resourceCount = 2
-  const { resources } = mappingV4 as any
+  const { resources } = mappingV7 as any
 
   beforeEach(() => {
     mockCreateResource.mockClear()
   })
 
   it('should send a query per resource', async () => {
-    await importMappingV4(new PrismaClient(), sourceId, resources)
+    await importMappingV7(new PrismaClient(), sourceId, resources)
     expect(mockCreateResource).toHaveBeenCalledTimes(resourceCount)
     expect(mockCreateResource.mock.calls[0]).toMatchSnapshot() // EpisodeOfCare - HopitalStay
     expect(mockCreateResource.mock.calls[1]).toMatchSnapshot() // Patient
   })
 
   it('should have cleaned the resource and attributes', async () => {
-    await importMappingV4(new PrismaClient(), sourceId, resources)
+    await importMappingV7(new PrismaClient(), sourceId, resources)
     expect(mockCreateResource.mock.calls[0][0]).toEqual({
       data: {
         label: resources[0].label,
@@ -46,7 +46,7 @@ describe('import mapping V4', () => {
           create: expect.arrayContaining([
             {
               path: 'period.start',
-              definitionId: '',
+              definitionId: 'dateTime',
               mergingScript: 'merge_concat',
               inputs: {
                 create: expect.any(Array),
@@ -55,22 +55,40 @@ describe('import mapping V4', () => {
             {
               path: 'managingOrganization.reference',
               comments: {
-                create: {
-                  author: {
-                    connect: {
-                      email: 'admin@arkhn.com',
+                create: [
+                  {
+                    author: {
+                      connect: {
+                        email: 'admin@arkhn.com',
+                      },
                     },
+                    content: 'test',
+                    createdAt: '2020-04-02T08:53:07.997Z',
                   },
-                  content: 'test',
-                },
+                ],
               },
-              definitionId: '',
+              definitionId: 'string',
               mergingScript: null,
               inputs: {
                 create: expect.any(Array),
               },
             },
           ]),
+        },
+        filters: {
+          create: [
+            {
+              value: '200',
+              relation: '<=',
+              sqlColumn: {
+                create: {
+                  column: 'CHAMBRE',
+                  owner: 'OPS$ACHQ1ABC',
+                  table: 'SEJOUR',
+                },
+              },
+            },
+          ],
         },
       },
     })

@@ -44,7 +44,7 @@
           "id": "ck7anfpxl0381q2f8nhzot6pq",
           "path": "managingOrganization.reference",
           "mergingScript": null,
-          "comments": null,
+          "comments": "test",
           "updatedAt": "2020-03-02T15:59:44.627Z",
           "createdAt": "2020-03-02T15:59:44.627Z",
           "inputs": [
