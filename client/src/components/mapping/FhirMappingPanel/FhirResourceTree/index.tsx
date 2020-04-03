@@ -102,6 +102,8 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     childNodes: ITreeNode<Attribute>[],
     parentArray?: ITreeNode<Attribute>
   ): ITreeNode<Attribute> => {
+    const isSelected =
+      !!selectedAttribute && attribute.path == selectedAttribute.path;
     const node: ITreeNode<Attribute> = {
       childNodes: childNodes,
       hasCaret: !attribute.isPrimitive || attribute.isArray,
@@ -114,8 +116,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       secondaryLabel: secondaryLabel(attribute, childNodes),
       nodeData: attribute,
       label: '',
-      isSelected:
-        !!selectedAttribute && attribute.path == selectedAttribute.path
+      isSelected
     };
     node.label = (
       <NodeLabel
@@ -124,6 +125,8 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
         deleteNodeCallback={() => deleteNodeFromArray(node, parentArray!)}
       />
     );
+
+    if (isSelected) setSelectedNode(node);
     return node;
   };
 
@@ -244,8 +247,8 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
   const handleNodeClick = async (node: ITreeNode<Attribute>): Promise<void> => {
     const attribute = node.nodeData!;
     console.debug(attribute.path);
-    if (!attribute.isPrimitive) {
-      // if the node is of composite type, expand (or collapse) it
+    if (attribute.isArray || !attribute.isPrimitive) {
+      // if the node is of composite or array type, expand (or collapse) it
       node.isExpanded = !node.isExpanded;
       // if the node has no children yet, fetch the attributes definitions
       // and add them as children of the clicked node.
