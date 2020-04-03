@@ -4,42 +4,50 @@
 $border-radius: 6px;
 
 #comment-block {
+  text-align: left;
+  white-space: pre-line;
+  flex-direction: column;
+  display: flex;
+}
+
+#comment-block h3 {
   text-align: center;
+}
+
+.card-input {
+  align-self: flex-end;
+  padding: 0px 20px;
 }
 
 #comment-input {
   display: flex;
-  margin: 20px;
+  margin: 0px;
+  border-radius: $border-radius;
 
   .text-input {
-    margin-right: 30px;
-    width: 90%;
+    margin-right: 10px;
+    width: calc(100% - 50px);
     align-self: flex-end;
   }
 }
 
 #send-comment-button {
-  font-size: large;
   border-style: solid $light-gray3;
   border-radius: $border-radius;
 }
 
-.comment-history {
-  display: flex;
-  flex-direction: column;
-  text-align: left;
 
-  .my-comment {
-    width: 50%;
-    align-self: flex-end;
-    margin: 10px;
-    border-radius: $border-radius;
-  }
+.card-input, .my-comment, .other-comment {
+  width: 70%;
+  min-width: 400px;
+  margin: 10px;
+  border-radius: $border-radius;
+}
 
-  .other-comment {
-    width: 50%;
-    align-self: flex-start;
-    margin: 10px;
-    border-radius: $border-radius;
-  }
+.my-comment {
+  align-self: flex-end;
+}
+
+.other-comment {
+  align-self: flex-start;
 }
