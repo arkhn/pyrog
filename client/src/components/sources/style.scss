@@ -37,10 +37,17 @@ h2 {
     .card-header {
       display: flex;
 
-      .bp3-button {
+      .bp3-button-group {
         position: absolute;
         right: 5%;
+      }
+
+      .bp3-button {
         border: 0;
+        margin: 0;
+      }
+
+      .bp3-icon {
         margin: 0;
       }
     }
