@@ -36,8 +36,9 @@ $border-radius: 6px;
   border-radius: $border-radius;
 }
 
-
-.card-input, .my-comment, .other-comment {
+.card-input,
+.my-comment,
+.other-comment {
   width: 70%;
   min-width: 400px;
   margin: 5px 10px;

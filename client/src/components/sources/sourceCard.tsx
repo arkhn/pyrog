@@ -1,5 +1,12 @@
 import React from 'react';
-import { Button, ButtonGroup, Card, Elevation, Icon, Tag } from '@blueprintjs/core';
+import {
+  Button,
+  ButtonGroup,
+  Card,
+  Elevation,
+  Icon,
+  Tag
+} from '@blueprintjs/core';
 
 import { ISelectedSource } from 'types';
 import { CollaboratorsDialog } from './collaborators';
