@@ -152,10 +152,10 @@ const SourcesView = (): React.ReactElement => {
             setSourceToDelete(undefined);
           }}
         >
-          <p>
-            Etes-vous sûr de vouloir supprimer la source{' '}
-            <b>{sourceToDelete ? sourceToDelete.name : ''}</b>? Cette action
-            n'est pas réversible.
+          <p className="delete-warning">
+            Etes-vous sûr de vouloir supprimer la source
+            <b> {sourceToDelete ? sourceToDelete.name : ''}</b> ?<br />
+            Cette action n'est pas réversible.
           </p>
         </Alert>
       </div>

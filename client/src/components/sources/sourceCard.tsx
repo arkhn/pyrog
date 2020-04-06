@@ -1,5 +1,12 @@
 import React from 'react';
-import { Button, Card, Elevation, Icon, Tag } from '@blueprintjs/core';
+import {
+  Button,
+  ButtonGroup,
+  Card,
+  Elevation,
+  Icon,
+  Tag
+} from '@blueprintjs/core';
 
 import { ISelectedSource } from 'types';
 import { CollaboratorsDialog } from './collaborators';
@@ -36,12 +43,25 @@ export const SourceCard = ({
           <h2>
             {source.template.name} - {source.name}
           </h2>
-          <Button
-            icon={'delete'}
-            loading={deleting}
-            minimal={true}
-            onClick={(e: React.MouseEvent) => onDelete(source, e)}
-          />
+          <ButtonGroup>
+            <Button
+              icon={'user'}
+              intent="primary"
+              minimal={true}
+              title={'Manage collaborators'}
+              onClick={(e: React.MouseEvent) => {
+                e.stopPropagation();
+                setIsCollaboratorDialogOpen(true);
+              }}
+            />
+            <Button
+              icon={'delete'}
+              loading={deleting}
+              minimal={true}
+              title={'Delete source'}
+              onClick={(e: React.MouseEvent) => onDelete(source, e)}
+            />
+          </ButtonGroup>
         </div>
         <div className="tags">
           <Tag>DPI</Tag>
@@ -60,18 +80,6 @@ export const SourceCard = ({
               <span>{source.mappingProgress[1]} Attributs</span>
             </span>
           </div>
-          <Button
-            className="add-collaborator-button"
-            icon="user"
-            intent="primary"
-            large={true}
-            onClick={(e: React.MouseEvent) => {
-              e.stopPropagation();
-              setIsCollaboratorDialogOpen(true);
-            }}
-          >
-            Manage collaborators
-          </Button>
         </div>
       </Card>
       <CollaboratorsDialog

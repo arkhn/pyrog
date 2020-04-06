@@ -117,37 +117,43 @@ const Comments = () => {
 
     return (
       <Card key={c.id} className={isMyComment ? 'my-comment' : 'other-comment'}>
-        <span>{c.content}</span>
+        <b>{c.author.name}</b>
         <br />
-        <span>
-          Sent by <b>{c.author.name}</b> on {formattedDate}
+        <span className="bp3-text-muted bp3-text-small bp3-running-text">
+          {formattedDate}
         </span>
+        <br />
+        {c.content}
       </Card>
     );
   };
 
   return (
     <div id="comment-block">
-      <FormGroup label={<h3>Comments</h3>}>
-        <div id="comment-input">
-          <TextArea
-            className="text-input"
-            value={newComment}
-            disabled={loading || !attribute}
-            onChange={e => {
-              setNewComment(e.target.value);
-            }}
-          />
-          <Button
-            id="send-comment-button"
-            disabled={!attribute}
-            onClick={actionCreateComment}
-          >
-            Send
-          </Button>
-        </div>
-      </FormGroup>
-      <div className="comment-history">{comments.map(renderComment)}</div>
+      <h3>Comments</h3>
+      <Card className="card-input">
+        <FormGroup>
+          <h4>Write a comment</h4>
+          <div id="comment-input">
+            <TextArea
+              className="text-input"
+              value={newComment}
+              disabled={loading || !attribute}
+              onChange={e => {
+                setNewComment(e.target.value);
+              }}
+            />
+            <Button
+              id="send-comment-button"
+              disabled={!attribute}
+              onClick={actionCreateComment}
+            >
+              Send
+            </Button>
+          </div>
+        </FormGroup>
+      </Card>
+      {comments.map(renderComment)}
     </div>
   );
 };
