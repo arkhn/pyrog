@@ -126,7 +126,7 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
               path: parentPath
             }
           });
-          dispatch(setAttributeInMap(path, attr.createAttribute));
+          dispatch(setAttributeInMap(parentPath, attr.createAttribute));
         }
       }
       await createSQLInput({

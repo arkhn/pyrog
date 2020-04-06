@@ -133,7 +133,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
   const deleteNodeFromArray = (
     deletedNode: ITreeNode<Attribute>,
     arrayNode: ITreeNode<Attribute>
-  ) => {
+  ): void => {
     // First, we delete all the corresponding attributes in DB
     const deleted = deletedNode.nodeData!;
     const array = arrayNode.nodeData!;
