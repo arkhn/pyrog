@@ -143,7 +143,7 @@ const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
               path: parentPath
             }
           });
-          dispatch(setAttributeInMap(path, attr.createAttribute));
+          dispatch(setAttributeInMap(parentPath, attr.createAttribute));
         }
       }
       await createStaticInput({
