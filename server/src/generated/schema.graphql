@@ -498,7 +498,7 @@ type StructureDefinition {
   attributes: [AttributeDefinition!]!
   derivation: String!
 
-  """List of extensions on this type"""
+  """List of allowed extensions on this type"""
   extensions: [StructureDefinition!]!
   id: String!
   kind: String!

@@ -70,13 +70,8 @@ export const StructureDefinition = objectType({
 
     t.list.field('extensions', {
       type: 'StructureDefinition',
-      description: 'List of extensions on this type',
-      resolve: async (parent: any, { elementId }) => {
-        const elementExtensions = elementId
-          ? await typeExtensions(elementId)
-          : []
-        return [...elementExtensions, ...(await typeExtensions(parent.meta.id))]
-      },
+      description: 'List of allowed extensions on this type',
+      resolve: async (parent: any) => typeExtensions(parent.meta.id),
     })
 
     t.list.field('profiles', {

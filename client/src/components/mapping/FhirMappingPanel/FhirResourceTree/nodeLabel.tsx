@@ -42,19 +42,20 @@ export const NodeLabel = ({
 
   const showContextMenu = async (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
-    const hasExtensions = !isArray && !!extensions && extensions.length > 0;
+    const hasAllowedExtensions =
+      !isArray && !!extensions && extensions.length > 0;
 
     const menu = (
       <ApolloProvider client={client}>
         <Menu>
           {isArray && renderAddItem()}
           {isItem && !isSlice && renderRemoveItem()}
-          {hasExtensions && renderAddExtension()}
+          {hasAllowedExtensions && renderAddExtension()}
         </Menu>
       </ApolloProvider>
     );
 
-    if (isArray || (isItem && !isSlice) || hasExtensions) {
+    if (isArray || (isItem && !isSlice) || hasAllowedExtensions) {
       ContextMenu.show(menu, { left: e.clientX, top: e.clientY });
     }
   };
