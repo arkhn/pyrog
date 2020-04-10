@@ -9,7 +9,6 @@ import { IconName } from '@blueprintjs/icons';
 
 import UploadExtension from 'components/uploads/uploadExtension';
 import TSelect from './TSelect';
-import { useApolloClient } from 'react-apollo';
 
 interface Props {
   disabled?: boolean;

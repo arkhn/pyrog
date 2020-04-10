@@ -11,7 +11,6 @@ import { validator } from '../validate';
 import './style.scss';
 import { useMutation } from 'react-apollo';
 import { loader } from 'graphql.macro';
-import ApolloClient from 'apollo-client';
 
 interface Resource {
   id: string;
@@ -64,9 +63,7 @@ const UploadExtension = ({ isOpen, onClose, onUpload }: Props) => {
     [] as string[]
   );
   const [uploadingExtension, setUploadingExtension] = React.useState(false);
-  const [refreshDefinition, { loading: refreshingDefinition }] = useMutation(
-    mRefreshDefinition
-  );
+  const [refreshDefinition] = useMutation(mRefreshDefinition);
 
   const validateExtension = (extension: any): boolean => {
     if (!validate(extension)) {

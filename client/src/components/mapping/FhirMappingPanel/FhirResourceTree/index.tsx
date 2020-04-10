@@ -102,7 +102,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       attributesForResource,
       parentArray
     );
-    if (!!selectedAttribute && attribute.path == selectedAttribute.path) {
+    if (!!selectedAttribute && attribute.path === selectedAttribute.path) {
       node.isSelected = true;
       setSelectedNode(node);
     }
@@ -281,6 +281,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
 
   useEffect(() => {
     if (!loading) setNodes(genTreeLevel(fhirStructure));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resource, loading]);
 
   return loading ? (
