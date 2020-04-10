@@ -114,7 +114,6 @@ const AddExtensionSelect = ({
       </Menu>
     );
   };
-  console.log('regular', items);
   return (
     <React.Fragment>
       <UploadExtension

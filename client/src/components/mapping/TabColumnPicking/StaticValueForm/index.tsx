@@ -115,7 +115,6 @@ const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
   const addStaticValue = async (value: string): Promise<void> => {
     try {
       if (!attributeId) {
-        console.log('create attr', path);
         // First, we create the attribute if it doesn't exist
         const { data: attr } = await createAttribute({
           variables: {
