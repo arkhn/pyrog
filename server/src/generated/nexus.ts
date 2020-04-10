@@ -348,6 +348,7 @@ export interface NexusGenEnums {
 export interface NexusGenRootTypes {
   AccessControl: prisma.AccessControl;
   Attribute: prisma.Attribute;
+  AttributeDefinition: {};
   AuthPayload: { // root type
     token: string; // String!
     user: NexusGenRootTypes['User']; // User!
@@ -442,6 +443,11 @@ export interface NexusGenFieldTypes {
     path: string; // String!
     resource: NexusGenRootTypes['Resource'] | null; // Resource
     updatedAt: any; // DateTime!
+  }
+  AttributeDefinition: { // field return type
+    attribute: any; // JSON!
+    extensions: NexusGenRootTypes['StructureDefinition'][]; // [StructureDefinition!]!
+    id: string; // String!
   }
   AuthPayload: { // field return type
     token: string; // String!
@@ -571,8 +577,9 @@ export interface NexusGenFieldTypes {
     version: string | null; // String
   }
   StructureDefinition: { // field return type
-    attributes: any; // JSON!
+    attributes: NexusGenRootTypes['AttributeDefinition'][]; // [AttributeDefinition!]!
     derivation: string; // String!
+    extensions: NexusGenRootTypes['StructureDefinition'][]; // [StructureDefinition!]!
     id: string; // String!
     kind: string; // String!
     name: string; // String!
@@ -803,7 +810,7 @@ export interface NexusGenAbstractResolveReturnTypes {
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "AccessControl" | "Attribute" | "AuthPayload" | "Column" | "Comment" | "ConceptMap" | "Credential" | "Filter" | "Input" | "Join" | "Mutation" | "Query" | "Resource" | "Source" | "StructureDefinition" | "Template" | "User";
+export type NexusGenObjectNames = "AccessControl" | "Attribute" | "AttributeDefinition" | "AuthPayload" | "Column" | "Comment" | "ConceptMap" | "Credential" | "Filter" | "Input" | "Join" | "Mutation" | "Query" | "Resource" | "Source" | "StructureDefinition" | "Template" | "User";
 
 export type NexusGenInputNames = "AccessControlFilter" | "AccessControlWhereInput" | "AccessControlWhereUniqueInput" | "AttributeFilter" | "AttributeInput" | "AttributeWhereInput" | "AttributeWhereUniqueInput" | "BooleanFilter" | "ColumnFilter" | "ColumnInput" | "ColumnInputWithoutJoins" | "ColumnWhereInput" | "ColumnWhereUniqueInput" | "CommentFilter" | "CommentWhereInput" | "CommentWhereUniqueInput" | "CredentialWhereInput" | "DateTimeFilter" | "FilterFilter" | "FilterInput" | "FilterWhereInput" | "InputFilter" | "InputWhereInput" | "InputWhereUniqueInput" | "JoinFilter" | "JoinInput" | "JoinWhereInput" | "JoinWhereUniqueInput" | "NullableStringFilter" | "ResourceFilter" | "ResourceWhereInput" | "ResourceWhereUniqueInput" | "SourceFilter" | "SourceWhereInput" | "SourceWhereUniqueInput" | "StringFilter" | "StructureDefinitionWhereFilter" | "TemplateNameCompoundUniqueInput" | "TemplateWhereInput" | "UpdateInputInput" | "UpdateResourceInput" | "UserSourceCompoundUniqueInput" | "UserWhereInput";
 

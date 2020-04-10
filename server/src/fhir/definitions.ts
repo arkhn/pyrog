@@ -19,6 +19,20 @@ export const resourceProfiles = async (
 ): Promise<Definition[]> => {
   const { mget, smembers } = cache()
   const keys = await smembers(`type:${resourceType}`)
+  if (!keys.length) return []
+
+  const res = await mget(keys)
+  return res.map(r => JSON.parse(r))
+}
+
+// Gets extensions of a type.
+export const typeExtensions = async (
+  fhirType: string,
+): Promise<Definition[]> => {
+  const { mget, smembers } = cache()
+  const keys = await smembers(`extension:${fhirType}`)
+  if (!keys.length) return []
+
   const res = await mget(keys)
   return res.map(r => JSON.parse(r))
 }
@@ -30,6 +44,8 @@ export const resourcesPerKind = async (
 ): Promise<Definition[]> => {
   const { mget, smembers } = cache()
   const keys = await smembers(`${derivation}:${kind}`)
+  if (!keys.length) return []
+
   const res = await mget(keys)
   return res.map(r => JSON.parse(r))
 }
@@ -39,7 +55,7 @@ export const cacheDefinition = async (definition: any): Promise<Definition> => {
 
   // Use id as key. If it isn't present, use url
   const { id, url } = definition
-  const { derivation, kind, type } = structured.meta
+  const { derivation, kind, type, context } = structured.meta
 
   if (!id && !url) {
     throw new Error('Structure definition has no id nor url field.')
@@ -53,6 +69,11 @@ export const cacheDefinition = async (definition: any): Promise<Definition> => {
   await sadd(`${derivation}:${kind}`, cachedId)
   // Cache profiles using key type:<type>
   await sadd(`type:${type}`, cachedId)
+
+  if (type === 'Extension' && derivation === 'constraint')
+    await Promise.all(
+      context!.map(c => sadd(`extension:${c.expression}`, cachedId)),
+    )
 
   return structured
 }

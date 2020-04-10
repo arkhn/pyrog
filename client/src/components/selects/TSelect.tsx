@@ -1,4 +1,10 @@
-import { Button, Intent, MenuItem, IPopoverProps } from '@blueprintjs/core';
+import {
+  Button,
+  Intent,
+  MenuItem,
+  IPopoverProps,
+  Icon
+} from '@blueprintjs/core';
 import { IconName } from '@blueprintjs/icons';
 import {
   ItemPredicate,
@@ -17,6 +23,7 @@ interface ISelectProps<T> {
   ) => JSX.Element | undefined;
   disabled: boolean;
   displayItem: (item: any) => string;
+  isMenuItem?: boolean;
   className?: string;
   rightIcon?: IconName;
   filterItems: ItemPredicate<T>;
@@ -36,7 +43,7 @@ interface ISelectProps<T> {
 export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
   private CustomSelect = Select.ofType<T>();
 
-  private handleValueChange = (item: T) => {
+  private handleValueChange = (item: T, e: any) => {
     this.props.onChange(item);
   };
 
@@ -50,6 +57,7 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
       rightIcon,
       filterItems,
       filterable,
+      isMenuItem,
       icon,
       inputItem,
       intent,
@@ -60,6 +68,30 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
       renderItem,
       renderList
     } = this.props;
+
+    const child = isMenuItem ? (
+      <MenuItem
+        labelElement={rightIcon || <Icon icon="caret-right" />}
+        disabled={disabled}
+        icon={icon}
+        intent={intent}
+        text={displayItem(inputItem)}
+        onClick={(e: React.MouseEvent) => {
+          e.preventDefault();
+        }}
+      />
+    ) : (
+      <Button
+        disabled={disabled}
+        fill={true}
+        alignText={'left'}
+        icon={icon}
+        intent={intent}
+        loading={loading}
+        rightIcon={rightIcon || 'caret-down'}
+        text={displayItem(inputItem)}
+      />
+    );
 
     return (
       <this.CustomSelect
@@ -77,16 +109,7 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
         onItemSelect={this.handleValueChange}
         popoverProps={popoverProps}
       >
-        <Button
-          disabled={disabled}
-          fill={true}
-          alignText={'left'}
-          icon={icon}
-          intent={intent}
-          loading={loading}
-          rightIcon={rightIcon || 'caret-down'}
-          text={displayItem(inputItem)}
-        />
+        {child}
       </this.CustomSelect>
     );
   }

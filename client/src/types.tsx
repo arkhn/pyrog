@@ -1,6 +1,6 @@
 import { IToaster } from '@blueprintjs/core';
 import * as redux from 'redux';
-import { Attribute } from '@arkhn/fhir.ts';
+import { Attribute, AttributeDefinition } from '@arkhn/fhir.ts';
 
 // REDUX
 export interface ISimpleAction {
@@ -23,6 +23,21 @@ export interface IUser {
 }
 
 export type ISourceRole = 'READER' | 'WRITER';
+
+export interface IAttribute {
+  id: string;
+  path: string;
+  definitionId: string;
+}
+export interface IAttributeDefinition {
+  attribute: AttributeDefinition;
+  extensions?: IStructureDefinition[];
+}
+export interface IStructureDefinition {
+  id: string;
+  attributes: IAttributeDefinition[];
+  extensions?: IStructureDefinition[];
+}
 
 export interface ISelectedSource {
   id: string;
@@ -138,16 +153,6 @@ export interface IView {
 // REACT
 
 // TODO: Deprecate type
-export interface IFhirResource {
-  resourceType: string;
-  owner: string;
-  table: string;
-  primaryKey: string;
-  contentAsTree: any;
-  inputColumnsDict?: any;
-}
-
-// TODO: Deprecate type
 export interface ISource {
   name: string;
   schema: any;
@@ -174,25 +179,4 @@ export interface ISourceColumn {
   owner: string;
   table: string;
   column: string;
-}
-
-export interface IInputColumn extends ISourceColumn {
-  join?: {
-    sourceColumn: string;
-    targetColumn: ISourceColumn;
-  };
-  script?: any;
-}
-
-export interface IFhirIntegrationSpec {
-  inputColumns: IInputColumn[];
-  mergingScript?: any;
-  [Symbol.iterator]?: any;
-}
-
-export interface IMapping {
-  primaryKeyColumn: ISourceColumn;
-  fhirMapping: {
-    [fhirAttribute: string]: IFhirIntegrationSpec;
-  };
 }
