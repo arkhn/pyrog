@@ -407,7 +407,6 @@ const ConceptMapDialog = ({
           `${FHIR_API_URL}/ConceptMap`,
           conceptMap
         );
-        console.log('created', created);
         createdConceptMapId = created.data.id;
       } catch (err) {
         toaster.show({

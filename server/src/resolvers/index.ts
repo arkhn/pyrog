@@ -1,5 +1,6 @@
 export * from './AccessControl'
 export * from './Attribute'
+export * from './AttributeDefinition'
 export * from './AuthPayload'
 export * from './ConceptMap'
 export * from './Column'

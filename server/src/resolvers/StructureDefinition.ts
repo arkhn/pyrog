@@ -6,6 +6,7 @@ import {
   resourceProfiles,
   resourcesPerKind,
   cacheDefinition,
+  typeExtensions,
 } from 'fhir/definitions'
 import { FHIR_API_URL } from '../constants'
 
@@ -61,10 +62,16 @@ export const StructureDefinition = objectType({
       },
     })
 
-    t.field('attributes', {
-      type: 'JSON',
+    t.list.field('attributes', {
+      type: 'AttributeDefinition',
       description: 'Structured version of the attributes',
       resolve: (parent: any) => parent.attributes,
+    })
+
+    t.list.field('extensions', {
+      type: 'StructureDefinition',
+      description: 'List of allowed extensions on this type',
+      resolve: async (parent: any) => typeExtensions(parent.meta.id),
     })
 
     t.list.field('profiles', {

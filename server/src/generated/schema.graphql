@@ -45,6 +45,14 @@ type Attribute {
   updatedAt: DateTime!
 }
 
+type AttributeDefinition {
+  attribute: JSON!
+
+  """List of extensions on this type"""
+  extensions: [StructureDefinition!]!
+  id: String!
+}
+
 input AttributeFilter {
   every: AttributeWhereInput
   none: AttributeWhereInput
@@ -487,8 +495,11 @@ input StringFilter {
 
 type StructureDefinition {
   """Structured version of the attributes"""
-  attributes: JSON!
+  attributes: [AttributeDefinition!]!
   derivation: String!
+
+  """List of allowed extensions on this type"""
+  extensions: [StructureDefinition!]!
   id: String!
   kind: String!
   name: String!

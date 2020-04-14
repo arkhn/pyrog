@@ -71,6 +71,7 @@ const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
       setStaticValue('');
       getFhirTypes();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [attribute]);
 
   const addInputToCache = (

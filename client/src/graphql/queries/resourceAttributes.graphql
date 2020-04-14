@@ -9,6 +9,7 @@ query resourceAttributes($resourceId: ID!) {
     attributes {
       id
       path
+      definitionId
     }
   }
 }

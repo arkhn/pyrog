@@ -116,6 +116,7 @@ const UploadProfile = ({ isOpen, resource, onClose, onUpload }: Props) => {
       }
     };
     reader.readAsText(profileFile);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [acceptedFiles]);
 
   const renderError = (

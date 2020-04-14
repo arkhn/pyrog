@@ -51,7 +51,6 @@ const mapReduxStateToReactProps = (
   state: IReduxStore
 ): IAuthenticationViewState => {
   return {
-    data: state.data,
     dispatch: state.dispatch,
     toaster: state.toaster,
     user: state.dispatch
