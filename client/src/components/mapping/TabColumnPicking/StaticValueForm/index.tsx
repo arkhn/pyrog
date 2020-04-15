@@ -67,6 +67,8 @@ const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
     : null;
 
   useEffect(() => {
+    // TODO we should use attribute.isReferenceType here but Attribute objects
+    // lose their accessors in Redux
     if (attribute.definition.id === 'Reference.type') {
       setStaticValue('');
       getFhirTypes();
