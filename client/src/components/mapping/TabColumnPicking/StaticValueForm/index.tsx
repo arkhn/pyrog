@@ -67,7 +67,7 @@ const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
     : null;
 
   useEffect(() => {
-    if (attribute.isReferenceType) {
+    if (attribute.definition.id === 'Reference.type') {
       setStaticValue('');
       getFhirTypes();
     }
