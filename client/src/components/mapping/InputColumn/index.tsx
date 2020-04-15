@@ -240,7 +240,7 @@ const InputColumn = ({ input, schema, source }: Props) => {
                         updateInput({
                           variables: {
                             inputId: input.id,
-                            data: { conceptMap: null }
+                            data: { conceptMapId: null }
                           }
                         });
                       }}
