@@ -12,7 +12,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { loader } from 'graphql.macro';
 import { Attribute } from '@arkhn/fhir.ts';
 
-import ColumnPicker from '../../ColumnPicker';
+import ColumnSelect from 'components/selects/columnSelect';
 import TableViewer from './TableViewer';
 import FhirPreview from './FhirPreview';
 
@@ -189,7 +189,7 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
       </div>
       <FormGroup labelFor="text-input" inline={true}>
         <ControlGroup>
-          <ColumnPicker
+          <ColumnSelect
             hasOwner={source.hasOwner}
             ownerChangeCallback={(e: string) => {
               setOwner(e);
