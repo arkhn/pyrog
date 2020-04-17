@@ -92,7 +92,7 @@ export const deselectResource = (): IAction => {
 };
 
 // Fhir Attribute
-export const updateFhirAttribute = (attribute: Attribute): IAction => {
+export const updateFhirAttribute = (attribute?: Attribute): IAction => {
   return {
     type: 'UPDATE_ATTRIBUTE',
     payload: {

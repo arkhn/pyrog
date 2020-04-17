@@ -249,10 +249,19 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
         node.childNodes = genTreeLevel(attribute.children);
       }
     } else {
-      if (selectedNode) selectedNode.isSelected = false;
-      node.isSelected = true;
-      setSelectedNode(node as TreeNode);
-      onClickCallback(node.nodeData);
+      if (selectedNode && selectedNode !== node)
+        selectedNode.isSelected = false;
+
+      // select or deselect the node
+      if (node.isSelected) {
+        node.isSelected = false;
+        setSelectedNode(undefined);
+        onClickCallback(undefined);
+      } else {
+        node.isSelected = true;
+        setSelectedNode(node as TreeNode);
+        onClickCallback(node.nodeData);
+      }
     }
     setNodes([...nodes]);
   };

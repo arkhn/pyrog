@@ -90,6 +90,10 @@ export const bootstrapDefinitions = async () => {
       },
     },
   )
-  await Promise.all(standardDefinitions.items.map(cacheDefinition))
+  await Promise.all(
+    standardDefinitions.entry.map(({ resource }: any) =>
+      cacheDefinition(resource),
+    ),
+  )
   console.log('Done.')
 }
