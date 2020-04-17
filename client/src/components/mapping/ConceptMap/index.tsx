@@ -92,7 +92,7 @@ const ConceptMapDialog = ({
         const codeSystems = await axios.get(
           `${FHIR_API_URL}/CodeSystem?_count=1000`
         );
-        setExistingCodeSystems(codeSystems.data.items);
+        setExistingCodeSystems(codeSystems.data.entry);
       } catch (err) {
         console.error(
           `Could not fecth code systems: ${
@@ -106,7 +106,7 @@ const ConceptMapDialog = ({
     const fetchConceptMaps = async (): Promise<void> => {
       try {
         const conceptMaps = await axios.get(`${FHIR_API_URL}/ConceptMap`);
-        setExistingConceptMaps(conceptMaps.data.items);
+        setExistingConceptMaps(conceptMaps.data.entry);
       } catch (err) {
         console.error(
           `Could not fecth concept maps: ${

@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { IReduxStore } from 'types';
 
-import { FHIRPIPE_URL } from '../../../../../constants';
+import { FHIRPIPE_URL } from '../../../../constants';
 
 interface Props {
   rowId: number;
@@ -28,15 +28,15 @@ const FhirPreview = ({ rowId }: Props) => {
         );
         setFhirObject(res.data.preview);
         setValidationErrors(res.data.errors);
-        setLoading(false);
       } catch (err) {
         toaster.show({
-          message: err.response.data || err.message,
+          message: err.response ? err.response.data : err.message,
           intent: 'danger',
           icon: 'warning-sign',
           timeout: 6000
         });
       }
+      setLoading(false);
     };
     fetchPreview();
   }, [rowId, resource.id, toaster]);

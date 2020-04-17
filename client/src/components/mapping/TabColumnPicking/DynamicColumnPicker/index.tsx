@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {
   Card,
   Elevation,
@@ -13,12 +12,10 @@ import { loader } from 'graphql.macro';
 import { Attribute } from '@arkhn/fhir.ts';
 
 import ColumnSelect from 'components/selects/columnSelect';
-import TableViewer from './TableViewer';
-import FhirPreview from './FhirPreview';
+import TableViewer from 'components/mapping/TableViewer';
 
 import { onError } from 'services/apollo';
 import { IReduxStore, ISelectedSource } from 'types';
-import { PAGAI_URL } from '../../../../constants';
 
 import { setAttributeInMap } from 'services/resourceInputs/actions';
 
@@ -54,13 +51,6 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
   const [owner, setOwner] = React.useState('');
   const [table, setTable] = React.useState('');
   const [column, setColumn] = React.useState('');
-  const [isTableLoading, setIsTableLoading] = React.useState(false);
-  const [rows, setRows] = React.useState([]);
-  const [fields, setFields] = React.useState([]);
-  const [fhirPreviewEnabled, setFhirPreviewEnabled] = React.useState(false);
-  const [fhirPreviewRowId, setFhirPreviewRowId] = React.useState(
-    undefined as number | undefined
-  );
 
   const [createAttribute] = useMutation(mCreateAttribute, {
     onError: onError(toaster)
@@ -145,36 +135,6 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
     }
   };
 
-  const previewFhirObject = (rowId: number) => {
-    setFhirPreviewRowId(rowId);
-    setFhirPreviewEnabled(true);
-  };
-
-  React.useEffect(() => {
-    if (resource && table) {
-      setIsTableLoading(true);
-      axios
-        .get(`${PAGAI_URL}/explore/${resource.id}/${table}`, {
-          params: { schema: owner }
-        })
-        .then((res: any) => {
-          setIsTableLoading(false);
-          setRows(res.data.rows);
-          setFields(res.data.fields);
-        })
-        .catch((err: any) => {
-          setIsTableLoading(false);
-          const { error } = err.response.data;
-          toaster.show({
-            message: error || err.response.statusText,
-            intent: 'danger',
-            icon: 'properties',
-            timeout: 10000
-          });
-        });
-    }
-  }, [resource, owner, table, toaster]);
-
   return (
     <Card elevation={Elevation.ONE}>
       <div className="card-absolute">
@@ -195,12 +155,10 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
               setOwner(e);
               setTable('');
               setColumn('');
-              setFhirPreviewEnabled(false);
             }}
             tableChangeCallback={(e: string) => {
               setTable(e);
               setColumn('');
-              setFhirPreviewEnabled(false);
             }}
             columnChangeCallback={(e: string) => {
               setColumn(e);
@@ -215,14 +173,7 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
           />
         </ControlGroup>
       </FormGroup>
-      <TableViewer
-        selectedTable={table}
-        fields={fields}
-        rows={rows}
-        isTableLoading={isTableLoading}
-        previewFhirObject={previewFhirObject}
-      />
-      {fhirPreviewEnabled && <FhirPreview rowId={fhirPreviewRowId!} />}
+      <TableViewer table={table} owner={owner} />
     </Card>
   );
 };

@@ -16,12 +16,13 @@ import FhirMappingPanel from './FhirMappingPanel';
 import { IReduxStore } from 'types';
 
 import './style.scss';
+import TableViewer from './TableViewer';
 
 const qExportMapping = loader('src/graphql/queries/exportMapping.graphql');
 
 const MappingView = () => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const { source, attribute } = useSelector(
+  const { source, resource, attribute } = useSelector(
     (state: IReduxStore) => state.selectedNode
   );
   const [selectedTabId, setSelectedTabId] = React.useState('picker' as TabId);
@@ -69,6 +70,17 @@ const MappingView = () => {
   const renderExistingRules = () => (
     <InputColumns schema={source.schema} source={source} />
   );
+
+  const renderTable = () => {
+    return (
+      <div id="tableViewer">
+        <TableViewer
+          table={resource.primaryKeyTable}
+          owner={resource.primaryKeyOwner}
+        />
+      </div>
+    );
+  };
 
   const renderTabs = () => {
     return (
@@ -132,6 +144,11 @@ const MappingView = () => {
           <div id="exploration-panel">
             {attribute && renderExistingRules()}
             {attribute && renderTabs()}
+            {source.credential &&
+              resource &&
+              resource.primaryKeyTable &&
+              !attribute &&
+              renderTable()}
           </div>
         </div>
       </div>

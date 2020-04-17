@@ -41,10 +41,12 @@ const selectedNodeReducer = (
     case 'UPDATE_ATTRIBUTE':
       return {
         ...state,
-        attribute: {
-          ...action.payload.attribute,
-          path: action.payload.attribute.path
-        }
+        attribute: action.payload.attribute
+          ? {
+              ...action.payload.attribute,
+              path: action.payload.attribute.path
+            }
+          : null
       };
 
     case 'DESELECT_SOURCE':
