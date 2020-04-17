@@ -74,7 +74,6 @@ const ResourceSelector = ({ resources, loading }: Props) => {
       </FormGroup>
       {resource && (
         <Drawer
-          resource={resource}
           isOpen={drawerIsOpen}
           onCloseCallback={() => {
             setDrawerIsOpen(false);

@@ -1,20 +1,25 @@
-import * as React from 'react';
+import React from 'react';
 
 import { ISelectedSource } from 'types';
 
 // COMPONENTS
-import ColumnPicker from '../ColumnPicker';
+import ColumnSelect from 'components/selects/columnSelect';
 
-interface IProps {
+interface Props {
   join: any;
   schema: any;
   source: ISelectedSource;
   updateJoin: any;
 }
 
-const JoinColumns = ({ join, schema, source, updateJoin }: IProps) => (
+const JoinColumns = ({
+  join,
+  schema,
+  source,
+  updateJoin
+}: Props): React.ReactElement => (
   <div className="join-columns">
-    <ColumnPicker
+    <ColumnSelect
       hasOwner={source.hasOwner}
       ownerChangeCallback={(e: string) => {
         updateJoin({
@@ -62,7 +67,7 @@ const JoinColumns = ({ join, schema, source, updateJoin }: IProps) => (
       }}
       sourceSchema={schema}
     />
-    <ColumnPicker
+    <ColumnSelect
       hasOwner={source.hasOwner}
       ownerChangeCallback={(e: string) => {
         updateJoin({

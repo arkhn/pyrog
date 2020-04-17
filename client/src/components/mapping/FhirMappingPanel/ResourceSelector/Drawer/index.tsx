@@ -12,8 +12,8 @@ import { loader } from 'graphql.macro';
 import { useSelector, useDispatch } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
 
-import { IReduxStore, Resource, ISourceColumn } from 'types';
-import ColumnPicker from 'components/mapping/ColumnPicker';
+import { IReduxStore, ISourceColumn } from 'types';
+import ColumnSelect from 'components/selects/columnSelect';
 import {
   updateSelectedResource,
   deselectResource
@@ -30,7 +30,6 @@ interface Filter {
 }
 
 interface Props {
-  resource: Resource;
   isOpen: boolean;
   onCloseCallback?: () => void;
 }
@@ -42,9 +41,11 @@ const qResourcesForSource = loader(
 const mDeleteResource = loader('src/graphql/mutations/deleteResource.graphql');
 const mUpdateResource = loader('src/graphql/mutations/updateResource.graphql');
 
-const Drawer = ({ resource, isOpen, onCloseCallback }: Props): ReactElement => {
+const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
   const dispatch = useDispatch();
-  const { source } = useSelector((state: IReduxStore) => state.selectedNode);
+  const { source, resource } = useSelector(
+    (state: IReduxStore) => state.selectedNode
+  );
 
   const toaster = useSelector((state: IReduxStore) => state.toaster);
 
@@ -178,7 +179,7 @@ const Drawer = ({ resource, isOpen, onCloseCallback }: Props): ReactElement => {
 
   const pickPrimaryKey = (
     <FormGroup label="Primary Key" disabled={updatingResource || !resource}>
-      <ColumnPicker
+      <ColumnSelect
         hasOwner={source ? source.hasOwner : undefined}
         ownerChangeCallback={(owner: string): void => {
           setPkOwner(owner);
@@ -234,7 +235,7 @@ const Drawer = ({ resource, isOpen, onCloseCallback }: Props): ReactElement => {
             <tr key={index}>
               <td>{deleteFilterButton(index)}</td>
               <td>
-                <ColumnPicker
+                <ColumnSelect
                   hasOwner={source ? source.hasOwner : undefined}
                   ownerChangeCallback={(owner: string): void => {
                     filters[index].sqlColumn.owner = owner;
