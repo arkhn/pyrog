@@ -13,11 +13,20 @@ interface NodeLabelProps {
 }
 
 export const NodeLabel = ({
-  attribute: { types, definition, id, isArray, isItem, isSlice, extensions },
+  attribute: {
+    types,
+    definition,
+    id,
+    isArray,
+    isItem,
+    isSlice,
+    slices,
+    extensions
+  },
   addNodeCallback,
   addExtensionCallback,
   deleteNodeCallback
-}: NodeLabelProps) => {
+}: NodeLabelProps): React.ReactElement => {
   const client = useApolloClient();
   const renderAddItem = () => (
     <MenuItem icon={'add'} onClick={addNodeCallback} text={'Ajouter un item'} />
@@ -48,14 +57,18 @@ export const NodeLabel = ({
     const menu = (
       <ApolloProvider client={client}>
         <Menu>
-          {isArray && renderAddItem()}
+          {isArray && slices.length === 0 && renderAddItem()}
           {isItem && !isSlice && renderRemoveItem()}
           {hasAllowedExtensions && renderAddExtension()}
         </Menu>
       </ApolloProvider>
     );
 
-    if (isArray || (isItem && !isSlice) || hasAllowedExtensions) {
+    if (
+      (isArray && slices.length === 0) ||
+      (isItem && !isSlice) ||
+      hasAllowedExtensions
+    ) {
       ContextMenu.show(menu, { left: e.clientX, top: e.clientY });
     }
   };
