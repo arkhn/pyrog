@@ -106,7 +106,9 @@ const ConceptMapDialog = ({
     const fetchConceptMaps = async (): Promise<void> => {
       try {
         const conceptMaps = await axios.get(`${FHIR_API_URL}/ConceptMap`);
-        setExistingConceptMaps(conceptMaps.data.entry);
+        setExistingConceptMaps(
+          conceptMaps.data.entry.map(({ resource }: any) => resource)
+        );
       } catch (err) {
         console.error(
           `Could not fecth concept maps: ${
