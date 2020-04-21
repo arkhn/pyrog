@@ -3,11 +3,13 @@ import { Menu, MenuItem, ContextMenu, Tooltip } from '@blueprintjs/core';
 import { Attribute } from '@arkhn/fhir.ts';
 
 import AddExtensionSelect from 'components/selects/addExtensionSelect';
+import AddSliceSelect from 'components/selects/addSliceSelect';
 import { ApolloProvider, useApolloClient } from 'react-apollo';
 
 interface NodeLabelProps {
   attribute: Attribute;
   addNodeCallback: any;
+  addSliceCallback: any;
   addExtensionCallback: any;
   deleteNodeCallback: any;
 }
@@ -24,13 +26,32 @@ export const NodeLabel = ({
     extensions
   },
   addNodeCallback,
+  addSliceCallback,
   addExtensionCallback,
   deleteNodeCallback
 }: NodeLabelProps): React.ReactElement => {
   const client = useApolloClient();
-  const renderAddItem = () => (
-    <MenuItem icon={'add'} onClick={addNodeCallback} text={'Ajouter un item'} />
-  );
+  const renderAddItem = () => {
+    if (slices.length === 0) {
+      return (
+        <MenuItem
+          icon={'add'}
+          onClick={addNodeCallback}
+          text={'Ajouter un item'}
+        />
+      );
+    } else {
+      const sliceNames = slices
+        .map(s => s.definition.sliceName)
+        .filter(Boolean) as string[];
+      return (
+        <AddSliceSelect
+          items={['default', ...sliceNames]}
+          onChange={addSliceCallback}
+        />
+      );
+    }
+  };
 
   const renderAddExtension = () => (
     <AddExtensionSelect
@@ -57,18 +78,14 @@ export const NodeLabel = ({
     const menu = (
       <ApolloProvider client={client}>
         <Menu>
-          {isArray && slices.length === 0 && renderAddItem()}
+          {isArray && renderAddItem()}
           {isItem && !isSlice && renderRemoveItem()}
           {hasAllowedExtensions && renderAddExtension()}
         </Menu>
       </ApolloProvider>
     );
 
-    if (
-      (isArray && slices.length === 0) ||
-      (isItem && !isSlice) ||
-      hasAllowedExtensions
-    ) {
+    if (isArray || (isItem && !isSlice) || hasAllowedExtensions) {
       ContextMenu.show(menu, { left: e.clientX, top: e.clientY });
     }
   };

@@ -25,6 +25,7 @@ export class TreeNode implements ITreeNode<Attribute> {
   existingAttributes: any;
   onAddExtension: Function;
   onAddItem: Function;
+  onAddSlice: Function;
   onDeleteItem: Function;
   genTreeLevel: Function;
 
@@ -33,6 +34,7 @@ export class TreeNode implements ITreeNode<Attribute> {
     childNodes: ITreeNode<Attribute>[],
     onAddExtension: Function,
     onAddItem: Function,
+    onAddSlice: Function,
     onDeleteItem: Function,
     genTreeLevel: Function,
     existingAttributes: any,
@@ -54,10 +56,12 @@ export class TreeNode implements ITreeNode<Attribute> {
         attribute={attribute}
         addExtensionCallback={(e: any) => onAddExtension(this, e)}
         addNodeCallback={() => onAddItem(this)}
+        addSliceCallback={(sliceName: string) => onAddSlice(this, sliceName)}
         deleteNodeCallback={() => onDeleteItem(this, parentArray!)}
       />
     );
     this.onAddItem = onAddItem;
+    this.onAddSlice = onAddSlice;
     this.onAddExtension = onAddExtension;
     this.onDeleteItem = onDeleteItem;
     this.genTreeLevel = genTreeLevel;
@@ -124,11 +128,28 @@ export class TreeNode implements ITreeNode<Attribute> {
     const item = this.nodeData.addItem(index);
     const nodeItem = this.create(
       item,
-      this.genTreeLevel([...item.children, ...item.slices]),
+      this.genTreeLevel([...item.children, ...item.choices]),
       this
     );
     this.childNodes?.push(nodeItem);
     return nodeItem;
+  }
+
+  addSlice(sliceName: string, index?: number) {
+    if (sliceName === 'default') {
+      this.addItem(index);
+    } else {
+      const item = this.nodeData.slices.find(
+        s => s.definition.sliceName === sliceName
+      )!;
+      const nodeItem = this.create(
+        item,
+        this.genTreeLevel([...item.children, ...item.choices]),
+        this
+      );
+      this.childNodes?.push(nodeItem);
+      return nodeItem;
+    }
   }
 
   addExtension(

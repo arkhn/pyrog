@@ -97,6 +97,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       childNodes,
       addExtension,
       addNodeToArray,
+      addSliceToArray,
       deleteNodeFromArray,
       genTreeLevel,
       attributesForResource,
@@ -169,6 +170,11 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     setNodes(nodes => [...nodes]);
   };
 
+  const addSliceToArray = (arrayNode: TreeNode, sliceName: string) => {
+    arrayNode.addSlice(sliceName);
+    setNodes(nodes => [...nodes]);
+  };
+
   const buildChildNodesForArray = (arrayNode: TreeNode): TreeNode[] => {
     const array = arrayNode.nodeData!;
 
@@ -195,16 +201,23 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       .map(buildNodeFromAttribute)
       .filter(Boolean) as TreeNode[];
 
-  const buildSlicedNode = (attribute: Attribute): TreeNode[] => {
-    const children = attribute.slices.map(buildNodeFromAttribute)
+  const buildSlicedNode = (slicedNode: TreeNode): TreeNode[] => {
+    const sliced = slicedNode.nodeData!;
 
-    // We need a copy of the main element because slices are stored as fields of it but should
-    // really be inserted at the same level. We are here building the slices and the original
-    // attribute as children of the same node.
-    const copy = Attribute.from({ ...attribute, slices: [] });
-    const base = buildNodeFromAttribute(copy);
-
-    return [base, ...children].filter(Boolean) as TreeNode[];
+    let existingItems = itemsOf(sliced);
+    // If no child exists yet, we still build one with index 0
+    if (Object.keys(existingItems).length === 0) {
+      existingItems = { '0': null as any };
+    }
+    // create a node for each item of the array
+    return Object.keys(existingItems).map(index =>
+      sliced.isExtension
+        ? slicedNode.addExtension(
+            { id: existingItems[index].definitionId, attributes: [] },
+            Number(index)
+          )!
+        : slicedNode.addItem(Number(index))
+    );
   };
 
   const buildNodeFromAttribute = (attribute: Attribute): TreeNode | null => {
@@ -212,7 +225,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
 
     if (attribute.slices.length > 0) {
       // if the attribute has slices, we build a node with these different slices inside
-      node.childNodes = buildSlicedNode(attribute);
+      node.childNodes = buildSlicedNode(node);
     } else if (attribute.choices.length > 0) {
       // if the node has choices, create a node for each of them
       node.childNodes = genTreeLevel(attribute.choices);
@@ -252,7 +265,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
 
   const handleNodeClick = async (node: ITreeNode<Attribute>): Promise<void> => {
     const attribute = node.nodeData!;
-    console.debug(attribute.path);
+    console.log(attribute);
     if (attribute.isArray || !attribute.isPrimitive) {
       // if the node is of composite or array type, expand (or collapse) it
       node.isExpanded = !node.isExpanded;
