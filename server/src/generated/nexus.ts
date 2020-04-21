@@ -66,6 +66,7 @@ export interface NexusGenInputs {
     OR?: NexusGenInputs['AttributeWhereInput'][] | null; // [AttributeWhereInput!]
     path?: NexusGenInputs['StringFilter'] | null; // StringFilter
     resource?: NexusGenInputs['ResourceWhereInput'] | null; // ResourceWhereInput
+    sliceName?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
   AttributeWhereUniqueInput: { // input type
@@ -442,6 +443,7 @@ export interface NexusGenFieldTypes {
     mergingScript: string | null; // String
     path: string; // String!
     resource: NexusGenRootTypes['Resource'] | null; // Resource
+    sliceName: string | null; // String
     updatedAt: any; // DateTime!
   }
   AttributeDefinition: { // field return type
@@ -655,6 +657,7 @@ export interface NexusGenArgTypes {
       definitionId: string; // ID!
       path: string; // String!
       resourceId: string; // ID!
+      sliceName?: string | null; // String
     }
     createComment: { // args
       attributeId: string; // ID!

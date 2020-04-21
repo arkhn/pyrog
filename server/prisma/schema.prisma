@@ -81,6 +81,7 @@ model Filter {
 model Attribute {
   id            String  @default(cuid()) @id
   path          String
+  sliceName     String?
   definitionId  String
   mergingScript String?
   comments      Comment[]
