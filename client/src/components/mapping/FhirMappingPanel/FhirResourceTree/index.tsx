@@ -198,6 +198,9 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
   const buildSlicedNode = (attribute: Attribute): TreeNode[] => {
     const children = attribute.slices.map(buildNodeFromAttribute)
 
+    // We need a copy of the main element because slices are stored as fields of it but should
+    // really be inserted at the same level. We are here building the slices and the original
+    // attribute as children of the same node.
     const copy = Attribute.from({ ...attribute, slices: [] });
     const base = buildNodeFromAttribute(copy);
 
