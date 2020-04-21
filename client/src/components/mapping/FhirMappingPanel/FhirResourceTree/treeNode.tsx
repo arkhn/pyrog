@@ -73,6 +73,7 @@ export class TreeNode implements ITreeNode<Attribute> {
       childNodes,
       this.onAddExtension,
       this.onAddItem,
+      this.onAddSlice,
       this.onDeleteItem,
       this.genTreeLevel,
       this.existingAttributes,
