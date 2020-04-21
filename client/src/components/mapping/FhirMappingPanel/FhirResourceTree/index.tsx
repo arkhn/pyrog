@@ -210,6 +210,9 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     if (attribute.slices.length > 0) {
       // if the attribute has slices, we build a node with these different slices inside
       node.childNodes = buildSlicedNode(attribute);
+    } else if (attribute.choices.length > 0) {
+      // if the node has choices, create a node for each of them
+      node.childNodes = genTreeLevel(attribute.choices);
     } else if (attribute.types.length > 1) {
       // if the attribute has multiple types, we have to create as many
       // children as there are types.
@@ -222,9 +225,6 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       // childNode will be the node really having the structure defined by
       // the structure definition.
       node.childNodes = buildChildNodesForArray(node);
-    } else if (attribute.choices.length > 0) {
-      // if the node has choices, create a node for each of them
-      node.childNodes = genTreeLevel(attribute.choices);
     } else if (attribute.children.length > 0) {
       // if the node has children we already know about, create them.
       node.childNodes = genTreeLevel(attribute.children);
