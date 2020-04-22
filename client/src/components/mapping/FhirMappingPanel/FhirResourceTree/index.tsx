@@ -194,13 +194,6 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     );
   };
 
-  const buildMultiTypeNode = (attribute: Attribute): TreeNode[] =>
-    // create a node with a single type for each type of the parent
-    attribute
-      .spreadTypes()
-      .map(buildNodeFromAttribute)
-      .filter(Boolean) as TreeNode[];
-
   const buildSlicedNode = (slicedNode: TreeNode): TreeNode[] => {
     const sliced = slicedNode.nodeData!;
 
@@ -227,10 +220,6 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     } else if (attribute.choices.length > 0) {
       // if the node has choices, create a node for each of them
       node.childNodes = genTreeLevel(attribute.choices);
-    } else if (attribute.types.length > 1) {
-      // if the attribute has multiple types, we have to create as many
-      // children as there are types.
-      node.childNodes = buildMultiTypeNode(attribute);
     } else if (attribute.isArray) {
       // if the node is an array of extensions, only render it if it already has children.
       if (attribute.isExtension && Object.keys(itemsOf(attribute)).length === 0)
