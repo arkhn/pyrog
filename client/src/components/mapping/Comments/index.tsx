@@ -90,7 +90,8 @@ const Comments = () => {
           variables: {
             resourceId: resource.id,
             definitionId: attribute.types[0],
-            path: attribute.path
+            path: attribute.path,
+            sliceName: attribute.definition.sliceName
           }
         });
         const newAttr = data.createAttribute;

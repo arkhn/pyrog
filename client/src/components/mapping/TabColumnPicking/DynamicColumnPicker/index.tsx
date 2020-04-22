@@ -93,7 +93,8 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
           variables: {
             resourceId: resource.id,
             definitionId: attribute.types[0],
-            path
+            path,
+            sliceName: attribute.definition.sliceName
           }
         });
         attributeId = attr.createAttribute.id;
@@ -113,7 +114,8 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
             variables: {
               resourceId: resource.id,
               definitionId: currentAttribute.types[0],
-              path: parentPath
+              path: parentPath,
+              sliceName: currentAttribute.definition.sliceName
             }
           });
           dispatch(setAttributeInMap(parentPath, attr.createAttribute));
