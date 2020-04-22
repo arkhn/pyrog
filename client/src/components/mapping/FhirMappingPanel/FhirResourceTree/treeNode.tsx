@@ -125,8 +125,8 @@ export class TreeNode implements ITreeNode<Attribute> {
     );
   }
 
-  addItem(index?: number) {
-    const item = this.nodeData.addItem(index);
+  addItem(index?: number, attr?: Attribute) {
+    const item = this.nodeData.addItem(index, attr);
     const nodeItem = this.create(
       item,
       this.genTreeLevel([...item.children, ...item.choices]),
@@ -140,16 +140,10 @@ export class TreeNode implements ITreeNode<Attribute> {
     if (sliceName === 'default') {
       this.addItem(index);
     } else {
-      const item = this.nodeData.slices.find(
+      const slice = this.nodeData.slices.find(
         s => s.definition.sliceName === sliceName
       )!;
-      const nodeItem = this.create(
-        item,
-        this.genTreeLevel([...item.children, ...item.choices]),
-        this
-      );
-      this.childNodes?.push(nodeItem);
-      return nodeItem;
+      return this.addItem(index, slice);
     }
   }
 
