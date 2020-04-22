@@ -61,7 +61,10 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     (state: IReduxStore) => state.resourceInputs.attributesMap
   );
 
-  const buildAttributes = ({ attribute, extensions }: IAttributeDefinition) => {
+  const buildAttributes = ({
+    attribute,
+    extensions
+  }: IAttributeDefinition): Attribute => {
     const a = Attribute.from(attribute);
     a.extensions = extensions as any;
     return a;
@@ -113,7 +116,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
   const addExtension = (
     node: TreeNode,
     extensionDefinition: IStructureDefinition
-  ) => {
+  ): void => {
     // TODO: handle primitive extensions
     if (node.nodeData.isPrimitive) {
       toaster.show({
@@ -148,7 +151,10 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     setNodes(nodes => [...nodes]);
   };
 
-  const deleteNodeFromArray = (deletedNode: TreeNode, arrayNode: TreeNode) => {
+  const deleteNodeFromArray = (
+    deletedNode: TreeNode,
+    arrayNode: TreeNode
+  ): void => {
     // First, we delete all the corresponding attributes in DB
     const deleted = deletedNode.nodeData!;
     deleteAttributes({
@@ -219,6 +225,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       node.childNodes = buildSlicedNode(node);
     } else if (attribute.choices.length > 0) {
       // if the node has choices, create a node for each of them
+      attribute.choices.forEach(choice => attribute.parent?.addChild(choice));
       node.childNodes = genTreeLevel(attribute.choices);
     } else if (attribute.isArray) {
       // if the node is an array of extensions, only render it if it already has children.
@@ -252,7 +259,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
 
   const handleNodeClick = async (node: ITreeNode<Attribute>): Promise<void> => {
     const attribute = node.nodeData!;
-    console.log(attribute);
+    console.debug(attribute);
     if (attribute.isArray || !attribute.isPrimitive) {
       // if the node is of composite or array type, expand (or collapse) it
       node.isExpanded = !node.isExpanded;
