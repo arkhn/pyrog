@@ -13,9 +13,9 @@
     sleep-promise "^8.0.1"
 
 "@arkhn/fhir.ts@^3.2.0":
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/@arkhn/fhir.ts/-/fhir.ts-3.2.0.tgz#688a2edac8f9dd57cbc1e7f31f89e9e017a26d8d"
-  integrity sha512-k7hY98fE2ZJwAsnr0htvGILgG+VIplbSlnPLxqnb+KLjLBlwyYKacrw2/kONJqzZ+zSodCpLnHWXShdh3ba7Ng==
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/@arkhn/fhir.ts/-/fhir.ts-3.3.0.tgz#5492713a8c4ac93882339553e488475f8b3ad034"
+  integrity sha512-5P63eTtmg1JqRyNBdBcOJV2pb/jAF2iyiXE7205du0VVLQLvZJG0LZppt2d+tUmuCBkTYF6wOEFyoRcrX7zPuw==
 
 "@babel/code-frame@^7.0.0":
   version "7.5.5"
