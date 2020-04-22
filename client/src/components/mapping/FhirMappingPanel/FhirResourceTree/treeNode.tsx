@@ -2,7 +2,7 @@ import { IconName } from '@blueprintjs/core';
 import { Icon, ITreeNode } from '@blueprintjs/core';
 import React from 'react';
 
-import { Attribute } from '@arkhn/fhir.ts';
+import { Attribute, ResourceDefinition } from '@arkhn/fhir.ts';
 
 // ACTIONS
 
@@ -32,6 +32,7 @@ export class TreeNode implements ITreeNode<Attribute> {
   constructor(
     attribute: Attribute,
     childNodes: ITreeNode<Attribute>[],
+    resourceExtensions: ResourceDefinition[],
     onAddExtension: Function,
     onAddItem: Function,
     onAddSlice: Function,
@@ -54,6 +55,7 @@ export class TreeNode implements ITreeNode<Attribute> {
     this.label = (
       <NodeLabel
         attribute={attribute}
+        resourceExtensions={resourceExtensions}
         addExtensionCallback={(e: any) => onAddExtension(this, e)}
         addNodeCallback={() => onAddItem(this)}
         addSliceCallback={(sliceName: string) => onAddSlice(this, sliceName)}
@@ -71,6 +73,7 @@ export class TreeNode implements ITreeNode<Attribute> {
     return new TreeNode(
       attr,
       childNodes,
+      [],
       this.onAddExtension,
       this.onAddItem,
       this.onAddSlice,
@@ -157,12 +160,28 @@ export class TreeNode implements ITreeNode<Attribute> {
       return;
     }
 
-    // if the attribute has an extension child,
-    // append the extension attribute to the array node
-    const extension = this.nodeData.parent!.addExtension(
-      extensionDefinition.id,
-      index
-    );
+    let extension: Attribute;
+    if (!this.nodeData.parent) {
+      extension = this.nodeData.addItem(
+        index,
+        new Attribute({
+          ...this.nodeData.definition,
+          type: [
+            {
+              code: 'Extension',
+              extension: [{ valueUrl: extensionDefinition.id }]
+            }
+          ]
+        })
+      );
+    } else {
+      // if the attribute has an extension child,
+      // append the extension attribute to the array node
+      extension = this.nodeData.parent!.addExtension(
+        extensionDefinition.id,
+        index
+      );
+    }
     extensionDefinition.attributes
       .map(a => Attribute.from(a.attribute))
       .forEach(a => extension.addChild(a));

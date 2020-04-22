@@ -74,6 +74,8 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     data && data.structureDefinition
       ? data.structureDefinition.attributes.map(buildAttributes())
       : [];
+  const resourceExtensions =
+    data && data.structureDefinition ? data.structureDefinition.extensions : [];
 
   const itemsOf = (array: Attribute): { [index: string]: IAttribute } => {
     // Check if there are already existing attributes for this node
@@ -98,6 +100,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     const node = new TreeNode(
       attribute,
       childNodes,
+      resourceExtensions,
       addExtension,
       addNodeToArray,
       addSliceToArray,
@@ -127,10 +130,11 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       });
       return;
     }
+    const isRootExtensions = !node.nodeData.parent && node.nodeData.isExtension;
+    let extensionArrayNode = isRootExtensions
+      ? node
+      : node.childNodes!.find(child => child.nodeData!.isExtension);
 
-    let extensionArrayNode = node.childNodes!.find(
-      child => child.nodeData!.isExtension
-    );
     if (!extensionArrayNode) {
       const extAttr = node.nodeData.children.find(c => c.isExtension);
       extensionArrayNode = createNode(extAttr!, []);
@@ -187,13 +191,17 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     let existingItems = itemsOf(array);
     // If no child exists yet, we still build one with index 0
     if (Object.keys(existingItems).length === 0) {
+      if (array.isExtension) return [];
       existingItems = { '0': null as any };
     }
     // create a node for each item of the array
     return Object.keys(existingItems).map(index =>
       array.isExtension
         ? arrayNode.addExtension(
-            { id: existingItems[index].definitionId, attributes: [] },
+            {
+              id: existingItems[index]?.definitionId,
+              attributes: []
+            },
             Number(index)
           )!
         : arrayNode.addItem(Number(index))
@@ -228,8 +236,13 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       attribute.choices.forEach(choice => attribute.parent?.addChild(choice));
       node.childNodes = genTreeLevel(attribute.choices);
     } else if (attribute.isArray) {
-      // if the node is an array of extensions, only render it if it already has children.
-      if (attribute.isExtension && Object.keys(itemsOf(attribute)).length === 0)
+      // if the node is an array of extensions (not at the root),
+      // only render it if it already has children.
+      if (
+        attribute.isExtension &&
+        attribute.parent &&
+        Object.keys(itemsOf(attribute)).length === 0
+      )
         return null;
       // If node is array, we need to replicate the root node for this type
       // childNode will be the node really having the structure defined by
@@ -259,8 +272,12 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
 
   const handleNodeClick = async (node: ITreeNode<Attribute>): Promise<void> => {
     const attribute = node.nodeData!;
-    console.debug(attribute);
-    if (attribute.isArray || !attribute.isPrimitive) {
+    console.debug(attribute.path, attribute);
+    if (
+      attribute.isArray ||
+      !attribute.isPrimitive ||
+      node.childNodes?.length
+    ) {
       // if the node is of composite or array type, expand (or collapse) it
       node.isExpanded = !node.isExpanded;
       // if the node has no children yet, fetch the attributes definitions
@@ -292,7 +309,8 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
   ): Promise<void> => {
     const attribute = node.nodeData!;
     if (
-      (attribute.isArray || !attribute.isPrimitive) &&
+      !attribute.isArray &&
+      !attribute.isPrimitive &&
       (!node.childNodes || node.childNodes.length === 0)
     ) {
       const children = await fetchAttributeDefinition(attribute);

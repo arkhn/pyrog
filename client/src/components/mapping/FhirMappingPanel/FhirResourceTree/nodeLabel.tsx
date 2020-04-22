@@ -1,6 +1,6 @@
 import React from 'react';
 import { Menu, MenuItem, ContextMenu, Tooltip } from '@blueprintjs/core';
-import { Attribute } from '@arkhn/fhir.ts';
+import { Attribute, ResourceDefinition } from '@arkhn/fhir.ts';
 
 import AddExtensionSelect from 'components/selects/addExtensionSelect';
 import AddSliceSelect from 'components/selects/addSliceSelect';
@@ -8,6 +8,7 @@ import { ApolloProvider, useApolloClient } from 'react-apollo';
 
 interface NodeLabelProps {
   attribute: Attribute;
+  resourceExtensions: ResourceDefinition[];
   addNodeCallback: any;
   addSliceCallback: any;
   addExtensionCallback: any;
@@ -23,8 +24,11 @@ export const NodeLabel = ({
     isItem,
     isSlice,
     slices,
-    extensions
+    extensions,
+    parent,
+    isExtension
   },
+  resourceExtensions,
   addNodeCallback,
   addSliceCallback,
   addExtensionCallback,
@@ -51,11 +55,11 @@ export const NodeLabel = ({
     );
   };
 
-  const renderAddExtension = () => (
+  const renderAddExtension = (selectedExtensions?: ResourceDefinition[]) => (
     <AddExtensionSelect
       loading={false}
       disabled={false}
-      items={extensions}
+      items={selectedExtensions}
       onChange={addExtensionCallback}
     />
   );
@@ -72,19 +76,26 @@ export const NodeLabel = ({
     e.preventDefault();
     const hasAllowedExtensions =
       !isArray && !!extensions && extensions.length > 0;
+    const isRootExtensions = !parent && isExtension;
 
     const menu = (
       <ApolloProvider client={client}>
         <Menu>
-          {isArray && slices.length === 0 && renderAddItem()}
+          {isArray && !isExtension && slices.length === 0 && renderAddItem()}
           {isArray && slices.length > 0 && renderAddSlice()}
           {isItem && !isSlice && renderRemoveItem()}
-          {hasAllowedExtensions && renderAddExtension()}
+          {hasAllowedExtensions && renderAddExtension(extensions)}
+          {isRootExtensions && renderAddExtension(resourceExtensions)}
         </Menu>
       </ApolloProvider>
     );
 
-    if (isArray || (isItem && !isSlice) || hasAllowedExtensions) {
+    if (
+      (isArray && !isExtension) ||
+      (isItem && !isSlice) ||
+      hasAllowedExtensions ||
+      isRootExtensions
+    ) {
       ContextMenu.show(menu, { left: e.clientX, top: e.clientY });
     }
   };
