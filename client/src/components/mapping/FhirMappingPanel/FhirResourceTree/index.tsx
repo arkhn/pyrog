@@ -211,12 +211,10 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     }
     // create a node for each item of the array
     return Object.keys(existingItems).map(index =>
-      sliced.isExtension
-        ? slicedNode.addExtension(
-            { id: existingItems[index].definitionId, attributes: [] },
-            Number(index)
-          )!
-        : slicedNode.addItem(Number(index))
+      slicedNode.addSlice(
+        existingItems[index] ? existingItems[index].sliceName : undefined,
+        Number(index)
+      )
     );
   };
 

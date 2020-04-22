@@ -136,9 +136,9 @@ export class TreeNode implements ITreeNode<Attribute> {
     return nodeItem;
   }
 
-  addSlice(sliceName: string, index?: number) {
-    if (sliceName === 'default') {
-      this.addItem(index);
+  addSlice(sliceName?: string, index?: number) {
+    if (!sliceName || sliceName === 'default') {
+      return this.addItem(index);
     } else {
       const slice = this.nodeData.slices.find(
         s => s.definition.sliceName === sliceName
