@@ -137,14 +137,10 @@ export class TreeNode implements ITreeNode<Attribute> {
   }
 
   addSlice(sliceName?: string, index?: number) {
-    if (!sliceName || sliceName === 'default') {
-      return this.addItem(index);
-    } else {
-      const slice = this.nodeData.slices.find(
-        s => s.definition.sliceName === sliceName
-      )!;
-      return this.addItem(index, slice);
-    }
+    const slice = this.nodeData.slices.find(
+      s => s.definition.sliceName === sliceName
+    )!;
+    return this.addItem(index, slice);
   }
 
   addExtension(

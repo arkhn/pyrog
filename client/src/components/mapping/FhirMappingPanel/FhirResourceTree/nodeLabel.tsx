@@ -31,26 +31,24 @@ export const NodeLabel = ({
   deleteNodeCallback
 }: NodeLabelProps): React.ReactElement => {
   const client = useApolloClient();
-  const renderAddItem = () => {
-    if (slices.length === 0) {
-      return (
-        <MenuItem
-          icon={'add'}
-          onClick={addNodeCallback}
-          text={'Ajouter un item'}
-        />
-      );
-    } else {
-      const sliceNames = slices
-        .map(s => s.definition.sliceName)
-        .filter(Boolean) as string[];
-      return (
-        <AddSliceSelect
-          items={['default', ...sliceNames]}
-          onChange={addSliceCallback}
-        />
-      );
-    }
+
+  const renderAddItem = () => (
+    <MenuItem icon={'add'} onClick={addNodeCallback} text={'Ajouter un item'} />
+  );
+
+  const renderAddSlice = () => {
+    const sliceNames = slices
+      .map(s => s.definition.sliceName)
+      .filter(Boolean) as string[];
+    return (
+      <AddSliceSelect
+        items={[...sliceNames]}
+        onChange={(selected: string): void =>
+          selected === id ? addNodeCallback() : addSliceCallback(selected)
+        }
+        baseName={id}
+      />
+    );
   };
 
   const renderAddExtension = () => (
@@ -78,7 +76,8 @@ export const NodeLabel = ({
     const menu = (
       <ApolloProvider client={client}>
         <Menu>
-          {isArray && renderAddItem()}
+          {isArray && slices.length === 0 && renderAddItem()}
+          {isArray && slices.length > 0 && renderAddSlice()}
           {isItem && !isSlice && renderRemoveItem()}
           {hasAllowedExtensions && renderAddExtension()}
         </Menu>
