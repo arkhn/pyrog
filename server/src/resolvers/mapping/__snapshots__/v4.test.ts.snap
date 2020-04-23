@@ -18,10 +18,12 @@ Array [
               },
             },
             "definitionId": "",
+            "id": "ck74z6s2o0005s3utow77alh6",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s2r0007s3utxzvrdfv9",
                   "script": null,
                   "staticValue": "internal",
                 },
@@ -32,10 +34,12 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s2u0009s3utu92qsv58",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s2w0011s3utlchaktkd",
                   "script": null,
                   "staticValue": "/Organization/{id}",
                 },
@@ -46,14 +50,17 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s2y0013s3ut92hx0cht",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s330018s3utjuodqpw6",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "SERVICE",
+                      "id": "ck74z6s310015s3ut24kka7n3",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "SEJOUR",
                     },
@@ -67,14 +74,17 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s350020s3utonyqbwkj",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s3a0024s3utxargsip8",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "ETATSEJ",
+                      "id": "ck74z6s380022s3utvedq54t8",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "SEJOUR",
                     },
@@ -88,14 +98,17 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s3c0026s3utstqaga9u",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s3g0030s3utlkwrfixv",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "SECLEUNIK",
+                      "id": "ck74z6s3e0028s3ut5psjydwq",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "SEJOUR",
                     },
@@ -109,14 +122,17 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s3i0032s3utr5dmi7fq",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s3n0036s3utgsb2ffho",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "ADMISSION",
+                      "id": "ck74z6s3l0034s3ut8ilts58r",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "SEJOUR",
                     },
@@ -125,10 +141,12 @@ Array [
                 },
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s3r0040s3utccmlsuwa",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "ADMISSION2",
+                      "id": "ck74z6s3p0038s3ut9idxyft4",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "SEJOUR",
                     },
@@ -142,14 +160,17 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s3t0042s3ut5xo9nh0x",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s3y0046s3utrbo1byee",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "TWCLEUNIK",
+                      "id": "ck74z6s3w0044s3ute3w7z6ds",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "SEJOUR",
                     },
@@ -163,26 +184,32 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s400049s3utivcmb7vo",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s4b0059s3utd254bust",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "LIBELTW",
+                      "id": "ck74z6s420051s3utubfvs13s",
                       "joins": Object {
                         "create": Array [
                           Object {
+                            "id": "ck74z6s440052s3utk0dunr5b",
                             "tables": Object {
                               "create": Array [
                                 Object {
                                   "column": "TWCLEUNIK",
+                                  "id": "ck74z6s470055s3utuw32fadc",
                                   "owner": "OPS$ACHQ1ABC",
                                   "table": "SEJOUR",
                                 },
                                 Object {
                                   "column": "TWCLEUNIK",
+                                  "id": "ck74z6s490057s3utqo816057",
                                   "owner": "OPS$ACHQ1ABC",
                                   "table": "TYPESEJ",
                                 },
@@ -204,14 +231,17 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s4d0061s3utbbxfls8b",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s4h0065s3utonhdfiah",
                   "script": "clean_date",
                   "sqlValue": Object {
                     "create": Object {
                       "column": "DATEOUT",
+                      "id": "ck74z6s4f0063s3utjjgh0sk4",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "SEJOUR",
                     },
@@ -220,10 +250,12 @@ Array [
                 },
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s4l0069s3uthpzkygwi",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "HEUREOUT",
+                      "id": "ck74z6s4j0067s3ut4gfmb2hr",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "SEJOUR",
                     },
@@ -237,14 +269,17 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s4n0071s3ut75r6unij",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s4r0075s3utpttakhte",
                   "script": "clean_date",
                   "sqlValue": Object {
                     "create": Object {
                       "column": "DATEIN",
+                      "id": "ck74z6s4p0073s3utgrvzky12",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "SEJOUR",
                     },
@@ -253,10 +288,12 @@ Array [
                 },
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s4v0079s3utitey8m4b",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "HEUREIN",
+                      "id": "ck74z6s4t0077s3utkxbdohz9",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "SEJOUR",
                     },
@@ -270,10 +307,12 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s4x0081s3utsqha4wcf",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s4z0083s3utfjdcwxjw",
                   "script": null,
                   "staticValue": "internal",
                 },
@@ -284,10 +323,12 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s510085s3uto5vtu3ns",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s530087s3ut0fxdd2hg",
                   "script": null,
                   "staticValue": "/Patient/{id}",
                 },
@@ -298,14 +339,17 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s560089s3utkfo9kdac",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s590093s3ut4yzvbz1l",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "PACLEUNIK",
+                      "id": "ck74z6s570091s3utwj5qsnrm",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "SEJOUR",
                     },
@@ -320,6 +364,7 @@ Array [
         ],
       },
       "definitionId": "EpisodeOfCare",
+      "id": "ck74z6s2l0003s3utqz3gjj5d",
       "label": "Hospital Stay",
       "primaryKeyColumn": "SECLEUNIK",
       "primaryKeyOwner": "OPS$ACHQ1ABC",
@@ -342,14 +387,17 @@ Array [
         "create": Array [
           Object {
             "definitionId": "",
+            "id": "ck74z6s2o0006s3utvs7dpyyg",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s2u0010s3ut0jjhi9p9",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "INACTIVPAT",
+                      "id": "ck74z6s2r0008s3ut09vzvnxz",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
@@ -363,14 +411,17 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s2w0012s3utcv9f5yx4",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s310016s3utm4ec00bf",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "ADR1PAT",
+                      "id": "ck74z6s2y0014s3utj262dt8x",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
@@ -379,10 +430,12 @@ Array [
                 },
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s350019s3ut6nhj9eyo",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "ADR2PAT",
+                      "id": "ck74z6s330017s3ut6svkgnl3",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
@@ -391,10 +444,12 @@ Array [
                 },
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s390023s3utl5iu29zc",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "ADR3PAT",
+                      "id": "ck74z6s370021s3utbw3d3yfl",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
@@ -408,14 +463,17 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s3b0025s3utqcwwbc8q",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s3f0029s3utvpsizaxf",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "VILLEPAT",
+                      "id": "ck74z6s3d0027s3utvxktapbv",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
@@ -429,14 +487,17 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s3i0031s3utlcbb7zwy",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s3m0035s3utjinwsvbs",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "CPOSTPAT",
+                      "id": "ck74z6s3k0033s3utki6j4rq6",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
@@ -450,14 +511,17 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s3o0037s3utn088gz0v",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s3s0041s3utzurqvuok",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "INACTIVPAT",
+                      "id": "ck74z6s3q0039s3utp7wiulo1",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
@@ -466,10 +530,12 @@ Array [
                 },
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s3w0045s3utqwindfws",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "IDMOTIFINAC",
+                      "id": "ck74z6s3u0043s3utxxv9ieu5",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
@@ -483,14 +549,17 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s3y0047s3ut41wvh4np",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s420050s3utkjdzdyn7",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "DATEINACPAT",
+                      "id": "ck74z6s400048s3utkolz8hfy",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
@@ -504,14 +573,17 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s440053s3utonbxenbm",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s480056s3utiy8062ct",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "TELPAT",
+                      "id": "ck74z6s460054s3utze9qa2uh",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
@@ -525,10 +597,12 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s4a0058s3ut6za31w82",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s4c0060s3uta66ykb2f",
                   "script": null,
                   "staticValue": "official",
                 },
@@ -539,14 +613,17 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s4e0062s3utmkpa5hdf",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s4i0066s3utft9tqgf5",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "NOMPAT",
+                      "id": "ck74z6s4g0064s3utqrlnww9a",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
@@ -560,14 +637,17 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s4k0068s3utjct66zcq",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s4o0072s3utripc836e",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "PRENOMPAT",
+                      "id": "ck74z6s4m0070s3utf4pze59l",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
@@ -581,10 +661,12 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s4q0074s3utypb6tw5y",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s4s0076s3utnyglsfnk",
                   "script": null,
                   "staticValue": "maiden",
                 },
@@ -595,14 +677,17 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s4u0078s3ut5lotec8n",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s4y0082s3uts7dlg5k7",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "NOMJFPAT",
+                      "id": "ck74z6s4w0080s3ut38d03www",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
@@ -616,14 +701,17 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s500084s3utas3vn3w7",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s540088s3utcos2gzf7",
                   "script": "clean_date",
                   "sqlValue": Object {
                     "create": Object {
                       "column": "DATENAISPA",
+                      "id": "ck74z6s520086s3utq1na3m11",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
@@ -637,14 +725,17 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s560090s3utq446lo7l",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s590094s3utyh8atj34",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "SEXEPAT",
+                      "id": "ck74z6s580092s3utkee8vzy1",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
@@ -658,10 +749,12 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s5c0095s3ut7vmxicp1",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s5e0096s3uttfo66eca",
                   "script": null,
                   "staticValue": "http://terminology.interopsante.org/CodeSystem/v2-0203",
                 },
@@ -672,10 +765,12 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s5g0097s3ut9zsjs21s",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s5i0098s3utx3hwyuez",
                   "script": null,
                   "staticValue": "PI",
                 },
@@ -686,10 +781,12 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s5k0099s3ut3pb37g4a",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s5m0100s3utgstvn3m9",
                   "script": null,
                   "staticValue": "Patient internal identifier",
                 },
@@ -700,10 +797,12 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s5n0101s3ut2co2emx1",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s5p0102s3ut7b7xbz2d",
                   "script": null,
                   "staticValue": "false",
                 },
@@ -714,14 +813,17 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s5r0103s3utxqwqh928",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s5v0105s3utv06b4yp7",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "NOOBSPAT",
+                      "id": "ck74z6s5t0104s3utbbf02nna",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
@@ -735,14 +837,17 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s5x0106s3utr1ce0qov",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s610108s3ut52ay4oir",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "PACLEUNIK",
+                      "id": "ck74z6s5z0107s3uthh8tx5wd",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
@@ -756,14 +861,17 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s630109s3utbb12yx8c",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s670111s3uts1c1575v",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "DOSSIERPAT",
+                      "id": "ck74z6s650110s3utxf0lfw5s",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
@@ -777,14 +885,17 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s690112s3utt0jc7inx",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s6d0114s3utew6s5t2y",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "DATEINPAT",
+                      "id": "ck74z6s6b0113s3ut8u2k3iot",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
@@ -798,14 +909,17 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s6f0115s3uth9zxnbwl",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s6j0117s3utg11tbzs8",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "DATEOUTPAT",
+                      "id": "ck74z6s6h0116s3utch62zrvp",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
@@ -819,10 +933,12 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s6l0118s3utqol2rbuh",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s6n0119s3utoopvxuuf",
                   "script": null,
                   "staticValue": "/Organization",
                 },
@@ -833,10 +949,12 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s6p0120s3utizcwysug",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s6r0121s3ut9qzuexx0",
                   "script": null,
                   "staticValue": "/Organization/{id}",
                 },
@@ -847,14 +965,17 @@ Array [
           },
           Object {
             "definitionId": "",
+            "id": "ck74z6s6t0122s3utdatirwmg",
             "inputs": Object {
               "create": Array [
                 Object {
                   "conceptMapId": null,
+                  "id": "ck74z6s6x0124s3utj7krrecc",
                   "script": null,
                   "sqlValue": Object {
                     "create": Object {
                       "column": "CODESERV",
+                      "id": "ck74z6s6v0123s3ut7nm8hc2m",
                       "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
@@ -869,6 +990,7 @@ Array [
         ],
       },
       "definitionId": "Patient",
+      "id": "ck74z6s2l0004s3ut2os7csti",
       "label": "",
       "primaryKeyColumn": "PACLEUNIK",
       "primaryKeyOwner": "OPS$ACHQ1ABC",

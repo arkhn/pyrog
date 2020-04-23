@@ -92,7 +92,9 @@ const ConceptMapDialog = ({
         const codeSystems = await axios.get(
           `${FHIR_API_URL}/CodeSystem?_count=1000`
         );
-        setExistingCodeSystems(codeSystems.data.entry);
+        setExistingCodeSystems(
+          codeSystems.data.entry.map(({ resource }: any) => resource)
+        );
       } catch (err) {
         console.error(
           `Could not fecth code systems: ${
@@ -205,7 +207,7 @@ const ConceptMapDialog = ({
       />
     </div>
   );
-
+  console.log('--', existingCodeSystems);
   const selectTargetCodeSystem = (
     <CodeSystemSelect
       systems={existingCodeSystems}

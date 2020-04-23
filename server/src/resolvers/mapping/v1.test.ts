@@ -33,6 +33,7 @@ describe('import mapping V1', () => {
     await importMappingV1(new PrismaClient(), sourceId, resources)
     expect(mockCreateResource.mock.calls[0][0]).toEqual({
       data: {
+        id: resources[0].id,
         label: resources[0].label,
         primaryKeyOwner: resources[0].primaryKeyOwner,
         primaryKeyTable: resources[0].primaryKeyTable,
@@ -46,6 +47,7 @@ describe('import mapping V1', () => {
         attributes: {
           create: expect.arrayContaining([
             {
+              id: expect.any(String),
               path: 'period.start',
               definitionId: '',
               mergingScript: 'merge_concat',
@@ -54,6 +56,7 @@ describe('import mapping V1', () => {
               },
             },
             {
+              id: expect.any(String),
               path: 'managingOrganization.reference',
               comments: {
                 create: {
