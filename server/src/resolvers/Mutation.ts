@@ -165,6 +165,7 @@ export const Mutation = mutationType({
         resourceId: idArg({ required: true }),
         definitionId: idArg({ required: true }),
         path: stringArg({ required: true }),
+        sliceName: stringArg({ required: false }),
         data: arg({ type: 'AttributeInput' }),
       },
       resolve: createAttribute,

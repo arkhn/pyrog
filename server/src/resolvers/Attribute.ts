@@ -6,6 +6,7 @@ export const Attribute = objectType({
   definition(t) {
     t.model.id()
     t.model.path()
+    t.model.sliceName()
     t.model.definitionId()
     t.field('definition', {
       type: 'StructureDefinition',
@@ -33,7 +34,7 @@ export const Attribute = objectType({
 export const createAttribute: FieldResolver<
   'Mutation',
   'createAttribute'
-> = async (_, { resourceId, definitionId, path, data }, ctx) => {
+> = async (_, { resourceId, definitionId, path, sliceName, data }, ctx) => {
   const existing = await ctx.prisma.attribute.findMany({
     where: { path, resource: { id: resourceId } },
     include: {
@@ -51,6 +52,7 @@ export const createAttribute: FieldResolver<
       ...data,
       definitionId,
       path,
+      sliceName,
       resource: {
         connect: { id: resourceId },
       },

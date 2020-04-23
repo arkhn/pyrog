@@ -3,25 +3,53 @@ import { Menu, MenuItem, ContextMenu, Tooltip } from '@blueprintjs/core';
 import { Attribute } from '@arkhn/fhir.ts';
 
 import AddExtensionSelect from 'components/selects/addExtensionSelect';
+import AddSliceSelect from 'components/selects/addSliceSelect';
 import { ApolloProvider, useApolloClient } from 'react-apollo';
 
 interface NodeLabelProps {
   attribute: Attribute;
   addNodeCallback: any;
+  addSliceCallback: any;
   addExtensionCallback: any;
   deleteNodeCallback: any;
 }
 
 export const NodeLabel = ({
-  attribute: { types, definition, id, isArray, isItem, isSlice, extensions },
+  attribute: {
+    types,
+    definition,
+    id,
+    isArray,
+    isItem,
+    isSlice,
+    slices,
+    extensions
+  },
   addNodeCallback,
+  addSliceCallback,
   addExtensionCallback,
   deleteNodeCallback
-}: NodeLabelProps) => {
+}: NodeLabelProps): React.ReactElement => {
   const client = useApolloClient();
+
   const renderAddItem = () => (
     <MenuItem icon={'add'} onClick={addNodeCallback} text={'Ajouter un item'} />
   );
+
+  const renderAddSlice = () => {
+    const sliceNames = slices
+      .map(s => s.definition.sliceName)
+      .filter(Boolean) as string[];
+    return (
+      <AddSliceSelect
+        items={[...sliceNames]}
+        onChange={(selected: string): void =>
+          selected === id ? addNodeCallback() : addSliceCallback(selected)
+        }
+        baseName={id}
+      />
+    );
+  };
 
   const renderAddExtension = () => (
     <AddExtensionSelect
@@ -48,7 +76,8 @@ export const NodeLabel = ({
     const menu = (
       <ApolloProvider client={client}>
         <Menu>
-          {isArray && renderAddItem()}
+          {isArray && slices.length === 0 && renderAddItem()}
+          {isArray && slices.length > 0 && renderAddSlice()}
           {isItem && !isSlice && renderRemoveItem()}
           {hasAllowedExtensions && renderAddExtension()}
         </Menu>

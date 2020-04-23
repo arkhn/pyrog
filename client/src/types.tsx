@@ -27,6 +27,7 @@ export type ISourceRole = 'READER' | 'WRITER';
 export interface IAttribute {
   id: string;
   path: string;
+  sliceName: string;
   definitionId: string;
 }
 export interface IAttributeDefinition {

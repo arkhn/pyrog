@@ -4,12 +4,14 @@ mutation createAttribute(
   $resourceId: ID!,
   $definitionId: ID!,
   $path: String!,
+  $sliceName: String,
   $data: AttributeInput
 ) {
   createAttribute(
     resourceId: $resourceId,
     definitionId: $definitionId,
     path: $path,
+    sliceName: $sliceName,
     data: $data
   ) {
     ...entireAttribute

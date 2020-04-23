@@ -123,7 +123,8 @@ const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
           variables: {
             resourceId: resource.id,
             definitionId: attribute.types[0],
-            path
+            path,
+            sliceName: attribute.definition.sliceName
           }
         });
         attributeId = attr.createAttribute.id;
@@ -143,7 +144,8 @@ const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
             variables: {
               resourceId: resource.id,
               definitionId: currentAttribute.types[0],
-              path: parentPath
+              path: parentPath,
+              sliceName: currentAttribute.definition.sliceName
             }
           });
           dispatch(setAttributeInMap(parentPath, attr.createAttribute));

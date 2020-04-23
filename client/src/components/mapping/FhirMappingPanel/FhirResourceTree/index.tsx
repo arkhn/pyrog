@@ -61,15 +61,18 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     (state: IReduxStore) => state.resourceInputs.attributesMap
   );
 
-  const buildAttributes = ({ attribute, extensions }: IAttributeDefinition) => {
-    const a = Attribute.from(attribute);
+  const buildAttributes = (parent?: Attribute) => ({
+    attribute,
+    extensions
+  }: IAttributeDefinition): Attribute => {
+    const a = Attribute.from(attribute, parent);
     a.extensions = extensions as any;
     return a;
   };
 
   const fhirStructure: Attribute[] =
     data && data.structureDefinition
-      ? data.structureDefinition.attributes.map(buildAttributes)
+      ? data.structureDefinition.attributes.map(buildAttributes())
       : [];
 
   const itemsOf = (array: Attribute): { [index: string]: IAttribute } => {
@@ -97,6 +100,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       childNodes,
       addExtension,
       addNodeToArray,
+      addSliceToArray,
       deleteNodeFromArray,
       genTreeLevel,
       attributesForResource,
@@ -112,7 +116,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
   const addExtension = (
     node: TreeNode,
     extensionDefinition: IStructureDefinition
-  ) => {
+  ): void => {
     // TODO: handle primitive extensions
     if (node.nodeData.isPrimitive) {
       toaster.show({
@@ -147,7 +151,10 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     setNodes(nodes => [...nodes]);
   };
 
-  const deleteNodeFromArray = (deletedNode: TreeNode, arrayNode: TreeNode) => {
+  const deleteNodeFromArray = (
+    deletedNode: TreeNode,
+    arrayNode: TreeNode
+  ): void => {
     // First, we delete all the corresponding attributes in DB
     const deleted = deletedNode.nodeData!;
     deleteAttributes({
@@ -166,6 +173,11 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
   const addNodeToArray = (arrayNode: TreeNode) => {
     // add it to the parent
     arrayNode.addItem();
+    setNodes(nodes => [...nodes]);
+  };
+
+  const addSliceToArray = (arrayNode: TreeNode, sliceName: string) => {
+    arrayNode.addSlice(sliceName);
     setNodes(nodes => [...nodes]);
   };
 
@@ -188,20 +200,33 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     );
   };
 
-  const buildMultiTypeNode = (attribute: Attribute): TreeNode[] =>
-    // create a node with a single type for each type of the parent
-    attribute
-      .spreadTypes()
-      .map(buildNodeFromAttribute)
-      .filter(Boolean) as TreeNode[];
+  const buildSlicedNode = (slicedNode: TreeNode): TreeNode[] => {
+    const sliced = slicedNode.nodeData!;
+
+    let existingItems = itemsOf(sliced);
+    // If no child exists yet, we still build one with index 0
+    if (Object.keys(existingItems).length === 0) {
+      existingItems = { '0': null as any };
+    }
+    // create a node for each item of the array
+    return Object.keys(existingItems).map(index =>
+      slicedNode.addSlice(
+        existingItems[index] ? existingItems[index].sliceName : undefined,
+        Number(index)
+      )
+    );
+  };
 
   const buildNodeFromAttribute = (attribute: Attribute): TreeNode | null => {
     const node = createNode(attribute, []);
 
-    if (attribute.types.length > 1) {
-      // if the attribute has multiple types, we have to create as many
-      // children as there are types.
-      node.childNodes = buildMultiTypeNode(attribute);
+    if (attribute.slices.length > 0) {
+      // if the attribute has slices, we build a node with these different slices inside
+      node.childNodes = buildSlicedNode(node);
+    } else if (attribute.choices.length > 0) {
+      // if the node has choices, create a node for each of them
+      attribute.choices.forEach(choice => attribute.parent?.addChild(choice));
+      node.childNodes = genTreeLevel(attribute.choices);
     } else if (attribute.isArray) {
       // if the node is an array of extensions, only render it if it already has children.
       if (attribute.isExtension && Object.keys(itemsOf(attribute)).length === 0)
@@ -210,9 +235,6 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       // childNode will be the node really having the structure defined by
       // the structure definition.
       node.childNodes = buildChildNodesForArray(node);
-    } else if (attribute.slices.length > 0) {
-      // if the node has slices, create a node for each of them
-      node.childNodes = genTreeLevel(attribute.slices);
     } else if (attribute.children.length > 0) {
       // if the node has children we already know about, create them.
       node.childNodes = genTreeLevel(attribute.children);
@@ -225,28 +247,27 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     attributes.map(buildNodeFromAttribute).filter(Boolean) as TreeNode[];
 
   const fetchAttributeDefinition = async (
-    definitionId: string
+    parent: Attribute
   ): Promise<Attribute[]> => {
     const { data } = await client.query({
       query: qStructureDisplay,
-      variables: { definitionId }
+      variables: { definitionId: parent.types[0] }
     });
     if (!data || !data.structureDefinition) return [];
-    return data.structureDefinition.attributes.map(buildAttributes);
+    return data.structureDefinition.attributes.map(buildAttributes(parent));
   };
 
   const handleNodeClick = async (node: ITreeNode<Attribute>): Promise<void> => {
     const attribute = node.nodeData!;
-    console.debug(attribute.path);
+    console.debug(attribute);
     if (attribute.isArray || !attribute.isPrimitive) {
       // if the node is of composite or array type, expand (or collapse) it
       node.isExpanded = !node.isExpanded;
       // if the node has no children yet, fetch the attributes definitions
       // and add them as children of the clicked node.
       if (!node.childNodes || node.childNodes.length === 0) {
-        const children = await fetchAttributeDefinition(attribute.types[0]);
-        children.forEach(child => attribute.addChild(child));
-        node.childNodes = genTreeLevel(attribute.children);
+        const children = await fetchAttributeDefinition(attribute);
+        node.childNodes = genTreeLevel(children);
       }
     } else {
       if (selectedNode && selectedNode !== node)
@@ -274,9 +295,8 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       (attribute.isArray || !attribute.isPrimitive) &&
       (!node.childNodes || node.childNodes.length === 0)
     ) {
-      const children = await fetchAttributeDefinition(attribute.types[0]);
+      const children = await fetchAttributeDefinition(attribute);
       children.forEach(child => attribute.addChild(child));
-      node.childNodes = genTreeLevel(attribute.children);
     }
     setNodes([...nodes]);
   };

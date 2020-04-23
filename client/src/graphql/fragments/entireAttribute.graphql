@@ -4,6 +4,7 @@
 fragment entireAttribute on Attribute {
   id
   path
+  sliceName
   definitionId
   mergingScript
   comments {
