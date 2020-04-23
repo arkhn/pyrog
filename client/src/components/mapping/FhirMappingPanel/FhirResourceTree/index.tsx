@@ -247,12 +247,11 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     attributes.map(buildNodeFromAttribute).filter(Boolean) as TreeNode[];
 
   const fetchAttributeDefinition = async (
-    definitionId: string,
-    parent?: Attribute
+    parent: Attribute
   ): Promise<Attribute[]> => {
     const { data } = await client.query({
       query: qStructureDisplay,
-      variables: { definitionId }
+      variables: { definitionId: parent.types[0] }
     });
     if (!data || !data.structureDefinition) return [];
     return data.structureDefinition.attributes.map(buildAttributes(parent));
@@ -267,10 +266,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       // if the node has no children yet, fetch the attributes definitions
       // and add them as children of the clicked node.
       if (!node.childNodes || node.childNodes.length === 0) {
-        const children = await fetchAttributeDefinition(
-          attribute.types[0],
-          attribute
-        );
+        const children = await fetchAttributeDefinition(attribute);
         node.childNodes = genTreeLevel(children);
       }
     } else {
@@ -299,10 +295,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       (attribute.isArray || !attribute.isPrimitive) &&
       (!node.childNodes || node.childNodes.length === 0)
     ) {
-      const children = await fetchAttributeDefinition(
-        attribute.types[0],
-        attribute
-      );
+      const children = await fetchAttributeDefinition(attribute);
       children.forEach(child => attribute.addChild(child));
     }
     setNodes([...nodes]);
