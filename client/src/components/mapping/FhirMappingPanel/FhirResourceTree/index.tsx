@@ -120,6 +120,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     node: TreeNode,
     extensionDefinition: IStructureDefinition
   ): void => {
+    console.log('add', extensionDefinition);
     // TODO: handle primitive extensions
     if (node.nodeData.isPrimitive) {
       toaster.show({
@@ -282,7 +283,10 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       node.isExpanded = !node.isExpanded;
       // if the node has no children yet, fetch the attributes definitions
       // and add them as children of the clicked node.
-      if (!node.childNodes || node.childNodes.length === 0) {
+      if (
+        !attribute.isArray &&
+        (!node.childNodes || node.childNodes.length === 0)
+      ) {
         const children = await fetchAttributeDefinition(attribute);
         node.childNodes = genTreeLevel(children);
       }
