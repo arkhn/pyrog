@@ -92,6 +92,7 @@ export const NodeLabel = ({
 
     if (
       (isArray && !isExtension) ||
+      (isArray && slices.length > 0) ||
       (isItem && !isSlice) ||
       hasAllowedExtensions ||
       isRootExtensions

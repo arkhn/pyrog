@@ -44,10 +44,13 @@ export class TreeNode implements ITreeNode<Attribute> {
     this.id = attribute.tail;
     this.nodeData = attribute;
     this.childNodes = childNodes;
-    this.hasCaret = !attribute.isPrimitive || attribute.isArray;
+    this.hasCaret =
+      !attribute.isPrimitive ||
+      attribute.choices.length > 0 ||
+      attribute.isArray;
     this.icon = attribute.isArray
       ? 'multi-select'
-      : !attribute.isPrimitive
+      : !attribute.isPrimitive || attribute.choices.length > 0
       ? 'folder-open'
       : 'tag';
     this.existingAttributes = existingAttributes;

@@ -213,10 +213,6 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     const sliced = slicedNode.nodeData!;
 
     let existingItems = itemsOf(sliced);
-    // If no child exists yet, we still build one with index 0
-    if (Object.keys(existingItems).length === 0) {
-      existingItems = { '0': null as any };
-    }
     // create a node for each item of the array
     return Object.keys(existingItems).map(index =>
       slicedNode.addSlice(
