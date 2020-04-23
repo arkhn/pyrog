@@ -9,17 +9,18 @@
     "build:docker": "docker-compose build pyrog",
     "generate": "yarn -s run generate:prisma && yarn -s run generate:nexus",
     "generate:prisma": "dotenv prisma2 generate",
-    "generate:nexus": "ts-node --project tsconfig.build.json -r tsconfig-paths/register --transpile-only src/schema",
+    "generate:nexus": "yarn run-ts --transpile-only src/schema",
     "dev": "ts-node-dev --project tsconfig.build.json -r tsconfig-paths/register --no-notify --respawn --transpileOnly src/server",
     "lint": "eslint './src/**/*.ts'",
     "migrate:new": "prisma2 migrate save --experimental",
     "migrate:up": "prisma2 migrate up --experimental",
-    "seed:superuser": "ts-node scripts/superuser.ts",
-    "seed:mapping": "ts-node scripts/importMapping.ts",
-    "export:mappings": "ts-node scripts/exportMapping.ts backup",
+    "seed:superuser": "yarn run-ts scripts/superuser.ts",
+    "seed:mapping": "yarn run-ts scripts/importMapping.ts",
+    "export:mappings": "yarn run-ts scripts/exportMapping.ts backup",
     "test": "jest --max-workers 1 --watch",
     "test:ci": "jest --max-workers 1 --coverage",
-    "wait:db": "ts-node scripts/waitForDb.ts"
+    "run-ts": "ts-node --project tsconfig.build.json -r tsconfig-paths/register",
+    "wait:db": "yarn run-ts scripts/waitForDb.ts"
   },
   "dependencies": {
     "@arkhn/fhir.ts": "^3.2.0",
