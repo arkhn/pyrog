@@ -120,7 +120,6 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     node: TreeNode,
     extensionDefinition: IStructureDefinition
   ): void => {
-    console.log('add', extensionDefinition);
     // TODO: handle primitive extensions
     if (node.nodeData.isPrimitive) {
       toaster.show({

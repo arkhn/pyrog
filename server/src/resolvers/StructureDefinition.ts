@@ -73,7 +73,7 @@ export const StructureDefinition = objectType({
       description: 'List of allowed extensions on this type',
       resolve: async (parent: any) =>
         // the the definition is not a root type (eg: observation-bodyweight), we need to return
-        // extensions on observation-bodyweight (definition.id) andq Observation (definition.type).
+        // extensions on observation-bodyweight (definition.id) and Observation (definition.type).
         parent.meta.type === parent.meta.id
           ? typeExtensions(parent.meta.id)
           : [
