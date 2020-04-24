@@ -71,7 +71,15 @@ export const StructureDefinition = objectType({
     t.list.field('extensions', {
       type: 'StructureDefinition',
       description: 'List of allowed extensions on this type',
-      resolve: async (parent: any) => typeExtensions(parent.meta.id),
+      resolve: async (parent: any) =>
+        // the the definition is not a root type (eg: observation-bodyweight), we need to return
+        // extensions on observation-bodyweight (definition.id) and Observation (definition.type).
+        parent.meta.type === parent.meta.id
+          ? typeExtensions(parent.meta.id)
+          : [
+              ...(await typeExtensions(parent.meta.id)),
+              ...(await typeExtensions(parent.meta.type)),
+            ],
     })
 
     t.list.field('profiles', {

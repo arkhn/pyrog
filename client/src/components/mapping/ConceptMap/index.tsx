@@ -207,7 +207,7 @@ const ConceptMapDialog = ({
       />
     </div>
   );
-  console.log('--', existingCodeSystems);
+
   const selectTargetCodeSystem = (
     <CodeSystemSelect
       systems={existingCodeSystems}
