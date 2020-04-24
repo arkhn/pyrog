@@ -1,4 +1,5 @@
 #import "../fragments/entireFilter.graphql"
+#import "../fragments/comment.graphql"
 
 query resourceAttributes($resourceId: ID!) {
   resource(resourceId: $resourceId) {
@@ -11,6 +12,12 @@ query resourceAttributes($resourceId: ID!) {
       path
       sliceName
       definitionId
+      inputs {
+        id
+      }
+      comments {
+        ...comment
+      }
     }
   }
 }

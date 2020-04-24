@@ -20,9 +20,6 @@ import { IReduxStore, ISelectedSource } from 'types';
 import { setAttributeInMap } from 'services/resourceInputs/actions';
 
 // GRAPHQL
-const qInputsForAttribute = loader(
-  'src/graphql/queries/inputsForAttribute.graphql'
-);
 const mCreateAttribute = loader(
   'src/graphql/mutations/createAttribute.graphql'
 );
@@ -60,31 +57,6 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
     { loading: creatingSQLInput }
   ] = useMutation(mCreateSQLInput, { onError: onError(toaster) });
 
-  const addInputToCache = (cache: any, { data: { createInput } }: any) => {
-    try {
-      const { attribute: dataAttribute } = cache.readQuery({
-        query: qInputsForAttribute,
-        variables: {
-          attributeId
-        }
-      });
-      cache.writeQuery({
-        query: qInputsForAttribute,
-        variables: {
-          attributeId
-        },
-        data: {
-          attribute: {
-            ...dataAttribute,
-            inputs: [...dataAttribute.inputs, createInput]
-          }
-        }
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const createInput = async (): Promise<void> => {
     try {
       if (!attributeId) {
@@ -98,7 +70,6 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
           }
         });
         attributeId = attr.createAttribute.id;
-        dispatch(setAttributeInMap(path, attr.createAttribute));
       }
       // Also, we create the parent attributes if they don't exist
       let currentAttribute = attribute;
@@ -121,7 +92,7 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
           dispatch(setAttributeInMap(parentPath, attr.createAttribute));
         }
       }
-      await createSQLInput({
+      const { data } = await createSQLInput({
         variables: {
           attributeId,
           columnInput: {
@@ -129,9 +100,9 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
             table: table,
             column: column
           }
-        },
-        update: addInputToCache
+        }
       });
+      dispatch(setAttributeInMap(path, data.createInput.attribute));
     } catch (e) {
       console.log(e);
     }

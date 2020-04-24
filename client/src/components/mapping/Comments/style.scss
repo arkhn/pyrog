@@ -14,9 +14,31 @@ $border-radius: 6px;
   text-align: center;
 }
 
+.user-input {
+  display: flex;
+}
+
 .card-input {
   align-self: flex-end;
   padding: 0px 20px;
+  min-width: 400px;
+}
+
+.form-validate {
+  display: flex;
+  align-self: center;
+  width: 30%;
+  flex-direction: column;
+}
+
+#validate-button {
+  width: 150px;
+
+  text-align: center;
+  font-size: x-large;
+  align-self: center;
+  border-radius: $border-radius;
+  display: flex;
 }
 
 #comment-input {
@@ -43,6 +65,10 @@ $border-radius: 6px;
   min-width: 400px;
   margin: 5px 10px;
   border-radius: $border-radius;
+}
+
+.validation-comment {
+  background-color: #3dcc91;
 }
 
 .my-comment {

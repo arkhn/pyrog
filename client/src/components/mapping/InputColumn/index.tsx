@@ -8,7 +8,7 @@ import {
   Tag
 } from '@blueprintjs/core';
 import React, { useState } from 'react';
-import { useApolloClient, useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { onError as onApolloError } from 'services/apollo';
@@ -19,9 +19,7 @@ import Join from '../Join';
 import ConceptMapDialog from 'components/mapping/ConceptMap';
 import ScriptSelect from 'components/selects/scriptSelect';
 import { loader } from 'graphql.macro';
-
-// ACTIONS
-import { removeAttributeFromMap } from 'services/resourceInputs/actions';
+import { setAttributeInMap } from 'services/resourceInputs/actions';
 
 // GRAPHQL
 const qInputsForAttribute = loader(
@@ -29,9 +27,6 @@ const qInputsForAttribute = loader(
 );
 const mUpdateInput = loader('src/graphql/mutations/updateInput.graphql');
 const mDeleteInput = loader('src/graphql/mutations/deleteInput.graphql');
-const mDeleteAttribute = loader(
-  'src/graphql/mutations/deleteAttribute.graphql'
-);
 const mAddJoinToColumn = loader(
   'src/graphql/mutations/addJoinToColumn.graphql'
 );
@@ -43,7 +38,6 @@ interface Props {
 }
 
 const InputColumn = ({ input, schema, source }: Props) => {
-  const client = useApolloClient();
   const dispatch = useDispatch();
 
   const toaster = useSelector((state: IReduxStore) => state.toaster);
@@ -61,7 +55,6 @@ const InputColumn = ({ input, schema, source }: Props) => {
   const [deleteInput, { loading: loadDelInput }] = useMutation(mDeleteInput, {
     onError
   });
-  const [deleteAttribute] = useMutation(mDeleteAttribute, { onError });
   const [
     addJoinToColumn,
     { loading: loadAddJoin }
@@ -81,6 +74,7 @@ const InputColumn = ({ input, schema, source }: Props) => {
       ...dataAttribute,
       inputs: dataAttribute.inputs.filter((i: any) => i.id !== input.id)
     };
+    dispatch(setAttributeInMap(attribute.path, newDataAttribute));
     cache.writeQuery({
       query: qInputsForAttribute,
       variables: {
@@ -98,23 +92,6 @@ const InputColumn = ({ input, schema, source }: Props) => {
       },
       update: removeInputFromCache
     });
-
-    // Remove attribute from map and DB if it was last input
-    const { data: dataInputs } = await client.query({
-      query: qInputsForAttribute,
-      variables: {
-        attributeId: attributeId
-      }
-    });
-
-    if (dataInputs.attribute.inputs.length === 0) {
-      deleteAttribute({
-        variables: {
-          attributeId
-        }
-      });
-      dispatch(removeAttributeFromMap(attribute.path));
-    }
   };
 
   return (

@@ -1,7 +1,19 @@
 #import "../fragments/comment.graphql"
+#import "../fragments/entireAttribute.graphql"
 
-mutation createComment($attributeId: ID!, $content: String!) {
-  createComment(attributeId: $attributeId, content: $content) {
+mutation createComment(
+  $attributeId: ID!
+  $content: String!
+  $validation: Boolean!
+) {
+  createComment(
+    attributeId: $attributeId
+    content: $content
+    validation: $validation
+  ) {
     ...comment
+    attribute {
+      ...entireAttribute
+    }
   }
 }

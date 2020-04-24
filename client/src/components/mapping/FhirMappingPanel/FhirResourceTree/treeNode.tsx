@@ -1,5 +1,5 @@
 import { IconName } from '@blueprintjs/core';
-import { Icon, ITreeNode } from '@blueprintjs/core';
+import { ITreeNode } from '@blueprintjs/core';
 import React from 'react';
 
 import { Attribute, ResourceDefinition } from '@arkhn/fhir.ts';
@@ -8,6 +8,7 @@ import { Attribute, ResourceDefinition } from '@arkhn/fhir.ts';
 
 import { NodeLabel } from './nodeLabel';
 import { IStructureDefinition } from 'types';
+import { SecondaryLabel } from './secondaryLabel';
 
 export class TreeNode implements ITreeNode<Attribute> {
   // ITreeNode interface
@@ -22,7 +23,6 @@ export class TreeNode implements ITreeNode<Attribute> {
   isExpanded?: boolean;
 
   // custom attributes
-  existingAttributes: any;
   onAddExtension: Function;
   onAddItem: Function;
   onAddSlice: Function;
@@ -38,7 +38,6 @@ export class TreeNode implements ITreeNode<Attribute> {
     onAddSlice: Function,
     onDeleteItem: Function,
     genTreeLevel: Function,
-    existingAttributes: any,
     parentArray?: ITreeNode<Attribute>
   ) {
     this.id = attribute.tail;
@@ -53,8 +52,7 @@ export class TreeNode implements ITreeNode<Attribute> {
       : !attribute.isPrimitive || attribute.choices.length > 0
       ? 'folder-open'
       : 'tag';
-    this.existingAttributes = existingAttributes;
-    this.secondaryLabel = this.buildSecondaryLabel(attribute, childNodes);
+    this.secondaryLabel = <SecondaryLabel attribute={attribute} />;
     this.label = (
       <NodeLabel
         attribute={attribute}
@@ -82,50 +80,13 @@ export class TreeNode implements ITreeNode<Attribute> {
       this.onAddSlice,
       this.onDeleteItem,
       this.genTreeLevel,
-      this.existingAttributes,
       array
     );
   }
 
-  checkHasChildAttributes(pathString: string) {
-    return Object.keys(this.existingAttributes).some(el =>
-      el.startsWith(pathString)
-    );
-  }
-
-  checkHasAttribute(pathString: string) {
-    return Object.keys(this.existingAttributes).includes(pathString);
-  }
-
-  buildSecondaryLabel(
-    attribute: Attribute,
-    childNodes: ITreeNode<Attribute>[]
-  ): React.ReactElement | undefined {
-    const hasInputs = this.checkHasAttribute(attribute.path);
-
-    let hasChildAttributes: boolean;
-    if (attribute.types.length > 1) {
-      // Check if any of the children have child attributes
-      hasChildAttributes = childNodes.some(n =>
-        this.checkHasChildAttributes(n.nodeData!.path)
-      );
-    } else {
-      hasChildAttributes = this.checkHasChildAttributes(attribute.path);
-    }
-
-    if (hasInputs && attribute.isPrimitive)
-      return <Icon icon="small-tick" intent={'success'} />;
-    else if (attribute.isRequired) return <Icon icon="dot" intent="warning" />;
-    else if (hasChildAttributes || hasInputs) return <Icon icon="dot" />;
-    else return undefined;
-  }
-
   updateSecondaryLabel() {
     if (!this.nodeData) return;
-    this.secondaryLabel = this.buildSecondaryLabel(
-      this.nodeData,
-      this.childNodes || []
-    );
+    this.secondaryLabel = <SecondaryLabel attribute={this.nodeData} />;
     this.childNodes?.forEach(child =>
       (child as TreeNode).updateSecondaryLabel()
     );

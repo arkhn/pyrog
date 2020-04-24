@@ -185,6 +185,7 @@ export const Mutation = mutationType({
       args: {
         attributeId: idArg({ required: true }),
         content: stringArg({ required: true }),
+        validation: booleanArg({ required: true }),
       },
       resolve: createComment,
     })

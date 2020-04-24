@@ -125,6 +125,7 @@ export interface NexusGenInputs {
     NOT?: NexusGenInputs['CommentWhereInput'][] | null; // [CommentWhereInput!]
     OR?: NexusGenInputs['CommentWhereInput'][] | null; // [CommentWhereInput!]
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    validation?: NexusGenInputs['BooleanFilter'] | null; // BooleanFilter
   }
   CommentWhereUniqueInput: { // input type
     id?: string | null; // String
@@ -465,10 +466,12 @@ export interface NexusGenFieldTypes {
     updatedAt: any; // DateTime!
   }
   Comment: { // field return type
+    attribute: NexusGenRootTypes['Attribute'] | null; // Attribute
     author: NexusGenRootTypes['User']; // User!
     content: string; // String!
     createdAt: any; // DateTime!
     id: string; // String!
+    validation: boolean; // Boolean!
   }
   ConceptMap: { // field return type
     id: string; // String!
@@ -662,6 +665,7 @@ export interface NexusGenArgTypes {
     createComment: { // args
       attributeId: string; // ID!
       content: string; // String!
+      validation: boolean; // Boolean!
     }
     createInput: { // args
       attributeId: string; // ID!

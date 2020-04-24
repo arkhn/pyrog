@@ -29,6 +29,8 @@ export interface IAttribute {
   path: string;
   sliceName: string;
   definitionId: string;
+  inputs: any[];
+  comments: IComment[];
 }
 export interface IAttributeDefinition {
   attribute: AttributeDefinition;
@@ -110,6 +112,7 @@ export interface IComment {
   id: string;
   author: IUser;
   content: string;
+  validation: boolean;
   createdAt: string;
 }
 

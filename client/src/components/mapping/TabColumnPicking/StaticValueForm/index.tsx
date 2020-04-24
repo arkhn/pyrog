@@ -22,9 +22,6 @@ import IdentifierSystemInput from './IdentifierSystemInput';
 
 // GRAPHQL
 const qBasicFhirTypes = loader('src/graphql/queries/basicFhirTypes.graphql');
-const qInputsForAttribute = loader(
-  'src/graphql/queries/inputsForAttribute.graphql'
-);
 const qSourcesAndResources = loader(
   'src/graphql/queries/sourcesAndResources.graphql'
 );
@@ -76,44 +73,13 @@ const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [attribute]);
 
-  const addInputToCache = (
-    cache: any,
-    { data: { createInput } }: any
-  ): void => {
-    try {
-      const { attribute: dataAttribute } = cache.readQuery({
-        query: qInputsForAttribute,
-        variables: {
-          attributeId
-        }
-      });
-      cache.writeQuery({
-        query: qInputsForAttribute,
-        variables: {
-          attributeId
-        },
-        data: {
-          attribute: {
-            ...dataAttribute,
-            inputs: [...dataAttribute.inputs, createInput]
-          }
-        }
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const [createAttribute] = useMutation(mCreateAttribute, {
     onError: onError(toaster)
   });
-  const [createStaticInput, { loading: creatingStaticInput }] = useMutation(
-    mCreateStaticInput,
-    {
-      update: addInputToCache,
-      onError: onError(toaster)
-    }
-  );
+  const [
+    createStaticInput,
+    { loading: creatingStaticInput }
+  ] = useMutation(mCreateStaticInput, { onError: onError(toaster) });
 
   const addStaticValue = async (value: string): Promise<void> => {
     try {
@@ -128,7 +94,6 @@ const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
           }
         });
         attributeId = attr.createAttribute.id;
-        dispatch(setAttributeInMap(path, attr.createAttribute));
       }
       // Also, we create the parent attributes if they don't exist
       let currentAttribute = attribute;
@@ -151,12 +116,13 @@ const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
           dispatch(setAttributeInMap(parentPath, attr.createAttribute));
         }
       }
-      await createStaticInput({
+      const { data }: any = await createStaticInput({
         variables: {
           attributeId,
           staticValue: value
         }
       });
+      dispatch(setAttributeInMap(path, data.createInput.attribute));
     } catch (e) {
       console.log(e);
     }
