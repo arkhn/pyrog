@@ -36,14 +36,14 @@ export const SecondaryLabel = ({
 
   const hasInputs = checkHasInputs(attribute.path);
 
-  let hasChildAttributes: boolean;
+  let hasChildInputs: boolean;
   if (attribute.choices.length > 0) {
     // Check if any of the children have child attributes
-    hasChildAttributes = attribute.choices.some(
+    hasChildInputs = attribute.choices.some(
       a => checkHasChildInputs(a.path) || checkHasInputs(a.path)
     );
   } else {
-    hasChildAttributes = checkHasChildInputs(attribute.path);
+    hasChildInputs = checkHasChildInputs(attribute.path);
   }
 
   const renderCommentCount = () => (
@@ -56,7 +56,7 @@ export const SecondaryLabel = ({
   return (
     <React.Fragment>
       {isValidated && <Icon icon="small-tick" intent="success" />}
-      {hasChildAttributes && <Icon icon="dot" />}
+      {hasChildInputs && <Icon icon="dot" />}
       {!isValidated && hasInputs && <Icon icon="dot" intent="warning" />}
       {!hasInputs && attribute.isRequired && (
         <Icon icon="dot" intent="danger" />
