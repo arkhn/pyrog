@@ -7,6 +7,9 @@ export const Comment = objectType({
 
     t.model.author()
     t.model.content()
+    t.model.validation()
+
+    t.model.attribute()
 
     t.model.createdAt()
   },
@@ -14,7 +17,7 @@ export const Comment = objectType({
 
 export const createComment: FieldResolver<'Mutation', 'createComment'> = async (
   _,
-  { attributeId, content },
+  { attributeId, content, validation },
   ctx,
 ) =>
   ctx.prisma.comment.create({
@@ -26,5 +29,6 @@ export const createComment: FieldResolver<'Mutation', 'createComment'> = async (
         connect: { id: ctx.user!.id },
       },
       content,
+      validation,
     },
   })

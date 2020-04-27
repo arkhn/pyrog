@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { useSelector, useDispatch } from 'react-redux';
-import { FormGroup, TextArea, Button, Card } from '@blueprintjs/core';
+import { FormGroup, TextArea, Button, Card, Icon } from '@blueprintjs/core';
 
 import { IReduxStore, IComment } from 'types';
 import { loader } from 'graphql.macro';
@@ -43,6 +43,9 @@ const Comments = () => {
     },
     skip: !attributeForNode
   });
+  const alreadyValidatedByMe = comments.some(
+    c => c.author.id === me.id && c.validation
+  );
 
   React.useEffect(() => {
     if (attrWithComments)
@@ -58,31 +61,13 @@ const Comments = () => {
     if (!attributeForNode) setComments([]);
   }, [attributeForNode]);
 
-  const onCreateComment = (
-    cache: any,
-    { data: { createComment: newComment } }: any
-  ) => {
-    const { attribute } = cache.readQuery({
-      query: qCommentsForAttribute,
-      variables: {
-        attributeId: attributeForNode.id
-      }
-    });
-    cache.writeQuery({
-      query: qCommentsForAttribute,
-      variables: {
-        attributeId: attributeForNode.id
-      },
-      data: {
-        attribute: {
-          ...attribute,
-          comments: [...attribute.comments, newComment]
-        }
-      }
-    });
-  };
+  const addValidation = () => actionCreateComment('', true);
+  const addComment = () => actionCreateComment(newComment, false);
 
-  const actionCreateComment = async (): Promise<void> => {
+  const actionCreateComment = async (
+    content: string,
+    validation: boolean
+  ): Promise<void> => {
     let attributeId = attributeForNode?.id;
     try {
       if (!attributeForNode) {
@@ -94,17 +79,17 @@ const Comments = () => {
             sliceName: attribute.definition.sliceName
           }
         });
-        const newAttr = data.createAttribute;
-        attributeId = newAttr.id;
-        dispatch(setAttributeInMap(attribute.path, newAttr));
+        attributeId = data.createAttribute.id;
       }
       const { data } = await createComment({
         variables: {
-          attributeId: attributeId,
-          content: newComment
-        },
-        update: onCreateComment
+          content,
+          validation,
+          attributeId: attributeId
+        }
       });
+      dispatch(setAttributeInMap(attribute.path, data.createComment.attribute));
+
       setComments([data.createComment, ...comments]);
       setNewComment('');
     } catch (e) {
@@ -117,8 +102,17 @@ const Comments = () => {
     const formattedDate = new Date(c.createdAt).toLocaleString('fr-FR');
 
     return (
-      <Card key={c.id} className={isMyComment ? 'my-comment' : 'other-comment'}>
-        <b>{c.author.name}</b>
+      <Card
+        key={c.id}
+        className={`
+        ${isMyComment ? 'my-comment' : 'other-comment'}
+        ${c.validation && 'validation-comment'}
+        `}
+      >
+        <b>
+          {c.author.name}
+          {c.validation && ' a validé cet attribut'}
+        </b>
         <br />
         <span className="bp3-text-muted bp3-text-small bp3-running-text">
           {formattedDate}
@@ -132,28 +126,40 @@ const Comments = () => {
   return (
     <div id="comment-block">
       <h3>Comments</h3>
-      <Card className="card-input">
-        <FormGroup>
-          <h4>Write a comment</h4>
-          <div id="comment-input">
-            <TextArea
-              className="text-input"
-              value={newComment}
-              disabled={loading || !attribute}
-              onChange={e => {
-                setNewComment(e.target.value);
-              }}
-            />
-            <Button
-              id="send-comment-button"
-              disabled={!attribute}
-              onClick={actionCreateComment}
-            >
-              Send
-            </Button>
-          </div>
-        </FormGroup>
-      </Card>
+      <div className="user-input">
+        <div className="form-validate">
+          <Button
+            id="validate-button"
+            disabled={!attribute || alreadyValidatedByMe}
+            onClick={addValidation}
+          >
+            <Icon icon="tick" intent={'success'} iconSize={80} />
+            <div>Validate</div>
+          </Button>
+        </div>
+        <Card className="card-input">
+          <FormGroup>
+            <h4>Write a comment</h4>
+            <div id="comment-input">
+              <TextArea
+                className="text-input"
+                value={newComment}
+                disabled={loading || !attribute}
+                onChange={e => {
+                  setNewComment(e.target.value);
+                }}
+              />
+              <Button
+                id="send-comment-button"
+                disabled={!attribute}
+                onClick={addComment}
+              >
+                Send
+              </Button>
+            </div>
+          </FormGroup>
+        </Card>
+      </div>
       {comments.map(renderComment)}
     </div>
   );

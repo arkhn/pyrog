@@ -144,10 +144,12 @@ input ColumnWhereUniqueInput {
 }
 
 type Comment {
+  attribute: Attribute
   author: User!
   content: String!
   createdAt: DateTime!
   id: String!
+  validation: Boolean!
 }
 
 input CommentFilter {
@@ -166,6 +168,7 @@ input CommentWhereInput {
   NOT: [CommentWhereInput!]
   OR: [CommentWhereInput!]
   updatedAt: DateTimeFilter
+  validation: BooleanFilter
 }
 
 input CommentWhereUniqueInput {
@@ -333,7 +336,7 @@ type Mutation {
   addJoinToColumn(columnId: ID!, join: JoinInput): Column!
   createAccessControl(role: SourceRole!, sourceId: ID!, userEmail: String!): AccessControl!
   createAttribute(data: AttributeInput, definitionId: ID!, path: String!, resourceId: ID!, sliceName: String): Attribute!
-  createComment(attributeId: ID!, content: String!): Comment!
+  createComment(attributeId: ID!, content: String!, validation: Boolean!): Comment!
   createInput(attributeId: ID!, script: String, sql: ColumnInput, static: String): Input!
   createResource(definitionId: String!, sourceId: ID!): Resource!
   createSource(hasOwner: Boolean!, mapping: String, name: String!, templateName: String!): Source!

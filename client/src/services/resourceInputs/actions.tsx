@@ -32,12 +32,3 @@ export const removeAttributesFromMap = (pathStart: string): IAction => {
     }
   };
 };
-
-export const removeAttributeFromMap = (path: string): IAction => {
-  return {
-    type: 'REMOVE_ATTRIBUTE_FROM_MAP',
-    payload: {
-      path
-    }
-  };
-};

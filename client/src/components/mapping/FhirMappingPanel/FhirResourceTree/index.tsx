@@ -106,7 +106,6 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       addSliceToArray,
       deleteNodeFromArray,
       genTreeLevel,
-      attributesForResource,
       parentArray
     );
     if (!!selectedAttribute && attribute.path === selectedAttribute.path) {

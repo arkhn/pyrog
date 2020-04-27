@@ -1,6 +1,7 @@
 fragment comment on Comment {
   id
   content
+  validation
   author {
     id
     email
