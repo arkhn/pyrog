@@ -97,6 +97,14 @@ const Comments = () => {
     }
   };
 
+  const validationIcon = () => {
+    return (
+      <div className="validation-icon">
+        <Icon icon="tick-circle" iconSize={35} intent="success" />
+      </div>
+    );
+  };
+
   const renderComment = (c: IComment) => {
     const isMyComment = c.author.id === me.id;
     const formattedDate = new Date(c.createdAt).toLocaleString('fr-FR');
@@ -109,16 +117,19 @@ const Comments = () => {
         ${c.validation && 'validation-comment'}
         `}
       >
-        <b>
-          {c.author.name}
-          {c.validation && ' a validé cet attribut'}
-        </b>
-        <br />
-        <span className="bp3-text-muted bp3-text-small bp3-running-text">
-          {formattedDate}
-        </span>
-        <br />
-        {c.content}
+        {c.validation && validationIcon()}
+        <div>
+          <b>
+            {c.author.name}
+            {c.validation && ' a validé cet attribut'}
+          </b>
+          <br />
+          <span className="bp3-text-muted bp3-text-small bp3-running-text">
+            {formattedDate}
+          </span>
+          <br />
+          {c.content}
+        </div>
       </Card>
     );
   };
@@ -126,17 +137,25 @@ const Comments = () => {
   return (
     <div id="comment-block">
       <h3>Comments</h3>
-      <div className="user-input">
-        <div className="form-validate">
+      <div className="user-buttons">
+        <div>
           <Button
-            id="validate-button"
+            icon="tick"
+            intent="success"
+            text="Validate"
             disabled={!attribute || alreadyValidatedByMe}
-            onClick={addValidation}
-          >
-            <Icon icon="tick" intent={'success'} iconSize={80} />
-            <div>Validate</div>
-          </Button>
+          />
+          {/*
+          <Button
+            icon="reset"
+            intent="danger"
+            text="Undo validation"
+            disabled={attribute && !alreadyValidatedByMe}
+          />
+          */}
         </div>
+      </div>
+      <div className="user-input">
         <Card className="card-input">
           <FormGroup>
             <h4>Write a comment</h4>

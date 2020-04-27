@@ -8,14 +8,26 @@ $border-radius: 6px;
   white-space: pre-line;
   flex-direction: column;
   display: flex;
+  margin: auto;
+  width: 50%;
+  min-width: 768px;
 }
 
 #comment-block h3 {
   text-align: center;
 }
 
+.user-buttons {
+  align-self: flex-end;
+
+  button {
+    margin-right: 10px;
+  }
+}
+
 .user-input {
   display: flex;
+  flex-direction: column;
 }
 
 .card-input {
@@ -24,21 +36,10 @@ $border-radius: 6px;
   min-width: 400px;
 }
 
-.form-validate {
-  display: flex;
-  align-self: center;
-  width: 30%;
-  flex-direction: column;
-}
-
 #validate-button {
-  width: 150px;
-
   text-align: center;
-  font-size: x-large;
   align-self: center;
   border-radius: $border-radius;
-  display: flex;
 }
 
 #comment-input {
@@ -58,17 +59,24 @@ $border-radius: 6px;
   border-radius: $border-radius;
 }
 
+.user-buttons,
 .card-input,
 .my-comment,
 .other-comment {
-  width: 70%;
-  min-width: 400px;
+  width: 90%;
   margin: 5px 10px;
   border-radius: $border-radius;
 }
 
 .validation-comment {
-  background-color: #3dcc91;
+  border: 2px #0d8050 solid;
+  background-color: #3dcc9150;
+  display: flex;
+
+  .validation-icon {
+    margin-right: 20px;
+    margin-bottom: 0;
+  }
 }
 
 .my-comment {
