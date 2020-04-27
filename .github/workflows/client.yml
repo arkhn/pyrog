@@ -52,11 +52,43 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Build
+      - name: Build staging and demo
         run: |
           cd client/
           yarn docker:build:staging
           yarn docker:build:demo
+
+        - name : Build Ambroise
+          env:
+            IP: ${{ secrets.IP_VM_AMB }}
+            STAGE: ambroise
+          run: |
+            ./scripts/build_hospital_client.sh > .env.ambroise
+            docker build -t arkhn/pyrog-client:ambroise --build-arg ENV_FILE=.env.ambroise .
+            
+        - name : Build AP
+          env:
+            IP: ${{ secrets.IP_VM_AP }}
+            STAGE: aphp
+          run: |
+            ./scripts/build_hospital_client.sh > .env.aphp
+            docker build -t arkhn/pyrog-client:aphp --build-arg ENV_FILE=.env.aphp .
+
+        - name : Build Clb
+          env:
+            IP: ${{ secrets.IP_VM_CLB }}
+            STAGE: clb
+          run: |
+            ./scripts/build_hospital_client.sh > .env.clb
+            docker build -t arkhn/pyrog-client:clb --build-arg ENV_FILE=.env.clb .
+
+        - name : Build Curie
+          env:
+            IP: ${{ secrets.IP_VM_CURIE }}
+            STAGE: curie
+          run: |
+            ./scripts/build_hospital_client.sh > .env.curie
+            docker build -t arkhn/pyrog-client:curie --build-arg ENV_FILE=.env.curie .
 
       - name: Tag docker images
         run: |
@@ -72,6 +104,12 @@ jobs:
           docker push $IMAGE:staging
           docker push $IMAGE:demo
           docker push $IMAGE:$GITHUB_SHA
+          docker push $IMAGE:ambroise
+          docker push $IMAGE:aphp
+          docker push $IMAGE:clb
+          docker push $IMAGE:curie
+
+
 
       - name: Publish to Github Packages
         run: |
