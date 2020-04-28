@@ -138,6 +138,56 @@ export interface IReduxStore {
   views: any;
 }
 
+// FHIR
+
+export interface CodeSystem {
+  title: string;
+  name: string;
+  url: string;
+  concept: Concept[];
+}
+
+export interface ConceptMap {
+  id?: string;
+  title: string;
+  name: string;
+  sourceUri: string;
+  targetUri: string;
+  description?: string;
+  group: Group[];
+}
+
+interface Concept {
+  code: string;
+}
+
+export interface Group {
+  source: string;
+  target: string;
+  element: Element[];
+}
+
+interface Element {
+  code: string;
+  target: Target[];
+}
+
+interface Target {
+  code: string;
+  equivalence: string;
+}
+
+export interface Terminology {
+  title: string;
+  valueSetUrl: string;
+  codes: Code[];
+}
+
+export interface Code {
+  value: string;
+  system?: string;
+}
+
 // VIEWS
 
 export interface IView {
