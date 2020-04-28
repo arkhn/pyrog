@@ -144,6 +144,7 @@ const Comments = () => {
             intent="success"
             text="Validate"
             disabled={!attribute || alreadyValidatedByMe}
+            onClick={addValidation}
           />
           {/*
           <Button
