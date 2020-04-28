@@ -64,7 +64,7 @@ jobs:
           STAGE: ambroise
         run: |
           cd client
-          ./scripts/build_hospital_client.sh > .env.ambroise
+          ./scripts/generate_client_env.sh > .env.ambroise
           docker build -t arkhn/pyrog-client:ambroise --build-arg ENV_FILE=.env.ambroise .
           
       - name : Build AP
@@ -73,7 +73,7 @@ jobs:
           STAGE: aphp
         run: |
           cd client
-          ./scripts/build_hospital_client.sh > .env.aphp
+          ./scripts/generate_client_env.sh > .env.aphp
           docker build -t arkhn/pyrog-client:aphp --build-arg ENV_FILE=.env.aphp .
 
       - name : Build Clb
@@ -82,7 +82,7 @@ jobs:
           STAGE: clb
         run: |
           cd client
-          ./scripts/build_hospital_client.sh > .env.clb
+          ./scripts/generate_client_env.sh > .env.clb
           docker build -t arkhn/pyrog-client:clb --build-arg ENV_FILE=.env.clb .
 
       - name : Build Curie
@@ -91,7 +91,7 @@ jobs:
           STAGE: curie
         run: |
           cd client
-          ./scripts/build_hospital_client.sh > .env.curie
+          ./scripts/generate_client_env.sh > .env.curie
           docker build -t arkhn/pyrog-client:curie --build-arg ENV_FILE=.env.curie .
 
       - name: Tag docker images
