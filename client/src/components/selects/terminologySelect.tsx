@@ -1,4 +1,4 @@
-import { MenuItem, Icon } from '@blueprintjs/core';
+import { Icon } from '@blueprintjs/core';
 import React from 'react';
 import Select, { components } from 'react-select';
 
