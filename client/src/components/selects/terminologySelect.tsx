@@ -1,4 +1,4 @@
-import { MenuItem } from '@blueprintjs/core';
+import { MenuItem, Icon } from '@blueprintjs/core';
 import React from 'react';
 import Select, { components } from 'react-select';
 
@@ -49,20 +49,29 @@ const TerminologySelect = ({
 
   const CustomOption = (props: any) => {
     return props.data.custom ? (
-      <MenuItem
-        onClick={(): void =>
-          callbackCreatingNewSystem ? callbackCreatingNewSystem() : null
-        }
-        icon={'plus'}
-        text={
-          <span>
-            <strong>Create new code system</strong>
-          </span>
-        }
-      />
+      <components.Option {...props}>
+        <div
+          onClick={(): void =>
+            callbackCreatingNewSystem ? callbackCreatingNewSystem() : null
+          }
+        >
+          <Icon icon="plus" />
+          Create new code system
+        </div>
+      </components.Option>
     ) : (
       <components.Option {...props} />
     );
+  };
+
+  const filterOptions = (candidate: any, input: string): boolean => {
+    if (input) {
+      return (
+        candidate.data.custom ||
+        candidate.label?.toLowerCase().indexOf(input.toLowerCase()) >= 0
+      );
+    }
+    return true;
   };
 
   const selectStyles = {
@@ -83,6 +92,7 @@ const TerminologySelect = ({
       options={
         allowCreate ? groupedOptions : (groupedOptions.slice(1) as any[])
       }
+      filterOption={filterOptions}
       getOptionLabel={system => system.title}
     />
   );

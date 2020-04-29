@@ -535,6 +535,7 @@ const ConceptMapDialog = ({
       setConceptMapDescription(existingConceptMap.description || '');
     }
   }, [
+    hasSelectedSource,
     sourceTerminology,
     newTerminologyName,
     targetTerminology,
