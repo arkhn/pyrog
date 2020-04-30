@@ -70,7 +70,8 @@ const ConceptMapDialog = ({
   const [isLoadingValueSets, setIsLoadingValueSets] = useState(false);
 
   const hasSelectedSource = !!sourceTerminology || !!newTerminologyName;
-  const newTerminologyUrl = `http://terminology.arkhn.org/${newTerminologyName}`;
+  const newTerminologyValueSetUrl = `http://terminology.arkhn.org/ValueSet/${newTerminologyName}`;
+  const newTerminologyCodeSystemUrl = `http://terminology.arkhn.org/CodeSystem/${newTerminologyName}`;
 
   const fetchCodeSystems = async (): Promise<void> => {
     // Fetch code systems and turns them to custom Terminology interface
@@ -83,6 +84,7 @@ const ConceptMapDialog = ({
         codeSystems.data.entry.map(({ resource }: any) => ({
           title: resource.title,
           valueSetUrl: resource.valueSet,
+          type: 'CodeSystem',
           codes: resource.concept
             ? resource.concept.map((concept: any) => ({
                 value: concept.code,
@@ -136,6 +138,7 @@ const ConceptMapDialog = ({
           title: resource.title || resource.name,
           url: resource.url,
           valueSetUrl: resource.url,
+          type: 'ValueSet',
           codes: [...composeCodes(resource), ...expansionCodes(resource)]
         }))
       );
@@ -206,13 +209,14 @@ const ConceptMapDialog = ({
         terminology === sourceTerminology
       }
       isLoading={isLoadingCodeSystems || isLoadingValueSets}
-      onChange={(terminology: Terminology): void => {
-        setSourceTerminology(terminology);
+      onChange={(option: any): void => {
+        if (option && !option.custom) setSourceTerminology(option);
         resetMap();
       }}
       allowCreate={true}
       callbackCreatingNewSystem={(): void => {
         resetMap();
+        setSourceTerminology(undefined);
         setNewTerminologyName('');
         setCreatingNewSet(true);
       }}
@@ -257,24 +261,6 @@ const ConceptMapDialog = ({
     />
   );
 
-  const createSourceCode = (index: number): React.ReactElement => (
-    <input
-      className="text-input"
-      key={index}
-      value={conceptMap[index].source?.value}
-      type="text"
-      onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-        setConceptMap(prev => {
-          prev[index].source = {
-            value: e.target.value,
-            system: newTerminologyUrl
-          };
-          return [...prev];
-        })
-      }
-    />
-  );
-
   const deleteRowButton = (index: number): React.ReactElement => (
     <Button
       icon="trash"
@@ -309,14 +295,15 @@ const ConceptMapDialog = ({
     <CodeSelect
       key={index}
       selectedCode={conceptMap[index][column]}
-      items={
-        column === 'source'
-          ? sourceTerminology!.codes
-          : targetTerminology!.codes
+      terminology={
+        column === 'source' ? sourceTerminology! : targetTerminology!
+      }
+      allowCreate={
+        column === 'target' && targetTerminology?.type === 'ValueSet'
       }
       onChange={(code: Code): void =>
         setConceptMap(prev => {
-          prev[index][column] = code;
+          prev[index][column] = { ...prev[index][column], ...code };
           return [...prev];
         })
       }
@@ -328,6 +315,34 @@ const ConceptMapDialog = ({
       }
     />
   );
+
+  const createCode = (
+    index: number,
+    column: 'source' | 'target'
+  ): React.ReactElement => (
+    <input
+      className="text-input"
+      key={index}
+      value={conceptMap[index][column]?.value}
+      type="text"
+      onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+        setConceptMap(prev => {
+          prev[index][column] = {
+            value: e.target.value,
+            system: newTerminologyCodeSystemUrl
+          };
+          return [...prev];
+        })
+      }
+    />
+  );
+
+  const insertCode = (
+    index: number,
+    column: 'source' | 'target',
+    mode: 'choose' | 'create'
+  ): React.ReactElement =>
+    mode === 'choose' ? chooseCode(index, column) : createCode(index, column);
 
   const displayConceptMap = (): React.ReactElement[] =>
     conceptMap.map((row, index) => (
@@ -343,9 +358,11 @@ const ConceptMapDialog = ({
     <tr key={index}>
       <td>{deleteRowButton(index)}</td>
       <td>
-        {creatingNewTerminology
-          ? createSourceCode(index)
-          : chooseCode(index, 'source')}
+        {insertCode(
+          index,
+          'source',
+          creatingNewTerminology ? 'create' : 'choose'
+        )}
       </td>
       <td>{chooseEquivalence(index)}</td>
       <td>{chooseCode(index, 'target')}</td>
@@ -359,9 +376,9 @@ const ConceptMapDialog = ({
     }, []);
 
     return {
-      name: newTerminologyName, // for computer
-      title: newTerminologyName, // for human
-      url: newTerminologyUrl, // for computer
+      name: newTerminologyName,
+      title: newTerminologyName,
+      url: newTerminologyCodeSystemUrl,
       concept: concepts
     };
   };
@@ -397,7 +414,7 @@ const ConceptMapDialog = ({
       ...(conceptMapDescription && { description: conceptMapDescription }),
       sourceUri: sourceTerminology
         ? sourceTerminology.valueSetUrl
-        : newTerminologyUrl,
+        : newTerminologyValueSetUrl,
       targetUri: targetTerminology!.valueSetUrl,
       group: groups
     };

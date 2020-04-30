@@ -181,6 +181,7 @@ export interface Terminology {
   title: string;
   valueSetUrl: string;
   codes: Code[];
+  type: 'ValueSet' | 'CodeSystem';
 }
 
 export interface Code {

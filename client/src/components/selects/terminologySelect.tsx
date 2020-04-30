@@ -2,16 +2,7 @@ import { Icon } from '@blueprintjs/core';
 import React from 'react';
 import Select, { components } from 'react-select';
 
-interface Terminology {
-  title: string;
-  valueSetUrl: string;
-  codes: Code[];
-}
-
-interface Code {
-  value: string;
-  system?: string;
-}
+import { Terminology } from 'types';
 
 interface Props {
   codeSystems: Terminology[];
