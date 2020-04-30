@@ -205,9 +205,7 @@ const ConceptMapDialog = ({
       codeSystems={existingCodeSystems}
       valueSets={existingValueSets}
       selectedSystem={sourceTerminology as any}
-      isOptionDisabled={(terminology: Terminology): boolean =>
-        terminology === sourceTerminology
-      }
+      disabledOptions={[targetTerminology]}
       isLoading={isLoadingCodeSystems || isLoadingValueSets}
       onChange={(option: any): void => {
         if (option && !option.custom) setSourceTerminology(option);
@@ -250,9 +248,7 @@ const ConceptMapDialog = ({
       codeSystems={existingCodeSystems}
       valueSets={existingValueSets}
       selectedSystem={targetTerminology as any}
-      isOptionDisabled={(terminology: Terminology): boolean =>
-        terminology === targetTerminology
-      }
+      disabledOptions={[sourceTerminology]}
       isLoading={isLoadingCodeSystems || isLoadingValueSets}
       onChange={(terminology: Terminology): void => {
         setTargetTerminology(terminology);
@@ -299,7 +295,9 @@ const ConceptMapDialog = ({
         column === 'source' ? sourceTerminology! : targetTerminology!
       }
       allowCreate={
-        column === 'target' && targetTerminology?.type === 'ValueSet'
+        column === 'source'
+          ? sourceTerminology?.type === 'ValueSet'
+          : targetTerminology?.type === 'ValueSet'
       }
       onChange={(code: Code): void =>
         setConceptMap(prev => {

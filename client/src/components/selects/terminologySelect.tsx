@@ -11,7 +11,7 @@ interface Props {
   onChange: Function;
   isLoading: boolean;
   allowCreate?: boolean;
-  isOptionDisabled?: (item: Terminology) => boolean;
+  disabledOptions?: (Terminology | undefined)[];
   callbackCreatingNewSystem?: Function;
 }
 
@@ -22,12 +22,12 @@ const TerminologySelect = ({
   onChange,
   isLoading,
   allowCreate,
-  isOptionDisabled,
+  disabledOptions,
   callbackCreatingNewSystem
 }: Props): React.ReactElement => {
   const groupedOptions = [
     {
-      label: 'New set',
+      label: 'New terminology',
       options: [{ custom: true }]
     },
     {
@@ -85,7 +85,9 @@ const TerminologySelect = ({
       onChange={(s: any) => onChange(s)}
       isLoading={isLoading}
       isClearable={true}
-      isOptionDisabled={isOptionDisabled}
+      isOptionDisabled={(option: any) =>
+        disabledOptions ? disabledOptions?.includes(option) : false
+      }
       filterOption={filterOptions}
       styles={selectStyles}
     />
