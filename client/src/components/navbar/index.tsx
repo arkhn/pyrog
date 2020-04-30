@@ -65,7 +65,6 @@ const Navbar = ({ exportMapping }: Props) => {
           onClick={() => setIsDrawerOpen(true)}
           text="Database"
         />
-        q
         <Button
           icon="export"
           minimal={true}
