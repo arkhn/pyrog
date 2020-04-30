@@ -47,23 +47,23 @@ const CodeSelect = ({
         <div className="value-system-input">
           <input
             className="text-input"
-            value={selectedCode?.value || ''}
-            type="text"
-            placeholder="value..."
-            onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-              onChange({
-                value: e.target.value
-              })
-            }
-          />
-          <input
-            className="text-input"
             value={selectedCode?.system || ''}
             type="text"
             placeholder="system..."
             onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
               onChange({
                 system: e.target.value
+              })
+            }
+          />
+          <input
+            className="text-input"
+            value={selectedCode?.value || ''}
+            type="text"
+            placeholder="value..."
+            onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+              onChange({
+                value: e.target.value
               })
             }
           />

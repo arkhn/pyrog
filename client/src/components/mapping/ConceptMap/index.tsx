@@ -325,6 +325,7 @@ const ConceptMapDialog = ({
       key={index}
       value={conceptMap[index][column]?.value}
       type="text"
+      placeholder="source code..."
       onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
         setConceptMap(prev => {
           prev[index][column] = {
