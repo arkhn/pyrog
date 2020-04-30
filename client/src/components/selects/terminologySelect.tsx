@@ -18,6 +18,7 @@ interface Props {
   valueSets: Terminology[];
   selectedSystem: Terminology;
   onChange: Function;
+  isLoading: boolean;
   allowCreate?: boolean;
   isOptionDisabled?: (item: Terminology) => boolean;
   callbackCreatingNewSystem?: Function;
@@ -28,9 +29,10 @@ const TerminologySelect = ({
   valueSets,
   selectedSystem,
   onChange,
+  isLoading,
+  allowCreate,
   isOptionDisabled,
-  callbackCreatingNewSystem,
-  allowCreate
+  callbackCreatingNewSystem
 }: Props): React.ReactElement => {
   const groupedOptions = [
     {
@@ -83,17 +85,18 @@ const TerminologySelect = ({
 
   return (
     <Select
-      components={{ Option: CustomOption }}
-      isClearable={true}
-      defaultInputValue={selectedSystem ? selectedSystem.title : undefined}
-      styles={selectStyles}
-      onChange={(s: any) => onChange(s)}
-      isOptionDisabled={isOptionDisabled}
       options={
         allowCreate ? groupedOptions : (groupedOptions.slice(1) as any[])
       }
-      filterOption={filterOptions}
       getOptionLabel={system => system.title}
+      components={{ Option: CustomOption }}
+      defaultInputValue={selectedSystem ? selectedSystem.title : undefined}
+      onChange={(s: any) => onChange(s)}
+      isLoading={isLoading}
+      isClearable={true}
+      isOptionDisabled={isOptionDisabled}
+      filterOption={filterOptions}
+      styles={selectStyles}
     />
   );
 };

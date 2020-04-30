@@ -66,12 +66,15 @@ const ConceptMapDialog = ({
   const [conceptMapDescription, setConceptMapDescription] = useState('');
   const [creatingNewTerminology, setCreatingNewSet] = useState(false);
   const [modifyAnyway, setModifyAnyway] = useState(false);
+  const [isLoadingCodeSystems, setIsLoadingCodeSystems] = useState(false);
+  const [isLoadingValueSets, setIsLoadingValueSets] = useState(false);
 
   const hasSelectedSource = !!sourceTerminology || !!newTerminologyName;
   const newTerminologyUrl = `http://terminology.arkhn.org/${newTerminologyName}`;
 
   const fetchCodeSystems = async (): Promise<void> => {
     // Fetch code systems and turns them to custom Terminology interface
+    setIsLoadingCodeSystems(true);
     try {
       const codeSystems = await axios.get(
         `${FHIR_API_URL}/CodeSystem?_count=1000`
@@ -95,10 +98,12 @@ const ConceptMapDialog = ({
         }`
       );
     }
+    setIsLoadingCodeSystems(false);
   };
 
   const fetchValueSets = async (): Promise<void> => {
     // Fetch value sets and turns them to custom Terminology interface
+    setIsLoadingValueSets(true);
     try {
       const valueSets = await axios.get(`${FHIR_API_URL}/ValueSet?_count=500`);
 
@@ -141,6 +146,7 @@ const ConceptMapDialog = ({
         }`
       );
     }
+    setIsLoadingValueSets(false);
   };
 
   const fetchConceptMaps = async (): Promise<void> => {
@@ -199,6 +205,7 @@ const ConceptMapDialog = ({
       isOptionDisabled={(terminology: Terminology): boolean =>
         terminology === sourceTerminology
       }
+      isLoading={isLoadingCodeSystems || isLoadingValueSets}
       onChange={(terminology: Terminology): void => {
         setSourceTerminology(terminology);
         resetMap();
@@ -242,6 +249,7 @@ const ConceptMapDialog = ({
       isOptionDisabled={(terminology: Terminology): boolean =>
         terminology === targetTerminology
       }
+      isLoading={isLoadingCodeSystems || isLoadingValueSets}
       onChange={(terminology: Terminology): void => {
         setTargetTerminology(terminology);
         resetMap();
