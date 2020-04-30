@@ -792,6 +792,9 @@ export interface NexusGenArgTypes {
       last?: number | null; // Int
       skip?: number | null; // Int
     }
+    mapping: { // args
+      includeComments: boolean; // Boolean!
+    }
     resources: { // args
       after?: NexusGenInputs['ResourceWhereUniqueInput'] | null; // ResourceWhereUniqueInput
       before?: NexusGenInputs['ResourceWhereUniqueInput'] | null; // ResourceWhereUniqueInput

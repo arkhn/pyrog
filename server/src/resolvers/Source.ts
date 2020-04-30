@@ -1,4 +1,4 @@
-import { objectType, FieldResolver } from '@nexus/schema'
+import { objectType, FieldResolver, booleanArg } from '@nexus/schema'
 
 import { importMapping, exportMapping } from 'resolvers/mapping'
 
@@ -22,13 +22,15 @@ export const Source = objectType({
     t.field('mapping', {
       type: 'String',
       nullable: false,
-      resolve: (parent, _, ctx) => exportMapping(ctx.prisma, parent.id),
+      args: { includeComments: booleanArg({ default: true, required: true }) },
+      resolve: (parent, { includeComments }, ctx) =>
+        exportMapping(ctx.prisma, parent.id, includeComments),
     })
 
     t.list.field('mappingProgress', {
       type: 'Int',
       nullable: true,
-      resolve: async (parent, __, ctx) => {
+      resolve: async (parent, _, ctx) => {
         const resources = await ctx.prisma.resource.findMany({
           include: {
             attributes: {

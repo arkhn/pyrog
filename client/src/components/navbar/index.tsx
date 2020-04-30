@@ -1,5 +1,13 @@
-import { Alignment, Button, Navbar as BPNavbar } from '@blueprintjs/core';
-import * as React from 'react';
+import {
+  Alignment,
+  Button,
+  Menu,
+  MenuItem,
+  Navbar as BPNavbar,
+  Popover,
+  Position
+} from '@blueprintjs/core';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useReactRouter from 'use-react-router';
 
@@ -17,23 +25,33 @@ import { AUTH_TOKEN } from '../../constants';
 import './style.scss';
 import { deselectSource } from 'services/selectedNode/actions';
 
-// Logo
 interface Props {
-  exportMapping?: (event: any) => void;
+  exportMapping?: (includeComments?: boolean) => void;
 }
 
 // Graphql
 const meQuery = loader('src/graphql/queries/me.graphql');
 
 const Navbar = ({ exportMapping }: Props) => {
+  const { history } = useReactRouter();
   const dispatch = useDispatch();
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
   const user = useSelector((state: IReduxStore) => state.user);
-  const { history } = useReactRouter();
-  const [drawerIsOpen, setDrawerIsOpen] = React.useState(false);
+
+  const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+  const [isExportMenuOpen, setIsExportMenuOpen] = React.useState(false);
 
   const { data } = useQuery(meQuery);
   const isAdmin = data && data.me.role === 'ADMIN';
+
+  const renderExportMenu = (
+    <Menu>
+      <MenuItem
+        text="Export without comments"
+        onClick={() => exportMapping!(false)}
+      />
+    </Menu>
+  );
 
   const renderSourceContext = () => {
     return (
@@ -44,12 +62,30 @@ const Navbar = ({ exportMapping }: Props) => {
         <Button
           icon="more"
           minimal={true}
-          onClick={() => setDrawerIsOpen(true)}
+          onClick={() => setIsDrawerOpen(true)}
+          text="Database"
+        />
+        q
+        <Button
+          icon="export"
+          minimal={true}
+          onClick={() => exportMapping!()}
+          text="Export mapping"
         >
-          Database
-        </Button>
-        <Button icon="export" minimal={true} onClick={exportMapping!}>
-          Export mapping
+          <Popover
+            content={renderExportMenu}
+            position={Position.BOTTOM_RIGHT}
+            isOpen={isExportMenuOpen}
+            onInteraction={(
+              nextOpenState: boolean,
+              e?: React.SyntheticEvent<HTMLElement>
+            ): void => {
+              setIsExportMenuOpen(nextOpenState);
+              e?.stopPropagation();
+            }}
+          >
+            <Button icon="caret-down" minimal={true} />
+          </Popover>
         </Button>
         {isAdmin && (
           <Button
@@ -58,15 +94,14 @@ const Navbar = ({ exportMapping }: Props) => {
             onClick={() => {
               history.push('/fhirpipe');
             }}
-          >
-            Run fhir-pipe
-          </Button>
+            text="Run fhir-pipe"
+          />
         )}
         <Drawer
           title={selectedNode.source ? selectedNode.source.name : ''}
-          isOpen={drawerIsOpen}
+          isOpen={isDrawerOpen}
           onClose={() => {
-            setDrawerIsOpen(false);
+            setIsDrawerOpen(false);
           }}
         />
       </BPNavbar.Group>

@@ -1,4 +1,4 @@
-query exportMapping($sourceId: ID!) {
+query exportMapping($sourceId: ID!, $includeComments: Boolean) {
   source(sourceId: $sourceId) {
     id
     name
@@ -6,6 +6,6 @@ query exportMapping($sourceId: ID!) {
       id
       name
     }
-    mapping
+    mapping(includeComments: $includeComments)
   }
 }
