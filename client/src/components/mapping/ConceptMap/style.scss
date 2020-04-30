@@ -18,7 +18,11 @@ $window-padding: 20px;
   }
 
   .enter-code-name {
-    display: inline;
+    display: flex;
+
+    .text-input {
+      width: 90%;
+    }
   }
 
   .text-input {

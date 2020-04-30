@@ -1,0 +1,15 @@
+@import '~@blueprintjs/core/lib/css/blueprint.css';
+@import '~@blueprintjs/core/lib/scss/variables';
+
+.code-select-button-group {
+  justify-content: center;
+
+  .value-system-input {
+    width: 70%;
+    
+    .text-input {
+      margin: auto 3px;
+      width: 45%;
+    }
+  }
+}

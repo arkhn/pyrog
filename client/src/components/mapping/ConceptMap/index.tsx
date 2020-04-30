@@ -5,46 +5,26 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { FHIR_API_URL } from '../../../constants';
 
-import CodeSystemSelect from 'components/selects/codeSystemSelect';
+import TerminologySelect from 'components/selects/terminologySelect';
+import CodeSelect from 'components/selects/codeSelect';
 import StringSelect from 'components/selects/stringSelect';
-import { IReduxStore } from 'types';
+import {
+  Code,
+  CodeSystem,
+  ConceptMap,
+  Group,
+  IReduxStore,
+  Terminology
+} from 'types';
 
 import UploadCodeSystem from 'components/uploads/uploadCodeSystem';
 
 import './style.scss';
 
-export interface CodeSystem {
-  title: string;
-  name: string;
-  concept: Concept[];
-}
-
-interface Concept {
-  code: string;
-}
-
-interface ConceptMap {
-  title: string;
-  name: string;
-  description: string;
-  id: string;
-  group: Group[];
-}
-
-interface Group {
-  source: string;
-  target: string;
-  element: Element[];
-}
-
-interface Element {
-  code: string;
-  target: Target[];
-}
-
-interface Target {
-  code: string;
-  equivalence: string;
+interface MapRow {
+  source?: Code;
+  equivalence?: string;
+  target?: Code;
 }
 
 interface Props {
@@ -55,12 +35,6 @@ interface Props {
   updateInputCallback: (conceptMap: string) => void;
 }
 
-interface MapRow {
-  source: string;
-  equivalence: string;
-  target: string;
-}
-
 const ConceptMapDialog = ({
   isOpen,
   onClose,
@@ -69,7 +43,10 @@ const ConceptMapDialog = ({
   const toaster = useSelector((state: IReduxStore) => state.toaster);
 
   const [existingCodeSystems, setExistingCodeSystems] = useState(
-    [] as CodeSystem[]
+    [] as Terminology[]
+  );
+  const [existingValueSets, setExistingValueSets] = useState(
+    [] as Terminology[]
   );
   const [existingConceptMaps, setExistingConceptMaps] = useState(
     [] as ConceptMap[]
@@ -78,47 +55,122 @@ const ConceptMapDialog = ({
   const [existingConceptMapId, setExistingConceptMapId] = useState(
     undefined as string | undefined
   );
-  const [sourceSystemTitle, setSourceSystemTitle] = useState('');
-  const [selectedTargetSystem, setSelectedTargetSystem] = useState('');
+  const [sourceTerminology, setSourceTerminology] = useState(
+    undefined as Terminology | undefined
+  );
+  const [targetTerminology, setTargetTerminology] = useState(
+    undefined as Terminology | undefined
+  );
+  const [newTerminologyName, setNewTerminologyName] = useState('');
   const [conceptMapTitle, setConceptMapTitle] = useState('');
   const [conceptMapDescription, setConceptMapDescription] = useState('');
-  const [creatingNewCodeSystem, setCreatingNewCodeSystem] = useState(false);
+  const [creatingNewTerminology, setCreatingNewSet] = useState(false);
   const [modifyAnyway, setModifyAnyway] = useState(false);
+  const [isLoadingCodeSystems, setIsLoadingCodeSystems] = useState(false);
+  const [isLoadingValueSets, setIsLoadingValueSets] = useState(false);
+
+  const hasSelectedSource = !!sourceTerminology || !!newTerminologyName;
+  const newTerminologyValueSetUrl = `http://terminology.arkhn.org/ValueSet/${newTerminologyName}`;
+  const newTerminologyCodeSystemUrl = `http://terminology.arkhn.org/CodeSystem/${newTerminologyName}`;
+
+  const fetchCodeSystems = async (): Promise<void> => {
+    // Fetch code systems and turns them to custom Terminology interface
+    setIsLoadingCodeSystems(true);
+    try {
+      const codeSystems = await axios.get(
+        `${FHIR_API_URL}/CodeSystem?_count=1000`
+      );
+      setExistingCodeSystems(
+        codeSystems.data.entry.map(({ resource }: any) => ({
+          title: resource.title,
+          valueSetUrl: resource.valueSet,
+          type: 'CodeSystem',
+          codes: resource.concept
+            ? resource.concept.map((concept: any) => ({
+                value: concept.code,
+                system: resource.url
+              }))
+            : []
+        }))
+      );
+    } catch (err) {
+      console.error(
+        `Could not fecth code systems: ${
+          err.response ? err.response.data : err.message
+        }`
+      );
+    }
+    setIsLoadingCodeSystems(false);
+  };
+
+  const fetchValueSets = async (): Promise<void> => {
+    // Fetch value sets and turns them to custom Terminology interface
+    setIsLoadingValueSets(true);
+    try {
+      const valueSets = await axios.get(`${FHIR_API_URL}/ValueSet?_count=500`);
+
+      const getConceptCodes = (element: any) =>
+        element.concept
+          ? element.concept.map((c: any) => ({
+              value: c.code,
+              system: element.system
+            }))
+          : [];
+
+      const reducer = (acc: string[], element: any) => [
+        ...acc,
+        ...getConceptCodes(element)
+      ];
+
+      const composeCodes = (resource: any) =>
+        resource.compose ? resource.compose.include.reduce(reducer, []) : [];
+
+      const expansionCodes = (resource: any) =>
+        resource.expansion
+          ? resource.expansion.contains.map((el: any) => ({
+              value: el.code,
+              system: el.system
+            }))
+          : [];
+
+      setExistingValueSets(
+        valueSets.data.entry.map(({ resource }: any) => ({
+          title: resource.title || resource.name,
+          url: resource.url,
+          valueSetUrl: resource.url,
+          type: 'ValueSet',
+          codes: [...composeCodes(resource), ...expansionCodes(resource)]
+        }))
+      );
+    } catch (err) {
+      console.error(
+        `Could not fecth value sets: ${
+          err.response ? err.response.data : err.message
+        }`
+      );
+    }
+    setIsLoadingValueSets(false);
+  };
+
+  const fetchConceptMaps = async (): Promise<void> => {
+    // Fetch concept maps
+    try {
+      const conceptMaps = await axios.get(`${FHIR_API_URL}/ConceptMap`);
+      setExistingConceptMaps(
+        conceptMaps.data.entry.map(({ resource }: any) => resource)
+      );
+    } catch (err) {
+      console.error(
+        `Could not fecth concept maps: ${
+          err.response ? err.response.data : err.message
+        }`
+      );
+    }
+  };
 
   useEffect(() => {
-    // fetch code systems
-    const fetchCodeSystems = async (): Promise<void> => {
-      try {
-        const codeSystems = await axios.get(
-          `${FHIR_API_URL}/CodeSystem?_count=1000`
-        );
-        setExistingCodeSystems(
-          codeSystems.data.entry.map(({ resource }: any) => resource)
-        );
-      } catch (err) {
-        console.error(
-          `Could not fecth code systems: ${
-            err.response ? err.response.data : err.message
-          }`
-        );
-      }
-    };
     fetchCodeSystems();
-    // fetch concept maps
-    const fetchConceptMaps = async (): Promise<void> => {
-      try {
-        const conceptMaps = await axios.get(`${FHIR_API_URL}/ConceptMap`);
-        setExistingConceptMaps(
-          conceptMaps.data.entry.map(({ resource }: any) => resource)
-        );
-      } catch (err) {
-        console.error(
-          `Could not fecth concept maps: ${
-            err.response ? err.response.data : err.message
-          }`
-        );
-      }
-    };
+    fetchValueSets();
     fetchConceptMaps();
   }, [isOpen]);
 
@@ -136,14 +188,6 @@ const ConceptMapDialog = ({
     'disjoint'
   ];
 
-  const displayCode = (code: string): string => (code ? code : 'Select code');
-
-  const isSourceSystemDisabled = (system: CodeSystem): boolean =>
-    system.title === selectedTargetSystem;
-
-  const isTargetSystemDisabled = (system: CodeSystem): boolean =>
-    system.title === sourceSystemTitle;
-
   const areFieldsEmpty = conceptMap.some(
     row => !row.source || !row.equivalence || !row.target
   );
@@ -156,32 +200,23 @@ const ConceptMapDialog = ({
     setExistingConceptMapId(undefined);
   };
 
-  const getCodesForCodeSystem = (systemTitle: string): string[] =>
-    existingCodeSystems
-      .find(s => s.title === systemTitle)
-      ?.concept.map(c => c.code) || [];
-
   const selectSourceCodeSystem = (
-    <CodeSystemSelect
-      systems={existingCodeSystems}
-      selectedSystem={sourceSystemTitle}
-      itemDisabled={isSourceSystemDisabled}
-      onChange={(s: string): void => {
-        if (s !== sourceSystemTitle) {
-          setSourceSystemTitle(s);
-          resetMap();
-        }
-      }}
-      onClear={(): void => {
-        setSourceSystemTitle('');
-        setCreatingNewCodeSystem(false);
+    <TerminologySelect
+      codeSystems={existingCodeSystems}
+      valueSets={existingValueSets}
+      selectedSystem={sourceTerminology as any}
+      disabledOptions={[targetTerminology]}
+      isLoading={isLoadingCodeSystems || isLoadingValueSets}
+      onChange={(option: any): void => {
+        if (option && !option.custom) setSourceTerminology(option);
         resetMap();
       }}
       allowCreate={true}
       callbackCreatingNewSystem={(): void => {
         resetMap();
-        setSourceSystemTitle('');
-        setCreatingNewCodeSystem(true);
+        setSourceTerminology(undefined);
+        setNewTerminologyName('');
+        setCreatingNewSet(true);
       }}
     />
   );
@@ -191,53 +226,34 @@ const ConceptMapDialog = ({
       <input
         className="text-input"
         placeholder="Enter name..."
-        value={sourceSystemTitle}
+        value={newTerminologyName}
         type="text"
         onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-          setSourceSystemTitle(e.target.value)
+          setNewTerminologyName(e.target.value)
         }
       />
       <Button
         icon="cross"
         minimal={true}
         onClick={(): void => {
-          setCreatingNewCodeSystem(false);
-          setSourceSystemTitle('');
+          setCreatingNewSet(false);
+          setNewTerminologyName('');
         }}
       />
     </div>
   );
 
   const selectTargetCodeSystem = (
-    <CodeSystemSelect
-      systems={existingCodeSystems}
-      selectedSystem={selectedTargetSystem}
-      itemDisabled={isTargetSystemDisabled}
-      onChange={(s: string): void => {
-        if (s !== selectedTargetSystem) {
-          setSelectedTargetSystem(s);
-          resetMap();
-        }
-      }}
-      onClear={(): void => {
-        setSelectedTargetSystem('');
+    <TerminologySelect
+      codeSystems={existingCodeSystems}
+      valueSets={existingValueSets}
+      selectedSystem={targetTerminology as any}
+      disabledOptions={[sourceTerminology]}
+      isLoading={isLoadingCodeSystems || isLoadingValueSets}
+      onChange={(terminology: Terminology): void => {
+        setTargetTerminology(terminology);
         resetMap();
       }}
-    />
-  );
-
-  const createSourceCode = (index: number): React.ReactElement => (
-    <input
-      className="text-input"
-      key={index}
-      value={conceptMap[index].source}
-      type="text"
-      onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-        setConceptMap(prev => {
-          prev[index].source = e.target.value;
-          return [...prev];
-        })
-      }
     />
   );
 
@@ -254,37 +270,86 @@ const ConceptMapDialog = ({
     />
   );
 
-  const chooseCode = (
-    index: number,
-    column: 'source' | 'target' | 'equivalence'
-  ): React.ReactElement => (
+  const chooseEquivalence = (index: number): React.ReactElement => (
     <StringSelect
       key={index}
-      inputItem={conceptMap[index][column]}
-      items={
-        column === 'equivalence'
-          ? choiceEquivalences
-          : getCodesForCodeSystem(
-              column === 'source' ? sourceSystemTitle : selectedTargetSystem
-            )
-      }
-      displayItem={displayCode}
+      inputItem={conceptMap[index]['equivalence'] || 'Select equivalence'}
+      items={choiceEquivalences}
       onChange={(code: string): void =>
         setConceptMap(prev => {
-          prev[index][column] = code;
+          prev[index]['equivalence'] = code;
           return [...prev];
         })
       }
     />
   );
 
+  const chooseCode = (
+    index: number,
+    column: 'source' | 'target'
+  ): React.ReactElement => (
+    <CodeSelect
+      key={index}
+      selectedCode={conceptMap[index][column]}
+      terminology={
+        column === 'source' ? sourceTerminology! : targetTerminology!
+      }
+      allowCreate={
+        column === 'source'
+          ? sourceTerminology?.type === 'ValueSet'
+          : targetTerminology?.type === 'ValueSet'
+      }
+      onChange={(code: Code): void =>
+        setConceptMap(prev => {
+          prev[index][column] = { ...prev[index][column], ...code };
+          return [...prev];
+        })
+      }
+      onClear={(): void =>
+        setConceptMap(prev => {
+          prev[index][column] = undefined;
+          return [...prev];
+        })
+      }
+    />
+  );
+
+  const createCode = (
+    index: number,
+    column: 'source' | 'target'
+  ): React.ReactElement => (
+    <input
+      className="text-input"
+      key={index}
+      value={conceptMap[index][column]?.value}
+      type="text"
+      placeholder="source code..."
+      onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+        setConceptMap(prev => {
+          prev[index][column] = {
+            value: e.target.value,
+            system: newTerminologyCodeSystemUrl
+          };
+          return [...prev];
+        })
+      }
+    />
+  );
+
+  const insertCode = (
+    index: number,
+    column: 'source' | 'target',
+    mode: 'choose' | 'create'
+  ): React.ReactElement =>
+    mode === 'choose' ? chooseCode(index, column) : createCode(index, column);
+
   const displayConceptMap = (): React.ReactElement[] =>
     conceptMap.map((row, index) => (
       <tr key={index}>
         <td></td>
-        <td>{row.source}</td>
+        <td>{row.source?.value}</td>
         <td>{row.equivalence}</td>
-        <td>{row.target}</td>
+        <td>{row.target?.value}</td>
       </tr>
     ));
 
@@ -292,11 +357,13 @@ const ConceptMapDialog = ({
     <tr key={index}>
       <td>{deleteRowButton(index)}</td>
       <td>
-        {creatingNewCodeSystem
-          ? createSourceCode(index)
-          : chooseCode(index, 'source')}
+        {insertCode(
+          index,
+          'source',
+          creatingNewTerminology ? 'create' : 'choose'
+        )}
       </td>
-      <td>{chooseCode(index, 'equivalence')}</td>
+      <td>{chooseEquivalence(index)}</td>
       <td>{chooseCode(index, 'target')}</td>
     </tr>
   );
@@ -304,42 +371,51 @@ const ConceptMapDialog = ({
   const createCodeSystem = (): CodeSystem => {
     // TODO complete fhir code system (there are missing fields we could fill)
     const concepts = conceptMap.reduce((acc: any[], row: MapRow) => {
-      return [...acc, { code: row.source }];
+      return [...acc, { code: row.source!.value }];
     }, []);
 
     return {
-      name: sourceSystemTitle, // for computer
-      title: sourceSystemTitle, // for human
+      name: newTerminologyName,
+      title: newTerminologyName,
+      url: newTerminologyCodeSystemUrl,
       concept: concepts
     };
   };
 
-  const createConceptMap = () => {
-    // TODO complete fhir concept map (there are missing fields we could fill)
-    const elements = conceptMap.reduce(
-      (acc: Element[], row: MapRow) => [
-        ...acc,
-        {
-          code: row.source,
-          target: [{ code: row.target, equivalence: row.equivalence }]
-        }
-      ],
-      []
-    );
+  const createConceptMap = (): ConceptMap => {
+    let groups: any[] = [];
+    for (const row of conceptMap) {
+      const newElement = {
+        code: row.source?.value,
+        target: [{ code: row.target?.value, equivalence: row.equivalence }]
+      };
+      const ind = groups.findIndex(
+        el =>
+          el.source === row.source?.system && el.target === row.target?.system
+      );
+      if (ind === -1) {
+        groups = [
+          ...groups,
+          {
+            source: row.source?.system,
+            target: row.target?.system,
+            element: [newElement]
+          }
+        ];
+      } else {
+        groups[ind].element = [...groups[ind].element, newElement];
+      }
+    }
 
     return {
-      name: conceptMapTitle, // for computer
-      title: conceptMapTitle, // for human
+      name: conceptMapTitle,
+      title: conceptMapTitle,
       ...(conceptMapDescription && { description: conceptMapDescription }),
-      sourceUri: '', // value set uri
-      targetUri: '', // value set uri
-      group: [
-        {
-          source: sourceSystemTitle, // TODO make uri from that
-          target: selectedTargetSystem, // TODO make uri from that
-          element: elements
-        }
-      ]
+      sourceUri: sourceTerminology
+        ? sourceTerminology.valueSetUrl
+        : newTerminologyValueSetUrl,
+      targetUri: targetTerminology!.valueSetUrl,
+      group: groups
     };
   };
 
@@ -388,7 +464,7 @@ const ConceptMapDialog = ({
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     e.preventDefault();
-    if (creatingNewCodeSystem) {
+    if (creatingNewTerminology) {
       const codeSystem = createCodeSystem();
       try {
         await axios.post(`${FHIR_API_URL}/CodeSystem`, codeSystem);
@@ -445,44 +521,50 @@ const ConceptMapDialog = ({
 
   useEffect(() => {
     // Set default concept map title
-    if (!!sourceSystemTitle && !!selectedTargetSystem)
+    if (hasSelectedSource && !!targetTerminology)
       setConceptMapTitle(
-        `${sourceSystemTitle}>${selectedTargetSystem}`.replace(/\s/g, '')
+        `${sourceTerminology ? sourceTerminology.title : newTerminologyName}>${
+          targetTerminology.title
+        }`.replace(/\s/g, '')
       );
 
     // Use existing concept map if there is one
-    let existingConceptMapGroup: Group | undefined;
     let existingConceptMap: ConceptMap | undefined;
     for (const map of existingConceptMaps) {
-      for (const group of map.group) {
-        if (
-          group.source === sourceSystemTitle &&
-          group.target === selectedTargetSystem
-        ) {
-          existingConceptMapGroup = group;
-          break;
-        }
-      }
-      if (existingConceptMapGroup) {
+      if (
+        map.sourceUri === sourceTerminology?.valueSetUrl &&
+        map.targetUri === targetTerminology?.valueSetUrl
+      ) {
         existingConceptMap = map;
         break;
       }
     }
-    if (existingConceptMap && existingConceptMapGroup) {
+    if (existingConceptMap) {
       setExistingConceptMapId(existingConceptMap.id);
       // TODO we currently only support one target because we don't understand
       // the multi target case.
-      setConceptMap(
-        existingConceptMapGroup.element.map(el => ({
-          source: el.code,
+      const reducer = (acc: MapRow[], group: Group): MapRow[] => [
+        ...acc,
+        ...group.element.map(el => ({
+          source: { value: el.code, system: group.source },
           equivalence: el.target[0].equivalence,
-          target: el.target[0].code
+          target: {
+            value: el.target[0].code,
+            system: group.target
+          }
         }))
-      );
+      ];
+      setConceptMap(existingConceptMap.group.reduce(reducer, []));
       setConceptMapTitle(existingConceptMap.title);
-      setConceptMapDescription(existingConceptMap.description);
+      setConceptMapDescription(existingConceptMap.description || '');
     }
-  }, [sourceSystemTitle, selectedTargetSystem, existingConceptMaps]);
+  }, [
+    hasSelectedSource,
+    sourceTerminology,
+    newTerminologyName,
+    targetTerminology,
+    existingConceptMaps
+  ]);
 
   return (
     <React.Fragment>
@@ -492,20 +574,20 @@ const ConceptMapDialog = ({
             <div className="center-text">
               <h1>CONCEPT MAP</h1>
             </div>
-            {!!selectedTargetSystem && !!sourceSystemTitle && metaData()}
+            {hasSelectedSource && !!targetTerminology && metaData()}
             <table className="bp3-html-table">
               <thead>
                 <tr>
                   <th className="head-col"></th>
                   <th className="source-col">
-                    {'Source:  '}
-                    {creatingNewCodeSystem
+                    {'Source'}
+                    {creatingNewTerminology
                       ? enterNewCodeSystemName
                       : selectSourceCodeSystem}
                   </th>
                   <th className="equivalence-col">Equivalence</th>
                   <th className="target-col">
-                    {'Target:  '}
+                    {'Target'}
                     {selectTargetCodeSystem}
                   </th>
                 </tr>
@@ -517,18 +599,15 @@ const ConceptMapDialog = ({
               </tbody>
             </table>
             <div className="center-text">
-              {!!selectedTargetSystem &&
-              !!sourceSystemTitle &&
+              {hasSelectedSource &&
+              !!targetTerminology &&
               (!existingConceptMapId || modifyAnyway) ? (
                 <Button
                   className="add-element-button"
                   fill={true}
                   text="add element"
                   onClick={(): void =>
-                    setConceptMap(prev => [
-                      ...prev,
-                      { source: '', equivalence: '', target: '' } as MapRow
-                    ])
+                    setConceptMap(prev => [...prev, {} as MapRow])
                   }
                 />
               ) : null}
@@ -555,8 +634,8 @@ const ConceptMapDialog = ({
                   }
                   disabled={
                     !existingConceptMapId &&
-                    (!sourceSystemTitle ||
-                      !selectedTargetSystem ||
+                    (!hasSelectedSource ||
+                      !targetTerminology ||
                       areFieldsEmpty ||
                       conceptMap.length < 1)
                   }
