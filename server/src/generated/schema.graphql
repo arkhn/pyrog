@@ -443,7 +443,7 @@ type Source {
   credential: Credential
   hasOwner: Boolean!
   id: String!
-  mapping: String!
+  mapping(includeComments: Boolean! = true): String!
   mappingProgress: [Int!]
   name: String!
   resources(after: ResourceWhereUniqueInput, before: ResourceWhereUniqueInput, first: Int, last: Int, skip: Int, where: ResourceWhereInput): [Resource!]!

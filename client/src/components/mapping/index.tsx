@@ -28,11 +28,12 @@ const MappingView = () => {
   const [selectedTabId, setSelectedTabId] = React.useState('picker' as TabId);
   const client = useApolloClient();
 
-  const exportMapping = async () => {
+  const exportMapping = async (includeComments = true): Promise<void> => {
     const { data, errors } = await client.query({
       query: qExportMapping,
       variables: {
-        sourceId: source.id
+        sourceId: source.id,
+        includeComments
       },
       fetchPolicy: 'network-only'
     });

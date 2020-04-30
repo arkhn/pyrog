@@ -56,6 +56,7 @@ export const importMapping = async (
 export const exportMapping = async (
   prismaClient: PrismaClient,
   sourceId: string,
+  includeComments: boolean,
 ): Promise<string> => {
   const source = await prismaClient.source.findOne({
     where: { id: sourceId },
@@ -72,7 +73,9 @@ export const exportMapping = async (
       filters: { include: { sqlColumn: true } },
       attributes: {
         include: {
-          comments: { include: { author: { select: { email: true } } } },
+          ...(includeComments && {
+            comments: { include: { author: { select: { email: true } } } },
+          }),
           inputs: {
             include: {
               sqlValue: {
