@@ -3,6 +3,7 @@ import { Tab, Tabs, TabId } from '@blueprintjs/core';
 import { loader } from 'graphql.macro';
 import { useApolloClient } from 'react-apollo';
 import { useSelector } from 'react-redux';
+import axios from 'axios';
 
 import Navbar from 'components/navbar';
 import InputColumns from './InputColumns';
@@ -12,8 +13,8 @@ import TabSQLParser from './TabSQLParser';
 import Comments from './Comments';
 import FhirMappingPanel from './FhirMappingPanel';
 
-// Import types
 import { IReduxStore } from 'types';
+import { FHIR_API_URL } from '../../constants';
 
 import './style.scss';
 import TableViewer from './TableViewer';
@@ -61,6 +62,58 @@ const MappingView = () => {
           type: 'application/json'
         }
       );
+      element.href = URL.createObjectURL(file);
+      element.download = fileName;
+      document.body.appendChild(element); // Required for this to work in FireFox
+      element.click();
+    }
+  };
+
+  const augmentAdditionalBundle = async (
+    ids: string[],
+    type: 'ConceptMap' | 'StructureDefinition',
+    bundle: any
+  ): Promise<void> => {
+    try {
+      const responses: any[] = await Promise.all(
+        ids.map(id => axios.get(`${FHIR_API_URL}/${type}/${id}`))
+      );
+      bundle.entry = [
+        ...bundle.entry,
+        ...responses.map(response => {
+          const { _id, ...entryWithoutId } = response.data;
+          return entryWithoutId;
+        })
+      ];
+    } catch (err) {
+      const errMessage = err.response ? err.response.data : err.message;
+      toaster.show({
+        icon: 'error',
+        intent: 'danger',
+        message: `error while fetching additional resources: ${errMessage}`,
+        timeout: 4000
+      });
+    }
+  };
+
+  const exportAdditionalResource = async (
+    conceptMapIds: string[],
+    profileIds: string[]
+  ): Promise<void> => {
+    const bundle: any = { resourceType: 'Bundle', entry: [] };
+
+    // Add concept maps to bundle
+    await augmentAdditionalBundle(conceptMapIds, 'ConceptMap', bundle);
+
+    // Add profiles to bundle
+    await augmentAdditionalBundle(profileIds, 'StructureDefinition', bundle);
+
+    if (bundle.entry.length > 0) {
+      const fileName = `${source.template.name}_${source.name}_additional_resources.json`;
+      const element = document.createElement('a');
+      const file = new File([JSON.stringify(bundle)], fileName, {
+        type: 'application/json'
+      });
       element.href = URL.createObjectURL(file);
       element.download = fileName;
       document.body.appendChild(element); // Required for this to work in FireFox
@@ -136,7 +189,10 @@ const MappingView = () => {
 
   return (
     <div>
-      <Navbar exportMapping={exportMapping} />
+      <Navbar
+        exportMapping={exportMapping}
+        exportAdditionalResource={exportAdditionalResource}
+      />
       <div id="mapping-explorer-container">
         <div id="main-container">
           <div id="fhir-panel">

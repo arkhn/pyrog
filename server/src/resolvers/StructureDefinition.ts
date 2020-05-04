@@ -2,7 +2,6 @@ import { objectType, FieldResolver } from '@nexus/schema'
 import axios from 'axios'
 import { Definition } from '@arkhn/fhir.ts'
 
-import { getDefinition } from 'fhir'
 import {
   resourceProfiles,
   resourcesPerKind,
@@ -122,33 +121,4 @@ export const refreshDefinition: FieldResolver<
   } catch (err) {
     throw new Error(err.response ? err.response.data : err.message)
   }
-}
-
-export const searchProfiles: FieldResolver<'Query', 'usedProfiles'> = async (
-  _,
-  { sourceId },
-  ctx,
-) => {
-  const source = await ctx.prisma.source.findOne({
-    where: { id: sourceId },
-    include: { template: true },
-  })
-  if (!source) {
-    throw new Error(`source ${sourceId} does not exist`)
-  }
-
-  const resources = await ctx.prisma.resource.findMany({
-    where: { source: { id: sourceId } },
-  })
-
-  const definitions = await Promise.all(
-    resources.map(r => getDefinition(r.definitionId)),
-  )
-
-  const profileIds = definitions
-    .filter(def => !!def && def.meta.id !== def.meta.type)
-    .map(def => def!.meta.id)
-
-  // Remove duplicates
-  return profileIds.filter((id, index) => profileIds.indexOf(id) === index)
 }

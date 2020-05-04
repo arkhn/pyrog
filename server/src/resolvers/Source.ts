@@ -1,6 +1,8 @@
 import { objectType, FieldResolver, booleanArg } from '@nexus/schema'
 
+import { getDefinition } from 'fhir'
 import { importMapping, exportMapping } from 'resolvers/mapping'
+import { AttributeWithInputs, ResourceWithAttributes } from 'types'
 
 export const Source = objectType({
   name: 'Source',
@@ -182,4 +184,78 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
     }),
   )
   return ctx.prisma.source.delete({ where: { id: sourceId } })
+}
+
+export const usedConceptMaps: FieldResolver<
+  'Query',
+  'usedConceptMapIds'
+> = async (_, { sourceId }, ctx) => {
+  const source = await ctx.prisma.source.findOne({
+    where: { id: sourceId },
+    include: { template: true },
+  })
+  if (!source) {
+    throw new Error(`source ${sourceId} does not exist`)
+  }
+
+  const sourceWithMapIds = await ctx.prisma.source.findOne({
+    where: { id: sourceId },
+    include: {
+      resources: {
+        include: {
+          attributes: {
+            include: {
+              inputs: true,
+            },
+          },
+        },
+      },
+    },
+  })
+  const resources = sourceWithMapIds!.resources as ResourceWithAttributes[]
+
+  const reduceattributes = (
+    acc: string[],
+    curAttribute: AttributeWithInputs,
+  ) => [
+    ...acc,
+    ...(curAttribute.inputs
+      .map(input => input.conceptMapId)
+      .filter(Boolean) as string[]),
+  ]
+  const reduceResources = (
+    acc: string[],
+    curResource: ResourceWithAttributes,
+  ) => [...acc, ...curResource.attributes.reduce(reduceattributes, [])]
+
+  return resources.reduce(reduceResources, [])
+}
+
+export const usedProfiles: FieldResolver<'Query', 'usedProfileIds'> = async (
+  _,
+  { sourceId },
+  ctx,
+) => {
+  const source = await ctx.prisma.source.findOne({
+    where: { id: sourceId },
+    include: { template: true },
+  })
+  if (!source) {
+    throw new Error(`source ${sourceId} does not exist`)
+  }
+
+  const resources = await ctx.prisma.resource.findMany({
+    where: { source: { id: sourceId } },
+  })
+
+  const definitions = await Promise.all(
+    resources.map(r => getDefinition(r.definitionId)),
+  )
+
+  const profileIds = definitions
+    .filter(def => !!def && def.meta.id !== def.meta.type)
+    .map(def => def!.meta.id)
+
+  // Remove duplicates
+  return profileIds.filter((id, index) => profileIds.indexOf(id) === index)
 }

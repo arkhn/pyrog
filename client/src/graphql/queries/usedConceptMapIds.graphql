@@ -1,0 +1,3 @@
+query usedConceptMapIds($sourceId: ID!) {
+  usedConceptMapIds(sourceId: $sourceId)
+}

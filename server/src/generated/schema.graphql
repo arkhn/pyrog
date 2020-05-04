@@ -387,7 +387,7 @@ type Query {
   template(templateId: ID!): Template
   templates: [Template!]
   usedConceptMapIds(sourceId: ID!): [String!]!
-  usedProfiles(sourceId: ID!): [String!]!
+  usedProfileIds(sourceId: ID!): [String!]!
 }
 
 type Resource {

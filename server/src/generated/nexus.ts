@@ -553,7 +553,7 @@ export interface NexusGenFieldTypes {
     template: NexusGenRootTypes['Template'] | null; // Template
     templates: NexusGenRootTypes['Template'][] | null; // [Template!]
     usedConceptMapIds: string[]; // [String!]!
-    usedProfiles: string[]; // [String!]!
+    usedProfileIds: string[]; // [String!]!
   }
   Resource: { // field return type
     attributes: NexusGenRootTypes['Attribute'][]; // [Attribute!]!
@@ -779,7 +779,7 @@ export interface NexusGenArgTypes {
     usedConceptMapIds: { // args
       sourceId: string; // ID!
     }
-    usedProfiles: { // args
+    usedProfileIds: { // args
       sourceId: string; // ID!
     }
   }
