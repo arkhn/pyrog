@@ -1,7 +1,7 @@
 import { arg, idArg, queryType } from '@nexus/schema'
 
 import { getDefinition } from 'fhir'
-import { sources, usedConceptMaps, usedProfiles } from './Source'
+import { sources } from './Source'
 import { searchDefinitions } from './StructureDefinition'
 
 export const Query = queryType({
@@ -99,22 +99,6 @@ export const Query = queryType({
       },
       nullable: true,
       resolve: searchDefinitions,
-    })
-
-    t.list.field('usedConceptMapIds', {
-      type: 'String',
-      args: {
-        sourceId: idArg({ nullable: false }),
-      },
-      resolve: usedConceptMaps,
-    })
-
-    t.list.field('usedProfileIds', {
-      type: 'String',
-      args: {
-        sourceId: idArg({ nullable: false }),
-      },
-      resolve: usedProfiles,
     })
   },
 })

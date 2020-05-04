@@ -53,6 +53,16 @@ export const Source = objectType({
         return [resources.length, nbAttributes]
       },
     })
+
+    t.list.field('usedConceptMapIds', {
+      type: 'String',
+      resolve: usedConceptMaps,
+    })
+
+    t.list.field('usedProfileIds', {
+      type: 'String',
+      resolve: usedProfiles,
+    })
   },
 })
 
@@ -186,20 +196,13 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
   return ctx.prisma.source.delete({ where: { id: sourceId } })
 }
 
-export const usedConceptMaps: FieldResolver<
-  'Query',
-  'usedConceptMapIds'
-> = async (_, { sourceId }, ctx) => {
-  const source = await ctx.prisma.source.findOne({
-    where: { id: sourceId },
-    include: { template: true },
-  })
-  if (!source) {
-    throw new Error(`source ${sourceId} does not exist`)
-  }
-
+const usedConceptMaps: FieldResolver<'Source', 'usedConceptMapIds'> = async (
+  parent,
+  _,
+  ctx,
+) => {
   const sourceWithMapIds = await ctx.prisma.source.findOne({
-    where: { id: sourceId },
+    where: { id: parent.id },
     include: {
       resources: {
         include: {
@@ -214,7 +217,7 @@ export const usedConceptMaps: FieldResolver<
   })
   const resources = sourceWithMapIds!.resources as ResourceWithAttributes[]
 
-  const reduceattributes = (
+  const reduceAttributes = (
     acc: string[],
     curAttribute: AttributeWithInputs,
   ) => [
@@ -226,26 +229,18 @@ export const usedConceptMaps: FieldResolver<
   const reduceResources = (
     acc: string[],
     curResource: ResourceWithAttributes,
-  ) => [...acc, ...curResource.attributes.reduce(reduceattributes, [])]
+  ) => [...acc, ...curResource.attributes.reduce(reduceAttributes, [])]
 
   return resources.reduce(reduceResources, [])
 }
 
-export const usedProfiles: FieldResolver<'Query', 'usedProfileIds'> = async (
+const usedProfiles: FieldResolver<'Source', 'usedProfileIds'> = async (
+  parent,
   _,
-  { sourceId },
   ctx,
 ) => {
-  const source = await ctx.prisma.source.findOne({
-    where: { id: sourceId },
-    include: { template: true },
-  })
-  if (!source) {
-    throw new Error(`source ${sourceId} does not exist`)
-  }
-
   const resources = await ctx.prisma.resource.findMany({
-    where: { source: { id: sourceId } },
+    where: { source: { id: parent.id } },
   })
 
   const definitions = await Promise.all(
@@ -253,7 +248,7 @@ export const usedProfiles: FieldResolver<'Query', 'usedProfileIds'> = async (
   )
 
   const profileIds = definitions
-    .filter(def => !!def && def.meta.id !== def.meta.type)
+    .filter(def => !!def && def.meta.derivation === 'constraint')
     .map(def => def!.meta.id)
 
   // Remove duplicates

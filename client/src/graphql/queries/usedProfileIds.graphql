@@ -1,3 +1,6 @@
 query usedProfileIds($sourceId: ID!) {
-  usedProfileIds(sourceId: $sourceId)
+  source(sourceId: $sourceId) {
+    id
+    usedProfileIds
+  }
 }

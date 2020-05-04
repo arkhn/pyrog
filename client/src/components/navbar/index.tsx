@@ -69,7 +69,7 @@ const Navbar = ({ exportMapping, exportAdditionalResource }: Props) => {
         },
         fetchPolicy: 'network-only'
       });
-      conceptMapsToFetch = data.usedConceptMapIds;
+      conceptMapsToFetch = data.source.usedConceptMapIds;
     }
 
     let profilesToFetch = [];
@@ -81,7 +81,7 @@ const Navbar = ({ exportMapping, exportAdditionalResource }: Props) => {
         },
         fetchPolicy: 'network-only'
       });
-      profilesToFetch = data.usedProfileIds;
+      profilesToFetch = data.source.usedProfileIds;
     }
 
     exportAdditionalResource!(conceptMapsToFetch, profilesToFetch);

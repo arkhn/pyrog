@@ -552,8 +552,6 @@ export interface NexusGenFieldTypes {
     structureDefinitions: NexusGenRootTypes['StructureDefinition'][] | null; // [StructureDefinition!]
     template: NexusGenRootTypes['Template'] | null; // Template
     templates: NexusGenRootTypes['Template'][] | null; // [Template!]
-    usedConceptMapIds: string[]; // [String!]!
-    usedProfileIds: string[]; // [String!]!
   }
   Resource: { // field return type
     attributes: NexusGenRootTypes['Attribute'][]; // [Attribute!]!
@@ -581,6 +579,8 @@ export interface NexusGenFieldTypes {
     resources: NexusGenRootTypes['Resource'][]; // [Resource!]!
     template: NexusGenRootTypes['Template']; // Template!
     updatedAt: any; // DateTime!
+    usedConceptMapIds: string[]; // [String!]!
+    usedProfileIds: string[]; // [String!]!
     version: string | null; // String
   }
   StructureDefinition: { // field return type
@@ -775,12 +775,6 @@ export interface NexusGenArgTypes {
     }
     template: { // args
       templateId: string; // ID!
-    }
-    usedConceptMapIds: { // args
-      sourceId: string; // ID!
-    }
-    usedProfileIds: { // args
-      sourceId: string; // ID!
     }
   }
   Resource: {
