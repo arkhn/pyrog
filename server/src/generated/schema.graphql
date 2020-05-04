@@ -377,6 +377,7 @@ input NullableStringFilter {
 type Query {
   allSources: [Source!]
   attribute(attributeId: ID!): Attribute
+  conceptMapIds(sourceId: ID!): [String!]!
   credential(credentialId: ID!): Credential
   me: User
   resource(resourceId: ID!): Resource

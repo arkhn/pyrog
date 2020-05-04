@@ -543,6 +543,7 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     allSources: NexusGenRootTypes['Source'][] | null; // [Source!]
     attribute: NexusGenRootTypes['Attribute'] | null; // Attribute
+    conceptMapIds: string[]; // [String!]!
     credential: NexusGenRootTypes['Credential'] | null; // Credential
     me: NexusGenRootTypes['User'] | null; // User
     resource: NexusGenRootTypes['Resource'] | null; // Resource
@@ -755,6 +756,9 @@ export interface NexusGenArgTypes {
   Query: {
     attribute: { // args
       attributeId: string; // ID!
+    }
+    conceptMapIds: { // args
+      sourceId: string; // ID!
     }
     credential: { // args
       credentialId: string; // ID!
