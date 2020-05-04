@@ -1,6 +1,7 @@
 import {
   Alignment,
   Button,
+  Divider,
   Menu,
   MenuItem,
   Navbar as BPNavbar,
@@ -40,15 +41,48 @@ const Navbar = ({ exportMapping }: Props) => {
 
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const [isExportMenuOpen, setIsExportMenuOpen] = React.useState(false);
+  const [exportComments, setExportComments] = React.useState(false);
+  const [exportConceptMaps, setExportConceptMaps] = React.useState(false);
+  const [exportProfiles, setExportProfiles] = React.useState(false);
 
   const { data } = useQuery(meQuery);
   const isAdmin = data && data.me.role === 'ADMIN';
 
+  const exportMenuItem = (text: string, stateGetter: any, stateSetter: any) => (
+    <MenuItem
+      text={
+        <div>
+          <input
+            type="checkbox"
+            checked={stateGetter}
+            onChange={() => stateSetter(!stateGetter)}
+            onClick={e => {
+              e.stopPropagation();
+              stateSetter(!stateGetter);
+            }}
+          />
+          {text}
+        </div>
+      }
+      onClick={(e: any) => {
+        e.preventDefault();
+        e.stopPropagation();
+        stateSetter(!stateGetter);
+      }}
+    />
+  );
+
   const renderExportMenu = (
     <Menu>
+      {exportMenuItem('Comments', exportComments, setExportComments)}
+      {exportMenuItem('Concept maps', exportConceptMaps, setExportConceptMaps)}
+      {exportMenuItem('Profiles', exportProfiles, setExportProfiles)}
+      <Divider />
       <MenuItem
-        text="Export without comments"
-        onClick={() => exportMapping!(false)}
+        text="Export"
+        onClick={() =>
+          console.log(exportComments, exportConceptMaps, exportProfiles)
+        }
       />
     </Menu>
   );
