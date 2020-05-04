@@ -1,6 +1,5 @@
 import { FieldResolver, objectType } from '@nexus/schema'
 import { AttributeWithInputs, ResourceWithAttributes } from 'types'
-import { Resource } from '@prisma/client'
 
 export const ConceptMap = objectType({
   name: 'ConceptMap',
@@ -30,7 +29,7 @@ export const ConceptMap = objectType({
 
 export const searchConceptMaps: FieldResolver<
   'Query',
-  'conceptMapIds'
+  'usedConceptMapIds'
 > = async (_, { sourceId }, ctx) => {
   const source = await ctx.prisma.source.findOne({
     where: { id: sourceId },
@@ -54,17 +53,21 @@ export const searchConceptMaps: FieldResolver<
       },
     },
   })
+  const resources = sourceWithMapIds!.resources as ResourceWithAttributes[]
 
   const reduceattributes = (
     acc: string[],
     curAttribute: AttributeWithInputs,
   ) => [
     ...acc,
-    ...curAttribute.inputs.map(input => input.conceptMapId).filter(Boolean),
+    ...(curAttribute.inputs
+      .map(input => input.conceptMapId)
+      .filter(Boolean) as string[]),
   ]
   const reduceResources = (
     acc: string[],
     curResource: ResourceWithAttributes,
   ) => [...acc, ...curResource.attributes.reduce(reduceattributes, [])]
-  return sourceWithMapIds!.resources.reduce(reduceResources, [])
+
+  return resources.reduce(reduceResources, [])
 }

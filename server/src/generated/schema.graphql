@@ -377,7 +377,6 @@ input NullableStringFilter {
 type Query {
   allSources: [Source!]
   attribute(attributeId: ID!): Attribute
-  conceptMapIds(sourceId: ID!): [String!]!
   credential(credentialId: ID!): Credential
   me: User
   resource(resourceId: ID!): Resource
@@ -387,6 +386,8 @@ type Query {
   structureDefinitions(filter: StructureDefinitionWhereFilter!): [StructureDefinition!]
   template(templateId: ID!): Template
   templates: [Template!]
+  usedConceptMapIds(sourceId: ID!): [String!]!
+  usedProfiles(sourceId: ID!): [String!]!
 }
 
 type Resource {

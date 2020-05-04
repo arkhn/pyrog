@@ -3,7 +3,7 @@ import { arg, idArg, queryType } from '@nexus/schema'
 import { getDefinition } from 'fhir'
 import { sources } from './Source'
 import { searchConceptMaps } from './ConceptMap'
-import { searchDefinitions } from './StructureDefinition'
+import { searchDefinitions, searchProfiles } from './StructureDefinition'
 
 export const Query = queryType({
   definition(t) {
@@ -102,7 +102,7 @@ export const Query = queryType({
       resolve: searchDefinitions,
     })
 
-    t.list.field('conceptMapIds', {
+    t.list.field('usedConceptMapIds', {
       type: 'String',
       args: {
         sourceId: idArg({ nullable: false }),
@@ -110,13 +110,12 @@ export const Query = queryType({
       resolve: searchConceptMaps,
     })
 
-    // t.list.field('structureDefinitions', {
-    //   type: 'StructureDefinition',
-    //   args: {
-    //     filter: arg({ type: 'StructureDefinitionWhereFilter', required: true }),
-    //   },
-    //   nullable: true,
-    //   resolve: searchDefinitions,
-    // })
+    t.list.field('usedProfiles', {
+      type: 'String',
+      args: {
+        sourceId: idArg({ nullable: false }),
+      },
+      resolve: searchProfiles,
+    })
   },
 })

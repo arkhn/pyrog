@@ -25,7 +25,7 @@ export type AttributeWithInputs = Attribute & {
   inputs: InputWithColumn[]
 }
 
-export type ResourceWithAttributesWithInputs = Resource & {
+export type ResourceWithAttributes = Resource & {
   attributes: AttributeWithInputs[]
 }
 
