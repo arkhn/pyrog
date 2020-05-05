@@ -68,7 +68,7 @@ export const NodeLabel = ({
     <MenuItem
       icon={'delete'}
       onClick={deleteNodeCallback}
-      text={"Supprimer l'item"}
+      text={`Supprimer ${isSlice ? 'la slice' : "l'item"}`}
     />
   );
 
@@ -83,7 +83,7 @@ export const NodeLabel = ({
         <Menu>
           {isArray && !isExtension && slices.length === 0 && renderAddItem()}
           {isArray && slices.length > 0 && renderAddSlice()}
-          {isItem && !isSlice && renderRemoveItem()}
+          {isItem && renderRemoveItem()}
           {hasAllowedExtensions && renderAddExtension(extensions)}
           {isRootExtensions && renderAddExtension(resourceExtensions)}
         </Menu>
@@ -93,7 +93,7 @@ export const NodeLabel = ({
     if (
       (isArray && !isExtension) ||
       (isArray && slices.length > 0) ||
-      (isItem && !isSlice) ||
+      isItem ||
       hasAllowedExtensions ||
       isRootExtensions
     ) {

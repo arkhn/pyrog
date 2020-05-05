@@ -168,8 +168,9 @@ export class TreeNode implements ITreeNode<Attribute> {
       child => child.id !== deleted.tail
     );
 
-    if (this.childNodes?.length === 0) {
+    if (!deleted.isSlice && this.childNodes?.length === 0) {
       // If only one child is left, we simply rebuild an empty one
+      // if the item is a slice, we don't want to rebuild an empty one.
       this.addItem();
     }
   }
