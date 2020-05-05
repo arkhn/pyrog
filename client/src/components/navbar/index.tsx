@@ -1,6 +1,7 @@
 import {
   Alignment,
   Button,
+  Divider,
   Menu,
   MenuItem,
   Navbar as BPNavbar,
@@ -12,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import useReactRouter from 'use-react-router';
 
 import { loader } from 'graphql.macro';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useApolloClient } from '@apollo/react-hooks';
 
 import Drawer from './drawer';
 import Header from './header';
@@ -27,29 +28,96 @@ import { deselectSource } from 'services/selectedNode/actions';
 
 interface Props {
   exportMapping?: (includeComments?: boolean) => void;
+  exportAdditionalResource?: (
+    conceptMapIds: string[],
+    profileIds: string[]
+  ) => void;
 }
 
 // Graphql
 const meQuery = loader('src/graphql/queries/me.graphql');
+const qUsedConceptMapIds = loader(
+  'src/graphql/queries/usedConceptMapIds.graphql'
+);
+const qUsedProfileIds = loader('src/graphql/queries/usedProfileIds.graphql');
 
-const Navbar = ({ exportMapping }: Props) => {
+const Navbar = ({ exportMapping, exportAdditionalResource }: Props) => {
   const { history } = useReactRouter();
+  const client = useApolloClient();
   const dispatch = useDispatch();
-  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
+  const { source } = useSelector((state: IReduxStore) => state.selectedNode);
   const user = useSelector((state: IReduxStore) => state.user);
 
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const [isExportMenuOpen, setIsExportMenuOpen] = React.useState(false);
+  const [exportComments, setExportComments] = React.useState(false);
+  const [exportConceptMaps, setExportConceptMaps] = React.useState(false);
+  const [exportProfiles, setExportProfiles] = React.useState(false);
 
   const { data } = useQuery(meQuery);
   const isAdmin = data && data.me.role === 'ADMIN';
 
+  const customExport = async () => {
+    exportMapping!(exportComments);
+
+    let conceptMapsToFetch = [];
+    if (exportConceptMaps) {
+      const { data } = await client.query({
+        query: qUsedConceptMapIds,
+        variables: {
+          sourceId: source.id
+        },
+        fetchPolicy: 'network-only'
+      });
+      conceptMapsToFetch = data.source.usedConceptMapIds;
+    }
+
+    let profilesToFetch = [];
+    if (exportProfiles) {
+      const { data } = await client.query({
+        query: qUsedProfileIds,
+        variables: {
+          sourceId: source.id
+        },
+        fetchPolicy: 'network-only'
+      });
+      profilesToFetch = data.source.usedProfileIds;
+    }
+
+    exportAdditionalResource!(conceptMapsToFetch, profilesToFetch);
+  };
+
+  const exportMenuItem = (text: string, stateGetter: any, stateSetter: any) => (
+    <MenuItem
+      text={
+        <div>
+          <input
+            type="checkbox"
+            checked={stateGetter}
+            onChange={() => stateSetter(!stateGetter)}
+            onClick={e => {
+              e.stopPropagation();
+              stateSetter(!stateGetter);
+            }}
+          />
+          {text}
+        </div>
+      }
+      onClick={(e: any) => {
+        e.preventDefault();
+        e.stopPropagation();
+        stateSetter(!stateGetter);
+      }}
+    />
+  );
+
   const renderExportMenu = (
     <Menu>
-      <MenuItem
-        text="Export without comments"
-        onClick={() => exportMapping!(false)}
-      />
+      {exportMenuItem('Comments', exportComments, setExportComments)}
+      {exportMenuItem('Concept maps', exportConceptMaps, setExportConceptMaps)}
+      {exportMenuItem('Profiles', exportProfiles, setExportProfiles)}
+      <Divider />
+      <MenuItem text="Export" onClick={() => customExport()} />
     </Menu>
   );
 
@@ -57,7 +125,7 @@ const Navbar = ({ exportMapping }: Props) => {
     return (
       <BPNavbar.Group align={Alignment.LEFT}>
         <BPNavbar.Divider />
-        {selectedNode.source.name}
+        {source.name}
         <BPNavbar.Divider />
         <Button
           icon="more"
@@ -97,7 +165,7 @@ const Navbar = ({ exportMapping }: Props) => {
           />
         )}
         <Drawer
-          title={selectedNode.source ? selectedNode.source.name : ''}
+          title={source ? source.name : ''}
           isOpen={isDrawerOpen}
           onClose={() => {
             setIsDrawerOpen(false);
@@ -122,7 +190,7 @@ const Navbar = ({ exportMapping }: Props) => {
         <Header />
       </BPNavbar.Group>
 
-      {selectedNode.source && renderSourceContext()}
+      {source && renderSourceContext()}
 
       {user.id && (
         <BPNavbar.Group align={Alignment.RIGHT}>

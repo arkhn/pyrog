@@ -579,6 +579,8 @@ export interface NexusGenFieldTypes {
     resources: NexusGenRootTypes['Resource'][]; // [Resource!]!
     template: NexusGenRootTypes['Template']; // Template!
     updatedAt: any; // DateTime!
+    usedConceptMapIds: string[]; // [String!]!
+    usedProfileIds: string[]; // [String!]!
     version: string | null; // String
   }
   StructureDefinition: { // field return type

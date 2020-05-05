@@ -449,6 +449,8 @@ type Source {
   resources(after: ResourceWhereUniqueInput, before: ResourceWhereUniqueInput, first: Int, last: Int, skip: Int, where: ResourceWhereInput): [Resource!]!
   template: Template!
   updatedAt: DateTime!
+  usedConceptMapIds: [String!]!
+  usedProfileIds: [String!]!
   version: String
 }
 

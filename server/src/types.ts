@@ -1,10 +1,11 @@
 import {
   Attribute,
+  Column,
+  Comment,
+  Filter,
   Input,
   Join,
-  Column,
-  Filter,
-  Comment,
+  Resource,
   User,
 } from '@prisma/client'
 
@@ -22,6 +23,10 @@ export type InputWithColumn = Input & {
 
 export type AttributeWithInputs = Attribute & {
   inputs: InputWithColumn[]
+}
+
+export type ResourceWithAttributes = Resource & {
+  attributes: AttributeWithInputs[]
 }
 
 export type AttributeWithCommentsPreV7 = AttributeWithInputs & {

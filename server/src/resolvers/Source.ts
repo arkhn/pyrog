@@ -1,6 +1,8 @@
 import { objectType, FieldResolver, booleanArg } from '@nexus/schema'
 
+import { getDefinition } from 'fhir'
 import { importMapping, exportMapping } from 'resolvers/mapping'
+import { AttributeWithInputs, ResourceWithAttributes } from 'types'
 
 export const Source = objectType({
   name: 'Source',
@@ -50,6 +52,16 @@ export const Source = objectType({
         )
         return [resources.length, nbAttributes]
       },
+    })
+
+    t.list.field('usedConceptMapIds', {
+      type: 'String',
+      resolve: usedConceptMaps,
+    })
+
+    t.list.field('usedProfileIds', {
+      type: 'String',
+      resolve: usedProfiles,
     })
   },
 })
@@ -182,4 +194,63 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
     }),
   )
   return ctx.prisma.source.delete({ where: { id: sourceId } })
+}
+
+const usedConceptMaps: FieldResolver<'Source', 'usedConceptMapIds'> = async (
+  parent,
+  _,
+  ctx,
+) => {
+  const sourceWithMapIds = await ctx.prisma.source.findOne({
+    where: { id: parent.id },
+    include: {
+      resources: {
+        include: {
+          attributes: {
+            include: {
+              inputs: true,
+            },
+          },
+        },
+      },
+    },
+  })
+  const resources = sourceWithMapIds!.resources as ResourceWithAttributes[]
+
+  const reduceAttributes = (
+    acc: string[],
+    curAttribute: AttributeWithInputs,
+  ) => [
+    ...acc,
+    ...(curAttribute.inputs
+      .map(input => input.conceptMapId)
+      .filter(Boolean) as string[]),
+  ]
+  const reduceResources = (
+    acc: string[],
+    curResource: ResourceWithAttributes,
+  ) => [...acc, ...curResource.attributes.reduce(reduceAttributes, [])]
+
+  return resources.reduce(reduceResources, [])
+}
+
+const usedProfiles: FieldResolver<'Source', 'usedProfileIds'> = async (
+  parent,
+  _,
+  ctx,
+) => {
+  const resources = await ctx.prisma.resource.findMany({
+    where: { source: { id: parent.id } },
+  })
+
+  const definitions = await Promise.all(
+    resources.map(r => getDefinition(r.definitionId)),
+  )
+
+  const profileIds = definitions
+    .filter(def => !!def && def.meta.derivation === 'constraint')
+    .map(def => def!.meta.id)
+
+  // Remove duplicates
+  return profileIds.filter((id, index) => profileIds.indexOf(id) === index)
 }

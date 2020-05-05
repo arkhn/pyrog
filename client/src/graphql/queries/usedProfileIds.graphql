@@ -1,0 +1,6 @@
+query usedProfileIds($sourceId: ID!) {
+  source(sourceId: $sourceId) {
+    id
+    usedProfileIds
+  }
+}
