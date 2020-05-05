@@ -9,11 +9,9 @@ export interface Props {
   tableChangeCallback?: Function;
   columnChangeCallback?: Function;
   hasOwner?: boolean;
-  initialColumn?: {
-    owner?: string;
-    table: string;
-    column: string;
-  };
+  initialOwner?: string;
+  initialTable?: string;
+  initialColumn?: string;
   sourceSchema: ISourceSchema;
   label?: string;
   vertical?: boolean;
@@ -27,6 +25,8 @@ const ColumnSelect = ({
   tableChangeCallback,
   columnChangeCallback,
   hasOwner,
+  initialOwner,
+  initialTable,
   initialColumn,
   sourceSchema,
   label,
@@ -35,15 +35,9 @@ const ColumnSelect = ({
   popoverProps,
   disabled
 }: Props): React.ReactElement => {
-  const [owner, setOwner] = useState(
-    initialColumn ? initialColumn.owner : undefined
-  );
-  const [table, setTable] = useState(
-    initialColumn ? initialColumn.table : undefined
-  );
-  const [column, setColumn] = useState(
-    initialColumn ? initialColumn.column : undefined
-  );
+  const [owner, setOwner] = useState(initialOwner);
+  const [table, setTable] = useState(initialTable);
+  const [column, setColumn] = useState(initialColumn);
 
   const changeOwner = (e: string): void => {
     setOwner(e);

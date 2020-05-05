@@ -45,8 +45,8 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
     ? attributesForResource[path].id
     : null;
 
-  const [owner, setOwner] = React.useState('');
-  const [table, setTable] = React.useState('');
+  const [owner, setOwner] = React.useState(resource.primaryKeyOwner);
+  const [table, setTable] = React.useState(resource.primaryKeyTable);
   const [column, setColumn] = React.useState('');
 
   const [createAttribute] = useMutation(mCreateAttribute, {
@@ -136,6 +136,8 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
             columnChangeCallback={(e: string) => {
               setColumn(e);
             }}
+            initialOwner={owner}
+            initialTable={table}
             sourceSchema={schema}
           />
           <Button
