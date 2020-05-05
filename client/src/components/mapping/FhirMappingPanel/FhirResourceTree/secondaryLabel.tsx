@@ -1,9 +1,11 @@
 import React from 'react';
 import { Attribute } from '@arkhn/fhir.ts';
 import { useSelector } from 'react-redux';
-import { Icon } from '@blueprintjs/core';
+import { Icon, Tooltip } from '@blueprintjs/core';
 
 import { IAttribute, IReduxStore } from 'types';
+
+import './style.scss';
 
 interface SecondaryLabelProps {
   attribute: Attribute;
@@ -53,15 +55,43 @@ export const SecondaryLabel = ({
     </React.Fragment>
   );
 
+  const labels = [];
+  if (hasChildInputs) {
+    labels.push({
+      component: <Icon icon="dot" />,
+      text: 'This attribute has children'
+    });
+  }
+  if (isValidated) {
+    labels.push({
+      component: <Icon icon="small-tick" intent="success" />,
+      text: 'This attribute has been validated'
+    });
+  } else if (hasInputs) {
+    labels.push({
+      component: <Icon icon="dot" intent="warning" />,
+      text: 'This attribute has inputs but is not yet validated'
+    });
+  }
+  if (!hasInputs && attribute.isRequired) {
+    labels.push({
+      component: <Icon icon="dot" intent="danger" />,
+      text: 'This attribute is required'
+    });
+  }
+  if (comments && comments.length > 0)
+    labels.push({
+      component: renderCommentCount(),
+      text: `This attribute has ${comments.length} comments`
+    });
+
   return (
-    <React.Fragment>
-      {isValidated && <Icon icon="small-tick" intent="success" />}
-      {hasChildInputs && <Icon icon="dot" />}
-      {!isValidated && hasInputs && <Icon icon="dot" intent="warning" />}
-      {!hasInputs && attribute.isRequired && (
-        <Icon icon="dot" intent="danger" />
-      )}
-      {comments && comments.length > 0 && renderCommentCount()}
-    </React.Fragment>
+    <span className="secondary-label">
+      {labels.map((l, i) => (
+        <Tooltip key={i} boundary={'viewport'} content={l.text}>
+          {l.component}
+        </Tooltip>
+      ))}
+    </span>
   );
 };
