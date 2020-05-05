@@ -60,11 +60,9 @@ const JoinColumns = ({
           }
         });
       }}
-      initialColumn={{
-        owner: join.tables[0].owner,
-        table: join.tables[0].table,
-        column: join.tables[0].column
-      }}
+      initialOwner={join.tables[0].owner}
+      initialTable={join.tables[0].table}
+      initialColumn={join.tables[0].column}
       sourceSchema={schema}
     />
     <ColumnSelect
@@ -108,11 +106,9 @@ const JoinColumns = ({
           }
         });
       }}
-      initialColumn={{
-        owner: join.tables[1].owner,
-        table: join.tables[1].table,
-        column: join.tables[1].column
-      }}
+      initialOwner={join.tables[1].owner}
+      initialTable={join.tables[1].table}
+      initialColumn={join.tables[1].column}
       sourceSchema={schema}
     />
   </div>

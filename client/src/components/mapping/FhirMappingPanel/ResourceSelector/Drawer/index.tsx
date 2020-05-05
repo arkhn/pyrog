@@ -193,11 +193,9 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
         columnChangeCallback={(column: string): void => {
           setPkColumn(column);
         }}
-        initialColumn={{
-          owner: pkOwner,
-          table: pkTable,
-          column: pkColumn
-        }}
+        initialOwner={pkOwner}
+        initialTable={pkTable}
+        initialColumn={pkColumn}
         sourceSchema={source.schema!}
         popoverProps={{
           autoFocus: true,
@@ -252,11 +250,9 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
                     filters[index].sqlColumn.column = column;
                     setFilters([...filters]);
                   }}
-                  initialColumn={{
-                    owner: sqlColumn ? sqlColumn.owner : '',
-                    table: sqlColumn ? sqlColumn.table : '',
-                    column: sqlColumn ? sqlColumn.column : ''
-                  }}
+                  initialOwner={sqlColumn ? sqlColumn.owner : ''}
+                  initialTable={sqlColumn ? sqlColumn.table : ''}
+                  initialColumn={sqlColumn ? sqlColumn.column : ''}
                   sourceSchema={source.schema!}
                   vertical={true}
                   fill={true}
