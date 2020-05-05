@@ -45,17 +45,13 @@
     margin-left: 8px;
   }
 
-  .help-popover {
-    margin-left: 8px;
-
-    .bp3-popover-target {
-      vertical-align: sub;
-    }
+  .centered-question-mark {
+    align-self: center;
+    padding-left: 5px;
   }
 }
 
 .bp3-popover-content {
-
   .text {
     width: min-content;
     margin: 5px;

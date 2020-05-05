@@ -3,20 +3,17 @@ import {
   Checkbox,
   ControlGroup,
   InputGroup,
-  Popover,
-  Position
+  Tooltip,
+  Icon
 } from '@blueprintjs/core';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { IReduxStore } from 'types';
-
 import { Attribute } from '@arkhn/fhir.ts';
 
+import { IReduxStore, Resource } from 'types';
 import SourceSelect from 'components/selects/sourceSelect';
 import ResourceSelect from 'components/selects/resourceSelect';
-
-import { Resource } from 'types';
 
 interface Props {
   attribute: Attribute;
@@ -84,6 +81,17 @@ const IdentifierSystemInput = ({
     }
   };
 
+  const customSystemTootip = (
+    <p className="text">
+      The identifier system is a URI that defines a set of identifiers (i.e. how
+      the value is made unique). For istance, we use
+      "http://hl7.org/fhir/sid/us-ssn" for United States Social Security Number
+      (SSN) identifier values. Sometimes, the identifiers are not a recognized
+      standard so we need to use a custom system. Pyrog's custom systems have
+      the form "http://terminology.arkhn.org/sourceId/resourceId".
+    </p>
+  );
+
   return (
     <ControlGroup>
       {customSystem ? (
@@ -136,27 +144,13 @@ const IdentifierSystemInput = ({
         label="Custom system"
         onChange={(): void => setCustomSystem(!customSystem)}
       />
-      <Popover
-        interactionKind="hover"
+      <Tooltip
         boundary="viewport"
-        className="help-popover"
-        position={Position.BOTTOM_RIGHT}
+        content={customSystemTootip}
+        className="centered-question-mark"
       >
-        <Button icon="help" minimal={true} small={true} />
-        {
-          <div>
-            <p className="text">
-              The identifier system is a URI that defines a set of identifiers
-              (i.e. how the value is made unique). For istance, we use
-              "http://hl7.org/fhir/sid/us-ssn" for United States Social Security
-              Number (SSN) identifier values. Sometimes, the identifiers are not
-              a recognized standard so we need to use a custom system. Pyrog's
-              custom systems have the form
-              "http://terminology.arkhn.org/sourceId/resourceId".
-            </p>
-          </div>
-        }
-      </Popover>
+        <Icon icon="help" />
+      </Tooltip>
     </ControlGroup>
   );
 };
