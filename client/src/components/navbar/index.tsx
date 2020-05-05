@@ -6,7 +6,8 @@ import {
   MenuItem,
   Navbar as BPNavbar,
   Popover,
-  Position
+  Position,
+  Icon
 } from '@blueprintjs/core';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -151,7 +152,7 @@ const Navbar = ({ exportMapping, exportAdditionalResource }: Props) => {
               e?.stopPropagation();
             }}
           >
-            <Button icon="caret-down" minimal={true} />
+            <Icon className="icon-caret-down" icon="caret-down" />
           </Popover>
         </Button>
         {isAdmin && (
