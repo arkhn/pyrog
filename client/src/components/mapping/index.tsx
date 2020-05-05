@@ -75,15 +75,18 @@ const MappingView = () => {
     bundle: any
   ): Promise<void> => {
     try {
-      const responses: any[] = await Promise.all(
-        ids.map(id => axios.get(`${FHIR_API_URL}/${type}/${id}`))
+      const response: any = await axios.get(
+        `${FHIR_API_URL}/${type}?id=${ids.join(',')}`
       );
       bundle.entry = [
         ...bundle.entry,
-        ...responses.map(response => {
-          const { _id, ...entryWithoutId } = response.data;
-          return entryWithoutId;
-        })
+        ...response.data.entry
+          .map((newEntry: any) => newEntry.resource)
+          .filter((newEntry: any) => ids.includes(newEntry.id)) // exact modifier in search doesn't work with several queries
+          .map((newEntry: any) => {
+            const { _id, ...entryWithoutId } = newEntry;
+            return entryWithoutId;
+          })
       ];
     } catch (err) {
       const errMessage = err.response ? err.response.data : err.message;
