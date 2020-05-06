@@ -7,8 +7,8 @@ import { FHIR_API_URL } from '../../../constants';
 
 import { IReduxStore } from 'types';
 
-import { validator } from 'components/uploads/validate';
-import fhirSchema from 'components/uploads/uploadCodeSystem/CodeSystem.schema.json';
+import { validator } from '../validation/validate';
+import fhirSchema from '../validation/CodeSystem.schema.json';
 
 import './style.scss';
 
