@@ -22,27 +22,21 @@ describe('import mapping V7', () => {
   })
 
   it('should send a query per resource', async () => {
-    await importMappingV7(new PrismaClient(), sourceId, resources, [
-      'admin@arkhn.com',
-    ])
+    await importMappingV7(new PrismaClient(), sourceId, resources)
     expect(mockCreateResource).toHaveBeenCalledTimes(resourceCount)
     expect(mockCreateResource.mock.calls[0]).toMatchSnapshot() // EpisodeOfCare - HopitalStay
     expect(mockCreateResource.mock.calls[1]).toMatchSnapshot() // Patient
   })
 
   it('should raise an error if importing mapping with unexisting comment author', async () => {
-    const t = importMappingV7(new PrismaClient(), sourceId, resources, [
-      'user@arkhn.com',
-    ])
+    const t = importMappingV7(new PrismaClient(), sourceId, resources)
     expect(t).rejects.toThrowError(
       'trying to import a mapping with unexisting comment author',
     )
   })
 
   it('should have cleaned the resource and attributes', async () => {
-    await importMappingV7(new PrismaClient(), sourceId, resources, [
-      'admin@arkhn.com',
-    ])
+    await importMappingV7(new PrismaClient(), sourceId, resources)
     expect(mockCreateResource.mock.calls[0][0]).toEqual({
       data: {
         id: resources[0].id,
