@@ -4,10 +4,14 @@ import importMappingV7 from './v7'
 import * as mappingV7 from '../../../test/fixtures/chimio-mapping-v7.json'
 
 const mockCreateResource = jest.fn()
+const mockFindManyUser = jest.fn(() => [{ email: 'admin@arkhn.com' }])
 jest.mock('@prisma/client', () => ({
   PrismaClient: jest.fn().mockImplementation(() => ({
     resource: {
       create: (data: any) => mockCreateResource(data),
+    },
+    user: {
+      findMany: mockFindManyUser,
     },
   })),
 }))
@@ -26,6 +30,14 @@ describe('import mapping V7', () => {
     expect(mockCreateResource).toHaveBeenCalledTimes(resourceCount)
     expect(mockCreateResource.mock.calls[0]).toMatchSnapshot() // EpisodeOfCare - HopitalStay
     expect(mockCreateResource.mock.calls[1]).toMatchSnapshot() // Patient
+  })
+
+  it('should raise an error if importing mapping with unexisting comment author', async () => {
+    mockFindManyUser.mockReturnValueOnce([{ email: 'user@arkhn.com' }])
+    const t = importMappingV7(new PrismaClient(), sourceId, resources)
+    expect(t).rejects.toThrowError(
+      'trying to import a mapping with unexisting comment author',
+    )
   })
 
   it('should have cleaned the resource and attributes', async () => {
