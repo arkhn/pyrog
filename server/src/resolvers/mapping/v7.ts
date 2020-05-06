@@ -1,6 +1,11 @@
 import { PrismaClient, Resource } from '@prisma/client'
 
-import { clean, buildFiltersQuery, buildAttributesQuery } from './utils'
+import {
+  clean,
+  checkAuthors,
+  buildFiltersQuery,
+  buildAttributesQuery,
+} from './utils'
 
 const cleanResourceV7 = (resource: Resource) => {
   const r = clean(resource)
@@ -9,19 +14,19 @@ const cleanResourceV7 = (resource: Resource) => {
   return r
 }
 
-export default (
+export default async (
   prismaClient: PrismaClient,
   sourceId: string,
   resources: any[],
-  existingUsers: string[],
-) =>
-  Promise.all(
+) => {
+  await checkAuthors(prismaClient, resources)
+  return Promise.all(
     resources.map(async (r: any) => {
       return prismaClient.resource.create({
         data: {
           ...cleanResourceV7(r),
           attributes: {
-            create: buildAttributesQuery(r.attributes, existingUsers),
+            create: buildAttributesQuery(r.attributes),
           },
           filters: {
             create: buildFiltersQuery(r.filters),
@@ -33,3 +38,4 @@ export default (
       })
     }),
   )
+}
