@@ -1,13 +1,12 @@
 import {
-  Column,
-  InputCreateWithoutAttributeInput,
-  ColumnCreateWithoutInputInput,
-  JoinCreateWithoutColumnInput,
   AttributeCreateWithoutResourceInput,
-  FilterCreateInput,
+  Column,
+  ColumnCreateWithoutInputInput,
   CommentCreateWithoutAttributeInput,
+  FilterCreateInput,
+  InputCreateWithoutAttributeInput,
+  JoinCreateWithoutColumnInput,
   PrismaClient,
-  Resource,
 } from '@prisma/client'
 
 import {
