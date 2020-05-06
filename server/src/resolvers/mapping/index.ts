@@ -47,7 +47,10 @@ export const importMapping = async (
     case MAPPING_VERSION_6:
       return handleV6(prismaClient, sourceId, resources)
     case MAPPING_VERSION_7:
-      return handleV7(prismaClient, sourceId, resources)
+      const existingUsers = (await prismaClient.user.findMany()).map(
+        user => user.email,
+      )
+      return handleV7(prismaClient, sourceId, resources, existingUsers)
     default:
       throw new Error(`Unknown mapping version: "${version}"`)
   }

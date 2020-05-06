@@ -13,6 +13,7 @@ export default (
   prismaClient: PrismaClient,
   sourceId: string,
   resources: any[],
+  existingUsers: string[],
 ) =>
   Promise.all(
     resources.map(async (r: any) => {
@@ -20,7 +21,7 @@ export default (
         data: {
           ...cleanResourceV7(r),
           attributes: {
-            create: buildAttributesQuery(r.attributes),
+            create: buildAttributesQuery(r.attributes, existingUsers),
           },
           filters: {
             create: buildFiltersQuery(r.filters),

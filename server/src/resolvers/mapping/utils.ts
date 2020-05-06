@@ -97,15 +97,21 @@ export const buildAttributesQueryPreV7 = (
 
 export const buildCommentsQuery = (
   comments: CommentWithAuthor[],
+  existingUsers: string[],
 ): CommentCreateWithoutAttributeInput[] =>
-  comments.map(c => ({
-    content: c.content,
-    author: { connect: { email: c.author.email } },
-    createdAt: c.createdAt,
-  }))
+  comments.map(c => {
+    if (!existingUsers.includes(c.author.email))
+      throw Error('trying to import a mapping with unexisting comment author')
+    return {
+      content: c.content,
+      author: { connect: { email: c.author.email } },
+      createdAt: c.createdAt,
+    }
+  })
 
 export const buildAttributesQuery = (
   attributes: AttributeWithComments[],
+  existingUsers: string[],
 ): AttributeCreateWithoutResourceInput[] | null =>
   attributes.map(a => {
     const attr: AttributeCreateWithoutResourceInput = clean(a)
@@ -116,7 +122,7 @@ export const buildAttributesQuery = (
     }
 
     if (a.comments && a.comments.length) {
-      attr.comments = { create: buildCommentsQuery(a.comments) }
+      attr.comments = { create: buildCommentsQuery(a.comments, existingUsers) }
     } else {
       delete attr.comments
     }
