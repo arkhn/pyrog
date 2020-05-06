@@ -30,7 +30,7 @@ export const checkAuthors = async (
   prismaClient: PrismaClient,
   resources: any[],
 ) => {
-  const authorMails: string[] = resources.reduce(
+  const authorEmails: string[] = resources.reduce(
     (authors, resource) => [
       ...authors,
       ...resource.attributes.reduce(
@@ -43,16 +43,22 @@ export const checkAuthors = async (
     ],
     [],
   )
-  const uniqueMails = authorMails.filter(
-    (mail, ind) => authorMails.indexOf(mail) === ind,
+  const uniqueEmails = authorEmails.filter(
+    (mail, ind) => authorEmails.indexOf(mail) === ind,
   )
   const allUsers = await prismaClient.user.findMany({
-    where: { email: { in: uniqueMails } },
+    where: { email: { in: uniqueEmails } },
   })
   const existingMails = allUsers.map(user => user.email)
-  const missingUsers = uniqueMails.filter(mail => !existingMails.includes(mail))
+  const missingUsers = uniqueEmails.filter(
+    mail => !existingMails.includes(mail),
+  )
   if (missingUsers.length > 0)
-    throw Error(`missing users ${missingUsers.join(', ')}`)
+    throw Error(
+      `trying to import a mapping with unexisting comment author ${missingUsers.join(
+        ', ',
+      )}`,
+    )
 }
 
 const buildJoinsQuery = (
