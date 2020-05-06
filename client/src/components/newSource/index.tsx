@@ -154,8 +154,8 @@ const NewSourceView = (): React.ReactElement => {
           } catch (e) {
             reject(new Error(`could not parse ${mappingFile.name} as JSON`));
           }
-          await client
-            .mutate({
+          try {
+            client.mutate({
               mutation: mCreateSource,
               variables: {
                 templateName,
@@ -163,14 +163,15 @@ const NewSourceView = (): React.ReactElement => {
                 mapping,
                 name: sourceName
               }
-            })
-            .catch(e => {
-              reject(
-                new Error(
-                  `error while creating resource: ${e.graphQLErrors[0].message}`
-                )
-              );
             });
+          } catch (err) {
+            reject(
+              new Error(
+                `error while creating resource: ${err.graphQLErrors[0].message}`
+              )
+            );
+          }
+
           resolve();
         };
         reader.onerror = (e: ProgressEvent<FileReader>): void => reject(e);
