@@ -15,10 +15,6 @@ import useReactRouter from 'use-react-router';
 
 import Navbar from 'components/navbar';
 
-import StructureDefinitionSchema from 'components/uploads/validation/StructureDefinition.schema.json';
-import ConceptMapSchema from 'components/uploads/validation/ConceptMap.schema.json';
-import { validator } from 'components/uploads/validation/validate';
-
 import { FHIR_API_URL } from '../../constants';
 import { ITemplate, IReduxStore } from 'types';
 
@@ -182,33 +178,6 @@ const NewSourceView = (): React.ReactElement => {
     }
   };
 
-  // Only StructureDefinitions and ConceptMaps are currently expected in additional resources
-  const schemas: any = {
-    StructureDefinition: StructureDefinitionSchema,
-    ConceptMap: ConceptMapSchema
-  };
-  const validators = new Map();
-
-  const uploadFhirResource = async (resource: any) => {
-    const resourceType = resource.resourceType;
-    if (!validators.has(resourceType)) {
-      validators.set(resourceType, validator(schemas[resourceType]));
-    }
-    const validate = validators.get(resourceType);
-
-    if (!validate(resource)) {
-      toaster.show(
-        renderToastProps({
-          message: `could not upload resource with id ${resource.id}`,
-          success: false
-        })
-      );
-      return;
-    }
-
-    await axios.post(`${FHIR_API_URL}/${resource.resourceType}`, resource);
-  };
-
   const uploadFhirBundle = async (): Promise<void> => {
     if (!fhirBundleFile) return;
 
@@ -226,7 +195,28 @@ const NewSourceView = (): React.ReactElement => {
         } catch (e) {
           reject(new Error(`could not parse ${fhirBundleFile!.name} as JSON`));
         }
-        bundleJson.entry.map(uploadFhirResource);
+        // Check that we only have StructureDefinitions, ConceptMaps,
+        // or CodeSystems in the bundle
+        const authorizedTypes = [
+          'StructureDefinition',
+          'ConceptMap',
+          'CodeSystem'
+        ];
+        const resourceTypes = bundleJson.entry.map(
+          (entry: any) => entry.resourceType
+        );
+        if (
+          resourceTypes.some((type: string) => !authorizedTypes.includes(type))
+        )
+          reject(
+            new Error(
+              `Source created but failed while trying to upload a bundle with 
+              resource which type is not
+              StructureDefinition, ConceptMap, nor CodeSystem`
+            )
+          );
+        // Upload the bundle
+        await axios.post(`${FHIR_API_URL}/upload-bundle`, bundleJson);
         resolve();
       };
       reader.onerror = (e: ProgressEvent<FileReader>): void => reject(e);
@@ -253,9 +243,10 @@ const NewSourceView = (): React.ReactElement => {
         if (!templateExists) {
           await createTemplate();
         }
-        // Create new source and upload bundle in parallel
-        await Promise.all([createSource(), uploadFhirBundle()]);
-        // await Promise.all([uploadFhirBundle()]);
+        // Create new source
+        await createSource();
+        // Upload bundle
+        await uploadFhirBundle();
         // After source is created,
         // redirect to /sources page.
         toaster.show(
