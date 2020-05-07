@@ -5,8 +5,9 @@ import { ErrorObject } from 'ajv';
 import axios from 'axios';
 
 import { FHIR_API_URL } from '../../../constants';
-import fhirSchema from './StructureDefinition.schema.json';
-import { validator } from '../validate';
+
+import { validator } from '../validation/validate';
+import fhirSchema from '../validation/StructureDefinition.schema.json';
 
 import './style.scss';
 import { useMutation } from 'react-apollo';

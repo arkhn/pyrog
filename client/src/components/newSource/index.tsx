@@ -15,7 +15,7 @@ import useReactRouter from 'use-react-router';
 
 import Navbar from 'components/navbar';
 
-// Import types
+import { FHIR_API_URL } from '../../constants';
 import { ITemplate, IReduxStore } from 'types';
 
 import './style.scss';
@@ -41,6 +41,9 @@ const NewSourceView = (): React.ReactElement => {
   const [sourceName, setSourceName] = useState('');
   const [schemaFile, setSchemaFile] = useState(undefined as File | undefined);
   const [mappingFile, setMappingFile] = useState(undefined as File | undefined);
+  const [fhirBundleFile, setFhirBundleFile] = useState(
+    undefined as File | undefined
+  );
 
   const { data: dataNames } = useQuery(qSourceAndTemplateNames, {
     fetchPolicy: 'network-only'
@@ -49,17 +52,13 @@ const NewSourceView = (): React.ReactElement => {
   // Build a map where keys are template names
   // and values are lists of source names for each template
   const mapTemplateToSourceNames = dataNames
-    ? dataNames.templates
-      ? dataNames.templates.reduce(
-          (map: Record<string, string[]>, template: ITemplate) => {
-            map[template.name] = template.sources
-              ? template.sources.map(s => s.name)
-              : [];
-            return map;
-          },
-          {}
-        )
-      : {}
+    ? dataNames.templates.reduce(
+        (map: Record<string, string[]>, template: ITemplate) => ({
+          ...map,
+          [template.name]: template.sources.map(s => s.name)
+        }),
+        {}
+      )
     : {};
 
   const renderToastProps = ({
@@ -188,6 +187,51 @@ const NewSourceView = (): React.ReactElement => {
     }
   };
 
+  const uploadFhirBundle = async (): Promise<void> => {
+    if (!fhirBundleFile) return;
+
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsText(fhirBundleFile!);
+      reader.onload = async (e: ProgressEvent<FileReader>): Promise<void> => {
+        const bundle = e.target?.result;
+        let bundleJson: any;
+        if (!bundle) {
+          reject(e.target?.error);
+        }
+        try {
+          bundleJson = JSON.parse(bundle as string);
+        } catch (e) {
+          reject(new Error(`could not parse ${fhirBundleFile!.name} as JSON`));
+        }
+        // Check that we only have StructureDefinitions, ConceptMaps,
+        // or CodeSystems in the bundle
+        const authorizedTypes = [
+          'StructureDefinition',
+          'ConceptMap',
+          'CodeSystem'
+        ];
+        const resourceTypes = bundleJson.entry.map(
+          (entry: any) => entry.resourceType
+        );
+        if (
+          resourceTypes.some((type: string) => !authorizedTypes.includes(type))
+        )
+          reject(
+            new Error(
+              `Source created but failed while trying to upload a bundle with 
+              resource which type is not
+              StructureDefinition, ConceptMap, nor CodeSystem`
+            )
+          );
+        // Upload the bundle
+        await axios.post(`${FHIR_API_URL}/upload-bundle`, bundleJson);
+        resolve();
+      };
+      reader.onerror = (e: ProgressEvent<FileReader>): void => reject(e);
+    });
+  };
+
   const onFormSubmit = async (e: any): Promise<void> => {
     e.preventDefault();
 
@@ -208,8 +252,10 @@ const NewSourceView = (): React.ReactElement => {
         if (!templateExists) {
           await createTemplate();
         }
-        // Create new source in Graphql
+        // Create new source
         await createSource();
+        // Upload bundle
+        await uploadFhirBundle();
         // After source is created,
         // redirect to /sources page.
         toaster.show(
@@ -358,6 +404,24 @@ const NewSourceView = (): React.ReactElement => {
                 mappingFile.name
               ) : (
                 <p className="disabled-text">Importer un mapping...</p>
+              )
+            }
+          />
+          <h1>Importer des ressources fhir (optionnel)</h1>
+          <FileInput
+            fill
+            inputProps={{
+              onChange: (event: React.FormEvent<HTMLInputElement>): void => {
+                const target = event.target as any;
+                setFhirBundleFile(target.files[0]);
+              },
+              name: 'bundle'
+            }}
+            text={
+              fhirBundleFile ? (
+                fhirBundleFile.name
+              ) : (
+                <p className="disabled-text">Importer un bundle fhir...</p>
               )
             }
           />
