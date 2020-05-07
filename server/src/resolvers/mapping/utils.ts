@@ -1,11 +1,12 @@
 import {
-  Column,
-  InputCreateWithoutAttributeInput,
-  ColumnCreateWithoutInputInput,
-  JoinCreateWithoutColumnInput,
   AttributeCreateWithoutResourceInput,
-  FilterCreateInput,
+  Column,
+  ColumnCreateWithoutInputInput,
   CommentCreateWithoutAttributeInput,
+  FilterCreateInput,
+  InputCreateWithoutAttributeInput,
+  JoinCreateWithoutColumnInput,
+  PrismaClient,
 } from '@prisma/client'
 
 import {
@@ -23,6 +24,41 @@ export const clean = (entry: any): any => {
   delete ret.updatedAt
   delete ret.createdAt
   return ret
+}
+
+export const checkAuthors = async (
+  prismaClient: PrismaClient,
+  resources: any[],
+) => {
+  const authorEmails: string[] = resources.reduce(
+    (authors, resource) => [
+      ...authors,
+      ...resource.attributes.reduce(
+        (resourceAuthors: string[], attribute: AttributeWithComments) => [
+          ...resourceAuthors,
+          ...attribute.comments.map(comment => comment.author.email),
+        ],
+        [],
+      ),
+    ],
+    [],
+  )
+  const uniqueEmails = authorEmails.filter(
+    (mail, ind) => authorEmails.indexOf(mail) === ind,
+  )
+  const allUsers = await prismaClient.user.findMany({
+    where: { email: { in: uniqueEmails } },
+  })
+  const existingMails = allUsers.map(user => user.email)
+  const missingUsers = uniqueEmails.filter(
+    mail => !existingMails.includes(mail),
+  )
+  if (missingUsers.length > 0)
+    throw Error(
+      `trying to import a mapping with unexisting comment author ${missingUsers.join(
+        ', ',
+      )}`,
+    )
 }
 
 const buildJoinsQuery = (
