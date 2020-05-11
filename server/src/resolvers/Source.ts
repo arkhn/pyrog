@@ -3,6 +3,7 @@ import { objectType, FieldResolver, booleanArg } from '@nexus/schema'
 import { getDefinition } from 'fhir'
 import { importMapping, exportMapping } from 'resolvers/mapping'
 import { AttributeWithInputs, ResourceWithAttributes } from 'types'
+import { Comment, Input } from '@prisma/client'
 
 export const Source = objectType({
   name: 'Source',
@@ -142,6 +143,7 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
                   },
                 },
               },
+              comments: true,
             },
           },
         },
@@ -166,11 +168,11 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
       )
       await Promise.all(
         r.attributes.map(async a => {
-          await Promise.all(
-            a.inputs.map(async i => {
+          await Promise.all([
+            ...a.inputs.map(async i => {
               if (i.sqlValue) {
-                await Promise.all(
-                  i.sqlValue.joins.map(async j => {
+                await Promise.all([
+                  ...i.sqlValue.joins.map(async j => {
                     await Promise.all(
                       j.tables.map(t =>
                         ctx.prisma.column.delete({
@@ -182,11 +184,17 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
                       where: { id: j.id },
                     })
                   }),
-                )
+                  ctx.prisma.column.delete({ where: { id: i.sqlValue.id } }),
+                ])
               }
               return ctx.prisma.input.delete({ where: { id: i.id } })
             }),
-          )
+            ...a.comments.map(async c =>
+              ctx.prisma.comment.delete({
+                where: { id: c.id },
+              }),
+            ),
+          ] as Promise<Comment | Input>[])
           return ctx.prisma.attribute.delete({ where: { id: a.id } })
         }),
       )
