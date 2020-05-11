@@ -36,7 +36,9 @@ export const checkAuthors = async (
       ...resource.attributes.reduce(
         (resourceAuthors: string[], attribute: AttributeWithComments) => [
           ...resourceAuthors,
-          ...attribute.comments.map(comment => comment.author.email),
+          ...(attribute.comments
+            ? attribute.comments.map(comment => comment.author.email)
+            : []),
         ],
         [],
       ),
