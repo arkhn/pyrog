@@ -154,7 +154,7 @@ const NewSourceView = (): React.ReactElement => {
             reject(new Error(`could not parse ${mappingFile.name} as JSON`));
           }
           try {
-            client.mutate({
+            await client.mutate({
               mutation: mCreateSource,
               variables: {
                 templateName,
@@ -170,7 +170,6 @@ const NewSourceView = (): React.ReactElement => {
               )
             );
           }
-
           resolve();
         };
         reader.onerror = (e: ProgressEvent<FileReader>): void => reject(e);
