@@ -26,29 +26,30 @@ export const importMapping = async (
   sourceId: string,
   mapping: any,
 ) => {
-  if (!mapping.version) {
+  const { resources, version } = mapping
+  if (!version) {
     throw new Error('Missing mapping version')
   }
-  if (!mapping.resources) {
+  if (!resources) {
     throw new Error('Missing "resources" key in mapping')
   }
-  switch (mapping.version) {
+  switch (version) {
     case MAPPING_VERSION_1:
-      return handleV1(prismaClient, sourceId, mapping.resources)
+      return handleV1(prismaClient, sourceId, resources)
     case MAPPING_VERSION_2:
-      return handleV2(prismaClient, sourceId, mapping.resources)
+      return handleV2(prismaClient, sourceId, resources)
     case MAPPING_VERSION_3:
-      return handleV3(prismaClient, sourceId, mapping.resources)
+      return handleV3(prismaClient, sourceId, resources)
     case MAPPING_VERSION_4:
-      return handleV4(prismaClient, sourceId, mapping.resources)
+      return handleV4(prismaClient, sourceId, resources)
     case MAPPING_VERSION_5:
-      return handleV5(prismaClient, sourceId, mapping.resources)
+      return handleV5(prismaClient, sourceId, resources)
     case MAPPING_VERSION_6:
-      return handleV6(prismaClient, sourceId, mapping.resources)
+      return handleV6(prismaClient, sourceId, resources)
     case MAPPING_VERSION_7:
-      return handleV7(prismaClient, sourceId, mapping.resources)
+      return handleV7(prismaClient, sourceId, resources)
     default:
-      throw new Error(`Unknown mapping version: "${mapping.version}"`)
+      throw new Error(`Unknown mapping version: "${version}"`)
   }
 }
 
