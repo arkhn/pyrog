@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { IReduxStore } from 'types';
 
-import { FHIRPIPE_URL } from '../../../../constants';
+import { RIVER_URL } from '../../../../constants';
 
 interface Props {
   rowId: number;
@@ -23,10 +23,15 @@ const FhirPreview = ({ rowId }: Props) => {
     const fetchPreview = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(
-          `${FHIRPIPE_URL}/preview/${resource.id}/${rowId}`
+        const res = await axios.post(
+          `${RIVER_URL}/preview`,
+          {
+            resource_id: resource.id,
+            primary_key_values: [rowId]
+          },
+          { headers: { 'Content-Type': 'application/json' } }
         );
-        setFhirObject(res.data.preview);
+        setFhirObject(res.data.instances);
         setValidationErrors(res.data.errors);
       } catch (err) {
         toaster.show({

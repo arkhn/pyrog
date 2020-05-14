@@ -12,7 +12,7 @@ import { IReduxStore } from 'types';
 import SourceSelect from 'components/selects/sourceSelect';
 import ResourceMultiSelect from 'components/selects/resourceMultiSelect';
 
-import { FHIRPIPE_URL } from '../../constants';
+import { RIVER_URL } from '../../constants';
 
 import './style.scss';
 
@@ -38,7 +38,7 @@ const qSourcesAndResources = loader(
   'src/graphql/queries/sourcesAndResources.graphql'
 );
 
-const FhirpipeView = (): React.ReactElement => {
+const FhirRiverView = (): React.ReactElement => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
 
   const [selectedSource, setSelectedSource] = useState({} as Source);
@@ -46,7 +46,6 @@ const FhirpipeView = (): React.ReactElement => {
   const [bypassValidation, setBypassValidation] = useState(false);
   const [skipRefBinding, setSkipRefBinding] = useState(false);
   const [override, setOverride] = useState(false);
-  const [multiprocessing, setMultiprocessing] = useState(false);
   const [running, setRunning] = useState(false);
 
   const { data } = useQuery(qSourcesAndResources, {
@@ -84,27 +83,22 @@ const FhirpipeView = (): React.ReactElement => {
     e.preventDefault();
     setRunning(true);
 
-    // The possible params for running fhirpipe are:
-    // mapping, sources, resources, labels, override,
-    // chunksize, bypass_validation, multiprocessing
-    // It is also needed to provide credentialId
-    const body = {
-      resource_ids: selectedResources.map(r => r.id),
-      credentialId: credentials && credentials.id,
-      bypass_validation: bypassValidation,
-      skip_ref_binding: skipRefBinding,
-      override: override,
-      multiprocessing: multiprocessing
-    };
-    const headers = { 'Content-Type': 'application/json' };
-
     try {
-      await axios.post(`${FHIRPIPE_URL}/run`, body, {
-        headers: headers
-      });
+      await axios.post(
+        `${RIVER_URL}/batch`,
+        {
+          resource_ids: selectedResources.map(r => r.id),
+          bypass_validation: bypassValidation, // TODO: not implemented yet
+          skip_ref_binding: skipRefBinding, // TODO: not implemented yet
+          override: override // TODO: not implemented yet
+        },
+        {
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
 
       toaster.show({
-        message: 'Fhirpipe ran successfully',
+        message: 'fhir-river ran successfully',
         intent: 'success',
         icon: 'tick-circle',
         timeout: 4000
@@ -112,7 +106,7 @@ const FhirpipeView = (): React.ReactElement => {
     } catch (err) {
       const errMessage = err.response ? err.response.data : err.message;
       toaster.show({
-        message: `Problem while running Fhirpipe: ${errMessage}`,
+        message: `Problem while running fhir-river: ${errMessage}`,
         intent: 'danger',
         icon: 'warning-sign',
         timeout: 6000
@@ -171,11 +165,6 @@ const FhirpipeView = (): React.ReactElement => {
               label="skip_reference_binding"
               onChange={(): void => setSkipRefBinding(prev => !prev)}
             />
-            <Switch
-              checked={multiprocessing}
-              label="multiprocessing"
-              onChange={(): void => setMultiprocessing(prev => !prev)}
-            />
           </div>
           <div className="align-right">
             <Button
@@ -187,7 +176,7 @@ const FhirpipeView = (): React.ReactElement => {
               className="button-submit"
               onClick={onClickRun}
             >
-              Run the pipe
+              Make the river flow
             </Button>
           </div>
         </div>
@@ -196,4 +185,4 @@ const FhirpipeView = (): React.ReactElement => {
   );
 };
 
-export default FhirpipeView;
+export default FhirRiverView;
