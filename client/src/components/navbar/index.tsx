@@ -160,9 +160,9 @@ const Navbar = ({ exportMapping, exportAdditionalResource }: Props) => {
             icon="flame"
             minimal={true}
             onClick={() => {
-              history.push('/fhirpipe');
+              history.push('/fhir-river');
             }}
-            text="Run fhir-pipe"
+            text="ETL Pipeline"
           />
         )}
         <Drawer

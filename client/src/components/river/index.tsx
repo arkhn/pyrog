@@ -38,7 +38,7 @@ const qSourcesAndResources = loader(
   'src/graphql/queries/sourcesAndResources.graphql'
 );
 
-const FhirpipeView = (): React.ReactElement => {
+const FhirRiverView = (): React.ReactElement => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
 
   const [selectedSource, setSelectedSource] = useState({} as Source);
@@ -46,7 +46,6 @@ const FhirpipeView = (): React.ReactElement => {
   const [bypassValidation, setBypassValidation] = useState(false);
   const [skipRefBinding, setSkipRefBinding] = useState(false);
   const [override, setOverride] = useState(false);
-  const [multiprocessing, setMultiprocessing] = useState(false);
   const [running, setRunning] = useState(false);
 
   const { data } = useQuery(qSourcesAndResources, {
@@ -86,7 +85,7 @@ const FhirpipeView = (): React.ReactElement => {
 
     try {
       await axios.post(
-        `${RIVER_URL}/run`,
+        `${RIVER_URL}/batch`,
         {
           resource_ids: selectedResources.map(r => r.id),
           bypass_validation: bypassValidation, // TODO: not implemented yet
@@ -99,7 +98,7 @@ const FhirpipeView = (): React.ReactElement => {
       );
 
       toaster.show({
-        message: 'Fhirpipe ran successfully',
+        message: 'fhir-river ran successfully',
         intent: 'success',
         icon: 'tick-circle',
         timeout: 4000
@@ -107,7 +106,7 @@ const FhirpipeView = (): React.ReactElement => {
     } catch (err) {
       const errMessage = err.response ? err.response.data : err.message;
       toaster.show({
-        message: `Problem while running Fhirpipe: ${errMessage}`,
+        message: `Problem while running fhir-river: ${errMessage}`,
         intent: 'danger',
         icon: 'warning-sign',
         timeout: 6000
@@ -166,11 +165,6 @@ const FhirpipeView = (): React.ReactElement => {
               label="skip_reference_binding"
               onChange={(): void => setSkipRefBinding(prev => !prev)}
             />
-            <Switch
-              checked={multiprocessing}
-              label="multiprocessing"
-              onChange={(): void => setMultiprocessing(prev => !prev)}
-            />
           </div>
           <div className="align-right">
             <Button
@@ -182,7 +176,7 @@ const FhirpipeView = (): React.ReactElement => {
               className="button-submit"
               onClick={onClickRun}
             >
-              Run the pipe
+              Make the river flow
             </Button>
           </div>
         </div>
@@ -191,4 +185,4 @@ const FhirpipeView = (): React.ReactElement => {
   );
 };
 
-export default FhirpipeView;
+export default FhirRiverView;
