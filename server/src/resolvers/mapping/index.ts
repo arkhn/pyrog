@@ -24,32 +24,31 @@ import { getDefinition } from 'fhir'
 export const importMapping = async (
   prismaClient: PrismaClient,
   sourceId: string,
-  mapping: string,
+  mapping: any,
 ) => {
-  const { version, resources } = JSON.parse(mapping)
-  if (!version) {
+  if (!mapping.version) {
     throw new Error('Missing mapping version')
   }
-  if (!resources) {
+  if (!mapping.resources) {
     throw new Error('Missing "resources" key in mapping')
   }
-  switch (version) {
+  switch (mapping.version) {
     case MAPPING_VERSION_1:
-      return handleV1(prismaClient, sourceId, resources)
+      return handleV1(prismaClient, sourceId, mapping.resources)
     case MAPPING_VERSION_2:
-      return handleV2(prismaClient, sourceId, resources)
+      return handleV2(prismaClient, sourceId, mapping.resources)
     case MAPPING_VERSION_3:
-      return handleV3(prismaClient, sourceId, resources)
+      return handleV3(prismaClient, sourceId, mapping.resources)
     case MAPPING_VERSION_4:
-      return handleV4(prismaClient, sourceId, resources)
+      return handleV4(prismaClient, sourceId, mapping.resources)
     case MAPPING_VERSION_5:
-      return handleV5(prismaClient, sourceId, resources)
+      return handleV5(prismaClient, sourceId, mapping.resources)
     case MAPPING_VERSION_6:
-      return handleV6(prismaClient, sourceId, resources)
+      return handleV6(prismaClient, sourceId, mapping.resources)
     case MAPPING_VERSION_7:
-      return handleV7(prismaClient, sourceId, resources)
+      return handleV7(prismaClient, sourceId, mapping.resources)
     default:
-      throw new Error(`Unknown mapping version: "${version}"`)
+      throw new Error(`Unknown mapping version: "${mapping.version}"`)
   }
 }
 
@@ -102,7 +101,7 @@ export const exportMapping = async (
   )
 
   return JSON.stringify({
-    source: { name: source.name, hasOwner: source.hasOwner },
+    source: { id: source.id, name: source.name, hasOwner: source.hasOwner },
     template: { name: source.template.name },
     resources,
     version: CURRENT_MAPPING_VERSION,
