@@ -12,7 +12,7 @@ import { IReduxStore } from 'types';
 import SourceSelect from 'components/selects/sourceSelect';
 import ResourceMultiSelect from 'components/selects/resourceMultiSelect';
 
-import { FHIRPIPE_URL } from '../../constants';
+import { RIVER_URL } from '../../constants';
 
 import './style.scss';
 
@@ -84,24 +84,19 @@ const FhirpipeView = (): React.ReactElement => {
     e.preventDefault();
     setRunning(true);
 
-    // The possible params for running fhirpipe are:
-    // mapping, sources, resources, labels, override,
-    // chunksize, bypass_validation, multiprocessing
-    // It is also needed to provide credentialId
-    const body = {
-      resource_ids: selectedResources.map(r => r.id),
-      credentialId: credentials && credentials.id,
-      bypass_validation: bypassValidation,
-      skip_ref_binding: skipRefBinding,
-      override: override,
-      multiprocessing: multiprocessing
-    };
-    const headers = { 'Content-Type': 'application/json' };
-
     try {
-      await axios.post(`${FHIRPIPE_URL}/run`, body, {
-        headers: headers
-      });
+      await axios.post(
+        `${RIVER_URL}/run`,
+        {
+          resource_ids: selectedResources.map(r => r.id),
+          bypass_validation: bypassValidation, // TODO: not implemented yet
+          skip_ref_binding: skipRefBinding, // TODO: not implemented yet
+          override: override // TODO: not implemented yet
+        },
+        {
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
 
       toaster.show({
         message: 'Fhirpipe ran successfully',
