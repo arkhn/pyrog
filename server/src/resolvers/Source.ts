@@ -87,8 +87,13 @@ export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
   ctx,
 ) => {
   // create the source
+  let parsedMapping
+  if (mapping) {
+    parsedMapping = JSON.parse(mapping)
+  }
   const source = await ctx.prisma.source.create({
     data: {
+      id: parsedMapping ? parsedMapping.source.id : undefined,
       name,
       hasOwner,
       template: { connect: { name: templateName } },
@@ -105,8 +110,8 @@ export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
   })
 
   // import mapping if present
-  if (mapping) {
-    await importMapping(ctx.prisma, source.id, mapping)
+  if (parsedMapping) {
+    await importMapping(ctx.prisma, source.id, parsedMapping)
   }
 
   return source

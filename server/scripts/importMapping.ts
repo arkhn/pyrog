@@ -55,7 +55,7 @@ const main = async (path: string) => {
       .map((r: any) => r.definitionId)
       .join(', ')}...`,
   )
-  return importMapping(prismaClient, source.id, content)
+  return importMapping(prismaClient, source.id, mapping)
 }
 
 if (process.argv.length != 3) {

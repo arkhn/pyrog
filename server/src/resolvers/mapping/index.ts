@@ -24,9 +24,9 @@ import { getDefinition } from 'fhir'
 export const importMapping = async (
   prismaClient: PrismaClient,
   sourceId: string,
-  mapping: string,
+  mapping: any,
 ) => {
-  const { version, resources } = JSON.parse(mapping)
+  const { resources, version } = mapping
   if (!version) {
     throw new Error('Missing mapping version')
   }
@@ -102,7 +102,7 @@ export const exportMapping = async (
   )
 
   return JSON.stringify({
-    source: { name: source.name, hasOwner: source.hasOwner },
+    source: { id: source.id, name: source.name, hasOwner: source.hasOwner },
     template: { name: source.template.name },
     resources,
     version: CURRENT_MAPPING_VERSION,
