@@ -89,7 +89,7 @@ export const exportMapping = async (
   })
 
   // augment the mapping of each resource with its definition
-  // and its source id. This is now required by fhir-pipe when
+  // and its source id. This is now required by fhir-river when
   // running from a mapping file.
   resources = await Promise.all(
     resources.map(async r => {
