@@ -81,11 +81,14 @@ const MappingView = () => {
       bundle.entry = [
         ...bundle.entry,
         ...response.data.entry
-          .map((newEntry: any) => newEntry.resource)
-          .filter((newEntry: any) => ids.includes(newEntry.id)) // exact modifier in search doesn't work with several queries
+          // exact modifier in search doesn't work with several queries
+          // TODO remove when
+          .filter((newEntry: any) => ids.includes(newEntry.resource.id))
           .map((newEntry: any) => {
-            const { _id, ...entryWithoutId } = newEntry;
-            return entryWithoutId;
+            const {
+              resource: { _id, ...resourceWithoutId }
+            } = newEntry;
+            return { resource: { ...resourceWithoutId } };
           })
       ];
     } catch (err) {

@@ -211,7 +211,7 @@ const NewSourceView = (): React.ReactElement => {
           'CodeSystem'
         ];
         const resourceTypes = bundleJson.entry.map(
-          (entry: any) => entry.resourceType
+          (entry: any) => entry.resource.resourceType
         );
         if (
           resourceTypes.some((type: string) => !authorizedTypes.includes(type))
