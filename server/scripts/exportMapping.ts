@@ -12,7 +12,7 @@ const main = async (outputDirectory: string) => {
   const sources = await prismaClient.source.findMany()
   console.log(`-> Exporting ${sources.length} source(s)...`)
   for (const source of sources) {
-    const content = await exportMapping(prismaClient, source.id)
+    const content = await exportMapping(prismaClient, source.id, true)
     writeFileSync(`${outputDirectory}/${source.id}.json`, content)
   }
 }
