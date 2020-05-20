@@ -20,7 +20,6 @@ const JoinColumns = ({
 }: Props): React.ReactElement => (
   <div className="join-columns">
     <ColumnSelect
-      hasOwner={source.hasOwner}
       ownerChangeCallback={(e: string) => {
         updateJoin({
           variables: {
@@ -66,7 +65,6 @@ const JoinColumns = ({
       sourceSchema={schema}
     />
     <ColumnSelect
-      hasOwner={source.hasOwner}
       ownerChangeCallback={(e: string) => {
         updateJoin({
           variables: {

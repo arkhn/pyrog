@@ -180,7 +180,6 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
   const pickPrimaryKey = (
     <FormGroup label="Primary Key" disabled={updatingResource || !resource}>
       <ColumnSelect
-        hasOwner={source ? source.hasOwner : undefined}
         ownerChangeCallback={(owner: string): void => {
           setPkOwner(owner);
           setPkTable('');
@@ -234,7 +233,6 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
               <td>{deleteFilterButton(index)}</td>
               <td>
                 <ColumnSelect
-                  hasOwner={source ? source.hasOwner : undefined}
                   ownerChangeCallback={(owner: string): void => {
                     filters[index].sqlColumn.owner = owner;
                     filters[index].sqlColumn.table = '';

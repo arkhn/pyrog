@@ -72,7 +72,7 @@ export const Mutation = mutationType({
       args: {
         templateName: stringArg({ required: true }),
         name: stringArg({ required: true }),
-        hasOwner: booleanArg({ required: true }),
+        credentialId: stringArg({ required: true }),
         mapping: stringArg({ required: false }),
       },
       resolve: createSource,
@@ -87,7 +87,7 @@ export const Mutation = mutationType({
     })
 
     /*
-     * CREDENTIAL
+     * DATABASE
      */
 
     t.field('upsertCredential', {
@@ -99,6 +99,7 @@ export const Mutation = mutationType({
         database: stringArg({ required: true }),
         login: stringArg({ required: true }),
         password: stringArg({ required: true }),
+        owner: stringArg({ required: true }),
         model: stringArg({ required: true }),
       },
       resolve: upsertCredential,

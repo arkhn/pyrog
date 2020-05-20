@@ -4,7 +4,6 @@
  */
 
 import * as Context from "../context"
-import * as prisma from "@prisma/client"
 import { core } from "@nexus/schema"
 declare global {
   interface NexusGenCustomInputMethods<TypeName extends string> {
@@ -40,11 +39,17 @@ export interface NexusGenInputs {
     OR?: NexusGenInputs['AccessControlWhereInput'][] | null; // [AccessControlWhereInput!]
     role?: NexusGenEnums['SourceRole'] | null; // SourceRole
     source?: NexusGenInputs['SourceWhereInput'] | null; // SourceWhereInput
+    sourceId?: NexusGenInputs['StringFilter'] | null; // StringFilter
     user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
+    userId?: NexusGenInputs['StringFilter'] | null; // StringFilter
   }
   AccessControlWhereUniqueInput: { // input type
+    AccessControl_user_source?: NexusGenInputs['AccessControl_user_sourceCompoundUniqueInput'] | null; // AccessControl_user_sourceCompoundUniqueInput
     id?: string | null; // String
-    user_source?: NexusGenInputs['UserSourceCompoundUniqueInput'] | null; // UserSourceCompoundUniqueInput
+  }
+  AccessControl_user_sourceCompoundUniqueInput: { // input type
+    sourceId: string; // String!
+    userId: string; // String!
   }
   AttributeFilter: { // input type
     every?: NexusGenInputs['AttributeWhereInput'] | null; // AttributeWhereInput
@@ -66,6 +71,7 @@ export interface NexusGenInputs {
     OR?: NexusGenInputs['AttributeWhereInput'][] | null; // [AttributeWhereInput!]
     path?: NexusGenInputs['StringFilter'] | null; // StringFilter
     resource?: NexusGenInputs['ResourceWhereInput'] | null; // ResourceWhereInput
+    resourceId?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     sliceName?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
@@ -100,6 +106,7 @@ export interface NexusGenInputs {
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     input?: NexusGenInputs['InputWhereInput'] | null; // InputWhereInput
     join?: NexusGenInputs['JoinWhereInput'] | null; // JoinWhereInput
+    joinId?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     joins?: NexusGenInputs['JoinFilter'] | null; // JoinFilter
     NOT?: NexusGenInputs['ColumnWhereInput'][] | null; // [ColumnWhereInput!]
     OR?: NexusGenInputs['ColumnWhereInput'][] | null; // [ColumnWhereInput!]
@@ -118,7 +125,9 @@ export interface NexusGenInputs {
   CommentWhereInput: { // input type
     AND?: NexusGenInputs['CommentWhereInput'][] | null; // [CommentWhereInput!]
     attribute?: NexusGenInputs['AttributeWhereInput'] | null; // AttributeWhereInput
+    attributeId?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     author?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
+    authorId?: NexusGenInputs['StringFilter'] | null; // StringFilter
     content?: NexusGenInputs['StringFilter'] | null; // StringFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
@@ -140,9 +149,12 @@ export interface NexusGenInputs {
     model?: NexusGenEnums['DatabaseType'] | null; // DatabaseType
     NOT?: NexusGenInputs['CredentialWhereInput'][] | null; // [CredentialWhereInput!]
     OR?: NexusGenInputs['CredentialWhereInput'][] | null; // [CredentialWhereInput!]
+    owner?: NexusGenInputs['StringFilter'] | null; // StringFilter
     password?: NexusGenInputs['StringFilter'] | null; // StringFilter
     port?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    schema?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     source?: NexusGenInputs['SourceWhereInput'] | null; // SourceWhereInput
+    sourceId?: NexusGenInputs['StringFilter'] | null; // StringFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
   DateTimeFilter: { // input type
@@ -172,7 +184,9 @@ export interface NexusGenInputs {
     OR?: NexusGenInputs['FilterWhereInput'][] | null; // [FilterWhereInput!]
     relation?: NexusGenInputs['StringFilter'] | null; // StringFilter
     resource?: NexusGenInputs['ResourceWhereInput'] | null; // ResourceWhereInput
+    resourceId?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     sqlColumn?: NexusGenInputs['ColumnWhereInput'] | null; // ColumnWhereInput
+    sqlColumnId?: NexusGenInputs['StringFilter'] | null; // StringFilter
     value?: NexusGenInputs['StringFilter'] | null; // StringFilter
   }
   InputFilter: { // input type
@@ -183,6 +197,7 @@ export interface NexusGenInputs {
   InputWhereInput: { // input type
     AND?: NexusGenInputs['InputWhereInput'][] | null; // [InputWhereInput!]
     attribute?: NexusGenInputs['AttributeWhereInput'] | null; // AttributeWhereInput
+    attributeId?: NexusGenInputs['StringFilter'] | null; // StringFilter
     conceptMapId?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
@@ -190,6 +205,7 @@ export interface NexusGenInputs {
     OR?: NexusGenInputs['InputWhereInput'][] | null; // [InputWhereInput!]
     script?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     sqlValue?: NexusGenInputs['ColumnWhereInput'] | null; // ColumnWhereInput
+    sqlValueId?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     staticValue?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
@@ -208,6 +224,7 @@ export interface NexusGenInputs {
   JoinWhereInput: { // input type
     AND?: NexusGenInputs['JoinWhereInput'][] | null; // [JoinWhereInput!]
     column?: NexusGenInputs['ColumnWhereInput'] | null; // ColumnWhereInput
+    columnId?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     NOT?: NexusGenInputs['JoinWhereInput'][] | null; // [JoinWhereInput!]
@@ -250,6 +267,7 @@ export interface NexusGenInputs {
     primaryKeyOwner?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     primaryKeyTable?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     source?: NexusGenInputs['SourceWhereInput'] | null; // SourceWhereInput
+    sourceId?: NexusGenInputs['StringFilter'] | null; // StringFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
   ResourceWhereUniqueInput: { // input type
@@ -265,19 +283,23 @@ export interface NexusGenInputs {
     AND?: NexusGenInputs['SourceWhereInput'][] | null; // [SourceWhereInput!]
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     credential?: NexusGenInputs['CredentialWhereInput'] | null; // CredentialWhereInput
-    hasOwner?: NexusGenInputs['BooleanFilter'] | null; // BooleanFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     name?: NexusGenInputs['StringFilter'] | null; // StringFilter
     NOT?: NexusGenInputs['SourceWhereInput'][] | null; // [SourceWhereInput!]
     OR?: NexusGenInputs['SourceWhereInput'][] | null; // [SourceWhereInput!]
     resources?: NexusGenInputs['ResourceFilter'] | null; // ResourceFilter
     template?: NexusGenInputs['TemplateWhereInput'] | null; // TemplateWhereInput
+    templateId?: NexusGenInputs['StringFilter'] | null; // StringFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     version?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
   }
   SourceWhereUniqueInput: { // input type
     id?: string | null; // String
-    template_name?: NexusGenInputs['TemplateNameCompoundUniqueInput'] | null; // TemplateNameCompoundUniqueInput
+    Source_templateId_name?: NexusGenInputs['Source_templateId_nameCompoundUniqueInput'] | null; // Source_templateId_nameCompoundUniqueInput
+  }
+  Source_templateId_nameCompoundUniqueInput: { // input type
+    name: string; // String!
+    templateId: string; // String!
   }
   StringFilter: { // input type
     contains?: string | null; // String
@@ -296,10 +318,6 @@ export interface NexusGenInputs {
     derivation?: string | null; // String
     kind?: string | null; // String
     type?: string | null; // String
-  }
-  TemplateNameCompoundUniqueInput: { // input type
-    name: string; // String!
-    template: string; // String!
   }
   TemplateWhereInput: { // input type
     AND?: NexusGenInputs['TemplateWhereInput'][] | null; // [TemplateWhereInput!]
@@ -321,14 +339,10 @@ export interface NexusGenInputs {
     primaryKeyOwner?: string | null; // String
     primaryKeyTable?: string | null; // String
   }
-  UserSourceCompoundUniqueInput: { // input type
-    source: string; // String!
-    user: string; // String!
-  }
   UserWhereInput: { // input type
-    accessControls?: NexusGenInputs['AccessControlFilter'] | null; // AccessControlFilter
+    AccessControl?: NexusGenInputs['AccessControlFilter'] | null; // AccessControlFilter
     AND?: NexusGenInputs['UserWhereInput'][] | null; // [UserWhereInput!]
-    comments?: NexusGenInputs['CommentFilter'] | null; // CommentFilter
+    Comment?: NexusGenInputs['CommentFilter'] | null; // CommentFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     email?: NexusGenInputs['StringFilter'] | null; // StringFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
@@ -342,33 +356,110 @@ export interface NexusGenInputs {
 }
 
 export interface NexusGenEnums {
-  DatabaseType: prisma.DatabaseType
-  Role: prisma.Role
-  SourceRole: prisma.SourceRole
+  DatabaseType: "ORACLE" | "POSTGRES"
+  Role: "ADMIN" | "USER"
+  SourceRole: "READER" | "WRITER"
 }
 
 export interface NexusGenRootTypes {
-  AccessControl: prisma.AccessControl;
-  Attribute: prisma.Attribute;
+  AccessControl: { // root type
+    id: string; // String!
+    role: NexusGenEnums['SourceRole']; // SourceRole!
+  }
+  Attribute: { // root type
+    createdAt: any; // DateTime!
+    definitionId: string; // String!
+    id: string; // String!
+    mergingScript?: string | null; // String
+    path: string; // String!
+    sliceName?: string | null; // String
+    updatedAt: any; // DateTime!
+  }
   AttributeDefinition: {};
   AuthPayload: { // root type
     token: string; // String!
     user: NexusGenRootTypes['User']; // User!
   }
-  Column: prisma.Column;
-  Comment: prisma.Comment;
+  Column: { // root type
+    column?: string | null; // String
+    createdAt: any; // DateTime!
+    id: string; // String!
+    owner?: string | null; // String
+    table?: string | null; // String
+    updatedAt: any; // DateTime!
+  }
+  Comment: { // root type
+    content: string; // String!
+    createdAt: any; // DateTime!
+    id: string; // String!
+    validation: boolean; // Boolean!
+  }
   ConceptMap: {};
-  Credential: prisma.Credential;
-  Filter: prisma.Filter;
-  Input: prisma.Input;
-  Join: prisma.Join;
+  Credential: { // root type
+    createdAt: any; // DateTime!
+    database: string; // String!
+    host: string; // String!
+    id: string; // String!
+    login: string; // String!
+    model: NexusGenEnums['DatabaseType']; // DatabaseType!
+    owner: string; // String!
+    password: string; // String!
+    port: string; // String!
+    schema?: string | null; // String
+    updatedAt: any; // DateTime!
+  }
+  Filter: { // root type
+    id: string; // String!
+    relation: string; // String!
+    value: string; // String!
+  }
+  Input: { // root type
+    conceptMapId?: string | null; // String
+    createdAt: any; // DateTime!
+    id: string; // String!
+    script?: string | null; // String
+    staticValue?: string | null; // String
+    updatedAt: any; // DateTime!
+  }
+  Join: { // root type
+    createdAt: any; // DateTime!
+    id: string; // String!
+    updatedAt: any; // DateTime!
+  }
   Mutation: {};
   Query: {};
-  Resource: prisma.Resource;
-  Source: prisma.Source;
+  Resource: { // root type
+    createdAt: any; // DateTime!
+    definitionId: string; // String!
+    id: string; // String!
+    label?: string | null; // String
+    primaryKeyColumn?: string | null; // String
+    primaryKeyOwner?: string | null; // String
+    primaryKeyTable?: string | null; // String
+    updatedAt: any; // DateTime!
+  }
+  Source: { // root type
+    createdAt: any; // DateTime!
+    id: string; // String!
+    name: string; // String!
+    updatedAt: any; // DateTime!
+    version?: string | null; // String
+  }
   StructureDefinition: {};
-  Template: prisma.Template;
-  User: prisma.User;
+  Template: { // root type
+    createdAt: any; // DateTime!
+    id: string; // String!
+    name: string; // String!
+    updatedAt: any; // DateTime!
+  }
+  User: { // root type
+    createdAt: any; // DateTime!
+    email: string; // String!
+    id: string; // String!
+    name: string; // String!
+    role: NexusGenEnums['Role']; // Role!
+    updatedAt: any; // DateTime!
+  }
   String: string;
   Int: number;
   Float: number;
@@ -382,6 +473,7 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
   AccessControlFilter: NexusGenInputs['AccessControlFilter'];
   AccessControlWhereInput: NexusGenInputs['AccessControlWhereInput'];
   AccessControlWhereUniqueInput: NexusGenInputs['AccessControlWhereUniqueInput'];
+  AccessControl_user_sourceCompoundUniqueInput: NexusGenInputs['AccessControl_user_sourceCompoundUniqueInput'];
   AttributeFilter: NexusGenInputs['AttributeFilter'];
   AttributeInput: NexusGenInputs['AttributeInput'];
   AttributeWhereInput: NexusGenInputs['AttributeWhereInput'];
@@ -414,13 +506,12 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
   SourceFilter: NexusGenInputs['SourceFilter'];
   SourceWhereInput: NexusGenInputs['SourceWhereInput'];
   SourceWhereUniqueInput: NexusGenInputs['SourceWhereUniqueInput'];
+  Source_templateId_nameCompoundUniqueInput: NexusGenInputs['Source_templateId_nameCompoundUniqueInput'];
   StringFilter: NexusGenInputs['StringFilter'];
   StructureDefinitionWhereFilter: NexusGenInputs['StructureDefinitionWhereFilter'];
-  TemplateNameCompoundUniqueInput: NexusGenInputs['TemplateNameCompoundUniqueInput'];
   TemplateWhereInput: NexusGenInputs['TemplateWhereInput'];
   UpdateInputInput: NexusGenInputs['UpdateInputInput'];
   UpdateResourceInput: NexusGenInputs['UpdateResourceInput'];
-  UserSourceCompoundUniqueInput: NexusGenInputs['UserSourceCompoundUniqueInput'];
   UserWhereInput: NexusGenInputs['UserWhereInput'];
   DatabaseType: NexusGenEnums['DatabaseType'];
   Role: NexusGenEnums['Role'];
@@ -481,12 +572,15 @@ export interface NexusGenFieldTypes {
   Credential: { // field return type
     createdAt: any; // DateTime!
     database: string; // String!
+    decryptedPassword: string; // String!
     host: string; // String!
     id: string; // String!
     login: string; // String!
     model: NexusGenEnums['DatabaseType']; // DatabaseType!
+    owner: string; // String!
     password: string; // String!
     port: string; // String!
+    schema: string | null; // String
     source: NexusGenRootTypes['Source']; // Source!
     updatedAt: any; // DateTime!
   }
@@ -571,7 +665,6 @@ export interface NexusGenFieldTypes {
     accessControls: NexusGenRootTypes['AccessControl'][]; // [AccessControl!]!
     createdAt: any; // DateTime!
     credential: NexusGenRootTypes['Credential'] | null; // Credential
-    hasOwner: boolean; // Boolean!
     id: string; // String!
     mapping: string; // String!
     mappingProgress: number[] | null; // [Int!]
@@ -680,7 +773,7 @@ export interface NexusGenArgTypes {
       sourceId: string; // ID!
     }
     createSource: { // args
-      hasOwner: boolean; // Boolean!
+      credentialId: string; // String!
       mapping?: string | null; // String
       name: string; // String!
       templateName: string; // String!
@@ -749,6 +842,7 @@ export interface NexusGenArgTypes {
       host: string; // String!
       login: string; // String!
       model: string; // String!
+      owner: string; // String!
       password: string; // String!
       port: string; // String!
       sourceId: string; // ID!
@@ -824,7 +918,7 @@ export interface NexusGenInheritedFields {}
 
 export type NexusGenObjectNames = "AccessControl" | "Attribute" | "AttributeDefinition" | "AuthPayload" | "Column" | "Comment" | "ConceptMap" | "Credential" | "Filter" | "Input" | "Join" | "Mutation" | "Query" | "Resource" | "Source" | "StructureDefinition" | "Template" | "User";
 
-export type NexusGenInputNames = "AccessControlFilter" | "AccessControlWhereInput" | "AccessControlWhereUniqueInput" | "AttributeFilter" | "AttributeInput" | "AttributeWhereInput" | "AttributeWhereUniqueInput" | "BooleanFilter" | "ColumnFilter" | "ColumnInput" | "ColumnInputWithoutJoins" | "ColumnWhereInput" | "ColumnWhereUniqueInput" | "CommentFilter" | "CommentWhereInput" | "CommentWhereUniqueInput" | "CredentialWhereInput" | "DateTimeFilter" | "FilterFilter" | "FilterInput" | "FilterWhereInput" | "InputFilter" | "InputWhereInput" | "InputWhereUniqueInput" | "JoinFilter" | "JoinInput" | "JoinWhereInput" | "JoinWhereUniqueInput" | "NullableStringFilter" | "ResourceFilter" | "ResourceWhereInput" | "ResourceWhereUniqueInput" | "SourceFilter" | "SourceWhereInput" | "SourceWhereUniqueInput" | "StringFilter" | "StructureDefinitionWhereFilter" | "TemplateNameCompoundUniqueInput" | "TemplateWhereInput" | "UpdateInputInput" | "UpdateResourceInput" | "UserSourceCompoundUniqueInput" | "UserWhereInput";
+export type NexusGenInputNames = "AccessControlFilter" | "AccessControlWhereInput" | "AccessControlWhereUniqueInput" | "AccessControl_user_sourceCompoundUniqueInput" | "AttributeFilter" | "AttributeInput" | "AttributeWhereInput" | "AttributeWhereUniqueInput" | "BooleanFilter" | "ColumnFilter" | "ColumnInput" | "ColumnInputWithoutJoins" | "ColumnWhereInput" | "ColumnWhereUniqueInput" | "CommentFilter" | "CommentWhereInput" | "CommentWhereUniqueInput" | "CredentialWhereInput" | "DateTimeFilter" | "FilterFilter" | "FilterInput" | "FilterWhereInput" | "InputFilter" | "InputWhereInput" | "InputWhereUniqueInput" | "JoinFilter" | "JoinInput" | "JoinWhereInput" | "JoinWhereUniqueInput" | "NullableStringFilter" | "ResourceFilter" | "ResourceWhereInput" | "ResourceWhereUniqueInput" | "SourceFilter" | "SourceWhereInput" | "SourceWhereUniqueInput" | "Source_templateId_nameCompoundUniqueInput" | "StringFilter" | "StructureDefinitionWhereFilter" | "TemplateWhereInput" | "UpdateInputInput" | "UpdateResourceInput" | "UserWhereInput";
 
 export type NexusGenEnumNames = "DatabaseType" | "Role" | "SourceRole";
 

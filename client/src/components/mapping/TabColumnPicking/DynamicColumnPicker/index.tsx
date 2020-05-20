@@ -123,7 +123,6 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
       <FormGroup labelFor="text-input" inline={true}>
         <ControlGroup>
           <ColumnSelect
-            hasOwner={source.hasOwner}
             ownerChangeCallback={(e: string) => {
               setOwner(e);
               setTable('');

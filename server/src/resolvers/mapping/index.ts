@@ -102,7 +102,7 @@ export const exportMapping = async (
   )
 
   return JSON.stringify({
-    source: { id: source.id, name: source.name, hasOwner: source.hasOwner },
+    source: { id: source.id, name: source.name },
     template: { name: source.template.name },
     resources,
     version: CURRENT_MAPPING_VERSION,

@@ -117,63 +117,28 @@ const InputColumn = ({ input, schema, source }: Props) => {
                 breadcrumbRenderer={(item: IBreadcrumbProps) => {
                   return <div>{item.text}</div>;
                 }}
-                items={
-                  source.hasOwner
-                    ? [
-                        {
-                          text: (
-                            <div className="stacked-tags">
-                              <Tag minimal={true}>OWNER</Tag>
-                              <Tag intent={'success'} large={true}>
-                                {input.sqlValue.owner}
-                              </Tag>
-                            </div>
-                          )
-                        },
-                        {
-                          text: (
-                            <div className="stacked-tags">
-                              <Tag minimal={true}>TABLE</Tag>
-                              <Tag intent={'success'} large={true}>
-                                {input.sqlValue.table}
-                              </Tag>
-                            </div>
-                          )
-                        },
-                        {
-                          text: (
-                            <div className="stacked-tags">
-                              <Tag minimal={true}>COLUMN</Tag>
-                              <Tag intent={'success'} large={true}>
-                                {input.sqlValue.column}
-                              </Tag>
-                            </div>
-                          )
-                        }
-                      ]
-                    : [
-                        {
-                          text: (
-                            <div className="stacked-tags">
-                              <Tag minimal={true}>TABLE</Tag>
-                              <Tag intent={'success'} large={true}>
-                                {input.sqlValue.table}
-                              </Tag>
-                            </div>
-                          )
-                        },
-                        {
-                          text: (
-                            <div className="stacked-tags">
-                              <Tag minimal={true}>COLUMN</Tag>
-                              <Tag intent={'success'} large={true}>
-                                {input.sqlValue.column}
-                              </Tag>
-                            </div>
-                          )
-                        }
-                      ]
-                }
+                items={[
+                  {
+                    text: (
+                      <div className="stacked-tags">
+                        <Tag minimal={true}>TABLE</Tag>
+                        <Tag intent={'success'} large={true}>
+                          {input.sqlValue.table}
+                        </Tag>
+                      </div>
+                    )
+                  },
+                  {
+                    text: (
+                      <div className="stacked-tags">
+                        <Tag minimal={true}>COLUMN</Tag>
+                        <Tag intent={'success'} large={true}>
+                          {input.sqlValue.column}
+                        </Tag>
+                      </div>
+                    )
+                  }
+                ]}
               />
               <div className="stacked-tags">
                 <Tag>SCRIPT</Tag>

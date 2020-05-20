@@ -9,6 +9,11 @@ type AccessControl {
   user: User!
 }
 
+input AccessControl_user_sourceCompoundUniqueInput {
+  sourceId: String!
+  userId: String!
+}
+
 input AccessControlFilter {
   every: AccessControlWhereInput
   none: AccessControlWhereInput
@@ -22,12 +27,14 @@ input AccessControlWhereInput {
   OR: [AccessControlWhereInput!]
   role: SourceRole
   source: SourceWhereInput
+  sourceId: StringFilter
   user: UserWhereInput
+  userId: StringFilter
 }
 
 input AccessControlWhereUniqueInput {
+  AccessControl_user_source: AccessControl_user_sourceCompoundUniqueInput
   id: String
-  user_source: UserSourceCompoundUniqueInput
 }
 
 type Attribute {
@@ -76,6 +83,7 @@ input AttributeWhereInput {
   OR: [AttributeWhereInput!]
   path: StringFilter
   resource: ResourceWhereInput
+  resourceId: NullableStringFilter
   sliceName: NullableStringFilter
   updatedAt: DateTimeFilter
 }
@@ -131,6 +139,7 @@ input ColumnWhereInput {
   id: StringFilter
   input: InputWhereInput
   join: JoinWhereInput
+  joinId: NullableStringFilter
   joins: JoinFilter
   NOT: [ColumnWhereInput!]
   OR: [ColumnWhereInput!]
@@ -161,7 +170,9 @@ input CommentFilter {
 input CommentWhereInput {
   AND: [CommentWhereInput!]
   attribute: AttributeWhereInput
+  attributeId: NullableStringFilter
   author: UserWhereInput
+  authorId: StringFilter
   content: StringFilter
   createdAt: DateTimeFilter
   id: StringFilter
@@ -184,12 +195,15 @@ type ConceptMap {
 type Credential {
   createdAt: DateTime!
   database: String!
+  decryptedPassword: String!
   host: String!
   id: String!
   login: String!
   model: DatabaseType!
+  owner: String!
   password: String!
   port: String!
+  schema: String
   source: Source!
   updatedAt: DateTime!
 }
@@ -204,9 +218,12 @@ input CredentialWhereInput {
   model: DatabaseType
   NOT: [CredentialWhereInput!]
   OR: [CredentialWhereInput!]
+  owner: StringFilter
   password: StringFilter
   port: StringFilter
+  schema: NullableStringFilter
   source: SourceWhereInput
+  sourceId: StringFilter
   updatedAt: DateTimeFilter
 }
 
@@ -254,7 +271,9 @@ input FilterWhereInput {
   OR: [FilterWhereInput!]
   relation: StringFilter
   resource: ResourceWhereInput
+  resourceId: NullableStringFilter
   sqlColumn: ColumnWhereInput
+  sqlColumnId: StringFilter
   value: StringFilter
 }
 
@@ -279,6 +298,7 @@ input InputFilter {
 input InputWhereInput {
   AND: [InputWhereInput!]
   attribute: AttributeWhereInput
+  attributeId: StringFilter
   conceptMapId: NullableStringFilter
   createdAt: DateTimeFilter
   id: StringFilter
@@ -286,6 +306,7 @@ input InputWhereInput {
   OR: [InputWhereInput!]
   script: NullableStringFilter
   sqlValue: ColumnWhereInput
+  sqlValueId: NullableStringFilter
   staticValue: NullableStringFilter
   updatedAt: DateTimeFilter
 }
@@ -315,6 +336,7 @@ input JoinInput {
 input JoinWhereInput {
   AND: [JoinWhereInput!]
   column: ColumnWhereInput
+  columnId: NullableStringFilter
   createdAt: DateTimeFilter
   id: StringFilter
   NOT: [JoinWhereInput!]
@@ -339,7 +361,7 @@ type Mutation {
   createComment(attributeId: ID!, content: String!, validation: Boolean!): Comment!
   createInput(attributeId: ID!, script: String, sql: ColumnInput, static: String): Input!
   createResource(definitionId: String!, sourceId: ID!): Resource!
-  createSource(hasOwner: Boolean!, mapping: String, name: String!, templateName: String!): Source!
+  createSource(credentialId: String!, mapping: String, name: String!, templateName: String!): Source!
   createTemplate(name: String!): Template!
   deleteAccessControl(accessControlId: ID!): AccessControl!
   deleteAttribute(attributeId: ID!): Attribute!
@@ -357,7 +379,7 @@ type Mutation {
   updateInput(data: UpdateInputInput!, inputId: ID!): Input!
   updateJoin(data: JoinInput!, joinId: ID!): Join!
   updateResource(data: UpdateResourceInput!, filters: [FilterInput!], resourceId: ID!): Resource!
-  upsertCredential(database: String!, host: String!, login: String!, model: String!, password: String!, port: String!, sourceId: ID!): Credential!
+  upsertCredential(database: String!, host: String!, login: String!, model: String!, owner: String!, password: String!, port: String!, sourceId: ID!): Credential!
 }
 
 input NullableStringFilter {
@@ -425,6 +447,7 @@ input ResourceWhereInput {
   primaryKeyOwner: NullableStringFilter
   primaryKeyTable: NullableStringFilter
   source: SourceWhereInput
+  sourceId: StringFilter
   updatedAt: DateTimeFilter
 }
 
@@ -441,7 +464,6 @@ type Source {
   accessControls(after: AccessControlWhereUniqueInput, before: AccessControlWhereUniqueInput, first: Int, last: Int, skip: Int): [AccessControl!]!
   createdAt: DateTime!
   credential: Credential
-  hasOwner: Boolean!
   id: String!
   mapping(includeComments: Boolean! = true): String!
   mappingProgress: [Int!]
@@ -452,6 +474,11 @@ type Source {
   usedConceptMapIds: [String!]!
   usedProfileIds: [String!]!
   version: String
+}
+
+input Source_templateId_nameCompoundUniqueInput {
+  name: String!
+  templateId: String!
 }
 
 input SourceFilter {
@@ -470,20 +497,20 @@ input SourceWhereInput {
   AND: [SourceWhereInput!]
   createdAt: DateTimeFilter
   credential: CredentialWhereInput
-  hasOwner: BooleanFilter
   id: StringFilter
   name: StringFilter
   NOT: [SourceWhereInput!]
   OR: [SourceWhereInput!]
   resources: ResourceFilter
   template: TemplateWhereInput
+  templateId: StringFilter
   updatedAt: DateTimeFilter
   version: NullableStringFilter
 }
 
 input SourceWhereUniqueInput {
   id: String
-  template_name: TemplateNameCompoundUniqueInput
+  Source_templateId_name: Source_templateId_nameCompoundUniqueInput
 }
 
 input StringFilter {
@@ -532,11 +559,6 @@ type Template {
   updatedAt: DateTime!
 }
 
-input TemplateNameCompoundUniqueInput {
-  name: String!
-  template: String!
-}
-
 input TemplateWhereInput {
   AND: [TemplateWhereInput!]
   createdAt: DateTimeFilter
@@ -569,15 +591,10 @@ type User {
   updatedAt: DateTime!
 }
 
-input UserSourceCompoundUniqueInput {
-  source: String!
-  user: String!
-}
-
 input UserWhereInput {
-  accessControls: AccessControlFilter
+  AccessControl: AccessControlFilter
   AND: [UserWhereInput!]
-  comments: CommentFilter
+  Comment: CommentFilter
   createdAt: DateTimeFilter
   email: StringFilter
   id: StringFilter

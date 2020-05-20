@@ -1,6 +1,5 @@
 import {
   Button,
-  Checkbox,
   FileInput,
   FormGroup,
   InputGroup,
@@ -14,6 +13,7 @@ import { useSelector } from 'react-redux';
 import useReactRouter from 'use-react-router';
 
 import Navbar from 'components/navbar';
+import NewDatabaseCredentials from 'components/database/new';
 
 import { FHIR_API_URL } from '../../constants';
 import { ITemplate, IReduxStore } from 'types';
@@ -35,7 +35,6 @@ const NewSourceView = (): React.ReactElement => {
 
   const toaster = useSelector((state: IReduxStore) => state.toaster);
 
-  const [hasOwner, setHasOwner] = useState(false);
   const [templateName, setTemplateName] = useState('');
   const [templateExists, setTemplateExists] = useState(false);
   const [sourceName, setSourceName] = useState('');
@@ -158,8 +157,8 @@ const NewSourceView = (): React.ReactElement => {
               mutation: mCreateSource,
               variables: {
                 templateName,
-                hasOwner,
                 mapping,
+                credentialId: null,
                 name: sourceName
               }
             });
@@ -179,8 +178,8 @@ const NewSourceView = (): React.ReactElement => {
         mutation: mCreateSource,
         variables: {
           templateName,
-          hasOwner,
-          name: sourceName
+          name: sourceName,
+          credentialId: null
         }
       });
     }
@@ -285,39 +284,6 @@ const NewSourceView = (): React.ReactElement => {
     }
   };
 
-  const schemaType = `
-    [owner: string] : {
-        [table: string]: string[]
-    }`;
-
-  const schemaExample = `
-    {
-        "$SYSTEM": {
-            "PATIENT": [
-                "ID",
-                "PRENOM",
-                "NOM"
-            ]
-        },
-    }`;
-
-  const sqlCommand = `
-    SELECT OWNER, TABLE_NAME, COLUMN_NAME, DATA_TYPE FROM all_tab_columns;
-    `;
-
-  const sqlplusCommand = `
-    set heading off;
-    set underline off;
-    set pagesize 0;
-    set colsep ";";
-    set trimspool on;
-    set headsep off;
-    set linesize 1000;
-    set numw 64;
-    spool schema_name.csv
-    SELECT OWNER, TABLE_NAME, COLUMN_NAME, DATA_TYPE FROM all_tab_columns;
-    `;
-
   return (
     <div>
       <Navbar />
@@ -360,34 +326,6 @@ const NewSourceView = (): React.ReactElement => {
               value={sourceName}
             />
           </FormGroup>
-
-          <h1>Schéma de la base *</h1>
-          <FileInput
-            fill
-            inputProps={{
-              onChange: (event: React.FormEvent<HTMLInputElement>): void => {
-                const target = event.target as any;
-                setSchemaFile(target.files[0]);
-              },
-              name: 'schema'
-            }}
-            text={
-              schemaFile ? (
-                schemaFile.name
-              ) : (
-                <p className="disabled-text">Importer un schéma...</p>
-              )
-            }
-          />
-          <br />
-          <Checkbox
-            checked={hasOwner}
-            label="Le schéma a un OWNER"
-            onChange={(event: React.FormEvent<HTMLElement>): void =>
-              setHasOwner(!hasOwner)
-            }
-          />
-          <br />
           <h1>Importer un mapping existant (optionnel)</h1>
           <FileInput
             fill
@@ -424,6 +362,7 @@ const NewSourceView = (): React.ReactElement => {
               )
             }
           />
+          <NewDatabaseCredentials />
           <div className="align-right">
             <Button
               disabled={
@@ -440,36 +379,6 @@ const NewSourceView = (): React.ReactElement => {
               Ajouter
             </Button>
           </div>
-
-          <p>
-            * Une source de données doit nécessairement être importée avec un
-            schéma de données SQL. Ce schéma doit être importé au format JSON et
-            organisé comme suit :
-          </p>
-          <pre>
-            <code dangerouslySetInnerHTML={{ __html: schemaType }} />
-          </pre>
-          <p>
-            Voici un exemple minimaliste de fichier représentant un schéma de
-            base de données JSON tel qu'il est requis par notre application à
-            l'heure actuelle :
-          </p>
-          <pre>
-            <code dangerouslySetInnerHTML={{ __html: schemaExample }} />
-          </pre>
-          <p>
-            Le schéma de données peut-être extrait en utilisant le logiciel Toad
-            avec cette commande SQL :
-          </p>
-          <pre>
-            <code dangerouslySetInnerHTML={{ __html: sqlCommand }} />
-          </pre>
-          <p>
-            ou en ligne de commande avec <code>sqlplus</code> :
-          </p>
-          <pre>
-            <code dangerouslySetInnerHTML={{ __html: sqlplusCommand }} />
-          </pre>
         </form>
       </div>
     </div>

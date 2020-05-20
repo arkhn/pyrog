@@ -6,6 +6,7 @@ export const {
   JWT_PRIVATE_KEY: priv,
   SCHEMAS_DIR,
   FHIR_API_URL,
+  PAGAI_URL,
   REDIS_URL,
 } = process.env
 if (!priv) {

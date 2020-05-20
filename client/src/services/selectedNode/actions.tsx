@@ -25,7 +25,6 @@ interface Filter {
 export const updateSelectedSource = (source: {
   id: string;
   name: string;
-  hasOwner: boolean;
   template: {
     name: string;
   };
@@ -44,7 +43,6 @@ export const changeSelectedSource = (
   source: {
     id: string;
     name: string;
-    hasOwner: boolean;
     template: {
       name: string;
     };

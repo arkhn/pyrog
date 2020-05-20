@@ -46,7 +46,6 @@ export interface IStructureDefinition {
 export interface ISelectedSource {
   id: string;
   name: string;
-  hasOwner: boolean;
   mappingProgress: number[];
   template: {
     name: string;

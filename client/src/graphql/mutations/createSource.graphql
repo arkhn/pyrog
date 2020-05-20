@@ -1,13 +1,13 @@
 mutation createSource(
   $templateName: String!
   $name: String!
-  $hasOwner: Boolean!
+  $credentialId: String!
   $mapping: String
 ) {
   createSource(
     templateName: $templateName
     name: $name
-    hasOwner: $hasOwner
+    credentialId: $credentialId
     mapping: $mapping
   ) {
     id
