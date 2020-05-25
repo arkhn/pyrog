@@ -1,0 +1,6 @@
+query databaseSchema($credentialId: ID!) {
+  credential(credentialId: $credentialId) {
+    id
+    schema
+  }
+}

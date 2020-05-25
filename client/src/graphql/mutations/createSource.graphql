@@ -1,15 +1,9 @@
 mutation createSource(
   $templateName: String!
   $name: String!
-  $credentialId: String!
   $mapping: String
 ) {
-  createSource(
-    templateName: $templateName
-    name: $name
-    credentialId: $credentialId
-    mapping: $mapping
-  ) {
+  createSource(templateName: $templateName, name: $name, mapping: $mapping) {
     id
   }
 }

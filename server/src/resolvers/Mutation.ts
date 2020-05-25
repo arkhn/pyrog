@@ -72,7 +72,6 @@ export const Mutation = mutationType({
       args: {
         templateName: stringArg({ required: true }),
         name: stringArg({ required: true }),
-        credentialId: stringArg({ required: true }),
         mapping: stringArg({ required: false }),
       },
       resolve: createSource,

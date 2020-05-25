@@ -68,7 +68,7 @@ const UpdateDatabaseCredentials = (): React.ReactElement => {
     // Fetch concept maps
     try {
       const { data } = await axios.post(`${PAGAI_URL}/get_owners`, credentials);
-      setAvailableOwners(data.owners);
+      setAvailableOwners(data);
     } catch (err) {
       setAvailableOwners(null);
       toaster.show({
@@ -115,7 +115,6 @@ const UpdateDatabaseCredentials = (): React.ReactElement => {
       setOwner(owner);
       setPassword(password);
       setDatabase(database);
-      console.log();
       if (!availableOwners && host && port && database && login && password) {
         fetchAvailableOwners({ model, host, port, database, login, password });
       }

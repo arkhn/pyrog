@@ -361,7 +361,7 @@ type Mutation {
   createComment(attributeId: ID!, content: String!, validation: Boolean!): Comment!
   createInput(attributeId: ID!, script: String, sql: ColumnInput, static: String): Input!
   createResource(definitionId: String!, sourceId: ID!): Resource!
-  createSource(credentialId: String!, mapping: String, name: String!, templateName: String!): Source!
+  createSource(mapping: String, name: String!, templateName: String!): Source!
   createTemplate(name: String!): Template!
   deleteAccessControl(accessControlId: ID!): AccessControl!
   deleteAttribute(attributeId: ID!): Attribute!

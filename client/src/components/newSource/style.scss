@@ -1,10 +1,10 @@
-@import "~@blueprintjs/core/lib/css/blueprint.css";
-@import "~@blueprintjs/core/lib/scss/variables";
+@import '~@blueprintjs/core/lib/css/blueprint.css';
+@import '~@blueprintjs/core/lib/scss/variables';
 
 $window-padding: 20px;
 
 #main-container-newsource {
-  max-width: 600px;
+  max-width: 85%;
   margin: 0px auto;
   padding: $window-padding;
 
@@ -27,5 +27,15 @@ $window-padding: 20px;
 
   .disabled-text {
     color: $pt-text-color-disabled;
+  }
+
+  .db-credential-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .credential-field {
+    display: flex;
+    margin: 1rem;
   }
 }

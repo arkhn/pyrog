@@ -773,7 +773,6 @@ export interface NexusGenArgTypes {
       sourceId: string; // ID!
     }
     createSource: { // args
-      credentialId: string; // String!
       mapping?: string | null; // String
       name: string; // String!
       templateName: string; // String!

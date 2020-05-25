@@ -82,7 +82,7 @@ export const sources: FieldResolver<'Query', 'sources'> = async (
 
 export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
   _parent,
-  { templateName, name, credentialId, mapping },
+  { templateName, name, mapping },
   ctx,
 ) => {
   // create the source
@@ -94,7 +94,6 @@ export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
     data: {
       id: parsedMapping ? parsedMapping.source.id : undefined,
       name,
-      credential: { connect: { id: credentialId } },
       template: { connect: { name: templateName } },
     },
   })

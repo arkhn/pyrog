@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Tab, Tabs, TabId } from '@blueprintjs/core';
 import { loader } from 'graphql.macro';
-import { useApolloClient } from 'react-apollo';
-import { useSelector } from 'react-redux';
+import { useApolloClient, useQuery } from 'react-apollo';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 
 import Navbar from 'components/navbar';
@@ -18,15 +18,28 @@ import { FHIR_API_URL } from '../../constants';
 
 import './style.scss';
 import TableViewer from './TableViewer';
+import { updateSelectedSource } from 'services/selectedNode/actions';
 
 const qExportMapping = loader('src/graphql/queries/exportMapping.graphql');
+const qDatabaseSchema = loader('src/graphql/queries/databaseSchema.graphql');
 
 const MappingView = () => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
+  const dispatch = useDispatch();
   const { source, resource, attribute } = useSelector(
     (state: IReduxStore) => state.selectedNode
   );
   const [selectedTabId, setSelectedTabId] = React.useState('picker' as TabId);
+  const { data: schemaData, loading: schemaLoading } = useQuery(
+    qDatabaseSchema,
+    {
+      skip: !source,
+      variables: {
+        credentialId: source?.credential.id
+      }
+    }
+  );
+
   const client = useApolloClient();
 
   const exportMapping = async (includeComments = true): Promise<void> => {
@@ -179,7 +192,18 @@ const MappingView = () => {
     );
   };
 
-  if (source && !source.schema) {
+  React.useEffect(() => {
+    if (!schemaLoading && schemaData.credential.schema && !source.schema) {
+      dispatch(
+        updateSelectedSource({
+          ...source,
+          schema: JSON.parse(schemaData.credential.schema)
+        })
+      );
+    }
+  }, [schemaData, schemaLoading]);
+
+  if (!schemaLoading && !schemaData.credential.schema) {
     toaster.show({
       icon: 'error',
       intent: 'danger',
