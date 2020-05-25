@@ -38,7 +38,8 @@ export default class ResourceSelect extends React.Component<SelectProps, any> {
     return (
       `${resource.definition.name.toLowerCase()}`.indexOf(
         query.toLowerCase()
-      ) >= 0
+      ) >= 0 ||
+      `${resource.label.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0
     );
   };
 
