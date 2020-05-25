@@ -21,7 +21,7 @@ export const Credential = objectType({
     t.model.password()
     t.field('decryptedPassword', {
       type: 'String',
-      resolve: (parent, o) => decrypt(parent.password),
+      resolve: parent => decrypt(parent.password),
     })
 
     t.model.source()
