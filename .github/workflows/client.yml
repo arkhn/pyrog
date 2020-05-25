@@ -94,6 +94,15 @@ jobs:
           ./scripts/generate_client_env.sh > .env.curie
           docker build -t arkhn/pyrog-client:curie --build-arg ENV_FILE=.env.curie .
 
+      - name : Build RMS
+        env:
+          IP: ${{ secrets.IP_VM_REIMS }}
+          STAGE: rms
+        run: |
+          cd client
+          ./scripts/generate_client_env.sh > .env.rms
+          docker build -t arkhn/pyrog-client:rms --build-arg ENV_FILE=.env.rms .
+  
       - name: Tag docker images
         run: |
           docker tag $IMAGE:staging $IMAGE:$GITHUB_SHA
@@ -112,6 +121,7 @@ jobs:
           docker push $IMAGE:aphp
           docker push $IMAGE:clb
           docker push $IMAGE:curie
+          docker push $IMAGE:rms
 
 
 
