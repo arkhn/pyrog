@@ -1,10 +1,5 @@
 import { objectType, FieldResolver } from '@nexus/schema'
-import {
-  DatabaseType,
-  Credential as Credz,
-  CredentialCreateInput,
-  CredentialCreateArgs,
-} from '@prisma/client'
+import { DatabaseType, Credential as Credz } from '@prisma/client'
 import { PAGAI_URL } from '../constants'
 
 import { encrypt, decrypt } from 'utils'
