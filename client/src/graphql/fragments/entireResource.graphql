@@ -4,7 +4,6 @@
 fragment entireResource on Resource {
   id
   label
-  primaryKeyOwner
   primaryKeyTable
   primaryKeyColumn
   attributes {

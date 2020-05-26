@@ -90,12 +90,10 @@ export interface NexusGenInputs {
   ColumnInput: { // input type
     column: string; // String!
     joins?: NexusGenInputs['JoinInput'][] | null; // [JoinInput!]
-    owner: string; // String!
     table: string; // String!
   }
   ColumnInputWithoutJoins: { // input type
     column?: string | null; // String
-    owner?: string | null; // String
     table?: string | null; // String
   }
   ColumnWhereInput: { // input type
@@ -110,7 +108,6 @@ export interface NexusGenInputs {
     joins?: NexusGenInputs['JoinFilter'] | null; // JoinFilter
     NOT?: NexusGenInputs['ColumnWhereInput'][] | null; // [ColumnWhereInput!]
     OR?: NexusGenInputs['ColumnWhereInput'][] | null; // [ColumnWhereInput!]
-    owner?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     table?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
@@ -264,7 +261,6 @@ export interface NexusGenInputs {
     NOT?: NexusGenInputs['ResourceWhereInput'][] | null; // [ResourceWhereInput!]
     OR?: NexusGenInputs['ResourceWhereInput'][] | null; // [ResourceWhereInput!]
     primaryKeyColumn?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
-    primaryKeyOwner?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     primaryKeyTable?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     source?: NexusGenInputs['SourceWhereInput'] | null; // SourceWhereInput
     sourceId?: NexusGenInputs['StringFilter'] | null; // StringFilter
@@ -336,7 +332,6 @@ export interface NexusGenInputs {
   UpdateResourceInput: { // input type
     label?: string | null; // String
     primaryKeyColumn?: string | null; // String
-    primaryKeyOwner?: string | null; // String
     primaryKeyTable?: string | null; // String
   }
   UserWhereInput: { // input type
@@ -384,7 +379,6 @@ export interface NexusGenRootTypes {
     column?: string | null; // String
     createdAt: any; // DateTime!
     id: string; // String!
-    owner?: string | null; // String
     table?: string | null; // String
     updatedAt: any; // DateTime!
   }
@@ -434,7 +428,6 @@ export interface NexusGenRootTypes {
     id: string; // String!
     label?: string | null; // String
     primaryKeyColumn?: string | null; // String
-    primaryKeyOwner?: string | null; // String
     primaryKeyTable?: string | null; // String
     updatedAt: any; // DateTime!
   }
@@ -552,7 +545,6 @@ export interface NexusGenFieldTypes {
     createdAt: any; // DateTime!
     id: string; // String!
     joins: NexusGenRootTypes['Join'][]; // [Join!]!
-    owner: string | null; // String
     table: string | null; // String
     updatedAt: any; // DateTime!
   }
@@ -656,7 +648,6 @@ export interface NexusGenFieldTypes {
     id: string; // String!
     label: string | null; // String
     primaryKeyColumn: string | null; // String
-    primaryKeyOwner: string | null; // String
     primaryKeyTable: string | null; // String
     source: NexusGenRootTypes['Source']; // Source!
     updatedAt: any; // DateTime!

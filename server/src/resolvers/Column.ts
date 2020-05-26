@@ -5,7 +5,6 @@ export const Column = objectType({
   definition(t) {
     t.model.id()
 
-    t.model.owner()
     t.model.table()
     t.model.column()
 
@@ -25,8 +24,6 @@ export const addJoinToColumn: FieldResolver<
       tables: {
         create: [
           {
-            owner:
-              join && join.source && join.source.owner ? join.source.owner : '',
             table:
               join && join.source && join.source.table ? join.source.table : '',
             column:
@@ -35,8 +32,6 @@ export const addJoinToColumn: FieldResolver<
                 : '',
           },
           {
-            owner:
-              join && join.target && join.target.owner ? join.target.owner : '',
             table:
               join && join.target && join.target.table ? join.target.table : '',
             column:

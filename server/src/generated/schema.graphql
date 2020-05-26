@@ -107,7 +107,6 @@ type Column {
   createdAt: DateTime!
   id: String!
   joins(after: JoinWhereUniqueInput, before: JoinWhereUniqueInput, first: Int, last: Int, skip: Int): [Join!]!
-  owner: String
   table: String
   updatedAt: DateTime!
 }
@@ -121,13 +120,11 @@ input ColumnFilter {
 input ColumnInput {
   column: String!
   joins: [JoinInput!]
-  owner: String!
   table: String!
 }
 
 input ColumnInputWithoutJoins {
   column: String
-  owner: String
   table: String
 }
 
@@ -143,7 +140,6 @@ input ColumnWhereInput {
   joins: JoinFilter
   NOT: [ColumnWhereInput!]
   OR: [ColumnWhereInput!]
-  owner: NullableStringFilter
   table: NullableStringFilter
   updatedAt: DateTimeFilter
 }
@@ -421,7 +417,6 @@ type Resource {
   id: String!
   label: String
   primaryKeyColumn: String
-  primaryKeyOwner: String
   primaryKeyTable: String
   source: Source!
   updatedAt: DateTime!
@@ -444,7 +439,6 @@ input ResourceWhereInput {
   NOT: [ResourceWhereInput!]
   OR: [ResourceWhereInput!]
   primaryKeyColumn: NullableStringFilter
-  primaryKeyOwner: NullableStringFilter
   primaryKeyTable: NullableStringFilter
   source: SourceWhereInput
   sourceId: StringFilter
@@ -578,7 +572,6 @@ input UpdateInputInput {
 input UpdateResourceInput {
   label: String
   primaryKeyColumn: String
-  primaryKeyOwner: String
   primaryKeyTable: String
 }
 

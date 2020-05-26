@@ -712,13 +712,6 @@
     {
       "tag": "CreateField",
       "model": "Resource",
-      "field": "primaryKeyOwner",
-      "type": "String",
-      "arity": "Optional"
-    },
-    {
-      "tag": "CreateField",
-      "model": "Resource",
       "field": "primaryKeyTable",
       "type": "String",
       "arity": "Optional"
@@ -1900,13 +1893,6 @@
         },
         "directive": "id"
       }
-    },
-    {
-      "tag": "CreateField",
-      "model": "Column",
-      "field": "owner",
-      "type": "String",
-      "arity": "Optional"
     },
     {
       "tag": "CreateField",

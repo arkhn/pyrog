@@ -1,7 +1,6 @@
 import {
   Button,
   Classes,
-  Drawer as BPDrawer,
   H3,
   Icon,
   InputGroup,
@@ -89,7 +88,10 @@ const UpdateDatabaseCredentials = (): React.ReactElement => {
     dispatch(
       updateSelectedSource({
         ...selectedNode.source,
-        credential: data.upsertCredential
+        credential: {
+          ...data.upsertCredential,
+          schema: JSON.parse(data.upsertCredential.schema)
+        }
       })
     );
   };
@@ -107,7 +109,8 @@ const UpdateDatabaseCredentials = (): React.ReactElement => {
         login,
         owner,
         decryptedPassword: password,
-        database
+        database,
+        model
       } = data.source.credential;
       setHost(host);
       setPort(port);
@@ -115,11 +118,21 @@ const UpdateDatabaseCredentials = (): React.ReactElement => {
       setOwner(owner);
       setPassword(password);
       setDatabase(database);
-      if (!availableOwners && host && port && database && login && password) {
+      setModel(model);
+      if (
+        !availableOwners &&
+        host &&
+        port &&
+        database &&
+        login &&
+        password &&
+        model
+      ) {
         fetchAvailableOwners({ model, host, port, database, login, password });
       }
     }
-  }, [loading, selectedNode, data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading, selectedNode, data, availableOwners]);
 
   return (
     <div className={Classes.DIALOG_BODY}>

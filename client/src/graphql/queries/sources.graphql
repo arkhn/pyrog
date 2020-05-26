@@ -1,3 +1,5 @@
+#import "../fragments/entireCredential.graphql"
+
 query sources {
   sources {
     id
@@ -8,7 +10,7 @@ query sources {
       name
     }
     credential {
-      id
+      ...entireCredential
     }
     accessControls {
       id

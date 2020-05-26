@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Tab, Tabs, TabId } from '@blueprintjs/core';
 import { loader } from 'graphql.macro';
-import { useApolloClient, useQuery } from 'react-apollo';
-import { useSelector, useDispatch } from 'react-redux';
+import { useApolloClient } from 'react-apollo';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 import Navbar from 'components/navbar';
@@ -18,27 +18,15 @@ import { FHIR_API_URL } from '../../constants';
 
 import './style.scss';
 import TableViewer from './TableViewer';
-import { updateSelectedSource } from 'services/selectedNode/actions';
 
 const qExportMapping = loader('src/graphql/queries/exportMapping.graphql');
-const qDatabaseSchema = loader('src/graphql/queries/databaseSchema.graphql');
 
 const MappingView = () => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const dispatch = useDispatch();
   const { source, resource, attribute } = useSelector(
     (state: IReduxStore) => state.selectedNode
   );
   const [selectedTabId, setSelectedTabId] = React.useState('picker' as TabId);
-  const { data: schemaData, loading: schemaLoading } = useQuery(
-    qDatabaseSchema,
-    {
-      skip: !source,
-      variables: {
-        credentialId: source?.credential.id
-      }
-    }
-  );
 
   const client = useApolloClient();
 
@@ -141,16 +129,13 @@ const MappingView = () => {
   };
 
   const renderExistingRules = () => (
-    <InputColumns schema={source.schema} source={source} />
+    <InputColumns schema={source.credential.schema} source={source} />
   );
 
   const renderTable = () => {
     return (
       <div id="tableViewer">
-        <TableViewer
-          table={resource.primaryKeyTable}
-          owner={resource.primaryKeyOwner}
-        />
+        <TableViewer table={resource.primaryKeyTable} />
       </div>
     );
   };
@@ -170,7 +155,7 @@ const MappingView = () => {
               panel={
                 <TabColumnPicking
                   attribute={attribute}
-                  schema={source.schema}
+                  schema={source.credential.schema}
                   source={source}
                 />
               }
@@ -192,18 +177,7 @@ const MappingView = () => {
     );
   };
 
-  React.useEffect(() => {
-    if (!schemaLoading && schemaData.credential.schema && !source.schema) {
-      dispatch(
-        updateSelectedSource({
-          ...source,
-          schema: JSON.parse(schemaData.credential.schema)
-        })
-      );
-    }
-  }, [schemaData, schemaLoading]);
-
-  if (!schemaLoading && !schemaData.credential.schema) {
+  if (!source.credential.schema) {
     toaster.show({
       icon: 'error',
       intent: 'danger',

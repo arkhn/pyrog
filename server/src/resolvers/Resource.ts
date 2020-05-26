@@ -8,7 +8,6 @@ export const Resource = objectType({
 
     t.model.label()
 
-    t.model.primaryKeyOwner()
     t.model.primaryKeyTable()
     t.model.primaryKeyColumn()
 
@@ -135,7 +134,6 @@ export const updateResource: FieldResolver<
           data: {
             sqlColumn: {
               create: {
-                owner: f.sqlColumn.owner,
                 table: f.sqlColumn.table,
                 column: f.sqlColumn.column,
               },

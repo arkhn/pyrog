@@ -40,7 +40,6 @@ const main = async (path: string) => {
     source = await prismaClient.source.create({
       data: {
         name: mapping.source.name,
-        hasOwner: mapping.source.hasOwner,
         template: { connect: { name: template.name } },
       },
     })

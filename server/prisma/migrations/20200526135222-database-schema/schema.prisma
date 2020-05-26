@@ -56,7 +56,6 @@ model Credential {
 model Resource {
   id               String      @default(cuid()) @id
   label            String?
-  primaryKeyOwner  String?
   primaryKeyTable  String?
   primaryKeyColumn String?
   // filters on db to avoid processing all the DB
@@ -125,7 +124,6 @@ model Input {
 
 model Column {
   id        String   @default(cuid()) @id
-  owner     String?
   table     String?
   column    String?
   joins     Join[]   @relation("ColumnJoins")

@@ -50,12 +50,21 @@ export interface ISelectedSource {
   template: {
     name: string;
   };
-  credential: {
-    id: string;
-  };
+  credential: ICredential;
   accessControls: IAccessControl[];
-  schema?: ISourceSchema;
   resources: Resource[];
+}
+
+export interface ICredential {
+  id: string;
+  host: string;
+  port: string;
+  database: string;
+  model: string;
+  login: string;
+  decryptedPassword: string;
+  owner: string;
+  schema: ISourceSchema | string;
 }
 
 export interface IAccessControl {
@@ -78,7 +87,6 @@ export interface Resource {
   name: string;
   type: string;
   profiles: Profile[];
-  primaryKeyOwner: string;
   primaryKeyTable: string;
   primaryKeyColumn: string;
   filters: Filters[];
@@ -103,7 +111,6 @@ export interface ISelectedNode {
 }
 
 export interface IResourceInputs {
-  primaryKeyOwner: string;
   primaryKeyTable: string;
   primaryKeyColumn: string;
   attributesMap: any;
@@ -219,20 +226,11 @@ export interface ITemplate {
   sources: ISource[];
 }
 
-export interface ISourceSchemaWithOwner {
-  [owner: string]: {
-    [table: string]: string[];
-  };
-}
-
-export interface ISourceSchemaWithoutOwner {
+export interface ISourceSchema {
   [table: string]: string[];
 }
 
-export type ISourceSchema = ISourceSchemaWithOwner | ISourceSchemaWithoutOwner;
-
 export interface ISourceColumn {
-  owner: string;
   table: string;
   column: string;
 }

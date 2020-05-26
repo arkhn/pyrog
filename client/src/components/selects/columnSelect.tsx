@@ -5,10 +5,8 @@ import StringSelect from 'components/selects/stringSelect';
 import { ISourceSchema } from 'types';
 
 export interface Props {
-  ownerChangeCallback?: Function;
   tableChangeCallback?: Function;
   columnChangeCallback?: Function;
-  initialOwner?: string;
   initialTable?: string;
   initialColumn?: string;
   sourceSchema: ISourceSchema;
@@ -20,10 +18,8 @@ export interface Props {
 }
 
 const ColumnSelect = ({
-  ownerChangeCallback,
   tableChangeCallback,
   columnChangeCallback,
-  initialOwner,
   initialTable,
   initialColumn,
   sourceSchema,

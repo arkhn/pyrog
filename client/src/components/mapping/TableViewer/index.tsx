@@ -19,12 +19,14 @@ import FhirPreview from './FhirPreview';
 
 interface IProps {
   table: string;
-  owner?: string;
 }
 
-const TableViewer = ({ table, owner }: IProps) => {
+const TableViewer = ({ table }: IProps) => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
+  const {
+    resource,
+    source: { credential }
+  } = useSelector((state: IReduxStore) => state.selectedNode);
 
   const [compatiblePreview, setCompatiblePreview] = React.useState(false);
   const [fhirPreviewEnabled, setFhirPreviewEnabled] = React.useState(false);
@@ -85,7 +87,7 @@ const TableViewer = ({ table, owner }: IProps) => {
       setLoading(true);
       axios
         .get(`${PAGAI_URL}/explore/${resource.id}/${table}`, {
-          params: { schema: owner }
+          params: { schema: credential.owner }
         })
         .then((res: any) => {
           setLoading(false);
@@ -103,7 +105,7 @@ const TableViewer = ({ table, owner }: IProps) => {
           });
         });
     }
-  }, [resource, owner, table, toaster]);
+  }, [resource, credential.owner, table, toaster]);
 
   return (
     <React.Fragment>

@@ -20,20 +20,6 @@ const JoinColumns = ({
 }: Props): React.ReactElement => (
   <div className="join-columns">
     <ColumnSelect
-      ownerChangeCallback={(e: string) => {
-        updateJoin({
-          variables: {
-            joinId: join.id,
-            data: {
-              source: {
-                owner: e,
-                table: null,
-                column: null
-              }
-            }
-          }
-        });
-      }}
       tableChangeCallback={(e: string) => {
         updateJoin({
           variables: {
@@ -59,26 +45,11 @@ const JoinColumns = ({
           }
         });
       }}
-      initialOwner={join.tables[0].owner}
       initialTable={join.tables[0].table}
       initialColumn={join.tables[0].column}
       sourceSchema={schema}
     />
     <ColumnSelect
-      ownerChangeCallback={(e: string) => {
-        updateJoin({
-          variables: {
-            joinId: join.id,
-            data: {
-              target: {
-                owner: e,
-                table: null,
-                column: null
-              }
-            }
-          }
-        });
-      }}
       tableChangeCallback={(e: string) => {
         updateJoin({
           variables: {
@@ -104,7 +75,6 @@ const JoinColumns = ({
           }
         });
       }}
-      initialOwner={join.tables[1].owner}
       initialTable={join.tables[1].table}
       initialColumn={join.tables[1].column}
       sourceSchema={schema}

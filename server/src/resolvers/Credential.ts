@@ -1,5 +1,10 @@
 import { objectType, FieldResolver } from '@nexus/schema'
-import { DatabaseType, Credential as Credz } from '@prisma/client'
+import {
+  DatabaseType,
+  Credential as Credz,
+  CredentialCreateInput,
+  CredentialCreateArgs,
+} from '@prisma/client'
 import { PAGAI_URL } from '../constants'
 
 import { encrypt, decrypt } from 'utils'
@@ -31,17 +36,11 @@ export const Credential = objectType({
   },
 })
 
-const loadDatabaseSchema = async (ctx: Context, credentials: Credz) => {
-  const {
-    id,
-    model,
-    owner,
-    host,
-    port,
-    database,
-    login,
-    password,
-  } = credentials
+const loadDatabaseSchema = async (
+  ctx: Context,
+  credentials: Partial<Credz>,
+): Promise<string> => {
+  const { model, owner, host, port, database, login, password } = credentials
   try {
     const { data } = await axios.post(`${PAGAI_URL}/get_db_schema`, {
       model,
@@ -50,17 +49,12 @@ const loadDatabaseSchema = async (ctx: Context, credentials: Credz) => {
       port,
       database,
       login,
-      password: decrypt(password),
+      password: decrypt(password!),
     })
-    await ctx.prisma.credential.update({
-      where: { id },
-      data: {
-        schema: JSON.stringify(data),
-      },
-    })
+    return JSON.stringify(data)
   } catch (err) {
     throw new Error(
-      `Could not update database schema using pagai: ${
+      `Could not fetch database schema using pagai: ${
         err.response ? err.response.data.error : err.message
       }`,
     )
@@ -85,36 +79,32 @@ export const upsertCredential: FieldResolver<
     throw new Error(`Source ${sourceId} does not exist`)
   }
 
+  const input: Partial<Credz> = {
+    host,
+    port,
+    model: model as DatabaseType,
+    database,
+    password: encryptedPassword,
+    login,
+    owner,
+  }
+  input.schema = await loadDatabaseSchema(ctx, input)
+
   let credz: Credz
   if (source.credential) {
     credz = await ctx.prisma.credential.update({
       where: { id: source.credential.id },
-      data: {
-        host,
-        port,
-        model: model as DatabaseType,
-        database,
-        password: encryptedPassword,
-        login,
-        owner,
-      },
+      data: input,
     })
   } else {
     credz = await ctx.prisma.credential.create({
       data: {
+        ...(input as Credz),
         source: { connect: { id: sourceId } },
-        login,
-        password: encryptedPassword,
-        host,
-        port,
-        model: model as DatabaseType,
-        database,
-        owner,
       },
     })
   }
-  // asynchronously load the database schema from pagai
-  loadDatabaseSchema(ctx, credz)
+
   return credz
 }
 

@@ -8,10 +8,10 @@ import {
   HTMLSelect,
   Icon
 } from '@blueprintjs/core';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import React, { useState } from 'react';
 import { useApolloClient, useQuery, useMutation } from '@apollo/react-hooks';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import useReactRouter from 'use-react-router';
 import { loader } from 'graphql.macro';
 
@@ -22,7 +22,6 @@ import { FHIR_API_URL, PAGAI_URL } from '../../constants';
 import { ITemplate, IReduxStore } from 'types';
 
 import './style.scss';
-import { updateSelectedSource } from 'services/selectedNode/actions';
 
 // GRAPHQL OPERATIONS
 const qSourceAndTemplateNames = loader(
@@ -41,12 +40,10 @@ const NewSourceView = (): React.ReactElement => {
   const { history } = useReactRouter();
 
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const dispatch = useDispatch();
 
   const [templateName, setTemplateName] = useState('');
   const [templateExists, setTemplateExists] = useState(false);
   const [sourceName, setSourceName] = useState('');
-  const [schemaFile, setSchemaFile] = useState(undefined as File | undefined);
   const [mappingFile, setMappingFile] = useState(undefined as File | undefined);
   const [fhirBundleFile, setFhirBundleFile] = useState(
     undefined as File | undefined
