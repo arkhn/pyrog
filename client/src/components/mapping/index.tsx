@@ -177,7 +177,7 @@ const MappingView = () => {
     );
   };
 
-  if (!source.credential.schema) {
+  if (!source.credential || !source.credential.schema) {
     toaster.show({
       icon: 'error',
       intent: 'danger',

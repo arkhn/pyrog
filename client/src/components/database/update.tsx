@@ -119,20 +119,22 @@ const UpdateDatabaseCredentials = (): React.ReactElement => {
       setPassword(password);
       setDatabase(database);
       setModel(model);
-      if (
-        !availableOwners &&
-        host &&
-        port &&
-        database &&
-        login &&
-        password &&
-        model
-      ) {
-        fetchAvailableOwners({ model, host, port, database, login, password });
-      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loading, selectedNode, data, availableOwners]);
+  }, [loading, selectedNode, data]);
+
+  React.useEffect(() => {
+    if (
+      !availableOwners &&
+      host &&
+      port &&
+      database &&
+      login &&
+      password &&
+      model
+    ) {
+      fetchAvailableOwners({ model, host, port, database, login, password });
+    }
+  });
 
   return (
     <div className={Classes.DIALOG_BODY}>
