@@ -2,7 +2,7 @@ import * as crypto from 'crypto'
 import { verify } from 'jsonwebtoken'
 import { User } from '@prisma/client'
 
-import { APP_SECRET, IV } from './constants'
+import { APP_SECRET, JWT_SIGNING_KEY, IV } from './constants'
 import cache from 'cache'
 import { Request } from 'express'
 
@@ -14,7 +14,9 @@ export const getUser = async (request: Request): Promise<User | null> => {
   const Authorization = request.get('Authorization')
   if (Authorization) {
     const token = Authorization.replace('Bearer ', '')
-    const verifiedToken = verify(token, APP_SECRET!) as Token
+    const verifiedToken = verify(token, JWT_SIGNING_KEY, {
+      algorithms: ['ES256'],
+    }) as Token
     if (!!verifiedToken) {
       const { get } = cache()
 

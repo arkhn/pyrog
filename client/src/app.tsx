@@ -1,4 +1,5 @@
 import * as React from 'react';
+import axios from 'axios';
 import { Provider } from 'react-redux';
 import { combineReducers, createStore, applyMiddleware } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
@@ -82,6 +83,12 @@ const store = finalCreateStore(persistedReducer);
 
 const persistor = persistStore(store);
 
+// AXIOS
+
+// Set a default authentication header for fhir api calls
+const token = localStorage.getItem(AUTH_TOKEN);
+axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
 // APOLLO
 
 // HttpLink
@@ -91,8 +98,6 @@ const httpLink = new HttpLink({
 });
 
 const middlewareLink = new ApolloLink((operation, forward) => {
-  const token = localStorage.getItem(AUTH_TOKEN);
-
   operation.setContext({
     headers: {
       Authorization: token ? `Bearer ${token}` : ''
