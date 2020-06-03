@@ -32,7 +32,7 @@ jobs:
 
       - name: Build
         env:
-          JWT_PUBLIC_KEY: none
+          JWT_PRIVATE_KEY: none
         run: |
           cd server
           yarn build
