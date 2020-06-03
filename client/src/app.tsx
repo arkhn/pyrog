@@ -85,9 +85,12 @@ const persistor = persistStore(store);
 
 // AXIOS
 
-// Set a default authentication header for fhir api calls
-const token = localStorage.getItem(AUTH_TOKEN);
-axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+// Interceptor to add authorization header for each requests
+axios.interceptors.request.use(config => {
+  const token = localStorage.getItem(AUTH_TOKEN);
+  config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
 
 // APOLLO
 
@@ -98,6 +101,7 @@ const httpLink = new HttpLink({
 });
 
 const middlewareLink = new ApolloLink((operation, forward) => {
+  const token = localStorage.getItem(AUTH_TOKEN);
   operation.setContext({
     headers: {
       Authorization: token ? `Bearer ${token}` : ''
