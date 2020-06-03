@@ -1,4 +1,5 @@
 import * as React from 'react';
+import axios from 'axios';
 import { Provider } from 'react-redux';
 import { combineReducers, createStore, applyMiddleware } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
@@ -82,6 +83,15 @@ const store = finalCreateStore(persistedReducer);
 
 const persistor = persistStore(store);
 
+// AXIOS
+
+// Interceptor to add authorization header for each requests
+axios.interceptors.request.use(config => {
+  const token = localStorage.getItem(AUTH_TOKEN);
+  config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
 // APOLLO
 
 // HttpLink
@@ -92,7 +102,6 @@ const httpLink = new HttpLink({
 
 const middlewareLink = new ApolloLink((operation, forward) => {
   const token = localStorage.getItem(AUTH_TOKEN);
-
   operation.setContext({
     headers: {
       Authorization: token ? `Bearer ${token}` : ''

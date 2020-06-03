@@ -2,7 +2,7 @@ import { objectType, FieldResolver } from '@nexus/schema'
 import { compare, hash } from 'bcryptjs'
 import { sign } from 'jsonwebtoken'
 
-import { APP_SECRET } from '../constants'
+import { JWT_SIGNING_KEY } from '../constants'
 import cache from 'cache'
 
 export const User = objectType({
@@ -43,7 +43,7 @@ export const login: FieldResolver<'Mutation', 'login'> = async (
   await set(`user:${user.id}`, JSON.stringify(user))
 
   return {
-    token: sign({ userId: user.id }, APP_SECRET!),
+    token: sign({ userId: user.id }, JWT_SIGNING_KEY, { algorithm: 'ES256' }),
     user,
   }
 }
@@ -67,7 +67,7 @@ export const signup: FieldResolver<'Mutation', 'signup'> = async (
   await set(`user:${user.id}`, JSON.stringify(user))
 
   return {
-    token: sign({ userId: user.id }, APP_SECRET!),
+    token: sign({ userId: user.id }, JWT_SIGNING_KEY, { algorithm: 'ES256' }),
     user,
   }
 }

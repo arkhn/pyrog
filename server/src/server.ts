@@ -1,5 +1,6 @@
 import { GraphQLServer, Options } from 'graphql-yoga'
 import cors from 'cors'
+import axios from 'axios'
 
 import { permissions } from 'permissions'
 import register from 'rest'
@@ -7,6 +8,12 @@ import register from 'rest'
 import { schema } from './schema'
 import { createContext } from './context'
 import { bootstrapDefinitions } from 'fhir'
+import { JWT_TOKEN } from './constants'
+
+// AXIOS
+
+// Set a default authentication header for fhir api calls
+axios.defaults.headers.common['Authorization'] = `Bearer ${JWT_TOKEN}`
 
 const server = new GraphQLServer({
   schema,

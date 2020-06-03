@@ -1,6 +1,17 @@
 import { randomBytes } from 'crypto'
 
-export const { APP_SECRET, SCHEMAS_DIR, FHIR_API_URL, REDIS_URL } = process.env
+export const {
+  APP_SECRET,
+  JWT_TOKEN,
+  JWT_PRIVATE_KEY: priv,
+  SCHEMAS_DIR,
+  FHIR_API_URL,
+  REDIS_URL,
+} = process.env
+if (!priv) {
+  throw new Error('MISSING "JWT_PRIVATE_KEY" in environment variables')
+}
+export const JWT_SIGNING_KEY = priv.replace(/\\n/g, '\n')
 
 const IV_LENGTH = 16 // For AES, this is always 16
 export const IV = randomBytes(IV_LENGTH)

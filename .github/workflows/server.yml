@@ -31,6 +31,8 @@ jobs:
           yarn install
 
       - name: Build
+        env:
+          JWT_PRIVATE_KEY: none
         run: |
           cd server
           yarn build
