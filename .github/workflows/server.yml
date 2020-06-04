@@ -59,6 +59,8 @@ jobs:
       - uses: actions/checkout@v1
 
       - name: Build
+        env:
+          JWT_PRIVATE_KEY: none
         run: |
           cd server/
           yarn build:docker
