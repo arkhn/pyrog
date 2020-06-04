@@ -20,6 +20,9 @@ RUN yarn cache clean --force
 COPY prisma prisma
 COPY src src
 
+ARG JWT_PRIVATE_KEY
+ENV JWT_PRIVATE_KEY $JWT_PRIVATE_KEY
+
 RUN yarn prisma2 generate
 RUN yarn build
 

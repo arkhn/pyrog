@@ -6,6 +6,8 @@ services:
     container_name: pyrog-server
     build:
       context: .
+      args:
+        - JWT_PRIVATE_KEY=none
     ports:
       - 1000:1000
     env_file: .env.docker
