@@ -43,7 +43,11 @@ export const login: FieldResolver<'Mutation', 'login'> = async (
   await set(`user:${user.id}`, JSON.stringify(user))
 
   return {
-    token: sign({ userId: user.id }, JWT_SIGNING_KEY, { algorithm: 'ES256' }),
+    token: sign(
+      { user: { id: user.id, name: user.name, email: user.email } },
+      JWT_SIGNING_KEY,
+      { algorithm: 'ES256' },
+    ),
     user,
   }
 }
@@ -67,7 +71,11 @@ export const signup: FieldResolver<'Mutation', 'signup'> = async (
   await set(`user:${user.id}`, JSON.stringify(user))
 
   return {
-    token: sign({ userId: user.id }, JWT_SIGNING_KEY, { algorithm: 'ES256' }),
+    token: sign(
+      { user: { id: user.id, name: user.name, email: user.email } },
+      JWT_SIGNING_KEY,
+      { algorithm: 'ES256' },
+    ),
     user,
   }
 }

@@ -7,7 +7,11 @@ import cache from 'cache'
 import { Request } from 'express'
 
 interface Token {
-  userId: string
+  user: {
+    id: string
+    name: string
+    email: string
+  }
 }
 
 export const getUser = async (request: Request): Promise<User | null> => {
@@ -20,7 +24,7 @@ export const getUser = async (request: Request): Promise<User | null> => {
     if (!!verifiedToken) {
       const { get } = cache()
 
-      const cached = await get(`user:${verifiedToken.userId}`)
+      const cached = await get(`user:${verifiedToken.user.id}`)
       const user: User = JSON.parse(cached)
       return user
     }
