@@ -107,7 +107,7 @@ const ConceptMapDialog = ({
     // Fetch value sets and turns them to custom Terminology interface
     setIsLoadingValueSets(true);
     try {
-      const valueSets = await axios.get(`${FHIR_API_URL}/ValueSet?_count=500`);
+      const valueSets = await axios.get(`${FHIR_API_URL}/ValueSet?_count=1000`);
 
       const getConceptCodes = (element: any) =>
         element.concept
@@ -408,6 +408,7 @@ const ConceptMapDialog = ({
     }
 
     return {
+      resourceType: 'ConceptMap',
       name: conceptMapTitle,
       title: conceptMapTitle,
       ...(conceptMapDescription && { description: conceptMapDescription }),
