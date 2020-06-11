@@ -11,7 +11,7 @@ import PrivateRoute from './components/routes/privateRoute';
 import AdminRoute from './components/routes/adminRoute';
 
 const Routes = () => (
-  <BrowserRouter>
+  <BrowserRouter basename="/pyrog">
     <Switch>
       <Route path="/login" component={Authentication} />
       <PrivateRoute exact path="/" component={Sources} />

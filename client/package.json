@@ -2,6 +2,7 @@
   "name": "pyrog-client",
   "version": "0.2.0",
   "license": "GPL-3.0",
+  "homepage": "/pyrog",
   "scripts": {
     "start": "react-scripts start",
     "start:staging": "env $(cat .env.staging) react-scripts start",
