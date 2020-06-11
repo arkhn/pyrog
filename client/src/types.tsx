@@ -149,6 +149,7 @@ export interface CodeSystem {
 
 export interface ConceptMap {
   id?: string;
+  resourceType: string;
   title: string;
   name: string;
   sourceUri: string;
