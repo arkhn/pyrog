@@ -5,6 +5,7 @@
   "scripts": {
     "start": "react-scripts start",
     "start:staging": "env $(cat .env.staging) react-scripts start",
+    "start:demo": "env $(cat .env.demo) react-scripts start",
     "build": "react-scripts build",
     "docker:build:demo": "docker build -t arkhn/pyrog-client:demo --build-arg ENV_FILE=.env.demo .",
     "docker:build:local": "docker build -t arkhn/pyrog-client:latest --build-arg ENV_FILE=.env .",
