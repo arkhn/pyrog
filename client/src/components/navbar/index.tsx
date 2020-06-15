@@ -55,8 +55,12 @@ const Navbar = ({ exportMapping, exportAdditionalResource }: Props) => {
   const [exportConceptMaps, setExportConceptMaps] = React.useState(false);
   const [exportProfiles, setExportProfiles] = React.useState(false);
 
-  const { data } = useQuery(meQuery);
-  const isAdmin = data && data.me.role === 'ADMIN';
+  const isAdmin = user && user.role === 'ADMIN';
+  const isWriter =
+    source &&
+    source.accessControls.filter(
+      acl => acl.role === 'WRITER' && acl.user.id === user.id
+    ).length > 0;
 
   const customExport = async () => {
     exportMapping!(exportComments);
@@ -127,34 +131,38 @@ const Navbar = ({ exportMapping, exportAdditionalResource }: Props) => {
       <BPNavbar.Group align={Alignment.LEFT}>
         <BPNavbar.Divider />
         {source.name}
-        <BPNavbar.Divider />
-        <Button
-          icon="more"
-          minimal={true}
-          onClick={() => setIsDrawerOpen(true)}
-          text="Database"
-        />
-        <Button
-          icon="export"
-          minimal={true}
-          onClick={() => exportMapping!()}
-          text="Export mapping"
-        >
-          <Popover
-            content={renderExportMenu}
-            position={Position.BOTTOM_RIGHT}
-            isOpen={isExportMenuOpen}
-            onInteraction={(
-              nextOpenState: boolean,
-              e?: React.SyntheticEvent<HTMLElement>
-            ): void => {
-              setIsExportMenuOpen(nextOpenState);
-              e?.stopPropagation();
-            }}
-          >
-            <Icon className="icon-caret-down" icon="caret-down" />
-          </Popover>
-        </Button>
+        {(isAdmin || isWriter) && (
+          <React.Fragment>
+            <BPNavbar.Divider />
+            <Button
+              icon="more"
+              minimal={true}
+              onClick={() => setIsDrawerOpen(true)}
+              text="Database"
+            />
+            <Button
+              icon="export"
+              minimal={true}
+              onClick={() => exportMapping!()}
+              text="Export mapping"
+            >
+              <Popover
+                content={renderExportMenu}
+                position={Position.BOTTOM_RIGHT}
+                isOpen={isExportMenuOpen}
+                onInteraction={(
+                  nextOpenState: boolean,
+                  e?: React.SyntheticEvent<HTMLElement>
+                ): void => {
+                  setIsExportMenuOpen(nextOpenState);
+                  e?.stopPropagation();
+                }}
+              >
+                <Icon className="icon-caret-down" icon="caret-down" />
+              </Popover>
+            </Button>
+          </React.Fragment>
+        )}
         {isAdmin && (
           <Button
             icon="flame"
