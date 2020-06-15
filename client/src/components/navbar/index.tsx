@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import useReactRouter from 'use-react-router';
 
 import { loader } from 'graphql.macro';
-import { useQuery, useApolloClient } from '@apollo/react-hooks';
+import { useApolloClient } from '@apollo/react-hooks';
 
 import Drawer from './drawer';
 import Header from './header';
@@ -36,7 +36,6 @@ interface Props {
 }
 
 // Graphql
-const meQuery = loader('src/graphql/queries/me.graphql');
 const qUsedConceptMapIds = loader(
   'src/graphql/queries/usedConceptMapIds.graphql'
 );
