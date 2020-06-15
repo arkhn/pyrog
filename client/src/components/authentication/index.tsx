@@ -47,9 +47,9 @@ const AuthenticationView = (): React.ReactElement => {
   const onCompletedSignup = (data: any): void => {
     if (data.signup.token) {
       const token = data.signup.token;
-      const { id, name, email } = data.signup.user;
+      const signedUpUser = data.signup.user;
       localStorage.setItem(AUTH_TOKEN, token);
-      dispatch(loginAction(id, name, email));
+      dispatch(loginAction(signedUpUser));
       history.push('/');
     }
   };
@@ -70,9 +70,9 @@ const AuthenticationView = (): React.ReactElement => {
   const onCompletedLogin = (data: any) => {
     if (data.login.token) {
       const token = data.login.token;
-      const { id, name, email } = data.login.user;
+      const signedInUser = data.login.user;
       localStorage.setItem(AUTH_TOKEN, token);
-      dispatch(loginAction(id, name, email));
+      dispatch(loginAction(signedInUser));
       history.push('/');
     }
   };
