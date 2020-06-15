@@ -3,7 +3,8 @@ import { ISimpleAction } from 'types';
 const initialState: any = {
   id: null,
   email: null,
-  name: null
+  name: null,
+  role: null
 };
 
 export const user = (state = initialState, action: ISimpleAction): any => {
@@ -12,7 +13,8 @@ export const user = (state = initialState, action: ISimpleAction): any => {
       return {
         id: action.payload.id,
         email: action.payload.email,
-        name: action.payload.name
+        name: action.payload.name,
+        role: action.payload.role
       };
     }
 

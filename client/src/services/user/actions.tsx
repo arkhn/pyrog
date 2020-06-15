@@ -1,12 +1,13 @@
-import { IAction } from 'types';
+import { IAction, IUser } from 'types';
 
-export const login = (id: string, name: string, email: string): IAction => {
+export const login = ({ id, name, email, role }: IUser): IAction => {
   return {
     type: 'LOGIN',
     payload: {
       id,
       name,
-      email
+      email,
+      role
     }
   };
 };
