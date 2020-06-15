@@ -8,9 +8,9 @@
     "start:staging": "env $(cat .env.staging) react-scripts start",
     "start:demo": "env $(cat .env.demo) react-scripts start",
     "build": "react-scripts build",
-    "docker:build:demo": "docker build -t arkhn/pyrog-client:demo --build-arg ENV_FILE=.env.demo .",
-    "docker:build:local": "docker build -t arkhn/pyrog-client:latest --build-arg ENV_FILE=.env .",
-    "docker:build:staging": "docker build -t arkhn/pyrog-client:staging --build-arg ENV_FILE=.env.staging .",
+    "build:docker:demo": "docker build -t arkhn/pyrog-client:demo --build-arg ENV_FILE=.env.demo .",
+    "build:docker:local": "docker build -t arkhn/pyrog-client:latest --build-arg ENV_FILE=.env .",
+    "build:docker:staging": "docker build -t arkhn/pyrog-client:staging --build-arg ENV_FILE=.env.staging .",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint './src/**/*.{ts,tsx}'"

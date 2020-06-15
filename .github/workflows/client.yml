@@ -55,10 +55,10 @@ jobs:
       - name: Build staging and demo
         run: |
           cd client/
-          yarn docker:build:staging
-          yarn docker:build:demo
+          yarn build:docker:staging
+          yarn build:docker:demo
 
-      - name : Build Ambroise
+      - name: Build Ambroise
         env:
           IP: ${{ secrets.IP_VM_AMB }}
           STAGE: ambroise
@@ -66,8 +66,8 @@ jobs:
           cd client
           ./scripts/generate_client_env.sh > .env.ambroise
           docker build -t arkhn/pyrog-client:ambroise --build-arg ENV_FILE=.env.ambroise .
-          
-      - name : Build AP
+
+      - name: Build AP
         env:
           IP: ${{ secrets.IP_VM_AP }}
           STAGE: aphp
@@ -76,7 +76,7 @@ jobs:
           ./scripts/generate_client_env.sh > .env.aphp
           docker build -t arkhn/pyrog-client:aphp --build-arg ENV_FILE=.env.aphp .
 
-      - name : Build Clb
+      - name: Build Clb
         env:
           IP: ${{ secrets.IP_VM_CLB }}
           STAGE: clb
@@ -85,7 +85,7 @@ jobs:
           ./scripts/generate_client_env.sh > .env.clb
           docker build -t arkhn/pyrog-client:clb --build-arg ENV_FILE=.env.clb .
 
-      - name : Build Curie
+      - name: Build Curie
         env:
           IP: ${{ secrets.IP_VM_CURIE }}
           STAGE: curie
@@ -94,7 +94,7 @@ jobs:
           ./scripts/generate_client_env.sh > .env.curie
           docker build -t arkhn/pyrog-client:curie --build-arg ENV_FILE=.env.curie .
 
-      - name : Build RMS
+      - name: Build RMS
         env:
           IP: ${{ secrets.IP_VM_REIMS }}
           STAGE: rms
@@ -102,7 +102,7 @@ jobs:
           cd client
           ./scripts/generate_client_env.sh > .env.rms
           docker build -t arkhn/pyrog-client:rms --build-arg ENV_FILE=.env.rms .
-  
+
       - name: Tag docker images
         run: |
           docker tag $IMAGE:staging $IMAGE:$GITHUB_SHA
@@ -122,8 +122,6 @@ jobs:
           docker push $IMAGE:clb
           docker push $IMAGE:curie
           docker push $IMAGE:rms
-
-
 
       - name: Publish to Github Packages
         run: |
