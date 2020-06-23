@@ -22,3 +22,10 @@ _Note: Pyrog is a very modular platform, you will benefit from using our dedicat
 We have reported several issues with the label `Good first issue` which can be a good way to start! You can also join our [Slack](https://join.slack.com/t/arkhn/shared_invite/zt-7ccdmm81-il2NOcS7iM6goZ_4OHC2qQ) to contact us if you have trouble or questions :)
 
 If you're enthusiastic about our project, :star: it to show your support! :heart:
+
+## Dumping and restoring
+
+```
+ pg_dump -h 51.158.119.205 -p 55432 --username=prisma --password -d prisma -n pyrog --format=c -f dump.sql
+ pg_restore -h localhost -p 5432 --username=prisma -d prisma -F c dump.sql
+```

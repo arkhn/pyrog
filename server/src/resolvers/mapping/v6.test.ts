@@ -34,7 +34,6 @@ describe('import mapping V6', () => {
       data: {
         id: resources[0].id,
         label: resources[0].label,
-        primaryKeyOwner: resources[0].primaryKeyOwner,
         primaryKeyTable: resources[0].primaryKeyTable,
         primaryKeyColumn: resources[0].primaryKeyColumn,
         source: {
@@ -85,7 +84,6 @@ describe('import mapping V6', () => {
                 create: {
                   id: expect.any(String),
                   column: 'CHAMBRE',
-                  owner: 'OPS$ACHQ1ABC',
                   table: 'SEJOUR',
                 },
               },

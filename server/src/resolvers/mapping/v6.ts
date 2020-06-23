@@ -16,6 +16,7 @@ const cleanResourceV6 = (resource: Resource) => {
   const r = clean(resource)
   delete r.definition
   delete r.source
+  delete r.primaryKeyOwner
   return r
 }
 

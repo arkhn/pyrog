@@ -1478,6 +1478,31 @@
       "arity": "Optional"
     },
     {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Comment",
+          "field": "attributeId"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Comment",
+          "field": "attributeId"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"attribute\""
+    },
+    {
       "tag": "CreateField",
       "model": "Comment",
       "field": "attribute",

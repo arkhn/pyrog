@@ -98,7 +98,7 @@ model Comment {
   validation  Boolean    @default(false)
   authorId    String     @map("author")
   author      User       @relation(fields: [authorId], references: [id])
-  attributeId String?
+  attributeId String?    @map("attribute")
   attribute   Attribute? @relation(fields: [attributeId], references: [id])
   updatedAt   DateTime   @updatedAt
   createdAt   DateTime   @default(now())

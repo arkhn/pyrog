@@ -8,15 +8,12 @@ import {
   MAPPING_VERSION_5,
   MAPPING_VERSION_6,
   MAPPING_VERSION_7,
+  MAPPING_VERSION_8,
   CURRENT_MAPPING_VERSION,
 } from '../../constants'
-import handleV1 from './v1'
-import handleV2 from './v2'
-import handleV3 from './v3'
-import handleV4 from './v4'
-import handleV5 from './v5'
 import handleV6 from './v6'
 import handleV7 from './v7'
+import handleV8 from './v8'
 import { getDefinition } from 'fhir'
 
 // copy all the resources from the mapping and their attributes.
@@ -35,19 +32,31 @@ export const importMapping = async (
   }
   switch (version) {
     case MAPPING_VERSION_1:
-      return handleV1(prismaClient, sourceId, resources)
+      throw new Error(
+        `Your mapping version (v${MAPPING_VERSION_1}) is no longer supported. Please upgrade your export.`,
+      )
     case MAPPING_VERSION_2:
-      return handleV2(prismaClient, sourceId, resources)
+      throw new Error(
+        `Your mapping version (v${MAPPING_VERSION_2}) is no longer supported. Please upgrade your export.`,
+      )
     case MAPPING_VERSION_3:
-      return handleV3(prismaClient, sourceId, resources)
+      throw new Error(
+        `Your mapping version (v${MAPPING_VERSION_3}) is no longer supported. Please upgrade your export.`,
+      )
     case MAPPING_VERSION_4:
-      return handleV4(prismaClient, sourceId, resources)
+      throw new Error(
+        `Your mapping version (v${MAPPING_VERSION_4}) is no longer supported. Please upgrade your export.`,
+      )
     case MAPPING_VERSION_5:
-      return handleV5(prismaClient, sourceId, resources)
+      throw new Error(
+        `Your mapping version (v${MAPPING_VERSION_5}) is no longer supported. Please upgrade your export.`,
+      )
     case MAPPING_VERSION_6:
       return handleV6(prismaClient, sourceId, resources)
     case MAPPING_VERSION_7:
       return handleV7(prismaClient, sourceId, resources)
+    case MAPPING_VERSION_8:
+      return handleV8(prismaClient, sourceId, resources)
     default:
       throw new Error(`Unknown mapping version: "${version}"`)
   }
