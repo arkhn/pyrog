@@ -1,12 +1,11 @@
-# ----> TODO: prisma2 cannot run in alpine yet since it needs some glibc library (https://github.com/prisma/photonjs/issues/173)
-# ###############################################################################
-# Step 2 : Run image
-#
-FROM node:12.13-slim
+FROM node:13-alpine
+
+RUN apk update && apk add openssl-dev libssl1.1 wget unzip git
 
 WORKDIR /home/node/app
 
-ENV POSTGRES_URL=${POSTGRES_URL}
+ENV POSTGRES_URL=postgresql://required:by@prisma/generate
+ENV JWT_PRIVATE_KEY=requiredToBuildTheApp
 
 # Install deps for production only
 COPY package.json package.json
@@ -20,7 +19,6 @@ RUN yarn cache clean --force
 COPY prisma prisma
 COPY src src
 
-RUN yarn prisma generate
 RUN yarn build
 
 COPY scripts scripts
