@@ -3,7 +3,6 @@ import cors from 'cors'
 import axios from 'axios'
 
 import { permissions } from 'permissions'
-import register from 'rest'
 
 import { schema } from './schema'
 import { createContext } from './context'
@@ -22,7 +21,6 @@ const server = new GraphQLServer({
 })
 
 server.express.use(cors())
-register(server.express)
 
 const options: Options = {
   cors: {
