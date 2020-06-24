@@ -4,7 +4,6 @@ export const {
   APP_SECRET,
   JWT_TOKEN,
   JWT_PRIVATE_KEY: priv,
-  SCHEMAS_DIR,
   FHIR_API_URL,
   PAGAI_URL,
   REDIS_URL,
