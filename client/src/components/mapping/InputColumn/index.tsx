@@ -163,7 +163,7 @@ const InputColumn = ({ input, schema, source }: Props) => {
                   }}
                 />
               </div>
-              {attribute.types[0] === 'code' && (
+              {['code', 'string'].includes(attribute.types[0]) && (
                 <div className="stacked-tags">
                   <Tag>CONCEPT MAP</Tag>
                   <ButtonGroup>
