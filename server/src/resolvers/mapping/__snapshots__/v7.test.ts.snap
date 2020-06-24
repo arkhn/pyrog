@@ -28,13 +28,11 @@ Array [
                                 Object {
                                   "column": "TWCLEUNIK",
                                   "id": "ck8iiui3g0884euutbugm7n1r",
-                                  "owner": "OPS$ACHQ1ABC",
                                   "table": "SEJOUR",
                                 },
                                 Object {
                                   "column": "TWCLEUNIK",
                                   "id": "ck8iiui3g0887euutfbeg2q1w",
-                                  "owner": "OPS$ACHQ1ABC",
                                   "table": "TYPESEJ",
                                 },
                               ],
@@ -42,7 +40,6 @@ Array [
                           },
                         ],
                       },
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "TYPESEJ",
                     },
                   },
@@ -88,7 +85,6 @@ Array [
                     "create": Object {
                       "column": "PACLEUNIK",
                       "id": "ck8iiui3h0904euutow06q7fr",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "SEJOUR",
                     },
                   },
@@ -118,7 +114,6 @@ Array [
                     "create": Object {
                       "column": "SERVICE",
                       "id": "ck8iiui3h0913euut4pe1okd6",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "SEJOUR",
                     },
                   },
@@ -142,7 +137,6 @@ Array [
                     "create": Object {
                       "column": "DATEIN",
                       "id": "ck8iiui3h0920euutrnmfy23u",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "SEJOUR",
                     },
                   },
@@ -156,7 +150,6 @@ Array [
                     "create": Object {
                       "column": "HEUREIN",
                       "id": "ck8iiui3h0923euut0o9d529y",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "SEJOUR",
                     },
                   },
@@ -180,7 +173,6 @@ Array [
                     "create": Object {
                       "column": "SECLEUNIK",
                       "id": "ck8iiui3h0931euut41jpxelx",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "SEJOUR",
                     },
                   },
@@ -204,7 +196,6 @@ Array [
                     "create": Object {
                       "column": "ETATSEJ",
                       "id": "ck8iiui3h0937euutgp9bkpn7",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "SEJOUR",
                     },
                   },
@@ -285,7 +276,6 @@ Array [
                     "create": Object {
                       "column": "HEUREOUT",
                       "id": "ck8iiui3h0957euut2ymeffbb",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "SEJOUR",
                     },
                   },
@@ -299,7 +289,6 @@ Array [
                     "create": Object {
                       "column": "DATEOUT",
                       "id": "ck8iiui3h0961euutboxn52xy",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "SEJOUR",
                     },
                   },
@@ -335,7 +324,6 @@ Array [
                     "create": Object {
                       "column": "ADMISSION",
                       "id": "ck8iiui3h0972euutm5dcshse",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "SEJOUR",
                     },
                   },
@@ -349,7 +337,6 @@ Array [
                     "create": Object {
                       "column": "ADMISSION2",
                       "id": "ck8iiui3h0975euutx0l30vvb",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "SEJOUR",
                     },
                   },
@@ -373,7 +360,6 @@ Array [
                     "create": Object {
                       "column": "TWCLEUNIK",
                       "id": "ck8iiui3h0982euutxt0rkzix",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "SEJOUR",
                     },
                   },
@@ -424,7 +410,6 @@ Array [
               "create": Object {
                 "column": "CHAMBRE",
                 "id": "ck8iiui3h1000euutdbxfu1pc",
-                "owner": "OPS$ACHQ1ABC",
                 "table": "SEJOUR",
               },
             },
@@ -435,7 +420,6 @@ Array [
       "id": "ck8iiui3g0872euut6adjvfnr",
       "label": "Hospital Stay",
       "primaryKeyColumn": "SECLEUNIK",
-      "primaryKeyOwner": "OPS$ACHQ1ABC",
       "primaryKeyTable": "SEJOUR",
       "source": Object {
         "connect": Object {
@@ -504,7 +488,6 @@ Array [
                     "create": Object {
                       "column": "DOSSIERPAT",
                       "id": "ck8iiui3g0886euutuxs3pf18",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
                   },
@@ -556,7 +539,6 @@ Array [
                     "create": Object {
                       "column": "NOMJFPAT",
                       "id": "ck8iiui3h0896euutbs1keubp",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
                   },
@@ -580,7 +562,6 @@ Array [
                     "create": Object {
                       "column": "SEXEPAT",
                       "id": "ck8iiui3h0901euutwnkvkkce",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
                   },
@@ -632,7 +613,6 @@ Array [
                     "create": Object {
                       "column": "CODESERV",
                       "id": "ck8iiui3h0914euutdsg7bypv",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
                   },
@@ -656,7 +636,6 @@ Array [
                     "create": Object {
                       "column": "NOOBSPAT",
                       "id": "ck8iiui3h0919euutq84e5y4s",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
                   },
@@ -708,7 +687,6 @@ Array [
                     "create": Object {
                       "column": "PACLEUNIK",
                       "id": "ck8iiui3h0932euutxe8cyhzl",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
                   },
@@ -732,7 +710,6 @@ Array [
                     "create": Object {
                       "column": "DATEINPAT",
                       "id": "ck8iiui3h0938euut659vuw8z",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
                   },
@@ -756,7 +733,6 @@ Array [
                     "create": Object {
                       "column": "DATEOUTPAT",
                       "id": "ck8iiui3h0943euutg93n40ko",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
                   },
@@ -780,7 +756,6 @@ Array [
                     "create": Object {
                       "column": "NOMPAT",
                       "id": "ck8iiui3h0949euutvljkeug7",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
                   },
@@ -804,7 +779,6 @@ Array [
                     "create": Object {
                       "column": "TELPAT",
                       "id": "ck8iiui3h0955euutakdfx2xz",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
                   },
@@ -828,7 +802,6 @@ Array [
                     "create": Object {
                       "column": "DATENAISPA",
                       "id": "ck8iiui3h0962euutf0oxkj75",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
                   },
@@ -852,7 +825,6 @@ Array [
                     "create": Object {
                       "column": "IDMOTIFINAC",
                       "id": "ck8iiui3h0968euut23dh97gd",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
                   },
@@ -866,7 +838,6 @@ Array [
                     "create": Object {
                       "column": "INACTIVPAT",
                       "id": "ck8iiui3h0971euutj3twzt8e",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
                   },
@@ -896,7 +867,6 @@ Array [
                     "create": Object {
                       "column": "VILLEPAT",
                       "id": "ck8iiui3h0978euut83bd52kx",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
                   },
@@ -936,7 +906,6 @@ Array [
                     "create": Object {
                       "column": "INACTIVPAT",
                       "id": "ck8iiui3h0988euutxsvmfd7x",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
                   },
@@ -976,7 +945,6 @@ Array [
                     "create": Object {
                       "column": "PRENOMPAT",
                       "id": "ck8iiui3h0995euuteec5thl9",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
                   },
@@ -1012,7 +980,6 @@ Array [
                     "create": Object {
                       "column": "DATEINACPAT",
                       "id": "ck8iiui3h1002euutq3m8i7s4",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
                   },
@@ -1036,7 +1003,6 @@ Array [
                     "create": Object {
                       "column": "ADR3PAT",
                       "id": "ck8iiui3i1005euutkkjejufb",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
                   },
@@ -1050,7 +1016,6 @@ Array [
                     "create": Object {
                       "column": "ADR1PAT",
                       "id": "ck8iiui3i1007euut6w476cku",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
                   },
@@ -1064,7 +1029,6 @@ Array [
                     "create": Object {
                       "column": "ADR2PAT",
                       "id": "ck8iiui3i1009euutn19nzf2n",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
                   },
@@ -1088,7 +1052,6 @@ Array [
                     "create": Object {
                       "column": "CPOSTPAT",
                       "id": "ck8iiui3i1012euut314ev1fh",
-                      "owner": "OPS$ACHQ1ABC",
                       "table": "PATIENT",
                     },
                   },
@@ -1130,7 +1093,6 @@ Array [
       "id": "ck8iiui3g0873euutm08fnyrf",
       "label": "",
       "primaryKeyColumn": "PACLEUNIK",
-      "primaryKeyOwner": "OPS$ACHQ1ABC",
       "primaryKeyTable": "PATIENT",
       "source": Object {
         "connect": Object {

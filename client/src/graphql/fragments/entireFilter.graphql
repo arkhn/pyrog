@@ -2,7 +2,6 @@ fragment entireFilter on Filter {
   id
   sqlColumn {
     id
-    owner
     table
     column
   }

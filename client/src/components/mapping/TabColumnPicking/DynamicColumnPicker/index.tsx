@@ -35,7 +35,12 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
   const dispatch = useDispatch();
   const toaster = useSelector((state: IReduxStore) => state.toaster);
 
-  const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
+  const {
+    resource,
+    source: {
+      credential: { owner }
+    }
+  } = useSelector((state: IReduxStore) => state.selectedNode);
   const path = attribute.path;
 
   const attributesForResource = useSelector(
@@ -45,7 +50,6 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
     ? attributesForResource[path].id
     : null;
 
-  const [owner, setOwner] = React.useState(resource.primaryKeyOwner);
   const [table, setTable] = React.useState(resource.primaryKeyTable);
   const [column, setColumn] = React.useState('');
 
@@ -123,12 +127,6 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
       <FormGroup labelFor="text-input" inline={true}>
         <ControlGroup>
           <ColumnSelect
-            hasOwner={source.hasOwner}
-            ownerChangeCallback={(e: string) => {
-              setOwner(e);
-              setTable('');
-              setColumn('');
-            }}
             tableChangeCallback={(e: string) => {
               setTable(e);
               setColumn('');
@@ -136,7 +134,6 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
             columnChangeCallback={(e: string) => {
               setColumn(e);
             }}
-            initialOwner={owner}
             initialTable={table}
             sourceSchema={schema}
           />
@@ -148,7 +145,7 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
           />
         </ControlGroup>
       </FormGroup>
-      <TableViewer table={table} owner={owner} />
+      <TableViewer table={table} />
     </Card>
   );
 };

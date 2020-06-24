@@ -1,15 +1,9 @@
 mutation createSource(
   $templateName: String!
   $name: String!
-  $hasOwner: Boolean!
   $mapping: String
 ) {
-  createSource(
-    templateName: $templateName
-    name: $name
-    hasOwner: $hasOwner
-    mapping: $mapping
-  ) {
+  createSource(templateName: $templateName, name: $name, mapping: $mapping) {
     id
   }
 }

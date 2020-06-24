@@ -12,7 +12,6 @@ export const Source = objectType({
 
     t.model.name()
     t.model.version()
-    t.model.hasOwner()
 
     t.model.resources({ filtering: true })
     t.model.credential()
@@ -83,7 +82,7 @@ export const sources: FieldResolver<'Query', 'sources'> = async (
 
 export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
   _parent,
-  { templateName, name, hasOwner, mapping },
+  { templateName, name, mapping },
   ctx,
 ) => {
   // create the source
@@ -95,7 +94,6 @@ export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
     data: {
       id: parsedMapping ? parsedMapping.source.id : undefined,
       name,
-      hasOwner,
       template: { connect: { name: templateName } },
     },
   })
@@ -189,8 +187,8 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
                       where: { id: j.id },
                     })
                   }),
-                  ctx.prisma.column.delete({ where: { id: i.sqlValue.id } }),
                 ])
+                await ctx.prisma.column.delete({ where: { id: i.sqlValue.id } })
               }
               return ctx.prisma.input.delete({ where: { id: i.id } })
             }),

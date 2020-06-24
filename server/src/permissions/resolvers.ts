@@ -8,7 +8,7 @@ export const getSourceIdFromMutationArgs = async (
   const {
     accessControlId,
     sourceId,
-    credentialId,
+    databaseId,
     resourceId,
     attributeId,
     inputId,
@@ -21,8 +21,8 @@ export const getSourceIdFromMutationArgs = async (
     id = sourceId
   } else if (accessControlId) {
     id = await getSourceFromAccessControl(accessControlId, ctx)
-  } else if (credentialId) {
-    id = await getSourceFromCredential(credentialId, ctx)
+  } else if (databaseId) {
+    id = await getSourceFromCredential(databaseId, ctx)
   } else if (resourceId) {
     id = await getSourceFromResource(resourceId, ctx)
   } else if (attributeId) {

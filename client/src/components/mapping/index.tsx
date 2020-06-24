@@ -27,6 +27,7 @@ const MappingView = () => {
     (state: IReduxStore) => state.selectedNode
   );
   const [selectedTabId, setSelectedTabId] = React.useState('picker' as TabId);
+
   const client = useApolloClient();
 
   const exportMapping = async (includeComments = true): Promise<void> => {
@@ -128,16 +129,13 @@ const MappingView = () => {
   };
 
   const renderExistingRules = () => (
-    <InputColumns schema={source.schema} source={source} />
+    <InputColumns schema={source.credential.schema} source={source} />
   );
 
   const renderTable = () => {
     return (
       <div id="tableViewer">
-        <TableViewer
-          table={resource.primaryKeyTable}
-          owner={resource.primaryKeyOwner}
-        />
+        <TableViewer table={resource.primaryKeyTable} />
       </div>
     );
   };
@@ -157,7 +155,7 @@ const MappingView = () => {
               panel={
                 <TabColumnPicking
                   attribute={attribute}
-                  schema={source.schema}
+                  schema={source.credential.schema}
                   source={source}
                 />
               }
@@ -179,7 +177,7 @@ const MappingView = () => {
     );
   };
 
-  if (source && !source.schema) {
+  if (!source.credential || !source.credential.schema) {
     toaster.show({
       icon: 'error',
       intent: 'danger',

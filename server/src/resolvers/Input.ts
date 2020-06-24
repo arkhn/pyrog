@@ -71,12 +71,10 @@ export const createInput: FieldResolver<'Mutation', 'createInput'> = async (
               tables: {
                 create: [
                   {
-                    owner: j.source ? j.source.owner : '',
                     table: j.source ? j.source.table : '',
                     column: j.source ? j.source.column : '',
                   },
                   {
-                    owner: j.target ? j.target.owner : '',
                     table: j.target ? j.target.table : '',
                     column: j.target ? j.target.column : '',
                   },
@@ -91,7 +89,6 @@ export const createInput: FieldResolver<'Mutation', 'createInput'> = async (
     data: {
       sqlValue: {
         create: {
-          owner: sqlValue!.owner,
           table: sqlValue!.table,
           column: sqlValue!.column,
           joins: {

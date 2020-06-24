@@ -23,6 +23,34 @@ export const clean = (entry: any): any => {
   const ret = JSON.parse(JSON.stringify(entry))
   delete ret.updatedAt
   delete ret.createdAt
+  if (ret.owner !== undefined) {
+    delete ret.owner
+  }
+  if (ret.sourceId !== undefined) {
+    delete ret.sourceId
+  }
+  if (ret.resourceId !== undefined) {
+    delete ret.resourceId
+  }
+  if (ret.attributeId !== undefined) {
+    delete ret.attributeId
+  }
+  if (ret.joinId !== undefined) {
+    delete ret.joinId
+  }
+  if (ret.sqlColumnId !== undefined) {
+    delete ret.sqlColumnId
+  }
+  if (ret.sqlValueId !== undefined) {
+    delete ret.sqlValueId
+  }
+  if (ret.columnId !== undefined) {
+    delete ret.columnId
+  }
+  if (ret.userId !== undefined) {
+    delete ret.userId
+  }
+
   return ret
 }
 
@@ -65,7 +93,7 @@ export const checkAuthors = async (
 
 const buildJoinsQuery = (
   joins: JoinWithColumn[],
-): JoinCreateWithoutColumnInput[] | null =>
+): JoinCreateWithoutColumnInput[] | undefined =>
   joins.map(j => {
     const join: JoinCreateWithoutColumnInput = clean(j)
     if (j.tables && j.tables.length) {
@@ -78,7 +106,7 @@ const buildJoinsQuery = (
 
 const buildColumnQuery = (
   c: ColumnWithJoins,
-): ColumnCreateWithoutInputInput | null => {
+): ColumnCreateWithoutInputInput | undefined => {
   const column: ColumnCreateWithoutInputInput = clean(c)
   if (c.joins && c.joins.length) {
     column.joins = { create: buildJoinsQuery(c.joins) }
@@ -90,7 +118,7 @@ const buildColumnQuery = (
 
 export const buildInputsQuery = (
   inputs: InputWithColumn[],
-): InputCreateWithoutAttributeInput[] | null =>
+): InputCreateWithoutAttributeInput[] | undefined =>
   inputs.map(i => {
     const input: InputCreateWithoutAttributeInput = clean(i)
     if (i.sqlValue) {
@@ -110,7 +138,7 @@ export const buildCommentQueryPreV7 = (
 
 export const buildAttributesQueryPreV7 = (
   attributes: AttributeWithCommentsPreV7[],
-): AttributeCreateWithoutResourceInput[] | null =>
+): AttributeCreateWithoutResourceInput[] | undefined =>
   attributes.map(a => {
     const attr: AttributeCreateWithoutResourceInput = clean(a)
     if (a.inputs && a.inputs.length) {
@@ -144,7 +172,7 @@ export const buildCommentsQuery = (
 
 export const buildAttributesQuery = (
   attributes: AttributeWithComments[],
-): AttributeCreateWithoutResourceInput[] | null =>
+): AttributeCreateWithoutResourceInput[] | undefined =>
   attributes.map(a => {
     const attr: AttributeCreateWithoutResourceInput = clean(a)
     if (a.inputs && a.inputs.length) {
@@ -173,7 +201,7 @@ const buildColumnWithoutJoinsQuery = (
 
 export const buildFiltersQuery = (
   filters: FilterWithSqlColumn[],
-): FilterCreateInput[] | null =>
+): FilterCreateInput[] | undefined =>
   filters.map(f => {
     const filter: FilterCreateInput = clean(f)
     filter.sqlColumn = { create: buildColumnWithoutJoinsQuery(f.sqlColumn) }

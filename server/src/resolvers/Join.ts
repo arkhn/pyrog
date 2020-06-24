@@ -34,12 +34,6 @@ export const updateJoin: FieldResolver<'Mutation', 'updateJoin'> = async (
           {
             where: { id: join!.tables[0].id },
             data: {
-              owner:
-                !data.source || data.source.owner === undefined
-                  ? join!.tables[0].owner
-                  : data.source.owner
-                  ? data.source.owner
-                  : null,
               table:
                 !data.source || data.source.table === undefined
                   ? join!.tables[0].table
@@ -57,12 +51,6 @@ export const updateJoin: FieldResolver<'Mutation', 'updateJoin'> = async (
           {
             where: { id: join!.tables[1].id },
             data: {
-              owner:
-                !data.target || data.target.owner === undefined
-                  ? join!.tables[1].owner
-                  : data.target.owner
-                  ? data.target.owner
-                  : null,
               table:
                 !data.target || data.target.table === undefined
                   ? join!.tables[1].table

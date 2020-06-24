@@ -5,7 +5,6 @@ import { IAction, ISourceSchema, ISourceColumn } from 'types';
 interface Resource {
   id: string;
   label: string;
-  primaryKeyOwner: string;
   primaryKeyTable: string;
   primaryKeyColumn: string;
   filters: Filter[];
@@ -25,7 +24,6 @@ interface Filter {
 export const updateSelectedSource = (source: {
   id: string;
   name: string;
-  hasOwner: boolean;
   template: {
     name: string;
   };
@@ -40,23 +38,20 @@ export const updateSelectedSource = (source: {
   };
 };
 
-export const changeSelectedSource = (
-  source: {
-    id: string;
+export const changeSelectedSource = (source: {
+  id: string;
+  name: string;
+  template: {
     name: string;
-    hasOwner: boolean;
-    template: {
-      name: string;
-    };
-    credential: {
-      id: string;
-    };
-  },
-  schema: any
-): IAction => {
+  };
+  credential: {
+    id: string;
+    schema: ISourceSchema | string;
+  };
+}): IAction => {
   return {
     type: 'CHANGE_SOURCE',
-    payload: { ...source, schema }
+    payload: source
   };
 };
 

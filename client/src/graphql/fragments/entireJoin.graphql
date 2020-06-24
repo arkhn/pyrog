@@ -2,7 +2,6 @@ fragment entireJoin on Join {
   id
   tables {
     id
-    owner
     table
     column
   }

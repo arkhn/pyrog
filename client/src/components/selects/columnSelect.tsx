@@ -5,11 +5,8 @@ import StringSelect from 'components/selects/stringSelect';
 import { ISourceSchema } from 'types';
 
 export interface Props {
-  ownerChangeCallback?: Function;
   tableChangeCallback?: Function;
   columnChangeCallback?: Function;
-  hasOwner?: boolean;
-  initialOwner?: string;
   initialTable?: string;
   initialColumn?: string;
   sourceSchema: ISourceSchema;
@@ -21,11 +18,8 @@ export interface Props {
 }
 
 const ColumnSelect = ({
-  ownerChangeCallback,
   tableChangeCallback,
   columnChangeCallback,
-  hasOwner,
-  initialOwner,
   initialTable,
   initialColumn,
   sourceSchema,
@@ -35,19 +29,8 @@ const ColumnSelect = ({
   popoverProps,
   disabled
 }: Props): React.ReactElement => {
-  const [owner, setOwner] = useState(initialOwner);
   const [table, setTable] = useState(initialTable);
   const [column, setColumn] = useState(initialColumn);
-
-  const changeOwner = (e: string): void => {
-    setOwner(e);
-    setTable(undefined);
-    setColumn(undefined);
-
-    if (ownerChangeCallback) {
-      ownerChangeCallback(e);
-    }
-  };
 
   const changeTable = (e: string): void => {
     setTable(e);
@@ -66,36 +49,14 @@ const ColumnSelect = ({
     }
   };
 
-  const owners = Object.keys(sourceSchema);
+  const tables = Object.keys(sourceSchema);
 
-  const tables = hasOwner
-    ? owner
-      ? Object.keys(sourceSchema[owner])
-      : []
-    : Object.keys(sourceSchema);
-
-  const columns = table
-    ? ((hasOwner
-        ? ((sourceSchema[owner!] as { [key: string]: string[] })[
-            table
-          ] as string[])
-        : (sourceSchema[table] as string[])) as any)
-    : [];
+  const columns = table ? ((sourceSchema[table] as string[]) as any) : [];
 
   const controlGroup = (
     <ControlGroup vertical={vertical || false} fill={fill || false}>
-      {hasOwner ? (
-        <StringSelect
-          icon={'group-objects'}
-          inputItem={owner!}
-          items={owners}
-          onChange={changeOwner}
-          popoverProps={popoverProps || {}}
-          disabled={disabled}
-        />
-      ) : null}
       <StringSelect
-        disabled={disabled || (hasOwner && !owner)}
+        disabled={disabled}
         icon={'th'}
         inputItem={table!}
         items={tables}

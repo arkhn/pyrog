@@ -1,26 +1,27 @@
 import {
   Button,
-  Checkbox,
   FileInput,
   FormGroup,
   InputGroup,
   IToastProps,
-  ProgressBar
+  ProgressBar,
+  HTMLSelect,
+  Icon
 } from '@blueprintjs/core';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import React, { useState } from 'react';
-import { useApolloClient, useQuery } from '@apollo/react-hooks';
+import { useApolloClient, useQuery, useMutation } from '@apollo/react-hooks';
 import { useSelector } from 'react-redux';
 import useReactRouter from 'use-react-router';
+import { loader } from 'graphql.macro';
 
 import Navbar from 'components/navbar';
+import { onError } from 'services/apollo';
 
-import { FHIR_API_URL } from '../../constants';
+import { FHIR_API_URL, PAGAI_URL } from '../../constants';
 import { ITemplate, IReduxStore } from 'types';
 
 import './style.scss';
-import { loader } from 'graphql.macro';
-import { HTTP_BACKEND_URL } from '../../constants';
 
 // GRAPHQL OPERATIONS
 const qSourceAndTemplateNames = loader(
@@ -28,6 +29,11 @@ const qSourceAndTemplateNames = loader(
 );
 const mCreateTemplate = loader('src/graphql/mutations/createTemplate.graphql');
 const mCreateSource = loader('src/graphql/mutations/createSource.graphql');
+const mUpsertCredential = loader(
+  'src/graphql/mutations/upsertCredential.graphql'
+);
+
+const models = ['POSTGRES', 'ORACLE'];
 
 const NewSourceView = (): React.ReactElement => {
   const client = useApolloClient();
@@ -35,14 +41,22 @@ const NewSourceView = (): React.ReactElement => {
 
   const toaster = useSelector((state: IReduxStore) => state.toaster);
 
-  const [hasOwner, setHasOwner] = useState(false);
   const [templateName, setTemplateName] = useState('');
   const [templateExists, setTemplateExists] = useState(false);
   const [sourceName, setSourceName] = useState('');
-  const [schemaFile, setSchemaFile] = useState(undefined as File | undefined);
   const [mappingFile, setMappingFile] = useState(undefined as File | undefined);
   const [fhirBundleFile, setFhirBundleFile] = useState(
     undefined as File | undefined
+  );
+  const [host, setHost] = React.useState('');
+  const [port, setPort] = React.useState('');
+  const [login, setLogin] = React.useState('');
+  const [owner, setOwner] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [database, setDatabase] = React.useState('');
+  const [model, setModel] = React.useState(models[0]);
+  const [availableOwners, setAvailableOwners] = React.useState(
+    null as string[] | null
   );
 
   const { data: dataNames } = useQuery(qSourceAndTemplateNames, {
@@ -88,48 +102,6 @@ const NewSourceView = (): React.ReactElement => {
     };
   };
 
-  const uploadSchema = async (toastID: string): Promise<AxiosResponse> => {
-    if (!schemaFile) {
-      throw new Error('Database schema is missing');
-    }
-    if (!templateName) {
-      throw new Error('Template name is missing');
-    }
-    if (!sourceName) {
-      throw new Error('Source name is missing');
-    }
-
-    const fileName = templateName.concat('_', sourceName);
-    const formData = new FormData();
-    formData.append('schema', schemaFile, fileName);
-
-    const CancelToken = axios.CancelToken;
-    let cancel: any;
-
-    return axios.request({
-      cancelToken: new CancelToken((c: any) => {
-        cancel = c;
-      }),
-      data: formData,
-      method: 'post',
-      url: `${HTTP_BACKEND_URL}/upload`,
-      onUploadProgress: p => {
-        toaster.show(
-          renderToastProps({
-            action: {
-              onClick: () => {
-                cancel();
-              },
-              text: 'Interrompre'
-            },
-            uploadProgress: p.loaded / p.total
-          }),
-          toastID
-        );
-      }
-    });
-  };
-
   const createTemplate = () =>
     client.mutate({
       mutation: mCreateTemplate,
@@ -138,7 +110,7 @@ const NewSourceView = (): React.ReactElement => {
       }
     });
 
-  const createSource = async (): Promise<void> => {
+  const createSource = async (): Promise<any> => {
     if (mappingFile) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -154,15 +126,16 @@ const NewSourceView = (): React.ReactElement => {
             reject(new Error(`could not parse ${mappingFile.name} as JSON`));
           }
           try {
-            await client.mutate({
+            const { data } = await client.mutate({
               mutation: mCreateSource,
               variables: {
                 templateName,
-                hasOwner,
                 mapping,
+                credentialId: null,
                 name: sourceName
               }
             });
+            resolve(data.createSource);
           } catch (err) {
             reject(
               new Error(
@@ -170,19 +143,19 @@ const NewSourceView = (): React.ReactElement => {
               )
             );
           }
-          resolve();
         };
         reader.onerror = (e: ProgressEvent<FileReader>): void => reject(e);
       });
     } else {
-      await client.mutate({
+      const { data } = await client.mutate({
         mutation: mCreateSource,
         variables: {
           templateName,
-          hasOwner,
-          name: sourceName
+          name: sourceName,
+          credentialId: null
         }
       });
+      return data.createSource;
     }
   };
 
@@ -231,6 +204,49 @@ const NewSourceView = (): React.ReactElement => {
     });
   };
 
+  const fetchAvailableOwners = async (credentials: {
+    model: string;
+    host: string;
+    port: string;
+    database: string;
+    login: string;
+    password: string;
+  }) => {
+    try {
+      const { data } = await axios.post(`${PAGAI_URL}/get_owners`, credentials);
+      setAvailableOwners(data);
+    } catch (err) {
+      setAvailableOwners(null);
+      toaster.show({
+        message: `Could not fetch available database owners: ${
+          err.response ? err.response.data.error : err.message
+        }`,
+        intent: 'danger',
+        icon: 'warning-sign',
+        timeout: 5000
+      });
+    }
+  };
+
+  const submitCredentials = async (source: { id: string }) => {
+    await upsertCredential({
+      variables: {
+        host,
+        port,
+        login,
+        database,
+        owner,
+        password,
+        model,
+        sourceId: source.id
+      }
+    });
+  };
+
+  const [upsertCredential] = useMutation(mUpsertCredential, {
+    onError: onError(toaster)
+  });
+
   const onFormSubmit = async (e: any): Promise<void> => {
     e.preventDefault();
 
@@ -244,36 +260,28 @@ const NewSourceView = (): React.ReactElement => {
     );
 
     try {
-      const uploadResponse = await uploadSchema(toastID);
-
-      if (uploadResponse.data.success) {
-        // Create new template in Graphql if it doesn't exist
-        if (!templateExists) {
-          await createTemplate();
-        }
-        // Create new source
-        await createSource();
-        // Upload bundle
-        await uploadFhirBundle();
-        // After source is created,
-        // redirect to /sources page.
-        toaster.show(
-          renderToastProps({
-            message: `Source ${sourceName} was created`,
-            success: true
-          }),
-          toastID
-        );
-        history.push('/');
-      } else {
-        toaster.show(
-          renderToastProps({
-            message: uploadResponse.data.message,
-            success: uploadResponse.data.success
-          }),
-          toastID
-        );
+      // Create new template in Graphql if it doesn't exist
+      if (!templateExists) {
+        await createTemplate();
       }
+      // Create new source
+      const source = await createSource();
+
+      // create database credentials
+      await submitCredentials(source);
+
+      // Upload bundle
+      await uploadFhirBundle();
+      // After source is created,
+      // redirect to /sources page.
+      toaster.show(
+        renderToastProps({
+          message: `Source ${sourceName} was created`,
+          success: true
+        }),
+        toastID
+      );
+      history.push('/');
     } catch (e) {
       toaster.show(
         renderToastProps({
@@ -284,39 +292,6 @@ const NewSourceView = (): React.ReactElement => {
       );
     }
   };
-
-  const schemaType = `
-    [owner: string] : {
-        [table: string]: string[]
-    }`;
-
-  const schemaExample = `
-    {
-        "$SYSTEM": {
-            "PATIENT": [
-                "ID",
-                "PRENOM",
-                "NOM"
-            ]
-        },
-    }`;
-
-  const sqlCommand = `
-    SELECT OWNER, TABLE_NAME, COLUMN_NAME, DATA_TYPE FROM all_tab_columns;
-    `;
-
-  const sqlplusCommand = `
-    set heading off;
-    set underline off;
-    set pagesize 0;
-    set colsep ";";
-    set trimspool on;
-    set headsep off;
-    set linesize 1000;
-    set numw 64;
-    spool schema_name.csv
-    SELECT OWNER, TABLE_NAME, COLUMN_NAME, DATA_TYPE FROM all_tab_columns;
-    `;
 
   return (
     <div>
@@ -336,7 +311,6 @@ const NewSourceView = (): React.ReactElement => {
             placeholder="Nom du template..."
             value={templateName}
           />
-
           <h1>Nom de la source</h1>
           <FormGroup
             helperText={
@@ -360,34 +334,6 @@ const NewSourceView = (): React.ReactElement => {
               value={sourceName}
             />
           </FormGroup>
-
-          <h1>Schéma de la base *</h1>
-          <FileInput
-            fill
-            inputProps={{
-              onChange: (event: React.FormEvent<HTMLInputElement>): void => {
-                const target = event.target as any;
-                setSchemaFile(target.files[0]);
-              },
-              name: 'schema'
-            }}
-            text={
-              schemaFile ? (
-                schemaFile.name
-              ) : (
-                <p className="disabled-text">Importer un schéma...</p>
-              )
-            }
-          />
-          <br />
-          <Checkbox
-            checked={hasOwner}
-            label="Le schéma a un OWNER"
-            onChange={(event: React.FormEvent<HTMLElement>): void =>
-              setHasOwner(!hasOwner)
-            }
-          />
-          <br />
           <h1>Importer un mapping existant (optionnel)</h1>
           <FileInput
             fill
@@ -424,11 +370,119 @@ const NewSourceView = (): React.ReactElement => {
               )
             }
           />
+          <h1>Database Credentials</h1>
+          <div>
+            <div className="db-credential-container">
+              <InputGroup
+                className="credential-field"
+                value={host}
+                leftIcon={'desktop'}
+                onChange={(event: any): void => {
+                  setHost(event.target.value);
+                }}
+                placeholder={'Host'}
+              />
+              <InputGroup
+                className="credential-field"
+                value={port}
+                leftIcon={'numerical'}
+                onChange={(event: any): void => {
+                  setPort(event.target.value);
+                }}
+                placeholder={'Port'}
+              />
+              <InputGroup
+                className="credential-field"
+                value={database}
+                leftIcon={'database'}
+                onChange={(event: any): void => {
+                  setDatabase(event.target.value);
+                }}
+                placeholder={'Database name'}
+              />
+              <InputGroup
+                className="credential-field"
+                value={login}
+                leftIcon={'user'}
+                onChange={(event: any): void => {
+                  setLogin(event.target.value);
+                }}
+                placeholder={'Login'}
+              />
+              <InputGroup
+                className="credential-field"
+                value={password}
+                leftIcon={'key'}
+                onChange={(event: any): void => {
+                  setPassword(event.target.value);
+                }}
+                placeholder={'Password'}
+                type={'password'}
+              />
+            </div>
+            <div className="db-credential-container">
+              <FormGroup
+                label="Database model"
+                labelFor="text-input"
+                className="credential-field"
+              >
+                <HTMLSelect
+                  options={models || []}
+                  onChange={ev => {
+                    setModel(ev.currentTarget.value);
+                  }}
+                />
+              </FormGroup>
+              <FormGroup
+                label="Database owner"
+                labelFor="text-input"
+                className="credential-field"
+              >
+                <HTMLSelect
+                  disabled={!availableOwners}
+                  options={availableOwners || []}
+                  onChange={ev => {
+                    setOwner(ev.currentTarget.value);
+                  }}
+                />
+              </FormGroup>
+            </div>
+            {!availableOwners && (
+              <Button
+                intent="primary"
+                disabled={
+                  !(host && port && database && login && password && model)
+                }
+                icon={<Icon intent={'success'} icon={'link'} />}
+                onClick={() =>
+                  fetchAvailableOwners({
+                    host,
+                    port,
+                    database,
+                    login,
+                    password,
+                    model
+                  })
+                }
+              >
+                Connect database
+              </Button>
+            )}
+          </div>
           <div className="align-right">
             <Button
               disabled={
-                !templateName ||
-                !sourceName ||
+                !(
+                  templateName &&
+                  sourceName &&
+                  host &&
+                  port &&
+                  database &&
+                  login &&
+                  password &&
+                  model &&
+                  owner
+                ) ||
                 (templateName in mapTemplateToSourceNames &&
                   mapTemplateToSourceNames[templateName].indexOf(sourceName) >=
                     0)
@@ -440,36 +494,6 @@ const NewSourceView = (): React.ReactElement => {
               Ajouter
             </Button>
           </div>
-
-          <p>
-            * Une source de données doit nécessairement être importée avec un
-            schéma de données SQL. Ce schéma doit être importé au format JSON et
-            organisé comme suit :
-          </p>
-          <pre>
-            <code dangerouslySetInnerHTML={{ __html: schemaType }} />
-          </pre>
-          <p>
-            Voici un exemple minimaliste de fichier représentant un schéma de
-            base de données JSON tel qu'il est requis par notre application à
-            l'heure actuelle :
-          </p>
-          <pre>
-            <code dangerouslySetInnerHTML={{ __html: schemaExample }} />
-          </pre>
-          <p>
-            Le schéma de données peut-être extrait en utilisant le logiciel Toad
-            avec cette commande SQL :
-          </p>
-          <pre>
-            <code dangerouslySetInnerHTML={{ __html: sqlCommand }} />
-          </pre>
-          <p>
-            ou en ligne de commande avec <code>sqlplus</code> :
-          </p>
-          <pre>
-            <code dangerouslySetInnerHTML={{ __html: sqlplusCommand }} />
-          </pre>
         </form>
       </div>
     </div>

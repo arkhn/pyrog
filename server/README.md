@@ -5,6 +5,12 @@
 In dev, .env file must be used to run commands. You can use `env $(cat .env) yarn ...`
 but the simplest solution is to install dotenv globallay (`yarn global add dotenv`).
 
+But first you have to edit your environment file with a variable:
+
+```
+JWT_PRIVATE_KEY=$(openssl ecparam -name secp256k1 -genkey -noout -out private.pem)
+```
+
 ```sh
 yarn # install dependencies
 dotenv yarn generate # generate the "@prisma/client" dependency, required by prisma

@@ -9,7 +9,6 @@ import { loader } from 'graphql.macro';
 import Navbar from 'components/navbar';
 
 import { changeSelectedSource } from 'services/selectedNode/actions';
-import { HTTP_BACKEND_URL } from '../../constants';
 import { onError } from 'services/apollo';
 import { IReduxStore, ISelectedSource } from 'types';
 
@@ -73,19 +72,9 @@ const SourcesView = (): React.ReactElement => {
   );
 
   const onSelectSource = async (source: ISelectedSource) => {
-    try {
-      const response = await fetch(
-        `${HTTP_BACKEND_URL}/schemas/${source.template.name}_${source.name}.json`
-      );
-      const body = await response.json();
-      if (response.status !== 200) {
-        throw new Error(body.error);
-      }
-      dispatch(changeSelectedSource(source, body));
-    } catch (err) {
-      console.log(`error fetching source schema: ${err}`);
-      dispatch(changeSelectedSource(source, undefined));
-    }
+    if (source.credential)
+      source.credential.schema = JSON.parse(source.credential.schema as string);
+    dispatch(changeSelectedSource(source));
     history.push({
       pathname: '/mapping',
       search: QueryString.stringify({

@@ -10,7 +10,6 @@ fragment entireInput on Input {
   staticValue
   sqlValue {
     id
-    owner
     table
     column
     joins {

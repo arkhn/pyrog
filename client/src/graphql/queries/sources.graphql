@@ -1,15 +1,16 @@
+#import "../fragments/entireCredential.graphql"
+
 query sources {
   sources {
     id
     name
-    hasOwner
     mappingProgress
     template {
       id
       name
     }
     credential {
-      id
+      ...entireCredential
     }
     accessControls {
       id
