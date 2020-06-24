@@ -64,7 +64,6 @@ const UpdateDatabaseCredentials = (): React.ReactElement => {
     login: string;
     password: string;
   }) => {
-    // Fetch concept maps
     try {
       const { data } = await axios.post(`${PAGAI_URL}/get_owners`, credentials);
       setAvailableOwners(data);
