@@ -35,12 +35,7 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
   const dispatch = useDispatch();
   const toaster = useSelector((state: IReduxStore) => state.toaster);
 
-  const {
-    resource,
-    source: {
-      credential: { owner }
-    }
-  } = useSelector((state: IReduxStore) => state.selectedNode);
+  const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
   const path = attribute.path;
 
   const attributesForResource = useSelector(
@@ -100,7 +95,6 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
         variables: {
           attributeId,
           columnInput: {
-            owner: owner || '',
             table: table,
             column: column
           }
