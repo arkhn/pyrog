@@ -1,7 +1,6 @@
 import { GraphQLServer, Options } from 'graphql-yoga'
 import cors from 'cors'
 import axios from 'axios'
-import * as express from 'express'
 
 import { permissions } from 'permissions'
 
@@ -33,13 +32,9 @@ const options: Options = {
 }
 const { PORT } = process.env
 
-server.get('/', (req: express.Request, res: express.Response) => {
-  res.status(404).send('NOT FOUND')
-})
-
 const main = async () => {
   await bootstrapDefinitions()
-  await server.start(options, () =>
+  server.start(options, () =>
     console.log(
       `🚀 Server ready at: http://localhost:${PORT || 4000}
       \n⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️`,
