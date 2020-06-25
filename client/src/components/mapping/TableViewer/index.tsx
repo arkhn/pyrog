@@ -86,9 +86,7 @@ const TableViewer = ({ table }: IProps) => {
     if (resource && table) {
       setLoading(true);
       axios
-        .get(`${PAGAI_URL}/explore/${resource.id}/${table}`, {
-          params: { schema: credential.owner }
-        })
+        .get(`${PAGAI_URL}/explore/${resource.id}/${table}`)
         .then((res: any) => {
           setLoading(false);
           setRows(res.data.rows);

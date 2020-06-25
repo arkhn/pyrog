@@ -34,7 +34,7 @@ const { PORT } = process.env
 
 const main = async () => {
   await bootstrapDefinitions()
-  await server.start(options, () =>
+  server.start(options, () =>
     console.log(
       `🚀 Server ready at: http://localhost:${PORT || 4000}
       \n⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️`,
