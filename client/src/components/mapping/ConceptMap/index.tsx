@@ -378,6 +378,7 @@ const ConceptMapDialog = ({
       name: newTerminologyName,
       title: newTerminologyName,
       url: newTerminologyCodeSystemUrl,
+      valueSet: newTerminologyValueSetUrl,
       concept: concepts
     };
   };

@@ -151,6 +151,7 @@ export interface CodeSystem {
   title: string;
   name: string;
   url: string;
+  valueSet: string;
   concept: Concept[];
 }
 
