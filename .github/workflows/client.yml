@@ -56,6 +56,7 @@ jobs:
         run: |
           cd client/
           yarn build:docker:staging
+          yarn build:docker:dev
           yarn build:docker:demo
 
       - name: Build Ambroise
@@ -105,16 +106,15 @@ jobs:
 
       - name: Tag docker images
         run: |
-          docker tag $IMAGE:staging $IMAGE:$GITHUB_SHA
-          docker tag $IMAGE:staging $GITHUB_REGISTRY/${{ github.repository }}/pyrog-client:$GITHUB_SHA
-
-          docker tag $IMAGE:staging $GITHUB_REGISTRY/${{ github.repository }}/pyrog-client:staging
-          docker tag $IMAGE:demo $GITHUB_REGISTRY/${{ github.repository }}/pyrog-client:demo
+          docker tag $IMAGE:staging $IMAGE:staging/$GITHUB_SHA
+          docker tag $IMAGE:demo $IMAGE:demo/$GITHUB_SHA
+          docker tag $IMAGE:dev $IMAGE:dev/$GITHUB_SHA
 
       - name: Publish to the docker hub
         run: |
           echo "${{ secrets.DOCKER_PASSWORD }}" |  docker login -u ${{ secrets.DOCKER_LOGIN }} --password-stdin
           docker push $IMAGE:staging
+          docker push $IMAGE:dev
           docker push $IMAGE:demo
           docker push $IMAGE:$GITHUB_SHA
           docker push $IMAGE:ambroise
@@ -122,10 +122,3 @@ jobs:
           docker push $IMAGE:clb
           docker push $IMAGE:curie
           docker push $IMAGE:rms
-
-      - name: Publish to Github Packages
-        run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login $GITHUB_REGISTRY -u ${{ github.actor }} --password-stdin
-          docker push $GITHUB_REGISTRY/${{ github.repository }}/pyrog-client:staging
-          docker push $GITHUB_REGISTRY/${{ github.repository }}/pyrog-client:demo
-          docker push $GITHUB_REGISTRY/${{ github.repository }}/pyrog-client:$GITHUB_SHA
