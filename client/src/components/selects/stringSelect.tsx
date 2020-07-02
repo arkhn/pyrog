@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { MenuItem, Intent, IPopoverProps } from '@blueprintjs/core';
 
-import { ItemPredicate, ItemRenderer } from '@blueprintjs/select';
+import { ItemListPredicate, ItemRenderer } from '@blueprintjs/select';
 import { IconName } from '@blueprintjs/icons';
 
 import TSelect from './TSelect';
@@ -13,6 +13,7 @@ interface ISelectProps {
   inputItem: string;
   intent?: Intent;
   items: string[];
+  maxItems?: number;
   loading?: boolean;
   filterable?: boolean;
   onChange: any;
@@ -27,8 +28,10 @@ export default class StringSelect extends React.Component<ISelectProps, any> {
     return <MenuItem key={item} onClick={handleClick} text={item} />;
   };
 
-  private filterByName: ItemPredicate<string> = (query, item) => {
-    return `${item.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0;
+  private filterList: ItemListPredicate<string> = (query, items) => {
+    return items
+      .filter(item => `${item.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0)
+      .slice(0, this.props.maxItems || 100);
   };
 
   private sortItems = (resources: string[]) => {
@@ -64,7 +67,7 @@ export default class StringSelect extends React.Component<ISelectProps, any> {
       <TSelect<string>
         disabled={!!disabled}
         displayItem={displayItem || this.displayItem}
-        filterItems={this.filterByName}
+        filterList={this.filterList}
         filterable={filterable}
         loading={loading}
         icon={icon}

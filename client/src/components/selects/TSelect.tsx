@@ -8,6 +8,7 @@ import {
 import { IconName } from '@blueprintjs/icons';
 import {
   ItemPredicate,
+  ItemListPredicate,
   ItemRenderer,
   ItemListRenderer,
   Select
@@ -26,7 +27,8 @@ interface ISelectProps<T> {
   isMenuItem?: boolean;
   className?: string;
   rightIcon?: IconName;
-  filterItems: ItemPredicate<T>;
+  filterItems?: ItemPredicate<T>;
+  filterList?: ItemListPredicate<T>;
   filterable?: boolean;
   items: T[];
   itemDisabled?: (item: T, index: number) => boolean;
@@ -56,6 +58,7 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
       className,
       rightIcon,
       filterItems,
+      filterList,
       filterable,
       isMenuItem,
       icon,
@@ -103,6 +106,7 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
         items={items}
         itemDisabled={itemDisabled}
         itemPredicate={filterItems}
+        itemListPredicate={filterList}
         itemRenderer={renderItem}
         itemListRenderer={renderList}
         noResults={<MenuItem disabled={true} text="No results." />}
