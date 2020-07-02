@@ -60,6 +60,7 @@ const ColumnSelect = ({
         icon={'th'}
         inputItem={table!}
         items={tables}
+        maxItems={100}
         onChange={changeTable}
         popoverProps={popoverProps || {}}
       />
@@ -68,6 +69,7 @@ const ColumnSelect = ({
         icon={'column-layout'}
         inputItem={column!}
         items={columns}
+        maxItems={100}
         onChange={changeColumn}
         popoverProps={popoverProps || {}}
       />

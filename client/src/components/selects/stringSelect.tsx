@@ -13,6 +13,7 @@ interface ISelectProps {
   inputItem: string;
   intent?: Intent;
   items: string[];
+  maxItems?: number;
   loading?: boolean;
   filterable?: boolean;
   onChange: any;
@@ -30,7 +31,7 @@ export default class StringSelect extends React.Component<ISelectProps, any> {
   private filterList: ItemListPredicate<string> = (query, items) => {
     return items
       .filter(item => `${item.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0)
-      .slice(0, 100);
+      .slice(0, this.props.maxItems || 100);
   };
 
   private sortItems = (resources: string[]) => {
