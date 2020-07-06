@@ -71,9 +71,13 @@ jobs:
           STAGE: ${{ matrix.environment.name }}
           TAGGED: $IMAGE:${{ matrix.environment.name }}
         run: |
-          cd client
-          ./scripts/generate_client_env.sh > .env.${{ matrix.environment.name }}
-          docker build -t arkhn/pyrog-client:${{ matrix.environment.name }} --build-arg ENV_FILE=.env.${{ matrix.environment.name }} .
+          if ${{ matrix.environment.secret }} != ""; then
+            cd client
+            ./scripts/generate_client_env.sh > .env.${{ matrix.environment.name }}
+            docker build -t arkhn/pyrog-client:${{ matrix.environment.name }} --build-arg ENV_FILE=.env.${{ matrix.environment.name }} .
+          else
+            yarn build:docker:${{ matrix.environment.name }}
+          fi
 
       - name: Tag docker image with hash
         run: |
