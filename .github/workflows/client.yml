@@ -69,17 +69,16 @@ jobs:
         env:
           IP: ${{ secrets[matrix.environment.secret] }}
           STAGE: ${{ matrix.environment.name }}
-          TAGGED: $IMAGE:${{ matrix.environment.name }}
         run: |
           cd client
           if [ -n "${{ matrix.environment.secret }}" ]; then
             ./scripts/generate_client_env.sh > .env.${{ matrix.environment.name }}
           fi
-          docker build -t arkhn/pyrog-client:${{ matrix.environment.name }} --build-arg ENV_FILE=.env.${{ matrix.environment.name }} .
+          docker build -t $IMAGE:${{ matrix.environment.name }} --build-arg ENV_FILE=.env.${{ matrix.environment.name }} .
 
       - name: Tag docker image with hash
         run: |
-          docker tag $TAGGED $TAGGED-$GITHUB_SHA
+          docker tag $IMAGE:${{ matrix.environment.name }} $IMAGE:${{ matrix.environment.name }}-$GITHUB_SHA
 
       - name: Publish to the docker hub
         run: |
