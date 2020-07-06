@@ -72,7 +72,7 @@ jobs:
           TAGGED: $IMAGE:${{ matrix.environment.name }}
         run: |
           cd client
-          if ${{ matrix.environment.secret }} != ""; then
+          if [ -n "${{ matrix.environment.secret }}" ]; then
             ./scripts/generate_client_env.sh > .env.${{ matrix.environment.name }}
           fi
           docker build -t arkhn/pyrog-client:${{ matrix.environment.name }} --build-arg ENV_FILE=.env.${{ matrix.environment.name }} .
