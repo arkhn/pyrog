@@ -8,11 +8,11 @@ import { RIVER_URL } from '../../../../constants';
 
 interface Props {
   rowId: number;
+  resourceId: string;
 }
 
-const FhirPreview = ({ rowId }: Props) => {
+const FhirPreview = ({ rowId, resourceId }: Props) => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
   const [fhirObject, setFhirObject] = React.useState(undefined as any);
   const [validationErrors, setValidationErrors] = React.useState(
     [] as string[]
@@ -26,7 +26,7 @@ const FhirPreview = ({ rowId }: Props) => {
         const res = await axios.post(
           `${RIVER_URL}/preview`,
           {
-            resource_id: resource.id,
+            resource_id: resourceId,
             primary_key_values: [rowId]
           },
           { headers: { 'Content-Type': 'application/json' } }
@@ -44,7 +44,7 @@ const FhirPreview = ({ rowId }: Props) => {
       setLoading(false);
     };
     fetchPreview();
-  }, [rowId, resource.id, toaster]);
+  }, [rowId, resourceId, toaster]);
 
   if (loading) return <Spinner />;
 
