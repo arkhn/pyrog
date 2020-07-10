@@ -127,7 +127,9 @@ const TableViewer = ({ table }: IProps) => {
       >
         {columns}
       </Table>
-      {fhirPreviewEnabled && <FhirPreview rowId={fhirPreviewRowId!} />}
+      {fhirPreviewEnabled && (
+        <FhirPreview rowId={fhirPreviewRowId!} resourceId={resource.id} />
+      )}
     </React.Fragment>
   );
 };
