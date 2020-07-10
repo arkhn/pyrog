@@ -2,7 +2,7 @@ import * as crypto from 'crypto'
 import { verify } from 'jsonwebtoken'
 import { User } from '@prisma/client'
 
-import { APP_SECRET, JWT_SIGNING_KEY, IV } from './constants'
+import { APP_SECRET, JWT_SIGNING_KEY } from './constants'
 import cache from 'cache'
 import { Request } from 'express'
 
@@ -33,16 +33,18 @@ export const getUser = async (request: Request): Promise<User | null> => {
 }
 
 export const encrypt = (text: string) => {
+  const iv = crypto.randomBytes(16)
+
   let cipher = crypto.createCipheriv(
     'aes-256-cbc',
     Buffer.from(APP_SECRET!),
-    IV,
+    iv,
   )
   let encrypted = cipher.update(text)
 
   encrypted = Buffer.concat([encrypted, cipher.final()])
 
-  return IV.toString('hex') + ':' + encrypted.toString('hex')
+  return iv.toString('hex') + ':' + encrypted.toString('hex')
 }
 
 export const decrypt = (text: string) => {

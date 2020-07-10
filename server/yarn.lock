@@ -3087,11 +3087,6 @@ http-errors@^1.7.0, http-errors@^1.7.3, http-errors@~1.7.2:
     statuses ">= 1.5.0 < 2"
     toidentifier "1.0.0"
 
-http-parser-js@^0.5.2:
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/http-parser-js/-/http-parser-js-0.5.2.tgz#da2e31d237b393aae72ace43882dd7e270a8ff77"
-  integrity sha512-opCO9ASqg5Wy2FNo7A0sxy71yGbbkJJXLdgMK04Tcypw9jr2MgWbyubb0+WdmDmGnFflO7fRbqbaihh/ENDlRQ==
-
 http-proxy-agent@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/http-proxy-agent/-/http-proxy-agent-4.0.1.tgz#8a8c8ef7f5932ccf953c296ca8291b95aa74aa3a"
@@ -6433,11 +6428,9 @@ typescript@3.7.2:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.7.2.tgz#27e489b95fa5909445e9fef5ee48d81697ad18fb"
   integrity sha512-ml7V7JfiN2Xwvcer+XAf2csGO1bPBdRbFCkYBczNZggrBZ9c7G3riSUeJmqEU5uOtXNPMhE3n+R4FA/3YOAWOQ==
 
-"undici@github:mcollina/undici":
-  version "1.0.3"
-  resolved "https://codeload.github.com/mcollina/undici/tar.gz/e5ec7ea989eef57a3456a005e7f5d945128b68e7"
-  dependencies:
-    http-parser-js "^0.5.2"
+undici@mcollina/undici:
+  version "1.1.0"
+  resolved "https://codeload.github.com/mcollina/undici/tar.gz/75de95ab227e0fc96c36b91e3112c7960d5c292e"
 
 union-value@^1.0.0:
   version "1.0.1"
