@@ -1,5 +1,3 @@
-import { randomBytes } from 'crypto'
-
 export const {
   APP_SECRET,
   JWT_TOKEN,
@@ -12,9 +10,6 @@ if (!priv) {
   throw new Error('MISSING "JWT_PRIVATE_KEY" in environment variables')
 }
 export const JWT_SIGNING_KEY = priv.replace(/\\n/g, '\n')
-
-const IV_LENGTH = 16 // For AES, this is always 16
-export const IV = randomBytes(IV_LENGTH)
 
 export const MAPPING_VERSION_1 = 1
 export const MAPPING_VERSION_2 = 2
