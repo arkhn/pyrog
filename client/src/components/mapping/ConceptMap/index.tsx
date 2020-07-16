@@ -78,7 +78,7 @@ const ConceptMapDialog = ({
     setIsLoadingCodeSystems(true);
     try {
       const codeSystems = await axios.get(
-        `${FHIR_API_URL}/CodeSystem?_count=1000`
+        `${FHIR_API_URL}/CodeSystem?_count=10000`
       );
       setExistingCodeSystems(
         codeSystems.data.entry.map(({ resource }: any) => ({
@@ -107,7 +107,9 @@ const ConceptMapDialog = ({
     // Fetch value sets and turns them to custom Terminology interface
     setIsLoadingValueSets(true);
     try {
-      const valueSets = await axios.get(`${FHIR_API_URL}/ValueSet?_count=1000`);
+      const valueSets = await axios.get(
+        `${FHIR_API_URL}/ValueSet?_count=10000`
+      );
 
       const getConceptCodes = (element: any) =>
         element.concept
