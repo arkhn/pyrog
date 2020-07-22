@@ -34,6 +34,7 @@ model Source {
 enum DatabaseType {
   POSTGRES
   ORACLE
+  MSSQL
 }
 
 model Credential {
