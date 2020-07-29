@@ -25,7 +25,7 @@
     "wait:db": "yarn run-ts scripts/waitForDb.ts"
   },
   "dependencies": {
-    "@arkhn/fhir.ts": "^3.4.2",
+    "@arkhn/fhir.ts": "^3.4.3",
     "@nexus/schema": "^0.14.0",
     "@prisma/client": "^2.0.1",
     "axios": "^0.19.2",
