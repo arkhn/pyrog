@@ -42,7 +42,7 @@ const InputColumn = ({ input, schema, source }: Props) => {
 
   const toaster = useSelector((state: IReduxStore) => state.toaster);
   const onError = onApolloError(toaster);
-  const { attribute } = useSelector((state: IReduxStore) => state.selectedNode);
+  const { attribute, resource } = useSelector((state: IReduxStore) => state.selectedNode);
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
   );
@@ -191,31 +191,33 @@ const InputColumn = ({ input, schema, source }: Props) => {
                 </div>
               )}
             </div>
-            <div className="input-column-joins">
-              <Button
-                icon={'add'}
-                loading={loadAddJoin}
-                onClick={() => {
-                  addJoinToColumn({
-                    variables: {
-                      columnId: input.sqlValue.id
-                    }
-                  });
-                }}
-              >
-                Add Join
-              </Button>
-              {input.sqlValue.joins
-                ? input.sqlValue.joins.map((join: any, index: number) => (
-                    <Join
-                      key={index}
-                      joinData={join}
-                      schema={schema}
-                      source={source}
-                    />
-                  ))
-                : null}
-            </div>
+            {input.sqlValue.table !== resource.primaryKeyTable && (
+              <div className="input-column-joins">
+                <Button
+                  icon={'add'}
+                  loading={loadAddJoin}
+                  onClick={() => {
+                    addJoinToColumn({
+                      variables: {
+                        columnId: input.sqlValue.id
+                      }
+                    });
+                  }}
+                >
+                  Add Join
+                </Button>
+                {input.sqlValue.joins
+                  ? input.sqlValue.joins.map((join: any, index: number) => (
+                      <Join
+                        key={index}
+                        joinData={join}
+                        schema={schema}
+                        source={source}
+                      />
+                    ))
+                  : null}
+              </div>
+            )}
           </div>
         )}
       </Card>
