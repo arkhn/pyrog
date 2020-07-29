@@ -199,7 +199,15 @@ const InputColumn = ({ input, schema, source }: Props) => {
                   onClick={() => {
                     addJoinToColumn({
                       variables: {
-                        columnId: input.sqlValue.id
+                        columnId: input.sqlValue.id,
+                        join: {
+                          source: {
+                            table: resource.primaryKeyTable
+                          },
+                          target: {
+                            table: input.sqlValue.table
+                          }
+                        }
                       }
                     });
                   }}
