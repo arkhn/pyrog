@@ -61,7 +61,7 @@ const TableViewer = ({ table }: IProps) => {
       }
       setLoading(false);
     },
-    [fields, rows]
+    [fields, rows, resource, toaster]
   );
 
   const onSelection = (regions: IRegion[]) => {
