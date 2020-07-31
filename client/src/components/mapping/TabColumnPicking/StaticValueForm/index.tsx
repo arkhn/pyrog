@@ -16,8 +16,9 @@ import { onError } from 'services/apollo';
 import { IReduxStore } from 'types';
 
 import { setAttributeInMap } from 'services/resourceInputs/actions';
-import StringSelect from 'components/selects/stringSelect';
+import { selectInputGroup } from 'services/selectedNode/actions';
 
+import StringSelect from 'components/selects/stringSelect';
 import IdentifierSystemInput from './IdentifierSystemInput';
 
 // GRAPHQL
@@ -149,6 +150,7 @@ const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
           staticValue: value
         }
       });
+      if (selectedInputGroup === null) dispatch(selectInputGroup(attributesForResource[path].inputGroups.length));
       dispatch(setAttributeInMap(path, data.createInput.inputGroup.attribute));
     } catch (e) {
       console.log(e);

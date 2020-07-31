@@ -89,8 +89,9 @@ const InputColumn = ({ input }: Props) => {
     });
   };
 
-  const onClickDelete = async () => {
+  const onClickDelete = async (e: React.MouseEvent) => {
     // Mutation to remove from DB
+    e.stopPropagation()
     await deleteInput({
       variables: {
         inputId: input.id
