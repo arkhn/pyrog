@@ -212,7 +212,8 @@ export const Mutation = mutationType({
       type: 'InputGroup',
       args: {
         inputGroupId: idArg({ required: true }),
-        data: arg({ type: 'InputGroupInput', required: true }),
+        mergingScript: stringArg(),
+        conditionId: stringArg(),
       },
       resolve: updateInputGroup,
     })

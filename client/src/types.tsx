@@ -98,6 +98,14 @@ export interface Resource {
   };
 }
 
+export interface Condition {
+  id: string;
+  action: string;
+  table: string;
+  column: string;
+  value: string;
+}
+
 export interface Filters {
   sqlColumn: ISourceColumn;
   relation: string;

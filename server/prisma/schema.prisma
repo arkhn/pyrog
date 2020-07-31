@@ -79,16 +79,16 @@ model Filter {
 }
 
 model Attribute {
-  id            String       @default(cuid()) @id
-  path          String
-  sliceName     String?
-  definitionId  String
-  comments      Comment[]
-  inputGroups   InputGroup[]
-  resourceId    String?      @map("resource")
-  resource      Resource?    @relation(fields: [resourceId], references: [id])
-  updatedAt     DateTime     @updatedAt
-  createdAt     DateTime     @default(now())
+  id           String       @default(cuid()) @id
+  path         String
+  sliceName    String?
+  definitionId String
+  comments     Comment[]
+  inputGroups  InputGroup[]
+  resourceId   String?      @map("resource")
+  resource     Resource?    @relation(fields: [resourceId], references: [id])
+  updatedAt    DateTime     @updatedAt
+  createdAt    DateTime     @default(now())
 }
 
 model Comment {
@@ -166,6 +166,7 @@ model Condition {
   action     ConditionAction
   columnId   String          @map("column")
   column     Column          @relation(fields: [columnId], references: [id])
+  value      String
   InputGroup InputGroup[]    @relation("inputCondition")
 }
 

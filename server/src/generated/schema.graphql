@@ -187,6 +187,13 @@ type ConceptMap {
   title: String!
 }
 
+type Condition {
+  action: ConditionAction!
+  column: Column!
+  id: String!
+  value: String!
+}
+
 enum ConditionAction {
   EXCLUDE
   INCLUDE
@@ -201,6 +208,7 @@ input ConditionWhereInput {
   InputGroup: InputGroupFilter
   NOT: [ConditionWhereInput!]
   OR: [ConditionWhereInput!]
+  value: StringFilter
 }
 
 type Credential {
@@ -308,6 +316,7 @@ input InputFilter {
 
 type InputGroup {
   attribute: Attribute
+  condition: Condition
   createdAt: DateTime!
   id: String!
   inputs(after: InputWhereUniqueInput, before: InputWhereUniqueInput, first: Int, last: Int): [Input!]!
@@ -319,10 +328,6 @@ input InputGroupFilter {
   every: InputGroupWhereInput
   none: InputGroupWhereInput
   some: InputGroupWhereInput
-}
-
-input InputGroupInput {
-  mergingScript: String
 }
 
 input InputGroupWhereInput {
@@ -426,7 +431,7 @@ type Mutation {
   refreshDefinition(definitionId: ID!): StructureDefinition!
   signup(email: String!, name: String!, password: String!): AuthPayload!
   updateInput(data: UpdateInputInput!, inputId: ID!): Input!
-  updateInputGroup(data: InputGroupInput!, inputGroupId: ID!): InputGroup!
+  updateInputGroup(conditionId: String, inputGroupId: ID!, mergingScript: String): InputGroup!
   updateJoin(data: JoinInput!, joinId: ID!): Join!
   updateResource(data: UpdateResourceInput!, filters: [FilterInput!], resourceId: ID!): Resource!
   upsertCredential(database: String!, host: String!, login: String!, model: String!, owner: String!, password: String!, port: String!, sourceId: ID!): Credential!

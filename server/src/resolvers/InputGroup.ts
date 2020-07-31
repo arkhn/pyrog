@@ -6,6 +6,7 @@ export const InputGroup = objectType({
     t.model.id()
 
     t.model.mergingScript()
+    t.model.condition()
     t.model.inputs()
 
     t.model.attribute()
@@ -38,12 +39,12 @@ export const createInputGroup: FieldResolver<
 export const updateInputGroup: FieldResolver<
   'Mutation',
   'updateInputGroup'
-> = async (_parent, { inputGroupId, data }, ctx) => {
-  if (!data) {
-    throw new Error('Update payload cannot be null')
-  }
+> = async (_parent, { inputGroupId, mergingScript, conditionId }, ctx) => {
   return ctx.prisma.inputGroup.update({
     where: { id: inputGroupId },
-    data,
+    data: {
+      ...(mergingScript !== undefined && { mergingScript }),
+      ...(conditionId !== undefined && { condition: { connect: { id: conditionId || undefined } } }),
+    },
   })
 }

@@ -6,9 +6,10 @@ import { onError } from 'services/apollo';
 import { loader } from 'graphql.macro';
 
 import ScriptSelect from 'components/selects/scriptSelect';
+import AddConditionSelect from 'components/selects/addConditionSelect';
 import InputColumn from '../InputColumn';
 
-import { IReduxStore } from 'types';
+import { IReduxStore, Condition } from 'types';
 
 // GRAPHQL
 const mUpdateInputGroup = loader(
@@ -31,9 +32,7 @@ const InputGroup = ({ inputGroup }: Props) => {
     updateInputGroup({
       variables: {
         inputGroupId: inputGroup.id,
-        data: {
-          mergingScript: script
-        }
+        mergingScript: script
       }
     });
   };
@@ -42,9 +41,25 @@ const InputGroup = ({ inputGroup }: Props) => {
     updateInputGroup({
       variables: {
         inputGroupId: inputGroup.id,
-        data: {
-          mergingScript: null
-        }
+        mergingScript: null
+      }
+    });
+  };
+
+  const onChangeCondition = (condition: Condition) => {
+    updateInputGroup({
+      variables: {
+        inputGroupId: inputGroup.id,
+        conditionId: condition.id
+      }
+    });
+  };
+
+  const onClearCondition = (): any => {
+    updateInputGroup({
+      variables: {
+        inputGroupId: inputGroup.id,
+        conditionId: null
       }
     });
   };
@@ -65,6 +80,32 @@ const InputGroup = ({ inputGroup }: Props) => {
               selectedScript={inputGroup.mergingScript}
               onChange={onChangeMergingScript}
               onClear={onClearMergingScript}
+            />
+          </div>
+          <div className="stacked-tags" onClick={e => e.stopPropagation()}>
+            <Tag>Condition</Tag>
+            <AddConditionSelect
+              loading={false}
+              disabled={false}
+              onChange={onChangeCondition}
+              onClear={onClearCondition}
+              inputItem={inputGroup.condition}
+              items={[
+                {
+                  id: 'aaaaa',
+                  action: 'aaaaa',
+                  table: 'aaaaa',
+                  column: 'aaaaa',
+                  value: 'aaaaa'
+                },
+                {
+                  id: 'bbb',
+                  action: 'aaaaa',
+                  table: 'aaaaa',
+                  column: 'aaaaa',
+                  value: 'aaaaa'
+                }
+              ]}
             />
           </div>
         </div>

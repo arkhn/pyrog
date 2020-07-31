@@ -165,7 +165,7 @@
     {
       "tag": "CreateField",
       "model": "InputGroup",
-      "field": "Attribute",
+      "field": "attribute",
       "type": "Attribute",
       "arity": "Optional"
     },
@@ -175,7 +175,7 @@
         "path": {
           "tag": "Field",
           "model": "InputGroup",
-          "field": "Attribute"
+          "field": "attribute"
         },
         "directive": "relation"
       }
@@ -187,7 +187,7 @@
         "path": {
           "tag": "Field",
           "model": "InputGroup",
-          "field": "Attribute"
+          "field": "attribute"
         },
         "directive": "relation"
       },
@@ -201,7 +201,7 @@
         "path": {
           "tag": "Field",
           "model": "InputGroup",
-          "field": "Attribute"
+          "field": "attribute"
         },
         "directive": "relation"
       },
@@ -400,6 +400,13 @@
     {
       "tag": "CreateField",
       "model": "Condition",
+      "field": "value",
+      "type": "String",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Condition",
       "field": "InputGroup",
       "type": "InputGroup",
       "arity": "List"
@@ -449,7 +456,7 @@
     {
       "tag": "CreateField",
       "model": "Input",
-      "field": "InputGroup",
+      "field": "inputGroup",
       "type": "InputGroup",
       "arity": "Optional"
     },
@@ -459,7 +466,7 @@
         "path": {
           "tag": "Field",
           "model": "Input",
-          "field": "InputGroup"
+          "field": "inputGroup"
         },
         "directive": "relation"
       }
@@ -471,7 +478,7 @@
         "path": {
           "tag": "Field",
           "model": "Input",
-          "field": "InputGroup"
+          "field": "inputGroup"
         },
         "directive": "relation"
       },
@@ -485,7 +492,7 @@
         "path": {
           "tag": "Field",
           "model": "Input",
-          "field": "InputGroup"
+          "field": "inputGroup"
         },
         "directive": "relation"
       },

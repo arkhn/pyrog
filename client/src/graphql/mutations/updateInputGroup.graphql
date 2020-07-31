@@ -1,7 +1,15 @@
 #import "../fragments/entireInputGroup.graphql"
 
-mutation updateInputGroup($inputGroupId: ID!, $data: InputGroupInput!) {
-  updateInputGroup(inputGroupId: $inputGroupId, data: $data) {
+mutation updateInputGroup(
+  $inputGroupId: ID!
+  $mergingScript: String
+  $conditionId: String
+) {
+  updateInputGroup(
+    inputGroupId: $inputGroupId
+    mergingScript: $mergingScript
+    conditionId: $conditionId
+  ) {
     ...entireInputGroup
   }
 }

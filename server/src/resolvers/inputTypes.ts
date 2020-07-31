@@ -16,13 +16,6 @@ export const AttributeInput = inputObjectType({
   },
 })
 
-export const InputGroupInput = inputObjectType({
-  name: 'InputGroupInput',
-  definition(t) {
-    t.string('mergingScript')
-  },
-})
-
 export const FilterInput = inputObjectType({
   name: 'FilterInput',
   definition(t) {
