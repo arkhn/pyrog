@@ -11,6 +11,7 @@ import { createComment } from './Comment'
 import { addJoinToColumn } from './Column'
 import { deleteCredential, upsertCredential } from './Credential'
 import { createInput, deleteInput, updateInput } from './Input'
+import { createInputGroup } from './InputGroup'
 import { updateJoin, deleteJoin } from './Join'
 import { createResource, updateResource, deleteResource } from './Resource'
 import { deleteSource, createSource } from './Source'
@@ -210,13 +211,25 @@ export const Mutation = mutationType({
     })
 
     /*
+     * INPUT GROUP
+     */
+
+    t.field('createInputGroup', {
+      type: 'InputGroup',
+      args: {
+        attributeId: idArg({ required: true }),
+      },
+      resolve: createInputGroup,
+    })
+
+    /*
      * INPUT
      */
 
     t.field('createInput', {
       type: 'Input',
       args: {
-        attributeId: idArg({ required: true }),
+        inputGroupId: idArg({ required: true }),
         script: stringArg(),
         static: stringArg(),
         sql: arg({

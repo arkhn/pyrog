@@ -4,7 +4,7 @@ import {
   ColumnCreateWithoutInputInput,
   CommentCreateWithoutAttributeInput,
   FilterCreateInput,
-  InputCreateWithoutAttributeInput,
+  InputCreateWithoutInputGroupInput,
   JoinCreateWithoutColumnInput,
   PrismaClient,
 } from '@prisma/client'
@@ -49,6 +49,12 @@ export const clean = (entry: any): any => {
   }
   if (ret.userId !== undefined) {
     delete ret.userId
+  }
+  if (ret.inputs !== undefined) {
+    delete ret.inputs
+  }
+  if (ret.mergingScript !== undefined) {
+    delete ret.mergingScript
   }
 
   return ret
@@ -118,9 +124,9 @@ const buildColumnQuery = (
 
 export const buildInputsQuery = (
   inputs: InputWithColumn[],
-): InputCreateWithoutAttributeInput[] | undefined =>
+): InputCreateWithoutInputGroupInput[] | undefined =>
   inputs.map(i => {
-    const input: InputCreateWithoutAttributeInput = clean(i)
+    const input: InputCreateWithoutInputGroupInput = clean(i)
     if (i.sqlValue) {
       input.sqlValue = { create: buildColumnQuery(i.sqlValue) }
     } else {
@@ -142,9 +148,9 @@ export const buildAttributesQueryPreV7 = (
   attributes.map(a => {
     const attr: AttributeCreateWithoutResourceInput = clean(a)
     if (a.inputs && a.inputs.length) {
-      attr.inputs = { create: buildInputsQuery(a.inputs) }
-    } else {
-      delete attr.inputs
+      attr.inputGroups = {
+        create: [{ inputs: { create: buildInputsQuery(a.inputs) } }],
+      }
     }
 
     if (attr.comments) {
@@ -176,9 +182,9 @@ export const buildAttributesQuery = (
   attributes.map(a => {
     const attr: AttributeCreateWithoutResourceInput = clean(a)
     if (a.inputs && a.inputs.length) {
-      attr.inputs = { create: buildInputsQuery(a.inputs) }
-    } else {
-      delete attr.inputs
+      attr.inputGroups = {
+        create: [{ inputs: { create: buildInputsQuery(a.inputs) } }],
+      }
     }
 
     if (a.comments && a.comments.length) {

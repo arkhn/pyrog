@@ -45,8 +45,7 @@ type Attribute {
   definition: StructureDefinition!
   definitionId: String!
   id: String!
-  inputs(after: InputWhereUniqueInput, before: InputWhereUniqueInput, first: Int, last: Int): [Input!]!
-  mergingScript: String
+  inputGroups(after: InputGroupWhereUniqueInput, before: InputGroupWhereUniqueInput, first: Int, last: Int): [InputGroup!]!
   path: String!
   resource: Resource
   sliceName: String
@@ -77,8 +76,7 @@ input AttributeWhereInput {
   createdAt: DateTimeFilter
   definitionId: StringFilter
   id: StringFilter
-  inputs: InputFilter
-  mergingScript: NullableStringFilter
+  inputGroups: InputGroupFilter
   NOT: [AttributeWhereInput!]
   OR: [AttributeWhereInput!]
   path: StringFilter
@@ -131,6 +129,7 @@ input ColumnInputWithoutJoins {
 input ColumnWhereInput {
   AND: [ColumnWhereInput!]
   column: NullableStringFilter
+  condition: ConditionWhereInput
   createdAt: DateTimeFilter
   filter: FilterWhereInput
   id: StringFilter
@@ -186,6 +185,22 @@ type ConceptMap {
   id: String!
   name: String!
   title: String!
+}
+
+enum ConditionAction {
+  EXCLUDE
+  INCLUDE
+}
+
+input ConditionWhereInput {
+  action: ConditionAction
+  AND: [ConditionWhereInput!]
+  column: ColumnWhereInput
+  columnId: StringFilter
+  id: StringFilter
+  InputGroup: InputGroupFilter
+  NOT: [ConditionWhereInput!]
+  OR: [ConditionWhereInput!]
 }
 
 type Credential {
@@ -274,11 +289,11 @@ input FilterWhereInput {
 }
 
 type Input {
-  attribute: Attribute!
   conceptMap: ConceptMap
   conceptMapId: String
   createdAt: DateTime!
   id: String!
+  inputGroup: InputGroup
   script: String
   sqlValue: Column
   staticValue: String
@@ -291,13 +306,47 @@ input InputFilter {
   some: InputWhereInput
 }
 
+type InputGroup {
+  attribute: Attribute
+  createdAt: DateTime!
+  id: String!
+  inputs(after: InputWhereUniqueInput, before: InputWhereUniqueInput, first: Int, last: Int): [Input!]!
+  mergingScript: String
+  updatedAt: DateTime!
+}
+
+input InputGroupFilter {
+  every: InputGroupWhereInput
+  none: InputGroupWhereInput
+  some: InputGroupWhereInput
+}
+
+input InputGroupWhereInput {
+  AND: [InputGroupWhereInput!]
+  attribute: AttributeWhereInput
+  attributeId: NullableStringFilter
+  condition: ConditionWhereInput
+  conditionId: NullableStringFilter
+  createdAt: DateTimeFilter
+  id: StringFilter
+  inputs: InputFilter
+  mergingScript: NullableStringFilter
+  NOT: [InputGroupWhereInput!]
+  OR: [InputGroupWhereInput!]
+  updatedAt: DateTimeFilter
+}
+
+input InputGroupWhereUniqueInput {
+  id: String
+}
+
 input InputWhereInput {
   AND: [InputWhereInput!]
-  attribute: AttributeWhereInput
-  attributeId: StringFilter
   conceptMapId: NullableStringFilter
   createdAt: DateTimeFilter
   id: StringFilter
+  inputGroup: InputGroupWhereInput
+  inputGroupId: NullableStringFilter
   NOT: [InputWhereInput!]
   OR: [InputWhereInput!]
   script: NullableStringFilter
@@ -355,7 +404,8 @@ type Mutation {
   createAccessControl(role: SourceRole!, sourceId: ID!, userEmail: String!): AccessControl!
   createAttribute(data: AttributeInput, definitionId: ID!, path: String!, resourceId: ID!, sliceName: String): Attribute!
   createComment(attributeId: ID!, content: String!, validation: Boolean!): Comment!
-  createInput(attributeId: ID!, script: String, sql: ColumnInput, static: String): Input!
+  createInput(inputGroupId: ID!, script: String, sql: ColumnInput, static: String): Input!
+  createInputGroup(attributeId: ID!): InputGroup!
   createResource(definitionId: String!, sourceId: ID!): Resource!
   createSource(mapping: String, name: String!, templateName: String!): Source!
   createTemplate(name: String!): Template!

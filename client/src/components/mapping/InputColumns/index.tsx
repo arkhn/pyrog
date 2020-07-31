@@ -1,34 +1,27 @@
-import { Tag, Spinner } from '@blueprintjs/core';
-import * as React from 'react';
-import { useQuery, useMutation } from '@apollo/react-hooks';
-import { useSelector } from 'react-redux';
+import React from 'react';
+import { Card, Elevation, Spinner } from '@blueprintjs/core';
+import { useQuery } from '@apollo/react-hooks';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { onError } from 'services/apollo';
-import { IReduxStore, ISelectedSource } from 'types';
+import { selectInputGroup } from 'services/selectedNode/actions';
+
+import { IReduxStore } from 'types';
 
 // COMPONENTS
-import ScriptSelect from 'components/selects/scriptSelect';
-import InputColumn from '../InputColumn';
+import InputGroup from '../InputGroup';
 import { loader } from 'graphql.macro';
 
 // GRAPHQL
 const qInputsForAttribute = loader(
   'src/graphql/queries/inputsForAttribute.graphql'
 );
-const mUpdateAttribute = loader(
-  'src/graphql/mutations/updateAttribute.graphql'
-);
 
-interface Props {
-  schema: any;
-  source: ISelectedSource;
-}
+const InputColumns = () => {
+  const dispatch = useDispatch();
 
-const InputColumns = ({ schema, source }: Props) => {
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
   const path = selectedNode.attribute.path;
 
-  const toaster = useSelector((state: IReduxStore) => state.toaster);
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
   );
@@ -43,67 +36,35 @@ const InputColumns = ({ schema, source }: Props) => {
     skip: !attributeId
   });
 
-  const [
-    updateAttribute,
-    { loading: loadingMutation }
-  ] = useMutation(mUpdateAttribute, { onError: onError(toaster) });
-
   if (loadingData) {
     return <Spinner />;
   }
 
   const attribute = data && data.attribute ? data.attribute : null;
-  const inputs = attribute && attribute.inputs ? attribute.inputs : [];
-
-  const onChangeMergingScript = (script: string) => {
-    updateAttribute({
-      variables: {
-        attributeId: attribute.id,
-        data: {
-          mergingScript: script
-        }
-      }
-    });
-  };
-
-  const onClearMergingScript = (): any => {
-    updateAttribute({
-      variables: {
-        attributeId: attribute.id,
-        data: {
-          mergingScript: null
-        }
-      }
-    });
-  };
+  let inputGroups =
+    attribute && attribute.inputGroups ? attribute.inputGroups : [];
 
   return (
-    <div id="input-columns">
-      <div id="input-column-rows">
-        {inputs.map((input: any, index: number) => {
-          return input ? (
-            <InputColumn
-              key={index}
-              input={input}
-              schema={schema}
-              source={source}
-            />
-          ) : null;
-        })}
-      </div>
-      {inputs.length > 1 ? (
-        <div id="input-column-merging-script">
-          <div className="stacked-tags">
-            <Tag>SCRIPT</Tag>
-            <ScriptSelect
-              loading={loadingMutation}
-              selectedScript={attribute.mergingScript}
-              onChange={onChangeMergingScript}
-              onClear={onClearMergingScript}
-            />
-          </div>
-        </div>
-      ) : null}
+    <div id="input-groups">
+      {inputGroups.map((inputGroup: any, index: number) =>
+        inputGroup ? (
+          <Card
+            className="input-column-info"
+            style={{
+              background:
+                index === selectedNode.selectedInputGroup ? '#ced9e0' : ''
+            }}
+            elevation={Elevation.ONE}
+            onClick={() => {
+              index === selectedNode.selectedInputGroup
+                ? dispatch(selectInputGroup(null))
+                : dispatch(selectInputGroup(index));
+            }}
+          >
+            <InputGroup key={index} inputGroup={inputGroup} />
+          </Card>
+        ) : null
+      )}
     </div>
   );
 };

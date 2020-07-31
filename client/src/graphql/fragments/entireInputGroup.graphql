@@ -1,0 +1,9 @@
+#import "./entireInput.graphql"
+
+fragment entireInputGroup on InputGroup {
+  id
+  mergingScript
+  inputs {
+    ...entireInput
+  }
+}

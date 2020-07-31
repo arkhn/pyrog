@@ -37,7 +37,7 @@ export const Source = objectType({
           include: {
             attributes: {
               include: {
-                inputs: true,
+                inputGroups: true,
               },
             },
           },
@@ -47,7 +47,7 @@ export const Source = objectType({
         const nbAttributes = resources.reduce(
           (acc, r) =>
             acc +
-            r.attributes.filter(a => a.inputs && a.inputs.length > 0).length,
+            r.attributes.filter(a => a.inputGroups && a.inputGroups.length > 0).length,
           0,
         )
         return [resources.length, nbAttributes]

@@ -30,7 +30,7 @@ export interface IAttribute {
   path: string;
   sliceName: string;
   definitionId: string;
-  inputs: any[];
+  inputGroups: any[];
   comments: IComment[];
 }
 export interface IAttributeDefinition {
@@ -108,6 +108,7 @@ export interface ISelectedNode {
   source: ISelectedSource;
   resource: Resource;
   attribute: Attribute;
+  selectedInputGroup: number;
 }
 
 export interface IResourceInputs {

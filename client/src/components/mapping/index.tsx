@@ -129,7 +129,7 @@ const MappingView = () => {
   };
 
   const renderExistingRules = () => (
-    <InputColumns schema={source.credential.schema} source={source} />
+    <InputColumns />
   );
 
   const renderTable = () => {

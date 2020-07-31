@@ -12,8 +12,11 @@ query resourceAttributes($resourceId: ID!) {
       path
       sliceName
       definitionId
-      inputs {
+      inputGroups {
         id
+        inputs {
+          id
+        }
       }
       comments {
         ...comment

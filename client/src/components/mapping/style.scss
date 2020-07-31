@@ -258,92 +258,100 @@ body {
   }
 }
 
-#input-columns {
+#input-groups {
+  margin-right: calc(#{$window-padding} / 2);
   padding: $window-padding;
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
 
-  #input-column-rows {
-    flex-grow: 1;
-    margin-right: calc(#{$window-padding} / 2);
-
-    & > *:not(:last-child) {
-      margin-bottom: calc(#{$window-padding} / 2);
-    }
+  & > *:not(:last-child) {
+    margin-bottom: calc(#{$window-padding} / 2);
   }
 
-  #input-column-merging-script {
-    display: flex;
-    align-items: center;
-
-    border-left: 1px solid $gray4;
-    padding: calc(#{$window-padding} / 2);
-    margin-left: calc(#{$window-padding} / 2);
-  }
-
-  .stacked-tags {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-
-    .bp3-tag {
-      text-align: center;
-    }
-    .bp3-button {
-      word-wrap: break-word;
-    }
-  }
-
-  .input-column {
+  #input-columns {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: stretch;
 
-    .input-column-info {
-      width: 100%;
-      padding: 10px $window-padding;
-    }
-
-    .input-column-info > * {
-      width: 100%;
-
-      display: flex;
-      flex-direction: row;
-      align-items: flex-start;
+    #input-column-rows {
+      flex-grow: 1;
+      margin-right: calc(#{$window-padding} / 2);
 
       & > *:not(:last-child) {
-        margin-right: $window-padding;
+        margin-bottom: calc(#{$window-padding} / 2);
+      }
+    }
+
+    #input-column-merging-script {
+      display: flex;
+      align-items: center;
+
+      border-left: 1px solid $gray4;
+      padding: calc(#{$window-padding} / 2);
+      margin-left: calc(#{$window-padding} / 2);
+    }
+
+    .stacked-tags {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+
+      .bp3-tag {
+        text-align: center;
+      }
+      .bp3-button {
+        word-wrap: break-word;
+      }
+    }
+
+    .input-column {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      .input-column-info {
+        width: 100%;
+        padding: 10px $window-padding;
       }
 
-      .input-column-name {
+      .input-column-info > * {
+        width: 100%;
+
         display: flex;
-        flex-basis: 50%;
-        flex-grow: 1;
-        align-items: center;
+        flex-direction: row;
+        align-items: flex-start;
 
         & > *:not(:last-child) {
-          margin-right: calc(#{$window-padding} / 2);
-        }
-      }
-
-      .input-column-joins {
-        display: flex;
-        flex-basis: 25%;
-        flex-grow: 1;
-        flex-direction: column;
-        align-items: stretch;
-
-        & > *:not(:last-child) {
-          margin-bottom: calc(#{$window-padding} / 2);
+          margin-right: $window-padding;
         }
 
-        .join {
+        .input-column-name {
           display: flex;
+          flex-basis: 50%;
+          flex-grow: 1;
           align-items: center;
 
           & > *:not(:last-child) {
             margin-right: calc(#{$window-padding} / 2);
+          }
+        }
+
+        .input-column-joins {
+          display: flex;
+          flex-basis: 25%;
+          flex-grow: 1;
+          flex-direction: column;
+          align-items: stretch;
+
+          & > *:not(:last-child) {
+            margin-bottom: calc(#{$window-padding} / 2);
+          }
+
+          .join {
+            display: flex;
+            align-items: center;
+
+            & > *:not(:last-child) {
+              margin-right: calc(#{$window-padding} / 2);
+            }
           }
         }
       }

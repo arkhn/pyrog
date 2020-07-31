@@ -95,3 +95,12 @@ export const updateFhirAttribute = (attribute?: Attribute): IAction => {
     }
   };
 };
+
+export const selectInputGroup = (selectedGroup: number | null): IAction => {
+  return {
+    type: 'SELECT_INPUT_GROUP',
+    payload: {
+      selectedGroup
+    }
+  };
+};

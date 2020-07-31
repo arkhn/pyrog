@@ -21,10 +21,9 @@ export const Attribute = objectType({
       },
     })
 
-    t.model.mergingScript()
     t.model.comments()
 
-    t.model.inputs()
+    t.model.inputGroups()
     t.model.resource()
 
     t.model.updatedAt()

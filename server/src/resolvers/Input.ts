@@ -30,7 +30,7 @@ export const Input = objectType({
       },
     })
 
-    t.model.attribute()
+    t.model.inputGroup()
 
     t.model.updatedAt()
     t.model.createdAt()
@@ -39,7 +39,7 @@ export const Input = objectType({
 
 export const createInput: FieldResolver<'Mutation', 'createInput'> = async (
   _parent,
-  { attributeId, script, static: staticValue, sql: sqlValue },
+  { inputGroupId, script, static: staticValue, sql: sqlValue },
   ctx,
 ) => {
   if (!sqlValue && !staticValue) {
@@ -53,9 +53,9 @@ export const createInput: FieldResolver<'Mutation', 'createInput'> = async (
       data: {
         staticValue,
         script,
-        attribute: {
+        inputGroup: {
           connect: {
-            id: attributeId,
+            id: inputGroupId,
           },
         },
       },
@@ -97,9 +97,9 @@ export const createInput: FieldResolver<'Mutation', 'createInput'> = async (
         },
       },
       script,
-      attribute: {
+      inputGroup: {
         connect: {
-          id: attributeId,
+          id: inputGroupId,
         },
       },
     },
@@ -110,7 +110,25 @@ export const deleteInput: FieldResolver<'Mutation', 'deleteInput'> = async (
   _parent,
   { inputId },
   ctx,
-) => ctx.prisma.input.delete({ where: { id: inputId } })
+) => {
+  const input = await ctx.prisma.input.findOne({
+    where: { id: inputId },
+    include: {
+      inputGroup: {
+        include: { inputs: true },
+      },
+    },
+  })
+  if (!input) throw new Error(`input with id ${inputId} does not exist`)
+
+  if (input.inputGroup?.inputs.length === 1) {
+    await ctx.prisma.inputGroup.delete({
+      where: { id: input.inputGroup.id },
+    })
+  }
+
+  return ctx.prisma.input.delete({ where: { id: inputId } })
+}
 
 export const updateInput: FieldResolver<'Mutation', 'updateInput'> = async (
   _parent,

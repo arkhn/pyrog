@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("POSTGRES_URL")
+  url = "***"
 }
 
 // One per software (Chimio, Crossway, etc)
@@ -109,7 +109,7 @@ model InputGroup {
   mergingScript String?
   conditionId   String?    @map("condition")
   condition     Condition? @relation("inputCondition", fields: [conditionId], references: [id])
-  attribute     Attribute? @relation(fields: [attributeId], references: [id])
+  Attribute     Attribute? @relation(fields: [attributeId], references: [id])
   attributeId   String?
   updatedAt     DateTime   @updatedAt
   createdAt     DateTime   @default(now())
@@ -127,7 +127,7 @@ model Input {
   sqlValueId   String?     @map("sqlValue")
   sqlValue     Column?     @relation(fields: [sqlValueId], references: [id])
   // Group to which this input belongs
-  inputGroup   InputGroup? @relation(fields: [inputGroupId], references: [id])
+  InputGroup   InputGroup? @relation(fields: [inputGroupId], references: [id])
   inputGroupId String?
   updatedAt    DateTime    @updatedAt
   createdAt    DateTime    @default(now())

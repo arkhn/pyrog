@@ -28,6 +28,9 @@ const qSourcesAndResources = loader(
 const mCreateAttribute = loader(
   'src/graphql/mutations/createAttribute.graphql'
 );
+const mCreateInputGroup = loader(
+  'src/graphql/mutations/createInputGroup.graphql'
+);
 const mCreateStaticInput = loader(
   'src/graphql/mutations/createStaticInput.graphql'
 );
@@ -40,7 +43,9 @@ const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
   const dispatch = useDispatch();
 
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
+  const { resource, selectedInputGroup } = useSelector(
+    (state: IReduxStore) => state.selectedNode
+  );
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
   );
@@ -62,6 +67,12 @@ const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
   let attributeId = attributesForResource[path]
     ? attributesForResource[path].id
     : null;
+  let inputGroupId =
+    selectedInputGroup === null ||
+    !attributesForResource[path] ||
+    selectedInputGroup >= attributesForResource[path].inputGroups.length
+      ? null
+      : attributesForResource[path].inputGroups[selectedInputGroup].id;
 
   useEffect(() => {
     // TODO we should use attribute.isReferenceType here but Attribute objects
@@ -76,6 +87,9 @@ const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
   const [createAttribute] = useMutation(mCreateAttribute, {
     onError: onError(toaster)
   });
+  const [createInputGroup] = useMutation(mCreateInputGroup, {
+    onError: onError(toaster)
+  });
   const [
     createStaticInput,
     { loading: creatingStaticInput }
@@ -83,8 +97,8 @@ const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
 
   const addStaticValue = async (value: string): Promise<void> => {
     try {
+      // First, we create the attribute if it doesn't exist
       if (!attributeId) {
-        // First, we create the attribute if it doesn't exist
         const { data: attr } = await createAttribute({
           variables: {
             resourceId: resource.id,
@@ -94,6 +108,19 @@ const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
           }
         });
         attributeId = attr.createAttribute.id;
+      }
+      // Then, we create the inputGroup if needed
+      if (
+        selectedInputGroup === null ||
+        !attributesForResource[path] ||
+        selectedInputGroup > attributesForResource[path].inputGroups.length
+      ) {
+        const { data: group } = await createInputGroup({
+          variables: {
+            attributeId
+          }
+        });
+        inputGroupId = group.createInputGroup.id;
       }
       // Also, we create the parent attributes if they don't exist
       let currentAttribute = attribute;
@@ -118,11 +145,11 @@ const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
       }
       const { data }: any = await createStaticInput({
         variables: {
-          attributeId,
+          inputGroupId,
           staticValue: value
         }
       });
-      dispatch(setAttributeInMap(path, data.createInput.attribute));
+      dispatch(setAttributeInMap(path, data.createInput.inputGroup.attribute));
     } catch (e) {
       console.log(e);
     }

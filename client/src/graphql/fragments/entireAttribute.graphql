@@ -1,4 +1,4 @@
-#import "../fragments/entireInput.graphql"
+#import "../fragments/entireInputGroup.graphql"
 #import "../fragments/comment.graphql"
 
 fragment entireAttribute on Attribute {
@@ -6,11 +6,10 @@ fragment entireAttribute on Attribute {
   path
   sliceName
   definitionId
-  mergingScript
   comments {
     ...comment
   }
-  inputs {
-    ...entireInput
+  inputGroups {
+    ...entireInputGroup
   }
 }
