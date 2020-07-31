@@ -1,6 +1,6 @@
 import React from 'react';
-import { Tag, Spinner } from '@blueprintjs/core';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { Tag } from '@blueprintjs/core';
+import { useMutation } from '@apollo/react-hooks';
 import { useSelector } from 'react-redux';
 import { onError } from 'services/apollo';
 import { loader } from 'graphql.macro';
@@ -11,11 +11,8 @@ import InputColumn from '../InputColumn';
 import { IReduxStore } from 'types';
 
 // GRAPHQL
-const qInputsForAttribute = loader(
-  'src/graphql/queries/inputsForAttribute.graphql'
-);
-const mUpdateAttribute = loader(
-  'src/graphql/mutations/updateAttribute.graphql'
+const mUpdateInputGroup = loader(
+  'src/graphql/mutations/updateInputGroup.graphql'
 );
 
 interface Props {
@@ -23,39 +20,17 @@ interface Props {
 }
 
 const InputGroup = ({ inputGroup }: Props) => {
-  const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
-  const path = selectedNode.attribute.path;
-
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const attributesForResource = useSelector(
-    (state: IReduxStore) => state.resourceInputs.attributesMap
-  );
-  const attributeId = attributesForResource[path]
-    ? attributesForResource[path].id
-    : null;
-
-  const { data, loading: loadingData } = useQuery(qInputsForAttribute, {
-    variables: {
-      attributeId: attributeId
-    },
-    skip: !attributeId
-  });
 
   const [
-    updateAttribute,
+    updateInputGroup,
     { loading: loadingMutation }
-  ] = useMutation(mUpdateAttribute, { onError: onError(toaster) });
-
-  if (loadingData) {
-    return <Spinner />;
-  }
-
-  const attribute = data && data.attribute ? data.attribute : null;
+  ] = useMutation(mUpdateInputGroup, { onError: onError(toaster) });
 
   const onChangeMergingScript = (script: string) => {
-    updateAttribute({
+    updateInputGroup({
       variables: {
-        attributeId: attribute.id,
+        inputGroupId: inputGroup.id,
         data: {
           mergingScript: script
         }
@@ -64,9 +39,9 @@ const InputGroup = ({ inputGroup }: Props) => {
   };
 
   const onClearMergingScript = (): any => {
-    updateAttribute({
+    updateInputGroup({
       variables: {
-        attributeId: attribute.id,
+        inputGroupId: inputGroup.id,
         data: {
           mergingScript: null
         }
@@ -83,11 +58,11 @@ const InputGroup = ({ inputGroup }: Props) => {
       </div>
       {inputGroup.inputs.length > 1 ? (
         <div id="input-column-merging-script">
-          <div className="stacked-tags">
+          <div className="stacked-tags" onClick={e => e.stopPropagation()}>
             <Tag>SCRIPT</Tag>
             <ScriptSelect
               loading={loadingMutation}
-              selectedScript={attribute.mergingScript}
+              selectedScript={inputGroup.mergingScript}
               onChange={onChangeMergingScript}
               onClear={onClearMergingScript}
             />

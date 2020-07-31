@@ -49,6 +49,7 @@ const InputColumns = () => {
       {inputGroups.map((inputGroup: any, index: number) =>
         inputGroup ? (
           <Card
+            key={index}
             className="input-column-info"
             style={{
               background:

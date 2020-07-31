@@ -1,0 +1,7 @@
+#import "../fragments/entireInputGroup.graphql"
+
+mutation updateInputGroup($inputGroupId: ID!, $data: InputGroupInput!) {
+  updateInputGroup(inputGroupId: $inputGroupId, data: $data) {
+    ...entireInputGroup
+  }
+}
