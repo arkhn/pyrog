@@ -20,7 +20,6 @@ import ConceptMapDialog from 'components/mapping/ConceptMap';
 import ScriptSelect from 'components/selects/scriptSelect';
 import { loader } from 'graphql.macro';
 import { setAttributeInMap } from 'services/resourceInputs/actions';
-import { groupEnd } from 'console';
 
 // GRAPHQL
 const qInputsForAttribute = loader(

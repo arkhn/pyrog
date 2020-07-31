@@ -1,17 +1,12 @@
 import { arg, idArg, mutationType, stringArg, booleanArg } from '@nexus/schema'
 
-import {
-  createAttribute,
-  updateAttribute,
-  deleteAttribute,
-  deleteAttributes,
-} from './Attribute'
+import { createAttribute, deleteAttribute, deleteAttributes } from './Attribute'
 import { createAccessControl, deleteAccessControl } from './AccessControl'
 import { createComment } from './Comment'
 import { addJoinToColumn } from './Column'
 import { deleteCredential, upsertCredential } from './Credential'
 import { createInput, deleteInput, updateInput } from './Input'
-import { createInputGroup } from './InputGroup'
+import { createInputGroup, updateInputGroup } from './InputGroup'
 import { updateJoin, deleteJoin } from './Join'
 import { createResource, updateResource, deleteResource } from './Resource'
 import { deleteSource, createSource } from './Source'
@@ -172,15 +167,6 @@ export const Mutation = mutationType({
       resolve: createAttribute,
     })
 
-    t.field('updateAttribute', {
-      type: 'Attribute',
-      args: {
-        attributeId: idArg({ required: true }),
-        data: arg({ type: 'AttributeInput', required: true }),
-      },
-      resolve: updateAttribute,
-    })
-
     t.field('createComment', {
       type: 'Comment',
       args: {
@@ -220,6 +206,15 @@ export const Mutation = mutationType({
         attributeId: idArg({ required: true }),
       },
       resolve: createInputGroup,
+    })
+
+    t.field('updateInputGroup', {
+      type: 'InputGroup',
+      args: {
+        inputGroupId: idArg({ required: true }),
+        data: arg({ type: 'InputGroupInput', required: true }),
+      },
+      resolve: updateInputGroup,
     })
 
     /*

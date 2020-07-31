@@ -1,5 +1,14 @@
 import { inputObjectType } from '@nexus/schema'
 
+export const UpdateResourceInput = inputObjectType({
+  name: 'UpdateResourceInput',
+  definition(t) {
+    t.field('label', { type: 'String' })
+    t.field('primaryKeyTable', { type: 'String' })
+    t.field('primaryKeyColumn', { type: 'String' })
+  },
+})
+
 export const AttributeInput = inputObjectType({
   name: 'AttributeInput',
   definition(t) {
@@ -7,12 +16,10 @@ export const AttributeInput = inputObjectType({
   },
 })
 
-export const UpdateResourceInput = inputObjectType({
-  name: 'UpdateResourceInput',
+export const InputGroupInput = inputObjectType({
+  name: 'InputGroupInput',
   definition(t) {
-    t.field('label', { type: 'String' })
-    t.field('primaryKeyTable', { type: 'String' })
-    t.field('primaryKeyColumn', { type: 'String' })
+    t.string('mergingScript')
   },
 })
 

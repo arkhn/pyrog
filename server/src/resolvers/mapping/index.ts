@@ -85,10 +85,14 @@ export const exportMapping = async (
           ...(includeComments && {
             comments: { include: { author: { select: { email: true } } } },
           }),
-          inputs: {
+          inputGroups: {
             include: {
-              sqlValue: {
-                include: { joins: { include: { tables: true } } },
+              inputs: {
+                include: {
+                  sqlValue: {
+                    include: { joins: { include: { tables: true } } },
+                  },
+                },
               },
             },
           },

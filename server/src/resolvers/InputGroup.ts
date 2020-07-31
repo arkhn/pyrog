@@ -34,3 +34,16 @@ export const createInputGroup: FieldResolver<
 
   return newGroup
 }
+
+export const updateInputGroup: FieldResolver<
+  'Mutation',
+  'updateInputGroup'
+> = async (_parent, { inputGroupId, data }, ctx) => {
+  if (!data) {
+    throw new Error('Update payload cannot be null')
+  }
+  return ctx.prisma.inputGroup.update({
+    where: { id: inputGroupId },
+    data,
+  })
+}

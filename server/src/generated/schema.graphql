@@ -321,6 +321,10 @@ input InputGroupFilter {
   some: InputGroupWhereInput
 }
 
+input InputGroupInput {
+  mergingScript: String
+}
+
 input InputGroupWhereInput {
   AND: [InputGroupWhereInput!]
   attribute: AttributeWhereInput
@@ -421,8 +425,8 @@ type Mutation {
   login(email: String!, password: String!): AuthPayload!
   refreshDefinition(definitionId: ID!): StructureDefinition!
   signup(email: String!, name: String!, password: String!): AuthPayload!
-  updateAttribute(attributeId: ID!, data: AttributeInput!): Attribute!
   updateInput(data: UpdateInputInput!, inputId: ID!): Input!
+  updateInputGroup(data: InputGroupInput!, inputGroupId: ID!): InputGroup!
   updateJoin(data: JoinInput!, joinId: ID!): Join!
   updateResource(data: UpdateResourceInput!, filters: [FilterInput!], resourceId: ID!): Resource!
   upsertCredential(database: String!, host: String!, login: String!, model: String!, owner: String!, password: String!, port: String!, sourceId: ID!): Credential!

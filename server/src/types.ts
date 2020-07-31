@@ -4,6 +4,7 @@ import {
   Comment,
   Filter,
   Input,
+  InputGroup,
   Join,
   Resource,
   User,
@@ -21,12 +22,20 @@ export type InputWithColumn = Input & {
   sqlValue: ColumnWithJoins
 }
 
+export type InputGroupWithInputs = InputGroup & {
+  inputs: InputWithColumn[]
+}
+
+export type AttributeWithInputGroups = Attribute & {
+  inputGroups: InputGroupWithInputs[]
+}
+
 export type AttributeWithInputs = Attribute & {
   inputs: InputWithColumn[]
 }
 
 export type ResourceWithAttributes = Resource & {
-  attributes: AttributeWithInputs[]
+  attributes: AttributeWithInputGroups[]
 }
 
 export type AttributeWithCommentsPreV7 = AttributeWithInputs & {
@@ -39,10 +48,6 @@ export type CommentWithAuthor = Comment & {
 
 export type AttributeWithComments = AttributeWithInputs & {
   comments: CommentWithAuthor[]
-}
-
-export type AttributeWithChildren = AttributeWithInputs & {
-  children: AttributeWithChildren[]
 }
 
 export type FilterWithSqlColumn = Filter & {
