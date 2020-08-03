@@ -1,4 +1,5 @@
 import { objectType, FieldResolver } from '@nexus/schema'
+import { ConditionAction } from '@prisma/client'
 
 export const Condition = objectType({
   name: 'Condition',
@@ -11,16 +12,29 @@ export const Condition = objectType({
   },
 })
 
-export const createCondition: FieldResolver<
+export const updateCondition: FieldResolver<
   'Mutation',
-  'createCondition'
-> = async (_, { action, table, column, value }, ctx) =>
-  ctx.prisma.condition.create({
+  'updateCondition'
+> = async (_, { conditionId, action, table, column, value }, ctx) =>
+  await ctx.prisma.condition.update({
+    where: {
+      id: conditionId,
+    },
     data: {
-      action,
+      action: action as ConditionAction,
       value,
       column: {
-        create: { table, column },
+        update: { table, column },
       },
+    },
+  })
+
+export const deleteCondition: FieldResolver<
+  'Mutation',
+  'deleteCondition'
+> = async (_, { conditionId }, ctx) =>
+  await ctx.prisma.condition.delete({
+    where: {
+      id: conditionId,
     },
   })

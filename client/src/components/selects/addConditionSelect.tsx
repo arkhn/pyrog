@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useCallback } from 'react';
 import {
   Button,
   ButtonGroup,
@@ -8,6 +8,9 @@ import {
   MenuItem,
   Position
 } from '@blueprintjs/core';
+import { useMutation } from '@apollo/react-hooks';
+import { useDispatch, useSelector } from 'react-redux';
+import { loader } from 'graphql.macro';
 
 import {
   ItemPredicate,
@@ -17,8 +20,14 @@ import {
 import { IconName } from '@blueprintjs/icons';
 
 import TSelect from './TSelect';
+import ColumnSelect from './columnSelect';
+import StringSelect from './stringSelect';
 
-import { Condition } from 'types';
+import { Condition, ISourceSchema, IReduxStore } from 'types';
+
+const mCreateCondition = loader(
+  'src/graphql/mutations/createCondition.graphql'
+);
 
 interface Props {
   disabled?: boolean;
@@ -35,7 +44,6 @@ interface Props {
 interface CreateConditionProps {
   isOpen: boolean;
   onClose: any;
-  onUpload: any;
 }
 
 const filterById: ItemPredicate<Condition> = (query, condition: Condition) => {
@@ -83,11 +91,7 @@ const AddConditionSelect = ({
     { handleClick, modifiers, query }
   ) => (
     // TODO change display
-    <MenuItem
-      key={condition.id}
-      onClick={handleClick}
-      text={condition.id}
-    />
+    <MenuItem key={condition.id} onClick={handleClick} text={condition.id} />
   );
 
   const renderConditionList: ItemListRenderer<Condition> = ({
@@ -119,7 +123,6 @@ const AddConditionSelect = ({
       <CreateCondition
         isOpen={createConditionOpen}
         onClose={() => setCreateConditionOpen(false)}
-        onUpload={onChange}
       />
       <ButtonGroup>
         <TSelect<Condition>
@@ -153,14 +156,61 @@ const AddConditionSelect = ({
   );
 };
 
-const CreateCondition = ({
-  isOpen,
-  onClose,
-  onUpload
-}: CreateConditionProps) => {
+const CreateCondition = ({ isOpen, onClose }: CreateConditionProps) => {
+  const schema = useSelector(
+    (state: IReduxStore) => state.selectedNode.source.credential.schema
+  );
+
+  const [action, setAction] = React.useState('');
+  const [table, setTable] = React.useState('');
+  const [column, setColumn] = React.useState('');
+  const [value, setValue] = React.useState('');
+
+  const [createComment] = useMutation(mCreateCondition);
+
+  const availableActions = ['INCLUDE', 'EXCLUDE'];
+
+  const onSubmit = useCallback(() => {
+    // TODO create condition
+  }, []);
+
   return (
-    <Dialog className="dialog" isOpen={isOpen} title="Create a new extension">
-      <Button className="uploadButton">Create extension</Button>
+    <Dialog
+      className="dialog"
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Create a new condition"
+    >
+      <div>
+        <StringSelect
+          inputItem={action}
+          items={availableActions}
+          onChange={(action: string): void => setAction(action)}
+        />
+      </div>
+      <div>
+        <ColumnSelect
+          tableChangeCallback={(e: string) => {
+            setTable(e);
+          }}
+          columnChangeCallback={(e: string) => {
+            setColumn(e);
+          }}
+          sourceSchema={schema as ISourceSchema}
+        />
+      </div>
+      <div>
+        <input
+          className="text-input"
+          value={value}
+          type="text"
+          placeholder="value..."
+          onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+            setValue(e.target.value)
+          }
+        />
+      </div>
+      <Button onClick={() => onSubmit()}>Create condition</Button>
     </Dialog>
   );
 };

@@ -1,4 +1,5 @@
 import { objectType, FieldResolver } from '@nexus/schema'
+import { ConditionAction } from '@prisma/client'
 
 export const InputGroup = objectType({
   name: 'InputGroup',
@@ -6,7 +7,7 @@ export const InputGroup = objectType({
     t.model.id()
 
     t.model.mergingScript()
-    t.model.condition()
+    t.model.conditions()
     t.model.inputs()
 
     t.model.attribute()
@@ -39,12 +40,42 @@ export const createInputGroup: FieldResolver<
 export const updateInputGroup: FieldResolver<
   'Mutation',
   'updateInputGroup'
-> = async (_parent, { inputGroupId, mergingScript, conditionId }, ctx) => {
+> = async (_parent, { inputGroupId, mergingScript }, ctx) => {
   return ctx.prisma.inputGroup.update({
     where: { id: inputGroupId },
     data: {
-      ...(mergingScript !== undefined && { mergingScript }),
-      ...(conditionId !== undefined && { condition: { connect: { id: conditionId || undefined } } }),
+      mergingScript,
+    },
+  })
+}
+
+export const addConditionToInputGroup: FieldResolver<
+  'Mutation',
+  'addConditionToInputGroup'
+> = async (_, { inputGroupId, action, table, column, value }, ctx) => {
+  const inputGroup = await ctx.prisma.inputGroup.findOne({
+    where: { id: inputGroupId },
+  })
+  const newCondition = await ctx.prisma.condition.create({
+    data: {
+      action: action as ConditionAction,
+      value,
+      column: {
+        create: { table, column },
+      },
+      inputGroup: {
+        connect: {
+          id: inputGroupId,
+        },
+      },
+    },
+  })
+  return await ctx.prisma.inputGroup.update({
+    where: { id: inputGroupId },
+    data: {
+      conditions: {
+        connect: { id: newCondition.id },
+      },
     },
   })
 }

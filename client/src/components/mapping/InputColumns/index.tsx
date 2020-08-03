@@ -50,7 +50,6 @@ const InputColumns = () => {
         inputGroup ? (
           <Card
             key={index}
-            className="input-column-info"
             style={{
               background:
                 index === selectedNode.selectedInputGroup ? '#ced9e0' : ''

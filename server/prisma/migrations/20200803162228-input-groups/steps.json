@@ -73,94 +73,9 @@
     {
       "tag": "CreateField",
       "model": "InputGroup",
-      "field": "conditionId",
-      "type": "String",
-      "arity": "Optional"
-    },
-    {
-      "tag": "CreateDirective",
-      "location": {
-        "path": {
-          "tag": "Field",
-          "model": "InputGroup",
-          "field": "conditionId"
-        },
-        "directive": "map"
-      }
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "InputGroup",
-          "field": "conditionId"
-        },
-        "directive": "map"
-      },
-      "argument": "",
-      "value": "\"condition\""
-    },
-    {
-      "tag": "CreateField",
-      "model": "InputGroup",
-      "field": "condition",
+      "field": "conditions",
       "type": "Condition",
-      "arity": "Optional"
-    },
-    {
-      "tag": "CreateDirective",
-      "location": {
-        "path": {
-          "tag": "Field",
-          "model": "InputGroup",
-          "field": "condition"
-        },
-        "directive": "relation"
-      }
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "InputGroup",
-          "field": "condition"
-        },
-        "directive": "relation"
-      },
-      "argument": "",
-      "value": "\"inputCondition\""
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "InputGroup",
-          "field": "condition"
-        },
-        "directive": "relation"
-      },
-      "argument": "fields",
-      "value": "[conditionId]"
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "InputGroup",
-          "field": "condition"
-        },
-        "directive": "relation"
-      },
-      "argument": "references",
-      "value": "[id]"
+      "arity": "List"
     },
     {
       "tag": "CreateField",
@@ -317,14 +232,14 @@
       "model": "Condition",
       "field": "action",
       "type": "ConditionAction",
-      "arity": "Required"
+      "arity": "Optional"
     },
     {
       "tag": "CreateField",
       "model": "Condition",
       "field": "columnId",
       "type": "String",
-      "arity": "Required"
+      "arity": "Optional"
     },
     {
       "tag": "CreateDirective",
@@ -356,7 +271,7 @@
       "model": "Condition",
       "field": "column",
       "type": "Column",
-      "arity": "Required"
+      "arity": "Optional"
     },
     {
       "tag": "CreateDirective",
@@ -402,14 +317,14 @@
       "model": "Condition",
       "field": "value",
       "type": "String",
-      "arity": "Required"
+      "arity": "Optional"
     },
     {
       "tag": "CreateField",
       "model": "Condition",
-      "field": "InputGroup",
-      "type": "InputGroup",
-      "arity": "List"
+      "field": "inputGroupId",
+      "type": "String",
+      "arity": "Required"
     },
     {
       "tag": "CreateDirective",
@@ -417,7 +332,39 @@
         "path": {
           "tag": "Field",
           "model": "Condition",
-          "field": "InputGroup"
+          "field": "inputGroupId"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Condition",
+          "field": "inputGroupId"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"inputGroup\""
+    },
+    {
+      "tag": "CreateField",
+      "model": "Condition",
+      "field": "inputGroup",
+      "type": "InputGroup",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Condition",
+          "field": "inputGroup"
         },
         "directive": "relation"
       }
@@ -429,12 +376,26 @@
         "path": {
           "tag": "Field",
           "model": "Condition",
-          "field": "InputGroup"
+          "field": "inputGroup"
         },
         "directive": "relation"
       },
-      "argument": "",
-      "value": "\"inputCondition\""
+      "argument": "fields",
+      "value": "[inputGroupId]"
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Condition",
+          "field": "inputGroup"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
     },
     {
       "tag": "CreateField",

@@ -101,8 +101,10 @@ export interface Resource {
 export interface Condition {
   id: string;
   action: string;
-  table: string;
-  column: string;
+  column: {
+    table: string;
+    column: string;
+  };
   value: string;
 }
 

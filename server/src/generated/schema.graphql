@@ -188,10 +188,10 @@ type ConceptMap {
 }
 
 type Condition {
-  action: ConditionAction!
-  column: Column!
+  action: ConditionAction
+  column: Column
   id: String!
-  value: String!
+  value: String
 }
 
 enum ConditionAction {
@@ -199,16 +199,27 @@ enum ConditionAction {
   INCLUDE
 }
 
+input ConditionFilter {
+  every: ConditionWhereInput
+  none: ConditionWhereInput
+  some: ConditionWhereInput
+}
+
 input ConditionWhereInput {
   action: ConditionAction
   AND: [ConditionWhereInput!]
   column: ColumnWhereInput
-  columnId: StringFilter
+  columnId: NullableStringFilter
   id: StringFilter
-  InputGroup: InputGroupFilter
+  inputGroup: InputGroupWhereInput
+  inputGroupId: StringFilter
   NOT: [ConditionWhereInput!]
   OR: [ConditionWhereInput!]
-  value: StringFilter
+  value: NullableStringFilter
+}
+
+input ConditionWhereUniqueInput {
+  id: String
 }
 
 type Credential {
@@ -316,7 +327,7 @@ input InputFilter {
 
 type InputGroup {
   attribute: Attribute
-  condition: Condition
+  conditions(after: ConditionWhereUniqueInput, before: ConditionWhereUniqueInput, first: Int, last: Int): [Condition!]!
   createdAt: DateTime!
   id: String!
   inputs(after: InputWhereUniqueInput, before: InputWhereUniqueInput, first: Int, last: Int): [Input!]!
@@ -334,8 +345,7 @@ input InputGroupWhereInput {
   AND: [InputGroupWhereInput!]
   attribute: AttributeWhereInput
   attributeId: NullableStringFilter
-  condition: ConditionWhereInput
-  conditionId: NullableStringFilter
+  conditions: ConditionFilter
   createdAt: DateTimeFilter
   id: StringFilter
   inputs: InputFilter
@@ -409,6 +419,7 @@ The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://
 scalar JSON
 
 type Mutation {
+  addConditionToInputGroup(action: String, column: String, inputGroupId: ID!, table: String, value: String): InputGroup!
   addJoinToColumn(columnId: ID!, join: JoinInput): Column!
   createAccessControl(role: SourceRole!, sourceId: ID!, userEmail: String!): AccessControl!
   createAttribute(data: AttributeInput, definitionId: ID!, path: String!, resourceId: ID!, sliceName: String): Attribute!
@@ -421,6 +432,7 @@ type Mutation {
   deleteAccessControl(accessControlId: ID!): AccessControl!
   deleteAttribute(attributeId: ID!): Attribute!
   deleteAttributes(filter: AttributeWhereInput): [Attribute!]
+  deleteCondition(conditionId: ID!): Condition!
   deleteCredential(credentialId: ID!): Credential!
   deleteInput(inputId: ID!): Input!
   deleteJoin(joinId: ID!): Join!
@@ -430,8 +442,9 @@ type Mutation {
   login(email: String!, password: String!): AuthPayload!
   refreshDefinition(definitionId: ID!): StructureDefinition!
   signup(email: String!, name: String!, password: String!): AuthPayload!
+  updateCondition(action: String, column: String, conditionId: ID!, table: String, value: String): Condition!
   updateInput(data: UpdateInputInput!, inputId: ID!): Input!
-  updateInputGroup(conditionId: String, inputGroupId: ID!, mergingScript: String): InputGroup!
+  updateInputGroup(inputGroupId: ID!, mergingScript: String): InputGroup!
   updateJoin(data: JoinInput!, joinId: ID!): Join!
   updateResource(data: UpdateResourceInput!, filters: [FilterInput!], resourceId: ID!): Resource!
   upsertCredential(database: String!, host: String!, login: String!, model: String!, owner: String!, password: String!, port: String!, sourceId: ID!): Credential!

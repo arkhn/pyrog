@@ -1,0 +1,23 @@
+mutation updateCondition(
+  $conditionId: ID!
+  $action: String
+  $table: String
+  $column: String
+  $value: String
+) {
+  updateCondition(
+    conditionId: $conditionId
+    action: $action
+    table: $table
+    column: $column
+    value: $value
+  ) {
+    id
+    action
+    column {
+      table
+      column
+    }
+    value
+  }
+}

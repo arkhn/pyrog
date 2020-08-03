@@ -6,7 +6,8 @@ fragment entireInputGroup on InputGroup {
   inputs {
     ...entireInput
   }
-  condition {
+  conditions {
+    id
     action
     column {
       table

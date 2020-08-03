@@ -44,10 +44,12 @@ const Join = ({ joinData }: Props) => {
   const removeJoin = (input: any) => {
     return {
       ...input,
-      sqlValue: {
-        ...input.sqlValue,
-        joins: input.sqlValue.joins.filter((j: any) => j.id !== joinData.id)
-      }
+      sqlValue: input.sqlValue
+        ? {
+            ...input.sqlValue,
+            joins: input.sqlValue.joins.filter((j: any) => j.id !== joinData.id)
+          }
+        : input.sqlValue
     };
   };
 
@@ -60,7 +62,10 @@ const Join = ({ joinData }: Props) => {
     });
     const newDataAttribute = {
       ...dataAttribute,
-      inputs: dataAttribute.inputs.map(removeJoin)
+      inputGroups: dataAttribute.inputGroups.map((group: any) => ({
+        ...group,
+        inputs: group.inputs.map(removeJoin)
+      }))
     };
     cache.writeQuery({
       query: qInputsForAttribute,
@@ -87,10 +92,7 @@ const Join = ({ joinData }: Props) => {
         }}
       />
 
-      <JoinColumns
-        join={joinData}
-        updateJoin={updateJoin}
-      />
+      <JoinColumns join={joinData} updateJoin={updateJoin} />
     </div>
   );
 };

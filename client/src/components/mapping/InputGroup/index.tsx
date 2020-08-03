@@ -1,19 +1,22 @@
 import React from 'react';
-import { Tag } from '@blueprintjs/core';
+import { Button, Tag } from '@blueprintjs/core';
 import { useMutation } from '@apollo/react-hooks';
 import { useSelector } from 'react-redux';
 import { onError } from 'services/apollo';
 import { loader } from 'graphql.macro';
 
 import ScriptSelect from 'components/selects/scriptSelect';
-import AddConditionSelect from 'components/selects/addConditionSelect';
 import InputColumn from '../InputColumn';
+import InputCondition from '../InputCondition';
 
-import { IReduxStore, Condition } from 'types';
+import { IReduxStore } from 'types';
 
 // GRAPHQL
 const mUpdateInputGroup = loader(
   'src/graphql/mutations/updateInputGroup.graphql'
+);
+const mCreateCondition = loader(
+  'src/graphql/mutations/addConditionToInputGroup.graphql'
 );
 
 interface Props {
@@ -27,11 +30,13 @@ const InputGroup = ({ inputGroup }: Props) => {
     updateInputGroup,
     { loading: loadingMutation }
   ] = useMutation(mUpdateInputGroup, { onError: onError(toaster) });
+  const [createCondition] = useMutation(mCreateCondition, {
+    onError: onError(toaster)
+  });
 
   const onChangeMergingScript = (script: string) => {
     updateInputGroup({
       variables: {
-        inputGroupId: inputGroup.id,
         mergingScript: script
       }
     });
@@ -40,77 +45,52 @@ const InputGroup = ({ inputGroup }: Props) => {
   const onClearMergingScript = (): any => {
     updateInputGroup({
       variables: {
-        inputGroupId: inputGroup.id,
         mergingScript: null
       }
     });
   };
 
-  const onChangeCondition = (condition: Condition) => {
-    updateInputGroup({
-      variables: {
-        inputGroupId: inputGroup.id,
-        conditionId: condition.id
-      }
-    });
-  };
-
-  const onClearCondition = (): any => {
-    updateInputGroup({
-      variables: {
-        inputGroupId: inputGroup.id,
-        conditionId: null
-      }
-    });
-  };
-
   return (
-    <div id="input-columns">
-      <div id="input-column-rows">
-        {inputGroup.inputs.map((input: any, index: number) => {
-          return input ? <InputColumn key={index} input={input} /> : null;
-        })}
-      </div>
-      {inputGroup.inputs.length > 1 ? (
-        <div id="input-column-merging-script">
-          <div className="stacked-tags" onClick={e => e.stopPropagation()}>
-            <Tag>SCRIPT</Tag>
-            <ScriptSelect
-              loading={loadingMutation}
-              selectedScript={inputGroup.mergingScript}
-              onChange={onChangeMergingScript}
-              onClear={onClearMergingScript}
-            />
-          </div>
-          <div className="stacked-tags" onClick={e => e.stopPropagation()}>
-            <Tag>Condition</Tag>
-            <AddConditionSelect
-              loading={false}
-              disabled={false}
-              onChange={onChangeCondition}
-              onClear={onClearCondition}
-              inputItem={inputGroup.condition}
-              items={[
-                {
-                  id: 'aaaaa',
-                  action: 'aaaaa',
-                  table: 'aaaaa',
-                  column: 'aaaaa',
-                  value: 'aaaaa'
-                },
-                {
-                  id: 'bbb',
-                  action: 'aaaaa',
-                  table: 'aaaaa',
-                  column: 'aaaaa',
-                  value: 'aaaaa'
-                }
-              ]}
-            />
-          </div>
+    <React.Fragment>
+      {inputGroup.conditions.map((condition: any, index: number) => {
+        return condition ? (
+          <InputCondition key={index} condition={condition} />
+        ) : null;
+      })}
+      <Button
+        icon={'add'}
+        onClick={(e: React.MouseEvent) => {
+          e.stopPropagation();
+          createCondition({
+            variables: {
+              inputGroupId: inputGroup.id
+            }
+          });
+        }}
+      >
+        Add condition
+      </Button>
+      <div id="input-columns">
+        <div id="input-column-rows">
+          {inputGroup.inputs.map((input: any, index: number) => {
+            return input ? <InputColumn key={index} input={input} /> : null;
+          })}
         </div>
-      ) : null}
-    </div>
+        {inputGroup.inputs.length > 1 ? (
+          <div id="input-column-merging-script">
+            <div className="stacked-tags" onClick={e => e.stopPropagation()}>
+              <Tag>SCRIPT</Tag>
+              <ScriptSelect
+                loading={loadingMutation}
+                selectedScript={inputGroup.mergingScript}
+                onChange={onChangeMergingScript}
+                onClear={onClearMergingScript}
+              />
+            </div>
+          </div>
+        ) : null}
+      </div>
+    </React.Fragment>
   );
 };
 

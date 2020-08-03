@@ -2,11 +2,16 @@ import { arg, idArg, mutationType, stringArg, booleanArg } from '@nexus/schema'
 
 import { createAttribute, deleteAttribute, deleteAttributes } from './Attribute'
 import { createAccessControl, deleteAccessControl } from './AccessControl'
-import { createComment } from './Comment'
 import { addJoinToColumn } from './Column'
+import { createComment } from './Comment'
+import { deleteCondition, updateCondition } from './Condition'
 import { deleteCredential, upsertCredential } from './Credential'
 import { createInput, deleteInput, updateInput } from './Input'
-import { createInputGroup, updateInputGroup } from './InputGroup'
+import {
+  addConditionToInputGroup,
+  createInputGroup,
+  updateInputGroup,
+} from './InputGroup'
 import { updateJoin, deleteJoin } from './Join'
 import { createResource, updateResource, deleteResource } from './Resource'
 import { deleteSource, createSource } from './Source'
@@ -213,9 +218,44 @@ export const Mutation = mutationType({
       args: {
         inputGroupId: idArg({ required: true }),
         mergingScript: stringArg(),
-        conditionId: stringArg(),
       },
       resolve: updateInputGroup,
+    })
+
+    t.field('addConditionToInputGroup', {
+      type: 'InputGroup',
+      args: {
+        inputGroupId: idArg({ required: true }),
+        action: stringArg(),
+        table: stringArg(),
+        column: stringArg(),
+        value: stringArg(),
+      },
+      resolve: addConditionToInputGroup,
+    })
+
+    /*
+     * CONDITION
+     */
+
+    t.field('updateCondition', {
+      type: 'Condition',
+      args: {
+        conditionId: idArg({ required: true }),
+        action: stringArg(),
+        table: stringArg(),
+        column: stringArg(),
+        value: stringArg(),
+      },
+      resolve: updateCondition,
+    })
+
+    t.field('deleteCondition', {
+      type: 'Condition',
+      args: {
+        conditionId: idArg({ required: true }),
+      },
+      resolve: deleteCondition,
     })
 
     /*
