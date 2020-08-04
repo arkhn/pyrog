@@ -7,7 +7,7 @@ import {
   ResourceWithAttributes,
   InputGroupWithInputs,
 } from 'types'
-import { Comment, Input } from '@prisma/client'
+import { Comment, Condition, Input } from '@prisma/client'
 
 export const Source = objectType({
   name: 'Source',
@@ -153,6 +153,9 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
                       },
                     },
                   },
+                  conditions: {
+                    include: { column: true },
+                  },
                 },
               },
               comments: true,
@@ -205,12 +208,17 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
                   }
                   return ctx.prisma.input.delete({ where: { id: i.id } })
                 }),
+                ...g.conditions.map(async c => {
+                  if (c.column)
+                    ctx.prisma.column.delete({ where: { id: c.column.id } })
+                  return ctx.prisma.condition.delete({ where: { id: c.id } })
+                }),
                 ...a.comments.map(async c =>
                   ctx.prisma.comment.delete({
                     where: { id: c.id },
                   }),
                 ),
-              ] as Promise<Comment | Input>[])
+              ] as Promise<Comment | Condition | Input>[])
               return ctx.prisma.inputGroup.delete({ where: { id: g.id } })
             }),
           )

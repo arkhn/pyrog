@@ -1,6 +1,6 @@
 import { objectType, FieldResolver } from '@nexus/schema'
 import { getDefinition } from 'fhir'
-import { AttributeWhereInput } from '@prisma/client'
+import { AttributeWhereInput, Condition, Input } from '@prisma/client'
 
 export const Attribute = objectType({
   name: 'Attribute',
@@ -88,6 +88,7 @@ export const deleteAttributes: FieldResolver<
               },
             },
           },
+          conditions: { include: { column: true } },
         },
       },
     },
@@ -97,8 +98,8 @@ export const deleteAttributes: FieldResolver<
     res.map(async a => {
       await Promise.all(
         a.inputGroups.map(async g => {
-          await Promise.all(
-            g.inputs.map(async i => {
+          await Promise.all([
+            ...g.inputs.map(async i => {
               if (i.sqlValue) {
                 await Promise.all(
                   i.sqlValue.joins.map(async j => {
@@ -113,7 +114,12 @@ export const deleteAttributes: FieldResolver<
               }
               return ctx.prisma.input.delete({ where: { id: i.id } })
             }),
-          )
+            ...g.conditions.map(async c => {
+              if (c.column)
+                ctx.prisma.column.delete({ where: { id: c.column.id } })
+              return ctx.prisma.condition.delete({ where: { id: c.id } })
+            }),
+          ] as Promise<Condition | Input>[])
           return ctx.prisma.inputGroup.delete({ where: { id: g.id } })
         }),
       )
