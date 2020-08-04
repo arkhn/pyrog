@@ -53,9 +53,6 @@ export const addConditionToInputGroup: FieldResolver<
   'Mutation',
   'addConditionToInputGroup'
 > = async (_, { inputGroupId, action, table, column, value }, ctx) => {
-  const inputGroup = await ctx.prisma.inputGroup.findOne({
-    where: { id: inputGroupId },
-  })
   const newCondition = await ctx.prisma.condition.create({
     data: {
       action: action as ConditionAction,

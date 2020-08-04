@@ -81,7 +81,7 @@ export const permissions = shield(
 
       createAttribute: rules.isSourceWriter,
       deleteAttribute: rules.isSourceWriter,
-      
+
       createComment: rules.isSourceReader,
 
       createInputGroup: rules.isSourceWriter,
