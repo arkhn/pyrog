@@ -24,7 +24,7 @@ export const buildAttributesV6 = (
   attributes: AttributeWithCommentsPreV7[],
 ): AttributeCreateWithoutResourceInput[] | null =>
   attributes.map(a => {
-    const attr: AttributeCreateWithoutResourceInput = clean(a)
+    const attr: any = clean(a)
     if (a.inputs && a.inputs.length) {
       attr.inputs = { create: buildInputsQuery(a.inputs) }
     } else {

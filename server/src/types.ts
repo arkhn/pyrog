@@ -1,5 +1,6 @@
 import {
   Attribute,
+  AttributeCreateManyWithoutResourceInput,
   Column,
   Comment,
   Filter,

@@ -1,3 +1,5 @@
+#import "../fragments/entireCondition.graphql"
+
 mutation addConditionToInputGroup(
   $inputGroupId: ID!
   $action: String
@@ -14,13 +16,7 @@ mutation addConditionToInputGroup(
   ) {
     id
     conditions {
-      id
-      action
-      column {
-        table
-        column
-      }
-      value
+      ...entireCondition
     }
   }
 }

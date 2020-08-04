@@ -114,7 +114,7 @@ const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
       if (
         selectedInputGroup === null ||
         !attributesForResource[path] ||
-        selectedInputGroup > attributesForResource[path].inputGroups.length
+        selectedInputGroup >= attributesForResource[path].inputGroups.length
       ) {
         const { data: group } = await createInputGroup({
           variables: {
@@ -150,7 +150,10 @@ const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
           staticValue: value
         }
       });
-      if (selectedInputGroup === null) dispatch(selectInputGroup(attributesForResource[path].inputGroups.length));
+      if (selectedInputGroup === null)
+        dispatch(
+          selectInputGroup(attributesForResource[path].inputGroups.length)
+        );
       dispatch(setAttributeInMap(path, data.createInput.inputGroup.attribute));
     } catch (e) {
       console.log(e);

@@ -1,0 +1,10 @@
+fragment entireCondition on Condition {
+  id
+  action
+  column {
+    id
+    table
+    column
+  }
+  value
+}

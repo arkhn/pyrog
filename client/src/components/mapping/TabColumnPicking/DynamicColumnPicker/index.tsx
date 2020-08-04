@@ -88,7 +88,7 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
       if (
         selectedInputGroup === null ||
         !attributesForResource[path] ||
-        selectedInputGroup > attributesForResource[path].inputGroups.length
+        selectedInputGroup >= attributesForResource[path].inputGroups.length
       ) {
         const { data: group } = await createInputGroup({
           variables: {
