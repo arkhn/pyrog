@@ -211,7 +211,7 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
                   }),
                 ),
               ] as Promise<Comment | Input>[])
-              return ctx.prisma.input.delete({ where: { id: g.id } })
+              return ctx.prisma.inputGroup.delete({ where: { id: g.id } })
             }),
           )
           return ctx.prisma.attribute.delete({ where: { id: a.id } })

@@ -4,7 +4,7 @@ import {
   cleanResource,
   checkAuthors,
   buildFiltersQuery,
-  buildAttributesQuery,
+  buildAttributesQueryV9,
 } from './utils'
 
 export default async (
@@ -19,7 +19,7 @@ export default async (
         data: {
           ...cleanResource(r),
           attributes: {
-            create: buildAttributesQuery(r.attributes),
+            create: buildAttributesQueryV9(r.attributes),
           },
           filters: {
             create: buildFiltersQuery(r.filters),

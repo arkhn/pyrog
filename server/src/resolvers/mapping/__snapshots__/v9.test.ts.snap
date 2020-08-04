@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`import mapping V8 should send a query per resource 1`] = `
+exports[`import mapping V9 should send a query per resource 1`] = `
 Array [
   Object {
     "data": Object {
@@ -12,6 +12,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpi0002uv9kw0g01mua",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -69,6 +70,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpi0003uv9kidki5i6b",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -92,6 +94,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpi0004uv9kjmeggidy",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -128,6 +131,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpi0005uv9kbswrrpn3",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -158,6 +162,21 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "conditions": Object {
+                    "create": Array [
+                      Object {
+                        "action": "EXCLUDE",
+                        "column": Object {
+                          "create": Object {
+                            "column": "DATEIN",
+                            "table": "SEJOUR",
+                          },
+                        },
+                        "value": "-1",
+                      },
+                    ],
+                  },
+                  "id": "ckdg2bhpi0006uv9kmpsp43pi",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -190,6 +209,34 @@ Array [
                   },
                   "mergingScript": "merge_concat",
                 },
+                Object {
+                  "conditions": Object {
+                    "create": Array [
+                      Object {
+                        "action": "INCLUDE",
+                        "column": Object {
+                          "create": Object {
+                            "column": "DATEIN",
+                            "table": "SEJOUR",
+                          },
+                        },
+                        "value": "-1",
+                      },
+                    ],
+                  },
+                  "id": "ckdg2bhpi0006uv9kmpsp43mi",
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck8iiui3h0921euut6xx53utp",
+                        "script": null,
+                        "staticValue": "NONE",
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
+                },
               ],
             },
             "path": "period.start",
@@ -201,6 +248,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpi0007uv9kcjgwug6p",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -231,6 +279,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpj0008uv9kewbagrl4",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -267,6 +316,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpj0009uv9k7awpfyjb",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -303,6 +353,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpj0011uv9ksotkme30",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -332,6 +383,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpj0012uv9kd7cajreu",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -387,6 +439,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpj0013uv9krsjb2alk",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -430,6 +483,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpj0015uv9kwl9pkijm",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -472,6 +526,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpj0017uv9kjdy3vno7",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -522,7 +577,7 @@ Array [
 ]
 `;
 
-exports[`import mapping V8 should send a query per resource 2`] = `
+exports[`import mapping V9 should send a query per resource 2`] = `
 Array [
   Object {
     "data": Object {
@@ -540,6 +595,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpj0014uv9kjnrbkitg",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -563,6 +619,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpj0016uv9k6akaab4b",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -586,6 +643,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpj0018uv9kshjianod",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -628,6 +686,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpj0019uv9kcxhqgnng",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -651,6 +710,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpj0020uv9ko7fd3xde",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -681,6 +741,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpj0021uv9kzgzw4m6y",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -723,6 +784,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpk0022uv9k0z9gdqr1",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -746,6 +808,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpk0023uv9ku9kjafwl",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -776,6 +839,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpk0024uv9kcv7u0lev",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -818,6 +882,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpk0025uv9ksdius163",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -841,6 +906,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpk0026uv9k2oab1ny5",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -871,6 +937,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpk0027uv9knb4xjj0f",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -901,6 +968,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpk0028uv9kvpqz533a",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -931,6 +999,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpk0029uv9kjf9vipqf",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -961,6 +1030,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpk0030uv9k1n0o24ae",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -991,6 +1061,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpk0031uv9kit0wjy2e",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -1021,6 +1092,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpk0032uv9k68426pp9",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -1070,6 +1142,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpk0033uv9kmac9bhln",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -1100,6 +1173,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpl0034uv9kf92nhmzi",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -1123,6 +1197,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpl0035uv9kpasv71ue",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -1153,6 +1228,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpl0036uv9k1ubqs9a7",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -1176,6 +1252,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpl0037uv9k4wq2arcm",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -1218,6 +1295,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpl0038uv9k4g76fh4q",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -1248,6 +1326,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpl0039uv9kdvw7qfxg",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -1304,6 +1383,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpl0040uv9ksbpxqgya",
                   "inputs": Object {
                     "create": Array [
                       Object {
@@ -1334,6 +1414,7 @@ Array [
             "inputGroups": Object {
               "create": Array [
                 Object {
+                  "id": "ckdg2bhpl0041uv9ku79x13iw",
                   "inputs": Object {
                     "create": Array [
                       Object {

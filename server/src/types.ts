@@ -2,6 +2,7 @@ import {
   Attribute,
   Column,
   Comment,
+  Condition,
   Filter,
   Input,
   InputGroup,
@@ -24,9 +25,15 @@ export type InputWithColumn = Input & {
 
 export type InputGroupWithInputs = InputGroup & {
   inputs: InputWithColumn[]
+  conditions: ConditionWithColumn[]
+}
+
+export type ConditionWithColumn = Condition & {
+  column: Column
 }
 
 export type AttributeWithInputGroups = Attribute & {
+  comments: CommentWithAuthor[]
   inputGroups: InputGroupWithInputs[]
 }
 
@@ -40,6 +47,7 @@ export type ResourceWithAttributes = Resource & {
 
 export type AttributeWithCommentsPreV7 = AttributeWithInputs & {
   comments: string
+  mergingScript: string
 }
 
 export type CommentWithAuthor = Comment & {
@@ -48,6 +56,7 @@ export type CommentWithAuthor = Comment & {
 
 export type AttributeWithComments = AttributeWithInputs & {
   comments: CommentWithAuthor[]
+  mergingScript: string
 }
 
 export type FilterWithSqlColumn = Filter & {

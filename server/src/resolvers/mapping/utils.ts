@@ -3,20 +3,28 @@ import {
   Column,
   ColumnCreateWithoutInputInput,
   CommentCreateWithoutAttributeInput,
+  Condition,
   FilterCreateInput,
   InputCreateWithoutInputGroupInput,
+  InputGroupCreateInput,
   JoinCreateWithoutColumnInput,
   PrismaClient,
+  Resource,
+  ConditionCreateInput,
+  ConditionCreateWithoutInputGroupInput,
 } from '@prisma/client'
 
 import {
-  JoinWithColumn,
-  ColumnWithJoins,
-  InputWithColumn,
   AttributeWithComments,
   AttributeWithCommentsPreV7,
-  FilterWithSqlColumn,
+  AttributeWithInputGroups,
+  ColumnWithJoins,
   CommentWithAuthor,
+  ConditionWithColumn,
+  FilterWithSqlColumn,
+  InputGroupWithInputs,
+  InputWithColumn,
+  JoinWithColumn,
 } from 'types'
 
 export const clean = (entry: any): any => {
@@ -50,16 +58,32 @@ export const clean = (entry: any): any => {
   if (ret.userId !== undefined) {
     delete ret.userId
   }
+  if (ret.inputGroupId !== undefined) {
+    delete ret.inputGroupId
+  }
+
+  return ret
+}
+
+export const cleanPreV9 = (entry: any): any => {
+  const ret = JSON.parse(JSON.stringify(entry))
+
   if (ret.inputs !== undefined) {
     delete ret.inputs
   }
   if (ret.mergingScript !== undefined) {
     delete ret.mergingScript
   }
-
   return ret
 }
 
+export const cleanResource = (resource: Resource) => {
+  const r = clean(resource)
+  delete r.definition
+  delete r.source
+  delete r.primaryKeyOwner
+  return r
+}
 export const checkAuthors = async (
   prismaClient: PrismaClient,
   resources: any[],
@@ -135,6 +159,20 @@ export const buildInputsQuery = (
     return input
   })
 
+export const buildConditionsQuery = (
+  conditions: ConditionWithColumn[],
+): ConditionCreateWithoutInputGroupInput[] | undefined =>
+  conditions.map(c => ({
+    action: c.action,
+    value: c.value,
+    column: {
+      create: {
+        table: c.column.table,
+        column: c.column.column,
+      },
+    },
+  }))
+
 export const buildCommentQueryPreV7 = (
   comment: string,
 ): CommentCreateWithoutAttributeInput => ({
@@ -180,11 +218,67 @@ export const buildAttributesQuery = (
   attributes: AttributeWithComments[],
 ): AttributeCreateWithoutResourceInput[] | undefined =>
   attributes.map(a => {
-    const attr: AttributeCreateWithoutResourceInput = clean(a)
+    let attr: AttributeCreateWithoutResourceInput = clean(a)
     if (a.inputs && a.inputs.length) {
       attr.inputGroups = {
-        create: [{ inputs: { create: buildInputsQuery(a.inputs) } }],
+        create: [
+          {
+            inputs: { create: buildInputsQuery(a.inputs) },
+            mergingScript: a.mergingScript,
+          },
+        ],
       }
+    }
+    attr = cleanPreV9(attr)
+
+    if (a.comments && a.comments.length) {
+      attr.comments = { create: buildCommentsQuery(a.comments) }
+    } else {
+      delete attr.comments
+    }
+
+    if (!attr.definitionId) {
+      throw new Error(
+        `Attribute ${a.id} (${a.path}) did not have a definitionId`,
+      )
+    }
+    return attr
+  })
+
+export const buildInputGroupsQuery = (
+  inputGroups: InputGroupWithInputs[],
+): InputGroupCreateInput[] | undefined =>
+  inputGroups.map(g => {
+    let group: InputGroupCreateInput = clean(g)
+    if (g.inputs && g.inputs.length) {
+      group.inputs = {
+        create: buildInputsQuery(g.inputs),
+      }
+    } else {
+      delete group.inputs
+    }
+    if (g.conditions && g.conditions.length) {
+      group.conditions = {
+        create: buildConditionsQuery(g.conditions),
+      }
+    } else {
+      delete group.conditions
+    }
+
+    return group
+  })
+
+export const buildAttributesQueryV9 = (
+  attributes: AttributeWithInputGroups[],
+): AttributeCreateWithoutResourceInput[] | undefined =>
+  attributes.map(a => {
+    const attr: AttributeCreateWithoutResourceInput = clean(a)
+    if (a.inputGroups && a.inputGroups.length) {
+      attr.inputGroups = {
+        create: buildInputGroupsQuery(a.inputGroups),
+      }
+    } else {
+      delete attr.inputGroups
     }
 
     if (a.comments && a.comments.length) {

@@ -42,7 +42,7 @@
     "enzyme": "^3.9.0",
     "eslint-config-react-app": "^5.1.0",
     "eslint-plugin-import": "^2.19.1",
-    "eslint-plugin-react": "^7.17.0",
+    "eslint-plugin-react": "^7.20.5",
     "eslint-plugin-react-hooks": "^2.3.0",
     "graphql": "^14.0.2",
     "graphql-anywhere": "^4.2.4",

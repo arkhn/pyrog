@@ -9,11 +9,13 @@ import {
   MAPPING_VERSION_6,
   MAPPING_VERSION_7,
   MAPPING_VERSION_8,
+  MAPPING_VERSION_9,
   CURRENT_MAPPING_VERSION,
 } from '../../constants'
 import handleV6 from './v6'
 import handleV7 from './v7'
 import handleV8 from './v8'
+import handleV9 from './v9'
 import { getDefinition } from 'fhir'
 
 // copy all the resources from the mapping and their attributes.
@@ -57,6 +59,8 @@ export const importMapping = async (
       return handleV7(prismaClient, sourceId, resources)
     case MAPPING_VERSION_8:
       return handleV8(prismaClient, sourceId, resources)
+    case MAPPING_VERSION_9:
+      return handleV9(prismaClient, sourceId, resources)
     default:
       throw new Error(`Unknown mapping version: "${version}"`)
   }
