@@ -14,7 +14,7 @@ import './style.scss';
 import { Icon } from '@blueprintjs/core';
 import { useSelector } from 'react-redux';
 import { IReduxStore } from 'types';
-import { PAGAI_URL } from '../../../constants';
+import { PAGAI_URL, RIVER_URL } from '../../../constants';
 import FhirPreview from './FhirPreview';
 
 interface IProps {
@@ -29,15 +29,40 @@ const TableViewer = ({ table }: IProps) => {
   } = useSelector((state: IReduxStore) => state.selectedNode);
 
   const [compatiblePreview, setCompatiblePreview] = React.useState(false);
-  const [fhirPreviewEnabled, setFhirPreviewEnabled] = React.useState(false);
-  const [fhirPreviewRowId, setFhirPreviewRowId] = React.useState(
-    undefined as number | undefined
-  );
 
   const [columns, setColumns] = React.useState([] as React.ReactElement[]);
   const [loading, setLoading] = React.useState(false);
   const [fields, setFields] = React.useState([] as string[]);
   const [rows, setRows] = React.useState([]);
+  const [previewData, setPreviewData] = React.useState(undefined as any);
+
+  const fetchPreview = React.useCallback(
+    async selectedRows => {
+      try {
+        setLoading(true);
+        const res = await axios.post(
+          `${RIVER_URL}/preview`,
+          {
+            resource_id: resource.id,
+            primary_key_values: [
+              rows[selectedRows][fields.indexOf(resource.primaryKeyColumn)]
+            ]
+          },
+          { headers: { 'Content-Type': 'application/json' } }
+        );
+        setPreviewData(res.data);
+      } catch (err) {
+        toaster.show({
+          message: err.response ? err.response.data : err.message,
+          intent: 'danger',
+          icon: 'warning-sign',
+          timeout: 6000
+        });
+      }
+      setLoading(false);
+    },
+    [fields, rows, resource, toaster]
+  );
 
   const onSelection = (regions: IRegion[]) => {
     if (!compatiblePreview) return;
@@ -47,11 +72,7 @@ const TableViewer = ({ table }: IProps) => {
     if (!selectedRows) return;
 
     const [rowIndex] = selectedRows;
-
-    setFhirPreviewRowId(
-      rows[rowIndex][fields.indexOf(resource.primaryKeyColumn)]
-    );
-    setFhirPreviewEnabled(true);
+    fetchPreview(rowIndex);
   };
 
   const renderRowHeader = (index: number) => (
@@ -76,7 +97,6 @@ const TableViewer = ({ table }: IProps) => {
   }, [rows, fields]);
 
   React.useEffect(() => {
-    setFhirPreviewEnabled(false);
     table === resource.primaryKeyTable
       ? setCompatiblePreview(true)
       : setCompatiblePreview(false);
@@ -127,9 +147,7 @@ const TableViewer = ({ table }: IProps) => {
       >
         {columns}
       </Table>
-      {fhirPreviewEnabled && (
-        <FhirPreview rowId={fhirPreviewRowId!} resourceId={resource.id} />
-      )}
+      <FhirPreview previewData={previewData} loading={loading} />
     </React.Fragment>
   );
 };
