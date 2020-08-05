@@ -3,14 +3,12 @@ import {
   Column,
   ColumnCreateWithoutInputInput,
   CommentCreateWithoutAttributeInput,
-  Condition,
   FilterCreateInput,
   InputCreateWithoutInputGroupInput,
   InputGroupCreateInput,
   JoinCreateWithoutColumnInput,
   PrismaClient,
   Resource,
-  ConditionCreateInput,
   ConditionCreateWithoutInputGroupInput,
 } from '@prisma/client'
 
