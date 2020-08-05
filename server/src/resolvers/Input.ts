@@ -122,12 +122,13 @@ export const deleteInput: FieldResolver<'Mutation', 'deleteInput'> = async (
   if (!input) throw new Error(`input with id ${inputId} does not exist`)
 
   if (input.inputGroup?.inputs.length === 1) {
-    await Promise.all([
+    await Promise.all(
       input.inputGroup.conditions.map(async c => {
-        if (c.column) ctx.prisma.column.delete({ where: { id: c.column.id } })
+        if (c.column)
+          await ctx.prisma.column.delete({ where: { id: c.column.id } })
         return ctx.prisma.condition.delete({ where: { id: c.id } })
       }),
-    ])
+    )
     await ctx.prisma.inputGroup.delete({
       where: { id: input.inputGroup.id },
     })
