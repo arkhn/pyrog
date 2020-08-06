@@ -1,0 +1,22 @@
+#import "../fragments/entireCondition.graphql"
+
+mutation addConditionToInputGroup(
+  $inputGroupId: ID!
+  $action: String
+  $table: String
+  $column: String
+  $value: String
+) {
+  addConditionToInputGroup(
+    inputGroupId: $inputGroupId
+    action: $action
+    table: $table
+    column: $column
+    value: $value
+  ) {
+    id
+    conditions {
+      ...entireCondition
+    }
+  }
+}

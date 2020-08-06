@@ -1,12 +1,11 @@
-#import "../fragments/entireInput.graphql"
+#import "../fragments/entireInputGroup.graphql"
 #import "../fragments/comment.graphql"
 
 query inputsForAttribute($attributeId: ID!) {
   attribute(attributeId: $attributeId) {
     id
-    mergingScript
-    inputs {
-      ...entireInput
+    inputGroups {
+      ...entireInputGroup
     }
     comments {
       ...comment

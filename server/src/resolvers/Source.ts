@@ -2,8 +2,12 @@ import { objectType, FieldResolver, booleanArg } from '@nexus/schema'
 
 import { getDefinition } from 'fhir'
 import { importMapping, exportMapping } from 'resolvers/mapping'
-import { AttributeWithInputs, ResourceWithAttributes } from 'types'
-import { Comment, Input } from '@prisma/client'
+import {
+  AttributeWithInputGroups,
+  ResourceWithAttributes,
+  InputGroupWithInputs,
+} from 'types'
+import { Comment, Condition, Input } from '@prisma/client'
 
 export const Source = objectType({
   name: 'Source',
@@ -37,7 +41,7 @@ export const Source = objectType({
           include: {
             attributes: {
               include: {
-                inputs: true,
+                inputGroups: true,
               },
             },
           },
@@ -47,7 +51,8 @@ export const Source = objectType({
         const nbAttributes = resources.reduce(
           (acc, r) =>
             acc +
-            r.attributes.filter(a => a.inputs && a.inputs.length > 0).length,
+            r.attributes.filter(a => a.inputGroups && a.inputGroups.length > 0)
+              .length,
           0,
         )
         return [resources.length, nbAttributes]
@@ -133,16 +138,23 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
           },
           attributes: {
             include: {
-              inputs: {
+              inputGroups: {
                 include: {
-                  sqlValue: {
+                  inputs: {
                     include: {
-                      joins: {
+                      sqlValue: {
                         include: {
-                          tables: true,
+                          joins: {
+                            include: {
+                              tables: true,
+                            },
+                          },
                         },
                       },
                     },
+                  },
+                  conditions: {
+                    include: { sqlValue: true },
                   },
                 },
               },
@@ -171,33 +183,45 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
       )
       await Promise.all(
         r.attributes.map(async a => {
-          await Promise.all([
-            ...a.inputs.map(async i => {
-              if (i.sqlValue) {
-                await Promise.all([
-                  ...i.sqlValue.joins.map(async j => {
-                    await Promise.all(
-                      j.tables.map(t =>
-                        ctx.prisma.column.delete({
-                          where: { id: t.id },
-                        }),
-                      ),
-                    )
-                    return ctx.prisma.join.delete({
-                      where: { id: j.id },
+          await Promise.all(
+            a.inputGroups.map(async g => {
+              await Promise.all([
+                ...g.inputs.map(async i => {
+                  if (i.sqlValue) {
+                    await Promise.all([
+                      ...i.sqlValue.joins.map(async j => {
+                        await Promise.all(
+                          j.tables.map(t =>
+                            ctx.prisma.column.delete({
+                              where: { id: t.id },
+                            }),
+                          ),
+                        )
+                        return ctx.prisma.join.delete({
+                          where: { id: j.id },
+                        })
+                      }),
+                    ])
+                    await ctx.prisma.column.delete({
+                      where: { id: i.sqlValue.id },
                     })
+                  }
+                  return ctx.prisma.input.delete({ where: { id: i.id } })
+                }),
+                ...g.conditions.map(async c => {
+                  if (c.sqlValue)
+                    ctx.prisma.column.delete({ where: { id: c.sqlValue.id } })
+                  return ctx.prisma.condition.delete({ where: { id: c.id } })
+                }),
+                ...a.comments.map(async c =>
+                  ctx.prisma.comment.delete({
+                    where: { id: c.id },
                   }),
-                ])
-                await ctx.prisma.column.delete({ where: { id: i.sqlValue.id } })
-              }
-              return ctx.prisma.input.delete({ where: { id: i.id } })
+                ),
+              ] as Promise<Comment | Condition | Input>[])
+              return ctx.prisma.inputGroup.delete({ where: { id: g.id } })
             }),
-            ...a.comments.map(async c =>
-              ctx.prisma.comment.delete({
-                where: { id: c.id },
-              }),
-            ),
-          ] as Promise<Comment | Input>[])
+          )
           return ctx.prisma.attribute.delete({ where: { id: a.id } })
         }),
       )
@@ -219,7 +243,11 @@ const usedConceptMaps: FieldResolver<'Source', 'usedConceptMapIds'> = async (
         include: {
           attributes: {
             include: {
-              inputs: true,
+              inputGroups: {
+                include: {
+                  inputs: true,
+                },
+              },
             },
           },
         },
@@ -228,15 +256,18 @@ const usedConceptMaps: FieldResolver<'Source', 'usedConceptMapIds'> = async (
   })
   const resources = sourceWithMapIds!.resources as ResourceWithAttributes[]
 
-  const reduceAttributes = (
-    acc: string[],
-    curAttribute: AttributeWithInputs,
-  ) => [
+  const reduceInputGroups = (acc: string[], curGroup: InputGroupWithInputs) => [
     ...acc,
-    ...(curAttribute.inputs
+    ...(curGroup.inputs
       .map(input => input.conceptMapId)
       .filter(Boolean) as string[]),
   ]
+
+  const reduceAttributes = (
+    acc: string[],
+    curAttribute: AttributeWithInputGroups,
+  ) => [...acc, ...curAttribute.inputGroups.reduce(reduceInputGroups, [])]
+
   const reduceResources = (
     acc: string[],
     curResource: ResourceWithAttributes,

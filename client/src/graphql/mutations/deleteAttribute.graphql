@@ -1,5 +1,0 @@
-mutation deleteAttribute($attributeId: ID!) {
-  deleteAttribute(attributeId: $attributeId) {
-    id
-  }
-}

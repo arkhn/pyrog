@@ -9,223 +9,268 @@ Array [
           Object {
             "definitionId": "string",
             "id": "ck7x75k0f03517bz9x5f1a05d",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x75k6x03537bz9a5prnwmx",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "LIBELTW",
-                      "id": "ck7x75k5m03527bz9dlcwr77b",
-                      "joins": Object {
-                        "create": Array [
-                          Object {
-                            "id": "ck7x75vev03577bz9ng0bieen",
-                            "tables": Object {
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x75k6x03537bz9a5prnwmx",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "LIBELTW",
+                            "id": "ck7x75k5m03527bz9dlcwr77b",
+                            "joins": Object {
                               "create": Array [
                                 Object {
-                                  "column": "TWCLEUNIK",
-                                  "id": "ck7x75vg803597bz923e2yyf5",
-                                  "table": "SEJOUR",
-                                },
-                                Object {
-                                  "column": "TWCLEUNIK",
-                                  "id": "ck7x75vfc03587bz9bqioih0z",
-                                  "table": "TYPESEJ",
+                                  "id": "ck7x75vev03577bz9ng0bieen",
+                                  "tables": Object {
+                                    "create": Array [
+                                      Object {
+                                        "column": "TWCLEUNIK",
+                                        "id": "ck7x75vg803597bz923e2yyf5",
+                                        "table": "SEJOUR",
+                                      },
+                                      Object {
+                                        "column": "TWCLEUNIK",
+                                        "id": "ck7x75vfc03587bz9bqioih0z",
+                                        "table": "TYPESEJ",
+                                      },
+                                    ],
+                                  },
                                 },
                               ],
                             },
+                            "table": "TYPESEJ",
                           },
-                        ],
+                        },
+                        "staticValue": null,
                       },
-                      "table": "TYPESEJ",
-                    },
+                    ],
                   },
-                  "staticValue": null,
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "type[0].coding[0].display",
           },
           Object {
             "definitionId": "Reference",
             "id": "ck7x78j9803617bz9rtmpz6fq",
-            "mergingScript": null,
             "path": "patient",
           },
           Object {
             "definitionId": "uri",
             "id": "ck7x78rlk03637bz91okxx9dw",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x78rxz03657bz90dwdoi4u",
-                  "script": null,
-                  "staticValue": "/Patient/{id}",
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x78rxz03657bz90dwdoi4u",
+                        "script": null,
+                        "staticValue": "/Patient/{id}",
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "patient.identifier.system",
           },
           Object {
             "definitionId": "string",
             "id": "ck7x795k103667bz92ljq73m8",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x795q103687bz9chuq9kg8",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "PACLEUNIK",
-                      "id": "ck7x795pc03677bz93p4muk0q",
-                      "table": "SEJOUR",
-                    },
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x795q103687bz9chuq9kg8",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "PACLEUNIK",
+                            "id": "ck7x795pc03677bz93p4muk0q",
+                            "table": "SEJOUR",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
                   },
-                  "staticValue": null,
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "patient.identifier.value",
           },
           Object {
             "definitionId": "Identifier",
             "id": "ck7x79ik103737bz9x9tfiplr",
-            "mergingScript": null,
             "path": "managingOrganization.identifier",
           },
           Object {
             "definitionId": "string",
             "id": "ck7x79rmd03757bz9tmkxeekn",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x79ru903777bz92i767yqj",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "SERVICE",
-                      "id": "ck7x79rs703767bz9plu1a7lt",
-                      "table": "SEJOUR",
-                    },
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x79ru903777bz92i767yqj",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "SERVICE",
+                            "id": "ck7x79rs703767bz9plu1a7lt",
+                            "table": "SEJOUR",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
                   },
-                  "staticValue": null,
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "managingOrganization.identifier.value",
           },
           Object {
             "definitionId": "dateTime",
             "id": "ck7x7a7sw03787bz9jl8zhzfm",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x7a88c03817bz9yzaxgs4l",
-                  "script": "clean_date",
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "DATEIN",
-                      "id": "ck7x7a86l03807bz9x9h8v8aj",
-                      "table": "SEJOUR",
-                    },
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x7a88c03817bz9yzaxgs4l",
+                        "script": "clean_date",
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "DATEIN",
+                            "id": "ck7x7a86l03807bz9x9h8v8aj",
+                            "table": "SEJOUR",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x7aepy03837bz9kgnnvu6w",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "HEUREIN",
+                            "id": "ck7x7aep703827bz96nx4as6y",
+                            "table": "SEJOUR",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
                   },
-                  "staticValue": null,
-                },
-                Object {
-                  "conceptMapId": null,
-                  "id": "ck7x7aepy03837bz9kgnnvu6w",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "HEUREIN",
-                      "id": "ck7x7aep703827bz96nx4as6y",
-                      "table": "SEJOUR",
-                    },
-                  },
-                  "staticValue": null,
+                  "mergingScript": "merge_concat",
                 },
               ],
             },
-            "mergingScript": "merge_concat",
             "path": "period.start",
           },
           Object {
             "definitionId": "string",
             "id": "ck7x73kkm03347bz9djwte413",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x73l0903377bz9ua4c2ukj",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "SECLEUNIK",
-                      "id": "ck7x73kym03367bz948epes0h",
-                      "table": "SEJOUR",
-                    },
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x73l0903377bz9ua4c2ukj",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "SECLEUNIK",
+                            "id": "ck7x73kym03367bz948epes0h",
+                            "table": "SEJOUR",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
                   },
-                  "staticValue": null,
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "identifier[0].value",
           },
           Object {
             "definitionId": "code",
             "id": "ck7x74inj03437bz9wqo12ltr",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x74iv203457bz9r3bo9dks",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "ETATSEJ",
-                      "id": "ck7x74iu703447bz9rcskbl7f",
-                      "table": "SEJOUR",
-                    },
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x74iv203457bz9r3bo9dks",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "ETATSEJ",
+                            "id": "ck7x74iu703447bz9rcskbl7f",
+                            "table": "SEJOUR",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
                   },
-                  "staticValue": null,
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "status",
           },
           Object {
             "definitionId": "CodeableConcept",
             "id": "ck7x74yu403487bz9kbdhea1l",
-            "mergingScript": null,
             "path": "type",
           },
           Object {
             "definitionId": "string",
             "id": "ck7x78j3b03607bz9saipkpsp",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x78jdt03627bz94jjh1j9n",
-                  "script": null,
-                  "staticValue": "internal",
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x78jdt03627bz94jjh1j9n",
+                        "script": null,
+                        "staticValue": "internal",
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "patient.reference",
           },
           Object {
@@ -241,158 +286,183 @@ Array [
             },
             "definitionId": "string",
             "id": "ck7x79co803697bz9d6xpxu7w",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x79d0603717bz9sw1aqifo",
-                  "script": null,
-                  "staticValue": "internal",
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x79d0603717bz9sw1aqifo",
+                        "script": null,
+                        "staticValue": "internal",
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "managingOrganization.reference",
           },
           Object {
             "definitionId": "Period",
             "id": "ck7x7a80903797bz97h31qudw",
-            "mergingScript": null,
             "path": "period",
           },
           Object {
             "definitionId": "dateTime",
             "id": "ck7x7as8d03847bz9nenjywu1",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x7ba5g03907bz98gx3rx73",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "HEUREOUT",
-                      "id": "ck7x7ba4r03897bz9a7dg3r6o",
-                      "table": "SEJOUR",
-                    },
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x7ba5g03907bz98gx3rx73",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "HEUREOUT",
+                            "id": "ck7x7ba4r03897bz9a7dg3r6o",
+                            "table": "SEJOUR",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x7asfp03867bz9g142r4l0",
+                        "script": "clean_date",
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "DATEOUT",
+                            "id": "ck7x7ase703857bz9rf6soxxg",
+                            "table": "SEJOUR",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
                   },
-                  "staticValue": null,
-                },
-                Object {
-                  "conceptMapId": null,
-                  "id": "ck7x7asfp03867bz9g142r4l0",
-                  "script": "clean_date",
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "DATEOUT",
-                      "id": "ck7x7ase703857bz9rf6soxxg",
-                      "table": "SEJOUR",
-                    },
-                  },
-                  "staticValue": null,
+                  "mergingScript": "merge_concat",
                 },
               ],
             },
-            "mergingScript": "merge_concat",
             "path": "period.end",
           },
           Object {
             "definitionId": "Coding",
             "id": "ck7x74ymi03477bz9tazc0kqa",
-            "mergingScript": null,
             "path": "type[0].coding",
           },
           Object {
             "definitionId": "Identifier",
             "id": "ck7x73krr03357bz9qaonohoa",
-            "mergingScript": null,
             "path": "identifier",
           },
           Object {
             "definitionId": "string",
             "id": "ck7x73zj503387bz9txa3jp6j",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x73zoo03407bz9mju81vm7",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "ADMISSION",
-                      "id": "ck7x73znt03397bz9j5e14phr",
-                      "table": "SEJOUR",
-                    },
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x73zoo03407bz9mju81vm7",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "ADMISSION",
+                            "id": "ck7x73znt03397bz9j5e14phr",
+                            "table": "SEJOUR",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x7426x03427bz9f5156s36",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "ADMISSION2",
+                            "id": "ck7x7426503417bz9ded2ox15",
+                            "table": "SEJOUR",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
                   },
-                  "staticValue": null,
-                },
-                Object {
-                  "conceptMapId": null,
-                  "id": "ck7x7426x03427bz9f5156s36",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "ADMISSION2",
-                      "id": "ck7x7426503417bz9ded2ox15",
-                      "table": "SEJOUR",
-                    },
-                  },
-                  "staticValue": null,
+                  "mergingScript": "select_first_not_empty",
                 },
               ],
             },
-            "mergingScript": "select_first_not_empty",
             "path": "identifier[1].value",
           },
           Object {
             "definitionId": "code",
             "id": "ck7x74yg303467bz9c1ol2nsw",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x74z1m03507bz91j6vvz27",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "TWCLEUNIK",
-                      "id": "ck7x74z0b03497bz95h5ufpcy",
-                      "table": "SEJOUR",
-                    },
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x74z1m03507bz91j6vvz27",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "TWCLEUNIK",
+                            "id": "ck7x74z0b03497bz95h5ufpcy",
+                            "table": "SEJOUR",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
                   },
-                  "staticValue": null,
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "type[0].coding[0].code",
           },
           Object {
             "definitionId": "Identifier",
             "id": "ck7x78rs903647bz9gkeslfmt",
-            "mergingScript": null,
             "path": "patient.identifier",
           },
           Object {
             "definitionId": "Reference",
             "id": "ck7x79cva03707bz964ydj4ib",
-            "mergingScript": null,
             "path": "managingOrganization",
           },
           Object {
             "definitionId": "uri",
             "id": "ck7x79ier03727bz9awxb7705",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x79io103747bz9zacv3kbh",
-                  "script": null,
-                  "staticValue": "/Organization/{id}",
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x79io103747bz9zacv3kbh",
+                        "script": null,
+                        "staticValue": "/Organization/{id}",
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "managingOrganization.identifier.system",
           },
         ],
@@ -437,648 +507,793 @@ Array [
           Object {
             "definitionId": "Coding",
             "id": "ck7x6it2u02517bz9d92mw491",
-            "mergingScript": null,
             "path": "identifier[0].type.coding",
           },
           Object {
             "definitionId": "code",
             "id": "ck7x6t0ix02557bz9789zsmst",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x6t0ox02567bz9u9rnhjdg",
-                  "script": null,
-                  "staticValue": "PI",
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x6t0ox02567bz9u9rnhjdg",
+                        "script": null,
+                        "staticValue": "PI",
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "identifier[0].type.coding[0].code",
           },
           Object {
             "definitionId": "string",
             "id": "ck7x6t69902577bz9wgzjwoza",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x6t6e102587bz90rjha0w9",
-                  "script": null,
-                  "staticValue": "Patient internal identifier",
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x6t6e102587bz90rjha0w9",
+                        "script": null,
+                        "staticValue": "Patient internal identifier",
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "identifier[0].type.coding[0].display",
           },
           Object {
             "definitionId": "string",
             "id": "ck7x6u6hi02647bz96a9msb6p",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x6u6pa02667bz9b1n03m4q",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "DOSSIERPAT",
-                      "id": "ck7x6u6mn02657bz9d0bao7fv",
-                      "table": "PATIENT",
-                    },
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x6u6pa02667bz9b1n03m4q",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "DOSSIERPAT",
+                            "id": "ck7x6u6mn02657bz9d0bao7fv",
+                            "table": "PATIENT",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
                   },
-                  "staticValue": null,
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "identifier[2].value",
           },
           Object {
             "definitionId": "Period",
             "id": "ck7x6uhfs02687bz9o8bg80m5",
-            "mergingScript": null,
             "path": "identifier[2].period",
           },
           Object {
             "definitionId": "HumanName",
             "id": "ck7x6veqc02787bz9s9cqrvkm",
-            "mergingScript": null,
             "path": "name",
           },
           Object {
             "definitionId": "code",
             "id": "ck7x6whd202877bz9cxnlxdvd",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x6whip02887bz9s2kobamd",
-                  "script": null,
-                  "staticValue": "maiden",
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x6whip02887bz9s2kobamd",
+                        "script": null,
+                        "staticValue": "maiden",
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "name[1].use",
           },
           Object {
             "definitionId": "string",
             "id": "ck7x6wpyq02897bz9ugaqb34l",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x6wq5402917bz9pl2jn3os",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "NOMJFPAT",
-                      "id": "ck7x6wq4002907bz97kaau30v",
-                      "table": "PATIENT",
-                    },
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x6wq5402917bz9pl2jn3os",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "NOMJFPAT",
+                            "id": "ck7x6wq4002907bz97kaau30v",
+                            "table": "PATIENT",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
                   },
-                  "staticValue": null,
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "name[1].family",
           },
           Object {
             "definitionId": "code",
             "id": "ck7x6xgef02967bz91qpzshe0",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x6xglb02987bz9qb9l219f",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "SEXEPAT",
-                      "id": "ck7x6xgj902977bz9gv6brlro",
-                      "table": "PATIENT",
-                    },
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x6xglb02987bz9qb9l219f",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "SEXEPAT",
+                            "id": "ck7x6xgj902977bz9gv6brlro",
+                            "table": "PATIENT",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
                   },
-                  "staticValue": null,
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "gender",
           },
           Object {
             "definitionId": "Address",
             "id": "ck7x6zfkk03127bz9f6l07sp9",
-            "mergingScript": null,
             "path": "address",
           },
           Object {
             "definitionId": "Reference",
             "id": "ck7x70u0e03267bz9jyuz7fpb",
-            "mergingScript": null,
             "path": "managingOrganization",
           },
           Object {
             "definitionId": "uri",
             "id": "ck7x7148403287bz940jxd3ii",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x714iw03307bz9au2su9cg",
-                  "script": null,
-                  "staticValue": "/Organization/{id}",
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x714iw03307bz9au2su9cg",
+                        "script": null,
+                        "staticValue": "/Organization/{id}",
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "managingOrganization.identifier.system",
           },
           Object {
             "definitionId": "string",
             "id": "ck7x71f3d03317bz98nen3tvd",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x71f9f03337bz9clbiwk2r",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "CODESERV",
-                      "id": "ck7x71f7z03327bz90ip52nd0",
-                      "table": "PATIENT",
-                    },
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x71f9f03337bz9clbiwk2r",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "CODESERV",
+                            "id": "ck7x71f7z03327bz90ip52nd0",
+                            "table": "PATIENT",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
                   },
-                  "staticValue": null,
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "managingOrganization.identifier.value",
           },
           Object {
             "definitionId": "",
             "id": "ck7x6h90w02287bz97o00igis",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x6h91i02307bz97qamx8cb",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "NOOBSPAT",
-                      "id": "ck7x6h91602297bz9i71ht6hk",
-                      "table": "PATIENT",
-                    },
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x6h91i02307bz97qamx8cb",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "NOOBSPAT",
+                            "id": "ck7x6h91602297bz9i71ht6hk",
+                            "table": "PATIENT",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
                   },
-                  "staticValue": null,
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "identifier[0].value",
           },
           Object {
             "definitionId": "CodeableConcept",
             "id": "ck7x6itb002527bz90bxf51yu",
-            "mergingScript": null,
             "path": "identifier[0].type",
           },
           Object {
             "definitionId": "Identifier",
             "id": "ck7x6itgy02537bz9t95vww0p",
-            "mergingScript": null,
             "path": "identifier",
           },
           Object {
             "definitionId": "boolean",
             "id": "ck7x6tbw002597bz99zru8n0x",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x6tc1c02607bz9b0m7fuda",
-                  "script": null,
-                  "staticValue": "false",
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x6tc1c02607bz9b0m7fuda",
+                        "script": null,
+                        "staticValue": "false",
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "identifier[0].type.coding[0].userSelected",
           },
           Object {
             "definitionId": "string",
             "id": "ck7x6ttbe02617bz99woro8y1",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x6tthq02637bz9io7i67y1",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "PACLEUNIK",
-                      "id": "ck7x6ttgv02627bz9ym1oep27",
-                      "table": "PATIENT",
-                    },
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x6tthq02637bz9io7i67y1",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "PACLEUNIK",
+                            "id": "ck7x6ttgv02627bz9ym1oep27",
+                            "table": "PATIENT",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
                   },
-                  "staticValue": null,
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "identifier[1].value",
           },
           Object {
             "definitionId": "dateTime",
             "id": "ck7x6uh8f02677bz9akmzu0av",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x6uhna02707bz9sy6p38qb",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "DATEINPAT",
-                      "id": "ck7x6uhma02697bz9rc4sqsg9",
-                      "table": "PATIENT",
-                    },
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x6uhna02707bz9sy6p38qb",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "DATEINPAT",
+                            "id": "ck7x6uhma02697bz9rc4sqsg9",
+                            "table": "PATIENT",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
                   },
-                  "staticValue": null,
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "identifier[2].period.start",
           },
           Object {
             "definitionId": "dateTime",
             "id": "ck7x6uq8x02717bz90m70ty04",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x6uqf702737bz9fackf7xx",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "DATEOUTPAT",
-                      "id": "ck7x6uqef02727bz9od2veuqd",
-                      "table": "PATIENT",
-                    },
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x6uqf702737bz9fackf7xx",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "DATEOUTPAT",
+                            "id": "ck7x6uqef02727bz9od2veuqd",
+                            "table": "PATIENT",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
                   },
-                  "staticValue": null,
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "identifier[2].period.end",
           },
           Object {
             "definitionId": "string",
             "id": "ck7x6w1d902807bz96fabww53",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x6w1lg02827bz97srnw6g1",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "NOMPAT",
-                      "id": "ck7x6w1ie02817bz9s4xiu8x9",
-                      "table": "PATIENT",
-                    },
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x6w1lg02827bz97srnw6g1",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "NOMPAT",
+                            "id": "ck7x6w1ie02817bz9s4xiu8x9",
+                            "table": "PATIENT",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
                   },
-                  "staticValue": null,
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "name[0].family",
           },
           Object {
             "definitionId": "string",
             "id": "ck7x6x3w702927bz9p3bh5nhb",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x6x4ab02957bz9ob7kfydq",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "TELPAT",
-                      "id": "ck7x6x49l02947bz92iuo9r3w",
-                      "table": "PATIENT",
-                    },
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x6x4ab02957bz9ob7kfydq",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "TELPAT",
+                            "id": "ck7x6x49l02947bz92iuo9r3w",
+                            "table": "PATIENT",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
                   },
-                  "staticValue": null,
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "telecom[0].value",
           },
           Object {
             "definitionId": "date",
             "id": "ck7x6xpyz02997bz9m1lobi4z",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x6xq4o03017bz9hr2yxaof",
-                  "script": "clean_date",
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "DATENAISPA",
-                      "id": "ck7x6xq3t03007bz9v7j9ggbz",
-                      "table": "PATIENT",
-                    },
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x6xq4o03017bz9hr2yxaof",
+                        "script": "clean_date",
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "DATENAISPA",
+                            "id": "ck7x6xq3t03007bz9v7j9ggbz",
+                            "table": "PATIENT",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
                   },
-                  "staticValue": null,
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "birthDate",
           },
           Object {
             "definitionId": "boolean",
             "id": "ck7x6yq6k03057bz92ywheaka",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x6yui503097bz957faewnw",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "IDMOTIFINAC",
-                      "id": "ck7x6yuhj03087bz919doctx0",
-                      "table": "PATIENT",
-                    },
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x6yui503097bz957faewnw",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "IDMOTIFINAC",
+                            "id": "ck7x6yuhj03087bz919doctx0",
+                            "table": "PATIENT",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x6yqex03077bz97lpuzjvz",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "INACTIVPAT",
+                            "id": "ck7x6yqdl03067bz9mr92xnve",
+                            "table": "PATIENT",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
                   },
-                  "staticValue": null,
-                },
-                Object {
-                  "conceptMapId": null,
-                  "id": "ck7x6yqex03077bz97lpuzjvz",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "INACTIVPAT",
-                      "id": "ck7x6yqdl03067bz9mr92xnve",
-                      "table": "PATIENT",
-                    },
-                  },
-                  "staticValue": null,
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "deceasedBoolean",
           },
           Object {
             "definitionId": "string",
             "id": "ck7x6zfdp03117bz9j1nq7egq",
-            "mergingScript": null,
             "path": "address[0].line",
           },
           Object {
             "definitionId": "string",
             "id": "ck7x6zzfx03197bz93ilsex5f",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x6zzml03217bz9nwruvcg4",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "VILLEPAT",
-                      "id": "ck7x6zzky03207bz9pog2xtye",
-                      "table": "PATIENT",
-                    },
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x6zzml03217bz9nwruvcg4",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "VILLEPAT",
+                            "id": "ck7x6zzky03207bz9pog2xtye",
+                            "table": "PATIENT",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
                   },
-                  "staticValue": null,
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "address[0].city",
           },
           Object {
             "definitionId": "uri",
             "id": "ck7x6istj02507bz9nhpho8a5",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x6itne02547bz9rj0ldi7m",
-                  "script": null,
-                  "staticValue": "http://terminology.interopsante.org/CodeSystem/v2-0203",
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x6itne02547bz9rj0ldi7m",
+                        "script": null,
+                        "staticValue": "http://terminology.interopsante.org/CodeSystem/v2-0203",
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "identifier[0].type.coding[0].system",
           },
           Object {
             "definitionId": "boolean",
             "id": "ck7x6v7kh02747bz9lqm6hfyh",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x6v7qr02767bz90laca8lj",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "INACTIVPAT",
-                      "id": "ck7x6v7pn02757bz9t66197cf",
-                      "table": "PATIENT",
-                    },
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x6v7qr02767bz90laca8lj",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "INACTIVPAT",
+                            "id": "ck7x6v7pn02757bz9t66197cf",
+                            "table": "PATIENT",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
                   },
-                  "staticValue": null,
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "active",
           },
           Object {
             "definitionId": "code",
             "id": "ck7x6veky02777bz9i1v5fvks",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x6vevg02797bz9gv0e5bbp",
-                  "script": null,
-                  "staticValue": "official",
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x6vevg02797bz9gv0e5bbp",
+                        "script": null,
+                        "staticValue": "official",
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "name[0].use",
           },
           Object {
             "definitionId": "string",
             "id": "ck7x6w82502837bz9g9be4xz7",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x6w8f602867bz9c7qffpzj",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "PRENOMPAT",
-                      "id": "ck7x6w8ea02857bz9o85fqr6p",
-                      "table": "PATIENT",
-                    },
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x6w8f602867bz9c7qffpzj",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "PRENOMPAT",
+                            "id": "ck7x6w8ea02857bz9o85fqr6p",
+                            "table": "PATIENT",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
                   },
-                  "staticValue": null,
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "name[0].given[0]",
           },
           Object {
             "definitionId": "string",
             "id": "ck7x6w88b02847bz9lvdu16l8",
-            "mergingScript": null,
             "path": "name[0].given",
           },
           Object {
             "definitionId": "ContactPoint",
             "id": "ck7x6x43302937bz9blntbt25",
-            "mergingScript": null,
             "path": "telecom",
           },
           Object {
             "definitionId": "dateTime",
             "id": "ck7x6yav603027bz9ckpvghqe",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x6yb1s03047bz93es5u21u",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "DATEINACPAT",
-                      "id": "ck7x6yazr03037bz90a4ymzyn",
-                      "table": "PATIENT",
-                    },
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x6yb1s03047bz93es5u21u",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "DATEINACPAT",
+                            "id": "ck7x6yazr03037bz90a4ymzyn",
+                            "table": "PATIENT",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
                   },
-                  "staticValue": null,
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "deceasedDateTime",
           },
           Object {
             "definitionId": "string",
             "id": "ck7x6zf7003107bz9l1ylrr2d",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x6zkjf03187bz92piz9p0o",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "ADR3PAT",
-                      "id": "ck7x6zkif03177bz91f2ofgki",
-                      "table": "PATIENT",
-                    },
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x6zkjf03187bz92piz9p0o",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "ADR3PAT",
+                            "id": "ck7x6zkif03177bz91f2ofgki",
+                            "table": "PATIENT",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x6zfsz03147bz9axyibg9t",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "ADR1PAT",
+                            "id": "ck7x6zfpt03137bz9n1eiht13",
+                            "table": "PATIENT",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x6zhzf03167bz9w2p8hhx1",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "ADR2PAT",
+                            "id": "ck7x6zhyl03157bz9agld7cpu",
+                            "table": "PATIENT",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
                   },
-                  "staticValue": null,
-                },
-                Object {
-                  "conceptMapId": null,
-                  "id": "ck7x6zfsz03147bz9axyibg9t",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "ADR1PAT",
-                      "id": "ck7x6zfpt03137bz9n1eiht13",
-                      "table": "PATIENT",
-                    },
-                  },
-                  "staticValue": null,
-                },
-                Object {
-                  "conceptMapId": null,
-                  "id": "ck7x6zhzf03167bz9w2p8hhx1",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "ADR2PAT",
-                      "id": "ck7x6zhyl03157bz9agld7cpu",
-                      "table": "PATIENT",
-                    },
-                  },
-                  "staticValue": null,
+                  "mergingScript": "merge_concat",
                 },
               ],
             },
-            "mergingScript": "merge_concat",
             "path": "address[0].line[0]",
           },
           Object {
             "definitionId": "string",
             "id": "ck7x707i503227bz98w0yg0zz",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x707o203247bz9akb0pb6w",
-                  "script": null,
-                  "sqlValue": Object {
-                    "create": Object {
-                      "column": "CPOSTPAT",
-                      "id": "ck7x707n903237bz9ikulfv7a",
-                      "table": "PATIENT",
-                    },
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x707o203247bz9akb0pb6w",
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "CPOSTPAT",
+                            "id": "ck7x707n903237bz9ikulfv7a",
+                            "table": "PATIENT",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
                   },
-                  "staticValue": null,
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "address[0].postalCode",
           },
           Object {
             "definitionId": "uri",
             "id": "ck7x70ttn03257bz9qcwkdylf",
-            "inputs": Object {
+            "inputGroups": Object {
               "create": Array [
                 Object {
-                  "conceptMapId": null,
-                  "id": "ck7x70u5f03277bz97o9a986l",
-                  "script": null,
-                  "staticValue": "Organization",
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "id": "ck7x70u5f03277bz97o9a986l",
+                        "script": null,
+                        "staticValue": "Organization",
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
                 },
               ],
             },
-            "mergingScript": null,
             "path": "managingOrganization.type",
           },
           Object {
             "definitionId": "Identifier",
             "id": "ck7x714dk03297bz93qo484pd",
-            "mergingScript": null,
             "path": "managingOrganization.identifier",
           },
         ],

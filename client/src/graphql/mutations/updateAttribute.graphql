@@ -1,7 +1,0 @@
-#import "../fragments/entireAttribute.graphql"
-
-mutation updateAttribute($attributeId: ID!, $data: AttributeInput!) {
-  updateAttribute(attributeId: $attributeId, data: $data) {
-    ...entireAttribute
-  }
-}

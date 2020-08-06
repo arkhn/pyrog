@@ -30,7 +30,7 @@ export interface IAttribute {
   path: string;
   sliceName: string;
   definitionId: string;
-  inputs: any[];
+  inputGroups: any[];
   comments: IComment[];
 }
 export interface IAttributeDefinition {
@@ -98,6 +98,16 @@ export interface Resource {
   };
 }
 
+export interface Condition {
+  id: string;
+  action: string;
+  sqlValue: {
+    table: string;
+    column: string;
+  };
+  value: string;
+}
+
 export interface Filters {
   sqlColumn: ISourceColumn;
   relation: string;
@@ -108,6 +118,7 @@ export interface ISelectedNode {
   source: ISelectedSource;
   resource: Resource;
   attribute: Attribute;
+  selectedInputGroup: number;
 }
 
 export interface IResourceInputs {

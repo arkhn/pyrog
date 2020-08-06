@@ -60,10 +60,16 @@ describe('import mapping V8', () => {
               id: expect.any(String),
               path: 'period.start',
               definitionId: 'dateTime',
-              mergingScript: 'merge_concat',
               sliceName: null,
-              inputs: {
-                create: expect.any(Array),
+              inputGroups: {
+                create: expect.arrayContaining([
+                  {
+                    mergingScript: 'merge_concat',
+                    inputs: {
+                      create: expect.any(Array),
+                    },
+                  },
+                ]),
               },
             },
             {
@@ -84,9 +90,15 @@ describe('import mapping V8', () => {
               },
               sliceName: null,
               definitionId: 'string',
-              mergingScript: null,
-              inputs: {
-                create: expect.any(Array),
+              inputGroups: {
+                create: expect.arrayContaining([
+                  {
+                    mergingScript: null,
+                    inputs: {
+                      create: expect.any(Array),
+                    },
+                  },
+                ]),
               },
             },
           ]),

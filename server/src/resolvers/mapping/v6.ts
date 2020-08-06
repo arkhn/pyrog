@@ -1,41 +1,39 @@
 import {
   PrismaClient,
-  Resource,
   AttributeCreateWithoutResourceInput,
 } from '@prisma/client'
 import { AttributeWithCommentsPreV7 } from 'types'
 
 import {
   clean,
+  cleanPreV9,
+  cleanResource,
   buildInputsQuery,
   buildFiltersQuery,
   buildCommentQueryPreV7,
 } from './utils'
 
-const cleanResourceV6 = (resource: Resource) => {
-  const r = clean(resource)
-  delete r.definition
-  delete r.source
-  delete r.primaryKeyOwner
-  return r
-}
-
 export const buildAttributesV6 = (
   attributes: AttributeWithCommentsPreV7[],
 ): AttributeCreateWithoutResourceInput[] | null =>
   attributes.map(a => {
-    const attr: AttributeCreateWithoutResourceInput = clean(a)
+    let attr: AttributeCreateWithoutResourceInput = clean(a)
     if (a.inputs && a.inputs.length) {
-      attr.inputs = { create: buildInputsQuery(a.inputs) }
-    } else {
-      delete attr.inputs
+      attr.inputGroups = {
+        create: [
+          {
+            inputs: { create: buildInputsQuery(a.inputs) },
+            mergingScript: a.mergingScript,
+          },
+        ],
+      }
     }
-
     if (a.comments) {
       attr.comments = { create: buildCommentQueryPreV7(a.comments) }
     } else {
       delete attr.comments
     }
+    attr = cleanPreV9(attr)
 
     return attr
   })
@@ -49,7 +47,7 @@ export default (
     resources.map(async (r: any) => {
       return prismaClient.resource.create({
         data: {
-          ...cleanResourceV6(r),
+          ...cleanResource(r),
           attributes: {
             create: buildAttributesV6(r.attributes),
           },

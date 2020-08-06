@@ -30,7 +30,7 @@ export const Input = objectType({
       },
     })
 
-    t.model.attribute()
+    t.model.inputGroup()
 
     t.model.updatedAt()
     t.model.createdAt()
@@ -39,7 +39,7 @@ export const Input = objectType({
 
 export const createInput: FieldResolver<'Mutation', 'createInput'> = async (
   _parent,
-  { attributeId, script, static: staticValue, sql: sqlValue },
+  { inputGroupId, script, static: staticValue, sql: sqlValue },
   ctx,
 ) => {
   if (!sqlValue && !staticValue) {
@@ -53,9 +53,9 @@ export const createInput: FieldResolver<'Mutation', 'createInput'> = async (
       data: {
         staticValue,
         script,
-        attribute: {
+        inputGroup: {
           connect: {
-            id: attributeId,
+            id: inputGroupId,
           },
         },
       },
@@ -97,9 +97,9 @@ export const createInput: FieldResolver<'Mutation', 'createInput'> = async (
         },
       },
       script,
-      attribute: {
+      inputGroup: {
         connect: {
-          id: attributeId,
+          id: inputGroupId,
         },
       },
     },
@@ -110,7 +110,31 @@ export const deleteInput: FieldResolver<'Mutation', 'deleteInput'> = async (
   _parent,
   { inputId },
   ctx,
-) => ctx.prisma.input.delete({ where: { id: inputId } })
+) => {
+  const input = await ctx.prisma.input.delete({
+    where: { id: inputId },
+    include: {
+      inputGroup: {
+        include: { inputs: true, conditions: { include: { sqlValue: true } } },
+      },
+    },
+  })
+
+  if (input.inputGroup?.inputs.length === 1) {
+    await Promise.all(
+      input.inputGroup.conditions.map(async c => {
+        if (c.sqlValue)
+          await ctx.prisma.column.delete({ where: { id: c.sqlValue.id } })
+        return ctx.prisma.condition.delete({ where: { id: c.id } })
+      }),
+    )
+    await ctx.prisma.inputGroup.delete({
+      where: { id: input.inputGroup.id },
+    })
+  }
+
+  return input
+}
 
 export const updateInput: FieldResolver<'Mutation', 'updateInput'> = async (
   _parent,

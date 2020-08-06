@@ -79,17 +79,16 @@ model Filter {
 }
 
 model Attribute {
-  id            String    @default(cuid()) @id
-  path          String
-  sliceName     String?
-  definitionId  String
-  mergingScript String?
-  comments      Comment[]
-  inputs        Input[]
-  resourceId    String?   @map("resource")
-  resource      Resource? @relation(fields: [resourceId], references: [id])
-  updatedAt     DateTime  @updatedAt
-  createdAt     DateTime  @default(now())
+  id           String       @default(cuid()) @id
+  path         String
+  sliceName    String?
+  definitionId String
+  comments     Comment[]
+  inputGroups  InputGroup[]
+  resourceId   String?      @map("resource")
+  resource     Resource?    @relation(fields: [resourceId], references: [id])
+  updatedAt    DateTime     @updatedAt
+  createdAt    DateTime     @default(now())
 }
 
 model Comment {
@@ -104,35 +103,47 @@ model Comment {
   createdAt   DateTime   @default(now())
 }
 
+model InputGroup {
+  id            String      @default(cuid()) @id
+  inputs        Input[]
+  mergingScript String?
+  conditions    Condition[]
+  attribute     Attribute?  @relation(fields: [attributeId], references: [id])
+  attributeId   String?
+  updatedAt     DateTime    @updatedAt
+  createdAt     DateTime    @default(now())
+}
+
 model Input {
-  id           String    @default(cuid()) @id
+  id           String      @default(cuid()) @id
   // cleaning scripts for the sql column
   script       String?
   // id of the concept map to be applied to a mapped code
   conceptMapId String?
   // Or a static value is it's fixed
   staticValue  String?
-  // parent
-  attributeId  String    @map("attribute")
-  attribute    Attribute @relation(fields: [attributeId], references: [id])
   // Sql column containing the value
-  sqlValueId   String?   @map("sqlValue")
-  sqlValue     Column?   @relation(fields: [sqlValueId], references: [id])
-  updatedAt    DateTime  @updatedAt
-  createdAt    DateTime  @default(now())
+  sqlValueId   String?     @map("sqlValue")
+  sqlValue     Column?     @relation(fields: [sqlValueId], references: [id])
+  // Group to which this input belongs
+  inputGroup   InputGroup? @relation(fields: [inputGroupId], references: [id])
+  inputGroupId String?
+  updatedAt    DateTime    @updatedAt
+  createdAt    DateTime    @default(now())
 }
 
 model Column {
-  id        String   @default(cuid()) @id
+  id        String     @default(cuid()) @id
   table     String?
   column    String?
-  joins     Join[]   @relation("ColumnJoins")
+  joins     Join[]     @relation("ColumnJoins")
   filter    Filter?
+  condition Condition?
   input     Input?
-  joinId    String?  @map("join")
-  join      Join?    @relation("JoinedColumns", fields: [joinId], references: [id])
-  updatedAt DateTime @updatedAt
-  createdAt DateTime @default(now())
+  joinId    String?    @map("join")
+  join      Join?      @relation("JoinedColumns", fields: [joinId], references: [id])
+  updatedAt DateTime   @updatedAt
+  createdAt DateTime   @default(now())
 }
 
 model Join {
@@ -142,6 +153,21 @@ model Join {
   column    Column?  @relation("ColumnJoins", fields: [columnId], references: [id])
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
+}
+
+enum ConditionAction {
+  INCLUDE
+  EXCLUDE
+}
+
+model Condition {
+  id           String           @default(cuid()) @id
+  action       ConditionAction?
+  columnId     String?          @map("column")
+  sqlValue     Column?          @relation(fields: [columnId], references: [id])
+  value        String?
+  inputGroupId String           @map("inputGroup")
+  inputGroup   InputGroup       @relation(fields: [inputGroupId], references: [id])
 }
 
 enum Role {

@@ -1,19 +1,11 @@
-import { PrismaClient, Resource } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 
 import {
-  clean,
+  cleanResource,
   checkAuthors,
   buildFiltersQuery,
   buildAttributesQuery,
 } from './utils'
-
-const cleanResourceV7 = (resource: Resource) => {
-  const r = clean(resource)
-  delete r.definition
-  delete r.source
-  delete r.primaryKeyOwner
-  return r
-}
 
 export default async (
   prismaClient: PrismaClient,
@@ -25,7 +17,7 @@ export default async (
     resources.map(async (r: any) => {
       return prismaClient.resource.create({
         data: {
-          ...cleanResourceV7(r),
+          ...cleanResource(r),
           attributes: {
             create: buildAttributesQuery(r.attributes),
           },

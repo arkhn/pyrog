@@ -90,25 +90,7 @@ const getSourceFromInput = async (inputId: any, ctx: Context) => {
   const input = await ctx.prisma.input.findOne({
     where: { id: inputId },
     include: {
-      attribute: {
-        include: {
-          resource: {
-            include: {
-              source: true,
-            },
-          },
-        },
-      },
-    },
-  })
-  return input?.attribute.resource?.source.id
-}
-
-const getSourceFromColumn = async (columnId: any, ctx: Context) => {
-  const column = await ctx.prisma.column.findOne({
-    where: { id: columnId },
-    include: {
-      input: {
+      inputGroup: {
         include: {
           attribute: {
             include: {
@@ -123,16 +105,16 @@ const getSourceFromColumn = async (columnId: any, ctx: Context) => {
       },
     },
   })
-  return column?.input?.attribute.resource?.source.id
+  return input?.inputGroup?.attribute?.resource?.source.id
 }
 
-const getSourceFromJoin = async (JoinId: any, ctx: Context) => {
-  const join = await ctx.prisma.join.findOne({
-    where: { id: JoinId },
+const getSourceFromColumn = async (columnId: any, ctx: Context) => {
+  const column = await ctx.prisma.column.findOne({
+    where: { id: columnId },
     include: {
-      column: {
+      input: {
         include: {
-          input: {
+          inputGroup: {
             include: {
               attribute: {
                 include: {
@@ -149,5 +131,35 @@ const getSourceFromJoin = async (JoinId: any, ctx: Context) => {
       },
     },
   })
-  return join?.column?.input?.attribute.resource?.source.id
+  return column?.input?.inputGroup?.attribute?.resource?.source.id
+}
+
+const getSourceFromJoin = async (JoinId: any, ctx: Context) => {
+  const join = await ctx.prisma.join.findOne({
+    where: { id: JoinId },
+    include: {
+      column: {
+        include: {
+          input: {
+            include: {
+              inputGroup: {
+                include: {
+                  attribute: {
+                    include: {
+                      resource: {
+                        include: {
+                          source: true,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  return join?.column?.input?.inputGroup?.attribute?.resource?.source.id
 }

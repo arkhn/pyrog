@@ -1,18 +1,18 @@
 import { inputObjectType } from '@nexus/schema'
 
-export const AttributeInput = inputObjectType({
-  name: 'AttributeInput',
-  definition(t) {
-    t.string('mergingScript')
-  },
-})
-
 export const UpdateResourceInput = inputObjectType({
   name: 'UpdateResourceInput',
   definition(t) {
     t.field('label', { type: 'String' })
     t.field('primaryKeyTable', { type: 'String' })
     t.field('primaryKeyColumn', { type: 'String' })
+  },
+})
+
+export const AttributeInput = inputObjectType({
+  name: 'AttributeInput',
+  definition(t) {
+    t.string('mergingScript')
   },
 })
 
