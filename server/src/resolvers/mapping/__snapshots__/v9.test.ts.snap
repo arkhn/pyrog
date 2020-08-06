@@ -166,7 +166,7 @@ Array [
                     "create": Array [
                       Object {
                         "action": "EXCLUDE",
-                        "column": Object {
+                        "sqlValue": Object {
                           "create": Object {
                             "column": "DATEIN",
                             "table": "SEJOUR",
@@ -214,7 +214,7 @@ Array [
                     "create": Array [
                       Object {
                         "action": "INCLUDE",
-                        "column": Object {
+                        "sqlValue": Object {
                           "create": Object {
                             "column": "DATEIN",
                             "table": "SEJOUR",

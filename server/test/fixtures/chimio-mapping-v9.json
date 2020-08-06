@@ -303,7 +303,7 @@
                   "columnId": "ckdg62wpn0001wu9kdswn6id6",
                   "value": "-1",
                   "inputGroupId": "ckdg2bhpi0006uv9kmpsp43pi",
-                  "column": {
+                  "sqlValue": {
                     "id": "ckdg62wpn0001wu9kdswn6id6",
                     "table": "SEJOUR",
                     "column": "DATEIN",
@@ -340,7 +340,7 @@
                   "columnId": "ckdg62wpn0001wu9kdswn6id7",
                   "value": "-1",
                   "inputGroupId": "ckdg2bhpi0006uv9kmpsp43pi",
-                  "column": {
+                  "sqlValue": {
                     "id": "ckdg62wpn0001wu9kdswn6id6",
                     "table": "SEJOUR",
                     "column": "DATEIN",

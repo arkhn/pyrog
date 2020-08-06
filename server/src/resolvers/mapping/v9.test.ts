@@ -74,7 +74,7 @@ describe('import mapping V9', () => {
                         {
                           action: 'EXCLUDE',
                           value: '-1',
-                          column: {
+                          sqlValue: {
                             create: { table: 'SEJOUR', column: 'DATEIN' },
                           },
                         },
