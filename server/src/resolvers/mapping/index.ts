@@ -12,7 +12,6 @@ import {
   MAPPING_VERSION_9,
   CURRENT_MAPPING_VERSION,
 } from '../../constants'
-import handleV6 from './v6'
 import handleV7 from './v7'
 import handleV8 from './v8'
 import handleV9 from './v9'
@@ -54,7 +53,9 @@ export const importMapping = async (
         `Your mapping version (v${MAPPING_VERSION_5}) is no longer supported. Please upgrade your export.`,
       )
     case MAPPING_VERSION_6:
-      return handleV6(prismaClient, sourceId, resources)
+      throw new Error(
+        `Your mapping version (v${MAPPING_VERSION_6}) is no longer supported. Please upgrade your export.`,
+      )
     case MAPPING_VERSION_7:
       return handleV7(prismaClient, sourceId, resources)
     case MAPPING_VERSION_8:
