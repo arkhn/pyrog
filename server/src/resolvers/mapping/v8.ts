@@ -1,4 +1,4 @@
-import { PrismaClient, Resource } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import { ResourceWithAttributes } from 'types'
 
 import {
