@@ -39,7 +39,6 @@ const main = async (path: string) => {
     console.log(`Creating source ${mapping.source.name}...`)
     source = await prismaClient.source.create({
       data: {
-        id: mapping.source.id,
         name: mapping.source.name,
         template: { connect: { name: template.name } },
       },

@@ -1,3 +1,4 @@
+import { ResourceDefinition } from '@arkhn/fhir.ts'
 import {
   Attribute,
   Column,
@@ -43,6 +44,10 @@ export type AttributeWithInputs = Attribute & {
 
 export type ResourceWithAttributes = Resource & {
   attributes: AttributeWithInputGroups[]
+}
+
+export type ResourceWithDefinition = ResourceWithAttributes & {
+  definition: ResourceDefinition
 }
 
 export type AttributeWithCommentsPreV7 = AttributeWithInputs & {
