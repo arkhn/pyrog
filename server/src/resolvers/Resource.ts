@@ -81,7 +81,7 @@ export const deleteResource: FieldResolver<
               },
               conditions: {
                 include: {
-                  column: true,
+                  sqlValue: true,
                 },
               },
             },
@@ -118,8 +118,8 @@ export const deleteResource: FieldResolver<
               return ctx.prisma.input.delete({ where: { id: i.id } })
             }),
             ...g.conditions.map(async c => {
-              if (c.column)
-                ctx.prisma.column.delete({ where: { id: c.column.id } })
+              if (c.sqlValue)
+                ctx.prisma.column.delete({ where: { id: c.sqlValue.id } })
               return ctx.prisma.condition.delete({ where: { id: c.id } })
             }),
           ] as Promise<Condition | Input>[])

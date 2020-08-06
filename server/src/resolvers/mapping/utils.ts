@@ -18,7 +18,7 @@ import {
   AttributeWithInputGroups,
   ColumnWithJoins,
   CommentWithAuthor,
-  ConditionWithColumn,
+  ConditionWithSqlValue,
   FilterWithSqlColumn,
   InputGroupWithInputs,
   InputWithColumn,
@@ -161,7 +161,7 @@ export const buildInputsQuery = (
   })
 
 export const buildConditionsQuery = (
-  conditions: ConditionWithColumn[],
+  conditions: ConditionWithSqlValue[],
 ): ConditionCreateWithoutInputGroupInput[] | undefined =>
   conditions.map(c => ({
     action: c.action,
