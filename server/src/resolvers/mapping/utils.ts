@@ -59,6 +59,9 @@ export const clean = (entry: any): any => {
   if (ret.inputGroupId !== undefined) {
     delete ret.inputGroupId
   }
+  if (ret.conditionId !== undefined) {
+    delete ret.conditionId
+  }
 
   return ret
 }
@@ -163,10 +166,10 @@ export const buildConditionsQuery = (
   conditions.map(c => ({
     action: c.action,
     value: c.value,
-    column: {
+    sqlValue: {
       create: {
-        table: c.column.table,
-        column: c.column.column,
+        table: c.sqlValue.table,
+        column: c.sqlValue.column,
       },
     },
   }))

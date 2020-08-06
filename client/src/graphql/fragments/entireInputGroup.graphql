@@ -1,4 +1,5 @@
 #import "./entireInput.graphql"
+#import "./entireCondition.graphql"
 
 fragment entireInputGroup on InputGroup {
   id
@@ -7,12 +8,6 @@ fragment entireInputGroup on InputGroup {
     ...entireInput
   }
   conditions {
-    id
-    action
-    column {
-      table
-      column
-    }
-    value
+    ...entireCondition
   }
 }

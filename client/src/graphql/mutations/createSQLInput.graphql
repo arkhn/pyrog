@@ -5,6 +5,7 @@ mutation createSQLInput($inputGroupId: ID!, $columnInput: ColumnInput) {
   createInput(inputGroupId: $inputGroupId, sql: $columnInput) {
     ...entireInput
     inputGroup {
+      id
       attribute {
         ...entireAttribute
       }

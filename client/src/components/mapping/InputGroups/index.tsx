@@ -16,7 +16,7 @@ const qInputsForAttribute = loader(
   'src/graphql/queries/inputsForAttribute.graphql'
 );
 
-const InputColumns = () => {
+const InputGroups = () => {
   const dispatch = useDispatch();
 
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
@@ -41,7 +41,7 @@ const InputColumns = () => {
   }
 
   const attribute = data && data.attribute ? data.attribute : null;
-  let inputGroups =
+  const inputGroups =
     attribute && attribute.inputGroups ? attribute.inputGroups : [];
 
   return (
@@ -69,4 +69,4 @@ const InputColumns = () => {
   );
 };
 
-export default InputColumns;
+export default InputGroups;

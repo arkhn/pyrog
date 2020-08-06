@@ -88,7 +88,7 @@ export const deleteAttributes: FieldResolver<
               },
             },
           },
-          conditions: { include: { column: true } },
+          conditions: { include: { sqlValue: true } },
         },
       },
     },
@@ -115,8 +115,8 @@ export const deleteAttributes: FieldResolver<
               return ctx.prisma.input.delete({ where: { id: i.id } })
             }),
             ...g.conditions.map(async c => {
-              if (c.column)
-                ctx.prisma.column.delete({ where: { id: c.column.id } })
+              if (c.sqlValue)
+                ctx.prisma.column.delete({ where: { id: c.sqlValue.id } })
               return ctx.prisma.condition.delete({ where: { id: c.id } })
             }),
           ] as Promise<Condition | Input>[])

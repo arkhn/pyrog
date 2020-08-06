@@ -25,11 +25,11 @@ export type InputWithColumn = Input & {
 
 export type InputGroupWithInputs = InputGroup & {
   inputs: InputWithColumn[]
-  conditions: ConditionWithColumn[]
+  conditions: ConditionWithSqlValue[]
 }
 
-export type ConditionWithColumn = Condition & {
-  column: Column
+export type ConditionWithSqlValue = Condition & {
+  sqlValue: Column
 }
 
 export type AttributeWithInputGroups = Attribute & {

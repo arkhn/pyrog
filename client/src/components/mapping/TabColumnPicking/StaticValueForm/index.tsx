@@ -68,6 +68,8 @@ const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
   let attributeId = attributesForResource[path]
     ? attributesForResource[path].id
     : null;
+  // The id of the input group in which we want to put the new input.
+  // If it is null, it means that we'll need to create a new input group first.
   let inputGroupId =
     selectedInputGroup === null ||
     !attributesForResource[path] ||

@@ -101,7 +101,7 @@ export interface Resource {
 export interface Condition {
   id: string;
   action: string;
-  column: {
+  sqlValue: {
     table: string;
     column: string;
   };

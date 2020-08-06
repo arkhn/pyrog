@@ -34,7 +34,7 @@ const ConditionSelect = ({
   popoverProps
 }: Props) => {
   const conditionToName = (condition: Condition): string =>
-    `${condition.action} ${condition.column.table} ${condition.column.column} ${condition.value}`;
+    `${condition.action} ${condition.sqlValue.table} ${condition.sqlValue.column} ${condition.value}`;
 
   const renderItem: ItemRenderer<Condition> = (item, { handleClick }) => (
     <MenuItem

@@ -29,6 +29,8 @@ interface Props {
   condition: Condition;
 }
 
+const availableActions = ['INCLUDE', 'EXCLUDE'];
+
 const InputCondition = ({ condition }: Props) => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
   const schema = useSelector(
@@ -64,16 +66,14 @@ const InputCondition = ({ condition }: Props) => {
   });
 
   const [action, setAction] = React.useState(condition.action);
-  const [table, setTable] = React.useState(condition.column.table);
-  const [column, setColumn] = React.useState(condition.column.column);
-  const [value, setValue] = React.useState(condition.value);
-
-  const availableActions = ['INCLUDE', 'EXCLUDE'];
+  const [table, setTable] = React.useState(condition.sqlValue.table);
+  const [column, setColumn] = React.useState(condition.sqlValue.column);
+  const [value, setValue] = React.useState(condition.value || '');
 
   useEffect(() => {});
   const attributesForSource: IAttribute[] =
     respQuery.data?.resource.attributes || [];
-  const allConditions: Condition[] = attributesForSource
+  const resourceConditions: Condition[] = attributesForSource
     .reduce(
       (acc: Condition[], attribute) => [
         ...acc,
@@ -87,8 +87,8 @@ const InputCondition = ({ condition }: Props) => {
     .filter(
       condition =>
         condition.action &&
-        condition.column.table &&
-        condition.column.column &&
+        condition.sqlValue.table &&
+        condition.sqlValue.column &&
         condition.value
     );
 
@@ -220,24 +220,24 @@ const InputCondition = ({ condition }: Props) => {
           inputItem={{
             id: condition.id,
             action,
-            column: {
+            sqlValue: {
               table,
               column
             },
             value
           }}
-          items={allConditions}
+          items={resourceConditions}
           onChange={(c: Condition): void => {
             setAction(c.action);
-            setTable(c.column.table);
-            setColumn(c.column.column);
+            setTable(c.sqlValue.table);
+            setColumn(c.sqlValue.column);
             setValue(c.value);
             updateCondition({
               variables: {
                 conditionId: condition.id,
                 action: c.action,
-                table: c.column.table,
-                column: c.column.column,
+                table: c.sqlValue.table,
+                column: c.sqlValue.column,
                 value: c.value
               }
             });

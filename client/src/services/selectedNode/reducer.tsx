@@ -4,7 +4,7 @@ const initialState: any = {
   source: null,
   resource: null,
   attribute: null,
-  selectedInputGroup: 0
+  selectedInputGroup: null
 };
 
 const selectedNodeReducer = (

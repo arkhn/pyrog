@@ -111,21 +111,20 @@ export const deleteInput: FieldResolver<'Mutation', 'deleteInput'> = async (
   { inputId },
   ctx,
 ) => {
-  const input = await ctx.prisma.input.findOne({
+  const input = await ctx.prisma.input.delete({
     where: { id: inputId },
     include: {
       inputGroup: {
-        include: { inputs: true, conditions: { include: { column: true } } },
+        include: { inputs: true, conditions: { include: { sqlValue: true } } },
       },
     },
   })
-  if (!input) throw new Error(`input with id ${inputId} does not exist`)
 
   if (input.inputGroup?.inputs.length === 1) {
     await Promise.all(
       input.inputGroup.conditions.map(async c => {
-        if (c.column)
-          await ctx.prisma.column.delete({ where: { id: c.column.id } })
+        if (c.sqlValue)
+          await ctx.prisma.column.delete({ where: { id: c.sqlValue.id } })
         return ctx.prisma.condition.delete({ where: { id: c.id } })
       }),
     )
@@ -134,7 +133,7 @@ export const deleteInput: FieldResolver<'Mutation', 'deleteInput'> = async (
     })
   }
 
-  return ctx.prisma.input.delete({ where: { id: inputId } })
+  return input
 }
 
 export const updateInput: FieldResolver<'Mutation', 'updateInput'> = async (

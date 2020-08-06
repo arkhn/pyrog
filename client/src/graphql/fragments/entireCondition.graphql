@@ -1,7 +1,7 @@
 fragment entireCondition on Condition {
   id
   action
-  column {
+  sqlValue {
     id
     table
     column

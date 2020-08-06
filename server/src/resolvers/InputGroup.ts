@@ -40,24 +40,29 @@ export const createInputGroup: FieldResolver<
 export const updateInputGroup: FieldResolver<
   'Mutation',
   'updateInputGroup'
-> = async (_parent, { inputGroupId, mergingScript }, ctx) => {
-  return ctx.prisma.inputGroup.update({
+> = async (_parent, { inputGroupId, mergingScript }, ctx) =>
+  ctx.prisma.inputGroup.update({
     where: { id: inputGroupId },
     data: {
       mergingScript,
     },
   })
-}
 
 export const addConditionToInputGroup: FieldResolver<
   'Mutation',
   'addConditionToInputGroup'
 > = async (_, { inputGroupId, action, table, column, value }, ctx) => {
-  const newCondition = await ctx.prisma.condition.create({
+  const inputGroup = await ctx.prisma.inputGroup.findOne({
+    where: { id: inputGroupId },
+  })
+  if (!inputGroup)
+    throw new Error(`inputGroup with id ${inputGroupId} does not exist`)
+
+  await ctx.prisma.condition.create({
     data: {
       action: action as ConditionAction,
       value,
-      column: {
+      sqlValue: {
         create: { table, column },
       },
       inputGroup: {
@@ -67,12 +72,5 @@ export const addConditionToInputGroup: FieldResolver<
       },
     },
   })
-  return await ctx.prisma.inputGroup.update({
-    where: { id: inputGroupId },
-    data: {
-      conditions: {
-        connect: { id: newCondition.id },
-      },
-    },
-  })
+  return inputGroup
 }

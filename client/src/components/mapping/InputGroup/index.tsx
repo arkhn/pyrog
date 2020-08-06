@@ -52,11 +52,10 @@ const InputGroup = ({ inputGroup }: Props) => {
 
   return (
     <React.Fragment>
-      {inputGroup.conditions.map((condition: any, index: number) => {
-        return condition ? (
-          <InputCondition key={index} condition={condition} />
-        ) : null;
-      })}
+      {inputGroup.conditions.map(
+        (condition: any, index: number) =>
+          condition && <InputCondition key={index} condition={condition} />
+      )}
       <Button
         icon={'add'}
         onClick={(e: React.MouseEvent) => {
@@ -72,9 +71,10 @@ const InputGroup = ({ inputGroup }: Props) => {
       </Button>
       <div id="input-columns">
         <div id="input-column-rows">
-          {inputGroup.inputs.map((input: any, index: number) => {
-            return input ? <InputColumn key={index} input={input} /> : null;
-          })}
+          {inputGroup.inputs.map(
+            (input: any, index: number) =>
+              input && <InputColumn key={index} input={input} />
+          )}
         </div>
         {inputGroup.inputs.length > 1 ? (
           <div id="input-column-merging-script">

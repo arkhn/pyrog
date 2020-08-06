@@ -144,13 +144,13 @@ export interface NexusGenInputs {
   ConditionWhereInput: { // input type
     action?: NexusGenEnums['ConditionAction'] | null; // ConditionAction
     AND?: NexusGenInputs['ConditionWhereInput'][] | null; // [ConditionWhereInput!]
-    column?: NexusGenInputs['ColumnWhereInput'] | null; // ColumnWhereInput
     columnId?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     inputGroup?: NexusGenInputs['InputGroupWhereInput'] | null; // InputGroupWhereInput
     inputGroupId?: NexusGenInputs['StringFilter'] | null; // StringFilter
     NOT?: NexusGenInputs['ConditionWhereInput'][] | null; // [ConditionWhereInput!]
     OR?: NexusGenInputs['ConditionWhereInput'][] | null; // [ConditionWhereInput!]
+    sqlValue?: NexusGenInputs['ColumnWhereInput'] | null; // ColumnWhereInput
     value?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
   }
   ConditionWhereUniqueInput: { // input type
@@ -621,8 +621,8 @@ export interface NexusGenFieldTypes {
   }
   Condition: { // field return type
     action: NexusGenEnums['ConditionAction'] | null; // ConditionAction
-    column: NexusGenRootTypes['Column'] | null; // Column
     id: string; // String!
+    sqlValue: NexusGenRootTypes['Column'] | null; // Column
     value: string | null; // String
   }
   Credential: { // field return type

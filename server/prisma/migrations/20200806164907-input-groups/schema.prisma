@@ -164,7 +164,7 @@ model Condition {
   id           String           @default(cuid()) @id
   action       ConditionAction?
   columnId     String?          @map("column")
-  column       Column?          @relation(fields: [columnId], references: [id])
+  sqlValue     Column?          @relation(fields: [columnId], references: [id])
   value        String?
   inputGroupId String           @map("inputGroup")
   inputGroup   InputGroup       @relation(fields: [inputGroupId], references: [id])

@@ -100,7 +100,7 @@ export const exportMapping = async (
               },
               conditions: {
                 include: {
-                  column: true,
+                  sqlValue: true,
                 },
               },
             },

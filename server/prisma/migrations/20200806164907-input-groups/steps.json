@@ -269,7 +269,7 @@
     {
       "tag": "CreateField",
       "model": "Condition",
-      "field": "column",
+      "field": "sqlValue",
       "type": "Column",
       "arity": "Optional"
     },
@@ -279,7 +279,7 @@
         "path": {
           "tag": "Field",
           "model": "Condition",
-          "field": "column"
+          "field": "sqlValue"
         },
         "directive": "relation"
       }
@@ -291,7 +291,7 @@
         "path": {
           "tag": "Field",
           "model": "Condition",
-          "field": "column"
+          "field": "sqlValue"
         },
         "directive": "relation"
       },
@@ -305,7 +305,7 @@
         "path": {
           "tag": "Field",
           "model": "Condition",
-          "field": "column"
+          "field": "sqlValue"
         },
         "directive": "relation"
       },

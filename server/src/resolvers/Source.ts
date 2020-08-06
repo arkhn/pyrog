@@ -154,7 +154,7 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
                     },
                   },
                   conditions: {
-                    include: { column: true },
+                    include: { sqlValue: true },
                   },
                 },
               },
@@ -209,8 +209,8 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
                   return ctx.prisma.input.delete({ where: { id: i.id } })
                 }),
                 ...g.conditions.map(async c => {
-                  if (c.column)
-                    ctx.prisma.column.delete({ where: { id: c.column.id } })
+                  if (c.sqlValue)
+                    ctx.prisma.column.delete({ where: { id: c.sqlValue.id } })
                   return ctx.prisma.condition.delete({ where: { id: c.id } })
                 }),
                 ...a.comments.map(async c =>

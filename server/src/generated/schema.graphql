@@ -189,8 +189,8 @@ type ConceptMap {
 
 type Condition {
   action: ConditionAction
-  column: Column
   id: String!
+  sqlValue: Column
   value: String
 }
 
@@ -208,13 +208,13 @@ input ConditionFilter {
 input ConditionWhereInput {
   action: ConditionAction
   AND: [ConditionWhereInput!]
-  column: ColumnWhereInput
   columnId: NullableStringFilter
   id: StringFilter
   inputGroup: InputGroupWhereInput
   inputGroupId: StringFilter
   NOT: [ConditionWhereInput!]
   OR: [ConditionWhereInput!]
+  sqlValue: ColumnWhereInput
   value: NullableStringFilter
 }
 

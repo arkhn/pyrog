@@ -7,7 +7,7 @@ export const Condition = objectType({
     t.model.id()
 
     t.model.action()
-    t.model.column()
+    t.model.sqlValue()
     t.model.value()
   },
 })
@@ -16,14 +16,14 @@ export const updateCondition: FieldResolver<
   'Mutation',
   'updateCondition'
 > = async (_, { conditionId, action, table, column, value }, ctx) =>
-  await ctx.prisma.condition.update({
+  ctx.prisma.condition.update({
     where: {
       id: conditionId,
     },
     data: {
       action: action as ConditionAction,
       value,
-      column: {
+      sqlValue: {
         update: { table, column },
       },
     },
@@ -33,7 +33,7 @@ export const deleteCondition: FieldResolver<
   'Mutation',
   'deleteCondition'
 > = async (_, { conditionId }, ctx) =>
-  await ctx.prisma.condition.delete({
+  ctx.prisma.condition.delete({
     where: {
       id: conditionId,
     },

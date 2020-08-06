@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 import Navbar from 'components/navbar';
-import InputColumns from './InputColumns';
+import InputColumns from './InputGroups';
 import TabColumnSuggestion from './TabColumnSuggestion';
 import TabColumnPicking from './TabColumnPicking';
 import TabSQLParser from './TabSQLParser';

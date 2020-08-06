@@ -44,12 +44,10 @@ const Join = ({ joinData }: Props) => {
   const removeJoin = (input: any) => {
     return {
       ...input,
-      sqlValue: input.sqlValue
-        ? {
-            ...input.sqlValue,
-            joins: input.sqlValue.joins.filter((j: any) => j.id !== joinData.id)
-          }
-        : input.sqlValue
+      sqlValue: {
+        ...input.sqlValue,
+        joins: input.sqlValue.joins.filter((j: any) => j.id !== joinData.id)
+      }
     };
   };
 

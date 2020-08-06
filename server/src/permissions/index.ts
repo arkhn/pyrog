@@ -86,6 +86,10 @@ export const permissions = shield(
 
       createInputGroup: rules.isSourceWriter,
       updateInputGroup: rules.isSourceWriter,
+      addConditionToInputGroup: rules.isSourceWriter,
+
+      updateCondition: rules.isSourceWriter,
+      deleteCondition: rules.isSourceWriter,
 
       createInput: rules.isSourceWriter,
       updateInput: rules.isSourceWriter,

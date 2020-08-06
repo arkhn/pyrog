@@ -5,6 +5,7 @@ mutation createStaticInput($inputGroupId: ID!, $staticValue: String) {
   createInput(inputGroupId: $inputGroupId, static: $staticValue) {
     ...entireInput
     inputGroup {
+      id
       attribute {
         ...entireAttribute
       }
