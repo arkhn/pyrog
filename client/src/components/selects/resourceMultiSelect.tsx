@@ -6,6 +6,7 @@ interface Props {
   resources: Resource[];
   selectedResources: Resource[];
   onResourceSelect: (item: Resource) => void;
+  onSelectAll: () => void;
   onRemoveTag?: (item: string, ind: number) => void;
 }
 
@@ -15,10 +16,17 @@ interface Resource {
   definitionId: string;
 }
 
+const selectAllItem = {
+  id: '__SELECT_ALL__',
+  label: '',
+  definitionId: ''
+};
+
 const ResourceMultiSelect = ({
   resources,
   selectedResources,
   onResourceSelect,
+  onSelectAll,
   onRemoveTag
 }: Props): React.ReactElement => {
   const CustomSelect = MultiSelect.ofType<Resource>();
@@ -27,16 +35,31 @@ const ResourceMultiSelect = ({
     return list.includes(item);
   };
 
-  const renderResource = (resource: Resource, { handleClick }: any) => (
-    <MenuItem
-      key={resource.id}
-      text={resource.definitionId}
-      label={resource.label}
-      icon={isItemSelected(selectedResources, resource) ? 'tick' : 'blank'}
-      onClick={handleClick}
-      shouldDismissPopover={false}
-    />
-  );
+  const renderResource = (resource: Resource, { handleClick }: any) =>
+    resource.id === '__SELECT_ALL__' ? (
+      <MenuItem
+        key={resource.id}
+        text={
+          selectedResources.length === resources.length ? (
+            <strong>Deselect all</strong>
+          ) : (
+            <strong>Select all</strong>
+          )
+        }
+        icon={selectedResources.length === resources.length ? 'tick' : 'blank'}
+        onClick={onSelectAll}
+        shouldDismissPopover={false}
+      />
+    ) : (
+      <MenuItem
+        key={resource.id}
+        text={resource.definitionId}
+        label={resource.label}
+        icon={isItemSelected(selectedResources, resource) ? 'tick' : 'blank'}
+        onClick={handleClick}
+        shouldDismissPopover={false}
+      />
+    );
 
   const filterResources: ItemPredicate<Resource> = (query, source) => {
     return source.definitionId.toLowerCase().indexOf(query.toLowerCase()) >= 0;
@@ -44,7 +67,7 @@ const ResourceMultiSelect = ({
 
   return (
     <CustomSelect
-      items={resources}
+      items={resources.length > 0 ? [selectAllItem, ...resources] : []}
       tagRenderer={resource => resource.definitionId}
       tagInputProps={{
         onRemove: onRemoveTag
