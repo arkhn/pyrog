@@ -18,6 +18,7 @@ interface Props {
   maxItems?: number;
   loading?: boolean;
   filterable?: boolean;
+  itemToKey:  (condition: Condition) => string
   onChange: any;
   popoverProps?: IPopoverProps;
 }
@@ -31,23 +32,21 @@ const ConditionSelect = ({
   loading,
   onChange,
   filterable,
+  itemToKey,
   popoverProps
 }: Props) => {
-  const conditionToName = (condition: Condition): string =>
-    `${condition.action} ${condition.sqlValue.table} ${condition.sqlValue.column} ${condition.value}`;
-
   const renderItem: ItemRenderer<Condition> = (item, { handleClick }) => (
     <MenuItem
-      key={conditionToName(item)}
+      key={itemToKey(item)}
       onClick={handleClick}
-      text={conditionToName(item)}
+      text={itemToKey(item)}
     />
   );
 
   const filterList: ItemListPredicate<Condition> = (query, items) => {
     return items.filter(
       item =>
-        `${conditionToName(item).toLowerCase()}`.indexOf(query.toLowerCase()) >=
+        `${itemToKey(item).toLowerCase()}`.indexOf(query.toLowerCase()) >=
         0
     );
   };

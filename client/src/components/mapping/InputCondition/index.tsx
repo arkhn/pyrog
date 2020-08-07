@@ -31,6 +31,9 @@ interface Props {
 
 const availableActions = ['INCLUDE', 'EXCLUDE'];
 
+const conditionToName = (condition: Condition): string =>
+  `${condition.action} ${condition.sqlValue.table} ${condition.sqlValue.column} ${condition.value}`;
+
 const InputCondition = ({ condition }: Props) => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
   const schema = useSelector(
@@ -42,10 +45,10 @@ const InputCondition = ({ condition }: Props) => {
   const path = useSelector(
     (state: IReduxStore) => state.selectedNode.attribute.path
   );
-  const attributesForResource = useSelector(
+  const attributesMap = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
   );
-  const attributeId = attributesForResource[path].id;
+  const attributeId = attributesMap[path].id;
 
   const onError = onApolloError(toaster);
 
@@ -68,29 +71,33 @@ const InputCondition = ({ condition }: Props) => {
   const [action, setAction] = React.useState(condition.action);
   const [table, setTable] = React.useState(condition.sqlValue.table);
   const [column, setColumn] = React.useState(condition.sqlValue.column);
-  const [value, setValue] = React.useState(condition.value || '');
+  const [value, setValue] = React.useState(condition.value || '');
 
   useEffect(() => {});
-  const attributesForSource: IAttribute[] =
+  const ResourceAttributes: IAttribute[] =
     respQuery.data?.resource.attributes || [];
-  const resourceConditions: Condition[] = attributesForSource
-    .reduce(
-      (acc: Condition[], attribute) => [
-        ...acc,
-        ...attribute.inputGroups.reduce(
-          (acc, inputGroup) => [...acc, ...inputGroup.conditions],
-          []
-        )
-      ],
-      []
-    )
-    .filter(
-      condition =>
-        condition.action &&
-        condition.sqlValue.table &&
-        condition.sqlValue.column &&
-        condition.value
-    );
+  const allConditions: Condition[] = ResourceAttributes.reduce(
+    (acc: Condition[], attribute) => [
+      ...acc,
+      ...attribute.inputGroups.reduce(
+        (acc, inputGroup) => [...acc, ...inputGroup.conditions],
+        []
+      )
+    ],
+    []
+  ).filter(
+    condition =>
+      condition.action &&
+      condition.sqlValue.table &&
+      condition.sqlValue.column &&
+      condition.value
+  );
+  // Remove duplicates
+  const resourceConditions: Condition[] = allConditions.filter(
+    (condition, index) =>
+      allConditions.map(conditionToName).indexOf(conditionToName(condition)) ===
+      index
+  );
 
   const removeConditionFromCache = (conditionId: string) => (cache: any) => {
     const { attribute: dataAttribute } = cache.readQuery({
@@ -227,6 +234,7 @@ const InputCondition = ({ condition }: Props) => {
             value
           }}
           items={resourceConditions}
+          itemToKey={conditionToName}
           onChange={(c: Condition): void => {
             setAction(c.action);
             setTable(c.sqlValue.table);
