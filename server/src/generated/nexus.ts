@@ -299,6 +299,7 @@ export interface NexusGenInputs {
     filters?: NexusGenInputs['FilterFilter'] | null; // FilterFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     label?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
+    logicalReference?: NexusGenInputs['StringFilter'] | null; // StringFilter
     NOT?: NexusGenInputs['ResourceWhereInput'][] | null; // [ResourceWhereInput!]
     OR?: NexusGenInputs['ResourceWhereInput'][] | null; // [ResourceWhereInput!]
     primaryKeyColumn?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter

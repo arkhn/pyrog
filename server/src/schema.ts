@@ -1,11 +1,11 @@
-import { nexusPrismaPlugin } from 'nexus-prisma'
+import { nexusSchemaPrisma } from 'nexus-plugin-prisma/schema'
 import { makeSchema } from '@nexus/schema'
 
 import * as resolvers from 'resolvers'
 
 export const schema = makeSchema({
   types: resolvers,
-  plugins: [nexusPrismaPlugin()],
+  plugins: [nexusSchemaPrisma()],
   outputs: {
     schema: __dirname + '/generated/schema.graphql',
     typegen: __dirname + '/generated/nexus.ts',

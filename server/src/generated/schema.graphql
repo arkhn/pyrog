@@ -508,6 +508,7 @@ input ResourceWhereInput {
   filters: FilterFilter
   id: StringFilter
   label: NullableStringFilter
+  logicalReference: StringFilter
   NOT: [ResourceWhereInput!]
   OR: [ResourceWhereInput!]
   primaryKeyColumn: NullableStringFilter

@@ -1,5 +1,4 @@
 import {
-  Attribute,
   AttributeCreateWithoutResourceInput,
   Column,
   ColumnCreateWithoutInputInput,
@@ -24,8 +23,6 @@ import {
   InputGroupWithInputs,
   InputWithColumn,
   JoinWithColumn,
-  AttributeWithInputs,
-  ResourceWithAttributes,
 } from 'types'
 
 export const clean = (entry: any): any => {
@@ -312,95 +309,3 @@ export const buildFiltersQuery = (
     filter.sqlColumn = { create: buildColumnWithoutJoinsQuery(f.sqlColumn) }
     return filter
   })
-
-export const updateReferences = async (
-  prismaClient: PrismaClient,
-  resource: ResourceWithAttributes,
-  idsMapping: { [prevId: string]: string },
-  prevSourceId?: string,
-) => {
-  // filter all references
-  const identifiers = resource.attributes.filter(
-    (a: Attribute) => a.definitionId === 'Identifier',
-  )
-  // find identifiers' systems based on the attribute path
-  const identifiersSystem = resource.attributes.filter(
-    (a: AttributeWithInputGroups) => {
-      const isSystem = identifiers.some(
-        (ref: Attribute) => a.path === `${ref.path}.system`,
-      )
-      const hasInput =
-        a.inputGroups &&
-        a.inputGroups.length &&
-        a.inputGroups[0].inputs &&
-        a.inputGroups[0].inputs.length &&
-        a.inputGroups[0].inputs[0].staticValue
-      if (isSystem && !hasInput) {
-        console.warn(`[${resource.definitionId}.${a.path}] missing input`)
-        return null
-      }
-      return isSystem && hasInput
-    },
-  )
-
-  const editSystem = (systemAttribute: AttributeWithInputGroups): string => {
-    // extract the targeted resource id from the reference system
-    let prevSystemValue = systemAttribute.inputGroups[0].inputs[0].staticValue!
-
-    // LEGACY: remove the sourceId from the system if present.
-    if (prevSourceId && prevSystemValue.includes(`/${prevSourceId}`))
-      prevSystemValue = prevSystemValue.replace(`/${prevSourceId}`, '')
-
-    const targetResourceId = prevSystemValue.split(/\//)[3] // system must look like http://terminology.arkhn.com/<resourceId>[/<optionalCustomKey>]
-    if (!targetResourceId) {
-      // FIXME: throw error instead of console.error
-      console.error(
-        `[${resource.definitionId}.${systemAttribute.path}] bad reference system: ${systemAttribute.inputGroups[0].inputs[0].staticValue}`,
-      )
-      return prevSystemValue
-    } else if (!idsMapping[targetResourceId]) {
-      console.error(
-        `[${resource.definitionId}.${systemAttribute.path}] could not update identifier system: resource id ${targetResourceId} does not exist`,
-      )
-      return prevSystemValue
-    }
-    console.debug(
-      `[${resource.definitionId}.${systemAttribute.path}] updating system ${prevSystemValue} with resourceId ${idsMapping[targetResourceId]}`,
-    )
-    return prevSystemValue.replace(
-      targetResourceId,
-      idsMapping[targetResourceId],
-    )
-  }
-
-  await Promise.all(
-    identifiersSystem.map(async (systemAttribute: AttributeWithInputGroups) =>
-      prismaClient.input.update({
-        where: { id: systemAttribute.inputGroups[0].inputs[0].id },
-        data: {
-          staticValue: editSystem(systemAttribute),
-        },
-      }),
-    ),
-  )
-  return prismaClient.resource.findOne({
-    where: { id: resource.id },
-    include: {
-      attributes: {
-        include: {
-          inputGroups: {
-            include: {
-              inputs: {
-                include: {
-                  sqlValue: {
-                    include: { joins: { include: { column: true } } },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  })
-}
