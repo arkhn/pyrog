@@ -299,6 +299,7 @@ export interface NexusGenInputs {
     filters?: NexusGenInputs['FilterFilter'] | null; // FilterFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     label?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
+    logicalReference?: NexusGenInputs['StringFilter'] | null; // StringFilter
     NOT?: NexusGenInputs['ResourceWhereInput'][] | null; // [ResourceWhereInput!]
     OR?: NexusGenInputs['ResourceWhereInput'][] | null; // [ResourceWhereInput!]
     primaryKeyColumn?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
@@ -479,6 +480,7 @@ export interface NexusGenRootTypes {
     definitionId: string; // String!
     id: string; // String!
     label?: string | null; // String
+    logicalReference: string; // String!
     primaryKeyColumn?: string | null; // String
     primaryKeyTable?: string | null; // String
     updatedAt: any; // DateTime!
@@ -724,6 +726,7 @@ export interface NexusGenFieldTypes {
     filters: NexusGenRootTypes['Filter'][]; // [Filter!]!
     id: string; // String!
     label: string | null; // String
+    logicalReference: string; // String!
     primaryKeyColumn: string | null; // String
     primaryKeyTable: string | null; // String
     source: NexusGenRootTypes['Source']; // Source!

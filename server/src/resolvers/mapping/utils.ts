@@ -27,6 +27,7 @@ import {
 
 export const clean = (entry: any): any => {
   const ret = JSON.parse(JSON.stringify(entry))
+  delete ret.id
   delete ret.updatedAt
   delete ret.createdAt
   if (ret.owner !== undefined) {

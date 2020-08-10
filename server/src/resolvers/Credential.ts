@@ -1,10 +1,10 @@
+import axios from 'axios'
 import { objectType, FieldResolver } from '@nexus/schema'
 import { DatabaseType, Credential as Credz } from '@prisma/client'
-import { PAGAI_URL } from '../constants'
 
+import { PAGAI_URL } from '../constants'
 import { encrypt, decrypt } from 'utils'
-import axios from 'axios'
-import { Context } from 'nexus-prisma/dist/utils'
+import { Context } from 'context'
 
 export const Credential = objectType({
   name: 'Credential',

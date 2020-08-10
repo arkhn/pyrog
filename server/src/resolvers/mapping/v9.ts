@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import { ResourceWithAttributes } from 'types'
 
 import {
   cleanResource,
@@ -10,12 +11,13 @@ import {
 export default async (
   prismaClient: PrismaClient,
   sourceId: string,
-  resources: any[],
+  resources: ResourceWithAttributes[],
 ) => {
   await checkAuthors(prismaClient, resources)
+
   return Promise.all(
-    resources.map(async (r: any) => {
-      return prismaClient.resource.create({
+    resources.map(async (r: any) =>
+      prismaClient.resource.create({
         data: {
           ...cleanResource(r),
           attributes: {
@@ -28,7 +30,7 @@ export default async (
             connect: { id: sourceId },
           },
         },
-      })
-    }),
+      }),
+    ),
   )
 }

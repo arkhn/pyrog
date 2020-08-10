@@ -7,6 +7,7 @@ export const Resource = objectType({
   definition(t) {
     t.model.id()
 
+    t.model.logicalReference()
     t.model.label()
 
     t.model.primaryKeyTable()

@@ -23,11 +23,11 @@ if (process.argv.length != 3) {
 }
 
 prismaClient
-  .connect()
+  .$connect()
   .then(() => main(process.argv[2]))
-  .then(() => prismaClient.disconnect())
+  .then(() => prismaClient.$disconnect())
   .then(() => process.exit(0))
   .catch(err => {
     console.error(err)
-    prismaClient.disconnect().then(() => process.exit(1))
+    prismaClient.$disconnect().then(() => process.exit(1))
   })

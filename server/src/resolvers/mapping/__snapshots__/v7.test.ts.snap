@@ -8,7 +8,6 @@ Array [
         "create": Array [
           Object {
             "definitionId": "string",
-            "id": "ck8iiui3g0874euutj38hg2w3",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -16,26 +15,21 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3g0878euut1905dqpz",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "LIBELTW",
-                            "id": "ck8iiui3g0880euutb7uo17il",
                             "joins": Object {
                               "create": Array [
                                 Object {
-                                  "id": "ck8iiui3g0882euutl4qtkhzn",
                                   "tables": Object {
                                     "create": Array [
                                       Object {
                                         "column": "TWCLEUNIK",
-                                        "id": "ck8iiui3g0884euutbugm7n1r",
                                         "table": "SEJOUR",
                                       },
                                       Object {
                                         "column": "TWCLEUNIK",
-                                        "id": "ck8iiui3g0887euutfbeg2q1w",
                                         "table": "TYPESEJ",
                                       },
                                     ],
@@ -58,12 +52,10 @@ Array [
           },
           Object {
             "definitionId": "Reference",
-            "id": "ck8iiui3h0893euut2mt8id45",
             "path": "patient",
           },
           Object {
             "definitionId": "uri",
-            "id": "ck8iiui3h0895euut8qejc3lo",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -71,9 +63,8 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0897euut1i0ztmbq",
                         "script": null,
-                        "staticValue": "/Patient/{id}",
+                        "staticValue": "http://terminology.arkhn.com/ck8iiui3g0873euutm08fnyrf",
                       },
                     ],
                   },
@@ -85,7 +76,6 @@ Array [
           },
           Object {
             "definitionId": "string",
-            "id": "ck8iiui3h0900euutkj9nrxmn",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -93,12 +83,10 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0902euutt8bfiib1",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "PACLEUNIK",
-                            "id": "ck8iiui3h0904euutow06q7fr",
                             "table": "SEJOUR",
                           },
                         },
@@ -114,12 +102,10 @@ Array [
           },
           Object {
             "definitionId": "Identifier",
-            "id": "ck8iiui3h0908euutbfu6jg9b",
             "path": "managingOrganization.identifier",
           },
           Object {
             "definitionId": "string",
-            "id": "ck8iiui3h0909euutyv68l658",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -127,12 +113,10 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0911euutqiqpvomq",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "SERVICE",
-                            "id": "ck8iiui3h0913euut4pe1okd6",
                             "table": "SEJOUR",
                           },
                         },
@@ -148,7 +132,6 @@ Array [
           },
           Object {
             "definitionId": "dateTime",
-            "id": "ck8iiui3h0915euut8x2qfzks",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -156,12 +139,10 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0918euutvumtyf8l",
                         "script": "clean_date",
                         "sqlValue": Object {
                           "create": Object {
                             "column": "DATEIN",
-                            "id": "ck8iiui3h0920euutrnmfy23u",
                             "table": "SEJOUR",
                           },
                         },
@@ -169,12 +150,10 @@ Array [
                       },
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0921euut6xx53utp",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "HEUREIN",
-                            "id": "ck8iiui3h0923euut0o9d529y",
                             "table": "SEJOUR",
                           },
                         },
@@ -190,7 +169,6 @@ Array [
           },
           Object {
             "definitionId": "string",
-            "id": "ck8iiui3h0927euutvs85rc77",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -198,12 +176,10 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0929euutc5hvt0g8",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "SECLEUNIK",
-                            "id": "ck8iiui3h0931euut41jpxelx",
                             "table": "SEJOUR",
                           },
                         },
@@ -219,7 +195,6 @@ Array [
           },
           Object {
             "definitionId": "code",
-            "id": "ck8iiui3h0933euutk1aasv6p",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -227,12 +202,10 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0935euutdt3suu39",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "ETATSEJ",
-                            "id": "ck8iiui3h0937euutgp9bkpn7",
                             "table": "SEJOUR",
                           },
                         },
@@ -248,12 +221,10 @@ Array [
           },
           Object {
             "definitionId": "CodeableConcept",
-            "id": "ck8iiui3h0939euut7b7rn1ej",
             "path": "type",
           },
           Object {
             "definitionId": "string",
-            "id": "ck8iiui3h0941euutleuqj86l",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -261,7 +232,6 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0944euutjgdyuh29",
                         "script": null,
                         "staticValue": "internal",
                       },
@@ -288,7 +258,6 @@ Array [
               ],
             },
             "definitionId": "string",
-            "id": "ck8iiui3h0945euuth5wnmtns",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -296,7 +265,6 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0950euutatcsermm",
                         "script": null,
                         "staticValue": "internal",
                       },
@@ -310,12 +278,10 @@ Array [
           },
           Object {
             "definitionId": "Period",
-            "id": "ck8iiui3h0952euuttenzso2y",
             "path": "period",
           },
           Object {
             "definitionId": "dateTime",
-            "id": "ck8iiui3h0954euut8zwfbntz",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -323,12 +289,10 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0956euutld7dnc4g",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "HEUREOUT",
-                            "id": "ck8iiui3h0957euut2ymeffbb",
                             "table": "SEJOUR",
                           },
                         },
@@ -336,12 +300,10 @@ Array [
                       },
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0959euut53yev1mp",
                         "script": "clean_date",
                         "sqlValue": Object {
                           "create": Object {
                             "column": "DATEOUT",
-                            "id": "ck8iiui3h0961euutboxn52xy",
                             "table": "SEJOUR",
                           },
                         },
@@ -357,17 +319,14 @@ Array [
           },
           Object {
             "definitionId": "Coding",
-            "id": "ck8iiui3h0964euuty3asc0h8",
             "path": "type[0].coding",
           },
           Object {
             "definitionId": "Identifier",
-            "id": "ck8iiui3h0965euutj05zb0ym",
             "path": "identifier",
           },
           Object {
             "definitionId": "string",
-            "id": "ck8iiui3h0967euut4u14vpqo",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -375,12 +334,10 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0970euutcv8h5wls",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "ADMISSION",
-                            "id": "ck8iiui3h0972euutm5dcshse",
                             "table": "SEJOUR",
                           },
                         },
@@ -388,12 +345,10 @@ Array [
                       },
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0973euutvuifu98j",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "ADMISSION2",
-                            "id": "ck8iiui3h0975euutx0l30vvb",
                             "table": "SEJOUR",
                           },
                         },
@@ -409,7 +364,6 @@ Array [
           },
           Object {
             "definitionId": "code",
-            "id": "ck8iiui3h0979euut1t9f8v80",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -417,12 +371,10 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0980euutozr9mpeq",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "TWCLEUNIK",
-                            "id": "ck8iiui3h0982euutxt0rkzix",
                             "table": "SEJOUR",
                           },
                         },
@@ -438,17 +390,14 @@ Array [
           },
           Object {
             "definitionId": "Identifier",
-            "id": "ck8iiui3h0985euutjzzfkrdp",
             "path": "patient.identifier",
           },
           Object {
             "definitionId": "Reference",
-            "id": "ck8iiui3h0987euutru6fv2k9",
             "path": "managingOrganization",
           },
           Object {
             "definitionId": "uri",
-            "id": "ck8iiui3h0989euuta109k4fo",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -456,9 +405,8 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0990euuttt00zl6b",
                         "script": null,
-                        "staticValue": "/Organization/{id}",
+                        "staticValue": "http://terminology.arkhn.com/ck8iiui3g0872euut6adjvlol",
                       },
                     ],
                   },
@@ -474,12 +422,10 @@ Array [
       "filters": Object {
         "create": Array [
           Object {
-            "id": "ck8iiui3h0997euutcwndk9e7",
             "relation": "<=",
             "sqlColumn": Object {
               "create": Object {
                 "column": "CHAMBRE",
-                "id": "ck8iiui3h1000euutdbxfu1pc",
                 "table": "SEJOUR",
               },
             },
@@ -487,7 +433,6 @@ Array [
           },
         ],
       },
-      "id": "ck8iiui3g0872euut6adjvfnr",
       "label": "Hospital Stay",
       "primaryKeyColumn": "SECLEUNIK",
       "primaryKeyTable": "SEJOUR",
@@ -509,12 +454,10 @@ Array [
         "create": Array [
           Object {
             "definitionId": "Coding",
-            "id": "ck8iiui3g0875euutkf6uodqk",
             "path": "identifier[0].type.coding",
           },
           Object {
             "definitionId": "code",
-            "id": "ck8iiui3g0876euutexvf69o0",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -522,7 +465,6 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3g0877euuto7i0cdak",
                         "script": null,
                         "staticValue": "PI",
                       },
@@ -536,7 +478,6 @@ Array [
           },
           Object {
             "definitionId": "string",
-            "id": "ck8iiui3g0879euut9967t9d4",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -544,7 +485,6 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3g0881euuth0l41cz7",
                         "script": null,
                         "staticValue": "Patient internal identifier",
                       },
@@ -558,7 +498,6 @@ Array [
           },
           Object {
             "definitionId": "string",
-            "id": "ck8iiui3g0883euut839w3p6a",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -566,12 +505,10 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3g0885euutkmpy55f1",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "DOSSIERPAT",
-                            "id": "ck8iiui3g0886euutuxs3pf18",
                             "table": "PATIENT",
                           },
                         },
@@ -587,17 +524,14 @@ Array [
           },
           Object {
             "definitionId": "Period",
-            "id": "ck8iiui3g0888euutesfyyhsb",
             "path": "identifier[2].period",
           },
           Object {
             "definitionId": "HumanName",
-            "id": "ck8iiui3g0889euut5ggfp6q7",
             "path": "name",
           },
           Object {
             "definitionId": "code",
-            "id": "ck8iiui3h0890euut17jb4j1r",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -605,7 +539,6 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0891euutd2ztrof3",
                         "script": null,
                         "staticValue": "maiden",
                       },
@@ -619,7 +552,6 @@ Array [
           },
           Object {
             "definitionId": "string",
-            "id": "ck8iiui3h0892euut4600qeo2",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -627,12 +559,10 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0894euut7no7sir4",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "NOMJFPAT",
-                            "id": "ck8iiui3h0896euutbs1keubp",
                             "table": "PATIENT",
                           },
                         },
@@ -648,7 +578,6 @@ Array [
           },
           Object {
             "definitionId": "code",
-            "id": "ck8iiui3h0898euut6a1dr77q",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -656,12 +585,10 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0899euutaixgu3e2",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "SEXEPAT",
-                            "id": "ck8iiui3h0901euutwnkvkkce",
                             "table": "PATIENT",
                           },
                         },
@@ -677,17 +604,14 @@ Array [
           },
           Object {
             "definitionId": "Address",
-            "id": "ck8iiui3h0903euutkmr3v7ds",
             "path": "address",
           },
           Object {
             "definitionId": "Reference",
-            "id": "ck8iiui3h0905euutf90c2ltg",
             "path": "managingOrganization",
           },
           Object {
             "definitionId": "uri",
-            "id": "ck8iiui3h0906euutomx5t0cc",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -695,9 +619,8 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0907euutgscl8qh8",
                         "script": null,
-                        "staticValue": "/Organization/{id}",
+                        "staticValue": "http://terminology.arkhn.com/ck8iiui3g0872euut6adjvlol",
                       },
                     ],
                   },
@@ -709,7 +632,6 @@ Array [
           },
           Object {
             "definitionId": "string",
-            "id": "ck8iiui3h0910euutnp9k1y22",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -717,12 +639,10 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0912euutd49yrtfy",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "CODESERV",
-                            "id": "ck8iiui3h0914euutdsg7bypv",
                             "table": "PATIENT",
                           },
                         },
@@ -738,7 +658,6 @@ Array [
           },
           Object {
             "definitionId": "string",
-            "id": "ck8iiui3h0916euutdo1lqnj5",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -746,12 +665,10 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0917euutopu6v5y7",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "NOOBSPAT",
-                            "id": "ck8iiui3h0919euutq84e5y4s",
                             "table": "PATIENT",
                           },
                         },
@@ -767,17 +684,14 @@ Array [
           },
           Object {
             "definitionId": "CodeableConcept",
-            "id": "ck8iiui3h0922euutk1avxzu4",
             "path": "identifier[0].type",
           },
           Object {
             "definitionId": "Identifier",
-            "id": "ck8iiui3h0924euut1lrx4wpb",
             "path": "identifier",
           },
           Object {
             "definitionId": "boolean",
-            "id": "ck8iiui3h0925euut34vf7oot",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -785,7 +699,6 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0926euutsbhh849y",
                         "script": null,
                         "staticValue": "false",
                       },
@@ -799,7 +712,6 @@ Array [
           },
           Object {
             "definitionId": "string",
-            "id": "ck8iiui3h0928euutab26dn9j",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -807,12 +719,10 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0930euutoh4ziwrs",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "PACLEUNIK",
-                            "id": "ck8iiui3h0932euutxe8cyhzl",
                             "table": "PATIENT",
                           },
                         },
@@ -828,7 +738,6 @@ Array [
           },
           Object {
             "definitionId": "dateTime",
-            "id": "ck8iiui3h0934euutgylav4oi",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -836,12 +745,10 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0936euutc7v7pazv",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "DATEINPAT",
-                            "id": "ck8iiui3h0938euut659vuw8z",
                             "table": "PATIENT",
                           },
                         },
@@ -857,7 +764,6 @@ Array [
           },
           Object {
             "definitionId": "dateTime",
-            "id": "ck8iiui3h0940euutscrthm2f",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -865,12 +771,10 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0942euut7uvubpg9",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "DATEOUTPAT",
-                            "id": "ck8iiui3h0943euutg93n40ko",
                             "table": "PATIENT",
                           },
                         },
@@ -886,7 +790,6 @@ Array [
           },
           Object {
             "definitionId": "string",
-            "id": "ck8iiui3h0946euutdz2z58cn",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -894,12 +797,10 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0948euut96dbj7j0",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "NOMPAT",
-                            "id": "ck8iiui3h0949euutvljkeug7",
                             "table": "PATIENT",
                           },
                         },
@@ -915,7 +816,6 @@ Array [
           },
           Object {
             "definitionId": "string",
-            "id": "ck8iiui3h0951euut7snrof9e",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -923,12 +823,10 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0953euuthluoxzsl",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "TELPAT",
-                            "id": "ck8iiui3h0955euutakdfx2xz",
                             "table": "PATIENT",
                           },
                         },
@@ -944,7 +842,6 @@ Array [
           },
           Object {
             "definitionId": "date",
-            "id": "ck8iiui3h0958euutnwve00s0",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -952,12 +849,10 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0960euutgwqivaht",
                         "script": "clean_date",
                         "sqlValue": Object {
                           "create": Object {
                             "column": "DATENAISPA",
-                            "id": "ck8iiui3h0962euutf0oxkj75",
                             "table": "PATIENT",
                           },
                         },
@@ -973,7 +868,6 @@ Array [
           },
           Object {
             "definitionId": "boolean",
-            "id": "ck8iiui3h0963euute7h6ujpd",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -981,12 +875,10 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0966euuta660ktzr",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "IDMOTIFINAC",
-                            "id": "ck8iiui3h0968euut23dh97gd",
                             "table": "PATIENT",
                           },
                         },
@@ -994,12 +886,10 @@ Array [
                       },
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0969euutyjv4icnl",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "INACTIVPAT",
-                            "id": "ck8iiui3h0971euutj3twzt8e",
                             "table": "PATIENT",
                           },
                         },
@@ -1015,12 +905,10 @@ Array [
           },
           Object {
             "definitionId": "string",
-            "id": "ck8iiui3h0974euuteh2qez1w",
             "path": "address[0].line",
           },
           Object {
             "definitionId": "string",
-            "id": "ck8iiui3h0976euutj8u39lki",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -1028,12 +916,10 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0977euutajddkw84",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "VILLEPAT",
-                            "id": "ck8iiui3h0978euut83bd52kx",
                             "table": "PATIENT",
                           },
                         },
@@ -1049,7 +935,6 @@ Array [
           },
           Object {
             "definitionId": "uri",
-            "id": "ck8iiui3h0981euut49d3l3w9",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -1057,7 +942,6 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0983euutcuqi5vgm",
                         "script": null,
                         "staticValue": "http://terminology.interopsante.org/CodeSystem/v2-0203",
                       },
@@ -1071,7 +955,6 @@ Array [
           },
           Object {
             "definitionId": "boolean",
-            "id": "ck8iiui3h0984euut920wkr1a",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -1079,12 +962,10 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0986euuthbh3ieqk",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "INACTIVPAT",
-                            "id": "ck8iiui3h0988euutxsvmfd7x",
                             "table": "PATIENT",
                           },
                         },
@@ -1100,7 +981,6 @@ Array [
           },
           Object {
             "definitionId": "code",
-            "id": "ck8iiui3h0991euutjuo0d0iy",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -1108,7 +988,6 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0992euutkchrs1zr",
                         "script": null,
                         "staticValue": "official",
                       },
@@ -1122,7 +1001,6 @@ Array [
           },
           Object {
             "definitionId": "string",
-            "id": "ck8iiui3h0993euut7o6kldza",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -1130,12 +1008,10 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h0994euutl8qzwjbn",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "PRENOMPAT",
-                            "id": "ck8iiui3h0995euuteec5thl9",
                             "table": "PATIENT",
                           },
                         },
@@ -1151,17 +1027,14 @@ Array [
           },
           Object {
             "definitionId": "string",
-            "id": "ck8iiui3h0996euuttnkh9882",
             "path": "name[0].given",
           },
           Object {
             "definitionId": "ContactPoint",
-            "id": "ck8iiui3h0998euutg2ndrcq7",
             "path": "telecom",
           },
           Object {
             "definitionId": "dateTime",
-            "id": "ck8iiui3h0999euutzmj34tuj",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -1169,12 +1042,10 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h1001euutxvy0picm",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "DATEINACPAT",
-                            "id": "ck8iiui3h1002euutq3m8i7s4",
                             "table": "PATIENT",
                           },
                         },
@@ -1190,7 +1061,6 @@ Array [
           },
           Object {
             "definitionId": "string",
-            "id": "ck8iiui3h1003euut9o2r3w8a",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -1198,12 +1068,10 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3h1004euut66nveayc",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "ADR3PAT",
-                            "id": "ck8iiui3i1005euutkkjejufb",
                             "table": "PATIENT",
                           },
                         },
@@ -1211,12 +1079,10 @@ Array [
                       },
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3i1006euuta9wvm09q",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "ADR1PAT",
-                            "id": "ck8iiui3i1007euut6w476cku",
                             "table": "PATIENT",
                           },
                         },
@@ -1224,12 +1090,10 @@ Array [
                       },
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3i1008euut9o21ki3b",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "ADR2PAT",
-                            "id": "ck8iiui3i1009euutn19nzf2n",
                             "table": "PATIENT",
                           },
                         },
@@ -1245,7 +1109,6 @@ Array [
           },
           Object {
             "definitionId": "string",
-            "id": "ck8iiui3i1010euutolkkbser",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -1253,12 +1116,10 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3i1011euutapr9pdal",
                         "script": null,
                         "sqlValue": Object {
                           "create": Object {
                             "column": "CPOSTPAT",
-                            "id": "ck8iiui3i1012euut314ev1fh",
                             "table": "PATIENT",
                           },
                         },
@@ -1274,7 +1135,6 @@ Array [
           },
           Object {
             "definitionId": "uri",
-            "id": "ck8iiui3i1013euutj23mrx86",
             "inputGroups": Object {
               "create": Array [
                 Object {
@@ -1282,7 +1142,6 @@ Array [
                     "create": Array [
                       Object {
                         "conceptMapId": null,
-                        "id": "ck8iiui3i1014euut6ylie60l",
                         "script": null,
                         "staticValue": "Organization",
                       },
@@ -1296,7 +1155,6 @@ Array [
           },
           Object {
             "definitionId": "Identifier",
-            "id": "ck8iiui3i1015euutgv9wqdv3",
             "path": "managingOrganization.identifier",
           },
         ],
@@ -1305,7 +1163,6 @@ Array [
       "filters": Object {
         "create": Array [],
       },
-      "id": "ck8iiui3g0873euutm08fnyrf",
       "label": "",
       "primaryKeyColumn": "PACLEUNIK",
       "primaryKeyTable": "PATIENT",

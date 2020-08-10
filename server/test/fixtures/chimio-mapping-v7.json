@@ -115,7 +115,7 @@
               "id": "ck8iiui3h0897euut1i0ztmbq",
               "script": null,
               "conceptMapId": null,
-              "staticValue": "/Patient/{id}",
+              "staticValue": "http://terminology.arkhn.com/ck8iiui3g0873euutm08fnyrf",
               "updatedAt": "2020-04-02T08:53:07.998Z",
               "createdAt": "2020-04-02T08:53:07.997Z",
               "sqlValue": null
@@ -530,7 +530,7 @@
               "id": "ck8iiui3h0990euuttt00zl6b",
               "script": null,
               "conceptMapId": null,
-              "staticValue": "/Organization/{id}",
+              "staticValue": "http://terminology.arkhn.com/ck8iiui3g0872euut6adjvlol",
               "updatedAt": "2020-04-02T08:53:07.998Z",
               "createdAt": "2020-04-02T08:53:07.997Z",
               "sqlValue": null
@@ -830,7 +830,7 @@
               "id": "ck8iiui3h0907euutgscl8qh8",
               "script": null,
               "conceptMapId": null,
-              "staticValue": "/Organization/{id}",
+              "staticValue": "http://terminology.arkhn.com/ck8iiui3g0872euut6adjvlol",
               "updatedAt": "2020-04-02T08:53:07.999Z",
               "createdAt": "2020-04-02T08:53:07.997Z",
               "sqlValue": null

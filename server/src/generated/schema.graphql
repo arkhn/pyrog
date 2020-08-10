@@ -488,6 +488,7 @@ type Resource {
   filters: [Filter!]!
   id: String!
   label: String
+  logicalReference: String!
   primaryKeyColumn: String
   primaryKeyTable: String
   source: Source!
@@ -508,6 +509,7 @@ input ResourceWhereInput {
   filters: FilterFilter
   id: StringFilter
   label: NullableStringFilter
+  logicalReference: StringFilter
   NOT: [ResourceWhereInput!]
   OR: [ResourceWhereInput!]
   primaryKeyColumn: NullableStringFilter
