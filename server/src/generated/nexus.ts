@@ -480,6 +480,7 @@ export interface NexusGenRootTypes {
     definitionId: string; // String!
     id: string; // String!
     label?: string | null; // String
+    logicalReference: string; // String!
     primaryKeyColumn?: string | null; // String
     primaryKeyTable?: string | null; // String
     updatedAt: any; // DateTime!
@@ -725,6 +726,7 @@ export interface NexusGenFieldTypes {
     filters: NexusGenRootTypes['Filter'][]; // [Filter!]!
     id: string; // String!
     label: string | null; // String
+    logicalReference: string; // String!
     primaryKeyColumn: string | null; // String
     primaryKeyTable: string | null; // String
     source: NexusGenRootTypes['Source']; // Source!

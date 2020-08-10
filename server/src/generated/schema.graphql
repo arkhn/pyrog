@@ -488,6 +488,7 @@ type Resource {
   filters: [Filter!]!
   id: String!
   label: String
+  logicalReference: String!
   primaryKeyColumn: String
   primaryKeyTable: String
   source: Source!

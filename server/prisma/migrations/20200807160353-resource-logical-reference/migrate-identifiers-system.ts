@@ -22,7 +22,7 @@ const updateIdentifiersSystem = async () => {
     select: { logicalReference: true, id: true },
   })
   const logicalReferenceMapping: { [id: string]: string } = allResources.reduce(
-    (acc, r) => ({ ...acc, [r.id]: v4() }),
+    (acc, r) => ({ ...acc, [r.id]: r.logicalReference }),
     {},
   )
 
@@ -59,6 +59,15 @@ const updateIdentifiersSystem = async () => {
 
       // system used to look like http://terminology.arkhn.com/<sourceId>/<resourceId>[/<optionalCustomKey>]
       const parts = prevSystemValue.split(/\//)
+      if (parts.length < 5 || parts.length > 6) {
+        console.error(
+          `[${a.resource!.definitionId}.${
+            a.path
+          }] bad reference system: ${prevSystemValue}`,
+        )
+        return null
+      }
+
       const targetResourceId = parts[4]
 
       // extract the trailing custom identifier key if present

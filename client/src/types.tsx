@@ -84,6 +84,7 @@ export interface Profile {
 export interface Resource {
   id: string;
   label: string;
+  logicalReference: string;
   name: string;
   type: string;
   profiles: Profile[];
