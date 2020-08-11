@@ -1,31 +1,15 @@
 import { readFileSync } from 'fs'
 import { encrypt } from 'utils'
-import {
-  Credential,
-  PrismaClient,
-  Prisma__ResourceClient,
-  Prisma__CredentialClient,
-  Resource,
-} from '@prisma/client'
+import { PrismaClient, Credential } from '@prisma/client'
 import { importMapping } from '../src/resolvers/mapping'
 
 const prismaClient = new PrismaClient()
 
 const importCredentials = (path: string, sourceId: string) => {
-  // read a json file looking like
-  // {
-  //   "host": "mimic",
-  //   "port": "5432",
-  //   "database": "mimic",
-  //   "login": "mimicuser",
-  //   "password": "mimicpass",
-  //   "owner": "",
-  //   "schema": "mimiciii",
-  //   "model": "POSTGRES"
-  // }
+  // read a json file containing a Credential object
   // and use it to create credentials for the source with id sourceId
   let content: string
-  let credentials: any
+  let credentials: Credential
   try {
     content = readFileSync(path).toString()
     credentials = JSON.parse(content)

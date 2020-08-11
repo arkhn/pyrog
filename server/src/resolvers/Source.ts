@@ -1,4 +1,8 @@
-import { objectType, FieldResolver, booleanArg, convertSDL } from '@nexus/schema'
+import {
+  objectType,
+  FieldResolver,
+  booleanArg,
+} from '@nexus/schema'
 
 import { getDefinition } from 'fhir'
 import { importMapping, exportMapping } from 'resolvers/mapping'
@@ -114,7 +118,9 @@ export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
 
   // import mapping if present
   if (parsedMapping) {
-    await ctx.prisma.$transaction(await importMapping(ctx.prisma, source.id, parsedMapping))
+    await ctx.prisma.$transaction(
+      await importMapping(ctx.prisma, source.id, parsedMapping),
+    )
   }
 
   return source
