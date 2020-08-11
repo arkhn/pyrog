@@ -1,11 +1,29 @@
 import { readFileSync } from 'fs'
 import { encrypt } from 'utils'
-import { PrismaClient } from '@prisma/client'
+import {
+  Credential,
+  PrismaClient,
+  Prisma__ResourceClient,
+  Prisma__CredentialClient,
+  Resource,
+} from '@prisma/client'
 import { importMapping } from '../src/resolvers/mapping'
 
 const prismaClient = new PrismaClient()
 
 const importCredentials = (path: string, sourceId: string) => {
+  // read a json file looking like
+  // {
+  //   "host": "mimic",
+  //   "port": "5432",
+  //   "database": "mimic",
+  //   "login": "mimicuser",
+  //   "password": "mimicpass",
+  //   "owner": "",
+  //   "schema": "mimiciii",
+  //   "model": "POSTGRES"
+  // }
+  // and use it to create credentials for the source with id sourceId
   let content: string
   let credentials: any
   try {
@@ -85,18 +103,21 @@ const main = async (path: string) => {
       .join(', ')}...`,
   )
 
-  let ret: Promise<any> = importMapping(prismaClient, source.id, mapping)
+  let operations: any[] = await importMapping(prismaClient, source.id, mapping)
 
   if (process.argv.length === 4) {
+    // if a second file is provided, use it to add credentials to the source
     console.log(`Seeding credentials from ${process.argv[3]}...`)
-    ret = Promise.all([ret, importCredentials(process.argv[3], source.id)])
+    operations = [...operations, importCredentials(process.argv[3], source.id)]
   }
 
-  return ret
+  return prismaClient.$transaction(operations)
 }
 
 if (process.argv.length < 3 || process.argv.length > 4) {
-  console.log('USAGE:\n> yarn seed:mapping <mapping.json> <credientials.json>')
+  console.log(
+    'USAGE:\n> yarn seed:mapping <mapping.json> (<credientials.json>)',
+  )
   process.exit(1)
 }
 
