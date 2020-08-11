@@ -114,7 +114,9 @@ export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
 
   // import mapping if present
   if (parsedMapping) {
-    await importMapping(ctx.prisma, source.id, parsedMapping)
+    await ctx.prisma.$transaction(
+      await importMapping(ctx.prisma, source.id, parsedMapping),
+    )
   }
 
   return source

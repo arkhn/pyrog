@@ -15,22 +15,20 @@ export default async (
 ) => {
   await checkAuthors(prismaClient, resources)
 
-  return Promise.all(
-    resources.map((r: any) =>
-      prismaClient.resource.create({
-        data: {
-          ...cleanResource(r),
-          attributes: {
-            create: buildAttributesQuery(r.attributes),
-          },
-          filters: {
-            create: buildFiltersQuery(r.filters),
-          },
-          source: {
-            connect: { id: sourceId },
-          },
+  return resources.map((r: any) =>
+    prismaClient.resource.create({
+      data: {
+        ...cleanResource(r),
+        attributes: {
+          create: buildAttributesQuery(r.attributes),
         },
-      }),
-    ),
+        filters: {
+          create: buildFiltersQuery(r.filters),
+        },
+        source: {
+          connect: { id: sourceId },
+        },
+      },
+    }),
   )
 }

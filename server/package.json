@@ -17,7 +17,6 @@
     "migrate:preview": "prisma migrate up --experimental --preview --auto-approve",
     "seed:superuser": "yarn run-ts scripts/superuser.ts",
     "seed:mapping": "yarn run-ts scripts/importMapping.ts",
-    "seed:credentials": "yarn run-ts scripts/seedCredentials.ts",
     "export:mappings": "yarn run-ts scripts/exportMapping.ts backup",
     "test": "jest --max-workers 1 --watch",
     "test:ci": "jest --max-workers 1 --coverage",
