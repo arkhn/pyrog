@@ -1,8 +1,4 @@
-import {
-  objectType,
-  FieldResolver,
-  booleanArg,
-} from '@nexus/schema'
+import { objectType, FieldResolver, booleanArg } from '@nexus/schema'
 
 import { getDefinition } from 'fhir'
 import { importMapping, exportMapping } from 'resolvers/mapping'
