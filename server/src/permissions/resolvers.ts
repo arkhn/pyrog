@@ -11,6 +11,7 @@ export const getSourceIdFromMutationArgs = async (
     databaseId,
     resourceId,
     attributeId,
+    inputGroupId,
     inputId,
     columnId,
     joinId,
@@ -27,6 +28,8 @@ export const getSourceIdFromMutationArgs = async (
     id = await getSourceFromResource(resourceId, ctx)
   } else if (attributeId) {
     id = await getSourceFromAttribute(attributeId, ctx)
+  } else if (inputGroupId) {
+    id = await getSourceFromInputGroup(inputGroupId, ctx)
   } else if (inputId) {
     id = await getSourceFromInput(inputId, ctx)
   } else if (columnId) {
@@ -84,6 +87,24 @@ const getSourceFromAttribute = async (attributeId: any, ctx: Context) => {
     },
   })
   return attribute?.resource?.source.id
+}
+
+const getSourceFromInputGroup = async (inputGroupId: any, ctx: Context) => {
+  const inputGroup = await ctx.prisma.inputGroup.findOne({
+    where: { id: inputGroupId },
+    include: {
+      attribute: {
+        include: {
+          resource: {
+            include: {
+              source: true,
+            },
+          },
+        },
+      },
+    },
+  })
+  return inputGroup?.attribute?.resource?.source.id
 }
 
 const getSourceFromInput = async (inputId: any, ctx: Context) => {

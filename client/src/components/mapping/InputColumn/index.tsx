@@ -198,7 +198,7 @@ const InputColumn = ({ input }: Props) => {
               )}
             </div>
             {input.sqlValue.table !== resource.primaryKeyTable && (
-              <div className="input-column-joins">
+              <div className="input-column-joins" onClick={e => e.stopPropagation()}>
                 <Button
                   icon={'add'}
                   loading={loadAddJoin}
