@@ -6,10 +6,14 @@
 
   .value-system-input {
     width: 70%;
-    
+
     .text-input {
       margin: auto 3px;
       width: 45%;
     }
   }
+}
+
+.TSelect button.bp3-button {
+  transform: none;
 }
