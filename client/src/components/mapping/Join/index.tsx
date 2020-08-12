@@ -41,15 +41,13 @@ const Join = ({ joinData }: Props) => {
     onError: onError(toaster)
   });
 
-  const removeJoin = (input: any) => {
-    return {
-      ...input,
-      sqlValue: {
-        ...input.sqlValue,
-        joins: input.sqlValue.joins.filter((j: any) => j.id !== joinData.id)
-      }
-    };
-  };
+  const removeJoin = (input: any) => ({
+    ...input,
+    sqlValue: {
+      ...input.sqlValue,
+      joins: input.sqlValue.joins.filter((j: any) => j.id !== joinData.id)
+    }
+  });
 
   const removeJoinFromCache = (cache: any) => {
     const { attribute: dataAttribute } = cache.readQuery({
