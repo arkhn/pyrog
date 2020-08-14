@@ -5,6 +5,7 @@ mutation updateCondition(
   $action: String
   $table: String
   $column: String
+  $relation: ConditionRelation
   $value: String
 ) {
   updateCondition(
@@ -12,6 +13,7 @@ mutation updateCondition(
     action: $action
     table: $table
     column: $column
+    relation: $relation
     value: $value
   ) {
     ...entireCondition

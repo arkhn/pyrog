@@ -106,6 +106,7 @@ export interface Condition {
     table: string;
     column: string;
   };
+  relation: string;
   value: string;
 }
 

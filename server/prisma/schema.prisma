@@ -162,14 +162,25 @@ enum ConditionAction {
   EXCLUDE
 }
 
+enum ConditionRelation {
+  EQ
+  LT
+  LE
+  GE
+  GT
+  NULL
+  NOTNULL
+}
+
 model Condition {
-  id           String           @default(cuid()) @id
+  id           String            @default(cuid()) @id
   action       ConditionAction?
-  columnId     String?          @map("column")
-  sqlValue     Column?          @relation(fields: [columnId], references: [id])
+  columnId     String?           @map("column")
+  sqlValue     Column?           @relation(fields: [columnId], references: [id])
+  relation     ConditionRelation @default(EQ)
   value        String?
-  inputGroupId String           @map("inputGroup")
-  inputGroup   InputGroup       @relation(fields: [inputGroupId], references: [id])
+  inputGroupId String            @map("inputGroup")
+  inputGroup   InputGroup        @relation(fields: [inputGroupId], references: [id])
 }
 
 enum Role {

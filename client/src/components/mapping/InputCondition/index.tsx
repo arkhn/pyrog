@@ -30,9 +30,22 @@ interface Props {
 }
 
 const availableActions = ['INCLUDE', 'EXCLUDE'];
+const conditionRelations = ['EQ', 'LT', 'LE', 'GE', 'GT', 'NULL', 'NOTNULL'];
+const conditionToString = new Map([
+  ['EQ', '=='],
+  ['LT', '<'],
+  ['LE', '<='],
+  ['GE', '>='],
+  ['GT', '>'],
+  ['NULL', 'IS NULL'],
+  ['NOTNULL', 'IS NOT NULL']
+]);
+const unaryRelations = ['NULL', 'NOTNULL'];
 
 const conditionToName = (condition: Condition): string =>
-  `${condition.action} ${condition.sqlValue.table} ${condition.sqlValue.column} ${condition.value}`;
+  `${condition.action} ${condition.sqlValue.table} ${
+    condition.sqlValue.column
+  } ${conditionToString.get(condition.relation)} ${condition.value}`;
 
 const InputCondition = ({ condition }: Props) => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
@@ -71,6 +84,7 @@ const InputCondition = ({ condition }: Props) => {
   const [action, setAction] = React.useState(condition.action);
   const [table, setTable] = React.useState(condition.sqlValue.table);
   const [column, setColumn] = React.useState(condition.sqlValue.column);
+  const [relation, setRelation] = React.useState(condition.relation);
   const [value, setValue] = React.useState(condition.value || '');
 
   useEffect(() => {});
@@ -197,31 +211,54 @@ const InputCondition = ({ condition }: Props) => {
           />
         </Tag>
       </div>
-      <Tag minimal={true}>EQUALS</Tag>
       <div
         className="stacked-tags"
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
       >
-        <Tag minimal={true}>VALUE</Tag>
+        <Tag minimal={true}>RELATION</Tag>
         <Tag intent={'primary'} large={true}>
-          <input
-            className="text-input"
-            value={value}
-            type="text"
-            placeholder="value..."
-            onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
-              // NOTE value updated in DB at each character. Put a submit button?
-              setValue(e.target.value);
+          <StringSelect
+            inputItem={relation}
+            items={conditionRelations}
+            displayItem={item => conditionToString.get(item)!}
+            onChange={(relation: string): void => {
+              setRelation(relation);
               updateCondition({
                 variables: {
                   conditionId: condition.id,
-                  value: e.target.value
+                  relation
                 }
               });
             }}
           />
         </Tag>
       </div>
+      {!unaryRelations.includes(condition.relation) && (
+        <div
+          className="stacked-tags"
+          onClick={(e: React.MouseEvent) => e.stopPropagation()}
+        >
+          <Tag minimal={true}>VALUE</Tag>
+          <Tag intent={'primary'} large={true}>
+            <input
+              className="text-input"
+              value={value}
+              type="text"
+              placeholder="value..."
+              onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
+                // NOTE value updated in DB at each character. Put a submit button?
+                setValue(e.target.value);
+                updateCondition({
+                  variables: {
+                    conditionId: condition.id,
+                    value: e.target.value
+                  }
+                });
+              }}
+            />
+          </Tag>
+        </div>
+      )}
       <div onClick={(e: React.MouseEvent) => e.stopPropagation()}>
         <ConditionSelect
           inputItem={{
@@ -231,6 +268,7 @@ const InputCondition = ({ condition }: Props) => {
               table,
               column
             },
+            relation,
             value
           }}
           items={resourceConditions}
@@ -239,6 +277,7 @@ const InputCondition = ({ condition }: Props) => {
             setAction(c.action);
             setTable(c.sqlValue.table);
             setColumn(c.sqlValue.column);
+            setRelation(c.relation);
             setValue(c.value);
             updateCondition({
               variables: {
@@ -246,6 +285,7 @@ const InputCondition = ({ condition }: Props) => {
                 action: c.action,
                 table: c.sqlValue.table,
                 column: c.sqlValue.column,
+                relation: c.relation,
                 value: c.value
               }
             });
