@@ -1,0 +1,50 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "CreateEnum",
+      "enum": "ConditionRelation",
+      "values": [
+        "EQ",
+        "LT",
+        "LE",
+        "GE",
+        "GT",
+        "NULL",
+        "NOTNULL"
+      ]
+    },
+    {
+      "tag": "CreateField",
+      "model": "Condition",
+      "field": "relation",
+      "type": "ConditionRelation",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Condition",
+          "field": "relation"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Condition",
+          "field": "relation"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "EQ"
+    }
+  ]
+}

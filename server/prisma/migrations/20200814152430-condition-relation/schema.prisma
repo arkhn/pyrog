@@ -1,0 +1,217 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["transactionApi"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url = "***"
+}
+
+// One per software (Chimio, Crossway, etc)
+model Template {
+  id        String   @default(cuid()) @id
+  name      String   @unique
+  sources   Source[]
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}
+
+model Source {
+  id             String          @default(cuid()) @id
+  name           String
+  version        String?
+  resources      Resource[]
+  credential     Credential?
+  templateId     String          @map("template")
+  template       Template        @relation(fields: [templateId], references: [id])
+  updatedAt      DateTime        @updatedAt
+  createdAt      DateTime        @default(now())
+  accessControls AccessControl[]
+
+  @@unique([templateId, name], name: "Source_templateId_name")
+}
+
+enum DatabaseType {
+  POSTGRES
+  ORACLE
+}
+
+model Credential {
+  id        String       @default(cuid()) @id
+  host      String
+  port      String
+  database  String
+  login     String
+  password  String
+  owner     String       @default("")
+  schema    String?
+  model     DatabaseType
+  // Parent
+  sourceId  String       @map("source")
+  source    Source       @relation(fields: [sourceId], references: [id])
+  updatedAt DateTime     @updatedAt
+  createdAt DateTime     @default(now())
+}
+
+model Resource {
+  id               String      @default(cuid()) @id
+  logicalReference String      @default("")
+  label            String?
+  primaryKeyTable  String?
+  primaryKeyColumn String?
+  // filters on db to avoid processing all the DB
+  filters          Filter[]
+  attributes       Attribute[]
+  definitionId     String
+  sourceId         String      @map("source")
+  source           Source      @relation(fields: [sourceId], references: [id])
+  updatedAt        DateTime    @updatedAt
+  createdAt        DateTime    @default(now())
+}
+
+model Filter {
+  id          String    @default(cuid()) @id
+  relation    String
+  value       String
+  resourceId  String?   @map("resource")
+  resource    Resource? @relation(fields: [resourceId], references: [id])
+  sqlColumnId String    @map("sqlColumn")
+  sqlColumn   Column    @relation(fields: [sqlColumnId], references: [id])
+}
+
+model Attribute {
+  id           String       @default(cuid()) @id
+  path         String
+  sliceName    String?
+  definitionId String
+  comments     Comment[]
+  inputGroups  InputGroup[]
+  resourceId   String?      @map("resource")
+  resource     Resource?    @relation(fields: [resourceId], references: [id])
+  updatedAt    DateTime     @updatedAt
+  createdAt    DateTime     @default(now())
+}
+
+model Comment {
+  id          String     @default(cuid()) @id
+  content     String
+  validation  Boolean    @default(false)
+  authorId    String     @map("author")
+  author      User       @relation(fields: [authorId], references: [id])
+  attributeId String?    @map("attribute")
+  attribute   Attribute? @relation(fields: [attributeId], references: [id])
+  updatedAt   DateTime   @updatedAt
+  createdAt   DateTime   @default(now())
+}
+
+model InputGroup {
+  id            String      @default(cuid()) @id
+  inputs        Input[]
+  mergingScript String?
+  conditions    Condition[]
+  attribute     Attribute?  @relation(fields: [attributeId], references: [id])
+  attributeId   String?
+  updatedAt     DateTime    @updatedAt
+  createdAt     DateTime    @default(now())
+}
+
+model Input {
+  id           String      @default(cuid()) @id
+  // cleaning scripts for the sql column
+  script       String?
+  // id of the concept map to be applied to a mapped code
+  conceptMapId String?
+  // Or a static value is it's fixed
+  staticValue  String?
+  // Sql column containing the value
+  sqlValueId   String?     @map("sqlValue")
+  sqlValue     Column?     @relation(fields: [sqlValueId], references: [id])
+  // Group to which this input belongs
+  inputGroup   InputGroup? @relation(fields: [inputGroupId], references: [id])
+  inputGroupId String?
+  updatedAt    DateTime    @updatedAt
+  createdAt    DateTime    @default(now())
+}
+
+model Column {
+  id        String     @default(cuid()) @id
+  table     String?
+  column    String?
+  joins     Join[]     @relation("ColumnJoins")
+  filter    Filter?
+  condition Condition?
+  input     Input?
+  joinId    String?    @map("join")
+  join      Join?      @relation("JoinedColumns", fields: [joinId], references: [id])
+  updatedAt DateTime   @updatedAt
+  createdAt DateTime   @default(now())
+}
+
+model Join {
+  id        String   @default(cuid()) @id
+  tables    Column[] @relation("JoinedColumns")
+  columnId  String?  @map("column")
+  column    Column?  @relation("ColumnJoins", fields: [columnId], references: [id])
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}
+
+enum ConditionAction {
+  INCLUDE
+  EXCLUDE
+}
+
+enum ConditionRelation {
+  EQ
+  LT
+  LE
+  GE
+  GT
+  NULL
+  NOTNULL
+}
+
+model Condition {
+  id           String            @default(cuid()) @id
+  action       ConditionAction?
+  columnId     String?           @map("column")
+  sqlValue     Column?           @relation(fields: [columnId], references: [id])
+  relation     ConditionRelation @default(EQ)
+  value        String?
+  inputGroupId String            @map("inputGroup")
+  inputGroup   InputGroup        @relation(fields: [inputGroupId], references: [id])
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model User {
+  id            String          @default(cuid()) @id
+  email         String          @unique
+  name          String
+  password      String
+  role          Role            @default(USER)
+  Comment       Comment[]
+  AccessControl AccessControl[]
+  updatedAt     DateTime        @updatedAt
+  createdAt     DateTime        @default(now())
+}
+
+enum SourceRole {
+  READER
+  WRITER
+}
+
+model AccessControl {
+  id       String     @default(cuid()) @id
+  role     SourceRole
+  userId   String     @map("user")
+  user     User       @relation(fields: [userId], references: [id])
+  sourceId String     @map("source")
+  source   Source     @relation(fields: [sourceId], references: [id])
+
+  @@unique([userId, sourceId], name: "AccessControl_user_source")
+}
