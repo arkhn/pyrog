@@ -169,9 +169,11 @@ const ConceptMapDialog = ({
   };
 
   useEffect(() => {
-    fetchCodeSystems();
-    fetchValueSets();
-    fetchConceptMaps();
+    if (isOpen) {
+      fetchCodeSystems();
+      fetchValueSets();
+      fetchConceptMaps();
+    }
   }, [isOpen]);
 
   // TODO these are actually codes from a code system. Fetch them instead of hard coding them
