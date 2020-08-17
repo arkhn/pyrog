@@ -31,15 +31,17 @@ const TableViewer = ({ table }: IProps) => {
   const [compatiblePreview, setCompatiblePreview] = React.useState(false);
 
   const [columns, setColumns] = React.useState([] as React.ReactElement[]);
-  const [loading, setLoading] = React.useState(false);
+  const [loadingTable, setLoadingTable] = React.useState(false);
   const [fields, setFields] = React.useState([] as string[]);
   const [rows, setRows] = React.useState([]);
+
   const [previewData, setPreviewData] = React.useState(undefined as any);
+  const [loadingPreview, setLoadingPreview] = React.useState(false);
 
   const fetchPreview = React.useCallback(
     async selectedRows => {
+      setLoadingPreview(true);
       try {
-        setLoading(true);
         const res = await axios.post(
           `${RIVER_URL}/preview`,
           {
@@ -59,7 +61,7 @@ const TableViewer = ({ table }: IProps) => {
           timeout: 6000
         });
       }
-      setLoading(false);
+      setLoadingPreview(false);
     },
     [fields, rows, resource, toaster]
   );
@@ -104,16 +106,16 @@ const TableViewer = ({ table }: IProps) => {
 
   React.useEffect(() => {
     if (resource && table) {
-      setLoading(true);
+      setLoadingTable(true);
       axios
         .get(`${PAGAI_URL}/explore/${resource.id}/${table}`)
         .then((res: any) => {
-          setLoading(false);
+          setLoadingTable(false);
           setRows(res.data.rows);
           setFields(res.data.fields);
         })
         .catch((err: any) => {
-          setLoading(false);
+          setLoadingTable(false);
           const { error } = err.response.data;
           toaster.show({
             message: error || err.response.statusText,
@@ -136,7 +138,7 @@ const TableViewer = ({ table }: IProps) => {
         onSelection={onSelection}
         selectionModes={SelectionModes.ROWS_ONLY}
         loadingOptions={
-          loading
+          loadingTable
             ? [
                 TableLoadingOption.CELLS,
                 TableLoadingOption.COLUMN_HEADERS,
@@ -147,7 +149,7 @@ const TableViewer = ({ table }: IProps) => {
       >
         {columns}
       </Table>
-      <FhirPreview previewData={previewData} loading={loading} />
+      <FhirPreview previewData={previewData} loading={loadingPreview} />
     </React.Fragment>
   );
 };
