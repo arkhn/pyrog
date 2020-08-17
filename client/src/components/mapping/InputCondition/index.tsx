@@ -30,8 +30,7 @@ interface Props {
 }
 
 const availableActions = ['INCLUDE', 'EXCLUDE'];
-const conditionRelations = ['EQ', 'LT', 'LE', 'GE', 'GT', 'NULL', 'NOTNULL'];
-const conditionToString = new Map([
+const conditionsMap = new Map([
   ['EQ', '=='],
   ['LT', '<'],
   ['LE', '<='],
@@ -45,7 +44,7 @@ const unaryRelations = ['NULL', 'NOTNULL'];
 const conditionToName = (condition: Condition): string =>
   `${condition.action} ${condition.sqlValue.table} ${
     condition.sqlValue.column
-  } ${conditionToString.get(condition.relation)} ${condition.value}`;
+  } ${conditionsMap.get(condition.relation)} ${condition.value}`;
 
 const InputCondition = ({ condition }: Props) => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
@@ -219,8 +218,8 @@ const InputCondition = ({ condition }: Props) => {
         <Tag intent={'primary'} large={true}>
           <StringSelect
             inputItem={relation}
-            items={conditionRelations}
-            displayItem={item => conditionToString.get(item)!}
+            items={Object.keys(conditionsMap)}
+            displayItem={item => conditionsMap.get(item)!}
             onChange={(relation: string): void => {
               setRelation(relation);
               updateCondition({
