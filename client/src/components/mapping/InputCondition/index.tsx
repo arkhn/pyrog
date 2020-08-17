@@ -218,7 +218,7 @@ const InputCondition = ({ condition }: Props) => {
         <Tag intent={'primary'} large={true}>
           <StringSelect
             inputItem={relation}
-            items={Object.keys(conditionsMap)}
+            items={Array.from(conditionsMap.keys())}
             displayItem={item => conditionsMap.get(item)!}
             onChange={(relation: string): void => {
               setRelation(relation);
