@@ -21,11 +21,15 @@ interface ISelectProps {
 }
 
 export default class StringSelect extends React.Component<ISelectProps, any> {
-  private renderItem: ItemRenderer<string> = (
-    item,
-    { handleClick, modifiers, query }
-  ) => {
-    return <MenuItem key={item} onClick={handleClick} text={item} />;
+  private renderItem: ItemRenderer<string> = (item, { handleClick }) => {
+    const { displayItem } = this.props;
+    return (
+      <MenuItem
+        key={item}
+        onClick={handleClick}
+        text={(displayItem || this.displayItem)(item)}
+      />
+    );
   };
 
   private filterList: ItemListPredicate<string> = (query, items) => {
