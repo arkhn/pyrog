@@ -33,7 +33,7 @@ const mUpsertCredential = loader(
   'src/graphql/mutations/upsertCredential.graphql'
 );
 
-const models = ['POSTGRES', 'ORACLE'];
+const models = ['POSTGRES', 'ORACLE', 'MSSQL'];
 
 const NewSourceView = (): React.ReactElement => {
   const client = useApolloClient();
