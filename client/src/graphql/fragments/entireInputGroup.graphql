@@ -1,0 +1,13 @@
+#import "./entireInput.graphql"
+#import "./entireCondition.graphql"
+
+fragment entireInputGroup on InputGroup {
+  id
+  mergingScript
+  inputs {
+    ...entireInput
+  }
+  conditions {
+    ...entireCondition
+  }
+}

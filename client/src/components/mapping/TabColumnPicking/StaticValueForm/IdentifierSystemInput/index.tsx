@@ -72,9 +72,9 @@ const IdentifierSystemInput = ({
   const onClickAddButton = () => {
     if (customSystem) {
       addStaticValue(
-        `http://terminology.arkhn.org/${selectedSource!.id}/${
-          selectedResource!.id
-        }${customKeyName ? '/' + customKeyName : ''}`
+        `http://terminology.arkhn.org/${selectedResource!.logicalReference}${
+          customKeyName ? '/' + customKeyName : ''
+        }`
       );
     } else {
       addStaticValue(staticValue);

@@ -11,6 +11,7 @@ export const getSourceIdFromMutationArgs = async (
     databaseId,
     resourceId,
     attributeId,
+    inputGroupId,
     inputId,
     columnId,
     joinId,
@@ -27,6 +28,8 @@ export const getSourceIdFromMutationArgs = async (
     id = await getSourceFromResource(resourceId, ctx)
   } else if (attributeId) {
     id = await getSourceFromAttribute(attributeId, ctx)
+  } else if (inputGroupId) {
+    id = await getSourceFromInputGroup(inputGroupId, ctx)
   } else if (inputId) {
     id = await getSourceFromInput(inputId, ctx)
   } else if (columnId) {
@@ -86,9 +89,9 @@ const getSourceFromAttribute = async (attributeId: any, ctx: Context) => {
   return attribute?.resource?.source.id
 }
 
-const getSourceFromInput = async (inputId: any, ctx: Context) => {
-  const input = await ctx.prisma.input.findOne({
-    where: { id: inputId },
+const getSourceFromInputGroup = async (inputGroupId: any, ctx: Context) => {
+  const inputGroup = await ctx.prisma.inputGroup.findOne({
+    where: { id: inputGroupId },
     include: {
       attribute: {
         include: {
@@ -101,14 +104,14 @@ const getSourceFromInput = async (inputId: any, ctx: Context) => {
       },
     },
   })
-  return input?.attribute.resource?.source.id
+  return inputGroup?.attribute?.resource?.source.id
 }
 
-const getSourceFromColumn = async (columnId: any, ctx: Context) => {
-  const column = await ctx.prisma.column.findOne({
-    where: { id: columnId },
+const getSourceFromInput = async (inputId: any, ctx: Context) => {
+  const input = await ctx.prisma.input.findOne({
+    where: { id: inputId },
     include: {
-      input: {
+      inputGroup: {
         include: {
           attribute: {
             include: {
@@ -123,16 +126,16 @@ const getSourceFromColumn = async (columnId: any, ctx: Context) => {
       },
     },
   })
-  return column?.input?.attribute.resource?.source.id
+  return input?.inputGroup?.attribute?.resource?.source.id
 }
 
-const getSourceFromJoin = async (JoinId: any, ctx: Context) => {
-  const join = await ctx.prisma.join.findOne({
-    where: { id: JoinId },
+const getSourceFromColumn = async (columnId: any, ctx: Context) => {
+  const column = await ctx.prisma.column.findOne({
+    where: { id: columnId },
     include: {
-      column: {
+      input: {
         include: {
-          input: {
+          inputGroup: {
             include: {
               attribute: {
                 include: {
@@ -149,5 +152,35 @@ const getSourceFromJoin = async (JoinId: any, ctx: Context) => {
       },
     },
   })
-  return join?.column?.input?.attribute.resource?.source.id
+  return column?.input?.inputGroup?.attribute?.resource?.source.id
+}
+
+const getSourceFromJoin = async (JoinId: any, ctx: Context) => {
+  const join = await ctx.prisma.join.findOne({
+    where: { id: JoinId },
+    include: {
+      column: {
+        include: {
+          input: {
+            include: {
+              inputGroup: {
+                include: {
+                  attribute: {
+                    include: {
+                      resource: {
+                        include: {
+                          source: true,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  return join?.column?.input?.inputGroup?.attribute?.resource?.source.id
 }

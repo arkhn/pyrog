@@ -1,0 +1,11 @@
+fragment entireCondition on Condition {
+  id
+  action
+  sqlValue {
+    id
+    table
+    column
+  }
+  relation
+  value
+}

@@ -32,6 +32,11 @@ const ColumnSelect = ({
   const [table, setTable] = useState(initialTable);
   const [column, setColumn] = useState(initialColumn);
 
+  React.useEffect(() => {
+    setTable(initialTable);
+    setColumn(initialColumn);
+  }, [initialTable, initialColumn]);
+
   const changeTable = (e: string): void => {
     setTable(e);
     setColumn(undefined);

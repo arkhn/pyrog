@@ -12,6 +12,7 @@ query sourcesAndResources {
     resources {
       id
       label
+      logicalReference
       definitionId
       definition {
         name

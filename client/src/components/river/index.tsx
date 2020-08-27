@@ -71,6 +71,13 @@ const FhirRiverView = (): React.ReactElement => {
       setSelectedResources([...selectedResources]);
     }
   };
+  const handleSelectAll = (): void => {
+    if (selectedResources.length === selectedSource.resources.length) {
+      setSelectedResources([]);
+    } else {
+      setSelectedResources([...selectedSource.resources]);
+    }
+  };
 
   const handleTagRemove = (_value: string, index: number): void => {
     selectedResources.splice(index, 1);
@@ -144,6 +151,7 @@ const FhirRiverView = (): React.ReactElement => {
           resources={selectedSource.resources || []}
           selectedResources={selectedResources}
           onResourceSelect={handleResourceSelect}
+          onSelectAll={handleSelectAll}
           onRemoveTag={handleTagRemove}
         />
         <div className="advanced-options">

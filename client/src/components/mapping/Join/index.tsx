@@ -5,7 +5,6 @@ import { IReduxStore } from 'types';
 import { useMutation } from '@apollo/react-hooks';
 
 import { onError } from 'services/apollo';
-import { ISelectedSource } from 'types';
 
 // COMPONENTS
 import JoinColumns from '../JoinColumns';
@@ -20,11 +19,9 @@ const mDeleteJoin = loader('src/graphql/mutations/deleteJoin.graphql');
 
 interface Props {
   joinData: any;
-  schema: any;
-  source: ISelectedSource;
 }
 
-const Join = ({ joinData, schema, source }: Props) => {
+const Join = ({ joinData }: Props) => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
   const {
     attribute: { path }
@@ -44,15 +41,13 @@ const Join = ({ joinData, schema, source }: Props) => {
     onError: onError(toaster)
   });
 
-  const removeJoin = (input: any) => {
-    return {
-      ...input,
-      sqlValue: {
-        ...input.sqlValue,
-        joins: input.sqlValue.joins.filter((j: any) => j.id !== joinData.id)
-      }
-    };
-  };
+  const removeJoin = (input: any) => ({
+    ...input,
+    sqlValue: {
+      ...input.sqlValue,
+      joins: input.sqlValue.joins.filter((j: any) => j.id !== joinData.id)
+    }
+  });
 
   const removeJoinFromCache = (cache: any) => {
     const { attribute: dataAttribute } = cache.readQuery({
@@ -63,7 +58,10 @@ const Join = ({ joinData, schema, source }: Props) => {
     });
     const newDataAttribute = {
       ...dataAttribute,
-      inputs: dataAttribute.inputs.map(removeJoin)
+      inputGroups: dataAttribute.inputGroups.map((group: any) => ({
+        ...group,
+        inputs: group.inputs.map(removeJoin)
+      }))
     };
     cache.writeQuery({
       query: qInputsForAttribute,
@@ -90,12 +88,7 @@ const Join = ({ joinData, schema, source }: Props) => {
         }}
       />
 
-      <JoinColumns
-        join={joinData}
-        updateJoin={updateJoin}
-        schema={schema}
-        source={source}
-      />
+      <JoinColumns join={joinData} updateJoin={updateJoin} />
     </div>
   );
 };

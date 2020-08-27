@@ -4,6 +4,7 @@ import importMappingV8 from './v8'
 import * as mappingV8 from '../../../test/fixtures/chimio-mapping-v8.json'
 
 const mockCreateResource = jest.fn()
+
 const mockFindManyUser = jest.fn(() => [{ email: 'admin@arkhn.com' }])
 jest.mock('@prisma/client', () => ({
   PrismaClient: jest.fn().mockImplementation(() => ({
@@ -18,7 +19,6 @@ jest.mock('@prisma/client', () => ({
 
 describe('import mapping V8', () => {
   const sourceId = '01234567'
-  const resourceCount = 2
   const { resources } = mappingV8 as any
 
   beforeEach(() => {
@@ -27,7 +27,7 @@ describe('import mapping V8', () => {
 
   it('should send a query per resource', async () => {
     await importMappingV8(new PrismaClient(), sourceId, resources)
-    expect(mockCreateResource).toHaveBeenCalledTimes(resourceCount)
+    expect(mockCreateResource).toHaveBeenCalledTimes(resources.length)
     expect(mockCreateResource.mock.calls[0]).toMatchSnapshot() // EpisodeOfCare - HopitalStay
     expect(mockCreateResource.mock.calls[1]).toMatchSnapshot() // Patient
   })
@@ -44,7 +44,6 @@ describe('import mapping V8', () => {
     await importMappingV8(new PrismaClient(), sourceId, resources)
     expect(mockCreateResource.mock.calls[0][0]).toEqual({
       data: {
-        id: resources[0].id,
         label: resources[0].label,
         primaryKeyTable: resources[0].primaryKeyTable,
         primaryKeyColumn: resources[0].primaryKeyColumn,
@@ -57,17 +56,21 @@ describe('import mapping V8', () => {
         attributes: {
           create: expect.arrayContaining([
             {
-              id: expect.any(String),
               path: 'period.start',
               definitionId: 'dateTime',
-              mergingScript: 'merge_concat',
               sliceName: null,
-              inputs: {
-                create: expect.any(Array),
+              inputGroups: {
+                create: expect.arrayContaining([
+                  {
+                    mergingScript: 'merge_concat',
+                    inputs: {
+                      create: expect.any(Array),
+                    },
+                  },
+                ]),
               },
             },
             {
-              id: expect.any(String),
               path: 'managingOrganization.reference',
               comments: {
                 create: [
@@ -84,9 +87,15 @@ describe('import mapping V8', () => {
               },
               sliceName: null,
               definitionId: 'string',
-              mergingScript: null,
-              inputs: {
-                create: expect.any(Array),
+              inputGroups: {
+                create: expect.arrayContaining([
+                  {
+                    mergingScript: null,
+                    inputs: {
+                      create: expect.any(Array),
+                    },
+                  },
+                ]),
               },
             },
           ]),
@@ -94,12 +103,10 @@ describe('import mapping V8', () => {
         filters: {
           create: [
             {
-              id: expect.any(String),
               value: '200',
               relation: '<=',
               sqlColumn: {
                 create: {
-                  id: expect.any(String),
                   column: 'CHAMBRE',
                   table: 'SEJOUR',
                 },

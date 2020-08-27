@@ -22,5 +22,5 @@ async function main() {
 }
 
 main().finally(async () => {
-  await prismaClient.disconnect()
+  await prismaClient.$disconnect()
 })

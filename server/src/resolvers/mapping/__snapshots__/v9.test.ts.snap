@@ -1,0 +1,532 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`import mapping V9 should send a query per resource 1`] = `
+Array [
+  Object {
+    "data": Object {
+      "attributes": Object {
+        "create": Array [
+          Object {
+            "definitionId": "string",
+            "inputGroups": Object {
+              "create": Array [
+                Object {
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "LIBELTW",
+                            "joins": Object {
+                              "create": Array [
+                                Object {
+                                  "tables": Object {
+                                    "create": Array [
+                                      Object {
+                                        "column": "TWCLEUNIK",
+                                        "table": "SEJOUR",
+                                      },
+                                      Object {
+                                        "column": "TWCLEUNIK",
+                                        "table": "TYPESEJ",
+                                      },
+                                    ],
+                                  },
+                                },
+                              ],
+                            },
+                            "table": "TYPESEJ",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
+                },
+              ],
+            },
+            "path": "type[0].coding[0].display",
+            "sliceName": null,
+          },
+          Object {
+            "definitionId": "Reference",
+            "path": "patient",
+            "sliceName": null,
+          },
+          Object {
+            "definitionId": "uri",
+            "inputGroups": Object {
+              "create": Array [
+                Object {
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "script": null,
+                        "staticValue": "http://terminology.arkhn.com/ck8iiui3g0873euutm08fnyrf",
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
+                },
+              ],
+            },
+            "path": "patient.identifier.system",
+            "sliceName": null,
+          },
+          Object {
+            "definitionId": "string",
+            "inputGroups": Object {
+              "create": Array [
+                Object {
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "PACLEUNIK",
+                            "table": "SEJOUR",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
+                },
+              ],
+            },
+            "path": "patient.identifier.value",
+            "sliceName": null,
+          },
+          Object {
+            "definitionId": "Identifier",
+            "path": "managingOrganization.identifier",
+            "sliceName": null,
+          },
+          Object {
+            "definitionId": "string",
+            "inputGroups": Object {
+              "create": Array [
+                Object {
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "SERVICE",
+                            "table": "SEJOUR",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
+                },
+              ],
+            },
+            "path": "managingOrganization.identifier.value",
+            "sliceName": null,
+          },
+          Object {
+            "definitionId": "dateTime",
+            "inputGroups": Object {
+              "create": Array [
+                Object {
+                  "conditions": Object {
+                    "create": Array [
+                      Object {
+                        "action": "EXCLUDE",
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "DATEIN",
+                            "table": "SEJOUR",
+                          },
+                        },
+                        "value": "-1",
+                      },
+                    ],
+                  },
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "script": "clean_date",
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "DATEIN",
+                            "table": "SEJOUR",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                      Object {
+                        "conceptMapId": null,
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "HEUREIN",
+                            "table": "SEJOUR",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
+                  },
+                  "mergingScript": "merge_concat",
+                },
+                Object {
+                  "conditions": Object {
+                    "create": Array [
+                      Object {
+                        "action": "INCLUDE",
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "DATEIN",
+                            "table": "SEJOUR",
+                          },
+                        },
+                        "value": "-1",
+                      },
+                    ],
+                  },
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "script": null,
+                        "staticValue": "NONE",
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
+                },
+              ],
+            },
+            "path": "period.start",
+            "sliceName": null,
+          },
+          Object {
+            "definitionId": "string",
+            "inputGroups": Object {
+              "create": Array [
+                Object {
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "SECLEUNIK",
+                            "table": "SEJOUR",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
+                },
+              ],
+            },
+            "path": "identifier[0].value",
+            "sliceName": null,
+          },
+          Object {
+            "definitionId": "code",
+            "inputGroups": Object {
+              "create": Array [
+                Object {
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "ETATSEJ",
+                            "table": "SEJOUR",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
+                },
+              ],
+            },
+            "path": "status",
+            "sliceName": null,
+          },
+          Object {
+            "definitionId": "CodeableConcept",
+            "path": "type",
+            "sliceName": null,
+          },
+          Object {
+            "definitionId": "string",
+            "inputGroups": Object {
+              "create": Array [
+                Object {
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "script": null,
+                        "staticValue": "internal",
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
+                },
+              ],
+            },
+            "path": "patient.reference",
+            "sliceName": null,
+          },
+          Object {
+            "comments": Object {
+              "create": Array [
+                Object {
+                  "author": Object {
+                    "connect": Object {
+                      "email": "admin@arkhn.com",
+                    },
+                  },
+                  "content": "test",
+                  "createdAt": "2020-04-02T08:53:07.997Z",
+                },
+              ],
+            },
+            "definitionId": "string",
+            "inputGroups": Object {
+              "create": Array [
+                Object {
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "script": null,
+                        "staticValue": "internal",
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
+                },
+              ],
+            },
+            "path": "managingOrganization.reference",
+            "sliceName": null,
+          },
+          Object {
+            "definitionId": "Period",
+            "path": "period",
+            "sliceName": null,
+          },
+          Object {
+            "definitionId": "dateTime",
+            "inputGroups": Object {
+              "create": Array [
+                Object {
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "HEUREOUT",
+                            "table": "SEJOUR",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                      Object {
+                        "conceptMapId": null,
+                        "script": "clean_date",
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "DATEOUT",
+                            "table": "SEJOUR",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
+                  },
+                  "mergingScript": "merge_concat",
+                },
+              ],
+            },
+            "path": "period.end",
+            "sliceName": null,
+          },
+          Object {
+            "definitionId": "Coding",
+            "path": "type[0].coding",
+            "sliceName": null,
+          },
+          Object {
+            "definitionId": "Identifier",
+            "path": "identifier",
+            "sliceName": null,
+          },
+          Object {
+            "definitionId": "string",
+            "inputGroups": Object {
+              "create": Array [
+                Object {
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "ADMISSION",
+                            "table": "SEJOUR",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                      Object {
+                        "conceptMapId": null,
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "ADMISSION2",
+                            "table": "SEJOUR",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
+                  },
+                  "mergingScript": "select_first_not_empty",
+                },
+              ],
+            },
+            "path": "identifier[1].value",
+            "sliceName": null,
+          },
+          Object {
+            "definitionId": "code",
+            "inputGroups": Object {
+              "create": Array [
+                Object {
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "TWCLEUNIK",
+                            "table": "SEJOUR",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
+                },
+              ],
+            },
+            "path": "type[0].coding[0].code",
+            "sliceName": null,
+          },
+          Object {
+            "definitionId": "Identifier",
+            "path": "patient.identifier",
+            "sliceName": null,
+          },
+          Object {
+            "definitionId": "Reference",
+            "path": "managingOrganization",
+            "sliceName": null,
+          },
+          Object {
+            "definitionId": "uri",
+            "inputGroups": Object {
+              "create": Array [
+                Object {
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "script": null,
+                        "staticValue": "http://terminology.arkhn.com/ck8iiui3g0872euut6adjvlol",
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
+                },
+              ],
+            },
+            "path": "managingOrganization.identifier.system",
+            "sliceName": null,
+          },
+        ],
+      },
+      "definitionId": "EpisodeOfCare",
+      "filters": Object {
+        "create": Array [
+          Object {
+            "relation": "<=",
+            "sqlColumn": Object {
+              "create": Object {
+                "column": "CHAMBRE",
+                "table": "SEJOUR",
+              },
+            },
+            "value": "200",
+          },
+        ],
+      },
+      "label": "Hospital Stay",
+      "primaryKeyColumn": "SECLEUNIK",
+      "primaryKeyTable": "SEJOUR",
+      "source": Object {
+        "connect": Object {
+          "id": "01234567",
+        },
+      },
+    },
+  },
+]
+`;
+
+exports[`import mapping V9 should send a query per resource 2`] = `
+Array [
+  Object {
+    "data": Object {
+      "attributes": Object {
+        "create": Array [],
+      },
+      "definitionId": "Organization",
+      "filters": Object {
+        "create": Array [],
+      },
+      "label": "Orga",
+      "primaryKeyColumn": "org_id",
+      "primaryKeyTable": "org",
+      "source": Object {
+        "connect": Object {
+          "id": "01234567",
+        },
+      },
+    },
+  },
+]
+`;

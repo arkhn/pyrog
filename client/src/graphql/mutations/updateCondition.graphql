@@ -1,0 +1,21 @@
+#import "../fragments/entireCondition.graphql"
+
+mutation updateCondition(
+  $conditionId: ID!
+  $action: String
+  $table: String
+  $column: String
+  $relation: ConditionRelation
+  $value: String
+) {
+  updateCondition(
+    conditionId: $conditionId
+    action: $action
+    table: $table
+    column: $column
+    relation: $relation
+    value: $value
+  ) {
+    ...entireCondition
+  }
+}

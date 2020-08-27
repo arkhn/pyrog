@@ -18,7 +18,7 @@ export const SecondaryLabel = ({
     (state: IReduxStore) => state.resourceInputs.attributesMap
   );
   const attributesWithInputs = Object.keys(attributesForResource).filter(
-    path => attributesForResource[path].inputs.length > 0
+    path => attributesForResource[path].inputGroups.length > 0
   );
 
   const checkHasChildInputs = (pathString: string) =>

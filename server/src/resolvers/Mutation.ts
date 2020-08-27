@@ -1,16 +1,17 @@
 import { arg, idArg, mutationType, stringArg, booleanArg } from '@nexus/schema'
 
-import {
-  createAttribute,
-  updateAttribute,
-  deleteAttribute,
-  deleteAttributes,
-} from './Attribute'
+import { createAttribute, deleteAttribute, deleteAttributes } from './Attribute'
 import { createAccessControl, deleteAccessControl } from './AccessControl'
-import { createComment } from './Comment'
 import { addJoinToColumn } from './Column'
+import { createComment } from './Comment'
+import { deleteCondition, updateCondition } from './Condition'
 import { deleteCredential, upsertCredential } from './Credential'
 import { createInput, deleteInput, updateInput } from './Input'
+import {
+  addConditionToInputGroup,
+  createInputGroup,
+  updateInputGroup,
+} from './InputGroup'
 import { updateJoin, deleteJoin } from './Join'
 import { createResource, updateResource, deleteResource } from './Resource'
 import { deleteSource, createSource } from './Source'
@@ -171,15 +172,6 @@ export const Mutation = mutationType({
       resolve: createAttribute,
     })
 
-    t.field('updateAttribute', {
-      type: 'Attribute',
-      args: {
-        attributeId: idArg({ required: true }),
-        data: arg({ type: 'AttributeInput', required: true }),
-      },
-      resolve: updateAttribute,
-    })
-
     t.field('createComment', {
       type: 'Comment',
       args: {
@@ -210,13 +202,72 @@ export const Mutation = mutationType({
     })
 
     /*
+     * INPUT GROUP
+     */
+
+    t.field('createInputGroup', {
+      type: 'InputGroup',
+      args: {
+        attributeId: idArg({ required: true }),
+      },
+      resolve: createInputGroup,
+    })
+
+    t.field('updateInputGroup', {
+      type: 'InputGroup',
+      args: {
+        inputGroupId: idArg({ required: true }),
+        mergingScript: stringArg(),
+      },
+      resolve: updateInputGroup,
+    })
+
+    t.field('addConditionToInputGroup', {
+      type: 'InputGroup',
+      args: {
+        inputGroupId: idArg({ required: true }),
+        action: stringArg(),
+        table: stringArg(),
+        column: stringArg(),
+        relation: arg({ type: 'ConditionRelation' }),
+        value: stringArg(),
+      },
+      resolve: addConditionToInputGroup,
+    })
+
+    /*
+     * CONDITION
+     */
+
+    t.field('updateCondition', {
+      type: 'Condition',
+      args: {
+        conditionId: idArg({ required: true }),
+        action: stringArg(),
+        table: stringArg(),
+        column: stringArg(),
+        relation: arg({ type: 'ConditionRelation' }),
+        value: stringArg(),
+      },
+      resolve: updateCondition,
+    })
+
+    t.field('deleteCondition', {
+      type: 'Condition',
+      args: {
+        conditionId: idArg({ required: true }),
+      },
+      resolve: deleteCondition,
+    })
+
+    /*
      * INPUT
      */
 
     t.field('createInput', {
       type: 'Input',
       args: {
-        attributeId: idArg({ required: true }),
+        inputGroupId: idArg({ required: true }),
         script: stringArg(),
         static: stringArg(),
         sql: arg({

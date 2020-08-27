@@ -1,0 +1,488 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "CreateEnum",
+      "enum": "ConditionAction",
+      "values": [
+        "INCLUDE",
+        "EXCLUDE"
+      ]
+    },
+    {
+      "tag": "CreateModel",
+      "model": "InputGroup"
+    },
+    {
+      "tag": "CreateField",
+      "model": "InputGroup",
+      "field": "id",
+      "type": "String",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "InputGroup",
+          "field": "id"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "InputGroup",
+          "field": "id"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "cuid()"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "InputGroup",
+          "field": "id"
+        },
+        "directive": "id"
+      }
+    },
+    {
+      "tag": "CreateField",
+      "model": "InputGroup",
+      "field": "inputs",
+      "type": "Input",
+      "arity": "List"
+    },
+    {
+      "tag": "CreateField",
+      "model": "InputGroup",
+      "field": "mergingScript",
+      "type": "String",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "InputGroup",
+      "field": "conditions",
+      "type": "Condition",
+      "arity": "List"
+    },
+    {
+      "tag": "CreateField",
+      "model": "InputGroup",
+      "field": "attribute",
+      "type": "Attribute",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "InputGroup",
+          "field": "attribute"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "InputGroup",
+          "field": "attribute"
+        },
+        "directive": "relation"
+      },
+      "argument": "fields",
+      "value": "[attributeId]"
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "InputGroup",
+          "field": "attribute"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
+    },
+    {
+      "tag": "CreateField",
+      "model": "InputGroup",
+      "field": "attributeId",
+      "type": "String",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "InputGroup",
+      "field": "updatedAt",
+      "type": "DateTime",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "InputGroup",
+          "field": "updatedAt"
+        },
+        "directive": "updatedAt"
+      }
+    },
+    {
+      "tag": "CreateField",
+      "model": "InputGroup",
+      "field": "createdAt",
+      "type": "DateTime",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "InputGroup",
+          "field": "createdAt"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "InputGroup",
+          "field": "createdAt"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "now()"
+    },
+    {
+      "tag": "CreateModel",
+      "model": "Condition"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Condition",
+      "field": "id",
+      "type": "String",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Condition",
+          "field": "id"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Condition",
+          "field": "id"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "cuid()"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Condition",
+          "field": "id"
+        },
+        "directive": "id"
+      }
+    },
+    {
+      "tag": "CreateField",
+      "model": "Condition",
+      "field": "action",
+      "type": "ConditionAction",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Condition",
+      "field": "columnId",
+      "type": "String",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Condition",
+          "field": "columnId"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Condition",
+          "field": "columnId"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"column\""
+    },
+    {
+      "tag": "CreateField",
+      "model": "Condition",
+      "field": "sqlValue",
+      "type": "Column",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Condition",
+          "field": "sqlValue"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Condition",
+          "field": "sqlValue"
+        },
+        "directive": "relation"
+      },
+      "argument": "fields",
+      "value": "[columnId]"
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Condition",
+          "field": "sqlValue"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Condition",
+      "field": "value",
+      "type": "String",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Condition",
+      "field": "inputGroupId",
+      "type": "String",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Condition",
+          "field": "inputGroupId"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Condition",
+          "field": "inputGroupId"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"inputGroup\""
+    },
+    {
+      "tag": "CreateField",
+      "model": "Condition",
+      "field": "inputGroup",
+      "type": "InputGroup",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Condition",
+          "field": "inputGroup"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Condition",
+          "field": "inputGroup"
+        },
+        "directive": "relation"
+      },
+      "argument": "fields",
+      "value": "[inputGroupId]"
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Condition",
+          "field": "inputGroup"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Attribute",
+      "field": "inputGroups",
+      "type": "InputGroup",
+      "arity": "List"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "Attribute",
+      "field": "mergingScript"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "Attribute",
+      "field": "inputs"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Input",
+      "field": "inputGroup",
+      "type": "InputGroup",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Input",
+          "field": "inputGroup"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Input",
+          "field": "inputGroup"
+        },
+        "directive": "relation"
+      },
+      "argument": "fields",
+      "value": "[inputGroupId]"
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Input",
+          "field": "inputGroup"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Input",
+      "field": "inputGroupId",
+      "type": "String",
+      "arity": "Optional"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "Input",
+      "field": "attributeId"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "Input",
+      "field": "attribute"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Column",
+      "field": "condition",
+      "type": "Condition",
+      "arity": "Optional"
+    }
+  ]
+}

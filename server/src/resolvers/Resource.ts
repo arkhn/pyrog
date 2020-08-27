@@ -1,4 +1,5 @@
 import { objectType, FieldResolver } from '@nexus/schema'
+import { Condition, Input } from '@prisma/client'
 import { getDefinition } from 'fhir'
 
 export const Resource = objectType({
@@ -6,6 +7,7 @@ export const Resource = objectType({
   definition(t) {
     t.model.id()
 
+    t.model.logicalReference()
     t.model.label()
 
     t.model.primaryKeyTable()
@@ -63,15 +65,24 @@ export const deleteResource: FieldResolver<
       },
       attributes: {
         include: {
-          inputs: {
+          inputGroups: {
             include: {
-              sqlValue: {
+              inputs: {
                 include: {
-                  joins: {
+                  sqlValue: {
                     include: {
-                      tables: true,
+                      joins: {
+                        include: {
+                          tables: true,
+                        },
+                      },
                     },
                   },
+                },
+              },
+              conditions: {
+                include: {
+                  sqlValue: true,
                 },
               },
             },
@@ -90,20 +101,30 @@ export const deleteResource: FieldResolver<
   await Promise.all(
     res!.attributes.map(async a => {
       await Promise.all(
-        a.inputs.map(async i => {
-          if (i.sqlValue) {
-            await Promise.all(
-              i.sqlValue.joins.map(async j => {
+        a.inputGroups.map(async g => {
+          await Promise.all([
+            ...g.inputs.map(async i => {
+              if (i.sqlValue) {
                 await Promise.all(
-                  j.tables.map(t =>
-                    ctx.prisma.column.delete({ where: { id: t.id } }),
-                  ),
+                  i.sqlValue.joins.map(async j => {
+                    await Promise.all(
+                      j.tables.map(t =>
+                        ctx.prisma.column.delete({ where: { id: t.id } }),
+                      ),
+                    )
+                    return ctx.prisma.join.delete({ where: { id: j.id } })
+                  }),
                 )
-                return ctx.prisma.join.delete({ where: { id: j.id } })
-              }),
-            )
-          }
-          return ctx.prisma.input.delete({ where: { id: i.id } })
+              }
+              return ctx.prisma.input.delete({ where: { id: i.id } })
+            }),
+            ...g.conditions.map(async c => {
+              if (c.sqlValue)
+                ctx.prisma.column.delete({ where: { id: c.sqlValue.id } })
+              return ctx.prisma.condition.delete({ where: { id: c.id } })
+            }),
+          ] as Promise<Condition | Input>[])
+          return ctx.prisma.inputGroup.delete({ where: { id: g.id } })
         }),
       )
       return ctx.prisma.attribute.delete({ where: { id: a.id } })

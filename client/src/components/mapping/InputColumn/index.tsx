@@ -12,7 +12,7 @@ import { useMutation } from '@apollo/react-hooks';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { onError as onApolloError } from 'services/apollo';
-import { IReduxStore, ISelectedSource } from 'types';
+import { IReduxStore } from 'types';
 
 // COMPONENTS
 import Join from '../Join';
@@ -33,16 +33,16 @@ const mAddJoinToColumn = loader(
 
 interface Props {
   input: any;
-  schema: any;
-  source: ISelectedSource;
 }
 
-const InputColumn = ({ input, schema, source }: Props) => {
+const InputColumn = ({ input }: Props) => {
   const dispatch = useDispatch();
 
   const toaster = useSelector((state: IReduxStore) => state.toaster);
   const onError = onApolloError(toaster);
-  const { attribute } = useSelector((state: IReduxStore) => state.selectedNode);
+  const { attribute, resource } = useSelector(
+    (state: IReduxStore) => state.selectedNode
+  );
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
   );
@@ -72,7 +72,12 @@ const InputColumn = ({ input, schema, source }: Props) => {
     });
     const newDataAttribute = {
       ...dataAttribute,
-      inputs: dataAttribute.inputs.filter((i: any) => i.id !== input.id)
+      inputGroups: dataAttribute.inputGroups
+        .map((group: any) => ({
+          ...group,
+          inputs: group.inputs.filter((i: any) => i.id !== input.id)
+        }))
+        .filter((group: any) => group.inputs.length > 0)
     };
     dispatch(setAttributeInMap(attribute.path, newDataAttribute));
     cache.writeQuery({
@@ -84,8 +89,9 @@ const InputColumn = ({ input, schema, source }: Props) => {
     });
   };
 
-  const onClickDelete = async () => {
+  const onClickDelete = async (e: React.MouseEvent) => {
     // Mutation to remove from DB
+    e.stopPropagation()
     await deleteInput({
       variables: {
         inputId: input.id
@@ -102,7 +108,7 @@ const InputColumn = ({ input, schema, source }: Props) => {
         minimal={true}
         onClick={onClickDelete}
       />
-      <Card elevation={Elevation.ONE} className="input-column-info">
+      <Card elevation={Elevation.ZERO} className="input-column-info">
         {input.staticValue ? (
           <div className="input-column-name">
             <Tag large={true}>Static</Tag>
@@ -191,31 +197,36 @@ const InputColumn = ({ input, schema, source }: Props) => {
                 </div>
               )}
             </div>
-            <div className="input-column-joins">
-              <Button
-                icon={'add'}
-                loading={loadAddJoin}
-                onClick={() => {
-                  addJoinToColumn({
-                    variables: {
-                      columnId: input.sqlValue.id
-                    }
-                  });
-                }}
-              >
-                Add Join
-              </Button>
-              {input.sqlValue.joins
-                ? input.sqlValue.joins.map((join: any, index: number) => (
-                    <Join
-                      key={index}
-                      joinData={join}
-                      schema={schema}
-                      source={source}
-                    />
-                  ))
-                : null}
-            </div>
+            {input.sqlValue.table !== resource.primaryKeyTable && (
+              <div className="input-column-joins" onClick={e => e.stopPropagation()}>
+                <Button
+                  icon={'add'}
+                  loading={loadAddJoin}
+                  onClick={() => {
+                    addJoinToColumn({
+                      variables: {
+                        columnId: input.sqlValue.id,
+                        join: {
+                          source: {
+                            table: resource.primaryKeyTable
+                          },
+                          target: {
+                            table: input.sqlValue.table
+                          }
+                        }
+                      }
+                    });
+                  }}
+                >
+                  Add Join
+                </Button>
+                {input.sqlValue.joins
+                  ? input.sqlValue.joins.map((join: any, index: number) => (
+                      <Join key={index} joinData={join} />
+                    ))
+                  : null}
+              </div>
+            )}
           </div>
         )}
       </Card>

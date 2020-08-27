@@ -17,7 +17,6 @@
     "migrate:preview": "prisma migrate up --experimental --preview --auto-approve",
     "seed:superuser": "yarn run-ts scripts/superuser.ts",
     "seed:mapping": "yarn run-ts scripts/importMapping.ts",
-    "seed:credentials": "yarn run-ts scripts/seedCredentials.ts",
     "export:mappings": "yarn run-ts scripts/exportMapping.ts backup",
     "test": "jest --max-workers 1 --watch",
     "test:ci": "jest --max-workers 1 --coverage",
@@ -25,9 +24,8 @@
     "wait:db": "yarn run-ts scripts/waitForDb.ts"
   },
   "dependencies": {
-    "@arkhn/fhir.ts": "^3.4.2",
+    "@arkhn/fhir.ts": "^3.4.3",
     "@nexus/schema": "^0.14.0",
-    "@prisma/client": "^2.0.1",
     "axios": "^0.19.2",
     "bcryptjs": "2.4.3",
     "cors": "^2.8.5",
@@ -39,13 +37,13 @@
     "jsonwebtoken": "8.5.1",
     "lodash.set": "^4.3.2",
     "multer": "^1.4.2",
-    "nexus-prisma": "^0.15.0",
+    "nexus-plugin-prisma": "^0.17.0",
     "pg": "^7.14.0",
-    "redis": "^3.0.2"
+    "redis": "^3.0.2",
+    "uuid": "^8.3.0"
   },
   "devDependencies": {
-    "@prisma/cli": "2.0.1",
-    "@prisma/sdk": "2.0.1",
+    "@prisma/sdk": "2.4.1",
     "@types/bcryptjs": "2.4.2",
     "@types/express": "^4.17.2",
     "@types/graphql-type-json": "^0.3.2",
@@ -56,6 +54,7 @@
     "@types/node": "12.12.14",
     "@types/pg": "^7.14.1",
     "@types/redis": "^2.8.15",
+    "@types/uuid": "^8.0.1",
     "@types/ws": "6.0.4",
     "@typescript-eslint/eslint-plugin": "^2.10.0",
     "@typescript-eslint/parser": "^2.10.0",
