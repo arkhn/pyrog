@@ -91,7 +91,7 @@ const InputColumn = ({ input }: Props) => {
 
   const onClickDelete = async (e: React.MouseEvent) => {
     // Mutation to remove from DB
-    e.stopPropagation()
+    e.stopPropagation();
     await deleteInput({
       variables: {
         inputId: input.id
@@ -146,7 +146,7 @@ const InputColumn = ({ input }: Props) => {
                   }
                 ]}
               />
-              <div className="stacked-tags">
+              <div className="stacked-tags" onClick={e => e.stopPropagation()}>
                 <Tag>SCRIPT</Tag>
                 <ScriptSelect
                   loading={loadUpdInput}
@@ -170,7 +170,10 @@ const InputColumn = ({ input }: Props) => {
                 />
               </div>
               {['code', 'string'].includes(attribute.types[0]) && (
-                <div className="stacked-tags">
+                <div
+                  className="stacked-tags"
+                  onClick={e => e.stopPropagation()}
+                >
                   <Tag>CONCEPT MAP</Tag>
                   <ButtonGroup>
                     <Button
@@ -198,7 +201,10 @@ const InputColumn = ({ input }: Props) => {
               )}
             </div>
             {input.sqlValue.table !== resource.primaryKeyTable && (
-              <div className="input-column-joins" onClick={e => e.stopPropagation()}>
+              <div
+                className="input-column-joins"
+                onClick={e => e.stopPropagation()}
+              >
                 <Button
                   icon={'add'}
                   loading={loadAddJoin}

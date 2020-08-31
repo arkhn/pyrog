@@ -25,15 +25,6 @@ interface Props {
 
 const InputGroup = ({ inputGroup }: Props) => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const { attribute, selectedInputGroup } = useSelector(
-    (state: IReduxStore) => state.selectedNode
-  );
-  const attributesForResource = useSelector(
-    (state: IReduxStore) => state.resourceInputs.attributesMap
-  );
-
-  const path = attribute.path;
-  let inputGroupId = attributesForResource[path].inputGroups[selectedInputGroup].id;
 
   const [
     updateInputGroup,
@@ -46,7 +37,7 @@ const InputGroup = ({ inputGroup }: Props) => {
   const onChangeMergingScript = (script: string) => {
     updateInputGroup({
       variables: {
-        inputGroupId,
+        inputGroupId: inputGroup.id,
         mergingScript: script
       }
     });
@@ -55,7 +46,7 @@ const InputGroup = ({ inputGroup }: Props) => {
   const onClearMergingScript = (): any => {
     updateInputGroup({
       variables: {
-        inputGroupId,
+        inputGroupId: inputGroup.id,
         mergingScript: null
       }
     });
