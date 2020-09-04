@@ -190,6 +190,7 @@ type ConceptMap {
 type Condition {
   action: ConditionAction
   id: String!
+  relation: ConditionRelation!
   sqlValue: Column
   value: String
 }
@@ -205,6 +206,16 @@ input ConditionFilter {
   some: ConditionWhereInput
 }
 
+enum ConditionRelation {
+  EQ
+  GE
+  GT
+  LE
+  LT
+  NOTNULL
+  NULL
+}
+
 input ConditionWhereInput {
   action: ConditionAction
   AND: [ConditionWhereInput!]
@@ -214,6 +225,7 @@ input ConditionWhereInput {
   inputGroupId: StringFilter
   NOT: [ConditionWhereInput!]
   OR: [ConditionWhereInput!]
+  relation: ConditionRelation
   sqlValue: ColumnWhereInput
   value: NullableStringFilter
 }
@@ -419,7 +431,7 @@ The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://
 scalar JSON
 
 type Mutation {
-  addConditionToInputGroup(action: String, column: String, inputGroupId: ID!, table: String, value: String): InputGroup!
+  addConditionToInputGroup(action: String, column: String, inputGroupId: ID!, relation: ConditionRelation, table: String, value: String): InputGroup!
   addJoinToColumn(columnId: ID!, join: JoinInput): Column!
   createAccessControl(role: SourceRole!, sourceId: ID!, userEmail: String!): AccessControl!
   createAttribute(data: AttributeInput, definitionId: ID!, path: String!, resourceId: ID!, sliceName: String): Attribute!
@@ -442,7 +454,7 @@ type Mutation {
   login(email: String!, password: String!): AuthPayload!
   refreshDefinition(definitionId: ID!): StructureDefinition!
   signup(email: String!, name: String!, password: String!): AuthPayload!
-  updateCondition(action: String, column: String, conditionId: ID!, table: String, value: String): Condition!
+  updateCondition(action: String, column: String, conditionId: ID!, relation: ConditionRelation, table: String, value: String): Condition!
   updateInput(data: UpdateInputInput!, inputId: ID!): Input!
   updateInputGroup(inputGroupId: ID!, mergingScript: String): InputGroup!
   updateJoin(data: JoinInput!, joinId: ID!): Join!

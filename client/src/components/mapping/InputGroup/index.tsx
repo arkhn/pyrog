@@ -37,6 +37,7 @@ const InputGroup = ({ inputGroup }: Props) => {
   const onChangeMergingScript = (script: string) => {
     updateInputGroup({
       variables: {
+        inputGroupId: inputGroup.id,
         mergingScript: script
       }
     });
@@ -45,6 +46,7 @@ const InputGroup = ({ inputGroup }: Props) => {
   const onClearMergingScript = (): any => {
     updateInputGroup({
       variables: {
+        inputGroupId: inputGroup.id,
         mergingScript: null
       }
     });

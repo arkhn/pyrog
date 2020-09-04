@@ -5,7 +5,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("POSTGRES_URL")
+  url = "***"
 }
 
 // One per software (Chimio, Crossway, etc)
@@ -35,7 +35,6 @@ model Source {
 enum DatabaseType {
   POSTGRES
   ORACLE
-  MSSQL
 }
 
 model Credential {
@@ -57,7 +56,7 @@ model Credential {
 
 model Resource {
   id               String      @default(cuid()) @id
-  logicalReference String      @default(uuid())
+  logicalReference String      @default("")
   label            String?
   primaryKeyTable  String?
   primaryKeyColumn String?

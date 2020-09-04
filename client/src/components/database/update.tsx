@@ -27,7 +27,7 @@ const mUpsertCredential = loader(
 );
 
 const UpdateDatabaseCredentials = (): React.ReactElement => {
-  const models = ['POSTGRES', 'ORACLE'];
+  const models = ['POSTGRES', 'ORACLE', 'MSSQL'];
 
   const toaster = useSelector((state: IReduxStore) => state.toaster);
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
