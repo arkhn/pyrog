@@ -101,7 +101,7 @@ export default class TSelect<T> extends React.Component<ISelectProps<T>, any> {
         createNewItemFromQuery={createNewItemFromQuery}
         createNewItemRenderer={createNewItemRenderer}
         disabled={disabled}
-        className={className}
+        className={`${className} TSelect`}
         filterable={filterable}
         items={items}
         itemDisabled={itemDisabled}
