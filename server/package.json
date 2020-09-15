@@ -28,6 +28,7 @@
     "@nexus/schema": "^0.14.0",
     "axios": "^0.19.2",
     "bcryptjs": "2.4.3",
+    "client-oauth2": "^4.3.3",
     "cors": "^2.8.5",
     "dotenv-cli": "^3.1.0",
     "graphql": "14.5.8",
