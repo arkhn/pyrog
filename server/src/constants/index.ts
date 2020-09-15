@@ -1,5 +1,7 @@
 export const {
   APP_SECRET,
+  OAUTH2_CLIENT_ID,
+  OAUTH2_TOKEN_URL,
   REDIS_URL,
   PAGAI_URL,
   FHIR_API_URL,
