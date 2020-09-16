@@ -14,7 +14,9 @@ import { authClient } from './oauth'
 // Set a default authentication header for fhir api calls
 const setAccessToken = async () => {
   const fhirApiToken = await authClient.credentials.getToken()
-  axios.defaults.headers.common['Authorization'] = `Bearer ${fhirApiToken.accessToken}`
+  axios.defaults.headers.common[
+    'Authorization'
+  ] = `Bearer ${fhirApiToken.accessToken}`
 }
 
 const server = new GraphQLServer({
