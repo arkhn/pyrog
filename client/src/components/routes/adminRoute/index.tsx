@@ -14,7 +14,7 @@ const AdminRoute = ({ component: Component, ...rest }: any) => {
     fetchPolicy: 'network-only'
   });
 
-  if (loading || !data) {
+  if (loading || !(data || error)) {
     return <Route component={Spinner} />;
   }
 

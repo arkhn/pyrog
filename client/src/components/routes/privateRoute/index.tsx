@@ -78,7 +78,7 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
       getToken();
       localStorage.removeItem(STATE_STORAGE_KEY);
     }
-  }, [token]);
+  }, [token, params, storedState, upsertUser]);
 
   // Redirect to the login page
   if (!(token || 'code' in params) || stateMismatch) {
