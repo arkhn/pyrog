@@ -22,7 +22,7 @@ import Header from './header';
 import { logout } from 'services/user/actions';
 
 import { IReduxStore } from 'types';
-import { AUTH_TOKEN } from '../../constants';
+import { TOKEN_STORAGE_KEY } from '../../constants';
 
 import './style.scss';
 import { deselectSource } from 'services/selectedNode/actions';
@@ -208,7 +208,7 @@ const Navbar = ({ exportMapping, exportAdditionalResource }: Props) => {
             className="bp3-minimal"
             icon="log-out"
             onClick={() => {
-              localStorage.removeItem(AUTH_TOKEN);
+              localStorage.removeItem(TOKEN_STORAGE_KEY);
               dispatch(logout());
               history.push('/login');
             }}

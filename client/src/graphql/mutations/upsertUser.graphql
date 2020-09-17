@@ -1,0 +1,8 @@
+mutation upsertUser($userEmail: String!, $name: String!) {
+  upsertUser(userEmail: $userEmail, name: $name) {
+    id
+    name
+    email
+    role
+  }
+}

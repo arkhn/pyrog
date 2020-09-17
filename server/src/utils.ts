@@ -1,8 +1,8 @@
+import axios from 'axios'
 import * as crypto from 'crypto'
-import { verify } from 'jsonwebtoken'
 import { User } from '@prisma/client'
 
-import { APP_SECRET, JWT_SIGNING_KEY } from './constants'
+import { APP_SECRET } from './constants'
 import cache from 'cache'
 import { Request } from 'express'
 
@@ -17,17 +17,16 @@ interface Token {
 export const getUser = async (request: Request): Promise<User | null> => {
   const Authorization = request.get('Authorization')
   if (Authorization) {
-    const token = Authorization.replace('Bearer ', '')
-    const verifiedToken = verify(token, JWT_SIGNING_KEY, {
-      algorithms: ['ES256'],
-    }) as Token
-    if (!!verifiedToken) {
-      const { get } = cache()
+    const userInfoResp = await axios.get('http://localhost:4444/userinfo', {
+      headers: {
+        Authorization,
+      },
+    })
+    const { get } = cache()
 
-      const cached = await get(`user:${verifiedToken.user.id}`)
-      const user: User = JSON.parse(cached)
-      return user
-    }
+    const cached = await get(`user:${userInfoResp.data.email}`)
+    const user: User = JSON.parse(cached)
+    return user
   }
   return null
 }

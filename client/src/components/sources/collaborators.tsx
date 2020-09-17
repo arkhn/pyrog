@@ -4,7 +4,8 @@ import {
   HTMLTable,
   Button,
   Intent,
-  InputGroup
+  InputGroup,
+  Spinner
 } from '@blueprintjs/core';
 import { useQuery, useApolloClient } from '@apollo/react-hooks';
 import { loader } from 'graphql.macro';
@@ -35,7 +36,7 @@ export const CollaboratorsDialog = ({
   onUpdate,
   isOpen
 }: Props): React.ReactElement => {
-  const { data } = useQuery(meQuery, { fetchPolicy: 'cache-only' });
+  const { data, loading } = useQuery(meQuery, { fetchPolicy: 'cache-only' });
   const [role, setRole] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [creatingPermission, setCreatingPermission] = React.useState(false);
@@ -156,7 +157,9 @@ export const CollaboratorsDialog = ({
       )
     });
 
-  return (
+  return loading ? (
+    <Spinner />
+  ) : (
     <Dialog
       className="collaboratorsTable"
       isOpen={isOpen}

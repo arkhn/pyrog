@@ -16,7 +16,7 @@ import { ApolloProvider } from 'react-apollo';
 import './style.scss';
 import Routes from './routes';
 import {
-  AUTH_TOKEN,
+  TOKEN_STORAGE_KEY,
   HTTP_BACKEND_URL,
   CLEANING_SCRIPTS_URL
 } from './constants';
@@ -83,15 +83,6 @@ const store = finalCreateStore(persistedReducer);
 
 const persistor = persistStore(store);
 
-// AXIOS
-
-// Interceptor to add authorization header for each requests
-axios.interceptors.request.use(config => {
-  const token = localStorage.getItem(AUTH_TOKEN);
-  config.headers.Authorization = `Bearer ${token}`;
-  return config;
-});
-
 // APOLLO
 
 // HttpLink
@@ -101,7 +92,7 @@ const httpLink = new HttpLink({
 });
 
 const middlewareLink = new ApolloLink((operation, forward) => {
-  const token = localStorage.getItem(AUTH_TOKEN);
+  const token = localStorage.getItem(TOKEN_STORAGE_KEY);
   operation.setContext({
     headers: {
       Authorization: token ? `Bearer ${token}` : ''

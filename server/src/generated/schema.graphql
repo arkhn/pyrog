@@ -90,11 +90,6 @@ input AttributeWhereUniqueInput {
   id: String
 }
 
-type AuthPayload {
-  token: String!
-  user: User!
-}
-
 input BooleanFilter {
   equals: Boolean
   not: Boolean
@@ -270,6 +265,7 @@ input CredentialWhereInput {
 }
 
 enum DatabaseType {
+  MSSQL
   ORACLE
   POSTGRES
 }
@@ -451,15 +447,14 @@ type Mutation {
   deleteResource(resourceId: ID!): Resource!
   deleteSource(sourceId: ID!): Source!
   deleteTemplate(id: ID!): Template!
-  login(email: String!, password: String!): AuthPayload!
   refreshDefinition(definitionId: ID!): StructureDefinition!
-  signup(email: String!, name: String!, password: String!): AuthPayload!
   updateCondition(action: String, column: String, conditionId: ID!, relation: ConditionRelation, table: String, value: String): Condition!
   updateInput(data: UpdateInputInput!, inputId: ID!): Input!
   updateInputGroup(inputGroupId: ID!, mergingScript: String): InputGroup!
   updateJoin(data: JoinInput!, joinId: ID!): Join!
   updateResource(data: UpdateResourceInput!, filters: [FilterInput!], resourceId: ID!): Resource!
   upsertCredential(database: String!, host: String!, login: String!, model: String!, owner: String!, password: String!, port: String!, sourceId: ID!): Credential!
+  upsertUser(name: String!, userEmail: String!): User!
 }
 
 input NullableStringFilter {
@@ -521,7 +516,7 @@ input ResourceWhereInput {
   filters: FilterFilter
   id: StringFilter
   label: NullableStringFilter
-  logicalReference: StringFilter
+  logicalReference: UUIDFilter
   NOT: [ResourceWhereInput!]
   OR: [ResourceWhereInput!]
   primaryKeyColumn: NullableStringFilter
@@ -680,7 +675,22 @@ input UserWhereInput {
   name: StringFilter
   NOT: [UserWhereInput!]
   OR: [UserWhereInput!]
-  password: StringFilter
   role: Role
   updatedAt: DateTimeFilter
+}
+
+scalar UUID
+
+input UUIDFilter {
+  contains: UUID
+  endsWith: UUID
+  equals: UUID
+  gt: UUID
+  gte: UUID
+  in: [UUID!]
+  lt: UUID
+  lte: UUID
+  not: UUID
+  notIn: [UUID!]
+  startsWith: UUID
 }
