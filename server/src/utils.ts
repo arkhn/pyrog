@@ -2,22 +2,14 @@ import axios from 'axios'
 import * as crypto from 'crypto'
 import { User } from '@prisma/client'
 
-import { APP_SECRET } from './constants'
+import { APP_SECRET, USER_INFO_URL } from './constants'
 import cache from 'cache'
 import { Request } from 'express'
-
-interface Token {
-  user: {
-    id: string
-    name: string
-    email: string
-  }
-}
 
 export const getUser = async (request: Request): Promise<User | null> => {
   const Authorization = request.get('Authorization')
   if (Authorization) {
-    const userInfoResp = await axios.get('http://localhost:4444/userinfo', {
+    const userInfoResp = await axios.get(USER_INFO_URL!, {
       headers: {
         Authorization,
       },

@@ -16,10 +16,12 @@ import { ApolloProvider } from 'react-apollo';
 import './style.scss';
 import Routes from './routes';
 import {
-  TOKEN_STORAGE_KEY,
+  CLEANING_SCRIPTS_URL,
   HTTP_BACKEND_URL,
-  CLEANING_SCRIPTS_URL
+  TOKEN_STORAGE_KEY,
+  TOKEN_URL
 } from './constants';
+import { refreshToken, removeToken } from 'oauth/tokenManager';
 
 // Reducers
 
@@ -82,6 +84,40 @@ const finalCreateStore = applyMiddleware(...middlewares)(createStore);
 const store = finalCreateStore(persistedReducer);
 
 const persistor = persistStore(store);
+
+// AXIOS
+
+// Add an interceptor to refresh access token when needed
+// NOTE we currently only need that for calls to the fhir api, not
+// for gql calls to pyrog-server because pyrog-server caches the user info.
+// Is this what we want? Do we want expiring users in Pyrog too?
+axios.interceptors.response.use(
+  response => {
+    return response;
+  },
+  async error => {
+    const originalRequest = error.config;
+
+    if (
+      error.response.status === 401 &&
+      originalRequest.url.startsWith(TOKEN_URL)
+    ) {
+      removeToken();
+      // TODO Need to redirect to /login?
+      return Promise.reject(error);
+    }
+
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      const success = await refreshToken();
+      if (!success) return Promise.reject(error);
+
+      return axios(originalRequest);
+    }
+    return Promise.reject(error);
+  }
+);
 
 // APOLLO
 

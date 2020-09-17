@@ -36,7 +36,7 @@ export const CollaboratorsDialog = ({
   onUpdate,
   isOpen
 }: Props): React.ReactElement => {
-  const { data, loading } = useQuery(meQuery, { fetchPolicy: 'cache-only' });
+  const { data, loading } = useQuery(meQuery);
   const [role, setRole] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [creatingPermission, setCreatingPermission] = React.useState(false);
