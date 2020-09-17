@@ -1,15 +1,10 @@
 export const {
   APP_SECRET,
   JWT_TOKEN,
-  JWT_PRIVATE_KEY: priv,
   FHIR_API_URL,
   PAGAI_URL,
   REDIS_URL,
 } = process.env
-if (!priv) {
-  throw new Error('MISSING "JWT_PRIVATE_KEY" in environment variables')
-}
-export const JWT_SIGNING_KEY = priv.replace(/\\n/g, '\n')
 
 export const MAPPING_VERSION_1 = 1
 export const MAPPING_VERSION_2 = 2
