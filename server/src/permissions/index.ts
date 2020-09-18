@@ -3,18 +3,27 @@ import { rule, shield } from 'graphql-shield'
 import { Context } from 'context'
 import { getSourceIdFromMutationArgs } from './resolvers'
 
+const notFoundUserError = 'User not found, maybe token is invalid.'
 const rules = {
   isAuthenticatedUser: rule()((_, __, ctx: Context) => {
-    return !!ctx.user
+    if (!ctx.user) {
+      return new Error(notFoundUserError)
+    }
+    return true
   }),
   isAdmin: rule()(async (_, __, ctx: Context) => {
     const { user } = ctx
-    return Boolean(user && user.role == 'ADMIN')
+    if (!user) {
+      return new Error(notFoundUserError)
+    }
+    return user.role == 'ADMIN'
   }),
   isSourceReader: rule()(async (_, args, ctx: Context) => {
     // Get user id
     const { user } = ctx
-    if (!user) return false
+    if (!user) {
+      return new Error(notFoundUserError)
+    }
 
     // Return true if the user is admin
     if (user.role == 'ADMIN') return true
@@ -33,7 +42,9 @@ const rules = {
   isSourceWriter: rule()(async (_, args, ctx: Context) => {
     // Get user id
     const { user } = ctx
-    if (!user) return false
+    if (!user) {
+      return new Error(notFoundUserError)
+    }
 
     // Return true if the user is admin
     if (user.role == 'ADMIN') return true

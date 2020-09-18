@@ -5,7 +5,6 @@ import {
   Button,
   Intent,
   InputGroup,
-  Spinner
 } from '@blueprintjs/core';
 import { useQuery, useApolloClient } from '@apollo/react-hooks';
 import { loader } from 'graphql.macro';

@@ -157,8 +157,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 const afterwareLink = onError(({ graphQLErrors, operation, forward }) => {
   if (graphQLErrors) {
     for (const err of graphQLErrors) {
-      console.log(err);
-      if (err.message.includes('Not Authorised!')) {
+      if (err.message.includes('token is invalid')) {
         // error code is set to UNAUTHENTICATED
         // when AuthenticationError thrown in resolver
         return fromPromise(refreshToken()).flatMap(
