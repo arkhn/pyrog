@@ -706,6 +706,7 @@ export interface NexusGenFieldTypes {
     deleteResource: NexusGenRootTypes['Resource']; // Resource!
     deleteSource: NexusGenRootTypes['Source']; // Source!
     deleteTemplate: NexusGenRootTypes['Template']; // Template!
+    logout: NexusGenRootTypes['User']; // User!
     refreshDefinition: NexusGenRootTypes['StructureDefinition']; // StructureDefinition!
     updateCondition: NexusGenRootTypes['Condition']; // Condition!
     updateInput: NexusGenRootTypes['Input']; // Input!

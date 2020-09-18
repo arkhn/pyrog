@@ -447,6 +447,7 @@ type Mutation {
   deleteResource(resourceId: ID!): Resource!
   deleteSource(sourceId: ID!): Source!
   deleteTemplate(id: ID!): Template!
+  logout: User!
   refreshDefinition(definitionId: ID!): StructureDefinition!
   updateCondition(action: String, column: String, conditionId: ID!, relation: ConditionRelation, table: String, value: String): Condition!
   updateInput(data: UpdateInputInput!, inputId: ID!): Input!

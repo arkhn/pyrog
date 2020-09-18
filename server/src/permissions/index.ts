@@ -66,6 +66,8 @@ export const permissions = shield(
       structureDefinition: rules.isAuthenticatedUser,
     },
     Mutation: {
+      upsertUser: rules.isAuthenticatedUser, // TODO fix so that user can only update itself?
+
       createAccessControl: rules.isSourceWriter,
       deleteAccessControl: rules.isSourceWriter,
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useMutation } from 'react-apollo';
 import { useSelector, useDispatch } from 'react-redux';
 import { Route } from 'react-router';
@@ -7,21 +7,21 @@ import axios from 'axios';
 import { Spinner } from '@blueprintjs/core';
 import queryString from 'query-string';
 import { loader } from 'graphql.macro';
+import jwt_decode from 'jwt-decode';
 
-import { fetchToken, getAccessToken, removeToken } from 'oauth/tokenManager';
+import { fetchTokens, getAccessToken, removeToken } from 'oauth/tokenManager';
 import { onError } from 'services/apollo';
 import { login as loginAction } from 'services/user/actions';
 import { IReduxStore } from 'types';
 import {
   STATE_STORAGE_KEY,
-  TOKEN_STORAGE_KEY,
-  USER_INFO_URL
+  ACCESS_TOKEN_STORAGE_KEY,
+  ID_TOKEN_STORAGE_KEY
 } from '../../../constants';
 
 const mUpsertUser = loader('src/graphql/mutations/upsertUser.graphql');
 
 const PrivateRoute = ({ component: Component, ...rest }: any) => {
-  // TODO if token becomes invalid, logout?
   const dispatch = useDispatch();
 
   const toaster = useSelector((state: IReduxStore) => state.toaster);
@@ -40,45 +40,41 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
   const params = queryString.parse(window.location.search);
 
   const storedState = localStorage.getItem(STATE_STORAGE_KEY);
-  const stateMismatch =
-    'code' in params &&
-    'state' in params &&
-    !!storedState &&
-    params.state !== storedState;
+  const receivedCode = 'code' in params && 'state' in params;
+  const stateMismatch = receivedCode && params.state !== storedState;
+  const stateMatch = receivedCode && params.state === storedState;
 
-  // TODO clean that
+  const setLoggedInUser = useCallback(async () => {
+    await fetchTokens();
+    const accessToken = localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY);
+    const idToken = localStorage.getItem(ID_TOKEN_STORAGE_KEY);
+    setToken(accessToken);
+
+    // Set axios interceptor
+    // TODO put all that's below somewhere else?
+    axios.interceptors.request.use(config => {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+      return config;
+    });
+
+    // Get user info
+    const decodedIdToken: any = jwt_decode(idToken!);
+
+    // Upsert user from IdP into Pyrog DB
+    upsertUser({
+      variables: {
+        userEmail: decodedIdToken.email,
+        name: decodedIdToken.name
+      }
+    });
+  }, [upsertUser]);
+
   useEffect(() => {
-    const getToken = async () => {
-      const oauthToken = await fetchToken();
-      setToken(oauthToken);
-
-      // Set axios interceptor
-      // TODO put all that's below somewhere else?
-      axios.interceptors.request.use(config => {
-        const token = localStorage.getItem(TOKEN_STORAGE_KEY);
-        config.headers.Authorization = `Bearer ${token}`;
-        return config;
-      });
-
-      // Get user info
-      // TODO should we use the id token instead?
-      const userInfoResp = await axios.get(USER_INFO_URL!);
-      const userInfo = userInfoResp.data;
-
-      // Upsert user from IdP into Pyrog DB
-      upsertUser({
-        variables: {
-          userEmail: userInfo.email,
-          name: userInfo.name
-        }
-      });
-    };
-
-    if ('code' in params && !!storedState && params.state === storedState) {
-      getToken();
+    if (stateMatch) {
+      setLoggedInUser();
       localStorage.removeItem(STATE_STORAGE_KEY);
     }
-  }, [token, params, storedState, upsertUser]);
+  }, [stateMatch, setLoggedInUser]);
 
   // Redirect to the login page
   if (!(token || 'code' in params) || stateMismatch) {

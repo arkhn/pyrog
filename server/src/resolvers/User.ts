@@ -1,6 +1,5 @@
 import { objectType, FieldResolver } from '@nexus/schema'
 
-// TODO keep caching users in redux?
 import cache from 'cache'
 
 export const User = objectType({
@@ -35,8 +34,9 @@ export const upsertUser: FieldResolver<'Mutation', 'upsertUser'> = async (
 
   // cache user in redis
   const { set } = cache()
-  await set(`user:${userEmail}`, JSON.stringify(user))
+  // We cache a user for 10 minutes before rechecking its identity with Hydra
+  // await set(`user:${userEmail}`, JSON.stringify(user), 'EX', 60 * 10)
+  await set(`user:${userEmail}`, JSON.stringify(user), 'EX', 5)
 
-  // TODO were we returning a token with the user before?
   return user
 }

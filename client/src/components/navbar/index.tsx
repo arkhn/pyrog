@@ -10,6 +10,7 @@ import {
   Icon
 } from '@blueprintjs/core';
 import React from 'react';
+import { useMutation } from 'react-apollo';
 import { useDispatch, useSelector } from 'react-redux';
 import useReactRouter from 'use-react-router';
 
@@ -19,10 +20,10 @@ import { useApolloClient } from '@apollo/react-hooks';
 import Drawer from './drawer';
 import Header from './header';
 
-import { logout } from 'services/user/actions';
+import { logout as logoutAction } from 'services/user/actions';
 
 import { IReduxStore } from 'types';
-import { TOKEN_STORAGE_KEY } from '../../constants';
+import { ACCESS_TOKEN_STORAGE_KEY } from '../../constants';
 
 import './style.scss';
 import { deselectSource } from 'services/selectedNode/actions';
@@ -40,6 +41,7 @@ const qUsedConceptMapIds = loader(
   'src/graphql/queries/usedConceptMapIds.graphql'
 );
 const qUsedProfileIds = loader('src/graphql/queries/usedProfileIds.graphql');
+const mLogout = loader('src/graphql/mutations/logout.graphql');
 
 const Navbar = ({ exportMapping, exportAdditionalResource }: Props) => {
   const { history } = useReactRouter();
@@ -53,6 +55,8 @@ const Navbar = ({ exportMapping, exportAdditionalResource }: Props) => {
   const [exportComments, setExportComments] = React.useState(false);
   const [exportConceptMaps, setExportConceptMaps] = React.useState(false);
   const [exportProfiles, setExportProfiles] = React.useState(false);
+
+  const [logout] = useMutation(mLogout);
 
   const isAdmin = user && user.role === 'ADMIN';
   const isWriter =
@@ -208,8 +212,10 @@ const Navbar = ({ exportMapping, exportAdditionalResource }: Props) => {
             className="bp3-minimal"
             icon="log-out"
             onClick={() => {
-              localStorage.removeItem(TOKEN_STORAGE_KEY);
-              dispatch(logout());
+              // TODO revoke tokens etc.
+              localStorage.removeItem(ACCESS_TOKEN_STORAGE_KEY);
+              logout();
+              dispatch(logoutAction());
               history.push('/login');
             }}
             text="Se déconnecter"

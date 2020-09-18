@@ -8,7 +8,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { createLogger } from 'redux-logger';
 
 import { HttpLink, InMemoryCache, ApolloClient } from 'apollo-client-preset';
-import { ApolloLink } from 'apollo-link';
+import { ApolloLink, fromPromise } from 'apollo-link';
 import { RestLink } from 'apollo-link-rest';
 import { onError } from 'apollo-link-error';
 import { ApolloProvider } from 'react-apollo';
@@ -18,7 +18,8 @@ import Routes from './routes';
 import {
   CLEANING_SCRIPTS_URL,
   HTTP_BACKEND_URL,
-  TOKEN_STORAGE_KEY,
+  ACCESS_TOKEN_STORAGE_KEY,
+  ID_TOKEN_STORAGE_KEY,
   TOKEN_URL
 } from './constants';
 import { refreshToken, removeToken } from 'oauth/tokenManager';
@@ -128,10 +129,12 @@ const httpLink = new HttpLink({
 });
 
 const middlewareLink = new ApolloLink((operation, forward) => {
-  const token = localStorage.getItem(TOKEN_STORAGE_KEY);
+  const accessToken = localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY);
+  const idToken = localStorage.getItem(ID_TOKEN_STORAGE_KEY);
   operation.setContext({
     headers: {
-      Authorization: token ? `Bearer ${token}` : ''
+      Authorization: accessToken ? `Bearer ${accessToken}` : '',
+      IdToken: idToken ? idToken : ''
     }
   });
 
@@ -151,11 +154,39 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (networkError) console.log(`[Network error]: ${networkError}`);
 });
 
+const afterwareLink = onError(({ graphQLErrors, operation, forward }) => {
+  if (graphQLErrors) {
+    for (const err of graphQLErrors) {
+      console.log(err);
+      if (err.message.includes('Not Authorised!')) {
+        // error code is set to UNAUTHENTICATED
+        // when AuthenticationError thrown in resolver
+        return fromPromise(refreshToken()).flatMap(
+          // retry the request, returning the new observable
+          () => {
+            const oldHeaders = operation.getContext().headers;
+            operation.setContext({
+              headers: {
+                ...oldHeaders,
+                Authorization: `Bearer ${localStorage.getItem(
+                  ACCESS_TOKEN_STORAGE_KEY
+                )}`
+              }
+            });
+            return forward(operation);
+          }
+        );
+      }
+    }
+  }
+});
+
 // Aggregate all links
 const links = [];
 if (process.env.NODE_ENV === 'development') {
   links.push(errorLink);
 }
+links.push(afterwareLink);
 if (CLEANING_SCRIPTS_URL) {
   links.push(
     new RestLink({

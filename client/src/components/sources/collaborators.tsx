@@ -157,8 +157,8 @@ export const CollaboratorsDialog = ({
       )
     });
 
-  return loading ? (
-    <Spinner />
+  return !data || loading ? (
+    <></>
   ) : (
     <Dialog
       className="collaboratorsTable"
