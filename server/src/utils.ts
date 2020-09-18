@@ -36,12 +36,11 @@ export const getUser = async (
         where: { email: userInfoResp.data.email },
       })
       // We cache a user for 10 minutes before rechecking its identity with Hydra
-      // await set(`user:${userInfoResp.data.email}`, JSON.stringify(user), 'EX', 60 * 10)
       await set(
         `user:${userInfoResp.data.email}`,
         JSON.stringify(user),
         'EX',
-        5,
+        60 * 10,
       )
       return user
     } catch (error) {
