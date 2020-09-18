@@ -20,8 +20,8 @@ export const upsertUser: FieldResolver<'Mutation', 'upsertUser'> = async (
   _parent,
   { userEmail, name },
   ctx,
-) => {
-  const user = await ctx.prisma.user.upsert({
+) =>
+  ctx.prisma.user.upsert({
     where: { email: userEmail },
     create: {
       email: userEmail,
@@ -31,11 +31,3 @@ export const upsertUser: FieldResolver<'Mutation', 'upsertUser'> = async (
       name,
     },
   })
-
-  // cache user in redis
-  const { set } = cache()
-  // We cache a user for 10 minutes before rechecking its identity with Hydra
-  await set(`user:${userEmail}`, JSON.stringify(user), 'EX', 60 * 10)
-
-  return user
-}
