@@ -4,6 +4,7 @@ import { Context } from 'context'
 import { getSourceIdFromMutationArgs } from './resolvers'
 
 const notFoundUserError = 'User not found, maybe token is invalid.'
+
 const rules = {
   isAuthenticatedUser: rule()((_, __, ctx: Context) => {
     if (!ctx.user) {

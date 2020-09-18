@@ -32,9 +32,21 @@ export const getUser = async (
           authorization,
         },
       })
-      const user = await prisma.user.findOne({
+      // TODO do we even upsert the user here and remove
+      // the upsertUser mutation?
+      let user = await prisma.user.findOne({
         where: { email: userInfoResp.data.email },
       })
+      if (!user) {
+        // If the user is not found, we create a new one
+        // with the information fetched from Hydra
+        user = await prisma.user.create({
+          data: {
+            email: userInfoResp.data.email,
+            name: userInfoResp.data.name,
+          },
+        })
+      }
       // We cache a user for 10 minutes before rechecking its identity with Hydra
       await set(
         `user:${userInfoResp.data.email}`,
