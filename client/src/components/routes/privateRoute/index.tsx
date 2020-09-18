@@ -40,9 +40,8 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
   const params = queryString.parse(window.location.search);
 
   const storedState = localStorage.getItem(STATE_STORAGE_KEY);
-  const receivedCode = 'code' in params && 'state' in params;
-  const stateMismatch = receivedCode && params.state !== storedState;
-  const stateMatch = receivedCode && params.state === storedState;
+  const stateMatch =
+    'code' in params && 'state' in params && params.state === storedState;
 
   const setLoggedInUser = useCallback(async () => {
     await fetchTokens();
@@ -77,7 +76,7 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
   }, [stateMatch, setLoggedInUser]);
 
   // Redirect to the login page
-  if (!(token || 'code' in params) || stateMismatch) {
+  if (!(token || 'code' in params)) {
     if (token) removeToken();
     return (
       <Route

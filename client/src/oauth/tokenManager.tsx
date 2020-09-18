@@ -12,15 +12,17 @@ import {
   REVOKE_URL
 } from '../constants';
 
-export const getAccessToken = () => localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY);
+export const getAccessToken = () =>
+  localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY);
 
-export const getIdToken = () => localStorage.getItem(ID_TOKEN_STORAGE_KEY)
+export const getIdToken = () => localStorage.getItem(ID_TOKEN_STORAGE_KEY);
 
 export const removeToken = async () => {
   await revokeToken();
   localStorage.removeItem(ACCESS_TOKEN_STORAGE_KEY);
   localStorage.removeItem(REFRESH_TOKEN_STORAGE_KEY);
   localStorage.removeItem(ID_TOKEN_STORAGE_KEY);
+  localStorage.removeItem(TOKEN_DATA_STORAGE_KEY);
 };
 
 export const fetchTokens = async () => {
