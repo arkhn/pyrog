@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { MenuItem, Intent, IPopoverProps } from '@blueprintjs/core';
+import {Intent, IPopoverProps, MenuItem} from '@blueprintjs/core';
 
-import { ItemListPredicate, ItemRenderer } from '@blueprintjs/select';
-import { IconName } from '@blueprintjs/icons';
+import {ItemListPredicate, ItemRenderer} from '@blueprintjs/select';
+import {IconName} from '@blueprintjs/icons';
 
 import TSelect from './TSelect';
 
@@ -32,26 +32,24 @@ export default class StringSelect extends React.Component<ISelectProps, any> {
     );
   };
 
+  private stringSort = (s1: string, s2: string): number => s1.localeCompare(s2);
+
   private filterList: ItemListPredicate<string> = (query, items) => {
-    return items
-      .filter(item => `${item.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0)
-      .slice(0, this.props.maxItems || 100);
+    const stringSet = new Set(
+      items
+        .filter(item => item.toLowerCase().startsWith(query.toLowerCase()))
+        .sort(this.stringSort)
+    );
+    items
+      .filter(item => item.toLowerCase().indexOf(query.toLowerCase()) >= 0)
+      .forEach(e => stringSet.add(e));
+    return [...stringSet].slice(0, this.props.maxItems || 100);
   };
 
-  private sortItems = (resources: string[]) => {
-    resources.sort((s1, s2) => {
-      const name1 = s1.toLowerCase();
-      const name2 = s2.toLowerCase();
-      if (name1 < name2) return -1;
-      if (name1 > name2) return 1;
-      return 0;
-    });
-    return resources;
-  };
+  private sortItems = (resources: string[]): string[] =>
+    resources.sort(this.stringSort);
 
-  private displayItem = function(item: string): string {
-    return item ? item : 'None';
-  };
+  private displayItem = (item: string): string => (item ? item : 'None');
 
   public render() {
     const {
