@@ -4,7 +4,6 @@ export const {
   PAGAI_URL,
   FHIR_API_URL,
   USER_INFO_URL,
-  JWT_TOKEN,
 } = process.env
 
 export const MAPPING_VERSION_1 = 1
