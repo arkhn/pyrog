@@ -72,20 +72,19 @@ const SourcesView = (): React.ReactElement => {
   );
 
   const onSelectSource = async (source: ISelectedSource) => {
-    const selectedSource: ISelectedSource = { ...source };
     try {
-      if (selectedSource.credential)
-        selectedSource.credential.schema = JSON.parse(
-          selectedSource.credential.schema as string
+      if (source.credential)
+        source.credential.schema = JSON.parse(
+          source.credential.schema as string
         );
     } catch {
       // No parsing needed as `schema` attribute is already a valid js object
     }
-    dispatch(changeSelectedSource(selectedSource));
+    dispatch(changeSelectedSource(source));
     history.push({
       pathname: '/mapping',
       search: QueryString.stringify({
-        sourceId: selectedSource.id
+        sourceId: source.id
       })
     });
   };

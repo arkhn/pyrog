@@ -21,7 +21,7 @@ const selectedNodeReducer = (
     case 'CHANGE_SOURCE':
       return {
         ...initialState,
-        source: action.payload,
+        source: action.payload
       };
 
     case 'UPDATE_RESOURCE':
