@@ -128,9 +128,7 @@ const MappingView = () => {
     }
   };
 
-  const renderExistingRules = () => (
-    <InputColumns />
-  );
+  const renderExistingRules = () => <InputColumns />;
 
   const renderTable = () => {
     return (
@@ -177,7 +175,7 @@ const MappingView = () => {
     );
   };
 
-  if (!source.credential || !source.credential.schema) {
+  if (!source?.credential?.schema) {
     toaster.show({
       icon: 'error',
       intent: 'danger',
