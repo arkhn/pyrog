@@ -32,13 +32,9 @@ export default class StringSelect extends React.Component<ISelectProps, any> {
     );
   };
 
-  private stringSort = (s1: string, s2: string): number => s1.localeCompare(s2);
-
   private filterList: ItemListPredicate<string> = (query, items) => {
     const stringSet = new Set(
-      items
-        .filter(item => item.toLowerCase().startsWith(query.toLowerCase()))
-        .sort(this.stringSort)
+      items.filter(item => item.toLowerCase().startsWith(query.toLowerCase()))
     );
     items
       .filter(item => item.toLowerCase().indexOf(query.toLowerCase()) >= 0)
@@ -47,7 +43,7 @@ export default class StringSelect extends React.Component<ISelectProps, any> {
   };
 
   private sortItems = (resources: string[]): string[] =>
-    resources.sort(this.stringSort);
+    resources.sort((s1: string, s2: string): number => s1.localeCompare(s2));
 
   private displayItem = (item: string): string => (item ? item : 'None');
 
