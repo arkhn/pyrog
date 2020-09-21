@@ -72,14 +72,8 @@ const SourcesView = (): React.ReactElement => {
   );
 
   const onSelectSource = async (source: ISelectedSource) => {
-    try {
-      if (source.credential)
-        source.credential.schema = JSON.parse(
-          source.credential.schema as string
-        );
-    } catch {
-      // No parsing needed as `schema` attribute is already a valid js object
-    }
+    if (source.credential && typeof source.credential.schema === 'string')
+      source.credential.schema = JSON.parse(source.credential.schema);
     dispatch(changeSelectedSource(source));
     history.push({
       pathname: '/mapping',
@@ -106,9 +100,7 @@ const SourcesView = (): React.ReactElement => {
           icon="add"
           intent="primary"
           large={true}
-          onClick={() => {
-            history.push('/newSource');
-          }}
+          onClick={() => history.push('/newSource')}
         >
           Ajouter une source / un logiciel
         </Button>
