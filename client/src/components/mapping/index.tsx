@@ -179,7 +179,7 @@ const MappingView = () => {
     toaster.show({
       icon: 'error',
       intent: 'danger',
-      message: `missing database schema for source ${source.name}`,
+      message: `missing database schema for source ${source?.name || null}`,
       timeout: 4000
     });
     return (
