@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import axios from 'axios';
 import { Provider } from 'react-redux';
 import { combineReducers, createStore, applyMiddleware } from 'redux';
@@ -148,7 +148,7 @@ export const client = new ApolloClient({
   link: ApolloLink.from(links)
 });
 
-export default () => (
+const App = (): React.ReactElement => (
   <Provider store={store}>
     <ApolloProvider client={client}>
       <PersistGate loading={null} persistor={persistor}>
@@ -157,3 +157,5 @@ export default () => (
     </ApolloProvider>
   </Provider>
 );
+
+export default App;
