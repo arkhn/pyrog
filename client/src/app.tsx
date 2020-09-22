@@ -89,6 +89,9 @@ const persistor = persistStore(store);
 // AXIOS
 
 // Add an interceptor to refresh access token when needed
+// NOTE we currently only need that for calls to the fhir api, not
+// for gql calls to pyrog-server because pyrog-server caches the user info.
+// Is this what we want? Do we want expiring users in Pyrog too?
 axios.interceptors.response.use(
   response => {
     return response;
