@@ -45,7 +45,7 @@ export default class StringSelect extends React.Component<ISelectProps, any> {
   private sortItems = (resources: string[]): string[] =>
     resources.sort((s1: string, s2: string): number => s1.localeCompare(s2));
 
-  private displayItem = (item: string): string => (item ? item : 'None');
+  private displayItem = (item: string): string => item || 'None';
 
   public render() {
     const {
