@@ -15,7 +15,6 @@
     "migrate:new": "prisma migrate save --experimental",
     "migrate:up": "prisma migrate up --experimental",
     "migrate:preview": "prisma migrate up --experimental --preview --auto-approve",
-    "seed:superuser": "yarn run-ts scripts/superuser.ts",
     "seed:mapping": "yarn run-ts scripts/importMapping.ts",
     "export:mappings": "yarn run-ts scripts/exportMapping.ts backup",
     "test": "jest --max-workers 1 --watch",
