@@ -1,7 +1,5 @@
 import { objectType, FieldResolver } from '@nexus/schema'
 
-import cache from 'cache'
-
 export const User = objectType({
   name: 'User',
   definition(t) {
