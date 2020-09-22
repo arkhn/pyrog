@@ -22,7 +22,9 @@ import {
   ID_TOKEN_STORAGE_KEY,
   TOKEN_URL
 } from './constants';
-import { refreshToken, removeToken } from 'oauth/tokenManager';
+import { refreshToken, removeTokens } from 'oauth/tokenManager';
+import { ISimpleAction } from 'types';
+import { logout as logoutAction } from 'services/user/actions';
 
 // Reducers
 
@@ -86,6 +88,11 @@ const store = finalCreateStore(persistedReducer);
 
 const persistor = persistStore(store);
 
+const redirectToLogin = () => {
+  removeTokens();
+  store.dispatch(logoutAction() as ISimpleAction);
+};
+
 // AXIOS
 
 // Add an interceptor to refresh access token when needed
@@ -100,8 +107,7 @@ axios.interceptors.response.use(
       error.response.status === 401 &&
       originalRequest.url.startsWith(TOKEN_URL)
     ) {
-      removeToken();
-      // TODO Need to redirect to /login?
+      redirectToLogin();
       return Promise.reject(error);
     }
 
@@ -109,8 +115,10 @@ axios.interceptors.response.use(
       originalRequest._retry = true;
 
       const success = await refreshToken();
-      if (!success) return Promise.reject(error);
-
+      if (!success) {
+        redirectToLogin();
+        return Promise.reject(error);
+      }
       return axios(originalRequest);
     }
     return Promise.reject(error);
@@ -151,12 +159,20 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (networkError) console.log(`[Network error]: ${networkError}`);
 });
 
+const tokenExpiredLink = onError(({ graphQLErrors }) => {
+  if (graphQLErrors) {
+    for (const err of graphQLErrors) {
+      if (err.message.includes('token is invalid')) {
+        redirectToLogin();
+      }
+    }
+  }
+});
+
 const afterwareLink = onError(({ graphQLErrors, operation, forward }) => {
   if (graphQLErrors) {
     for (const err of graphQLErrors) {
       if (err.message.includes('token is invalid')) {
-        // error code is set to UNAUTHENTICATED
-        // when AuthenticationError thrown in resolver
         return fromPromise(refreshToken()).flatMap(
           // retry the request, returning the new observable
           () => {
@@ -182,6 +198,7 @@ const links = [];
 if (process.env.NODE_ENV === 'development') {
   links.push(errorLink);
 }
+links.push(tokenExpiredLink);
 links.push(afterwareLink);
 if (CLEANING_SCRIPTS_URL) {
   links.push(

@@ -21,7 +21,7 @@ import Header from './header';
 
 import { logout as logoutAction } from 'services/user/actions';
 import { deselectSource } from 'services/selectedNode/actions';
-import { getIdToken, removeToken } from 'oauth/tokenManager';
+import { getIdToken, removeTokens, revokeToken } from 'oauth/tokenManager';
 import { IReduxStore } from 'types';
 import { LOGOUT_URL, LOGOUT_REDIRECT_URL } from '../../constants';
 
@@ -215,8 +215,8 @@ const Navbar = ({ exportMapping, exportAdditionalResource }: Props) => {
               if (!idToken)
                 throw new Error("Can't logout, id token not found.");
               const logoutUrl = `${LOGOUT_URL}?id_token_hint=${idToken}&post_logout_redirect_uri=${LOGOUT_REDIRECT_URL}`;
-
-              removeToken();
+              revokeToken();
+              removeTokens();
               logout();
               dispatch(logoutAction());
               window.location.assign(logoutUrl);

@@ -9,7 +9,7 @@ import queryString from 'query-string';
 import { loader } from 'graphql.macro';
 import jwt_decode from 'jwt-decode';
 
-import { fetchTokens, getAccessToken, removeToken } from 'oauth/tokenManager';
+import { fetchTokens, getAccessToken, removeTokens } from 'oauth/tokenManager';
 import { onError } from 'services/apollo';
 import { login as loginAction } from 'services/user/actions';
 import { IReduxStore } from 'types';
@@ -25,6 +25,7 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
   const dispatch = useDispatch();
 
   const toaster = useSelector((state: IReduxStore) => state.toaster);
+  const user = useSelector((state: IReduxStore) => state.user);
 
   const onUpsertCompleted = (data: any) => {
     // Put the user info in redux
@@ -76,8 +77,8 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
   }, [stateMatch, setLoggedInUser]);
 
   // Redirect to the login page
-  if (!(token || 'code' in params)) {
-    if (token) removeToken();
+  if (!('code' in params) && (!token || !user.id)) {
+    if (token) removeTokens();
     return (
       <Route
         render={props => (

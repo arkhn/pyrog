@@ -14,7 +14,6 @@ export const login = ({ id, name, email, role }: IUser): IAction => {
 
 export const logout = (): IAction => {
   return {
-    type: 'LOGOUT',
-    payload: {}
+    type: 'LOGOUT'
   };
 };

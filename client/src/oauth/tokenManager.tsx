@@ -17,8 +17,7 @@ export const getAccessToken = () =>
 
 export const getIdToken = () => localStorage.getItem(ID_TOKEN_STORAGE_KEY);
 
-export const removeToken = async () => {
-  await revokeToken();
+export const removeTokens = () => {
   localStorage.removeItem(ACCESS_TOKEN_STORAGE_KEY);
   localStorage.removeItem(REFRESH_TOKEN_STORAGE_KEY);
   localStorage.removeItem(ID_TOKEN_STORAGE_KEY);
@@ -53,7 +52,7 @@ export const refreshToken = async () => {
   return true;
 };
 
-const revokeToken = async () => {
+export const revokeToken = async () => {
   // NOTE It looks like the refresh token doesn't work after the access token has been revoked.
   const accessToken = localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY);
   if (!accessToken)
