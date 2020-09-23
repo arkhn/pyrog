@@ -37,7 +37,6 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
     onError: onError(toaster)
   });
 
-  const [token, setToken] = useState(getAccessToken());
   const params = queryString.parse(window.location.search);
 
   const storedState = localStorage.getItem(STATE_STORAGE_KEY);
@@ -48,7 +47,6 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
     await fetchTokens();
     const accessToken = localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY);
     const idToken = localStorage.getItem(ID_TOKEN_STORAGE_KEY);
-    setToken(accessToken);
 
     // Set axios interceptor
     // TODO put all that's below somewhere else?
@@ -76,25 +74,26 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
     }
   }, [stateMatch, setLoggedInUser]);
 
-  // Redirect to the login page
-  if (!('code' in params) && (!token || !user.id)) {
-    if (token) removeTokens();
-    return (
-      <Route
-        render={props => (
-          <Redirect
-            to={{
-              pathname: '/login',
-              state: { from: props.location }
-            }}
-          />
-        )}
-      />
-    );
-  }
-
-  if (!token) {
-    return <Spinner />;
+  if (!user.id) {
+    if ('code' in params) {
+      // Wait for the code to be exchanged for a token
+      return <Spinner />;
+    } else {
+      // Redirect to the login page
+      removeTokens();
+      return (
+        <Route
+          render={props => (
+            <Redirect
+              to={{
+                pathname: '/login',
+                state: { from: props.location }
+              }}
+            />
+          )}
+        />
+      );
+    }
   }
 
   return <Route {...rest} render={props => <Component {...props} />} />;
