@@ -1,6 +1,6 @@
 import { Alert, Button, Intent, Spinner } from '@blueprintjs/core';
 import * as QueryString from 'query-string';
-import React from 'react';
+import React, { useState } from 'react';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import useReactRouter from 'use-react-router';
@@ -25,19 +25,14 @@ const SourcesView = (): React.ReactElement => {
 
   const toaster = useSelector((state: IReduxStore) => state.toaster);
 
-  const [sourceToDelete, setSourceToDelete] = React.useState(
+  const [sourceToDelete, setSourceToDelete] = useState(
     undefined as ISelectedSource | undefined
   );
-  const [isAlertOpen, setIsAlertOpen] = React.useState(false);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
 
   const { data: dataSources, loading: loadingSources } = useQuery(qSources, {
     fetchPolicy: 'cache-and-network'
   });
-
-  const removeSourceFromCache = (
-    cache: any,
-    { data: { deleteSource } }: any
-  ): void => updateCachedSource(cache, deleteSource, true);
 
   const updateCachedSource = (
     cache: any,
@@ -66,14 +61,17 @@ const SourcesView = (): React.ReactElement => {
     }
   };
 
+  const removeSourceFromCache = (
+    cache: any,
+    { data: { deleteSource } }: any
+  ): void => updateCachedSource(cache, deleteSource, true);
+
   const [deleteSource, { loading: deletingSource }] = useMutation(
     mDeleteSource,
     { update: removeSourceFromCache, onError: onError(toaster) }
   );
 
-  const onSelectSource = async (source: ISelectedSource) => {
-    if (source.credential)
-      source.credential.schema = JSON.parse(source.credential.schema as string);
+  const onSelectSource = async (source: ISelectedSource): Promise<void> => {
     dispatch(changeSelectedSource(source));
     history.push({
       pathname: '/mapping',
@@ -100,9 +98,7 @@ const SourcesView = (): React.ReactElement => {
           icon="add"
           intent="primary"
           large={true}
-          onClick={() => {
-            history.push('/newSource');
-          }}
+          onClick={() => history.push('/newSource')}
         >
           Ajouter une source / un logiciel
         </Button>
@@ -142,9 +138,9 @@ const SourcesView = (): React.ReactElement => {
           }}
         >
           <p className="delete-warning">
-            Etes-vous sûr de vouloir supprimer la source
+            {'Etes-vous sûr de vouloir supprimer la source'}
             <b> {sourceToDelete ? sourceToDelete.name : ''}</b> ?<br />
-            Cette action n'est pas réversible.
+            {"Cette action n'est pas réversible."}
           </p>
         </Alert>
       </div>
