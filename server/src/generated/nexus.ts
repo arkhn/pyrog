@@ -714,7 +714,6 @@ export interface NexusGenFieldTypes {
     updateJoin: NexusGenRootTypes['Join']; // Join!
     updateResource: NexusGenRootTypes['Resource']; // Resource!
     upsertCredential: NexusGenRootTypes['Credential']; // Credential!
-    upsertUser: NexusGenRootTypes['User']; // User!
   }
   Query: { // field return type
     allSources: NexusGenRootTypes['Source'][] | null; // [Source!]
@@ -950,10 +949,6 @@ export interface NexusGenArgTypes {
       password: string; // String!
       port: string; // String!
       sourceId: string; // ID!
-    }
-    upsertUser: { // args
-      name: string; // String!
-      userEmail: string; // String!
     }
   }
   Query: {

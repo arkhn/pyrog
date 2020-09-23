@@ -455,7 +455,6 @@ type Mutation {
   updateJoin(data: JoinInput!, joinId: ID!): Join!
   updateResource(data: UpdateResourceInput!, filters: [FilterInput!], resourceId: ID!): Resource!
   upsertCredential(database: String!, host: String!, login: String!, model: String!, owner: String!, password: String!, port: String!, sourceId: ID!): Credential!
-  upsertUser(name: String!, userEmail: String!): User!
 }
 
 input NullableStringFilter {

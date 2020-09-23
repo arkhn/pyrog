@@ -1,4 +1,4 @@
-import { objectType, FieldResolver } from '@nexus/schema'
+import { objectType } from '@nexus/schema'
 
 export const User = objectType({
   name: 'User',
@@ -13,19 +13,3 @@ export const User = objectType({
     t.model.updatedAt()
   },
 })
-
-export const upsertUser: FieldResolver<'Mutation', 'upsertUser'> = async (
-  _parent,
-  { userEmail, name },
-  ctx,
-) =>
-  ctx.prisma.user.upsert({
-    where: { email: userEmail },
-    create: {
-      email: userEmail,
-      name,
-    },
-    update: {
-      name,
-    },
-  })

@@ -17,7 +17,6 @@ import { createResource, updateResource, deleteResource } from './Resource'
 import { deleteSource, createSource } from './Source'
 import { refreshDefinition } from './StructureDefinition'
 import { createTemplate, deleteTemplate } from './Template'
-import { upsertUser } from './User'
 import cache from 'cache'
 
 export const Mutation = mutationType({
@@ -335,15 +334,6 @@ export const Mutation = mutationType({
     /*
      * USER
      */
-
-    t.field('upsertUser', {
-      type: 'User',
-      args: {
-        userEmail: stringArg({ required: true }),
-        name: stringArg({ required: true }),
-      },
-      resolve: upsertUser,
-    })
 
     t.field('logout', {
       type: 'User',
