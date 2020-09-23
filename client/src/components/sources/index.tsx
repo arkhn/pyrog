@@ -71,9 +71,7 @@ const SourcesView = (): React.ReactElement => {
     { update: removeSourceFromCache, onError: onError(toaster) }
   );
 
-  const onSelectSource = async (source: ISelectedSource) => {
-    if (source.credential && typeof source.credential.schema === 'string')
-      source.credential.schema = JSON.parse(source.credential.schema);
+  const onSelectSource = async (source: ISelectedSource): Promise<void> => {
     dispatch(changeSelectedSource(source));
     history.push({
       pathname: '/mapping',
