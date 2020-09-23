@@ -38,8 +38,6 @@ export const refreshToken = async () => {
   if (!tokenData) return false;
   const oauthToken = authClient.createToken(JSON.parse(tokenData));
 
-  // TODO here refresh doesn't work if no secrets are provided.
-  // Is it unsafe to put a dummy secret in a public app (vs no secret at all)?
   const updatedToken = await oauthToken.refresh();
 
   localStorage.setItem(ACCESS_TOKEN_STORAGE_KEY, updatedToken.accessToken);

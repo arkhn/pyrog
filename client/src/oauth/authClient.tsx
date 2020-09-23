@@ -9,8 +9,9 @@ import {
 
 export const authClient = new ClientOAuth2({
   clientId: CLIENT_ID,
-  // TODO here refresh doesn't work if no secrets are provided.
-  // Choose the right authentication method
+  // NOTE With the client-oauth2 lib, refresh doesn't work if no secret is provided
+  // so we give a dummy secret here. It's not more dangerous than having no authentication
+  // scheme at all and didn't find a way to securely authenticate a public client with Hydra
   clientSecret: CLIENT_SECRET,
   authorizationUri: AUTH_URL,
   accessTokenUri: TOKEN_URL,
