@@ -169,7 +169,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 const tokenExpiredLink = onError(({ graphQLErrors }) => {
   if (graphQLErrors) {
     for (const err of graphQLErrors) {
-      if (err.message.includes('token is invalid')) {
+      if (err.statusCode === 401) {
         redirectToLogin();
       }
     }
@@ -179,7 +179,7 @@ const tokenExpiredLink = onError(({ graphQLErrors }) => {
 const afterwareLink = onError(({ graphQLErrors, operation, forward }) => {
   if (graphQLErrors) {
     for (const err of graphQLErrors) {
-      if (err.message.includes('token is invalid')) {
+      if (err.statusCode === 401) {
         return fromPromise(refreshToken()).flatMap(
           // retry the request, returning the new observable
           () => {

@@ -3,31 +3,51 @@ import { rule, shield } from 'graphql-shield'
 import { Context } from 'context'
 import { getSourceIdFromMutationArgs } from './resolvers'
 
-const notFoundUserError = 'User not found, maybe token is invalid.'
+export const authenticationError = {
+  code: 'AUTHENTICATION_ERROR',
+  statusCode: 401,
+  message: 'User not found, maybe token is invalid.',
+}
+export const authorizationError = {
+  code: 'AUTHORIZATION_ERROR',
+  statusCode: 403,
+}
 
 const rules = {
   isAuthenticatedUser: rule()((_, __, ctx: Context) => {
     if (!ctx.user) {
-      return new Error(notFoundUserError)
+      return new Error(
+        `${authenticationError.code}: ${authenticationError.message}`,
+      )
     }
     return true
   }),
   isAdmin: rule()(async (_, __, ctx: Context) => {
     const { user } = ctx
     if (!user) {
-      return new Error(notFoundUserError)
+      return new Error(
+        `${authenticationError.code}: ${authenticationError.message}`,
+      )
     }
-    return user.role == 'ADMIN'
+
+    if (user.role !== 'ADMIN') {
+      return new Error(
+        `${authorizationError.code}: You need to be admin to perform this action`,
+      )
+    }
+    return true
   }),
   isSourceReader: rule()(async (_, args, ctx: Context) => {
     // Get user id
     const { user } = ctx
     if (!user) {
-      return new Error(notFoundUserError)
+      return new Error(
+        `${authenticationError.code}: ${authenticationError.message}`,
+      )
     }
 
     // Return true if the user is admin
-    if (user.role == 'ADMIN') return true
+    if (user.role === 'ADMIN') return true
 
     let sourceId = await getSourceIdFromMutationArgs(args, ctx)
 
@@ -38,13 +58,21 @@ const rules = {
         source: { id: sourceId },
       },
     })
-    return Boolean(access.length > 0)
+
+    if (access.length === 0) {
+      return new Error(
+        `${authorizationError.code}: You don't have read access on this source`,
+      )
+    }
+    return true
   }),
   isSourceWriter: rule()(async (_, args, ctx: Context) => {
     // Get user id
     const { user } = ctx
     if (!user) {
-      return new Error(notFoundUserError)
+      return new Error(
+        `${authenticationError.code}: ${authenticationError.message}`,
+      )
     }
 
     // Return true if the user is admin
@@ -61,7 +89,12 @@ const rules = {
       },
     })
 
-    return Boolean(access.length > 0)
+    if (access.length === 0) {
+      return new Error(
+        `${authorizationError.code}: You don't have write access on this source`,
+      )
+    }
+    return true
   }),
 }
 

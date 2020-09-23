@@ -2,7 +2,11 @@ import { GraphQLServer, Options } from 'graphql-yoga'
 import cors from 'cors'
 import axios from 'axios'
 
-import { permissions } from 'permissions'
+import {
+  authenticationError,
+  authorizationError,
+  permissions,
+} from 'permissions'
 
 import { schema } from './schema'
 import { createContext } from './context'
@@ -29,6 +33,21 @@ const options: Options = {
     allowedHeaders: ['Authorization', 'Content-Type'],
   },
   bodyParserOptions: { limit: '10mb', type: 'application/json' },
+  formatError: (err: any) => {
+    if (err.message.startsWith(authenticationError.code)) {
+      return {
+        message: err.message,
+        statusCode: authenticationError.statusCode,
+      }
+    } else if (err.message.startsWith(authorizationError.code)) {
+      return {
+        message: err.message,
+        statusCode: authorizationError.statusCode,
+      }
+    } else {
+      return err
+    }
+  },
 }
 const { PORT } = process.env
 
