@@ -5,7 +5,7 @@ import {
   ControlGroup,
   Button
 } from '@blueprintjs/core';
-import * as React from 'react';
+import React, { useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import { useSelector, useDispatch } from 'react-redux';
 import { loader } from 'graphql.macro';
@@ -58,8 +58,8 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
       ? null
       : attributesForResource[path].inputGroups[selectedInputGroup].id;
 
-  const [table, setTable] = React.useState(resource.primaryKeyTable);
-  const [column, setColumn] = React.useState('');
+  const [table, setTable] = useState(resource.primaryKeyTable);
+  const [column, setColumn] = useState('');
 
   const [createAttribute] = useMutation(mCreateAttribute, {
     onError: onError(toaster)

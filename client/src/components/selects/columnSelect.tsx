@@ -1,5 +1,5 @@
 import { ControlGroup, FormGroup, IPopoverProps } from '@blueprintjs/core';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import StringSelect from 'components/selects/stringSelect';
 import { ISourceSchema } from 'types';
@@ -32,7 +32,7 @@ const ColumnSelect = ({
   const [table, setTable] = useState(initialTable);
   const [column, setColumn] = useState(initialColumn);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setTable(initialTable);
     setColumn(initialColumn);
   }, [initialTable, initialColumn]);
