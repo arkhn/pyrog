@@ -143,7 +143,9 @@ links.push(httpLinkAuth);
 
 // Client
 export const client = new ApolloClient({
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    addTypename: false
+  }),
   connectToDevTools: true,
   link: ApolloLink.from(links)
 });
