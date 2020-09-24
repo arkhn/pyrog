@@ -1,7 +1,7 @@
 fragment entireFilter on Filter {
-  id
+#  id
   sqlColumn {
-    id
+#    id
     table
     column
   }
