@@ -125,7 +125,8 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 });
 
 // Aggregate all links
-const links = [];
+const links = [httpLinkAuth];
+
 if (process.env.NODE_ENV === 'development') {
   links.push(errorLink);
 }
@@ -139,13 +140,10 @@ if (CLEANING_SCRIPTS_URL) {
     })
   );
 }
-links.push(httpLinkAuth);
 
 // Client
 export const client = new ApolloClient({
-  cache: new InMemoryCache({
-    addTypename: false
-  }),
+  cache: new InMemoryCache(),
   connectToDevTools: true,
   link: ApolloLink.from(links)
 });
