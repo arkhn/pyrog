@@ -140,7 +140,6 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
 
   const onFormSubmit = (e: React.FormEvent<HTMLElement>): void => {
     e.preventDefault();
-    console.log(resource);
     const updatedResource = updateResource({
       variables: {
         resourceId: resource.id,
