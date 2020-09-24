@@ -1,6 +1,7 @@
 export const {
   APP_SECRET,
-  JWT_TOKEN,
+  OAUTH2_CLIENT_ID,
+  OAUTH2_TOKEN_URL,
   JWT_PRIVATE_KEY: priv,
   FHIR_API_URL,
   PAGAI_URL,

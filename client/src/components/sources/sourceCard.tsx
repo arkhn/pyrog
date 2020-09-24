@@ -33,7 +33,7 @@ export const SourceCard = ({
   ] = React.useState(false);
 
   return (
-    <React.Fragment>
+    <>
       <Card
         elevation={Elevation.TWO}
         interactive={true}
@@ -88,6 +88,6 @@ export const SourceCard = ({
         onClose={() => setIsCollaboratorDialogOpen(false)}
         onUpdate={onUpdate}
       />
-    </React.Fragment>
+    </>
   );
 };

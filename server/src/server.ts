@@ -6,13 +6,18 @@ import { permissions } from 'permissions'
 
 import { schema } from './schema'
 import { createContext } from './context'
-import { bootstrapDefinitions } from 'fhir'
-import { JWT_TOKEN } from './constants'
+import { bootstrapDefinitions } from './fhir'
+import { authClient } from './oauth'
 
 // AXIOS
 
 // Set a default authentication header for fhir api calls
-axios.defaults.headers.common['Authorization'] = `Bearer ${JWT_TOKEN}`
+const setAccessToken = async () => {
+  const fhirApiToken = await authClient.credentials.getToken()
+  axios.defaults.headers.common[
+    'Authorization'
+  ] = `Bearer ${fhirApiToken.accessToken}`
+}
 
 const server = new GraphQLServer({
   schema,
@@ -33,6 +38,7 @@ const options: Options = {
 const { PORT } = process.env
 
 const main = async () => {
+  await setAccessToken()
   await bootstrapDefinitions()
   server.start(options, () =>
     console.log(
