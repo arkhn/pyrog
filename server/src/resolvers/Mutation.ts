@@ -17,7 +17,7 @@ import { createResource, updateResource, deleteResource } from './Resource'
 import { deleteSource, createSource } from './Source'
 import { refreshDefinition } from './StructureDefinition'
 import { createTemplate, deleteTemplate } from './Template'
-import { signup, login } from './User'
+import cache from 'cache'
 
 export const Mutation = mutationType({
   /*
@@ -25,25 +25,6 @@ export const Mutation = mutationType({
    */
 
   definition(t) {
-    t.field('signup', {
-      type: 'AuthPayload',
-      args: {
-        name: stringArg({ required: true }),
-        email: stringArg({ required: true }),
-        password: stringArg({ required: true }),
-      },
-      resolve: signup,
-    })
-
-    t.field('login', {
-      type: 'AuthPayload',
-      args: {
-        email: stringArg({ required: true }),
-        password: stringArg({ required: true }),
-      },
-      resolve: login,
-    })
-
     /*
      * TEMPLATE
      */
@@ -348,6 +329,19 @@ export const Mutation = mutationType({
         accessControlId: idArg({ required: true }),
       },
       resolve: deleteAccessControl,
+    })
+
+    /*
+     * USER
+     */
+
+    t.field('logout', {
+      type: 'User',
+      resolve: (_parent, _args, ctx) => {
+        const { del } = cache()
+        del!(`user:${ctx.user?.email}`)
+        return ctx.user!
+      },
     })
   },
 })

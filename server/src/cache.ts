@@ -7,7 +7,12 @@ let rcache: RedisClient
 let get: (arg: string) => Promise<string>
 let del: (arg: string) => Promise<number>
 let mget: OverloadedKeyCommand<string[], string[], Promise<string[]>>
-let set: (arg1: string, arg2: string) => Promise<unknown>
+let set: (
+  key: string,
+  value: string,
+  mode?: string,
+  duration?: number,
+) => Promise<unknown>
 let sadd: OverloadedKeyCommand<string, number, Promise<number>>
 let smembers: (arg: string) => Promise<string[]>
 

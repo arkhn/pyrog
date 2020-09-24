@@ -16,7 +16,6 @@ yarn # install dependencies
 dotenv yarn generate # generate the "@prisma/client" dependency, required by prisma
 docker-compose up postgres redis # launches postgres and redis in docker (you may use the `-d` option to run in the background)
 dotenv yarn migrate:up # applies the prisma migrations on the postrges database
-dotenv yarn seed:superuser # inserts an admin@arkhn.com user in the db (dont forget to have SUPERUSER_PASSWORD in your .env)
 dotenv yarn dev # runs pyrog-server with hot-reloading (using ts-node)
 ```
 

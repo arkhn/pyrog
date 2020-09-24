@@ -27,7 +27,7 @@ yarn start
 `.env` already contains a default setup. However, you can modify it with a custom setup. This allows you to point to a specific Pyrog server. This is useful if you are working on the client part of Pyrog only and do not want to run a Pyrog server locally. You could then use our running staging Pyrog server and your `.env` file should then look something like this:
 
 ```
-AUTH_TOKEN="ARKHN_TOKEN"
+TOKEN_STORAGE_KEY="ARKHN_TOKEN"
 ENGINE_BACKEND_URL=https://engine.arkhn.org
 HTTP_BACKEND_URL=https://graphql.pyrog.staging.arkhn.org
 WS_BACKEND_URL=ws://graphql.pyrog.staging.arkhn.org

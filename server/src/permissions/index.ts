@@ -3,21 +3,51 @@ import { rule, shield } from 'graphql-shield'
 import { Context } from 'context'
 import { getSourceIdFromMutationArgs } from './resolvers'
 
+export const authenticationError = {
+  code: 'AUTHENTICATION_ERROR',
+  statusCode: 401,
+  message: 'User not found, maybe token is invalid.',
+}
+export const authorizationError = {
+  code: 'AUTHORIZATION_ERROR',
+  statusCode: 403,
+}
+
 const rules = {
   isAuthenticatedUser: rule()((_, __, ctx: Context) => {
-    return !!ctx.user
+    if (!ctx.user) {
+      return new Error(
+        `${authenticationError.code}: ${authenticationError.message}`,
+      )
+    }
+    return true
   }),
   isAdmin: rule()(async (_, __, ctx: Context) => {
     const { user } = ctx
-    return Boolean(user && user.role == 'ADMIN')
+    if (!user) {
+      return new Error(
+        `${authenticationError.code}: ${authenticationError.message}`,
+      )
+    }
+
+    if (user.role !== 'ADMIN') {
+      return new Error(
+        `${authorizationError.code}: You need to be admin to perform this action`,
+      )
+    }
+    return true
   }),
   isSourceReader: rule()(async (_, args, ctx: Context) => {
     // Get user id
     const { user } = ctx
-    if (!user) return false
+    if (!user) {
+      return new Error(
+        `${authenticationError.code}: ${authenticationError.message}`,
+      )
+    }
 
     // Return true if the user is admin
-    if (user.role == 'ADMIN') return true
+    if (user.role === 'ADMIN') return true
 
     let sourceId = await getSourceIdFromMutationArgs(args, ctx)
 
@@ -28,12 +58,22 @@ const rules = {
         source: { id: sourceId },
       },
     })
-    return Boolean(access.length > 0)
+
+    if (access.length === 0) {
+      return new Error(
+        `${authorizationError.code}: You don't have read access on this source`,
+      )
+    }
+    return true
   }),
   isSourceWriter: rule()(async (_, args, ctx: Context) => {
     // Get user id
     const { user } = ctx
-    if (!user) return false
+    if (!user) {
+      return new Error(
+        `${authenticationError.code}: ${authenticationError.message}`,
+      )
+    }
 
     // Return true if the user is admin
     if (user.role == 'ADMIN') return true
@@ -49,7 +89,12 @@ const rules = {
       },
     })
 
-    return Boolean(access.length > 0)
+    if (access.length === 0) {
+      return new Error(
+        `${authorizationError.code}: You don't have write access on this source`,
+      )
+    }
+    return true
   }),
 }
 
@@ -66,6 +111,8 @@ export const permissions = shield(
       structureDefinition: rules.isAuthenticatedUser,
     },
     Mutation: {
+      logout: rules.isAuthenticatedUser,
+
       createAccessControl: rules.isSourceWriter,
       deleteAccessControl: rules.isSourceWriter,
 
