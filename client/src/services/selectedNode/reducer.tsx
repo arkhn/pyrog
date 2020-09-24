@@ -21,7 +21,13 @@ const selectedNodeReducer = (
     case 'CHANGE_SOURCE':
       return {
         ...initialState,
-        source: action.payload,
+        source: {
+          ...action.payload,
+          credential: action.payload.credential && {
+            ...action.payload.credential,
+            schema: JSON.parse(action.payload.credential.schema)
+          }
+        }
       };
 
     case 'UPDATE_RESOURCE':
