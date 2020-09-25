@@ -10,22 +10,22 @@ import {
   Icon
 } from '@blueprintjs/core';
 import React from 'react';
+import { useMutation } from 'react-apollo';
 import { useDispatch, useSelector } from 'react-redux';
 import useReactRouter from 'use-react-router';
-
 import { loader } from 'graphql.macro';
 import { useApolloClient } from '@apollo/react-hooks';
 
 import Drawer from './drawer';
 import Header from './header';
 
-import { logout } from 'services/user/actions';
-
+import { logout as logoutAction } from 'services/user/actions';
+import { deselectSource } from 'services/selectedNode/actions';
+import { getIdToken, removeTokens, revokeToken } from 'oauth/tokenManager';
 import { IReduxStore } from 'types';
-import { AUTH_TOKEN } from '../../constants';
+import { LOGOUT_URL, LOGOUT_REDIRECT_URL } from '../../constants';
 
 import './style.scss';
-import { deselectSource } from 'services/selectedNode/actions';
 
 interface Props {
   exportMapping?: (includeComments?: boolean) => void;
@@ -40,6 +40,7 @@ const qUsedConceptMapIds = loader(
   'src/graphql/queries/usedConceptMapIds.graphql'
 );
 const qUsedProfileIds = loader('src/graphql/queries/usedProfileIds.graphql');
+const mLogout = loader('src/graphql/mutations/logout.graphql');
 
 const Navbar = ({ exportMapping, exportAdditionalResource }: Props) => {
   const { history } = useReactRouter();
@@ -53,6 +54,8 @@ const Navbar = ({ exportMapping, exportAdditionalResource }: Props) => {
   const [exportComments, setExportComments] = React.useState(false);
   const [exportConceptMaps, setExportConceptMaps] = React.useState(false);
   const [exportProfiles, setExportProfiles] = React.useState(false);
+
+  const [logout] = useMutation(mLogout);
 
   const isAdmin = user && user.role === 'ADMIN';
   const isWriter =
@@ -208,9 +211,15 @@ const Navbar = ({ exportMapping, exportAdditionalResource }: Props) => {
             className="bp3-minimal"
             icon="log-out"
             onClick={() => {
-              localStorage.removeItem(AUTH_TOKEN);
-              dispatch(logout());
-              history.push('/login');
+              const idToken = getIdToken();
+              if (!idToken)
+                throw new Error("Can't logout, id token not found.");
+              const logoutUrl = `${LOGOUT_URL}?id_token_hint=${idToken}&post_logout_redirect_uri=${LOGOUT_REDIRECT_URL}`;
+              revokeToken();
+              removeTokens();
+              logout();
+              dispatch(logoutAction());
+              window.location.assign(logoutUrl);
             }}
             text="Se déconnecter"
           />

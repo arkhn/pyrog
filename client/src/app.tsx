@@ -8,7 +8,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { createLogger } from 'redux-logger';
 
 import { HttpLink, InMemoryCache, ApolloClient } from 'apollo-client-preset';
-import { ApolloLink } from 'apollo-link';
+import { ApolloLink, fromPromise } from 'apollo-link';
 import { RestLink } from 'apollo-link-rest';
 import { onError } from 'apollo-link-error';
 import { ApolloProvider } from 'react-apollo';
@@ -16,10 +16,15 @@ import { ApolloProvider } from 'react-apollo';
 import './style.scss';
 import Routes from './routes';
 import {
-  AUTH_TOKEN,
+  CLEANING_SCRIPTS_URL,
   HTTP_BACKEND_URL,
-  CLEANING_SCRIPTS_URL
+  ACCESS_TOKEN_STORAGE_KEY,
+  ID_TOKEN_STORAGE_KEY,
+  TOKEN_URL
 } from './constants';
+import { refreshToken, removeTokens } from 'oauth/tokenManager';
+import { ISimpleAction } from 'types';
+import { logout as logoutAction } from 'services/user/actions';
 
 // Reducers
 
@@ -83,14 +88,49 @@ const store = finalCreateStore(persistedReducer);
 
 const persistor = persistStore(store);
 
+const redirectToLogin = () => {
+  removeTokens();
+  store.dispatch(logoutAction() as ISimpleAction);
+};
+
 // AXIOS
 
-// Interceptor to add authorization header for each requests
+// Set axios interceptor
 axios.interceptors.request.use(config => {
-  const token = localStorage.getItem(AUTH_TOKEN);
-  config.headers.Authorization = `Bearer ${token}`;
+  const accessToken = localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY);
+  config.headers.Authorization = `Bearer ${accessToken}`;
   return config;
 });
+
+// Add an interceptor to refresh access token when needed
+axios.interceptors.response.use(
+  response => {
+    return response;
+  },
+  async error => {
+    const originalRequest = error.config;
+
+    if (
+      error.response.status === 401 &&
+      originalRequest.url.startsWith(TOKEN_URL)
+    ) {
+      redirectToLogin();
+      return Promise.reject(error);
+    }
+
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      const success = await refreshToken();
+      if (!success) {
+        redirectToLogin();
+        return Promise.reject(error);
+      }
+      return axios(originalRequest);
+    }
+    return Promise.reject(error);
+  }
+);
 
 // APOLLO
 
@@ -101,10 +141,12 @@ const httpLink = new HttpLink({
 });
 
 const middlewareLink = new ApolloLink((operation, forward) => {
-  const token = localStorage.getItem(AUTH_TOKEN);
+  const accessToken = localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY);
+  const idToken = localStorage.getItem(ID_TOKEN_STORAGE_KEY);
   operation.setContext({
     headers: {
-      Authorization: token ? `Bearer ${token}` : ''
+      Authorization: accessToken ? `Bearer ${accessToken}` : '',
+      IdToken: idToken ? idToken : ''
     }
   });
 
@@ -124,11 +166,47 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (networkError) console.log(`[Network error]: ${networkError}`);
 });
 
+const tokenExpiredLink = onError(({ graphQLErrors }) => {
+  if (graphQLErrors) {
+    for (const err of graphQLErrors) {
+      if (err.statusCode === 401) {
+        redirectToLogin();
+      }
+    }
+  }
+});
+
+const afterwareLink = onError(({ graphQLErrors, operation, forward }) => {
+  if (graphQLErrors) {
+    for (const err of graphQLErrors) {
+      if (err.statusCode === 401) {
+        return fromPromise(refreshToken()).flatMap(
+          // retry the request, returning the new observable
+          () => {
+            const oldHeaders = operation.getContext().headers;
+            operation.setContext({
+              headers: {
+                ...oldHeaders,
+                Authorization: `Bearer ${localStorage.getItem(
+                  ACCESS_TOKEN_STORAGE_KEY
+                )}`
+              }
+            });
+            return forward(operation);
+          }
+        );
+      }
+    }
+  }
+});
+
 // Aggregate all links
 const links = [];
 if (process.env.NODE_ENV === 'development') {
   links.push(errorLink);
 }
+links.push(tokenExpiredLink);
+links.push(afterwareLink);
 if (CLEANING_SCRIPTS_URL) {
   links.push(
     new RestLink({

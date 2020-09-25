@@ -1,32 +1,57 @@
+import axios from 'axios'
 import * as crypto from 'crypto'
-import { verify } from 'jsonwebtoken'
-import { User } from '@prisma/client'
-
-import { APP_SECRET, JWT_SIGNING_KEY } from './constants'
 import cache from 'cache'
 import { Request } from 'express'
+import jwt_decode from 'jwt-decode'
+import { User, PrismaClient } from '@prisma/client'
 
-interface Token {
-  user: {
-    id: string
-    name: string
-    email: string
-  }
-}
+import { APP_SECRET, USER_INFO_URL } from './constants'
 
-export const getUser = async (request: Request): Promise<User | null> => {
-  const Authorization = request.get('Authorization')
-  if (Authorization) {
-    const token = Authorization.replace('Bearer ', '')
-    const verifiedToken = verify(token, JWT_SIGNING_KEY, {
-      algorithms: ['ES256'],
-    }) as Token
-    if (!!verifiedToken) {
-      const { get } = cache()
+export const getUser = async (
+  request: Request,
+  prisma: PrismaClient,
+): Promise<User | null> => {
+  const authorization = request.get('Authorization')
+  const idToken = request.get('IdToken')
 
-      const cached = await get(`user:${verifiedToken.user.id}`)
+  const { get, set } = cache()
+
+  if (idToken) {
+    const decodedIdToken: any = jwt_decode(idToken)
+    const cached = await get(`user:${decodedIdToken.email}`)
+    if (cached) {
       const user: User = JSON.parse(cached)
       return user
+    }
+  }
+  if (authorization) {
+    try {
+      // Get user info from access token
+      const userInfoResp = await axios.get(USER_INFO_URL!, {
+        headers: {
+          authorization,
+        },
+      })
+      const user = await prisma.user.upsert({
+        where: { email: userInfoResp.data.email },
+        create: {
+          email: userInfoResp.data.email,
+          name: userInfoResp.data.name,
+        },
+        update: {
+          name: userInfoResp.data.name,
+        },
+      })
+      // We cache a user for 10 minutes before rechecking its identity with Hydra
+      await set(
+        `user:${userInfoResp.data.email}`,
+        JSON.stringify(user),
+        'EX',
+        60 * 10,
+      )
+      return user
+    } catch (error) {
+      return null
     }
   }
   return null
