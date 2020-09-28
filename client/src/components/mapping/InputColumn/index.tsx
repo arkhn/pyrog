@@ -135,7 +135,7 @@ const InputColumn = ({ input }: Props) => {
     } else {
       setConceptMapTitle('None');
     }
-  }, [input.conceptMapId]);
+  }, [input.conceptMapId, setTitle]);
 
   return (
     <div className="input-column">
