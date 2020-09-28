@@ -19,6 +19,7 @@ export const getUser = async (
     return null
   }
 
+  // in case idToken is present and the user is cached in redis, return it
   if (idToken) {
     const decodedIdToken = jwt_decode(idToken)
     const user = await getUserFromCache(decodedIdToken)
@@ -49,7 +50,7 @@ export const getUser = async (
     return null
   }
 
-  // Get info about the user
+  // Get info about the user if the access token is still valid
   try {
     if (idToken) {
       // Whether via the id token
