@@ -13,8 +13,12 @@ export const authorizationError = {
   statusCode: 403,
 }
 
+// We want to skip authorization checks during integration tests
+const skipAuthorizations = process.env.ENV === 'test'
+
 const rules = {
   isAuthenticatedUser: rule()((_, __, ctx: Context) => {
+    if (skipAuthorizations) return true
     if (!ctx.user) {
       return new Error(
         `${authenticationError.code}: ${authenticationError.message}`,
@@ -23,6 +27,7 @@ const rules = {
     return true
   }),
   isAdmin: rule()(async (_, __, ctx: Context) => {
+    if (skipAuthorizations) return true
     const { user } = ctx
     if (!user) {
       return new Error(
@@ -38,7 +43,7 @@ const rules = {
     return true
   }),
   isSourceReader: rule()(async (_, args, ctx: Context) => {
-    // Get user id
+    if (skipAuthorizations) return true
     const { user } = ctx
     if (!user) {
       return new Error(
@@ -67,7 +72,7 @@ const rules = {
     return true
   }),
   isSourceWriter: rule()(async (_, args, ctx: Context) => {
-    // Get user id
+    if (skipAuthorizations) return true
     const { user } = ctx
     if (!user) {
       return new Error(
