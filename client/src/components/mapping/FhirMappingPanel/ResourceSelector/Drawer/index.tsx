@@ -140,7 +140,6 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
 
   const onFormSubmit = (e: React.FormEvent<HTMLElement>): void => {
     e.preventDefault();
-
     const updatedResource = updateResource({
       variables: {
         resourceId: resource.id,
@@ -149,7 +148,15 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
           primaryKeyTable: pkTable,
           primaryKeyColumn: pkColumn
         },
-        filters
+        filters: filters.map(filter => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { __typename, ...sqlColumn } = filter.sqlColumn as any;
+          return {
+            sqlColumn,
+            relation: filter.relation,
+            value: filter.value
+          };
+        })
       }
     });
     if (updatedResource) {
