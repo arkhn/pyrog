@@ -82,9 +82,8 @@ export const getUser = async (
   return user
 }
 
-const { get, set } = cache()
-
 const getUserFromCache = async (decodedIdToken: any) => {
+  const { get } = cache()
   const cached = await get(`user:${decodedIdToken.email}`)
   if (cached) {
     const user: User = JSON.parse(cached)
@@ -94,6 +93,7 @@ const getUserFromCache = async (decodedIdToken: any) => {
 }
 
 const cacheUser = async (user: User, tokenTTL: number) => {
+  const { set } = cache()
   // We cache a user for 10 minutes max before rechecking its identity
   const expiresIn = tokenTTL || 10 * 60
   await set(
