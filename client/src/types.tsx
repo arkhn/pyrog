@@ -163,6 +163,7 @@ export interface IReduxStore {
 export interface CodeSystem {
   title: string;
   name: string;
+  status: string;
   url: string;
   valueSet: string;
   concept: Concept[];
@@ -176,6 +177,7 @@ export interface ConceptMap {
   sourceUri: string;
   targetUri: string;
   description?: string;
+  status: string;
   group: Group[];
 }
 

@@ -379,6 +379,7 @@ const ConceptMapDialog = ({
     return {
       name: newTerminologyName,
       title: newTerminologyName,
+      status: 'active',
       url: newTerminologyCodeSystemUrl,
       valueSet: newTerminologyValueSetUrl,
       concept: concepts
@@ -414,6 +415,7 @@ const ConceptMapDialog = ({
       resourceType: 'ConceptMap',
       name: conceptMapTitle,
       title: conceptMapTitle,
+      status: 'active',
       ...(conceptMapDescription && { description: conceptMapDescription }),
       sourceUri: sourceTerminology
         ? sourceTerminology.valueSetUrl
