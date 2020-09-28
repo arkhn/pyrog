@@ -1,11 +1,12 @@
 import axios from 'axios'
+import qs from 'querystring'
 import * as crypto from 'crypto'
 import cache from 'cache'
 import { Request } from 'express'
 import jwt_decode from 'jwt-decode'
 import { User, PrismaClient } from '@prisma/client'
 
-import { APP_SECRET, USER_INFO_URL } from './constants'
+import { APP_SECRET, TOKEN_INTROSPECTION_URL, USER_INFO_URL } from './constants'
 
 export const getUser = async (
   request: Request,
@@ -14,47 +15,94 @@ export const getUser = async (
   const authorization = request.get('Authorization')
   const idToken = request.get('IdToken')
 
-  const { get, set } = cache()
-
-  if (idToken) {
-    const decodedIdToken: any = jwt_decode(idToken)
-    const cached = await get(`user:${decodedIdToken.email}`)
-    if (cached) {
-      const user: User = JSON.parse(cached)
-      return user
-    }
+  if (!authorization) {
+    return null
   }
-  if (authorization) {
-    try {
-      // Get user info from access token
+
+  // in case idToken is present and the user is cached in redis, return it
+  if (idToken) {
+    const decodedIdToken = jwt_decode(idToken)
+    const user = await getUserFromCache(decodedIdToken)
+    if (user) return user
+  }
+
+  let userData
+  let tokenTTL
+
+  // Introspect the access token
+  try {
+    const introspectionResp = await axios.post(
+      TOKEN_INTROSPECTION_URL!,
+      qs.stringify({
+        token: authorization.replace('Bearer ', ''),
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      },
+    )
+    if (!introspectionResp.data.active) {
+      return null
+    }
+    tokenTTL = introspectionResp.data.exp
+  } catch (error) {
+    return null
+  }
+
+  // Get info about the user if the access token is still valid
+  try {
+    if (idToken) {
+      // Whether via the id token
+      userData = jwt_decode(idToken)
+    } else {
+      // Or we use the /userinfo endpoint
       const userInfoResp = await axios.get(USER_INFO_URL!, {
         headers: {
           authorization,
         },
       })
-      const user = await prisma.user.upsert({
-        where: { email: userInfoResp.data.email },
-        create: {
-          email: userInfoResp.data.email,
-          name: userInfoResp.data.name,
-        },
-        update: {
-          name: userInfoResp.data.name,
-        },
-      })
-      // We cache a user for 10 minutes before rechecking its identity with Hydra
-      await set(
-        `user:${userInfoResp.data.email}`,
-        JSON.stringify(user),
-        'EX',
-        60 * 10,
-      )
-      return user
-    } catch (error) {
-      return null
+      userData = userInfoResp.data
     }
+  } catch (error) {
+    return null
+  }
+
+  // We'll insert a new user at its first query to pyrog-server only
+  const user = await prisma.user.upsert({
+    where: { email: userData.email },
+    create: {
+      email: userData.email,
+      name: userData.name,
+    },
+    update: {
+      name: userData.name,
+    },
+  })
+  await cacheUser(user, tokenTTL)
+  return user
+}
+
+const getUserFromCache = async (decodedIdToken: any) => {
+  const { get } = cache()
+  const cached = await get(`user:${decodedIdToken.email}`)
+  if (cached) {
+    const user: User = JSON.parse(cached)
+    return user
   }
   return null
+}
+
+const cacheUser = async (user: User, tokenTTL: number) => {
+  const { set } = cache()
+  // We cache a user for 10 minutes max before rechecking its identity
+  const expiresIn = tokenTTL || 10 * 60
+  await set(
+    `user:${user.email}`,
+    JSON.stringify(user),
+    'EX',
+    Math.min(10 * 60, expiresIn),
+  )
 }
 
 export const encrypt = (text: string) => {

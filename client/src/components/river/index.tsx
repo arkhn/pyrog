@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Button, Switch } from '@blueprintjs/core';
+import { Button } from '@blueprintjs/core';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useQuery } from '@apollo/react-hooks';
@@ -43,9 +43,6 @@ const FhirRiverView = (): React.ReactElement => {
 
   const [selectedSource, setSelectedSource] = useState({} as Source);
   const [selectedResources, setSelectedResources] = useState([] as Resource[]);
-  const [bypassValidation, setBypassValidation] = useState(false);
-  const [skipRefBinding, setSkipRefBinding] = useState(false);
-  const [override, setOverride] = useState(false);
   const [running, setRunning] = useState(false);
 
   const { data } = useQuery(qSourcesAndResources, {
@@ -94,10 +91,10 @@ const FhirRiverView = (): React.ReactElement => {
       await axios.post(
         `${RIVER_URL}/batch`,
         {
-          resource_ids: selectedResources.map(r => r.id),
-          bypass_validation: bypassValidation, // TODO: not implemented yet
-          skip_ref_binding: skipRefBinding, // TODO: not implemented yet
-          override: override // TODO: not implemented yet
+          resources: selectedResources.map(r => ({
+            resource_id: r.id,
+            resource_type: r.definitionId
+          }))
         },
         {
           headers: { 'Content-Type': 'application/json' }
@@ -154,39 +151,18 @@ const FhirRiverView = (): React.ReactElement => {
           onSelectAll={handleSelectAll}
           onRemoveTag={handleTagRemove}
         />
-        <div className="advanced-options">
-          <h2>Advanced options</h2>
-          {/* TODO utlimately, these options should only be accessible to admin users. */}
-          <div>
-            <Switch
-              checked={override}
-              label="override"
-              onChange={(): void => setOverride(prev => !prev)}
-            />
-            <Switch
-              checked={bypassValidation}
-              label="bypass_validation"
-              onChange={(): void => setBypassValidation(prev => !prev)}
-            />
-            <Switch
-              checked={skipRefBinding}
-              label="skip_reference_binding"
-              onChange={(): void => setSkipRefBinding(prev => !prev)}
-            />
-          </div>
-          <div className="align-right">
-            <Button
-              intent="primary"
-              large
-              type="submit"
-              disabled={!selectedSource.id || credentialsMissing}
-              loading={running}
-              className="button-submit"
-              onClick={onClickRun}
-            >
-              Make the river flow
-            </Button>
-          </div>
+        <div className="align-right">
+          <Button
+            intent="primary"
+            large
+            type="submit"
+            disabled={!selectedSource.id || credentialsMissing}
+            loading={running}
+            className="button-submit"
+            onClick={onClickRun}
+          >
+            Make the river flow
+          </Button>
         </div>
       </div>
     </div>

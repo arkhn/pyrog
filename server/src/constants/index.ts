@@ -6,6 +6,7 @@ export const {
   OAUTH2_TOKEN_URL,
   PAGAI_URL,
   REDIS_URL,
+  TOKEN_INTROSPECTION_URL,
   USER_INFO_URL,
 } = process.env
 

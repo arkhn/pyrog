@@ -10,7 +10,10 @@ import { useApolloClient } from '@apollo/react-hooks';
 import { fetchTokens, removeTokens } from 'oauth/tokenManager';
 import { login as loginAction } from 'services/user/actions';
 import { IReduxStore } from 'types';
-import { STATE_STORAGE_KEY } from '../../../constants';
+import {
+  ACCESS_TOKEN_STORAGE_KEY,
+  STATE_STORAGE_KEY
+} from '../../../constants';
 
 const meQuery = loader('src/graphql/queries/me.graphql');
 
@@ -21,6 +24,7 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
 
   const params = queryString.parse(window.location.search);
 
+  const accessToken = localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY);
   const storedState = localStorage.getItem(STATE_STORAGE_KEY);
   const stateMatch =
     'code' in params && 'state' in params && params.state === storedState;
@@ -44,7 +48,7 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
     }
   }, [stateMatch, setLoggedInUser]);
 
-  if (!user.id) {
+  if (!user.id && !accessToken) {
     if ('code' in params) {
       // Wait for the code to be exchanged for a token
       return <Spinner />;
