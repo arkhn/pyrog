@@ -2,6 +2,7 @@ import { rule, shield } from 'graphql-shield'
 
 import { Context } from 'context'
 import { getSourceIdFromMutationArgs } from './resolvers'
+import { ENV } from '../constants'
 
 export const authenticationError = {
   code: 'AUTHENTICATION_ERROR',
@@ -14,11 +15,10 @@ export const authorizationError = {
 }
 
 // We want to skip authorization checks during integration tests
-const skipAuthorizations = process.env.ENV === 'test'
+const skipAuthorizations = ENV === 'test'
 
 const rules = {
   isAuthenticatedUser: rule()((_, __, ctx: Context) => {
-    if (skipAuthorizations) return true
     if (!ctx.user) {
       return new Error(
         `${authenticationError.code}: ${authenticationError.message}`,
@@ -27,7 +27,6 @@ const rules = {
     return true
   }),
   isAdmin: rule()(async (_, __, ctx: Context) => {
-    if (skipAuthorizations) return true
     const { user } = ctx
     if (!user) {
       return new Error(
@@ -43,7 +42,6 @@ const rules = {
     return true
   }),
   isSourceReader: rule()(async (_, args, ctx: Context) => {
-    if (skipAuthorizations) return true
     const { user } = ctx
     if (!user) {
       return new Error(
@@ -72,7 +70,6 @@ const rules = {
     return true
   }),
   isSourceWriter: rule()(async (_, args, ctx: Context) => {
-    if (skipAuthorizations) return true
     const { user } = ctx
     if (!user) {
       return new Error(
@@ -104,53 +101,55 @@ const rules = {
 }
 
 export const permissions = shield(
-  {
-    Query: {
-      me: rules.isAuthenticatedUser,
-      credential: rules.isAuthenticatedUser,
-      allSources: rules.isAdmin,
-      sources: rules.isAuthenticatedUser,
-      source: rules.isAuthenticatedUser,
-      resource: rules.isAuthenticatedUser,
-      attribute: rules.isAuthenticatedUser,
-      structureDefinition: rules.isAuthenticatedUser,
-    },
-    Mutation: {
-      logout: rules.isAuthenticatedUser,
+  skipAuthorizations
+    ? {}
+    : {
+        Query: {
+          me: rules.isAuthenticatedUser,
+          credential: rules.isAuthenticatedUser,
+          allSources: rules.isAdmin,
+          sources: rules.isAuthenticatedUser,
+          source: rules.isAuthenticatedUser,
+          resource: rules.isAuthenticatedUser,
+          attribute: rules.isAuthenticatedUser,
+          structureDefinition: rules.isAuthenticatedUser,
+        },
+        Mutation: {
+          logout: rules.isAuthenticatedUser,
 
-      createAccessControl: rules.isSourceWriter,
-      deleteAccessControl: rules.isSourceWriter,
+          createAccessControl: rules.isSourceWriter,
+          deleteAccessControl: rules.isSourceWriter,
 
-      createSource: rules.isAuthenticatedUser,
-      deleteSource: rules.isSourceWriter,
+          createSource: rules.isAuthenticatedUser,
+          deleteSource: rules.isSourceWriter,
 
-      upsertCredential: rules.isSourceWriter,
-      deleteCredential: rules.isSourceWriter,
+          upsertCredential: rules.isSourceWriter,
+          deleteCredential: rules.isSourceWriter,
 
-      createResource: rules.isSourceWriter,
-      updateResource: rules.isSourceWriter,
-      deleteResource: rules.isSourceWriter,
+          createResource: rules.isSourceWriter,
+          updateResource: rules.isSourceWriter,
+          deleteResource: rules.isSourceWriter,
 
-      createAttribute: rules.isSourceWriter,
-      deleteAttribute: rules.isSourceWriter,
+          createAttribute: rules.isSourceWriter,
+          deleteAttribute: rules.isSourceWriter,
 
-      createComment: rules.isSourceReader,
+          createComment: rules.isSourceReader,
 
-      createInputGroup: rules.isSourceWriter,
-      updateInputGroup: rules.isSourceWriter,
-      addConditionToInputGroup: rules.isSourceWriter,
+          createInputGroup: rules.isSourceWriter,
+          updateInputGroup: rules.isSourceWriter,
+          addConditionToInputGroup: rules.isSourceWriter,
 
-      updateCondition: rules.isSourceWriter,
-      deleteCondition: rules.isSourceWriter,
+          updateCondition: rules.isSourceWriter,
+          deleteCondition: rules.isSourceWriter,
 
-      createInput: rules.isSourceWriter,
-      updateInput: rules.isSourceWriter,
-      deleteInput: rules.isSourceWriter,
+          createInput: rules.isSourceWriter,
+          updateInput: rules.isSourceWriter,
+          deleteInput: rules.isSourceWriter,
 
-      addJoinToColumn: rules.isSourceWriter,
-      updateJoin: rules.isSourceWriter,
-      deleteJoin: rules.isSourceWriter,
-    },
-  },
+          addJoinToColumn: rules.isSourceWriter,
+          updateJoin: rules.isSourceWriter,
+          deleteJoin: rules.isSourceWriter,
+        },
+      },
   { allowExternalErrors: true },
 )
