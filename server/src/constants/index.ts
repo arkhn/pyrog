@@ -5,7 +5,7 @@ export const {
   REDIS_URL,
   PAGAI_URL,
   FHIR_API_URL,
-  USER_INFO_URL,
+  TOKEN_INTROSPECTION_URL,
 } = process.env
 
 export const MAPPING_VERSION_1 = 1

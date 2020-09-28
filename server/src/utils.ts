@@ -5,7 +5,7 @@ import { Request } from 'express'
 import jwt_decode from 'jwt-decode'
 import { User, PrismaClient } from '@prisma/client'
 
-import { APP_SECRET, USER_INFO_URL } from './constants'
+import { APP_SECRET, TOKEN_INTROSPECTION_URL } from './constants'
 
 export const getUser = async (
   request: Request,
@@ -16,45 +16,58 @@ export const getUser = async (
 
   const { get, set } = cache()
 
-  if (idToken) {
+  if (!idToken || !authorization) {
+    // Pyrog server needs both access and id tokens
+    return null
+  } else {
     const decodedIdToken: any = jwt_decode(idToken)
     const cached = await get(`user:${decodedIdToken.email}`)
     if (cached) {
       const user: User = JSON.parse(cached)
       return user
     }
-  }
-  if (authorization) {
     try {
-      // Get user info from access token
-      const userInfoResp = await axios.get(USER_INFO_URL!, {
-        headers: {
-          authorization,
+      // TODO we don't check that info in idToken and user corresponding to the
+      // access token are the same. This could be a problem if the id token has
+      // rights the access token doesn't have
+      const introspectionResp = await axios.post(
+        TOKEN_INTROSPECTION_URL!,
+        {
+          token: authorization.replace('Bearer ', ''),
         },
-      })
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        },
+      )
+      if (!introspectionResp.data.active) {
+        // Token is not active
+        return null
+      }
       const user = await prisma.user.upsert({
-        where: { email: userInfoResp.data.email },
+        where: { email: decodedIdToken.email },
         create: {
-          email: userInfoResp.data.email,
-          name: userInfoResp.data.name,
+          email: decodedIdToken.email,
+          name: decodedIdToken.name,
         },
         update: {
-          name: userInfoResp.data.name,
+          name: decodedIdToken.name,
         },
       })
-      // We cache a user for 10 minutes before rechecking its identity with Hydra
+      const expiresIn = introspectionResp.data.exp || 10 * 60
+      // We cache a user for 10 minutes max before rechecking its identity with Hydra
       await set(
-        `user:${userInfoResp.data.email}`,
+        `user:${decodedIdToken.email}`,
         JSON.stringify(user),
         'EX',
-        60 * 10,
+        Math.min(5, expiresIn),
       )
       return user
     } catch (error) {
       return null
     }
   }
-  return null
 }
 
 export const encrypt = (text: string) => {
