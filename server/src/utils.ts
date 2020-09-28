@@ -1,4 +1,5 @@
 import axios from 'axios'
+import qs from 'querystring'
 import * as crypto from 'crypto'
 import cache from 'cache'
 import { Request } from 'express'
@@ -32,9 +33,9 @@ export const getUser = async (
       // rights the access token doesn't have
       const introspectionResp = await axios.post(
         TOKEN_INTROSPECTION_URL!,
-        {
+        qs.stringify({
           token: authorization.replace('Bearer ', ''),
-        },
+        }),
         {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',

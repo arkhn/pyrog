@@ -98,7 +98,9 @@ const redirectToLogin = () => {
 // Set axios interceptor
 axios.interceptors.request.use(config => {
   const accessToken = localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY);
+  const idToken = localStorage.getItem(ID_TOKEN_STORAGE_KEY);
   config.headers.Authorization = `Bearer ${accessToken}`;
+  config.headers.IdToken = idToken;
   return config;
 });
 
