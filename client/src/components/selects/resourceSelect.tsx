@@ -32,7 +32,7 @@ export default class ResourceSelect extends React.Component<SelectProps, any> {
   };
 
   private filterList: ItemListPredicate<Resource> = (query, items) => {
-    const stringSet = new Set(
+    const resourceSet = new Set(
       items.filter(
         item =>
           item.definition.name?.toLowerCase().startsWith(query.toLowerCase()) ||
@@ -45,8 +45,8 @@ export default class ResourceSelect extends React.Component<SelectProps, any> {
           item.definition.name?.toLowerCase().indexOf(query.toLowerCase()) >=
             0 || item.label?.toLowerCase().indexOf(query.toLowerCase()) >= 0
       )
-      .forEach(e => stringSet.add(e));
-    return [...stringSet];
+      .forEach(e => resourceSet.add(e));
+    return [...resourceSet];
   };
 
   private sortItems = (resources: Resource[]): Resource[] =>
