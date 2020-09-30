@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { MenuItem, Intent, Position } from '@blueprintjs/core';
-import { ItemPredicate, ItemRenderer } from '@blueprintjs/select';
+import {ItemListPredicate, ItemPredicate, ItemRenderer} from '@blueprintjs/select';
 import { IconName } from '@blueprintjs/icons';
 
 import TSelect from './TSelect';
@@ -31,20 +31,31 @@ export default class ResourceSelect extends React.Component<SelectProps, any> {
     );
   };
 
-  private filterByName: ItemPredicate<Resource> = (query, resource: Resource) =>
-    resource.definition.name?.toLowerCase().startsWith(query.toLowerCase()) ||
-    resource.label?.toLowerCase().startsWith(query.toLowerCase());
+  private filterList: ItemListPredicate<Resource> = (query, items) => {
+    const stringSet = new Set(
+      items.filter(
+        item =>
+          item.definition.name?.toLowerCase().startsWith(query.toLowerCase()) ||
+          item.label?.toLowerCase().startsWith(query.toLowerCase())
+      )
+    );
+    items
+      .filter(
+        item =>
+          item.definition.name?.toLowerCase().indexOf(query.toLowerCase()) >=
+            0 || item.label?.toLowerCase().indexOf(query.toLowerCase()) >= 0
+      )
+      .forEach(e => stringSet.add(e));
+    return [...stringSet];
+  };
 
   private sortItems = (resources: Resource[]): Resource[] =>
     resources.sort((r1: Resource, r2: Resource): number =>
       r1.definition.name.localeCompare(r2.definition.name)
     );
 
-  private displayItem = function(resource: Resource): string {
-    return resource.definition
-      ? resource.definition.name
-      : '(Select a resource)';
-  };
+  private displayItem = (resource: Resource): string =>
+    resource.definition ? resource.definition.name : '(Select a resource)';
 
   public render() {
     const {
@@ -61,7 +72,7 @@ export default class ResourceSelect extends React.Component<SelectProps, any> {
       <TSelect<Resource>
         disabled={!!disabled}
         displayItem={this.displayItem}
-        filterItems={this.filterByName}
+        filterList={this.filterList}
         loading={loading}
         icon={icon}
         inputItem={inputItem}
