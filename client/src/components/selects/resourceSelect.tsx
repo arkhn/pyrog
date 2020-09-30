@@ -31,26 +31,14 @@ export default class ResourceSelect extends React.Component<SelectProps, any> {
     );
   };
 
-  private filterByName: ItemPredicate<Resource> = (
-    query,
-    resource: Resource
-  ) => {
-    return (
-      `${resource.definition.name.toLowerCase()}`.indexOf(
-        query.toLowerCase()
-      ) >= 0 ||
-      `${resource.label.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0
-    );
-  };
+  private filterByName: ItemPredicate<Resource> = (query, resource: Resource) =>
+    resource.definition.name?.toLowerCase().startsWith(query.toLowerCase()) ||
+    resource.label?.toLowerCase().startsWith(query.toLowerCase());
 
-  private sortItems = (resources: Resource[]) =>
-    resources.sort((r1, r2) => {
-      const name1 = r1.definition.name.toLowerCase();
-      const name2 = r2.definition.name.toLowerCase();
-      if (name1 < name2) return -1;
-      if (name1 > name2) return 1;
-      return 0;
-    });
+  private sortItems = (resources: Resource[]): Resource[] =>
+    resources.sort((r1: Resource, r2: Resource): number =>
+      r1.definition.name.localeCompare(r2.definition.name)
+    );
 
   private displayItem = function(resource: Resource): string {
     return resource.definition
@@ -78,7 +66,7 @@ export default class ResourceSelect extends React.Component<SelectProps, any> {
         icon={icon}
         inputItem={inputItem}
         intent={intent}
-        items={this.sortItems(items)}
+        items={items ? this.sortItems(items) : []}
         onChange={onChange}
         popoverProps={{
           autoFocus: true,
