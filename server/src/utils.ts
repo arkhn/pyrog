@@ -6,12 +6,21 @@ import { Request } from 'express'
 import jwt_decode from 'jwt-decode'
 import { User, PrismaClient } from '@prisma/client'
 
-import { APP_SECRET, TOKEN_INTROSPECTION_URL, USER_INFO_URL } from './constants'
+import {
+  APP_SECRET,
+  IN_PROD,
+  TOKEN_INTROSPECTION_URL,
+  USER_INFO_URL,
+} from './constants'
 
 export const getUser = async (
   request: Request,
   prisma: PrismaClient,
 ): Promise<User | null> => {
+  if (!IN_PROD)
+    // return a fake user for tests
+    return { id: 'admin', name: 'admin', email: 'admin', role: 'ADMIN' } as User
+
   const authorization = request.get('Authorization')
   const idToken = request.get('IdToken')
 
