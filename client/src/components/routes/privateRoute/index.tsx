@@ -39,7 +39,7 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
     });
 
     dispatch(loginAction(me));
-  }, [client, dispatch]);
+  }, [client, dispatch, stateMatch]);
 
   useEffect(() => {
     if (stateMatch) {
