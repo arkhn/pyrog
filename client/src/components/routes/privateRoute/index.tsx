@@ -30,7 +30,7 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
     'code' in params && 'state' in params && params.state === storedState;
 
   const setLoggedInUser = useCallback(async () => {
-    await fetchTokens();
+    if (stateMatch) await fetchTokens();
 
     const {
       data: { me }
@@ -39,7 +39,7 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
     });
 
     dispatch(loginAction(me));
-  }, [client, dispatch]);
+  }, [client, dispatch, stateMatch]);
 
   useEffect(() => {
     if (stateMatch) {
@@ -47,6 +47,10 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
       localStorage.removeItem(STATE_STORAGE_KEY);
     }
   }, [stateMatch, setLoggedInUser]);
+
+  if (accessToken && !user.id) {
+    setLoggedInUser();
+  }
 
   if (!user.id && !accessToken) {
     if ('code' in params) {
