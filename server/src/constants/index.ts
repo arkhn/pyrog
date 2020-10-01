@@ -10,6 +10,9 @@ export const {
   USER_INFO_URL,
 } = process.env
 
+const  TEST_ENV = "test"
+export const IN_PROD = ENV !== TEST_ENV
+
 export const MAPPING_VERSION_1 = 1
 export const MAPPING_VERSION_2 = 2
 export const MAPPING_VERSION_3 = 3

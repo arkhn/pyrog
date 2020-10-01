@@ -12,7 +12,7 @@ import { schema } from './schema'
 import { createContext } from './context'
 import { bootstrapDefinitions } from './fhir'
 import { authClient } from './oauth'
-import { ENV } from './constants'
+import { IN_PROD } from './constants'
 
 // AXIOS
 
@@ -58,7 +58,7 @@ const options: Options = {
 const { PORT } = process.env
 
 const main = async () => {
-  if (!(ENV && ENV === 'test')) {
+  if (IN_PROD) {
     await setAccessToken()
   }
   await bootstrapDefinitions()
