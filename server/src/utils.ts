@@ -68,7 +68,7 @@ export const getUser = async (
       // Or we use the /userinfo endpoint
       const userInfoResp = await axios.get(USER_INFO_URL!, {
         headers: {
-          authorization,
+          Authorization: authorization,
         },
       })
       userData = userInfoResp.data
