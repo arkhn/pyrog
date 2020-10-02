@@ -15,32 +15,39 @@ import { authClient } from './oauth'
 import { IN_PROD } from './constants'
 
 // AXIOS
+let accessToken: string | null = null
 
 // Set a default authentication header for fhir api calls
 const setAccessToken = async () => {
   const fhirApiToken = await authClient.credentials.getToken()
-  axios.defaults.headers.common[
-    'Authorization'
-  ] = `Bearer ${fhirApiToken.accessToken}`
+  accessToken = fhirApiToken.accessToken
 }
 
-// Add an interceptor to ask for another access token when needed
-axios.interceptors.response.use(
-  response => {
-    return response
-  },
-  async error => {
-    const originalRequest = error.config
+if (IN_PROD) {
+  // Set axios interceptor to use token
+  axios.interceptors.request.use(config => {
+    config.headers.Authorization = `Bearer ${accessToken}`
+    return config
+  })
 
-    if (IN_PROD && error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true
+  // Add an interceptor to ask for another access token when needed
+  axios.interceptors.response.use(
+    response => {
+      return response
+    },
+    async error => {
+      const originalRequest = error.config
 
-      await setAccessToken()
-      return axios(originalRequest)
-    }
-    return Promise.reject(error)
-  },
-)
+      if (IN_PROD && error.response.status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true
+
+        await setAccessToken()
+        return axios(originalRequest)
+      }
+      return Promise.reject(error)
+    },
+  )
+}
 
 const server = new GraphQLServer({
   schema,
