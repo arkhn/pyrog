@@ -24,6 +24,24 @@ const setAccessToken = async () => {
   ] = `Bearer ${fhirApiToken.accessToken}`
 }
 
+// Add an interceptor to ask for another access token when needed
+axios.interceptors.response.use(
+  response => {
+    return response
+  },
+  async error => {
+    const originalRequest = error.config
+
+    if (IN_PROD && error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true
+
+      await setAccessToken()
+      return axios(originalRequest)
+    }
+    return Promise.reject(error)
+  },
+)
+
 const server = new GraphQLServer({
   schema,
   context: createContext,
