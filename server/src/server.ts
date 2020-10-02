@@ -26,7 +26,8 @@ const setAccessToken = async () => {
 if (IN_PROD) {
   // Set axios interceptor to use token
   axios.interceptors.request.use(config => {
-    config.headers.Authorization = `Bearer ${accessToken}`
+    config.headers.Authorization =
+      config.headers.Authorization || `Bearer ${accessToken}`
     return config
   })
 
