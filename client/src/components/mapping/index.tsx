@@ -77,7 +77,7 @@ const MappingView = () => {
   ): Promise<void> => {
     try {
       const response: any = await axios.get(
-        `${FHIR_API_URL}/${type}?id=${ids.join(',')}`
+        `${FHIR_API_URL}/${type}?_id=${ids.join(',')}`
       );
       bundle.entry = [
         ...bundle.entry,
