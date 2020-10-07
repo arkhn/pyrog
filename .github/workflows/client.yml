@@ -61,7 +61,6 @@ jobs:
         with:
           context: client
           file: ./client/Dockerfile
-          no-cache: true
           build-args: |
             VERSION_NAME=${{ steps.metadata.outputs.version }}
             VERSION_SHA=${GITHUB_SHA::8}
