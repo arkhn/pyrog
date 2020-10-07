@@ -1,37 +1,24 @@
 name: pyrog-client
 
-on: [push]
+on: push
 
 jobs:
   build:
-    name: Build Pyrog client
     runs-on: ubuntu-18.04
 
-    strategy:
-      matrix:
-        node-version: [12.x]
-
     steps:
-      - uses: actions/checkout@v1
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Cache node modules
-        uses: actions/cache@v1
+          node-version: 12
+      - uses: actions/cache@v1
         with:
           path: client/node_modules
-          key: ${{ runner.OS }}-${{ matrix.node-version}}-node-modules-${{ hashFiles('client/yarn.lock') }}
-
-      - name: Install Dependencies
-        run: |
+          key: ${{ runner.os }}-${{ hashFiles('client/yarn.lock') }}
+      - run: |
           cd client
           yarn install
-
-      - name: Build
-        run: |
+      - run: |
           cd client
           yarn build
 
@@ -42,45 +29,54 @@ jobs:
   #          yarn lint
 
   publish:
-    name: Build and publish
+    needs: build
+    runs-on: ubuntu-18.04
+
     env:
       GITHUB_REGISTRY: docker.pkg.github.com
       IMAGE: arkhn/pyrog-client
-    runs-on: ubuntu-18.04
-    needs: build
-    if: github.ref == 'refs/heads/master'
-    strategy:
-      matrix:
-        environment:
-          [
-            { "name": "ambroise", "secret": "IP_VM_AMB" },
-            { "name": "aphp", "secret": "IP_VM_AP" },
-            { "name": "clb", "secret": "IP_VM_CLB" },
-            { "name": "curie", "secret": "IP_VM_CURIE" },
-            { "name": "demo", "secret": "" },
-            { "name": "dev", "secret": "" },
-            { "name": "rms", "secret": "IP_VM_REIMS" },
-            { "name": "staging", "secret": "" },
-          ]
+
     steps:
-      - uses: actions/checkout@v1
-
-      - name: Build image
-        env:
-          IP: ${{ secrets[matrix.environment.secret] }}
-          STAGE: ${{ matrix.environment.name }}
+      - id: metadata
         run: |
-          cd client
-          if [ -n "${{ matrix.environment.secret }}" ]; then
-            ./scripts/generate_client_env.sh > .env.${{ matrix.environment.name }}
+          IMAGE=arkhn/pyrog-client
+          VERSION=noop
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/}
+          elif [[ "${GITHUB_REF}" == refs/heads/* ]]; then
+            VERSION=$(echo ${GITHUB_REF#refs/heads/} | sed -r 's#/+#-#g')
           fi
-          docker build -t $IMAGE:${{ matrix.environment.name }} --build-arg ENV_FILE=.env.${{ matrix.environment.name }} .
+          TAGS="${IMAGE}:${VERSION},${IMAGE}:${GITHUB_SHA::8}"
+          if [[ "${GITHUB_REF}" == refs/heads/master ]] && [[ "${VERSION}" =~ ^v[0-9]{1,3}(\.[0-9]{1,3}(\.[0-9]{1,3})?)?$ ]]; then
+            TAGS="${TAGS},${IMAGE}:latest"
+          fi
+          echo ::set-output name=version::${VERSION}
+          echo ::set-output name=tags::${TAGS}
+          echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+      - uses: actions/checkout@v2
+      - uses: docker/setup-qemu-action@v1
+      - uses: docker/setup-buildx-action@v1
+      - uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_LOGIN }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Tag docker image with hash
-        run: |
-          docker tag $IMAGE:${{ matrix.environment.name }} $IMAGE:${{ matrix.environment.name }}-$GITHUB_SHA
-
-      - name: Publish to the docker hub
-        run: |
-          echo "${{ secrets.DOCKER_PASSWORD }}" |  docker login -u ${{ secrets.DOCKER_LOGIN }} --password-stdin
-          docker push $IMAGE
+      - uses: docker/build-push-action@v2
+        with:
+          context: client
+          file: ./client/Dockerfile
+          build-args: |
+            VERSION_NAME=${{ steps.metadata.outputs.version }}
+            VERSION_SHA=${GITHUB_SHA::8}
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.metadata.outputs.tags }}
+          labels: |
+            com.arkhn.image.title=pyrog-client
+            com.arkhn.image.description=${{ github.event.repository.description }}
+            com.arkhn.image.url=${{ github.event.repository.html_url }}
+            com.arkhn.image.source=${{ github.event.repository.clone_url }}
+            com.arkhn.image.version=${{ steps.metadata.outputs.version }}
+            com.arkhn.image.created=${{ steps.metadata.outputs.created }}
+            com.arkhn.image.revision=${{ github.sha }}
+            com.arkhn.image.licenses=${{ github.event.repository.license.spdx_id }}
