@@ -10,3 +10,4 @@
 !src
 !public
 !.env*
+!docker-entrypoint.sh
