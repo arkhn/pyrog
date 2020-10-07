@@ -32,10 +32,6 @@ jobs:
     needs: build
     runs-on: ubuntu-18.04
 
-    env:
-      GITHUB_REGISTRY: docker.pkg.github.com
-      IMAGE: arkhn/pyrog-client
-
     steps:
       - id: metadata
         run: |
