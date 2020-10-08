@@ -90,6 +90,9 @@ export const bootstrapDefinitions = async () => {
       },
     },
   )
+  if (!standardDefinitions.entry || standardDefinitions.entry.length === 0)
+    throw new Error('Could not fetch definitions from fhir-api, aborting...')
+
   await Promise.all(
     standardDefinitions.entry.map(({ resource }: any) =>
       cacheDefinition(resource),
