@@ -15,12 +15,9 @@ jobs:
         with:
           path: client/node_modules
           key: ${{ runner.os }}-${{ hashFiles('client/yarn.lock') }}
-      - run: |
-          cd client
-          yarn install
-      - run: |
-          cd client
-          yarn build
+      - run: yarn --cwd ./client install
+      - run: yarn --cwd ./client build
+
 
   # Same cleaning need to be done, see Issue #105
   #      - name: Lint
