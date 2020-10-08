@@ -53,7 +53,7 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
   }
 
   if (!user.id && !accessToken) {
-    if ('code' in params) {
+    if (stateMatch) {
       // Wait for the code to be exchanged for a token
       return <Spinner />;
     } else {
