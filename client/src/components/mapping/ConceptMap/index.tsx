@@ -348,7 +348,7 @@ const ConceptMapDialog = ({
   const displayConceptMap = (): React.ReactElement[] =>
     conceptMap.map((row, index) => (
       <tr key={index}>
-        <td></td>
+        <td />
         <td>{row.source?.value}</td>
         <td>{row.equivalence}</td>
         <td>{row.target?.value}</td>
