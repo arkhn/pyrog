@@ -7,13 +7,13 @@ import {
   IBreadcrumbProps,
   Tag
 } from '@blueprintjs/core';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 
 import { onError as onApolloError } from 'services/apollo';
-import { IReduxStore } from 'types';
+import { IReduxStore, ConceptMap } from 'types';
 import { FHIR_API_URL } from '../../../constants';
 
 // COMPONENTS
@@ -37,22 +37,6 @@ interface Props {
   input: any;
 }
 
-const resolveConceptMapTitle = async (
-  conceptMapId: string
-): Promise<string> => {
-  try {
-    const response = await axios.get(
-      `${FHIR_API_URL}/ConceptMap/${conceptMapId}`
-    );
-    return response.data.title;
-  } catch (err) {
-    console.error(
-      `Could not fecth concept map with id ${conceptMapId}: ${err}`
-    );
-    return '';
-  }
-};
-
 const InputColumn = ({ input }: Props) => {
   const dispatch = useDispatch();
 
@@ -66,10 +50,10 @@ const InputColumn = ({ input }: Props) => {
   );
   const attributeId = attributesForResource[attribute.path].id;
 
-  const [conceptMapTitle, setConceptMapTitle] = useState('None');
-  const [resolvingConceptMapTitle, setResolvingConceptMapTitle] = useState(
-    false
+  const [conceptMap, setConceptMap] = useState(
+    undefined as ConceptMap | undefined
   );
+
   const [isConceptMapOverlayVisible, setConceptMapOverlayVisible] = useState(
     false
   );
@@ -122,20 +106,21 @@ const InputColumn = ({ input }: Props) => {
     });
   };
 
-  const setTitle = useCallback(async (conceptMapId) => {
-    setResolvingConceptMapTitle(true);
-    const title = await resolveConceptMapTitle(conceptMapId);
-    setConceptMapTitle(title);
-    setResolvingConceptMapTitle(false);
-  }, []);
-
   useEffect(() => {
     if (input.conceptMapId) {
-      setTitle(input.conceptMapId);
-    } else {
-      setConceptMapTitle('None');
+      const fetchConceptMap = async (conceptMapId: string) => {
+        const response = await axios.get(
+          `${FHIR_API_URL}/ConceptMap/${conceptMapId}`
+        );
+        setConceptMap(response.data as ConceptMap);
+      };
+      fetchConceptMap(input.conceptMapId).catch(e => {
+        console.error(
+          `Could not fecth concept map with id ${input.conceptMapId}: ${e}`
+        );
+      });
     }
-  }, [input.conceptMapId, setTitle]);
+  }, [input.conceptMapId]);
 
   return (
     <div className="input-column">
@@ -214,11 +199,10 @@ const InputColumn = ({ input }: Props) => {
                   <Tag>CONCEPT MAP</Tag>
                   <ButtonGroup>
                     <Button
-                      text={conceptMapTitle}
+                      text={conceptMap?.title}
                       onClick={(_e: React.MouseEvent) => {
                         setConceptMapOverlayVisible(true);
                       }}
-                      loading={resolvingConceptMapTitle}
                     />
                     <Button
                       className="delete-button"
@@ -277,6 +261,7 @@ const InputColumn = ({ input }: Props) => {
       <ConceptMapDialog
         isOpen={isConceptMapOverlayVisible}
         onClose={_ => setConceptMapOverlayVisible(false)}
+        currentConceptMap={conceptMap}
         updateInputCallback={(conceptMapId: string) => {
           updateInput({
             variables: {

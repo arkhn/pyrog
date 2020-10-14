@@ -33,12 +33,14 @@ interface Props {
     event?: React.SyntheticEvent<HTMLElement, Event> | undefined
   ) => void;
   updateInputCallback: (conceptMap: string) => void;
+  currentConceptMap: undefined | ConceptMap;
 }
 
 const ConceptMapDialog = ({
   isOpen,
   onClose,
-  updateInputCallback
+  updateInputCallback,
+  currentConceptMap
 }: Props): React.ReactElement => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
 
@@ -533,17 +535,14 @@ const ConceptMapDialog = ({
           targetTerminology.title
         }`.replace(/\s/g, '')
       );
-
     // Use existing concept map if there is one
-    let existingConceptMap: ConceptMap | undefined;
-    for (const map of existingConceptMaps) {
-      if (
-        map.sourceUri === sourceTerminology?.valueSetUrl &&
-        map.targetUri === targetTerminology?.valueSetUrl
-      ) {
-        existingConceptMap = map;
-        break;
-      }
+    let existingConceptMap: ConceptMap | undefined = currentConceptMap;
+    if (!existingConceptMap) {
+      existingConceptMap = existingConceptMaps.find(
+        map =>
+          map.sourceUri === sourceTerminology?.valueSetUrl &&
+          map.targetUri === targetTerminology?.valueSetUrl
+      );
     }
     if (existingConceptMap) {
       setExistingConceptMapId(existingConceptMap.id);
@@ -584,7 +583,7 @@ const ConceptMapDialog = ({
             <table className="bp3-html-table">
               <thead>
                 <tr>
-                  <th className="head-col"></th>
+                  <th className="head-col" />
                   <th className="source-col">
                     {'Source'}
                     {creatingNewTerminology
