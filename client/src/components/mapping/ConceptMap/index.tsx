@@ -225,6 +225,20 @@ const ConceptMapDialog = ({
     />
   );
 
+  const selectTargetCodeSystem = (
+    <TerminologySelect
+      codeSystems={existingCodeSystems}
+      valueSets={existingValueSets}
+      selectedSystem={targetTerminology as any}
+      disabledOptions={[sourceTerminology]}
+      isLoading={isLoadingCodeSystems || isLoadingValueSets}
+      onChange={(terminology: Terminology): void => {
+        setTargetTerminology(terminology);
+        resetMap();
+      }}
+    />
+  );
+
   const enterNewCodeSystemName = (
     <div className="enter-code-name">
       <input
@@ -245,20 +259,6 @@ const ConceptMapDialog = ({
         }}
       />
     </div>
-  );
-
-  const selectTargetCodeSystem = (
-    <TerminologySelect
-      codeSystems={existingCodeSystems}
-      valueSets={existingValueSets}
-      selectedSystem={targetTerminology as any}
-      disabledOptions={[sourceTerminology]}
-      isLoading={isLoadingCodeSystems || isLoadingValueSets}
-      onChange={(terminology: Terminology): void => {
-        setTargetTerminology(terminology);
-        resetMap();
-      }}
-    />
   );
 
   const deleteRowButton = (index: number): React.ReactElement => (
@@ -535,15 +535,15 @@ const ConceptMapDialog = ({
           targetTerminology.title
         }`.replace(/\s/g, '')
       );
+    if (currentConceptMap) setConceptMapTitle(currentConceptMap.title);
     // Use existing concept map if there is one
-    let existingConceptMap: ConceptMap | undefined = currentConceptMap;
-    if (!existingConceptMap) {
-      existingConceptMap = existingConceptMaps.find(
+    const existingConceptMap =
+      currentConceptMap ||
+      existingConceptMaps.find(
         map =>
           map.sourceUri === sourceTerminology?.valueSetUrl &&
           map.targetUri === targetTerminology?.valueSetUrl
       );
-    }
     if (existingConceptMap) {
       setExistingConceptMapId(existingConceptMap.id);
       // TODO we currently only support one target because we don't understand
@@ -568,8 +568,34 @@ const ConceptMapDialog = ({
     sourceTerminology,
     newTerminologyName,
     targetTerminology,
-    existingConceptMaps
+    existingConceptMaps,
+    currentConceptMap
   ]);
+
+  useEffect(() => {
+    if (
+      currentConceptMap &&
+      existingCodeSystems.length > 0 &&
+      existingValueSets.length > 0
+    ) {
+      const source =
+        existingCodeSystems.find(
+          codeSystem => currentConceptMap.sourceUri === codeSystem.valueSetUrl
+        ) ||
+        existingValueSets.find(
+          valueSet => currentConceptMap.sourceUri === valueSet.valueSetUrl
+        );
+      const target =
+        existingCodeSystems.find(
+          codeSystem => currentConceptMap.targetUri === codeSystem.valueSetUrl
+        ) ||
+        existingValueSets.find(
+          valueSet => currentConceptMap.targetUri === valueSet.valueSetUrl
+        );
+      if (source) setSourceTerminology(source);
+      if (target) setTargetTerminology(target);
+    }
+  }, [existingCodeSystems, existingValueSets, currentConceptMap]);
 
   return (
     <React.Fragment>
@@ -621,14 +647,14 @@ const ConceptMapDialog = ({
               <ButtonGroup vertical={true}>
                 {/* TODO display only if user is admin
               TODO better place for this */}
-                {existingConceptMapId ? (
+                {existingConceptMapId && (
                   <Button
                     intent="danger"
                     text={'Modify concept map'}
                     onClick={(): void => setModifyAnyway(true)}
                     disabled={modifyAnyway}
                   />
-                ) : null}
+                )}
                 <Button
                   intent="primary"
                   type="submit"

@@ -39,11 +39,11 @@ const CodeSelect = ({
   allowCreate
 }: Props): React.ReactElement => {
   const [creatingNewCode, setCreatingNewCode] = useState(false);
-  const codes = terminology.codes;
+  const codes = terminology?.codes;
 
   return (
     <ButtonGroup className="code-select-button-group">
-      {codes.length === 0 || creatingNewCode ? (
+      {codes?.length === 0 || creatingNewCode ? (
         <div className="value-system-input">
           <input
             className="text-input"

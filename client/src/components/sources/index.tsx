@@ -105,7 +105,8 @@ const SourcesView = (): React.ReactElement => {
         <div id="software-cards">
           {loadingSources ? (
             <Spinner />
-          ) : dataSources?.sources ? (
+          ) : (
+            dataSources?.sources &&
             dataSources.sources.map((source: ISelectedSource) => (
               <SourceCard
                 key={source.id}
@@ -116,7 +117,7 @@ const SourcesView = (): React.ReactElement => {
                 deleting={deletingSource && sourceToDelete?.id === source.id}
               />
             ))
-          ) : null}
+          )}
         </div>
         <Alert
           cancelButtonText="Cancel"
