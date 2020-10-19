@@ -12,6 +12,7 @@ import { IReduxStore } from 'types';
 import SourceSelect from 'components/selects/sourceSelect';
 import ResourceMultiSelect from 'components/selects/resourceMultiSelect';
 
+import { Resource } from 'types';
 import { RIVER_URL } from '../../constants';
 
 import './style.scss';
@@ -26,11 +27,6 @@ interface Source {
     id: string;
   };
   resources: Resource[];
-}
-interface Resource {
-  id: string;
-  label: string;
-  definitionId: string;
 }
 
 // GRAPHQL
@@ -93,7 +89,7 @@ const FhirRiverView = (): React.ReactElement => {
         {
           resources: selectedResources.map(r => ({
             resource_id: r.id,
-            resource_type: r.definitionId
+            resource_type: r.definition.type
           }))
         },
         {

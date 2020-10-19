@@ -2,6 +2,8 @@ import { MenuItem } from '@blueprintjs/core';
 import { ItemPredicate, MultiSelect } from '@blueprintjs/select';
 import React from 'react';
 
+import { Resource } from 'types';
+
 interface Props {
   resources: Resource[];
   selectedResources: Resource[];
@@ -10,17 +12,11 @@ interface Props {
   onRemoveTag?: (item: string, ind: number) => void;
 }
 
-interface Resource {
-  id: string;
-  label: string;
-  definitionId: string;
-}
-
 const selectAllItem = {
   id: '__SELECT_ALL__',
   label: '',
   definitionId: ''
-};
+} as Resource;
 
 const ResourceMultiSelect = ({
   resources,
