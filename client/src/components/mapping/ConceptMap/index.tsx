@@ -560,7 +560,6 @@ const ConceptMapDialog = ({
           }
         }))
       ];
-      console.log(existingConceptMap);
       setConceptMap(existingConceptMap.group.reduce(reducer, []));
       setConceptMapTitle(existingConceptMap.title);
       setConceptMapDescription(existingConceptMap.description || '');
