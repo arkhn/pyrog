@@ -24,15 +24,26 @@ yarn start
 
 ### Custom setup
 
-`.env` already contains a default setup. However, you can modify it with a custom setup. This allows you to point to a specific Pyrog server. This is useful if you are working on the client part of Pyrog only and do not want to run a Pyrog server locally. You could then use our running staging Pyrog server and your `.env` file should then look something like this:
+`.env.template` contains env variables used by the application.
+To launch the applicaiton with a custom setup, you need to modify it to point to a specific services. This is useful if you are working on the client part of Pyrog only and do not want to run a Pyrog server locally.
+To use it, just save the new file as `.env` and execute `yarn start`.
 
-```
-TOKEN_STORAGE_KEY="ARKHN_TOKEN"
-ENGINE_BACKEND_URL=https://engine.arkhn.org
-HTTP_BACKEND_URL=https://graphql.pyrog.staging.arkhn.org
-WS_BACKEND_URL=ws://graphql.pyrog.staging.arkhn.org
-CLEANING_SCRIPTS_URL=http://localhost:5000
-```
+Here is a brief explanation of the different variables:
+
+- PORT: the port on which the application will run
+- REACT_APP_HTTP_BACKEND_URL: url to the pyrog server to use. It can be local or you can use something like `https://staging.arkhn.com/pyrog-api`
+- REACT_APP_RIVER_URL: url to river api. It can be local or you can use something like `https://staging.arkhn.com/river`
+- REACT_APP_PAGAI_URL: url to pagai api. It can be local or you can use something like `https://staging.arkhn.com/pagai`
+- REACT_APP_CLEANING_SCRIPTS_URL: url to the cleaning script api. It can be local or you can use something like `https://staging.arkhn.com/scripts`
+- REACT_APP_FHIR_API_URL: url to fhir api. It can be local or you can use something like `https://staging.arkhn.com/api`
+- REACT_APP_CLIENT_ID: the id of the client known by hydra (oauth provider)
+- REACT_APP_CLIENT_SECRET: the secret of the client known by hydra (oauth provider)
+- REACT_APP_AUTH_URL: url to Hydra's "auth" route. It can be local or you can use something like `https://staging.arkhn.com/hydra/oauth2/auth`. Note that if you use a remote server, your client needs to be registered with the right configuration (redirect urls, etc.).
+- REACT_APP_TOKEN_URL: url to Hydra's "token" route. It can be local or you can use something like `https://staging.arkhn.com/hydra/oauth2/token`. Note that if you use a remote server, your client needs to be registered.
+- REACT_APP_REVOKE_URL: url to Hydra's "revoke" route. It can be local or you can use something like `https://staging.arkhn.com/hydra/oauth2/token`. Note that if you use a remote server, your client needs to be registered.
+- REACT_APP_LOGOUT_URL: url to Hydra's "logout" route. It can be local or you can use something like `https://staging.arkhn.com/hydra/oauth2/logout`. Note that if you use a remote server, your client needs to be registered.
+- REACT_APP_LOGIN_REDIRECT_URL: url where the user will be redirected after login. If you run the application locally, it should be something like `http://localhost:1729/pyrog/`.
+- REACT_APP_LOGOUT_REDIRECT_URL: url where the user will be redirected after logout. If you run the application locally, it should be something like `http://localhost:1729/pyrog/login/`.
 
 ### Install dependencies
 

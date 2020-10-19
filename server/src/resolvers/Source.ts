@@ -97,7 +97,6 @@ export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
   }
   const source = await ctx.prisma.source.create({
     data: {
-      id: parsedMapping ? parsedMapping.source.id : undefined,
       name,
       template: { connect: { name: templateName } },
     },

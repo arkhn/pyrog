@@ -38,7 +38,13 @@ export const refreshToken = async () => {
   if (!tokenData) return false;
   const oauthToken = authClient.createToken(JSON.parse(tokenData));
 
-  const updatedToken = await oauthToken.refresh();
+  let updatedToken;
+  try {
+    updatedToken = await oauthToken.refresh();
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
 
   localStorage.setItem(ACCESS_TOKEN_STORAGE_KEY, updatedToken.accessToken);
   localStorage.setItem(REFRESH_TOKEN_STORAGE_KEY, updatedToken.refreshToken);
