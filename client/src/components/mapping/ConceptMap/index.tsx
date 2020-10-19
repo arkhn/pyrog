@@ -97,7 +97,7 @@ const ConceptMapDialog = ({
       );
     } catch (err) {
       console.error(
-        `Could not fecth code systems: ${
+        `Could not fetch code systems: ${
           err.response ? err.response.data : err.message
         }`
       );
@@ -146,7 +146,7 @@ const ConceptMapDialog = ({
       );
     } catch (err) {
       console.error(
-        `Could not fecth value sets: ${
+        `Could not fetch value sets: ${
           err.response ? err.response.data : err.message
         }`
       );
@@ -157,13 +157,14 @@ const ConceptMapDialog = ({
   const fetchConceptMaps = async (): Promise<void> => {
     // Fetch concept maps
     try {
-      const conceptMaps = await axios.get(`${FHIR_API_URL}/ConceptMap`);
-      setExistingConceptMaps(
-        conceptMaps.data.entry.map(({ resource }: any) => resource)
+      const response = await axios.get(`${FHIR_API_URL}/ConceptMap`);
+      const conceptMaps = response.data?.entry.map(
+        ({ resource }: any) => resource
       );
+      if (conceptMaps) setExistingConceptMaps(conceptMaps);
     } catch (err) {
       console.error(
-        `Could not fecth concept maps: ${
+        `Could not fetch concept maps: ${
           err.response ? err.response.data : err.message
         }`
       );
@@ -559,6 +560,7 @@ const ConceptMapDialog = ({
           }
         }))
       ];
+      console.log(existingConceptMap);
       setConceptMap(existingConceptMap.group.reduce(reducer, []));
       setConceptMapTitle(existingConceptMap.title);
       setConceptMapDescription(existingConceptMap.description || '');

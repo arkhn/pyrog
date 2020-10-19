@@ -112,12 +112,12 @@ const InputColumn = ({ input }: Props) => {
         const response = await axios.get(
           `${FHIR_API_URL}/ConceptMap/${conceptMapId}`
         );
+        if (response.data.resourceType === 'OperationOutcome')
+          throw new Error(response.data.issue[0].diagnostics);
         setConceptMap(response.data as ConceptMap);
       };
       fetchConceptMap(input.conceptMapId).catch(e => {
-        console.error(
-          `Could not fecth concept map with id ${input.conceptMapId}: ${e}`
-        );
+        console.error(e);
       });
     }
   }, [input.conceptMapId]);
@@ -199,7 +199,7 @@ const InputColumn = ({ input }: Props) => {
                   <Tag>CONCEPT MAP</Tag>
                   <ButtonGroup>
                     <Button
-                      text={conceptMap?.title}
+                      text={conceptMap?.title || 'None'}
                       onClick={(_e: React.MouseEvent) => {
                         setConceptMapOverlayVisible(true);
                       }}
