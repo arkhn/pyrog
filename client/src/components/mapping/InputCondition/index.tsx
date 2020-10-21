@@ -51,8 +51,8 @@ const InputCondition = ({ condition }: Props) => {
   const schema = useSelector(
     (state: IReduxStore) => state.selectedNode.source.credential.schema
   );
-  const resource = useSelector(
-    (state: IReduxStore) => state.selectedNode.resource
+  const { resource } = useSelector(
+    (state: IReduxStore) => state.selectedNode
   );
   const path = useSelector(
     (state: IReduxStore) => state.selectedNode.attribute.path
@@ -80,11 +80,9 @@ const InputCondition = ({ condition }: Props) => {
     onError
   });
 
-  const [action, setAction] = React.useState(condition.action);
-  const [table, setTable] = React.useState(condition.sqlValue.table);
-  const [column, setColumn] = React.useState(condition.sqlValue.column);
-  const [relation, setRelation] = React.useState(condition.relation);
-  const [value, setValue] = React.useState(condition.value || '');
+  const [newConditionValue, setNewConditionValue] = React.useState(
+    condition.value || ''
+  );
 
   useEffect(() => {});
   const ResourceAttributes: IAttribute[] =
@@ -163,10 +161,9 @@ const InputCondition = ({ condition }: Props) => {
         <Tag minimal={true}>ACTION</Tag>
         <Tag intent={'primary'} large={true}>
           <StringSelect
-            inputItem={action}
+            inputItem={condition.action}
             items={availableActions}
             onChange={(action: string): void => {
-              setAction(action);
               updateCondition({
                 variables: {
                   conditionId: condition.id,
@@ -185,10 +182,9 @@ const InputCondition = ({ condition }: Props) => {
         <Tag minimal={true}>COLUMN</Tag>
         <Tag intent={'primary'} large={true}>
           <ColumnSelect
-            initialTable={table}
-            initialColumn={column}
+            initialTable={condition.sqlValue.table}
+            initialColumn={condition.sqlValue.column}
             tableChangeCallback={(e: string) => {
-              setTable(e);
               updateCondition({
                 variables: {
                   conditionId: condition.id,
@@ -198,7 +194,6 @@ const InputCondition = ({ condition }: Props) => {
               });
             }}
             columnChangeCallback={(e: string) => {
-              setColumn(e);
               updateCondition({
                 variables: {
                   conditionId: condition.id,
@@ -217,11 +212,10 @@ const InputCondition = ({ condition }: Props) => {
         <Tag minimal={true}>RELATION</Tag>
         <Tag intent={'primary'} large={true}>
           <StringSelect
-            inputItem={relation}
+            inputItem={condition.relation}
             items={Array.from(conditionsMap.keys())}
             displayItem={item => conditionsMap.get(item)!}
             onChange={(relation: string): void => {
-              setRelation(relation);
               updateCondition({
                 variables: {
                   conditionId: condition.id,
@@ -241,16 +235,17 @@ const InputCondition = ({ condition }: Props) => {
           <Tag intent={'primary'} large={true}>
             <input
               className="text-input"
-              value={value}
+              value={newConditionValue}
               type="text"
               placeholder="value..."
               onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
-                // NOTE value updated in DB at each character. Put a submit button?
-                setValue(e.target.value);
+                setNewConditionValue(e.target.value);
+              }}
+              onBlur={(): void => {
                 updateCondition({
                   variables: {
                     conditionId: condition.id,
-                    value: e.target.value
+                    value: newConditionValue
                   }
                 });
               }}
@@ -260,24 +255,10 @@ const InputCondition = ({ condition }: Props) => {
       )}
       <div onClick={(e: React.MouseEvent) => e.stopPropagation()}>
         <ConditionSelect
-          inputItem={{
-            id: condition.id,
-            action,
-            sqlValue: {
-              table,
-              column
-            },
-            relation,
-            value
-          }}
+          inputItem={condition}
           items={resourceConditions}
           itemToKey={conditionToName}
           onChange={(c: Condition): void => {
-            setAction(c.action);
-            setTable(c.sqlValue.table);
-            setColumn(c.sqlValue.column);
-            setRelation(c.relation);
-            setValue(c.value);
             updateCondition({
               variables: {
                 conditionId: condition.id,
