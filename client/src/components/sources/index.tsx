@@ -106,6 +106,7 @@ const SourcesView = (): React.ReactElement => {
           {loadingSources ? (
             <Spinner />
           ) : (
+            dataSources?.sources &&
             dataSources.sources.map((source: ISelectedSource) => (
               <SourceCard
                 key={source.id}

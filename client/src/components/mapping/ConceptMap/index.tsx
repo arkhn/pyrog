@@ -33,12 +33,14 @@ interface Props {
     event?: React.SyntheticEvent<HTMLElement, Event> | undefined
   ) => void;
   updateInputCallback: (conceptMap: string) => void;
+  currentConceptMap: undefined | ConceptMap;
 }
 
 const ConceptMapDialog = ({
   isOpen,
   onClose,
-  updateInputCallback
+  updateInputCallback,
+  currentConceptMap
 }: Props): React.ReactElement => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
 
@@ -95,7 +97,7 @@ const ConceptMapDialog = ({
       );
     } catch (err) {
       console.error(
-        `Could not fecth code systems: ${
+        `Could not fetch code systems: ${
           err.response ? err.response.data : err.message
         }`
       );
@@ -144,7 +146,7 @@ const ConceptMapDialog = ({
       );
     } catch (err) {
       console.error(
-        `Could not fecth value sets: ${
+        `Could not fetch value sets: ${
           err.response ? err.response.data : err.message
         }`
       );
@@ -155,13 +157,14 @@ const ConceptMapDialog = ({
   const fetchConceptMaps = async (): Promise<void> => {
     // Fetch concept maps
     try {
-      const conceptMaps = await axios.get(`${FHIR_API_URL}/ConceptMap`);
-      setExistingConceptMaps(
-        conceptMaps.data.entry.map(({ resource }: any) => resource)
+      const response = await axios.get(`${FHIR_API_URL}/ConceptMap`);
+      const conceptMaps = response.data?.entry.map(
+        ({ resource }: any) => resource
       );
+      if (conceptMaps) setExistingConceptMaps(conceptMaps);
     } catch (err) {
       console.error(
-        `Could not fecth concept maps: ${
+        `Could not fetch concept maps: ${
           err.response ? err.response.data : err.message
         }`
       );
@@ -223,6 +226,20 @@ const ConceptMapDialog = ({
     />
   );
 
+  const selectTargetCodeSystem = (
+    <TerminologySelect
+      codeSystems={existingCodeSystems}
+      valueSets={existingValueSets}
+      selectedSystem={targetTerminology as any}
+      disabledOptions={[sourceTerminology]}
+      isLoading={isLoadingCodeSystems || isLoadingValueSets}
+      onChange={(terminology: Terminology): void => {
+        setTargetTerminology(terminology);
+        resetMap();
+      }}
+    />
+  );
+
   const enterNewCodeSystemName = (
     <div className="enter-code-name">
       <input
@@ -243,20 +260,6 @@ const ConceptMapDialog = ({
         }}
       />
     </div>
-  );
-
-  const selectTargetCodeSystem = (
-    <TerminologySelect
-      codeSystems={existingCodeSystems}
-      valueSets={existingValueSets}
-      selectedSystem={targetTerminology as any}
-      disabledOptions={[sourceTerminology]}
-      isLoading={isLoadingCodeSystems || isLoadingValueSets}
-      onChange={(terminology: Terminology): void => {
-        setTargetTerminology(terminology);
-        resetMap();
-      }}
-    />
   );
 
   const deleteRowButton = (index: number): React.ReactElement => (
@@ -348,7 +351,7 @@ const ConceptMapDialog = ({
   const displayConceptMap = (): React.ReactElement[] =>
     conceptMap.map((row, index) => (
       <tr key={index}>
-        <td></td>
+        <td />
         <td>{row.source?.value}</td>
         <td>{row.equivalence}</td>
         <td>{row.target?.value}</td>
@@ -533,18 +536,15 @@ const ConceptMapDialog = ({
           targetTerminology.title
         }`.replace(/\s/g, '')
       );
-
+    if (currentConceptMap) setConceptMapTitle(currentConceptMap.title);
     // Use existing concept map if there is one
-    let existingConceptMap: ConceptMap | undefined;
-    for (const map of existingConceptMaps) {
-      if (
-        map.sourceUri === sourceTerminology?.valueSetUrl &&
-        map.targetUri === targetTerminology?.valueSetUrl
-      ) {
-        existingConceptMap = map;
-        break;
-      }
-    }
+    const existingConceptMap =
+      currentConceptMap ||
+      existingConceptMaps.find(
+        map =>
+          map.sourceUri === sourceTerminology?.valueSetUrl &&
+          map.targetUri === targetTerminology?.valueSetUrl
+      );
     if (existingConceptMap) {
       setExistingConceptMapId(existingConceptMap.id);
       // TODO we currently only support one target because we don't understand
@@ -569,7 +569,8 @@ const ConceptMapDialog = ({
     sourceTerminology,
     newTerminologyName,
     targetTerminology,
-    existingConceptMaps
+    existingConceptMaps,
+    currentConceptMap
   ]);
 
   return (
@@ -584,7 +585,7 @@ const ConceptMapDialog = ({
             <table className="bp3-html-table">
               <thead>
                 <tr>
-                  <th className="head-col"></th>
+                  <th className="head-col" />
                   <th className="source-col">
                     {'Source'}
                     {creatingNewTerminology
@@ -622,14 +623,14 @@ const ConceptMapDialog = ({
               <ButtonGroup vertical={true}>
                 {/* TODO display only if user is admin
               TODO better place for this */}
-                {existingConceptMapId ? (
+                {existingConceptMapId && (
                   <Button
                     intent="danger"
                     text={'Modify concept map'}
                     onClick={(): void => setModifyAnyway(true)}
                     disabled={modifyAnyway}
                   />
-                ) : null}
+                )}
                 <Button
                   intent="primary"
                   type="submit"

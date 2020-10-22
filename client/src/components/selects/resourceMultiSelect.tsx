@@ -66,7 +66,7 @@ const ResourceMultiSelect = ({
       items={resources.length > 0 ? [selectAllItem, ...resources] : []}
       tagRenderer={resource => resource.definitionId}
       tagInputProps={{
-        onRemove: onRemoveTag
+        onRemove: onRemoveTag as (value: React.ReactNode, index: number) => void
       }}
       itemRenderer={renderResource}
       itemPredicate={filterResources}
