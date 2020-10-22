@@ -39,9 +39,10 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
   const dispatch = useDispatch();
 
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const { resource, attribute: selectedAttribute } = useSelector(
+  const { resource, source, attribute: selectedAttribute } = useSelector(
     (state: IReduxStore) => state.selectedNode
   );
+  const user = useSelector((state: IReduxStore) => state.user);
   const baseDefinitionId = resource.definition.id;
 
   const { data, loading } = useQuery(qStructureDisplay, {
@@ -60,6 +61,16 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
   const attributesForResource: { [k: string]: IAttribute } = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
   );
+  const attributesWithInputs = Object.keys(attributesForResource).filter(
+    path => attributesForResource[path].inputGroups.length > 0
+  );
+
+  const isAdmin = user && user.role === 'ADMIN';
+  const isWriter =
+    source &&
+    source.accessControls.filter(
+      acl => acl.role === 'WRITER' && acl.user.id === user.id
+    ).length > 0;
 
   const buildAttributes = (parent?: Attribute) => ({
     attribute,
@@ -251,8 +262,19 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     return node;
   };
 
+  // For source readers, we only want to display attributes that are filled
+  const shoudlBeDisplayed = (pathString: string) =>
+    isAdmin ||
+    isWriter ||
+    attributesWithInputs.some(
+      el => el !== pathString && el.startsWith(pathString)
+    );
+
   const genTreeLevel = (attributes: Attribute[]): TreeNode[] =>
-    attributes.map(buildNodeFromAttribute).filter(Boolean) as TreeNode[];
+    attributes
+      .filter(attr => shoudlBeDisplayed(attr.path))
+      .map(buildNodeFromAttribute)
+      .filter(Boolean) as TreeNode[];
 
   const fetchAttributeDefinition = async (
     parent: Attribute
