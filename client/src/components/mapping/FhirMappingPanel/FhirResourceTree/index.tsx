@@ -61,8 +61,10 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
   const attributesForResource: { [k: string]: IAttribute } = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
   );
-  const attributesWithInputs = Object.keys(attributesForResource).filter(
-    path => attributesForResource[path].inputGroups.length > 0
+  const attributesWithInputs = Object.keys(attributesForResource).filter(path =>
+    attributesForResource[path].inputGroups.some(
+      group => group.inputs.length > 0
+    )
   );
 
   const isAdmin = user && user.role === 'ADMIN';
@@ -266,9 +268,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
   const shoudlBeDisplayed = (pathString: string) =>
     isAdmin ||
     isWriter ||
-    attributesWithInputs.some(
-      el => el !== pathString && el.startsWith(pathString)
-    );
+    attributesWithInputs.some(el => el.startsWith(pathString));
 
   const genTreeLevel = (attributes: Attribute[]): TreeNode[] =>
     attributes
