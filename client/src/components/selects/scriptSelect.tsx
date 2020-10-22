@@ -25,16 +25,12 @@ interface Props {
 }
 
 const filterByName: ItemPredicate<Script> = (query, item) =>
-  item.name.toLowerCase().indexOf(query.toLowerCase()) >= 0;
+  item.name.toLowerCase().startsWith(query.toLowerCase());
 
-const sortItems = (scripts: Script[]) =>
-  scripts.sort((s1, s2) => {
-    const name1 = s1.name.toLowerCase();
-    const name2 = s2.name.toLowerCase();
-    if (name1 < name2) return -1;
-    if (name1 > name2) return 1;
-    return 0;
-  });
+const sortItems = (scripts: Script[]): Script[] =>
+  scripts.sort((s1: Script, s2: Script): number =>
+    s1.name.localeCompare(s2.name)
+  );
 
 const renderItem: ItemRenderer<Script> = (item, { handleClick }) => {
   return (

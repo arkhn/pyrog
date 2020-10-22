@@ -573,31 +573,6 @@ const ConceptMapDialog = ({
     currentConceptMap
   ]);
 
-  useEffect(() => {
-    if (
-      currentConceptMap &&
-      existingCodeSystems.length > 0 &&
-      existingValueSets.length > 0
-    ) {
-      const source =
-        existingCodeSystems.find(
-          codeSystem => currentConceptMap.sourceUri === codeSystem.valueSetUrl
-        ) ||
-        existingValueSets.find(
-          valueSet => currentConceptMap.sourceUri === valueSet.valueSetUrl
-        );
-      const target =
-        existingCodeSystems.find(
-          codeSystem => currentConceptMap.targetUri === codeSystem.valueSetUrl
-        ) ||
-        existingValueSets.find(
-          valueSet => currentConceptMap.targetUri === valueSet.valueSetUrl
-        );
-      if (source) setSourceTerminology(source);
-      if (target) setTargetTerminology(target);
-    }
-  }, [existingCodeSystems, existingValueSets, currentConceptMap]);
-
   return (
     <React.Fragment>
       <Dialog isOpen={isOpen} onClose={onClose}>
