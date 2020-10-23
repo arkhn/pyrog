@@ -1,6 +1,9 @@
 name: pyrog-client
 
-on: [push]
+on:
+  push:
+    paths:
+      - "front/**"
 
 jobs:
   build:
@@ -25,62 +28,63 @@ jobs:
           path: client/node_modules
           key: ${{ runner.OS }}-${{ matrix.node-version}}-node-modules-${{ hashFiles('client/yarn.lock') }}
 
-      - name: Install Dependencies
-        run: |
-          cd client
-          yarn install
-
-      - name: Build
-        run: |
-          cd client
-          yarn build
-
-  # Same cleaning need to be done, see Issue #105
-  #      - name: Lint
-  #        run: |
-  #          cd client
-  #          yarn lint
+      - run: yarn --cwd ./client install
+      - run: yarn --cwd ./client build
+      # Some cleaning need to be done, see Issue #105
+      # - run: yarn --cwd ./client lint
 
   publish:
-    name: Build and publish
-    env:
-      GITHUB_REGISTRY: docker.pkg.github.com
-      IMAGE: arkhn/pyrog-client
-    runs-on: ubuntu-18.04
     needs: build
-    if: github.ref == 'refs/heads/master'
-    strategy:
-      matrix:
-        environment:
-          [
-            { "name": "ambroise", "secret": "IP_VM_AMB" },
-            { "name": "aphp", "secret": "IP_VM_AP" },
-            { "name": "clb", "secret": "IP_VM_CLB" },
-            { "name": "curie", "secret": "IP_VM_CURIE" },
-            { "name": "demo", "secret": "" },
-            { "name": "dev", "secret": "" },
-            { "name": "rms", "secret": "IP_VM_REIMS" },
-            { "name": "staging", "secret": "" },
-          ]
+    runs-on: ubuntu-18.04
+
     steps:
-      - uses: actions/checkout@v1
-
-      - name: Build image
-        env:
-          IP: ${{ secrets[matrix.environment.secret] }}
-          STAGE: ${{ matrix.environment.name }}
+      - id: metadata
         run: |
-          cd client
-          if [ -n "${{ matrix.environment.secret }}" ]; then
-            ./scripts/generate_client_env.sh > .env.${{ matrix.environment.name }}
+          IMAGE=arkhn/pyrog-client
+          # Always tag with first 8 of sha
+          TAGS="${IMAGE}:${GITHUB_SHA::8}"
+
+          # Has this workflow been triggered by an app tag ?
+          if [[ "${GITHUB_REF}" == refs/tags/app/* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/app/}
+            # Is the tag on master and does it follow numeric versioning ?
+            if [[ "${{ github.event.base_ref }}" == refs/heads/master ]] && [[ "${VERSION}" =~ ^v[0-9]{1,3}(\.[0-9]{1,3}(\.[0-9]{1,3})?)?$ ]]; then
+              TAGS="${TAGS},${IMAGE}:latest"
+            fi
+          # Has this workflow been triggered by a branch ?
+          elif [[ "${GITHUB_REF}" == refs/heads/* ]]; then
+            VERSION=$(echo ${GITHUB_REF#refs/heads/} | sed -r 's#/+#-#g')
           fi
-          docker build -t $IMAGE:${{ matrix.environment.name }} --build-arg ENV_FILE=.env.${{ matrix.environment.name }} .
+          if [[ ! -z "${VERSION}" ]]; then
+            TAGS="${TAGS},${IMAGE}:${VERSION}"
+          fi
+          echo ::set-output name=version::${VERSION}
+          echo ::set-output name=tags::${TAGS}
+          echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+      - uses: actions/checkout@v2
+      - uses: docker/setup-qemu-action@v1
+      - uses: docker/setup-buildx-action@v1
+      - uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_LOGIN }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Tag docker image with hash
-        run: |
-          docker tag $IMAGE:${{ matrix.environment.name }} $IMAGE:${{ matrix.environment.name }}-$GITHUB_SHA
-
-      - name: Publish to the docker hub
-        run: |
-          echo "${{ secrets.DOCKER_PASSWORD }}" |  docker login -u ${{ secrets.DOCKER_LOGIN }} --password-stdin
-          docker push $IMAGE
+      - uses: docker/build-push-action@v2
+        with:
+          context: front
+          file: ./front/Dockerfile
+          build-args: |
+            VERSION_NAME=${{ steps.metadata.outputs.version }}
+            VERSION_SHA=${GITHUB_SHA::8}
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.metadata.outputs.tags }}
+          labels: |
+            com.arkhn.image.title=front-api
+            com.arkhn.image.description=${{ github.event.repository.description }}
+            com.arkhn.image.url=${{ github.event.repository.html_url }}
+            com.arkhn.image.source=${{ github.event.repository.clone_url }}
+            com.arkhn.image.version=${{ steps.metadata.outputs.version }}
+            com.arkhn.image.created=${{ steps.metadata.outputs.created }}
+            com.arkhn.image.revision=${{ github.sha }}
+            com.arkhn.image.licenses=${{ github.event.repository.license.spdx_id }}

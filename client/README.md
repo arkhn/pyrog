@@ -65,6 +65,41 @@ yarn run build
 
 This will create bundles and output them to `./dist/`. These files can then be exported to a distant production server running the application.
 
+## Release
+
+Each push (commits and/or tags) will publish a single image to the DockerHub registry.
+
+Each image will have one or more docker tags, depending on the context:
+
+- on every branch (including `master`), images have following tags:
+  - the first 8 chars of the targetted commit hash,
+  - the branch name, with `/` replaced by `-`. For instance the branch `jd/fix/1` will have the `jd-fix-1` tag on DockerHub.
+- on `master`, images have **additional** tags:
+  - the version, only if the push is a tag (i.e. `git push --tags app/<version>`),
+  - the `latest` tag, for the most recent pushed tag.
+
+## Versioning of `pyrog-client`
+
+The app must follow a [**semantic versioning**](https://semver.org/).
+
+## Publishing a new release of `pyrog-client`
+
+### 1. Tag the target commit (on `master`)
+
+        git tags app/vX.Y.Z [<commit-sha>]
+
+Tags for the `pyrog-client` should be prefixed with `app`. For instance, use `app/v1.1.0` if you want to publish the `v1.1.0` version of the `pyrog-client` on DockerHub.
+
+### 2. Push the tag
+
+        git push --tags app/vX.Y.Z
+
+Providing that the CI workflow is successful (which should always be the case on `master`...), a new image will soon be available on DockerHub with the specified tag.
+
+### 3. Pull the tagged image
+
+        docker pull arkhn/pyrog-client:vX.Y.Z
+
 ## Code organisation
 
 ### Webpack
