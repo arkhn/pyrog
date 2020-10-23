@@ -1,6 +1,9 @@
 name: pyrog-server
 
-on: [push]
+on:
+  push:
+    paths:
+      - "server/**"
 
 jobs:
   lint-and-test:

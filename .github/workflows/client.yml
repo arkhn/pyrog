@@ -3,7 +3,7 @@ name: pyrog-client
 on:
   push:
     paths:
-      - "front/**"
+      - "client/**"
 
 jobs:
   build:
@@ -71,8 +71,8 @@ jobs:
 
       - uses: docker/build-push-action@v2
         with:
-          context: front
-          file: ./front/Dockerfile
+          context: client
+          file: ./client/Dockerfile
           build-args: |
             VERSION_NAME=${{ steps.metadata.outputs.version }}
             VERSION_SHA=${GITHUB_SHA::8}
@@ -80,7 +80,7 @@ jobs:
           push: true
           tags: ${{ steps.metadata.outputs.tags }}
           labels: |
-            com.arkhn.image.title=front-api
+            com.arkhn.image.title=pyrog-client
             com.arkhn.image.description=${{ github.event.repository.description }}
             com.arkhn.image.url=${{ github.event.repository.html_url }}
             com.arkhn.image.source=${{ github.event.repository.clone_url }}
