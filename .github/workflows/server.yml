@@ -60,8 +60,8 @@ jobs:
           TAGS="${IMAGE}:${GITHUB_SHA::8}"
 
           # Has this workflow been triggered by an api tag ?
-          if [[ "${GITHUB_REF}" == refs/tags/server/* ]]; then
-            VERSION=${GITHUB_REF#refs/tags/server/}
+          if [[ "${GITHUB_REF}" == refs/tags/api/* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/api/}
 
             # Is the tag on master and does it follow numeric versioning ?
             if [[ "${{ github.event.base_ref }}" == refs/heads/master ]] && [[ "${VERSION}" =~ ^v[0-9]{1,3}(\.[0-9]{1,3}(\.[0-9]{1,3})?)?$ ]]; then
