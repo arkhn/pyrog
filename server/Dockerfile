@@ -1,11 +1,10 @@
-FROM node:13-alpine
+FROM node:13-alpine AS build-image
 
 RUN apk update && apk add openssl-dev libssl1.1 wget unzip git
 
-WORKDIR /home/node/app
+WORKDIR /build
 
 ENV POSTGRES_URL=postgresql://required:by@prisma/generate
-ENV JWT_PRIVATE_KEY=requiredToBuildTheApp
 
 # Install deps for production only
 COPY package.json package.json
@@ -21,9 +20,18 @@ COPY src src
 
 RUN yarn build
 
+FROM node:13-alpine AS runtime-image
+
+WORKDIR /srv
+
+COPY ["package.json",  "tsconfig.json", "tsconfig.build.json", "docker-entrypoint.sh", "/srv/"]
+COPY prisma prisma
 COPY scripts scripts
 
-# Start the app
-ENV NODE_PATH dist/
+COPY --from=build-image /build/node_modules ./node_modules
+COPY --from=build-image /build/dist ./dist
 
-CMD yarn wait:db && yarn migrate:up && yarn start
+EXPOSE 1000
+
+RUN chmod +x /srv/docker-entrypoint.sh
+ENTRYPOINT [ "/srv/docker-entrypoint.sh" ]

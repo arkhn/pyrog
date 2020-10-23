@@ -12,3 +12,4 @@
 !prisma
 !scripts
 !.env*
+!docker-entrypoint.sh
