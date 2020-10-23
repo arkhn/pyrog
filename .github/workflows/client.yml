@@ -10,23 +10,16 @@ jobs:
     name: Build Pyrog client
     runs-on: ubuntu-18.04
 
-    strategy:
-      matrix:
-        node-version: [12.x]
-
     steps:
       - uses: actions/checkout@v1
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+      - uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 12
 
-      - name: Cache node modules
-        uses: actions/cache@v1
+      - uses: actions/cache@v1
         with:
           path: client/node_modules
-          key: ${{ runner.OS }}-${{ matrix.node-version}}-node-modules-${{ hashFiles('client/yarn.lock') }}
+          key: ${{ runner.os }}-${{ hashFiles('client/yarn.lock') }}
 
       - run: yarn --cwd ./client install
       - run: yarn --cwd ./client build
