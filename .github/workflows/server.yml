@@ -46,7 +46,7 @@ jobs:
           yarn test:ci
 
   build-and-publish:
-    needs: lint
+    needs: lint-and-test
     runs-on: ubuntu-18.04
 
     outputs:
