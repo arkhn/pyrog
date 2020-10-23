@@ -3,8 +3,6 @@
 # Exit immediately if a command exits with a non-zero status.
 set -e
 
-echo "test"
-
 export NODE_PATH="./dist"
 
 # wait for postgres to be up

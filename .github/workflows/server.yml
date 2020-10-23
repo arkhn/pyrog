@@ -28,25 +28,10 @@ jobs:
           path: server/node_modules
           key: ${{ runner.OS }}-${{ matrix.node-version}}-node-modules-${{ hashFiles('server/yarn.lock') }}
 
-      - name: Install Dependencies
-        run: |
-          cd server
-          yarn install
-
-      - name: Build
-        run: |
-          cd server
-          yarn build
-
-      - name: Lint
-        run: |
-          cd server
-          yarn lint
-
-      - name: Test
-        run: |
-          cd server
-          yarn test:ci
+      - run: yarn --cwd ./server install
+      - run: yarn --cwd ./server build
+      - run: yarn --cwd ./server lint
+      - run: yarn --cwd ./server test:ci
 
   build-and-publish:
     needs: lint-and-test
