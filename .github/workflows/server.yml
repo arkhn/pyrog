@@ -54,6 +54,7 @@ jobs:
             # Is the tag on master and does it follow numeric versioning ?
             if [[ "${{ github.event.base_ref }}" == refs/heads/master ]] && [[ "${VERSION}" =~ ^v[0-9]{1,3}(\.[0-9]{1,3}(\.[0-9]{1,3})?)?$ ]]; then
               TAGS="${TAGS},${IMAGE}:latest"
+              VERSION="${VERSION#v}"
             fi
 
           # Has this workflow been triggered by a branch ?
