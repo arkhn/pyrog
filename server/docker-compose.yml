@@ -2,20 +2,15 @@ version: '3.7'
 
 services:
   pyrog:
-    image: arkhn/pyrog-server:latest
+    image: pyrog-server
     container_name: pyrog-server
     build:
       context: .
-      args:
-        - JWT_PRIVATE_KEY=none
     ports:
       - 1000:1000
     env_file: .env.docker
     depends_on:
       - postgres
-    volumes:
-      - schemas:/home/node/app/schemas
-      - ./backup:/home/node/app/backup
     networks:
       - arkhn
 
