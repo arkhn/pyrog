@@ -71,7 +71,6 @@ const main = async (mappingFile: string, destFile: string) => {
     ...r,
     logicalReference: v4(),
   }))
-  // console.log(migrated)
 
   const logicalReferenceMapping: {
     [id: string]: string
@@ -98,7 +97,6 @@ const main = async (mappingFile: string, destFile: string) => {
   }, [])
 
   writeFileSync(destFile, JSON.stringify(migrated))
-  // console.log(JSON.stringify(migrated))
 }
 
 if (process.argv.length !== 4) {
