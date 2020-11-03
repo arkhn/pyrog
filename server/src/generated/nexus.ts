@@ -660,7 +660,6 @@ export interface NexusGenFieldTypes {
     value: string; // String!
   }
   Input: { // field return type
-    conceptMap: NexusGenRootTypes['ConceptMap'] | null; // ConceptMap
     conceptMapId: string | null; // String
     createdAt: any; // DateTime!
     id: string; // String!
@@ -688,6 +687,7 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     addConditionToInputGroup: NexusGenRootTypes['InputGroup']; // InputGroup!
     addJoinToColumn: NexusGenRootTypes['Column']; // Column!
+    changeRole: NexusGenRootTypes['User']; // User!
     createAccessControl: NexusGenRootTypes['AccessControl']; // AccessControl!
     createAttribute: NexusGenRootTypes['Attribute']; // Attribute!
     createComment: NexusGenRootTypes['Comment']; // Comment!
@@ -843,6 +843,10 @@ export interface NexusGenArgTypes {
     addJoinToColumn: { // args
       columnId: string; // ID!
       join?: NexusGenInputs['JoinInput'] | null; // JoinInput
+    }
+    changeRole: { // args
+      newRole: NexusGenEnums['Role']; // Role!
+      userId: string; // ID!
     }
     createAccessControl: { // args
       role: NexusGenEnums['SourceRole']; // SourceRole!

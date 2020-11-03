@@ -17,6 +17,7 @@ import { createResource, updateResource, deleteResource } from './Resource'
 import { deleteSource, createSource } from './Source'
 import { refreshDefinition } from './StructureDefinition'
 import { createTemplate, deleteTemplate } from './Template'
+import { changeRole } from './User'
 import cache from 'cache'
 
 export const Mutation = mutationType({
@@ -342,6 +343,15 @@ export const Mutation = mutationType({
         del!(`user:${ctx.user?.email}`)
         return ctx.user!
       },
+    })
+
+    t.field('changeRole', {
+      type: 'User',
+      args: {
+        userId: idArg({ required: true }),
+        newRole: arg({ type: 'Role', required: true }),
+      },
+      resolve: changeRole,
     })
   },
 })
