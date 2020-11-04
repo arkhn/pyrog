@@ -316,7 +316,6 @@ input FilterWhereInput {
 }
 
 type Input {
-  conceptMap: ConceptMap
   conceptMapId: String
   createdAt: DateTime!
   id: String!
@@ -454,6 +453,7 @@ type Mutation {
   updateInputGroup(inputGroupId: ID!, mergingScript: String): InputGroup!
   updateJoin(data: JoinInput!, joinId: ID!): Join!
   updateResource(data: UpdateResourceInput!, filters: [FilterInput!], resourceId: ID!): Resource!
+  updateRole(newRole: Role!, userId: ID!): User!
   upsertCredential(database: String!, host: String!, login: String!, model: String!, owner: String!, password: String!, port: String!, sourceId: ID!): Credential!
 }
 

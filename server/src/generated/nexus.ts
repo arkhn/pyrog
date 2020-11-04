@@ -660,7 +660,6 @@ export interface NexusGenFieldTypes {
     value: string; // String!
   }
   Input: { // field return type
-    conceptMap: NexusGenRootTypes['ConceptMap'] | null; // ConceptMap
     conceptMapId: string | null; // String
     createdAt: any; // DateTime!
     id: string; // String!
@@ -713,6 +712,7 @@ export interface NexusGenFieldTypes {
     updateInputGroup: NexusGenRootTypes['InputGroup']; // InputGroup!
     updateJoin: NexusGenRootTypes['Join']; // Join!
     updateResource: NexusGenRootTypes['Resource']; // Resource!
+    updateRole: NexusGenRootTypes['User']; // User!
     upsertCredential: NexusGenRootTypes['Credential']; // Credential!
   }
   Query: { // field return type
@@ -939,6 +939,10 @@ export interface NexusGenArgTypes {
       data: NexusGenInputs['UpdateResourceInput']; // UpdateResourceInput!
       filters?: NexusGenInputs['FilterInput'][] | null; // [FilterInput!]
       resourceId: string; // ID!
+    }
+    updateRole: { // args
+      newRole: NexusGenEnums['Role']; // Role!
+      userId: string; // ID!
     }
     upsertCredential: { // args
       database: string; // String!

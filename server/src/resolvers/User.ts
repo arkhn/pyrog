@@ -1,4 +1,5 @@
-import { objectType } from '@nexus/schema'
+import { objectType, FieldResolver } from '@nexus/schema'
+import { Role } from '@prisma/client'
 
 export const User = objectType({
   name: 'User',
@@ -13,3 +14,17 @@ export const User = objectType({
     t.model.updatedAt()
   },
 })
+
+export const updateRole: FieldResolver<'Mutation', 'updateRole'> = async (
+  _,
+  { userId, newRole },
+  ctx,
+) =>
+  ctx.prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      role: newRole as Role,
+    },
+  })
