@@ -428,7 +428,6 @@ scalar JSON
 type Mutation {
   addConditionToInputGroup(action: String, column: String, inputGroupId: ID!, relation: ConditionRelation, table: String, value: String): InputGroup!
   addJoinToColumn(columnId: ID!, join: JoinInput): Column!
-  changeRole(newRole: Role!, userId: ID!): User!
   createAccessControl(role: SourceRole!, sourceId: ID!, userEmail: String!): AccessControl!
   createAttribute(data: AttributeInput, definitionId: ID!, path: String!, resourceId: ID!, sliceName: String): Attribute!
   createComment(attributeId: ID!, content: String!, validation: Boolean!): Comment!
@@ -454,6 +453,7 @@ type Mutation {
   updateInputGroup(inputGroupId: ID!, mergingScript: String): InputGroup!
   updateJoin(data: JoinInput!, joinId: ID!): Join!
   updateResource(data: UpdateResourceInput!, filters: [FilterInput!], resourceId: ID!): Resource!
+  updateRole(newRole: Role!, userId: ID!): User!
   upsertCredential(database: String!, host: String!, login: String!, model: String!, owner: String!, password: String!, port: String!, sourceId: ID!): Credential!
 }
 

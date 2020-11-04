@@ -116,7 +116,7 @@ export const permissions = shield(
         },
         Mutation: {
           logout: rules.isAuthenticatedUser,
-          changeRole: rules.isAdmin,
+          updateRole: rules.isAdmin,
 
           createAccessControl: rules.isSourceWriter,
           deleteAccessControl: rules.isSourceWriter,

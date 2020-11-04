@@ -15,7 +15,7 @@ export const User = objectType({
   },
 })
 
-export const changeRole: FieldResolver<'Mutation', 'changeRole'> = async (
+export const updateRole: FieldResolver<'Mutation', 'updateRole'> = async (
   _,
   { userId, newRole },
   ctx,

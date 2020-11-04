@@ -687,7 +687,6 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     addConditionToInputGroup: NexusGenRootTypes['InputGroup']; // InputGroup!
     addJoinToColumn: NexusGenRootTypes['Column']; // Column!
-    changeRole: NexusGenRootTypes['User']; // User!
     createAccessControl: NexusGenRootTypes['AccessControl']; // AccessControl!
     createAttribute: NexusGenRootTypes['Attribute']; // Attribute!
     createComment: NexusGenRootTypes['Comment']; // Comment!
@@ -713,6 +712,7 @@ export interface NexusGenFieldTypes {
     updateInputGroup: NexusGenRootTypes['InputGroup']; // InputGroup!
     updateJoin: NexusGenRootTypes['Join']; // Join!
     updateResource: NexusGenRootTypes['Resource']; // Resource!
+    updateRole: NexusGenRootTypes['User']; // User!
     upsertCredential: NexusGenRootTypes['Credential']; // Credential!
   }
   Query: { // field return type
@@ -844,10 +844,6 @@ export interface NexusGenArgTypes {
       columnId: string; // ID!
       join?: NexusGenInputs['JoinInput'] | null; // JoinInput
     }
-    changeRole: { // args
-      newRole: NexusGenEnums['Role']; // Role!
-      userId: string; // ID!
-    }
     createAccessControl: { // args
       role: NexusGenEnums['SourceRole']; // SourceRole!
       sourceId: string; // ID!
@@ -943,6 +939,10 @@ export interface NexusGenArgTypes {
       data: NexusGenInputs['UpdateResourceInput']; // UpdateResourceInput!
       filters?: NexusGenInputs['FilterInput'][] | null; // [FilterInput!]
       resourceId: string; // ID!
+    }
+    updateRole: { // args
+      newRole: NexusGenEnums['Role']; // Role!
+      userId: string; // ID!
     }
     upsertCredential: { // args
       database: string; // String!
