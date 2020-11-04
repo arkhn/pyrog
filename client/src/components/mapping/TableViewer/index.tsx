@@ -41,6 +41,7 @@ const TableViewer = ({ table }: IProps) => {
   const fetchPreview = React.useCallback(
     async selectedRows => {
       setLoadingPreview(true);
+      setPreviewData(undefined);
       try {
         const res = await axios.post(
           `${RIVER_URL}/preview`,
