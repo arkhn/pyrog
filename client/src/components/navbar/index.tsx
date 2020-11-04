@@ -219,6 +219,7 @@ const Navbar = ({ exportMapping, exportAdditionalResource }: Props) => {
               removeTokens();
               logout();
               dispatch(logoutAction());
+              dispatch(deselectSource());
               window.location.assign(logoutUrl);
             }}
             text="Se déconnecter"

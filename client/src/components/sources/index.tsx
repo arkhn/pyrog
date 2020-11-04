@@ -8,7 +8,10 @@ import { loader } from 'graphql.macro';
 
 import Navbar from 'components/navbar';
 
-import { changeSelectedSource } from 'services/selectedNode/actions';
+import {
+  changeSelectedSource,
+  deselectSource
+} from 'services/selectedNode/actions';
 import { onError } from 'services/apollo';
 import { IReduxStore, ISelectedSource } from 'types';
 
@@ -23,6 +26,7 @@ const SourcesView = (): React.ReactElement => {
   const dispatch = useDispatch();
   const { history } = useReactRouter();
 
+  const { source } = useSelector((state: IReduxStore) => state.selectedNode);
   const toaster = useSelector((state: IReduxStore) => state.toaster);
 
   const [sourceToDelete, setSourceToDelete] = useState(
@@ -33,6 +37,12 @@ const SourcesView = (): React.ReactElement => {
   const { data: dataSources, loading: loadingSources } = useQuery(qSources, {
     fetchPolicy: 'cache-and-network'
   });
+
+  React.useEffect(() => {
+    if (source) {
+      dispatch(deselectSource());
+    }
+  }, [dispatch, source]);
 
   const updateCachedSource = (
     cache: any,
