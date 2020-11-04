@@ -261,6 +261,8 @@ body {
 #input-groups {
   margin-right: calc(#{$window-padding} / 2);
   padding: $window-padding;
+  max-height: 50%;
+  overflow-x: scroll;
 
   & > *:not(:last-child) {
     margin-bottom: calc(#{$window-padding} / 2);
