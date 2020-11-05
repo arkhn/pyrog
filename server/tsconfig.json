@@ -2,7 +2,10 @@
   "compilerOptions": {
     "outDir": "dist",
     "baseUrl": "src" /* Base directory to resolve non-absolute module names. */,
-    "lib": ["esnext"],
+    "lib": [
+      "esnext",
+      "dom"
+    ],
     "strict": true,
     "resolveJsonModule": true,
     "esModuleInterop": true
