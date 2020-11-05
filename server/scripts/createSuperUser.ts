@@ -11,6 +11,7 @@ const main = async () => {
       name: 'admin',
       password: SUPERUSER_PASSWORD as string,
       email: SUPERUSER_EMAIL || 'admin@arkhn.com',
+      role: 'ADMIN',
     },
   })
 }
