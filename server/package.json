@@ -26,6 +26,7 @@
   "dependencies": {
     "@arkhn/fhir.ts": "^3.4.3",
     "@nexus/schema": "^0.14.0",
+    "@types/form-data": "^2.5.0",
     "axios": "^0.19.2",
     "client-oauth2": "^4.3.3",
     "cors": "^2.8.5",

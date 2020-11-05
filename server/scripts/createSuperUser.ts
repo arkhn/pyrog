@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import axios from 'axios'
+import FormData from 'form-data'
 
 const prismaClient = new PrismaClient()
 
@@ -20,12 +21,13 @@ const main = async () => {
   form.append('name', user.name)
   form.append('password', user.password)
   form.append('email', user.email)
-  const res = await axios.post(`${IDENTITY_PROVIDER_URL}/signup`, form)
-  if (res.status === 500)
-    throw Error('identity provider failed to create superuser')
+  await axios.post(`${IDENTITY_PROVIDER_URL}/signup`, form, {
+    headers: form.getHeaders(),
+  })
   await prismaClient.user.create({
     data: {
-      ...user,
+      name: user.name,
+      email: user.email,
       role: 'ADMIN',
     },
   })
@@ -35,8 +37,7 @@ prismaClient
   .$connect()
   .then(() => main())
   .then(() => prismaClient.$disconnect())
-  .then(() => process.exit(0))
   .catch(err => {
     console.error(err)
-    prismaClient.$disconnect().then(() => process.exit(1))
+    prismaClient.$disconnect()
   })
