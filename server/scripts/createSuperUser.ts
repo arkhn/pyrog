@@ -12,6 +12,10 @@ const {
 
 const main = async () => {
   if (!SUPERUSER_PASSWORD) throw Error('superuser password is required')
+  const res = await prismaClient.user.count({
+    where: { name: 'admin', email: SUPERUSER_EMAIL },
+  })
+  if (res) return
   const user = {
     name: 'admin',
     password: SUPERUSER_PASSWORD as string,
