@@ -27,6 +27,7 @@ WORKDIR /srv
 COPY ["package.json",  "tsconfig.json", "tsconfig.build.json", "docker-entrypoint.sh", "/srv/"]
 COPY prisma prisma
 COPY scripts scripts
+COPY src src
 
 COPY --from=build-image /build/node_modules ./node_modules
 COPY --from=build-image /build/dist ./dist
