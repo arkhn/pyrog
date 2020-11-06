@@ -11,8 +11,5 @@ yarn wait:db
 # apply migrations
 yarn migrate:up
 
-# create superuser
-yarn seed:superuser
-
 # run the app
 yarn start
