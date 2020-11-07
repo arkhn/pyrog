@@ -15,7 +15,10 @@ const main = async () => {
   const res = await prismaClient.user.count({
     where: { name: 'admin', email: SUPERUSER_EMAIL },
   })
-  if (res) return
+  if (res) {
+    console.warn(`user ${SUPERUSER_EMAIL} already exists, skipping...`)
+    return
+  }
   const user = {
     name: 'admin',
     password: SUPERUSER_PASSWORD as string,
