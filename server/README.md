@@ -41,6 +41,14 @@ yarn build:docker
 docker-compose up
 ```
 
+## Create a superuser
+```shell script
+SUPERUSER_EMAIL=admin@arkhn.com \
+SUPERUSER_PASSWORD=password \
+IDENTITY_PROVIDER_URL=https://staging.arkhn.com/identity-provider \
+yarn seed:superuser
+```
+
 ## Release
 
 Each push (commits and/or tags) will publish a single image to the DockerHub registry.
