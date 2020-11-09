@@ -8,6 +8,7 @@ import {
   InputGroupWithInputs,
 } from 'types'
 import { Comment, Condition, Input } from '@prisma/client'
+import { IN_PROD } from '../constants'
 
 export const Source = objectType({
   name: 'Source',
@@ -103,13 +104,15 @@ export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
   })
 
   // create a row in ACL
-  await ctx.prisma.accessControl.create({
-    data: {
-      user: { connect: { id: ctx.user!.id } },
-      source: { connect: { id: source.id } },
-      role: 'WRITER',
-    },
-  })
+  if (IN_PROD) {
+    await ctx.prisma.accessControl.create({
+      data: {
+        user: { connect: { id: ctx.user!.id } },
+        source: { connect: { id: source.id } },
+        role: 'WRITER',
+      },
+    })
+  }
 
   // import mapping if present
   if (parsedMapping) {
