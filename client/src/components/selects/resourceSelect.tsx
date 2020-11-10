@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { MenuItem, Intent, Position } from '@blueprintjs/core';
-import {ItemListPredicate, ItemRenderer} from '@blueprintjs/select';
+import { ItemListPredicate, ItemRenderer } from '@blueprintjs/select';
 import { IconName } from '@blueprintjs/icons';
 
 import TSelect from './TSelect';

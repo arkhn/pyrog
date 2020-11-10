@@ -37,7 +37,7 @@ export const NodeLabel = ({
   const client = useApolloClient();
 
   const renderAddItem = () => (
-    <MenuItem icon={'add'} onClick={addNodeCallback} text={'Ajouter un item'} />
+    <MenuItem icon={'add'} onClick={addNodeCallback} text={'Add an item'} />
   );
 
   const renderAddSlice = () => {

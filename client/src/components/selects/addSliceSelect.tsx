@@ -1,5 +1,10 @@
 import * as React from 'react';
-import { MenuItem, Position, Menu } from '@blueprintjs/core';
+import {
+  MenuItem,
+  Position,
+  Menu,
+  PopoverInteractionKind
+} from '@blueprintjs/core';
 import {
   ItemListRenderer,
   ItemPredicate,
@@ -54,7 +59,8 @@ const AddSliceSelect = ({ inputItem, items, onChange, baseName }: Props) => {
           canEscapeKeyClose: true,
           lazy: true,
           position: Position.RIGHT_TOP,
-          usePortal: true
+          usePortal: true,
+          interactionKind: PopoverInteractionKind.HOVER
         }}
         renderItem={renderMenuItem}
         renderList={renderSliceList}

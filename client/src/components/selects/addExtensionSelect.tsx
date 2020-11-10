@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Intent, MenuItem, Position, Menu } from '@blueprintjs/core';
+import { Intent, MenuItem, Position, Menu, PopoverInteractionKind } from '@blueprintjs/core';
 import {
   ItemPredicate,
   ItemRenderer,
@@ -136,7 +136,8 @@ const AddExtensionSelect = ({
           canEscapeKeyClose: true,
           lazy: true,
           position: Position.RIGHT_TOP,
-          usePortal: true
+          usePortal: true,
+          interactionKind: PopoverInteractionKind.HOVER
         }}
         renderItem={renderMenuItem}
         renderList={renderExtensionList}
