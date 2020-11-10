@@ -11,15 +11,22 @@ import {
   IN_PROD,
   TOKEN_INTROSPECTION_URL,
   USER_INFO_URL,
+  TEST_ADMIN_USER,
 } from './constants'
 
 export const getUser = async (
   request: Request,
   prisma: PrismaClient,
 ): Promise<User | null> => {
-  if (!IN_PROD)
-    // return a fake user for tests
-    return { id: 'admin', name: 'admin', email: 'admin', role: 'ADMIN' } as User
+  if (!IN_PROD) {
+    // insert a fake admin user for tests
+    await prisma.user.upsert({
+      where: { id: TEST_ADMIN_USER.id },
+      create: TEST_ADMIN_USER,
+      update: TEST_ADMIN_USER,
+    })
+    return TEST_ADMIN_USER
+  }
 
   const authorization = request.get('Authorization')
   const idToken = request.get('IdToken')

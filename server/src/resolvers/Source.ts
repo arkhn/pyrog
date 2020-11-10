@@ -104,15 +104,13 @@ export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
   })
 
   // create a row in ACL
-  if (IN_PROD) {
-    await ctx.prisma.accessControl.create({
-      data: {
-        user: { connect: { id: ctx.user!.id } },
-        source: { connect: { id: source.id } },
-        role: 'WRITER',
-      },
-    })
-  }
+  await ctx.prisma.accessControl.create({
+    data: {
+      user: { connect: { id: ctx.user!.id } },
+      source: { connect: { id: source.id } },
+      role: 'WRITER',
+    },
+  })
 
   // import mapping if present
   if (parsedMapping) {
