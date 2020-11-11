@@ -20,12 +20,12 @@ export const getUser = async (
 ): Promise<User | null> => {
   if (!IN_PROD) {
     // insert a fake admin user for tests
-    await prisma.user.upsert({
+    const user = prisma.user.upsert({
       where: { id: TEST_ADMIN_USER.id },
       create: TEST_ADMIN_USER,
       update: TEST_ADMIN_USER,
     })
-    return TEST_ADMIN_USER
+    return user
   }
 
   const authorization = request.get('Authorization')
