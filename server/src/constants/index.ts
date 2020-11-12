@@ -1,3 +1,5 @@
+import { User } from '@prisma/client'
+
 export const {
   APP_SECRET,
   ENV,
@@ -25,3 +27,10 @@ export const MAPPING_VERSION_9 = 9
 export const CURRENT_MAPPING_VERSION = MAPPING_VERSION_9
 
 export const HL7_AUTHOR = 'HL7'
+
+export const TEST_ADMIN_USER = {
+  id: 'admin',
+  name: 'admin',
+  email: 'admin@arkhn.com',
+  role: 'ADMIN',
+} as User
