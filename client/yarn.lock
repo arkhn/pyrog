@@ -51,10 +51,10 @@
     "@apollo/react-hooks" "^3.1.5"
     tslib "^1.10.0"
 
-"@arkhn/fhir.ts@^3.4.3":
-  version "3.4.3"
-  resolved "https://registry.yarnpkg.com/@arkhn/fhir.ts/-/fhir.ts-3.4.3.tgz#8364e7e143debdd1ecffeb77d79d7d5860b791ae"
-  integrity sha512-H0wLM7Jm/nLAaywCtTteni4HyRf5b+IQlo4f0M1TNRTr5ZRs4yDF53eBTAmM0gpkaHzSwyjyoV228HPDnNJdrg==
+"@arkhn/fhir.ts@^3.4.4":
+  version "3.4.4"
+  resolved "https://registry.yarnpkg.com/@arkhn/fhir.ts/-/fhir.ts-3.4.4.tgz#47e337025b88bff8cf98a6924deb03cdefaa1535"
+  integrity sha512-0ByYz2KY4TLqZhYTkQ1B3ohkt6iXYa+H17tmh2+KamnkWRX/oHq0idR9k1t/jh9ixXYnXpED3n/LSXUFD6vFXg==
 
 "@babel/code-frame@7.8.3":
   version "7.8.3"

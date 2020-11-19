@@ -130,12 +130,7 @@ export class TreeNode implements ITreeNode<Attribute> {
         index,
         new Attribute({
           ...this.nodeData.definition,
-          type: [
-            {
-              code: 'Extension',
-              extension: [{ valueUrl: extensionDefinition.id }]
-            }
-          ]
+          type: [{ code: extensionDefinition.id }]
         })
       );
     } else {

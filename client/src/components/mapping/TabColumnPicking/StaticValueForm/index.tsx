@@ -42,7 +42,6 @@ interface Props {
 
 const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
   const dispatch = useDispatch();
-
   const toaster = useSelector((state: IReduxStore) => state.toaster);
   const { resource, selectedInputGroup } = useSelector(
     (state: IReduxStore) => state.selectedNode

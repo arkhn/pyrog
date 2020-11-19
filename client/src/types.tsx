@@ -1,6 +1,6 @@
 import { IToaster } from '@blueprintjs/core';
 import * as redux from 'redux';
-import { Attribute, AttributeDefinition } from '@arkhn/fhir.ts';
+import { Attribute, AttributeDefinition, ResourceDefinition } from '@arkhn/fhir.ts';
 
 // REDUX
 export interface ISimpleAction {
@@ -74,20 +74,12 @@ export interface IAccessControl {
   __typename: 'AccessControl';
 }
 
-export interface Profile {
-  id: string;
-  name: string;
-  type: string;
-  publisher?: string;
-}
-
 export interface Resource {
   id: string;
   label: string;
   logicalReference: string;
   name: string;
   type: string;
-  profiles: Profile[];
   primaryKeyTable: string;
   primaryKeyColumn: string;
   filters: Filters[];
@@ -146,10 +138,15 @@ export interface IData {
   recommendedColumns: IRecommendedColumns;
 }
 
+export interface IFhir {
+  extensions: { [path: string]: ResourceDefinition[] };
+  availableResources: ResourceDefinition[];
+}
 // Store
 export interface IReduxStore {
   data: IData;
   dispatch?: any;
+  fhir: IFhir;
   selectedNode: ISelectedNode;
   resourceInputs: IResourceInputs;
   structure: any;

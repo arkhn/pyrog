@@ -1,37 +1,51 @@
 import { Button, FormGroup, ControlGroup } from '@blueprintjs/core';
-import React from 'react';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import React, { useEffect } from 'react';
+import axios from 'axios';
+import { useMutation } from '@apollo/react-hooks';
 import { useDispatch, useSelector } from 'react-redux';
+import { ResourceDefinition } from '@arkhn/fhir.ts';
 
 import AddResourceSelect from 'components/selects/addResourceSelect';
 import { changeSelectedResource } from 'services/selectedNode/actions';
 import { initAttributesMap } from 'services/resourceInputs/actions';
 import { onError } from 'services/apollo';
-import { IReduxStore, Resource } from 'types';
+import { IReduxStore } from 'types';
 import { loader } from 'graphql.macro';
+
+import { FHIR_API_URL } from '../../../../constants';
+import { fetchAvailableResources } from 'services/fhir';
 
 const qResourcesForSource = loader(
   'src/graphql/queries/resourcesForSource.graphql'
 );
 const mCreateResource = loader('src/graphql/mutations/createResource.graphql');
-const mRefreshDefinition = loader(
-  'src/graphql/mutations/refreshDefinition.graphql'
-);
-const qAvailableResources = loader(
-  'src/graphql/queries/availableResources.graphql'
-);
+
+const fetchProfiles: (r: ResourceDefinition) => Promise<any[]> = async (r: ResourceDefinition) => {
+  let profiles = [];
+  try {
+    const response = await axios.get(
+      `${FHIR_API_URL}/StructureDefinition?type=${r.type}&_count=1000&_elements=id,name,type`
+    );
+    profiles = response.data?.entry.map(({ resource }: any) => resource);
+  } catch (err) {
+    console.error(
+      `Could not fetch available resources: ${
+        err.response ? err.response.data : err.message
+      }`
+    );
+  }
+  return profiles;
+};
 
 const AddResource = () => {
   const dispatch = useDispatch();
 
   const { source } = useSelector((state: IReduxStore) => state.selectedNode);
+  const { availableResources } = useSelector((state: IReduxStore) => state.fhir);
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const [selectedResource, setSelectedResource] = React.useState(
-    undefined as Resource | undefined
+  const [selectedDefinition, setSelectedDefinition] = React.useState(
+    undefined as ResourceDefinition | undefined
   );
-  const { data, loading } = useQuery(qAvailableResources, {
-    fetchPolicy: 'cache-first'
-  });
 
   const onCompleted = (data: any) => {
     toaster.show({
@@ -41,11 +55,6 @@ const AddResource = () => {
       timeout: 4000
     });
   };
-
-  const [
-    refreshDefinition,
-    { loading: refreshingDefinition }
-  ] = useMutation(mRefreshDefinition, { onError: onError(toaster) });
 
   const addResourceToCache = (
     cache: any,
@@ -85,15 +94,11 @@ const AddResource = () => {
   );
 
   const onAdd = async () => {
-    await refreshDefinition({
-      variables: { definitionId: selectedResource!.id }
-    });
-
     // Create the new resource
     const responseCreateResource = await createResource({
       variables: {
         sourceId: source.id,
-        definitionId: selectedResource!.id
+        definitionId: selectedDefinition!.id
       }
     });
     if (responseCreateResource) {
@@ -105,22 +110,27 @@ const AddResource = () => {
     }
   };
 
+  useEffect(() => {
+    dispatch(fetchAvailableResources)
+  }, [dispatch]);
+
   return (
     <FormGroup>
       <ControlGroup>
         <AddResourceSelect
-          loading={loading}
+          loading={availableResources.length === 0}
           disabled={!source}
-          inputItem={selectedResource}
-          items={loading || !data ? [] : data.structureDefinitions}
-          onChange={(r: Resource) => {
-            setSelectedResource(r);
+          inputItem={selectedDefinition}
+          items={availableResources}
+          onChange={(r: ResourceDefinition) => {
+            setSelectedDefinition(r);
           }}
+          fetchProfiles={fetchProfiles}
         />
         <Button
-          loading={creatingResource || refreshingDefinition}
+          loading={creatingResource}
           icon={'plus'}
-          disabled={!selectedResource}
+          disabled={!selectedDefinition}
           onClick={onAdd}
         />
       </ControlGroup>
