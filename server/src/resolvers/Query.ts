@@ -1,4 +1,4 @@
-import { arg, idArg, queryType } from '@nexus/schema'
+import { idArg, queryType } from '@nexus/schema'
 
 import { getDefinition } from 'fhir'
 import { sources } from './Source'
