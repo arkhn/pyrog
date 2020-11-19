@@ -118,7 +118,7 @@ const AddResource = () => {
     <FormGroup>
       <ControlGroup>
         <AddResourceSelect
-          loading={availableResources.length === 0}
+          loading={!availableResources || availableResources.length === 0}
           disabled={!source}
           inputItem={selectedDefinition}
           items={availableResources}

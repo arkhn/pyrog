@@ -95,7 +95,7 @@ const AddExtensionSelect = ({
       <Menu ulRef={itemsParentRef}>
         <MenuItem
           onClick={(e: React.MouseEvent) => {
-            e.preventDefault();
+            e.stopPropagation()
             setUploadExtensionOpen(true);
           }}
           icon={'plus'}
@@ -109,6 +109,7 @@ const AddExtensionSelect = ({
       </Menu>
     );
   };
+
   return (
     <React.Fragment>
       <UploadExtension

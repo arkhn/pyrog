@@ -12,7 +12,7 @@ import { loader } from 'graphql.macro';
 import { useSelector, useDispatch } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
 
-import { Filters, IReduxStore, ISourceSchema } from 'types';
+import { Filter, IReduxStore, ISourceSchema } from 'types';
 import ColumnSelect from 'components/selects/columnSelect';
 import {
   updateSelectedResource,
@@ -46,7 +46,7 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
   const [label, setLabel] = React.useState('');
   const [pkTable, setPkTable] = React.useState('');
   const [pkColumn, setPkColumn] = React.useState('');
-  const [filters, setFilters] = React.useState([] as Filters[]);
+  const [filters, setFilters] = React.useState([] as Filter[]);
 
   const onUpdateCompleted = (): void => {
     toaster.show({

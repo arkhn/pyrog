@@ -82,7 +82,7 @@ export interface Resource {
   type: string;
   primaryKeyTable: string;
   primaryKeyColumn: string;
-  filters: Filters[];
+  filters: Filter[];
   definitionId: string;
   definition: {
     id: string;
@@ -102,7 +102,7 @@ export interface Condition {
   value: string;
 }
 
-export interface Filters {
+export interface Filter {
   sqlColumn: ISourceColumn;
   relation: string;
   value: string;

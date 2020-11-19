@@ -35,7 +35,7 @@ export const fetchAvailableExtensions = async (
         err.response ? err.response.data : err.message
       }`
     );
-    dispatch({ type: 'FETCH_EXTENSIONS', payload: getState() });
+    dispatch({ type: 'FETCH_EXTENSIONS', payload: getState().extensions });
   }
 };
 
@@ -62,14 +62,14 @@ export const fetchAvailableResources = async (
         err.response ? err.response.data : err.message
       }`
     );
-    dispatch({ type: 'FETCH_AVAILABLE_RESOURCES', payload: getState() });
+    dispatch({
+      type: 'FETCH_AVAILABLE_RESOURCES',
+      payload: getState().availableResources
+    });
   }
 };
 
-const extensionsReducer = (
-  state = initialState,
-  action: ISimpleAction
-): any => {
+const fhirReducer = (state = initialState, action: ISimpleAction): any => {
   switch (action.type) {
     case 'FETCH_EXTENSIONS':
       return {
@@ -86,4 +86,4 @@ const extensionsReducer = (
   }
 };
 
-export default extensionsReducer;
+export default fhirReducer;

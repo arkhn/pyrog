@@ -12,6 +12,8 @@ import fhirSchema from '../validation/StructureDefinition.schema.json';
 import './style.scss';
 import { useApolloClient } from 'react-apollo';
 import { loader } from 'graphql.macro';
+import { fetchAvailableExtensions } from 'services/fhir';
+import { useDispatch } from 'react-redux';
 
 interface Resource {
   id: string;
@@ -58,6 +60,7 @@ const UploadExtension = ({ isOpen, onClose, onUpload }: Props) => {
   });
 
   const client = useApolloClient();
+  const dispatch = useDispatch();
   const [extensionDefinition, setExtensionDefinition] = React.useState(
     undefined as any
   );
@@ -95,7 +98,8 @@ const UploadExtension = ({ isOpen, onClose, onUpload }: Props) => {
         query: qStructureDisplay,
         variables: { definitionId: extensionDefinition.id }
       });
-      onUpload(data.refreshDefinition);
+      dispatch(fetchAvailableExtensions)
+      onUpload(data.structureDefinition);
       onClose();
     } catch (err) {
       setinvalidExtensionErrors([

@@ -21,28 +21,10 @@ interface Props {
   fetchProfiles: (r: ResourceDefinition) => Promise<ResourceDefinition[]>
 }
 
-const sortAlphabetically = (
-  item1: ResourceDefinition,
-  item2: ResourceDefinition,
-  first: string | undefined
-): number => {
-  if (item1.id === first) return -1;
-  if (item2.id === first) return 1;
-
-  const name1 = item1.name.toLowerCase();
-  const name2 = item2.name.toLowerCase();
-
-  if (name1 < name2) return -1;
-  if (name1 > name2) return 1;
-  return 0;
-};
-
-// If the second argument is provided, the sort funcion puts
-// the definition which id matches on top of the list.
-const sortItems = (
-  definitions: ResourceDefinition[],
-  first: string | undefined = undefined
-): ResourceDefinition[] => definitions.sort((p1, p2) => sortAlphabetically(p1, p2, first));
+const sortItems = (definitions: ResourceDefinition[], first: string): ResourceDefinition[] =>
+definitions.sort((d1: ResourceDefinition, d2: ResourceDefinition): number =>
+  d1.id === first ? 1 : ( d2.id === first ? -1 : d1.name.localeCompare(d2.name))
+);
 
 const filterByName: ItemPredicate<ResourceDefinition> = (query, definition: ResourceDefinition) => {
   return definition.name.toLowerCase().indexOf(query.toLowerCase()) >= 0;
@@ -94,7 +76,7 @@ const AddProfileSelect = ({
           icon={'plus'}
           text={
             <span>
-              <strong>Create new definition </strong>
+              <strong>Create new profile</strong>
             </span>
           }
         />

@@ -24,28 +24,10 @@ const filterByName: ItemPredicate<ResourceDefinition> = (query, definition: Reso
   return definition.name.toLowerCase().indexOf(query.toLowerCase()) >= 0;
 };
 
-const sortAlphabetically = (
-  item1: ResourceDefinition,
-  item2: ResourceDefinition,
-  first: string | undefined
-): number => {
-  if (item1.id === first) return -1;
-  if (item2.id === first) return 1;
-
-  const name1 = item1.name.toLowerCase();
-  const name2 = item2.name.toLowerCase();
-
-  if (name1 < name2) return -1;
-  if (name1 > name2) return 1;
-  return 0;
-};
-
-// If the second argument is provided, the sort funcion puts
-// the definition which id matches on top of the list.
-const sortItems = (
-  definitions: ResourceDefinition[],
-  first: string | undefined = undefined
-): ResourceDefinition[] => definitions.sort((r1, r2) => sortAlphabetically(r1, r2, first));
+const sortItems = (resources: ResourceDefinition[]): ResourceDefinition[] =>
+resources.sort((r1: ResourceDefinition, r2: ResourceDefinition): number =>
+  r1.name.localeCompare(r2.name)
+);
 
 const AddResourceSelect = ({
   disabled,

@@ -168,7 +168,6 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       console.error('could not add extension:', errors)
       return
     }
-    console.log("yay", data.structureDefinition)
     const extensionNode = (extensionArrayNode as TreeNode).addExtension(
       data.structureDefinition
     );
@@ -178,7 +177,6 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     extensionNode!.isExpanded = true;
     if (selectedNode) selectedNode.isSelected = false;
     extensionNode!.isSelected = true;
-    console.log("setSelectedNode", extensionNode)
     setSelectedNode(extensionNode);
 
     setNodes(nodes => [...nodes]);
