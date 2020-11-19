@@ -1,14 +1,4 @@
-import { objectType, FieldResolver } from '@nexus/schema'
-import axios from 'axios'
-import { Definition } from '@arkhn/fhir.ts'
-
-import {
-  resourceProfiles,
-  resourcesPerKind,
-  cacheDefinition,
-  typeExtensions,
-} from 'fhir/definitions'
-import { FHIR_API_URL } from '../constants'
+import { objectType } from '@nexus/schema'
 
 export const StructureDefinition = objectType({
   name: 'StructureDefinition',
@@ -67,58 +57,5 @@ export const StructureDefinition = objectType({
       description: 'Structured version of the attributes',
       resolve: (parent: any) => parent.attributes,
     })
-
-    t.list.field('extensions', {
-      type: 'StructureDefinition',
-      description: 'List of allowed extensions on this type',
-      resolve: async (parent: any) =>
-        // the the definition is not a root type (eg: observation-bodyweight), we need to return
-        // extensions on observation-bodyweight (definition.id) and Observation (definition.type).
-        parent.meta.type === parent.meta.id
-          ? typeExtensions(parent.meta.id)
-          : [
-              ...(await typeExtensions(parent.meta.id)),
-              ...(await typeExtensions(parent.meta.type)),
-            ],
-    })
-
-    t.list.field('profiles', {
-      type: 'StructureDefinition',
-      description: 'List of profiles on this resource',
-      resolve: async (parent: any) => resourceProfiles(parent.meta.type),
-    })
   },
 })
-
-export const searchDefinitions: FieldResolver<
-  'Query',
-  'structureDefinitions'
-> = async (_, { filter }) => {
-  const { derivation, kind, type } = filter
-
-  let res: Definition[]
-  if (derivation && kind && !type) {
-    res = await resourcesPerKind(derivation, kind)
-  } else if (!derivation && !kind && type) {
-    res = await resourceProfiles(type)
-  } else {
-    throw new Error(
-      'Can only use filters derivation and kind together, and type alone',
-    )
-  }
-  return res
-}
-
-export const refreshDefinition: FieldResolver<
-  'Mutation',
-  'refreshDefinition'
-> = async (_, { definitionId }) => {
-  try {
-    const { data } = await axios.get(
-      `${FHIR_API_URL}/StructureDefinition/${definitionId}`,
-    )
-    return cacheDefinition(data)
-  } catch (err) {
-    throw new Error(err.response ? err.response.data : err.message)
-  }
-}

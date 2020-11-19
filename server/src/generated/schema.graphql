@@ -447,7 +447,6 @@ type Mutation {
   deleteSource(sourceId: ID!): Source!
   deleteTemplate(id: ID!): Template!
   logout: User!
-  refreshDefinition(definitionId: ID!): StructureDefinition!
   updateCondition(action: String, column: String, conditionId: ID!, relation: ConditionRelation, table: String, value: String): Condition!
   updateInput(data: UpdateInputInput!, inputId: ID!): Input!
   updateInputGroup(inputGroupId: ID!, mergingScript: String): InputGroup!
@@ -480,7 +479,6 @@ type Query {
   source(sourceId: ID!): Source
   sources: [Source!]
   structureDefinition(definitionId: ID!): StructureDefinition
-  structureDefinitions(filter: StructureDefinitionWhereFilter!): [StructureDefinition!]
   template(templateId: ID!): Template
   templates: [Template!]
 }
@@ -606,15 +604,9 @@ type StructureDefinition {
   """Structured version of the attributes"""
   attributes: [AttributeDefinition!]!
   derivation: String!
-
-  """List of allowed extensions on this type"""
-  extensions: [StructureDefinition!]!
   id: String!
   kind: String!
   name: String!
-
-  """List of profiles on this resource"""
-  profiles: [StructureDefinition!]!
   publisher: String!
   type: String!
   url: String!

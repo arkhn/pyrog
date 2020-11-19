@@ -5,6 +5,8 @@
 In dev, .env file must be used to run commands. You can use `env $(cat .env) yarn ...`
 but the simplest solution is to install dotenv globallay (`yarn global add dotenv`).
 
+Copy the `.env.template`, edit it and save it as a `.env` file in the server/ directory. `.env.template` contains the minimal configuration required to deploy the stack locally. Your `.env` should be the preferred place to override the default settings used in `docker-compose.yml` and should not be committed.
+
 ```sh
 yarn # install dependencies
 dotenv yarn generate # generate the "@prisma/client" dependency, required by prisma
@@ -42,6 +44,7 @@ docker-compose up
 ```
 
 ## Create a superuser
+
 ```shell script
 SUPERUSER_EMAIL=admin@arkhn.com \
 SUPERUSER_PASSWORD=password \

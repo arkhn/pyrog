@@ -706,7 +706,6 @@ export interface NexusGenFieldTypes {
     deleteSource: NexusGenRootTypes['Source']; // Source!
     deleteTemplate: NexusGenRootTypes['Template']; // Template!
     logout: NexusGenRootTypes['User']; // User!
-    refreshDefinition: NexusGenRootTypes['StructureDefinition']; // StructureDefinition!
     updateCondition: NexusGenRootTypes['Condition']; // Condition!
     updateInput: NexusGenRootTypes['Input']; // Input!
     updateInputGroup: NexusGenRootTypes['InputGroup']; // InputGroup!
@@ -724,7 +723,6 @@ export interface NexusGenFieldTypes {
     source: NexusGenRootTypes['Source'] | null; // Source
     sources: NexusGenRootTypes['Source'][] | null; // [Source!]
     structureDefinition: NexusGenRootTypes['StructureDefinition'] | null; // StructureDefinition
-    structureDefinitions: NexusGenRootTypes['StructureDefinition'][] | null; // [StructureDefinition!]
     template: NexusGenRootTypes['Template'] | null; // Template
     templates: NexusGenRootTypes['Template'][] | null; // [Template!]
   }
@@ -760,11 +758,9 @@ export interface NexusGenFieldTypes {
   StructureDefinition: { // field return type
     attributes: NexusGenRootTypes['AttributeDefinition'][]; // [AttributeDefinition!]!
     derivation: string; // String!
-    extensions: NexusGenRootTypes['StructureDefinition'][]; // [StructureDefinition!]!
     id: string; // String!
     kind: string; // String!
     name: string; // String!
-    profiles: NexusGenRootTypes['StructureDefinition'][]; // [StructureDefinition!]!
     publisher: string; // String!
     type: string; // String!
     url: string; // String!
@@ -912,9 +908,6 @@ export interface NexusGenArgTypes {
     deleteTemplate: { // args
       id: string; // ID!
     }
-    refreshDefinition: { // args
-      definitionId: string; // ID!
-    }
     updateCondition: { // args
       action?: string | null; // String
       column?: string | null; // String
@@ -970,9 +963,6 @@ export interface NexusGenArgTypes {
     }
     structureDefinition: { // args
       definitionId: string; // ID!
-    }
-    structureDefinitions: { // args
-      filter: NexusGenInputs['StructureDefinitionWhereFilter']; // StructureDefinitionWhereFilter!
     }
     template: { // args
       templateId: string; // ID!
