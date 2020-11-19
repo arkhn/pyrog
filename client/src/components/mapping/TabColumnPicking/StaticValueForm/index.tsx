@@ -4,13 +4,14 @@ import {
   ControlGroup,
   Elevation,
   FormGroup,
-  InputGroup
+  InputGroup,
+  Position
 } from '@blueprintjs/core';
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useLazyQuery, useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { loader } from 'graphql.macro';
-import { Attribute } from '@arkhn/fhir.ts';
+import { Attribute, ResourceDefinition } from '@arkhn/fhir.ts';
 
 import { onError } from 'services/apollo';
 import { IReduxStore } from 'types';
@@ -22,7 +23,6 @@ import StringSelect from 'components/selects/stringSelect';
 import IdentifierSystemInput from './IdentifierSystemInput';
 
 // GRAPHQL
-const qBasicFhirTypes = loader('src/graphql/queries/basicFhirTypes.graphql');
 const qSourcesAndResources = loader(
   'src/graphql/queries/sourcesAndResources.graphql'
 );
@@ -49,15 +49,12 @@ const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
   );
+  const { availableResources } = useSelector(
+    (state: IReduxStore) => state.fhir
+  );
 
   const [staticValue, setStaticValue] = useState('');
 
-  const [
-    getFhirTypes,
-    { data: dataFhirTypes, loading: loadingFhirTypes }
-  ] = useLazyQuery(qBasicFhirTypes, {
-    fetchPolicy: 'cache-first'
-  });
   const { data: dataSources } = useQuery(qSourcesAndResources, {
     fetchPolicy: 'no-cache'
   });
@@ -81,7 +78,6 @@ const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
     // lose their accessors in Redux
     if (attribute.definition.id === 'Reference.type') {
       setStaticValue('');
-      getFhirTypes();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [attribute]);
@@ -164,14 +160,17 @@ const StaticValueForm = ({ attribute }: Props): React.ReactElement => {
   const renderReferenceTypeDropDown = (): React.ReactElement => (
     <React.Fragment>
       <StringSelect
-        items={
-          loadingFhirTypes || !dataFhirTypes
-            ? []
-            : dataFhirTypes.structureDefinitions.map((t: any) => t.name)
-        }
+        items={availableResources.map((t: ResourceDefinition) => t.name)}
         onChange={setStaticValue}
-        loading={loadingFhirTypes}
         inputItem={staticValue}
+        popoverProps={{
+          autoFocus: true,
+          boundary: 'viewport',
+          canEscapeKeyClose: true,
+          lazy: true,
+          position: Position.LEFT_TOP,
+          usePortal: true
+        }}
       />
       <Button
         disabled={staticValue.length === 0}

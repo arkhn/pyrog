@@ -6,7 +6,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useQuery } from '@apollo/react-hooks';
 import {
   IReduxStore,
-  IStructureDefinition,
   IAttributeDefinition,
   IAttribute
 } from 'types';

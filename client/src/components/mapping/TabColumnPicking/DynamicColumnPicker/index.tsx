@@ -3,7 +3,8 @@ import {
   Elevation,
   FormGroup,
   ControlGroup,
-  Button
+  Button,
+  Position
 } from '@blueprintjs/core';
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
@@ -159,6 +160,15 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
             }}
             initialTable={table}
             sourceSchema={schema}
+            popoverProps={{
+              autoFocus: true,
+              boundary: 'viewport',
+              canEscapeKeyClose: true,
+              lazy: true,
+              position: Position.TOP,
+              usePortal: true
+            }}
+    
           />
           <Button
             disabled={!attribute || !column}

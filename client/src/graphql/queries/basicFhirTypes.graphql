@@ -1,8 +1,0 @@
-query basicFhirTypes {
-  structureDefinitions(
-    filter: { kind: "resource", derivation: "specialization" }
-  ) {
-    id
-    name
-  }
-}
