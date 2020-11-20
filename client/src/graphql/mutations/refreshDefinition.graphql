@@ -1,9 +1,0 @@
-mutation refreshDefinition($definitionId: ID!) {
-  refreshDefinition(definitionId: $definitionId) {
-    id
-    attributes {
-      id
-      attribute
-    }
-  }
-}

@@ -12,7 +12,7 @@ import { loader } from 'graphql.macro';
 import { useSelector, useDispatch } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
 
-import { IReduxStore, ISourceColumn, ISourceSchema } from 'types';
+import { Filter, IReduxStore, ISourceSchema } from 'types';
 import ColumnSelect from 'components/selects/columnSelect';
 import {
   updateSelectedResource,
@@ -22,12 +22,6 @@ import { onError } from 'services/apollo';
 
 import './style.scss';
 import StringSelect from 'components/selects/stringSelect';
-
-interface Filter {
-  sqlColumn: ISourceColumn;
-  relation: string;
-  value: string;
-}
 
 interface Props {
   isOpen: boolean;

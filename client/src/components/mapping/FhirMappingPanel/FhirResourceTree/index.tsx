@@ -6,13 +6,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useQuery } from '@apollo/react-hooks';
 import {
   IReduxStore,
-  IStructureDefinition,
   IAttributeDefinition,
   IAttribute
 } from 'types';
 import { loader } from 'graphql.macro';
 
-import { Attribute } from '@arkhn/fhir.ts';
+import { Attribute, ResourceDefinition } from '@arkhn/fhir.ts';
 
 // ACTIONS
 import { removeAttributesFromMap } from 'services/resourceInputs/actions';
@@ -43,6 +42,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     (state: IReduxStore) => state.selectedNode
   );
   const user = useSelector((state: IReduxStore) => state.user);
+  const { extensions } = useSelector((state: IReduxStore) => state.fhir);
   const baseDefinitionId = resource.definition.id;
 
   const { data, loading } = useQuery(qStructureDisplay, {
@@ -75,11 +75,19 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     ).length > 0;
 
   const buildAttributes = (parent?: Attribute) => ({
-    attribute,
-    extensions
+    attribute
   }: IAttributeDefinition): Attribute => {
     const a = Attribute.from(attribute, parent);
-    a.extensions = extensions as any;
+
+    if (a.isPrimitive)
+      a.extensions = a.types.reduce(
+        (acc: ResourceDefinition[], type: string) => [
+          ...acc,
+          ...(extensions[type] || [])
+        ],
+        []
+      );
+    else a.extensions = extensions[a.definition.id];
     return a;
   };
 
@@ -87,8 +95,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     data && data.structureDefinition
       ? data.structureDefinition.attributes.map(buildAttributes())
       : [];
-  const resourceExtensions =
-    data && data.structureDefinition ? data.structureDefinition.extensions : [];
+  const resourceExtensions = extensions[resource.definition.type] || [];
 
   const itemsOf = (array: Attribute): { [index: string]: IAttribute } => {
     // Check if there are already existing attributes for this node
@@ -128,10 +135,10 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
     return node;
   };
 
-  const addExtension = (
+  const addExtension = async (
     node: TreeNode,
-    extensionDefinition: IStructureDefinition
-  ): void => {
+    extensionDefinition: ResourceDefinition
+  ): Promise<void> => {
     // TODO: handle primitive extensions
     if (node.nodeData.isPrimitive) {
       toaster.show({
@@ -153,8 +160,16 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       node.childNodes = [...node.childNodes!, extensionArrayNode];
     }
 
+    const { data, errors } = await client.query({
+      query: qStructureDisplay,
+      variables: { definitionId: extensionDefinition.id }
+    });
+    if (!data) {
+      console.error('could not add extension:', errors)
+      return
+    }
     const extensionNode = (extensionArrayNode as TreeNode).addExtension(
-      extensionDefinition
+      data.structureDefinition
     );
 
     node.isExpanded = true;

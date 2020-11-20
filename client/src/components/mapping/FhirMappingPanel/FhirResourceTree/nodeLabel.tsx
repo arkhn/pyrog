@@ -5,6 +5,7 @@ import { Attribute, ResourceDefinition } from '@arkhn/fhir.ts';
 import AddExtensionSelect from 'components/selects/addExtensionSelect';
 import AddSliceSelect from 'components/selects/addSliceSelect';
 import { ApolloProvider, useApolloClient } from 'react-apollo';
+import { Provider, useStore } from 'react-redux';
 
 interface NodeLabelProps {
   attribute: Attribute;
@@ -35,6 +36,7 @@ export const NodeLabel = ({
   deleteNodeCallback
 }: NodeLabelProps): React.ReactElement => {
   const client = useApolloClient();
+  const store = useStore();
 
   const renderAddItem = () => (
     <MenuItem icon={'add'} onClick={addNodeCallback} text={'Add an item'} />
@@ -79,15 +81,17 @@ export const NodeLabel = ({
     const isRootExtensions = !parent && isExtension;
 
     const menu = (
-      <ApolloProvider client={client}>
-        <Menu>
-          {isArray && !isExtension && slices.length === 0 && renderAddItem()}
-          {isArray && slices.length > 0 && renderAddSlice()}
-          {isItem && renderRemoveItem()}
-          {hasAllowedExtensions && renderAddExtension(extensions)}
-          {isRootExtensions && renderAddExtension(resourceExtensions)}
-        </Menu>
-      </ApolloProvider>
+      <Provider store={store}>
+        <ApolloProvider client={client}>
+          <Menu>
+            {isArray && !isExtension && slices.length === 0 && renderAddItem()}
+            {isArray && slices.length > 0 && renderAddSlice()}
+            {isItem && renderRemoveItem()}
+            {hasAllowedExtensions && renderAddExtension(extensions)}
+            {isRootExtensions && renderAddExtension(resourceExtensions)}
+          </Menu>
+        </ApolloProvider>
+      </Provider>
     );
 
     if (

@@ -1,25 +1,9 @@
 query structureDisplay($definitionId: ID!) {
   structureDefinition(definitionId: $definitionId) {
     id
-    extensions {
-      id
-      name
-      publisher
-      attributes {
-        attribute
-      }
-    }
     attributes {
       id
       attribute
-      extensions {
-        id
-        name
-        publisher
-        attributes {
-          attribute
-        }
-      }
     }
   }
 }

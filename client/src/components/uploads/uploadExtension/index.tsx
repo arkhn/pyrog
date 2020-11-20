@@ -10,8 +10,10 @@ import { validator } from '../validation/validate';
 import fhirSchema from '../validation/StructureDefinition.schema.json';
 
 import './style.scss';
-import { useMutation } from 'react-apollo';
+import { useApolloClient } from 'react-apollo';
 import { loader } from 'graphql.macro';
+import { fetchAvailableExtensions } from 'services/fhir';
+import { useDispatch } from 'react-redux';
 
 interface Resource {
   id: string;
@@ -25,8 +27,8 @@ interface Props {
   onUpload: (r: Resource) => void;
 }
 
-const mRefreshDefinition = loader(
-  'src/graphql/mutations/refreshDefinition.graphql'
+const qStructureDisplay = loader(
+  'src/graphql/queries/structureDisplay.graphql'
 );
 
 const overviewAttributes = [
@@ -57,6 +59,8 @@ const UploadExtension = ({ isOpen, onClose, onUpload }: Props) => {
     accept: 'application/json'
   });
 
+  const client = useApolloClient();
+  const dispatch = useDispatch();
   const [extensionDefinition, setExtensionDefinition] = React.useState(
     undefined as any
   );
@@ -64,7 +68,6 @@ const UploadExtension = ({ isOpen, onClose, onUpload }: Props) => {
     [] as string[]
   );
   const [uploadingExtension, setUploadingExtension] = React.useState(false);
-  const [refreshDefinition] = useMutation(mRefreshDefinition);
 
   const validateExtension = (extension: any): boolean => {
     if (!validate(extension)) {
@@ -91,10 +94,12 @@ const UploadExtension = ({ isOpen, onClose, onUpload }: Props) => {
         `${FHIR_API_URL}/StructureDefinition`,
         extensionDefinition
       );
-      const { data } = await refreshDefinition({
+      const { data } = await client.query({
+        query: qStructureDisplay,
         variables: { definitionId: extensionDefinition.id }
       });
-      onUpload(data.refreshDefinition);
+      dispatch(fetchAvailableExtensions)
+      onUpload(data.structureDefinition);
       onClose();
     } catch (err) {
       setinvalidExtensionErrors([

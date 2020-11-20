@@ -57,19 +57,15 @@ const sortItems = (
   extensions.sort((e1, e2) => sortAlphabetically(e1, e2, first));
 
 const AddExtensionSelect = ({
-  disabled,
-  icon,
   inputItem,
-  intent,
   items,
-  loading,
   onChange
 }: Props) => {
   const [uploadExtensionOpen, setUploadExtensionOpen] = React.useState(false);
 
   const renderMenuItem: ItemRenderer<Extension> = (
     extension: Extension,
-    { handleClick, modifiers, query }
+    { handleClick }
   ) => {
     const publisher =
       extension.publisher && extension.publisher.length > 20
@@ -99,7 +95,7 @@ const AddExtensionSelect = ({
       <Menu ulRef={itemsParentRef}>
         <MenuItem
           onClick={(e: React.MouseEvent) => {
-            e.preventDefault();
+            e.stopPropagation()
             setUploadExtensionOpen(true);
           }}
           icon={'plus'}
@@ -113,6 +109,7 @@ const AddExtensionSelect = ({
       </Menu>
     );
   };
+
   return (
     <React.Fragment>
       <UploadExtension

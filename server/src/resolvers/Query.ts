@@ -1,8 +1,7 @@
-import { arg, idArg, queryType } from '@nexus/schema'
+import { idArg, queryType } from '@nexus/schema'
 
 import { getDefinition } from 'fhir'
 import { sources } from './Source'
-import { searchDefinitions } from './StructureDefinition'
 
 export const Query = queryType({
   definition(t) {
@@ -90,15 +89,6 @@ export const Query = queryType({
       },
       nullable: true,
       resolve: async (_, { definitionId }) => getDefinition(definitionId),
-    })
-
-    t.list.field('structureDefinitions', {
-      type: 'StructureDefinition',
-      args: {
-        filter: arg({ type: 'StructureDefinitionWhereFilter', required: true }),
-      },
-      nullable: true,
-      resolve: searchDefinitions,
     })
   },
 })

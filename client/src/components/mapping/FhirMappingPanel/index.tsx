@@ -5,6 +5,7 @@ import { Attribute } from '@arkhn/fhir.ts';
 
 // ACTIONS
 import { updateFhirAttribute } from 'services/selectedNode/actions';
+import { fetchAvailableExtensions } from 'services/fhir';
 
 // COMPONENTS
 import AddResource from './AddResource';
@@ -47,6 +48,10 @@ const FhirMappingPanel = () => {
       </div>
     );
   };
+
+  React.useEffect(() =>{
+    dispatch(fetchAvailableExtensions)
+  }, [dispatch])
 
   return (
     <>

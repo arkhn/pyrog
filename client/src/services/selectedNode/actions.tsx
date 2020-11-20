@@ -1,24 +1,6 @@
 import { Attribute } from '@arkhn/fhir.ts';
 
-import { IAction, ISourceSchema, ISourceColumn } from 'types';
-
-interface Resource {
-  id: string;
-  label: string;
-  primaryKeyTable: string;
-  primaryKeyColumn: string;
-  filters: Filter[];
-  definition: {
-    id: string;
-    type: string;
-  };
-}
-
-interface Filter {
-  sqlColumn: ISourceColumn;
-  relation: string;
-  value: string;
-}
+import { IAction, ISourceSchema, Resource } from 'types';
 
 // Fhir Source
 export const updateSelectedSource = (source: {

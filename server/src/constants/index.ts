@@ -10,6 +10,7 @@ export const {
   REDIS_URL,
   TOKEN_INTROSPECTION_URL,
   USER_INFO_URL,
+  DEFINITIONS_DIR,
 } = process.env
 
 const TEST_ENV = 'test'

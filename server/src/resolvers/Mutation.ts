@@ -15,7 +15,6 @@ import {
 import { updateJoin, deleteJoin } from './Join'
 import { createResource, updateResource, deleteResource } from './Resource'
 import { deleteSource, createSource } from './Source'
-import { refreshDefinition } from './StructureDefinition'
 import { createTemplate, deleteTemplate } from './Template'
 import { updateRole } from './User'
 import cache from 'cache'
@@ -124,18 +123,6 @@ export const Mutation = mutationType({
         filters: arg({ type: 'FilterInput', list: true }),
       },
       resolve: updateResource,
-    })
-
-    /*
-     * StructureDefinition
-     */
-
-    t.field('refreshDefinition', {
-      type: 'StructureDefinition',
-      args: {
-        definitionId: idArg({ required: true }),
-      },
-      resolve: refreshDefinition,
     })
 
     /*
