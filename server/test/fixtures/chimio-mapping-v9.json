@@ -300,6 +300,7 @@
                 {
                   "id": "ckdg62wpn0000wu9kwb72ma7l",
                   "action": "EXCLUDE",
+                  "relation": "EQ",
                   "columnId": "ckdg62wpn0001wu9kdswn6id6",
                   "value": "-1",
                   "inputGroupId": "ckdg2bhpi0006uv9kmpsp43pi",
@@ -337,6 +338,7 @@
                 {
                   "id": "ckdg62wpn0000wu9kwb72ma8l",
                   "action": "INCLUDE",
+                  "relation": "GT",
                   "columnId": "ckdg62wpn0001wu9kdswn6id7",
                   "value": "-1",
                   "inputGroupId": "ckdg2bhpi0006uv9kmpsp43pi",

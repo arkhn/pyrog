@@ -167,6 +167,7 @@ export const buildConditionsQuery = (
   conditions.map(c => ({
     action: c.action,
     value: c.value,
+    relation: c.relation,
     sqlValue: {
       create: {
         table: c.sqlValue.table,

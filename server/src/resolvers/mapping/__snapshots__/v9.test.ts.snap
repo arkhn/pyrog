@@ -145,6 +145,7 @@ Array [
                     "create": Array [
                       Object {
                         "action": "EXCLUDE",
+                        "relation": "EQ",
                         "sqlValue": Object {
                           "create": Object {
                             "column": "DATEIN",
@@ -188,6 +189,7 @@ Array [
                     "create": Array [
                       Object {
                         "action": "INCLUDE",
+                        "relation": "GT",
                         "sqlValue": Object {
                           "create": Object {
                             "column": "DATEIN",
