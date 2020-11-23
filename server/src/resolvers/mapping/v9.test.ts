@@ -70,6 +70,7 @@ describe('import mapping V9', () => {
                       create: expect.arrayContaining([
                         {
                           action: 'EXCLUDE',
+                          relation: 'EQ',
                           value: '-1',
                           sqlValue: {
                             create: { table: 'SEJOUR', column: 'DATEIN' },
