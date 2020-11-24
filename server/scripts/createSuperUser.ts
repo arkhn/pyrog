@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import axios from 'axios'
-import FormData from 'form-data'
+import qs from 'qs'
 
 const prismaClient = new PrismaClient()
 
@@ -24,13 +24,9 @@ const main = async () => {
 
   // if IDENTITY_PROVIDER_URL is provided, send a request to create the user
   if (IDENTITY_PROVIDER_URL) {
-    let form = new FormData()
-    form.append('name', user.name)
-    form.append('password', user.password)
-    form.append('email', user.email)
-    console.log('creating user', user, '...', form)
-    await axios.post(`${IDENTITY_PROVIDER_URL}/signup`, form, {
-      headers: form.getHeaders(),
+    console.log('creating user', user)
+    await axios.post(`${IDENTITY_PROVIDER_URL}/signup`, qs.stringify(user), {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     })
   }
 
