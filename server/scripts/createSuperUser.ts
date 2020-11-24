@@ -28,6 +28,7 @@ const main = async () => {
     form.append('name', user.name)
     form.append('password', user.password)
     form.append('email', user.email)
+    console.log('creating user', user, '...', form)
     await axios.post(`${IDENTITY_PROVIDER_URL}/signup`, form, {
       headers: form.getHeaders(),
     })
