@@ -54,8 +54,6 @@ export const fetchAvailableResources = async (
       type: 'FETCH_AVAILABLE_RESOURCES',
       payload: availableResources
     });
-
-    return;
   } catch (err) {
     console.error(
       `Could not fetch available resources: ${
