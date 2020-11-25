@@ -117,9 +117,8 @@ const TableViewer = ({ table }: IProps) => {
         })
         .catch((err: any) => {
           setLoadingTable(false);
-          const { error } = err.response.data;
           toaster.show({
-            message: error || err.response.statusText,
+            message: err.response ? err.response.data : err.message,
             intent: 'danger',
             icon: 'properties',
             timeout: 10000
