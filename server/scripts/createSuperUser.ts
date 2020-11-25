@@ -24,7 +24,6 @@ const main = async () => {
 
   // if IDENTITY_PROVIDER_URL is provided, send a request to create the user
   if (IDENTITY_PROVIDER_URL) {
-    console.log('creating user', user)
     await axios.post(`${IDENTITY_PROVIDER_URL}/signup`, qs.stringify(user), {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     })
