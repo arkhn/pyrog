@@ -30,7 +30,6 @@ const TableViewer = ({ table }: IProps) => {
 
   const [compatiblePreview, setCompatiblePreview] = React.useState(false);
 
-  const [columns, setColumns] = React.useState([] as React.ReactElement[]);
   const [loadingTable, setLoadingTable] = React.useState(false);
   const [fields, setFields] = React.useState([] as string[]);
   const [rows, setRows] = React.useState([]);
@@ -86,20 +85,6 @@ const TableViewer = ({ table }: IProps) => {
   );
 
   React.useEffect(() => {
-    setColumns(
-      fields.map((field: string, index: number) => {
-        return (
-          <Column
-            key={index}
-            name={field}
-            cellRenderer={(i: number) => <Cell>{rows[i][index]}</Cell>}
-          />
-        );
-      })
-    );
-  }, [rows, fields]);
-
-  React.useEffect(() => {
     table === resource.primaryKeyTable
       ? setCompatiblePreview(true)
       : setCompatiblePreview(false);
@@ -147,7 +132,13 @@ const TableViewer = ({ table }: IProps) => {
             : []
         }
       >
-        {columns}
+        {fields.map((field: string, index: number) => (
+          <Column
+            key={index}
+            name={field}
+            cellRenderer={(i: number) => <Cell>{rows[i][index]}</Cell>}
+          />
+        ))}
       </Table>
       <FhirPreview previewData={previewData} loading={loadingPreview} />
     </React.Fragment>
