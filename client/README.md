@@ -86,7 +86,7 @@ The app must follow a [**semantic versioning**](https://semver.org/).
 
 ### 1. Tag the target commit (on `master`)
 
-        git tags app/vX.Y.Z [<commit-sha>]
+        git tag app/vX.Y.Z [<commit-sha>]
 
 Tags for the `pyrog-client` should be prefixed with `app`. For instance, use `app/v1.1.0` if you want to publish the `v1.1.0` version of the `pyrog-client` on DockerHub.
 
