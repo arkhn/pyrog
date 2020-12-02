@@ -208,7 +208,8 @@ body {
     }
 
     #exploration-tabs {
-      overflow: scroll;
+      min-height: 40%;
+      overflow-x: scroll;
 
       #column-selection {
         background-color: $light-gray3;
@@ -261,7 +262,7 @@ body {
 #input-groups {
   margin-right: calc(#{$window-padding} / 2);
   padding: $window-padding;
-  max-height: 50%;
+  min-height: 20%;
   overflow-x: scroll;
 
   & > *:not(:last-child) {
