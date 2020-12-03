@@ -53,7 +53,7 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
     setLoggedInUser();
   }
 
-  if (!AUTH_DISABLED && !user.id && process.env.NODE_ENV !== 'development') {
+  if (!AUTH_DISABLED && !user.id && !accessToken) {
     if (stateMatch) {
       // Wait for the code to be exchanged for a token
       return <Spinner />;

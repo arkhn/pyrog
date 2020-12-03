@@ -6,7 +6,7 @@ export const STATE_STORAGE_KEY = 'ARKHN_AUTH_STATE';
 export const AUTH_DISABLED =
   process.env.REACT_APP_AUTH_DISABLED &&
   ['1', 'true', 'yes'].includes(
-    process.env.REACT_APP_AUTH_DISABLED?.toLowerCase()
+    process.env.REACT_APP_AUTH_DISABLED.toLowerCase()
   );
 export const {
   REACT_APP_HTTP_BACKEND_URL: HTTP_BACKEND_URL,
