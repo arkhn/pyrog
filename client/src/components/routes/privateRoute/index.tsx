@@ -12,6 +12,7 @@ import { login as loginAction } from 'services/user/actions';
 import { IReduxStore } from 'types';
 import {
   ACCESS_TOKEN_STORAGE_KEY,
+  AUTH_DISABLED,
   STATE_STORAGE_KEY
 } from '../../../constants';
 
@@ -52,7 +53,7 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
     setLoggedInUser();
   }
 
-  if (!user.id && !accessToken) {
+  if (!AUTH_DISABLED && !user.id && !accessToken) {
     if (stateMatch) {
       // Wait for the code to be exchanged for a token
       return <Spinner />;

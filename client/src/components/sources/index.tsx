@@ -12,7 +12,7 @@ import {
   changeSelectedSource,
   deselectSource
 } from 'services/selectedNode/actions';
-import { onError } from 'services/apollo';
+import { onError as onApolloError } from 'services/apollo';
 import { IReduxStore, ISelectedSource } from 'types';
 
 import { SourceCard } from './sourceCard';
@@ -28,6 +28,7 @@ const SourcesView = (): React.ReactElement => {
 
   const { source } = useSelector((state: IReduxStore) => state.selectedNode);
   const toaster = useSelector((state: IReduxStore) => state.toaster);
+  const onError = onApolloError(toaster);
 
   const [sourceToDelete, setSourceToDelete] = useState(
     undefined as ISelectedSource | undefined
@@ -35,7 +36,7 @@ const SourcesView = (): React.ReactElement => {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
 
   const { data: dataSources, loading: loadingSources } = useQuery(qSources, {
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: 'cache-and-network', onError
   });
 
   React.useEffect(() => {
@@ -78,7 +79,7 @@ const SourcesView = (): React.ReactElement => {
 
   const [deleteSource, { loading: deletingSource }] = useMutation(
     mDeleteSource,
-    { update: removeSourceFromCache, onError: onError(toaster) }
+    { update: removeSourceFromCache, onError }
   );
 
   const onSelectSource = async (source: ISelectedSource): Promise<void> => {

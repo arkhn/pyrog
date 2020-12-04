@@ -2,6 +2,7 @@ import { rule, shield } from 'graphql-shield'
 
 import { Context } from 'context'
 import { getSourceIdFromMutationArgs } from './resolvers'
+import { User } from '@prisma/client'
 import { ENV } from '../constants'
 
 export const authenticationError = {
@@ -17,24 +18,28 @@ export const authorizationError = {
 // We want to skip authorization checks during integration tests
 const skipAuthorizations = ENV === 'test'
 
+const checkUser = (user: User | undefined): Error | undefined => {
+  if (!user) {
+    return new Error(
+      `${authenticationError.code}: ${authenticationError.message}`,
+    )
+  }
+  if (!user.email) {
+    return new Error('User does not have an email.')
+  }
+}
 const rules = {
   isAuthenticatedUser: rule()((_, __, ctx: Context) => {
-    if (!ctx.user) {
-      return new Error(
-        `${authenticationError.code}: ${authenticationError.message}`,
-      )
-    }
+    const err = checkUser(ctx.user)
+    if (err) return err
     return true
   }),
   isAdmin: rule()(async (_, __, ctx: Context) => {
     const { user } = ctx
-    if (!user) {
-      return new Error(
-        `${authenticationError.code}: ${authenticationError.message}`,
-      )
-    }
+    const err = checkUser(user)
+    if (err) return err
 
-    if (user.role !== 'ADMIN') {
+    if (user!.role !== 'ADMIN') {
       return new Error(
         `${authorizationError.code}: You need to be admin to perform this action`,
       )
@@ -43,21 +48,18 @@ const rules = {
   }),
   isSourceReader: rule()(async (_, args, ctx: Context) => {
     const { user } = ctx
-    if (!user) {
-      return new Error(
-        `${authenticationError.code}: ${authenticationError.message}`,
-      )
-    }
+    const err = checkUser(user)
+    if (err) return err
 
     // Return true if the user is admin
-    if (user.role === 'ADMIN') return true
+    if (user!.role === 'ADMIN') return true
 
     let sourceId = await getSourceIdFromMutationArgs(args, ctx)
 
     // Check access
     const access = await ctx.prisma.accessControl.findMany({
       where: {
-        user: { id: user.id },
+        user: { id: user!.id },
         source: { id: sourceId },
       },
     })
@@ -71,21 +73,18 @@ const rules = {
   }),
   isSourceWriter: rule()(async (_, args, ctx: Context) => {
     const { user } = ctx
-    if (!user) {
-      return new Error(
-        `${authenticationError.code}: ${authenticationError.message}`,
-      )
-    }
+    const err = checkUser(user)
+    if (err) return err
 
     // Return true if the user is admin
-    if (user.role == 'ADMIN') return true
+    if (user!.role == 'ADMIN') return true
 
     let sourceId = await getSourceIdFromMutationArgs(args, ctx)
 
     // Check role
     const access = await ctx.prisma.accessControl.findMany({
       where: {
-        user: { id: user.id },
+        user: { id: user!.id },
         source: { id: sourceId },
         role: 'WRITER',
       },
