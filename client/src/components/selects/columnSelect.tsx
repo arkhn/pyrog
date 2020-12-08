@@ -1,4 +1,4 @@
-import { ControlGroup, FormGroup, IPopoverProps } from '@blueprintjs/core';
+import { ControlGroup, IPopoverProps } from '@blueprintjs/core';
 import React, { useState, useEffect } from 'react';
 
 import StringSelect from 'components/selects/stringSelect';
@@ -10,7 +10,6 @@ export interface Props {
   initialTable?: string;
   initialColumn?: string;
   sourceSchema: ISourceSchema;
-  label?: string;
   vertical?: boolean;
   fill?: boolean;
   popoverProps?: IPopoverProps;
@@ -23,7 +22,6 @@ const ColumnSelect = ({
   initialTable,
   initialColumn,
   sourceSchema,
-  label,
   vertical,
   fill,
   popoverProps,
@@ -58,7 +56,7 @@ const ColumnSelect = ({
 
   const columns = table ? ((sourceSchema[table] as string[]) as any) : [];
 
-  const controlGroup = (
+  return (
     <ControlGroup vertical={vertical || false} fill={fill || false}>
       <StringSelect
         disabled={disabled}
@@ -79,14 +77,6 @@ const ColumnSelect = ({
         popoverProps={popoverProps || {}}
       />
     </ControlGroup>
-  );
-
-  return label ? (
-    <FormGroup label={label} labelFor="text-input" inline={true}>
-      {controlGroup}
-    </FormGroup>
-  ) : (
-    controlGroup
   );
 };
 
