@@ -259,6 +259,9 @@ body {
   }
 }
 
+#input-groups:empty {
+  display: none;
+}
 #input-groups {
   margin-right: calc(#{$window-padding} / 2);
   padding: $window-padding;
