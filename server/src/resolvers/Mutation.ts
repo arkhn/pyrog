@@ -271,7 +271,7 @@ export const Mutation = mutationType({
       type: 'Column',
       args: {
         columnId: idArg({ required: true }),
-        join: arg({ type: 'JoinInput' }),
+        join: arg({ type: 'JoinInput', required: true }),
       },
       resolve: addJoinToColumn,
     })

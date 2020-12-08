@@ -112,7 +112,7 @@ input ColumnFilter {
 
 input ColumnInput {
   column: String!
-  joins: [JoinInput!]
+  joins: [JoinTablesInput!]
   table: String!
 }
 
@@ -298,7 +298,7 @@ input FilterFilter {
 
 input FilterInput {
   relation: String!
-  sqlColumn: ColumnInputWithoutJoins!
+  sqlColumn: ColumnInput!
   value: String!
 }
 
@@ -404,6 +404,10 @@ input JoinInput {
   target: ColumnInputWithoutJoins
 }
 
+input JoinTablesInput {
+  tables: [ColumnInputWithoutJoins!]
+}
+
 input JoinWhereInput {
   AND: [JoinWhereInput!]
   column: ColumnWhereInput
@@ -427,7 +431,7 @@ scalar JSON
 
 type Mutation {
   addConditionToInputGroup(action: String, column: String, inputGroupId: ID!, relation: ConditionRelation, table: String, value: String): InputGroup!
-  addJoinToColumn(columnId: ID!, join: JoinInput): Column!
+  addJoinToColumn(columnId: ID!, join: JoinInput!): Column!
   createAccessControl(role: SourceRole!, sourceId: ID!, userEmail: String!): AccessControl!
   createAttribute(data: AttributeInput, definitionId: ID!, path: String!, resourceId: ID!, sliceName: String): Attribute!
   createComment(attributeId: ID!, content: String!, validation: Boolean!): Comment!

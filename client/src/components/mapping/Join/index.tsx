@@ -88,7 +88,10 @@ const Join = ({ joinData }: Props) => {
         }}
       />
 
-      <JoinColumns join={joinData} updateJoin={updateJoin} />
+      <JoinColumns
+        join={joinData}
+        updateJoin={(variables: any) => updateJoin({ variables })}
+      />
     </div>
   );
 };

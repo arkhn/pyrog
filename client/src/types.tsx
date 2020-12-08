@@ -1,6 +1,10 @@
 import { IToaster } from '@blueprintjs/core';
 import * as redux from 'redux';
-import { Attribute, AttributeDefinition, ResourceDefinition } from '@arkhn/fhir.ts';
+import {
+  Attribute,
+  AttributeDefinition,
+  ResourceDefinition
+} from '@arkhn/fhir.ts';
 
 // REDUX
 export interface ISimpleAction {
@@ -103,9 +107,19 @@ export interface Condition {
 }
 
 export interface Filter {
-  sqlColumn: ISourceColumn;
+  sqlColumn: Column;
   relation: string;
   value: string;
+}
+
+interface Column {
+  table: string;
+  column: string;
+  joins?: Join[];
+}
+
+export interface Join {
+  tables: Column[];
 }
 
 export interface ISelectedNode {
@@ -241,9 +255,4 @@ export interface ITemplate {
 
 export interface ISourceSchema {
   [table: string]: string[];
-}
-
-export interface ISourceColumn {
-  table: string;
-  column: string;
 }

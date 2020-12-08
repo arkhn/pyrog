@@ -1,17 +1,22 @@
-import { ControlGroup, IPopoverProps } from '@blueprintjs/core';
+import { ControlGroup, Icon, IPopoverProps } from '@blueprintjs/core';
 import React, { useState, useEffect } from 'react';
 
+import JoinColumns from 'components/mapping/JoinColumns';
 import StringSelect from 'components/selects/stringSelect';
-import { ISourceSchema } from 'types';
+import { ISourceSchema, Join } from 'types';
 
 export interface Props {
   tableChangeCallback?: Function;
   columnChangeCallback?: Function;
+  joinsChangeCallback?: Function;
   initialTable?: string;
   initialColumn?: string;
   sourceSchema: ISourceSchema;
   vertical?: boolean;
   fill?: boolean;
+  withJoins?: boolean;
+  initialJoins?: Join[];
+  primaryKeyTable?: string;
   popoverProps?: IPopoverProps;
   disabled?: boolean;
 }
@@ -19,24 +24,31 @@ export interface Props {
 const ColumnSelect = ({
   tableChangeCallback,
   columnChangeCallback,
+  joinsChangeCallback,
   initialTable,
   initialColumn,
   sourceSchema,
   vertical,
   fill,
+  withJoins,
+  initialJoins,
+  primaryKeyTable,
   popoverProps,
   disabled
 }: Props): React.ReactElement => {
   const [table, setTable] = useState(initialTable);
   const [column, setColumn] = useState(initialColumn);
+  const [joins, setJoins] = useState(initialJoins);
 
   useEffect(() => {
     setTable(initialTable);
     setColumn(initialColumn);
-  }, [initialTable, initialColumn]);
+    setJoins(initialJoins || []);
+  }, [initialTable, initialColumn, initialJoins]);
 
   const changeTable = (e: string): void => {
     setTable(e);
+    setJoins([]);
     setColumn(undefined);
 
     if (tableChangeCallback) {
@@ -52,31 +64,97 @@ const ColumnSelect = ({
     }
   };
 
+  const changeJoins = (
+    sourceTable: string,
+    sourceColumn: string,
+    targetTable: string,
+    targetColumn: string,
+    index?: number
+  ): void => {
+    const newJoin = {
+      tables: [
+        { table: sourceTable, column: sourceColumn },
+        { table: targetTable, column: targetColumn }
+      ]
+    };
+    if (index !== undefined) {
+      joins![index] = newJoin;
+      setJoins([...joins!]);
+    } else {
+      setJoins([...joins!, newJoin]);
+    }
+
+    if (joinsChangeCallback) {
+      joinsChangeCallback(joins);
+    }
+  };
+
   const tables = Object.keys(sourceSchema);
 
-  const columns = table ? ((sourceSchema[table] as string[]) as any) : [];
+  const columns = table ? sourceSchema[table] : [];
 
   return (
-    <ControlGroup vertical={vertical || false} fill={fill || false}>
-      <StringSelect
-        disabled={disabled}
-        icon={'th'}
-        inputItem={table!}
-        items={tables}
-        maxItems={100}
-        onChange={changeTable}
-        popoverProps={popoverProps || {}}
-      />
-      <StringSelect
-        disabled={disabled || !table}
-        icon={'column-layout'}
-        inputItem={column!}
-        items={columns}
-        maxItems={100}
-        onChange={changeColumn}
-        popoverProps={popoverProps || {}}
-      />
-    </ControlGroup>
+    <>
+      <ControlGroup vertical={vertical || false} fill={fill || false}>
+        <StringSelect
+          disabled={disabled}
+          icon={'th'}
+          inputItem={table!}
+          items={tables}
+          maxItems={100}
+          onChange={changeTable}
+          popoverProps={popoverProps || {}}
+        />
+        <StringSelect
+          disabled={disabled || !table}
+          icon={'column-layout'}
+          inputItem={column!}
+          items={columns}
+          maxItems={100}
+          onChange={changeColumn}
+          popoverProps={popoverProps || {}}
+        />
+      </ControlGroup>
+      {withJoins &&
+        joins!.map((join, index) => (
+          <ControlGroup key={index} fill={fill || false}>
+            <Icon icon="left-join" />
+            <JoinColumns
+              join={join}
+              updateJoin={(
+                sourceTable: string,
+                sourceColumn: string,
+                targetTable: string,
+                targetColumn: string
+              ) =>
+                changeJoins(
+                  sourceTable,
+                  sourceColumn,
+                  targetTable,
+                  targetColumn,
+                  index
+                )
+              }
+            />
+          </ControlGroup>
+        ))}
+      {withJoins && joins!.length === 0 && table && table !== primaryKeyTable && (
+        <ControlGroup fill={fill || false}>
+          <Icon icon="left-join" />
+          <JoinColumns
+            updateJoin={(
+              sourceTable: string,
+              sourceColumn: string,
+              targetTable: string,
+              targetColumn: string
+            ) =>
+              changeJoins(sourceTable, sourceColumn, targetTable, targetColumn)
+            }
+          />
+          {/* TODO add join */}
+        </ControlGroup>
+      )}
+    </>
   );
 };
 

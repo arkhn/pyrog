@@ -52,12 +52,12 @@ export const createInput: FieldResolver<'Mutation', 'createInput'> = async (
               tables: {
                 create: [
                   {
-                    table: j.source ? j.source.table : '',
-                    column: j.source ? j.source.column : '',
+                    table: (j.tables && j.tables[0]?.table) || '',
+                    column: (j.tables && j.tables[0]?.column) || '',
                   },
                   {
-                    table: j.target ? j.target.table : '',
-                    column: j.target ? j.target.column : '',
+                    table: (j.tables && j.tables[1]?.table) || '',
+                    column: (j.tables && j.tables[1]?.column) || '',
                   },
                 ],
               },

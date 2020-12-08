@@ -24,20 +24,12 @@ export const addJoinToColumn: FieldResolver<
       tables: {
         create: [
           {
-            table:
-              join && join.source && join.source.table ? join.source.table : '',
-            column:
-              join && join.source && join.source.column
-                ? join.source.column
-                : '',
+            table: join.source?.table || '',
+            column: join.source?.column || '',
           },
           {
-            table:
-              join && join.target && join.target.table ? join.target.table : '',
-            column:
-              join && join.target && join.target.column
-                ? join.target.column
-                : '',
+            table: join.target?.table || '',
+            column: join.target?.column || '',
           },
         ],
       },

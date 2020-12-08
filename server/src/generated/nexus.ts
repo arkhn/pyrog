@@ -88,7 +88,7 @@ export interface NexusGenInputs {
   }
   ColumnInput: { // input type
     column: string; // String!
-    joins?: NexusGenInputs['JoinInput'][] | null; // [JoinInput!]
+    joins?: NexusGenInputs['JoinTablesInput'][] | null; // [JoinTablesInput!]
     table: string; // String!
   }
   ColumnInputWithoutJoins: { // input type
@@ -192,7 +192,7 @@ export interface NexusGenInputs {
   }
   FilterInput: { // input type
     relation: string; // String!
-    sqlColumn: NexusGenInputs['ColumnInputWithoutJoins']; // ColumnInputWithoutJoins!
+    sqlColumn: NexusGenInputs['ColumnInput']; // ColumnInput!
     value: string; // String!
   }
   FilterWhereInput: { // input type
@@ -259,6 +259,9 @@ export interface NexusGenInputs {
   JoinInput: { // input type
     source?: NexusGenInputs['ColumnInputWithoutJoins'] | null; // ColumnInputWithoutJoins
     target?: NexusGenInputs['ColumnInputWithoutJoins'] | null; // ColumnInputWithoutJoins
+  }
+  JoinTablesInput: { // input type
+    tables?: NexusGenInputs['ColumnInputWithoutJoins'][] | null; // [ColumnInputWithoutJoins!]
   }
   JoinWhereInput: { // input type
     AND?: NexusGenInputs['JoinWhereInput'][] | null; // [JoinWhereInput!]
@@ -562,6 +565,7 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
   InputWhereUniqueInput: NexusGenInputs['InputWhereUniqueInput'];
   JoinFilter: NexusGenInputs['JoinFilter'];
   JoinInput: NexusGenInputs['JoinInput'];
+  JoinTablesInput: NexusGenInputs['JoinTablesInput'];
   JoinWhereInput: NexusGenInputs['JoinWhereInput'];
   JoinWhereUniqueInput: NexusGenInputs['JoinWhereUniqueInput'];
   NullableStringFilter: NexusGenInputs['NullableStringFilter'];
@@ -838,7 +842,7 @@ export interface NexusGenArgTypes {
     }
     addJoinToColumn: { // args
       columnId: string; // ID!
-      join?: NexusGenInputs['JoinInput'] | null; // JoinInput
+      join: NexusGenInputs['JoinInput']; // JoinInput!
     }
     createAccessControl: { // args
       role: NexusGenEnums['SourceRole']; // SourceRole!
@@ -1011,7 +1015,7 @@ export interface NexusGenInheritedFields {}
 
 export type NexusGenObjectNames = "AccessControl" | "Attribute" | "AttributeDefinition" | "Column" | "Comment" | "ConceptMap" | "Condition" | "Credential" | "Filter" | "Input" | "InputGroup" | "Join" | "Mutation" | "Query" | "Resource" | "Source" | "StructureDefinition" | "Template" | "User";
 
-export type NexusGenInputNames = "AccessControlFilter" | "AccessControlWhereInput" | "AccessControlWhereUniqueInput" | "AccessControl_user_sourceCompoundUniqueInput" | "AttributeFilter" | "AttributeInput" | "AttributeWhereInput" | "AttributeWhereUniqueInput" | "BooleanFilter" | "ColumnFilter" | "ColumnInput" | "ColumnInputWithoutJoins" | "ColumnWhereInput" | "ColumnWhereUniqueInput" | "CommentFilter" | "CommentWhereInput" | "CommentWhereUniqueInput" | "ConditionFilter" | "ConditionWhereInput" | "ConditionWhereUniqueInput" | "CredentialWhereInput" | "DateTimeFilter" | "FilterFilter" | "FilterInput" | "FilterWhereInput" | "InputFilter" | "InputGroupFilter" | "InputGroupWhereInput" | "InputGroupWhereUniqueInput" | "InputWhereInput" | "InputWhereUniqueInput" | "JoinFilter" | "JoinInput" | "JoinWhereInput" | "JoinWhereUniqueInput" | "NullableStringFilter" | "ResourceFilter" | "ResourceWhereInput" | "ResourceWhereUniqueInput" | "SourceFilter" | "SourceWhereInput" | "SourceWhereUniqueInput" | "Source_templateId_nameCompoundUniqueInput" | "StringFilter" | "StructureDefinitionWhereFilter" | "TemplateWhereInput" | "UUIDFilter" | "UpdateInputInput" | "UpdateResourceInput" | "UserWhereInput";
+export type NexusGenInputNames = "AccessControlFilter" | "AccessControlWhereInput" | "AccessControlWhereUniqueInput" | "AccessControl_user_sourceCompoundUniqueInput" | "AttributeFilter" | "AttributeInput" | "AttributeWhereInput" | "AttributeWhereUniqueInput" | "BooleanFilter" | "ColumnFilter" | "ColumnInput" | "ColumnInputWithoutJoins" | "ColumnWhereInput" | "ColumnWhereUniqueInput" | "CommentFilter" | "CommentWhereInput" | "CommentWhereUniqueInput" | "ConditionFilter" | "ConditionWhereInput" | "ConditionWhereUniqueInput" | "CredentialWhereInput" | "DateTimeFilter" | "FilterFilter" | "FilterInput" | "FilterWhereInput" | "InputFilter" | "InputGroupFilter" | "InputGroupWhereInput" | "InputGroupWhereUniqueInput" | "InputWhereInput" | "InputWhereUniqueInput" | "JoinFilter" | "JoinInput" | "JoinTablesInput" | "JoinWhereInput" | "JoinWhereUniqueInput" | "NullableStringFilter" | "ResourceFilter" | "ResourceWhereInput" | "ResourceWhereUniqueInput" | "SourceFilter" | "SourceWhereInput" | "SourceWhereUniqueInput" | "Source_templateId_nameCompoundUniqueInput" | "StringFilter" | "StructureDefinitionWhereFilter" | "TemplateWhereInput" | "UUIDFilter" | "UpdateInputInput" | "UpdateResourceInput" | "UserWhereInput";
 
 export type NexusGenEnumNames = "ConditionAction" | "ConditionRelation" | "DatabaseType" | "Role" | "SourceRole";
 
