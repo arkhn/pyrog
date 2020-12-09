@@ -38,7 +38,7 @@ const ColumnSelect = ({
 }: Props): React.ReactElement => {
   const [table, setTable] = useState(initialTable);
   const [column, setColumn] = useState(initialColumn);
-  const [joins, setJoins] = useState(initialJoins);
+  const [joins, setJoins] = useState(initialJoins || []);
 
   useEffect(() => {
     setTable(initialTable);
@@ -94,7 +94,7 @@ const ColumnSelect = ({
   const columns = table ? sourceSchema[table] : [];
 
   return (
-    <>
+    <ControlGroup vertical={true}>
       <ControlGroup vertical={vertical || false} fill={fill || false}>
         <StringSelect
           disabled={disabled}
@@ -154,7 +154,7 @@ const ColumnSelect = ({
           {/* TODO add join */}
         </ControlGroup>
       )}
-    </>
+    </ControlGroup>
   );
 };
 

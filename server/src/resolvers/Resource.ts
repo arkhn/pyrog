@@ -151,7 +151,7 @@ export const updateResource: FieldResolver<
             ctx.prisma.join.delete({ where: { id: j.id } }),
           ),
         )
-        ctx.prisma.filter.delete({ where: { id: f.id } })
+        await ctx.prisma.filter.delete({ where: { id: f.id } })
       }),
     )
     const newFilters = await Promise.all(

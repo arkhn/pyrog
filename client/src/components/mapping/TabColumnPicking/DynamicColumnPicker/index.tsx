@@ -16,7 +16,7 @@ import ColumnSelect from 'components/selects/columnSelect';
 import TableViewer from 'components/mapping/TableViewer';
 
 import { onError } from 'services/apollo';
-import { IReduxStore, ISelectedSource } from 'types';
+import { IReduxStore, ISelectedSource, Join } from 'types';
 
 import { setAttributeInMap } from 'services/resourceInputs/actions';
 
@@ -61,6 +61,7 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
 
   const [table, setTable] = useState(resource.primaryKeyTable);
   const [column, setColumn] = useState('');
+  const [joins, setJoins] = useState([] as Join[]);
 
   const [createAttribute] = useMutation(mCreateAttribute, {
     onError: onError(toaster)
@@ -108,7 +109,7 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
         if (
           !attributesForResource[parentPath] &&
           !currentAttribute.isArray &&
-          !(currentAttribute.types.length > 1)
+          currentAttribute.types.length <= 1
         ) {
           const { data: attr } = await createAttribute({
             variables: {
@@ -126,7 +127,8 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
           inputGroupId,
           columnInput: {
             table: table,
-            column: column
+            column: column,
+            joins: joins
           }
         }
       });
@@ -158,8 +160,12 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
             columnChangeCallback={(e: string) => {
               setColumn(e);
             }}
+            joinsChangeCallback={(joins: Join[]): void => {
+              setJoins(joins);
+            }}
             initialTable={table}
             sourceSchema={schema}
+            withJoins={false}  // TODO change if we want to select joins in Dynamic div
             popoverProps={{
               autoFocus: true,
               boundary: 'viewport',
@@ -168,7 +174,6 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
               position: Position.TOP,
               usePortal: true
             }}
-    
           />
           <Button
             disabled={!attribute || !column}
