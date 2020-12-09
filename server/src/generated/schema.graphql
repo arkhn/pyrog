@@ -430,7 +430,7 @@ The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://
 scalar JSON
 
 type Mutation {
-  addConditionToInputGroup(action: String, column: String, inputGroupId: ID!, relation: ConditionRelation, table: String, value: String): InputGroup!
+  addConditionToInputGroup(action: ConditionAction!, column: String, inputGroupId: ID!, relation: ConditionRelation!, table: String, value: String): InputGroup!
   addJoinToColumn(columnId: ID!, join: JoinInput!): Column!
   createAccessControl(role: SourceRole!, sourceId: ID!, userEmail: String!): AccessControl!
   createAttribute(data: AttributeInput, definitionId: ID!, path: String!, resourceId: ID!, sliceName: String): Attribute!

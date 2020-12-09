@@ -833,10 +833,10 @@ export interface NexusGenArgTypes {
   }
   Mutation: {
     addConditionToInputGroup: { // args
-      action?: string | null; // String
+      action: NexusGenEnums['ConditionAction']; // ConditionAction!
       column?: string | null; // String
       inputGroupId: string; // ID!
-      relation?: NexusGenEnums['ConditionRelation'] | null; // ConditionRelation
+      relation: NexusGenEnums['ConditionRelation']; // ConditionRelation!
       table?: string | null; // String
       value?: string | null; // String
     }

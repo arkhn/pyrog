@@ -6,6 +6,7 @@ import { ISelectedSource } from 'types';
 
 import StaticValueForm from './StaticValueForm';
 import DynamicColumnPicker from './DynamicColumnPicker';
+import ConditionForm from './ConditionForm';
 import './style.scss';
 
 interface Props {
@@ -23,6 +24,7 @@ const TabColumnPicking = ({ attribute, schema, source }: Props) => {
         schema={schema}
         source={source}
       />
+      <ConditionForm />
     </div>
   );
 };

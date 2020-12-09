@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Tag } from '@blueprintjs/core';
+import { Tag } from '@blueprintjs/core';
 import { useMutation } from '@apollo/react-hooks';
 import { useSelector } from 'react-redux';
 import { onError } from 'services/apollo';
@@ -15,9 +15,6 @@ import { IReduxStore } from 'types';
 const mUpdateInputGroup = loader(
   'src/graphql/mutations/updateInputGroup.graphql'
 );
-const mCreateCondition = loader(
-  'src/graphql/mutations/addConditionToInputGroup.graphql'
-);
 
 interface Props {
   inputGroup: any;
@@ -30,9 +27,6 @@ const InputGroup = ({ inputGroup }: Props) => {
     updateInputGroup,
     { loading: loadingMutation }
   ] = useMutation(mUpdateInputGroup, { onError: onError(toaster) });
-  const [createCondition] = useMutation(mCreateCondition, {
-    onError: onError(toaster)
-  });
 
   const onChangeMergingScript = (script: string) => {
     updateInputGroup({
@@ -58,19 +52,6 @@ const InputGroup = ({ inputGroup }: Props) => {
         (condition: any, index: number) =>
           condition && <InputCondition key={index} condition={condition} />
       )}
-      <Button
-        icon={'add'}
-        onClick={(e: React.MouseEvent) => {
-          e.stopPropagation();
-          createCondition({
-            variables: {
-              inputGroupId: inputGroup.id
-            }
-          });
-        }}
-      >
-        Add condition
-      </Button>
       <div id="input-columns">
         <div id="input-column-rows">
           {inputGroup.inputs.map(

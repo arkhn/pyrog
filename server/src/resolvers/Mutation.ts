@@ -195,10 +195,10 @@ export const Mutation = mutationType({
       type: 'InputGroup',
       args: {
         inputGroupId: idArg({ required: true }),
-        action: stringArg(),
+        action: arg({ type: 'ConditionAction', required: true }),
         table: stringArg(),
         column: stringArg(),
-        relation: arg({ type: 'ConditionRelation' }),
+        relation: arg({ type: 'ConditionRelation', required: true }),
         value: stringArg(),
       },
       resolve: addConditionToInputGroup,

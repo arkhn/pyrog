@@ -2,9 +2,10 @@
 
 mutation addConditionToInputGroup(
   $inputGroupId: ID!
-  $action: String
+  $action: ConditionAction!
   $table: String
   $column: String
+  $relation: ConditionRelation!
   $value: String
 ) {
   addConditionToInputGroup(
@@ -12,6 +13,7 @@ mutation addConditionToInputGroup(
     action: $action
     table: $table
     column: $column
+    relation: $relation
     value: $value
   ) {
     id

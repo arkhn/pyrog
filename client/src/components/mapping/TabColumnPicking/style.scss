@@ -1,6 +1,9 @@
 @import '~@blueprintjs/core/lib/css/blueprint.css';
 @import '~@blueprintjs/core/lib/scss/variables';
 
+$window-padding: 20px;
+$border-radius: 6px;
+
 .bp3-card {
   position: relative;
 
@@ -55,5 +58,39 @@
   .text {
     width: min-content;
     margin: 5px;
+  }
+}
+
+.input-conditions {
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+
+  & > *:not(:last-child) {
+    margin-right: $window-padding;
+  }
+
+  .condition-action {
+    display: flex;
+    align-items: center;
+  }
+
+  .condition-column {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.stacked-tags {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  .bp3-tag {
+    text-align: center;
+  }
+  .bp3-button {
+    word-wrap: break-word;
   }
 }

@@ -165,7 +165,7 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
             }}
             initialTable={table}
             sourceSchema={schema}
-            withJoins={false}  // TODO change if we want to select joins in Dynamic div
+            withJoins={true}  // TODO change if we want to select joins in Dynamic div
             popoverProps={{
               autoFocus: true,
               boundary: 'viewport',
