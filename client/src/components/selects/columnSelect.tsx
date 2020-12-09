@@ -1,4 +1,4 @@
-import { ControlGroup, Icon, IPopoverProps } from '@blueprintjs/core';
+import { Button, ControlGroup, Icon, IPopoverProps } from '@blueprintjs/core';
 import React, { useState, useEffect } from 'react';
 
 import JoinColumns from 'components/mapping/JoinColumns';
@@ -38,7 +38,7 @@ const ColumnSelect = ({
 }: Props): React.ReactElement => {
   const [table, setTable] = useState(initialTable);
   const [column, setColumn] = useState(initialColumn);
-  const [joins, setJoins] = useState(initialJoins || []);
+  const [joins, setJoins] = useState(initialJoins || []);
 
   useEffect(() => {
     setTable(initialTable);
@@ -48,8 +48,8 @@ const ColumnSelect = ({
 
   const changeTable = (e: string): void => {
     setTable(e);
-    setJoins([]);
     setColumn(undefined);
+    setJoins([]);
 
     if (tableChangeCallback) {
       tableChangeCallback(e);
@@ -114,11 +114,31 @@ const ColumnSelect = ({
           onChange={changeColumn}
           popoverProps={popoverProps || {}}
         />
+        {withJoins && (
+          <Button
+            icon={'left-join'}
+            onClick={() => {
+              // addJoinToColumn({
+              //   variables: {
+              //     columnId: input.sqlValue.id,
+              //     join: {
+              //       source: {
+              //         table: resource.primaryKeyTable
+              //       },
+              //       target: {
+              //         table: input.sqlValue.table
+              //       }
+              //     }
+              //   }
+              // });
+            }}
+          />
+        )}
       </ControlGroup>
       {withJoins &&
         joins!.map((join, index) => (
           <ControlGroup key={index} fill={fill || false}>
-            <Icon icon="left-join" />
+            <Icon icon="trash" />
             <JoinColumns
               join={join}
               updateJoin={(
@@ -140,7 +160,7 @@ const ColumnSelect = ({
         ))}
       {withJoins && joins!.length === 0 && table && table !== primaryKeyTable && (
         <ControlGroup fill={fill || false}>
-          <Icon icon="left-join" />
+          <Icon icon="trash" />
           <JoinColumns
             updateJoin={(
               sourceTable: string,

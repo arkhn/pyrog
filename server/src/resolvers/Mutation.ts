@@ -238,6 +238,7 @@ export const Mutation = mutationType({
       args: {
         inputGroupId: idArg({ required: true }),
         script: stringArg(),
+        conceptMapId: stringArg(),
         static: stringArg(),
         sql: arg({
           type: 'ColumnInput',

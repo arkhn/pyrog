@@ -20,7 +20,7 @@ export const Input = objectType({
 
 export const createInput: FieldResolver<'Mutation', 'createInput'> = async (
   _parent,
-  { inputGroupId, script, static: staticValue, sql: sqlValue },
+  { inputGroupId, script, conceptMapId, static: staticValue, sql: sqlValue },
   ctx,
 ) => {
   if (!sqlValue && !staticValue) {
@@ -34,6 +34,7 @@ export const createInput: FieldResolver<'Mutation', 'createInput'> = async (
       data: {
         staticValue,
         script,
+        conceptMapId,
         inputGroup: {
           connect: {
             id: inputGroupId,
@@ -78,6 +79,7 @@ export const createInput: FieldResolver<'Mutation', 'createInput'> = async (
         },
       },
       script,
+      conceptMapId,
       inputGroup: {
         connect: {
           id: inputGroupId,

@@ -106,22 +106,6 @@ const InputColumn = ({ input }: Props) => {
     });
   };
 
-  useEffect(() => {
-    if (input.conceptMapId) {
-      const fetchConceptMap = async (conceptMapId: string) => {
-        const response = await axios.get(
-          `${FHIR_API_URL}/ConceptMap/${conceptMapId}`
-        );
-        if (response.data.resourceType === 'OperationOutcome')
-          throw new Error(response.data.issue[0].diagnostics);
-        setConceptMap(response.data as ConceptMap);
-      };
-      fetchConceptMap(input.conceptMapId).catch(e => {
-        console.error(e);
-      });
-    }
-  }, [input.conceptMapId]);
-
   return (
     <div className="input-column">
       <Button
@@ -168,57 +152,16 @@ const InputColumn = ({ input }: Props) => {
                   }
                 ]}
               />
-              <div className="stacked-tags" onClick={e => e.stopPropagation()}>
-                <Tag>SCRIPT</Tag>
-                <ScriptSelect
-                  loading={loadUpdInput}
-                  selectedScript={input.script}
-                  onChange={(script: string) => {
-                    updateInput({
-                      variables: {
-                        inputId: input.id,
-                        data: { script }
-                      }
-                    });
-                  }}
-                  onClear={(): void => {
-                    updateInput({
-                      variables: {
-                        inputId: input.id,
-                        data: { script: null }
-                      }
-                    });
-                  }}
-                />
-              </div>
-              {['code', 'string'].includes(attribute.types[0]) && (
-                <div
-                  className="stacked-tags"
-                  onClick={e => e.stopPropagation()}
-                >
+              {input.script && (
+                <div className="stacked-tags">
+                  <Tag minimal={true}>SCRIPT</Tag>
+                  <Tag large={true}>{input.script}</Tag>
+                </div>
+              )}
+              {input.conceptMapId && (
+                <div className="stacked-tags">
                   <Tag>CONCEPT MAP</Tag>
-                  <ButtonGroup>
-                    <Button
-                      text={conceptMap?.title || 'None'}
-                      onClick={(_e: React.MouseEvent) => {
-                        setConceptMapOverlayVisible(true);
-                      }}
-                    />
-                    <Button
-                      className="delete-button"
-                      icon="cross"
-                      minimal={true}
-                      disabled={!input.conceptMapId}
-                      onClick={(_e: React.MouseEvent) => {
-                        updateInput({
-                          variables: {
-                            inputId: input.id,
-                            data: { conceptMapId: null }
-                          }
-                        });
-                      }}
-                    />
-                  </ButtonGroup>
+                  <Tag large={true}>{input.conceptMapId}</Tag>
                 </div>
               )}
             </div>

@@ -114,60 +114,52 @@ const ConditionForm = () => {
       <div className="input-conditions">
         <div className="stacked-tags">
           <Tag minimal={true}>ACTION</Tag>
-          <Tag intent={'primary'} large={true}>
-            <StringSelect
-              inputItem={conditionAction}
-              items={availableActions}
-              onChange={(action: string): void => {
-                setConditionAction(action);
-              }}
-            />
-          </Tag>
+          <StringSelect
+            inputItem={conditionAction}
+            items={availableActions}
+            onChange={(action: string): void => {
+              setConditionAction(action);
+            }}
+          />
         </div>
         <div className="stacked-tags">
           <Tag minimal={true}>COLUMN</Tag>
-          <Tag intent={'primary'} large={true}>
-            <ColumnSelect
-              initialTable={conditionTable}
-              initialColumn={conditionColumn}
-              tableChangeCallback={(e: string) => {
-                setConditionTable(e);
-                setConditionColumn('');
-              }}
-              columnChangeCallback={(e: string) => {
-                setConditionColumn(e);
-              }}
-              sourceSchema={schema as ISourceSchema}
-            />
-          </Tag>
+          <ColumnSelect
+            initialTable={conditionTable}
+            initialColumn={conditionColumn}
+            tableChangeCallback={(e: string) => {
+              setConditionTable(e);
+              setConditionColumn('');
+            }}
+            columnChangeCallback={(e: string) => {
+              setConditionColumn(e);
+            }}
+            sourceSchema={schema as ISourceSchema}
+          />
         </div>
         <div className="stacked-tags">
           <Tag minimal={true}>RELATION</Tag>
-          <Tag intent={'primary'} large={true}>
-            <StringSelect
-              inputItem={conditionRelation}
-              items={Array.from(conditionsMap.keys())}
-              displayItem={item => conditionsMap.get(item)!}
-              onChange={(relation: string): void => {
-                setConditionRelation(relation);
-              }}
-            />
-          </Tag>
+          <StringSelect
+            inputItem={conditionRelation}
+            items={Array.from(conditionsMap.keys())}
+            displayItem={item => conditionsMap.get(item)!}
+            onChange={(relation: string): void => {
+              setConditionRelation(relation);
+            }}
+          />
         </div>
         {!unaryRelations.includes(conditionRelation) && (
           <div className="stacked-tags">
             <Tag minimal={true}>VALUE</Tag>
-            <Tag intent={'primary'} large={true}>
-              <input
-                className="text-input"
-                value={conditionValue}
-                type="text"
-                placeholder="value..."
-                onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
-                  setConditionValue(e.target.value);
-                }}
-              />
-            </Tag>
+            <input
+              className="text-input"
+              value={conditionValue}
+              type="text"
+              placeholder="value..."
+              onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
+                setConditionValue(e.target.value);
+              }}
+            />
           </div>
         )}
         <div>

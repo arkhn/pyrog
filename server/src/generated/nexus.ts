@@ -862,6 +862,7 @@ export interface NexusGenArgTypes {
       validation: boolean; // Boolean!
     }
     createInput: { // args
+      conceptMapId?: string | null; // String
       inputGroupId: string; // ID!
       script?: string | null; // String
       sql?: NexusGenInputs['ColumnInput'] | null; // ColumnInput

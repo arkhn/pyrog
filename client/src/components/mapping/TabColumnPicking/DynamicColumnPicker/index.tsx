@@ -1,12 +1,15 @@
 import {
+  Button,
+  ButtonGroup,
   Card,
+  ControlGroup,
   Elevation,
   FormGroup,
-  ControlGroup,
-  Button,
-  Position
+  Position,
+  Tag
 } from '@blueprintjs/core';
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import { useSelector, useDispatch } from 'react-redux';
 import { loader } from 'graphql.macro';
@@ -16,9 +19,11 @@ import ColumnSelect from 'components/selects/columnSelect';
 import TableViewer from 'components/mapping/TableViewer';
 
 import { onError } from 'services/apollo';
-import { IReduxStore, ISelectedSource, Join } from 'types';
-
+import ScriptSelect from 'components/selects/scriptSelect';
+import ConceptMapDialog from 'components/mapping/ConceptMap';
 import { setAttributeInMap } from 'services/resourceInputs/actions';
+import { ConceptMap, IReduxStore, ISelectedSource, Join } from 'types';
+import { FHIR_API_URL } from '../../../../constants';
 
 // GRAPHQL
 const mCreateAttribute = loader(
@@ -62,6 +67,16 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
   const [table, setTable] = useState(resource.primaryKeyTable);
   const [column, setColumn] = useState('');
   const [joins, setJoins] = useState([] as Join[]);
+  const [script, setScript] = useState(undefined as string | undefined);
+  const [conceptMapId, setConceptMapId] = useState(
+    undefined as string | undefined
+  );
+  const [conceptMap, setConceptMap] = useState(
+    undefined as ConceptMap | undefined
+  );
+  const [isConceptMapOverlayVisible, setConceptMapOverlayVisible] = useState(
+    false
+  );
 
   const [createAttribute] = useMutation(mCreateAttribute, {
     onError: onError(toaster)
@@ -73,6 +88,22 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
     createSQLInput,
     { loading: creatingSQLInput }
   ] = useMutation(mCreateSQLInput, { onError: onError(toaster) });
+
+  useEffect(() => {
+    if (conceptMapId) {
+      const fetchConceptMap = async (conceptMapId: string) => {
+        const response = await axios.get(
+          `${FHIR_API_URL}/ConceptMap/${conceptMapId}`
+        );
+        if (response.data.resourceType === 'OperationOutcome')
+          throw new Error(response.data.issue[0].diagnostics);
+        setConceptMap(response.data as ConceptMap);
+      };
+      fetchConceptMap(conceptMapId).catch(e => {
+        console.error(e);
+      });
+    }
+  }, [conceptMapId]);
 
   const createInput = async (): Promise<void> => {
     try {
@@ -125,6 +156,8 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
       const { data } = await createSQLInput({
         variables: {
           inputGroupId,
+          script,
+          conceptMapId,
           columnInput: {
             table: table,
             column: column,
@@ -139,19 +172,19 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
   };
 
   return (
-    <Card elevation={Elevation.ONE}>
-      <div className="card-absolute">
-        <div className="card-flex">
-          <div className="card-tag">Dynamic</div>
-          {!source.credential && (
-            <div className="card-credentials-missing">
-              Database credentials missing
-            </div>
-          )}
+    <>
+      <Card elevation={Elevation.ONE}>
+        <div className="card-absolute">
+          <div className="card-flex">
+            <div className="card-tag">Dynamic</div>
+            {!source.credential && (
+              <div className="card-credentials-missing">
+                Database credentials missing
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-      <FormGroup labelFor="text-input" inline={true}>
-        <ControlGroup>
+        <div className="input-conditions">
           <ColumnSelect
             tableChangeCallback={(e: string) => {
               setTable(e);
@@ -165,7 +198,7 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
             }}
             initialTable={table}
             sourceSchema={schema}
-            withJoins={true}  // TODO change if we want to select joins in Dynamic div
+            withJoins={true} // TODO change if we want to select joins in Dynamic div
             popoverProps={{
               autoFocus: true,
               boundary: 'viewport',
@@ -175,16 +208,59 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
               usePortal: true
             }}
           />
+          <div className="stacked-tags">
+            <Tag minimal={true}>SCRIPT</Tag>
+            <ScriptSelect
+              selectedScript={script || ''}
+              onChange={(script: string) => {
+                setScript(script);
+              }}
+              onClear={(): void => {
+                setScript(undefined);
+              }}
+            />
+          </div>
+          {['code', 'string'].includes(attribute.types[0]) && (
+            <div className="stacked-tags" onClick={e => e.stopPropagation()}>
+              <Tag minimal={true}>CONCEPT MAP</Tag>
+              <ButtonGroup>
+                <Button
+                  text={conceptMap?.title || 'None'}
+                  onClick={(_e: React.MouseEvent) => {
+                    setConceptMapOverlayVisible(true);
+                  }}
+                />
+                <Button
+                  className="delete-button"
+                  icon="cross"
+                  minimal={true}
+                  disabled={!conceptMap}
+                  onClick={(_e: React.MouseEvent) => {
+                    setConceptMap(undefined);
+                  }}
+                />
+              </ButtonGroup>
+            </div>
+          )}
           <Button
             disabled={!attribute || !column}
             icon={'add'}
             loading={creatingSQLInput}
             onClick={createInput}
           />
-        </ControlGroup>
-      </FormGroup>
-      <TableViewer table={table} />
-    </Card>
+        </div>
+        <TableViewer table={table} />
+      </Card>
+      <ConceptMapDialog
+        isOpen={isConceptMapOverlayVisible}
+        onClose={_ => setConceptMapOverlayVisible(false)}
+        currentConceptMap={conceptMap}
+        updateInputCallback={(conceptMapId: string) => {
+          setConceptMapId(conceptMapId);
+          setConceptMapOverlayVisible(false);
+        }}
+      />
+    </>
   );
 };
 
