@@ -15,9 +15,6 @@ import ConditionSelect from 'components/selects/conditionSelect';
 const qConditionsForResource = loader(
   'src/graphql/queries/conditionsForResource.graphql'
 );
-const mUpdateCondition = loader(
-  'src/graphql/mutations/updateCondition.graphql'
-);
 const mCreateCondition = loader(
   'src/graphql/mutations/addConditionToInputGroup.graphql'
 );
@@ -97,7 +94,7 @@ const ConditionForm = () => {
       condition.action &&
       condition.sqlValue.table &&
       condition.sqlValue.column &&
-      condition.value
+      condition.relation
   );
   // Remove duplicates
   const resourceConditions: Condition[] = allConditions.filter(
@@ -127,7 +124,6 @@ const ConditionForm = () => {
             />
           </Tag>
         </div>
-        <Tag minimal={true}>IF</Tag>
         <div className="stacked-tags">
           <Tag minimal={true}>COLUMN</Tag>
           <Tag intent={'primary'} large={true}>
@@ -175,23 +171,17 @@ const ConditionForm = () => {
           </div>
         )}
         <div>
-          {/* <ConditionSelect
-            inputItem={condition}
+          <ConditionSelect
             items={resourceConditions}
             itemToKey={conditionToName}
             onChange={(c: Condition): void => {
-              updateCondition({
-                variables: {
-                  conditionId: condition.id,
-                  action: c.action,
-                  table: c.sqlValue.table,
-                  column: c.sqlValue.column,
-                  relation: c.relation,
-                  value: c.value
-                }
-              });
+              setConditionAction(c.action);
+              setConditionTable(c.sqlValue.table);
+              setConditionColumn(c.sqlValue.column);
+              setConditionRelation(c.relation);
+              setConditionValue(c.value);
             }}
-          /> */}
+          />
         </div>
         <Button
           icon={'add'}
@@ -203,7 +193,7 @@ const ConditionForm = () => {
                 table: conditionTable,
                 column: conditionColumn,
                 relation: conditionRelation,
-                value: conditionValue,
+                value: conditionValue
               }
             });
           }}

@@ -12,7 +12,6 @@ interface Props {
   disabled?: boolean;
   displayItem?: (item: string) => string;
   icon?: IconName;
-  inputItem: Condition;
   intent?: Intent;
   items: Condition[];
   maxItems?: number;
@@ -26,7 +25,6 @@ interface Props {
 const ConditionSelect = ({
   disabled,
   icon,
-  inputItem,
   intent,
   items,
   loading,
@@ -59,7 +57,7 @@ const ConditionSelect = ({
       filterable={filterable}
       loading={loading}
       icon={icon}
-      inputItem={inputItem}
+      inputItem={{} as Condition}
       intent={intent}
       items={items}
       onChange={onChange}
