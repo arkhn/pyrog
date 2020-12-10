@@ -1,25 +1,22 @@
 import {
   Breadcrumbs,
   Button,
-  ButtonGroup,
   Card,
   Elevation,
   IBreadcrumbProps,
+  Icon,
   Tag
 } from '@blueprintjs/core';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import { useSelector, useDispatch } from 'react-redux';
-import axios from 'axios';
 
 import { onError as onApolloError } from 'services/apollo';
 import { IReduxStore, ConceptMap } from 'types';
-import { FHIR_API_URL } from '../../../constants';
 
 // COMPONENTS
 import Join from '../Join';
 import ConceptMapDialog from 'components/mapping/ConceptMap';
-import ScriptSelect from 'components/selects/scriptSelect';
 import { loader } from 'graphql.macro';
 import { setAttributeInMap } from 'services/resourceInputs/actions';
 
@@ -61,10 +58,6 @@ const InputColumn = ({ input }: Props) => {
   const [deleteInput, { loading: loadDelInput }] = useMutation(mDeleteInput, {
     onError
   });
-  const [
-    addJoinToColumn,
-    { loading: loadAddJoin }
-  ] = useMutation(mAddJoinToColumn, { onError });
   const [updateInput, { loading: loadUpdInput }] = useMutation(mUpdateInput, {
     onError
   });
@@ -165,37 +158,12 @@ const InputColumn = ({ input }: Props) => {
                 </div>
               )}
             </div>
-            {input.sqlValue.table !== resource.primaryKeyTable && (
-              <div
-                className="input-column-joins"
-                onClick={e => e.stopPropagation()}
-              >
-                <Button
-                  icon={'add'}
-                  loading={loadAddJoin}
-                  onClick={() => {
-                    addJoinToColumn({
-                      variables: {
-                        columnId: input.sqlValue.id,
-                        join: {
-                          source: {
-                            table: resource.primaryKeyTable
-                          },
-                          target: {
-                            table: input.sqlValue.table
-                          }
-                        }
-                      }
-                    });
-                  }}
-                >
-                  Add Join
-                </Button>
-                {input.sqlValue.joins
-                  ? input.sqlValue.joins.map((join: any, index: number) => (
-                      <Join key={index} joinData={join} />
-                    ))
-                  : null}
+            {input.sqlValue.joins.length > 0 && (
+              <div className="input-column-joins">
+                <Icon icon="left-join" />
+                {input.sqlValue.joins.map((join: any, index: number) => (
+                  <Join key={index} joinData={join} />
+                ))}
               </div>
             )}
           </div>

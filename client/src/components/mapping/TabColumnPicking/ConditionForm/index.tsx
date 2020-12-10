@@ -74,7 +74,7 @@ const ConditionForm = () => {
   const [conditionAction, setConditionAction] = React.useState('');
   const [conditionTable, setConditionTable] = React.useState('');
   const [conditionColumn, setConditionColumn] = React.useState('');
-  const [conditionRelation, setConditionRelation] = React.useState('');
+  const [conditionRelation, setConditionRelation] = React.useState('EQ');
   const [conditionValue, setConditionValue] = React.useState('');
 
   useEffect(() => {});

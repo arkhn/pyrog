@@ -250,14 +250,15 @@ const NewSourceView = (): React.ReactElement => {
   const onFormSubmit = async (e: any): Promise<void> => {
     e.preventDefault();
 
-    const toastID = toaster.show(
-      renderToastProps({
-        action: {
-          text: 'Interrompre'
-        },
-        uploadProgress: 0
-      })
-    );
+    const toastID = "a"
+    // toaster.show(
+    //   renderToastProps({
+    //     action: {
+    //       text: 'Interrompre'
+    //     },
+    //     uploadProgress: 0
+    //   })
+    // );
 
     try {
       // Create new template in Graphql if it doesn't exist
@@ -274,13 +275,13 @@ const NewSourceView = (): React.ReactElement => {
       await uploadFhirBundle();
       // After source is created,
       // redirect to /sources page.
-      toaster.show(
-        renderToastProps({
-          message: `Source ${sourceName} was created`,
-          success: true
-        }),
-        toastID
-      );
+      // toaster.show(
+      //   renderToastProps({
+      //     message: `Source ${sourceName} was created`,
+      //     success: true
+      //   }),
+      //   toastID
+      // );
       history.push('/');
     } catch (e) {
       toaster.show(

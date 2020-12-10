@@ -1,7 +1,7 @@
 import { Button, ControlGroup, Icon, IPopoverProps } from '@blueprintjs/core';
 import React, { useState, useEffect } from 'react';
 
-import JoinColumns from 'components/mapping/JoinColumns';
+import JoinSelect from './joinSelect';
 import StringSelect from 'components/selects/stringSelect';
 import { ISourceSchema, Join } from 'types';
 
@@ -118,6 +118,13 @@ const ColumnSelect = ({
           <Button
             icon={'left-join'}
             onClick={() => {
+              const emptyJoin = {
+                tables: [
+                  { table: '', column: '' },
+                  { table: '', column: '' }
+                ]
+              };
+              setJoins([...joins, emptyJoin]);
               // addJoinToColumn({
               //   variables: {
               //     columnId: input.sqlValue.id,
@@ -136,10 +143,16 @@ const ColumnSelect = ({
         )}
       </ControlGroup>
       {withJoins &&
-        joins!.map((join, index) => (
-          <ControlGroup key={index} fill={fill || false}>
-            <Icon icon="trash" />
-            <JoinColumns
+        joins.map((join, index) => (
+          <ControlGroup key={index}>
+            <Button
+              icon="trash"
+              onClick={() => {
+                joins.splice(index, 1);
+                setJoins([...joins]);
+              }}
+            />
+            <JoinSelect
               join={join}
               updateJoin={(
                 sourceTable: string,
@@ -158,22 +171,6 @@ const ColumnSelect = ({
             />
           </ControlGroup>
         ))}
-      {withJoins && joins!.length === 0 && table && table !== primaryKeyTable && (
-        <ControlGroup fill={fill || false}>
-          <Icon icon="trash" />
-          <JoinColumns
-            updateJoin={(
-              sourceTable: string,
-              sourceColumn: string,
-              targetTable: string,
-              targetColumn: string
-            ) =>
-              changeJoins(sourceTable, sourceColumn, targetTable, targetColumn)
-            }
-          />
-          {/* TODO add join */}
-        </ControlGroup>
-      )}
     </ControlGroup>
   );
 };

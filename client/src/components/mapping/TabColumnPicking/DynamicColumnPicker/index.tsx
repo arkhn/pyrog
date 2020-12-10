@@ -184,7 +184,7 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
             )}
           </div>
         </div>
-        <div className="input-conditions">
+        <div className="sql-input-form">
           <ColumnSelect
             tableChangeCallback={(e: string) => {
               setTable(e);
