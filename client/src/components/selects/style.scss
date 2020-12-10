@@ -21,3 +21,14 @@
 .bp3-icon-left-join {
   align-self: center;
 }
+
+.column-select {
+  display: flex;
+
+  .column-select-input {
+    align-self: center;
+  }
+  .column-select-joins {
+    margin-left: 10px;
+  }
+}

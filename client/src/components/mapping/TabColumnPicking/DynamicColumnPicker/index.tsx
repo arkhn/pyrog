@@ -196,7 +196,7 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
             }}
             initialTable={table}
             sourceSchema={schema}
-            withJoins={true} // TODO change if we want to select joins in Dynamic div
+            withJoins={true}
             popoverProps={{
               autoFocus: true,
               boundary: 'viewport',
@@ -206,17 +206,19 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
               usePortal: true
             }}
           />
-          <div className="stacked-tags">
-            <Tag minimal={true}>SCRIPT</Tag>
-            <ScriptSelect
-              selectedScript={script || ''}
-              onChange={(script: string) => {
-                setScript(script);
-              }}
-              onClear={(): void => {
-                setScript(undefined);
-              }}
-            />
+          <div className="sql-input-form-script">
+            <div className="stacked-tags">
+              <Tag minimal={true}>SCRIPT</Tag>
+              <ScriptSelect
+                selectedScript={script || ''}
+                onChange={(script: string) => {
+                  setScript(script);
+                }}
+                onClear={(): void => {
+                  setScript(undefined);
+                }}
+              />
+            </div>
           </div>
           {['code', 'string'].includes(attribute.types[0]) && (
             <div className="stacked-tags" onClick={e => e.stopPropagation()}>
@@ -240,12 +242,15 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
               </ButtonGroup>
             </div>
           )}
-          <Button
-            disabled={!attribute || !column}
-            icon={'add'}
-            loading={creatingSQLInput}
-            onClick={createInput}
-          />
+          <div className="sql-input-form-add-button">
+            <Button
+              disabled={!attribute || !column}
+              icon={'add'}
+              loading={creatingSQLInput}
+              onClick={createInput}
+            />
+          </div>
+          <span className="stretch"></span>
         </div>
         <TableViewer table={table} />
       </Card>

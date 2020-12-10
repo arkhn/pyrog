@@ -94,84 +94,76 @@ const ColumnSelect = ({
   const columns = table ? sourceSchema[table] : [];
 
   return (
-    <ControlGroup vertical={true}>
-      <ControlGroup vertical={vertical || false} fill={fill || false}>
-        <StringSelect
-          disabled={disabled}
-          icon={'th'}
-          inputItem={table!}
-          items={tables}
-          maxItems={100}
-          onChange={changeTable}
-          popoverProps={popoverProps || {}}
-        />
-        <StringSelect
-          disabled={disabled || !table}
-          icon={'column-layout'}
-          inputItem={column!}
-          items={columns}
-          maxItems={100}
-          onChange={changeColumn}
-          popoverProps={popoverProps || {}}
-        />
-        {withJoins && (
-          <Button
-            icon={'left-join'}
-            onClick={() => {
-              const emptyJoin = {
-                tables: [
-                  { table: '', column: '' },
-                  { table: '', column: '' }
-                ]
-              };
-              setJoins([...joins, emptyJoin]);
-              // addJoinToColumn({
-              //   variables: {
-              //     columnId: input.sqlValue.id,
-              //     join: {
-              //       source: {
-              //         table: resource.primaryKeyTable
-              //       },
-              //       target: {
-              //         table: input.sqlValue.table
-              //       }
-              //     }
-              //   }
-              // });
-            }}
+    <div className="column-select">
+      <div className="column-select-input">
+        <ControlGroup vertical={vertical || false} fill={fill || false}>
+          <StringSelect
+            disabled={disabled}
+            icon={'th'}
+            inputItem={table!}
+            items={tables}
+            maxItems={100}
+            onChange={changeTable}
+            popoverProps={popoverProps || {}}
           />
-        )}
-      </ControlGroup>
-      {withJoins &&
-        joins.map((join, index) => (
-          <ControlGroup key={index}>
+          <StringSelect
+            disabled={disabled || !table}
+            icon={'column-layout'}
+            inputItem={column!}
+            items={columns}
+            maxItems={100}
+            onChange={changeColumn}
+            popoverProps={popoverProps || {}}
+          />
+          {withJoins && (
             <Button
-              icon="trash"
+              icon={'left-join'}
               onClick={() => {
-                joins.splice(index, 1);
-                setJoins([...joins]);
+                const emptyJoin = {
+                  tables: [
+                    { table: '', column: '' },
+                    { table: '', column: '' }
+                  ]
+                };
+                setJoins([...joins, emptyJoin]);
               }}
             />
-            <JoinSelect
-              join={join}
-              updateJoin={(
-                sourceTable: string,
-                sourceColumn: string,
-                targetTable: string,
-                targetColumn: string
-              ) =>
-                changeJoins(
-                  sourceTable,
-                  sourceColumn,
-                  targetTable,
-                  targetColumn,
-                  index
-                )
-              }
-            />
-          </ControlGroup>
-        ))}
-    </ControlGroup>
+          )}
+        </ControlGroup>
+      </div>
+      <div className="column-select-joins">
+        {/* TODO can only add joins when not primary table -> RM withJoins*/}
+        {withJoins &&
+          joins.map((join, index) => (
+            <ControlGroup key={index}>
+              <Button
+                icon="trash"
+                onClick={() => {
+                  joins.splice(index, 1);
+                  setJoins([...joins]);
+                }}
+              />
+              <JoinSelect
+                join={join}
+                updateJoin={(
+                  sourceTable: string,
+                  sourceColumn: string,
+                  targetTable: string,
+                  targetColumn: string
+                ) =>
+                  changeJoins(
+                    sourceTable,
+                    sourceColumn,
+                    targetTable,
+                    targetColumn,
+                    index
+                  )
+                }
+              />
+            </ControlGroup>
+          ))}
+      </div>
+    </div>
   );
 };
 
