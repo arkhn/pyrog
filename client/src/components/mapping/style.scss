@@ -285,28 +285,7 @@ body {
     }
   }
 
-  .input-conditions {
-    width: 100%;
-
-    display: flex;
-    flex-direction: row;
-
-    & > *:not(:last-child) {
-      margin-right: $window-padding;
-    }
-
-    .condition-action {
-      display: flex;
-      align-items: center;
-    }
-
-    .condition-column {
-      display: flex;
-      align-items: center;
-    }
-  }
-
-  #input-columns {
+  .input-cards {
     display: flex;
     flex-direction: row;
     align-items: stretch;
@@ -329,7 +308,7 @@ body {
       margin-left: calc(#{$window-padding} / 2);
     }
 
-    .input-column {
+    .input-card {
       display: flex;
       flex-direction: row;
       align-items: center;

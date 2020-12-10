@@ -7,16 +7,15 @@ import {
   Icon,
   Tag
 } from '@blueprintjs/core';
-import React, { useState } from 'react';
+import React from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { onError as onApolloError } from 'services/apollo';
-import { IReduxStore, ConceptMap } from 'types';
+import { IReduxStore } from 'types';
 
 // COMPONENTS
 import Join from '../Join';
-import ConceptMapDialog from 'components/mapping/ConceptMap';
 import { loader } from 'graphql.macro';
 import { setAttributeInMap } from 'services/resourceInputs/actions';
 
@@ -24,11 +23,7 @@ import { setAttributeInMap } from 'services/resourceInputs/actions';
 const qInputsForAttribute = loader(
   'src/graphql/queries/inputsForAttribute.graphql'
 );
-const mUpdateInput = loader('src/graphql/mutations/updateInput.graphql');
 const mDeleteInput = loader('src/graphql/mutations/deleteInput.graphql');
-const mAddJoinToColumn = loader(
-  'src/graphql/mutations/addJoinToColumn.graphql'
-);
 
 interface Props {
   input: any;
@@ -39,26 +34,13 @@ const InputColumn = ({ input }: Props) => {
 
   const toaster = useSelector((state: IReduxStore) => state.toaster);
   const onError = onApolloError(toaster);
-  const { attribute, resource } = useSelector(
-    (state: IReduxStore) => state.selectedNode
-  );
+  const { attribute } = useSelector((state: IReduxStore) => state.selectedNode);
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
   );
   const attributeId = attributesForResource[attribute.path].id;
 
-  const [conceptMap, setConceptMap] = useState(
-    undefined as ConceptMap | undefined
-  );
-
-  const [isConceptMapOverlayVisible, setConceptMapOverlayVisible] = useState(
-    false
-  );
-
   const [deleteInput, { loading: loadDelInput }] = useMutation(mDeleteInput, {
-    onError
-  });
-  const [updateInput, { loading: loadUpdInput }] = useMutation(mUpdateInput, {
     onError
   });
 
@@ -100,7 +82,7 @@ const InputColumn = ({ input }: Props) => {
   };
 
   return (
-    <div className="input-column">
+    <div className="input-card">
       <Button
         icon={'trash'}
         loading={loadDelInput}
@@ -169,20 +151,6 @@ const InputColumn = ({ input }: Props) => {
           </div>
         )}
       </Card>
-      <ConceptMapDialog
-        isOpen={isConceptMapOverlayVisible}
-        onClose={_ => setConceptMapOverlayVisible(false)}
-        currentConceptMap={conceptMap}
-        updateInputCallback={(conceptMapId: string) => {
-          updateInput({
-            variables: {
-              inputId: input.id,
-              data: { conceptMapId }
-            }
-          });
-          setConceptMapOverlayVisible(false);
-        }}
-      />
     </div>
   );
 };

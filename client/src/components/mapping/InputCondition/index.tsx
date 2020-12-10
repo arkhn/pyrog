@@ -1,5 +1,12 @@
 import React from 'react';
-import { Breadcrumbs, Button, IBreadcrumbProps, Tag } from '@blueprintjs/core';
+import {
+  Breadcrumbs,
+  Button,
+  Card,
+  Elevation,
+  IBreadcrumbProps,
+  Tag
+} from '@blueprintjs/core';
 import { useMutation } from '@apollo/react-hooks';
 import { useSelector } from 'react-redux';
 import { loader } from 'graphql.macro';
@@ -10,12 +17,6 @@ import { Condition, IReduxStore } from 'types';
 // GRAPHQL
 const qInputsForAttribute = loader(
   'src/graphql/queries/inputsForAttribute.graphql'
-);
-const qConditionsForResource = loader(
-  'src/graphql/queries/conditionsForResource.graphql'
-);
-const mUpdateCondition = loader(
-  'src/graphql/mutations/updateCondition.graphql'
 );
 const mDeleteCondition = loader(
   'src/graphql/mutations/deleteCondition.graphql'
@@ -80,7 +81,7 @@ const InputCondition = ({ condition }: Props) => {
     });
 
   return (
-    <div className="input-conditions">
+    <div className="input-card">
       <Button
         icon={'trash'}
         loading={loadDelete}
@@ -89,56 +90,60 @@ const InputCondition = ({ condition }: Props) => {
           onClickDelete(condition);
         }}
       />
-      <div className="stacked-tags">
-        <Tag minimal={true}>ACTION</Tag>
-        <Tag intent={'primary'} large={true}>
-          {condition.action}
-        </Tag>
-      </div>
-      <Tag minimal={true}>IF</Tag>
-      <div className="stacked-tags">
-        <Breadcrumbs
-          breadcrumbRenderer={(item: IBreadcrumbProps) => {
-            return <div>{item.text}</div>;
-          }}
-          items={[
-            {
-              text: (
-                <div className="stacked-tags">
-                  <Tag minimal={true}>TABLE</Tag>
-                  <Tag intent={'primary'} large={true}>
-                    {condition.sqlValue.table}
-                  </Tag>
-                </div>
-              )
-            },
-            {
-              text: (
-                <div className="stacked-tags">
-                  <Tag minimal={true}>COLUMN</Tag>
-                  <Tag intent={'primary'} large={true}>
-                    {condition.sqlValue.column}
-                  </Tag>
-                </div>
-              )
-            }
-          ]}
-        />
-      </div>
-      <div className="stacked-tags">
-        <Tag minimal={true}>RELATION</Tag>
-        <Tag intent={'primary'} large={true}>
-          {condition.relation}
-        </Tag>
-      </div>
-      {!unaryRelations.includes(condition.relation) && (
-        <div className="stacked-tags">
-          <Tag minimal={true}>VALUE</Tag>
-          <Tag intent={'primary'} large={true}>
-            {condition.value}
-          </Tag>
+      <Card elevation={Elevation.ZERO} className="input-column-info">
+        <div className="input-column-name">
+          <div className="stacked-tags">
+            <Tag minimal={true}>ACTION</Tag>
+            <Tag intent={'primary'} large={true}>
+              {condition.action}
+            </Tag>
+          </div>
+          <Tag minimal={true}>IF</Tag>
+          <div className="stacked-tags">
+            <Breadcrumbs
+              breadcrumbRenderer={(item: IBreadcrumbProps) => (
+                <div>{item.text}</div>
+              )}
+              items={[
+                {
+                  text: (
+                    <div className="stacked-tags">
+                      <Tag minimal={true}>TABLE</Tag>
+                      <Tag intent={'primary'} large={true}>
+                        {condition.sqlValue.table}
+                      </Tag>
+                    </div>
+                  )
+                },
+                {
+                  text: (
+                    <div className="stacked-tags">
+                      <Tag minimal={true}>COLUMN</Tag>
+                      <Tag intent={'primary'} large={true}>
+                        {condition.sqlValue.column}
+                      </Tag>
+                    </div>
+                  )
+                }
+              ]}
+            />
+          </div>
+          <div className="stacked-tags">
+            <Tag minimal={true}>RELATION</Tag>
+            <Tag intent={'primary'} large={true}>
+              {condition.relation}
+            </Tag>
+          </div>
+          {!unaryRelations.includes(condition.relation) && (
+            <div className="stacked-tags">
+              <Tag minimal={true}>VALUE</Tag>
+              <Tag intent={'primary'} large={true}>
+                {condition.value}
+              </Tag>
+            </div>
+          )}
         </div>
-      )}
+      </Card>
     </div>
   );
 };

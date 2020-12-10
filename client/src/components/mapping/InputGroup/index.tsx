@@ -48,11 +48,7 @@ const InputGroup = ({ inputGroup }: Props) => {
 
   return (
     <React.Fragment>
-      {inputGroup.conditions.map(
-        (condition: any, index: number) =>
-          condition && <InputCondition key={index} condition={condition} />
-      )}
-      <div id="input-columns">
+      <div className="input-cards">
         <div id="input-column-rows">
           {inputGroup.inputs.map(
             (input: any, index: number) =>
@@ -72,6 +68,14 @@ const InputGroup = ({ inputGroup }: Props) => {
             </div>
           </div>
         ) : null}
+      </div>
+      <div className="input-cards">
+        <div id="input-column-rows">
+          {inputGroup.conditions.map(
+            (condition: any, index: number) =>
+              condition && <InputCondition key={index} condition={condition} />
+          )}
+        </div>
       </div>
     </React.Fragment>
   );
