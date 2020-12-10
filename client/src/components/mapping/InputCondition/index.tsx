@@ -98,7 +98,9 @@ const InputCondition = ({ condition }: Props) => {
               {condition.action}
             </Tag>
           </div>
-          <Tag minimal={true}>IF</Tag>
+          <div className="if-minimal-tag">
+            <Tag minimal={true}>IF</Tag>
+          </div>
           <div className="stacked-tags">
             <Breadcrumbs
               breadcrumbRenderer={(item: IBreadcrumbProps) => (

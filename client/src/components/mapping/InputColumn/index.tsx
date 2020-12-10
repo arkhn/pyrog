@@ -127,19 +127,23 @@ const InputColumn = ({ input }: Props) => {
                   }
                 ]}
               />
-              {input.script && (
+            </div>
+            {input.script && (
+              <div className="input-script">
                 <div className="stacked-tags">
                   <Tag minimal={true}>SCRIPT</Tag>
                   <Tag large={true}>{input.script}</Tag>
                 </div>
-              )}
-              {input.conceptMapId && (
+              </div>
+            )}
+            {input.conceptMapId && (
+              <div className="input-script">
                 <div className="stacked-tags">
                   <Tag>CONCEPT MAP</Tag>
                   <Tag large={true}>{input.conceptMapId}</Tag>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
             {input.sqlValue.joins.length > 0 && (
               <div className="input-column-joins">
                 <Icon icon="left-join" />

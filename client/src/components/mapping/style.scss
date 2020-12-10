@@ -272,10 +272,14 @@ body {
     margin-bottom: calc(#{$window-padding} / 2);
   }
 
+  .if-minimal-tag {
+    align-self: center;
+  }
+
   .stacked-tags {
     display: flex;
     flex-direction: column;
-    align-items: stretch;
+    align-self: center;
 
     .bp3-tag {
       text-align: center;
@@ -333,11 +337,14 @@ body {
           display: flex;
           flex-basis: 50%;
           flex-grow: 1;
-          align-items: center;
+          align-self: center;
+        }
 
-          & > *:not(:last-child) {
-            margin-right: calc(#{$window-padding} / 2);
-          }
+        .input-script {
+          display: flex;
+          flex-basis: 50%;
+          flex-grow: 1;
+          align-self: center;
         }
 
         .input-column-joins {
