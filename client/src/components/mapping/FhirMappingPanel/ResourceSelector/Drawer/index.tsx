@@ -240,11 +240,10 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
                   initialTable={sqlColumn ? sqlColumn.table : ''}
                   initialColumn={sqlColumn ? sqlColumn.column : ''}
                   sourceSchema={source.credential.schema as ISourceSchema}
-                  vertical={false}
                   fill={true}
-                  withJoins={true}
+                  vertical={true}
                   initialJoins={filters[index].sqlColumn.joins}
-                  primaryKeyTable={resource.primaryKeyTable}
+                  primaryKeyTable={pkTable}
                   popoverProps={{
                     autoFocus: true,
                     boundary: 'viewport',
@@ -256,7 +255,7 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
                   disabled={updatingResource || !resource}
                 />
               </td>
-              <td>
+              <td className="align-top">
                 <StringSelect
                   inputItem={relation}
                   items={sqlRelations}
@@ -267,7 +266,7 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
                   }}
                 />
               </td>
-              <td>
+              <td className="align-top">
                 <input
                   className="bp3-input"
                   type="text"

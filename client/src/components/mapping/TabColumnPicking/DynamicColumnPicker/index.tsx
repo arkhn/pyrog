@@ -196,7 +196,7 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
             }}
             initialTable={table}
             sourceSchema={schema}
-            withJoins={true}
+            primaryKeyTable={resource.primaryKeyTable}
             popoverProps={{
               autoFocus: true,
               boundary: 'viewport',

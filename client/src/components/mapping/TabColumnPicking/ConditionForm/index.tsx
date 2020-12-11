@@ -41,15 +41,14 @@ const ConditionForm = () => {
   const schema = useSelector(
     (state: IReduxStore) => state.selectedNode.source.credential.schema
   );
-
-  const onError = onApolloError(toaster);
-
   const { attribute, resource, selectedInputGroup } = useSelector(
     (state: IReduxStore) => state.selectedNode
   );
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
   );
+
+  const onError = onApolloError(toaster);
 
   const path = attribute.path;
   // The id of the input group in which we want to put the new input.
@@ -142,7 +141,7 @@ const ConditionForm = () => {
                 setConditionJoins(joins);
               }}
               sourceSchema={schema as ISourceSchema}
-              withJoins={true}
+              primaryKeyTable={resource.primaryKeyTable}
             />
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { Button, ControlGroup, Icon, IPopoverProps } from '@blueprintjs/core';
+import { Button, ControlGroup, IPopoverProps } from '@blueprintjs/core';
 import React, { useState, useEffect } from 'react';
 
 import JoinSelect from './joinSelect';
@@ -14,7 +14,6 @@ export interface Props {
   sourceSchema: ISourceSchema;
   vertical?: boolean;
   fill?: boolean;
-  withJoins?: boolean;
   initialJoins?: Join[];
   primaryKeyTable?: string;
   popoverProps?: IPopoverProps;
@@ -30,7 +29,6 @@ const ColumnSelect = ({
   sourceSchema,
   vertical,
   fill,
-  withJoins,
   initialJoins,
   primaryKeyTable,
   popoverProps,
@@ -92,11 +90,12 @@ const ColumnSelect = ({
   const tables = Object.keys(sourceSchema);
 
   const columns = table ? sourceSchema[table] : [];
+  const withJoins = table && primaryKeyTable && primaryKeyTable !== table;
 
   return (
-    <div className="column-select">
+    <div className={vertical ? 'column-select-vertical' : 'column-select'}>
       <div className="column-select-input">
-        <ControlGroup vertical={vertical || false} fill={fill || false}>
+        <ControlGroup fill={fill || false}>
           <StringSelect
             disabled={disabled}
             icon={'th'}
@@ -132,7 +131,6 @@ const ColumnSelect = ({
         </ControlGroup>
       </div>
       <div className="column-select-joins">
-        {/* TODO can only add joins when not primary table -> RM withJoins*/}
         {withJoins &&
           joins.map((join, index) => (
             <ControlGroup key={index}>
