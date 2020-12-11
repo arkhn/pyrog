@@ -1,10 +1,10 @@
 import {
   Breadcrumbs,
   Button,
+  ButtonGroup,
   Card,
   Elevation,
   IBreadcrumbProps,
-  Icon,
   Tag
 } from '@blueprintjs/core';
 import React from 'react';
@@ -83,12 +83,6 @@ const InputColumn = ({ input }: Props) => {
 
   return (
     <div className="input-card">
-      <Button
-        icon={'trash'}
-        loading={loadDelInput}
-        minimal={true}
-        onClick={onClickDelete}
-      />
       <Card elevation={Elevation.ZERO} className="input-column-info">
         {input.staticValue ? (
           <div className="input-column-name">
@@ -154,6 +148,20 @@ const InputColumn = ({ input }: Props) => {
           </div>
         )}
       </Card>
+      <ButtonGroup vertical={true}>
+        <Button
+          icon={'annotation'}
+          loading={loadDelInput}
+          minimal={true}
+          onClick={onClickDelete}
+        />
+        <Button
+          icon={'trash'}
+          loading={loadDelInput}
+          minimal={true}
+          onClick={onClickDelete}
+        />
+      </ButtonGroup>
     </div>
   );
 };

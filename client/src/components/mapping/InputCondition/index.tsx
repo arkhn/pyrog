@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Breadcrumbs,
   Button,
+  ButtonGroup,
   Card,
   Elevation,
   IBreadcrumbProps,
@@ -83,14 +84,6 @@ const InputCondition = ({ condition }: Props) => {
 
   return (
     <div className="input-card">
-      <Button
-        icon={'trash'}
-        loading={loadDelete}
-        minimal={true}
-        onClick={() => {
-          onClickDelete(condition);
-        }}
-      />
       <Card elevation={Elevation.ZERO} className="input-column-info">
         <div className="input-column-name">
           <div className="stacked-tags">
@@ -135,7 +128,7 @@ const InputCondition = ({ condition }: Props) => {
             {condition.sqlValue.joins && condition.sqlValue.joins.length > 0 && (
               <div className="input-column-join">
                 {condition.sqlValue.joins.map((join: any, index: number) => (
-                  <Join key={index} joinData={join} />
+                  <Join key={index} joinData={join} intent={'primary'} />
                 ))}
               </div>
             )}
@@ -156,6 +149,24 @@ const InputCondition = ({ condition }: Props) => {
           )}
         </div>
       </Card>
+      <ButtonGroup vertical={true}>
+        <Button
+          icon={'annotation'}
+          loading={loadDelete}
+          minimal={true}
+          onClick={() => {
+            onClickDelete(condition);
+          }}
+        />
+        <Button
+          icon={'trash'}
+          loading={loadDelete}
+          minimal={true}
+          onClick={() => {
+            onClickDelete(condition);
+          }}
+        />
+      </ButtonGroup>
     </div>
   );
 };
