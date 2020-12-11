@@ -28,6 +28,15 @@ interface Props {
   condition: Condition;
 }
 
+const conditionsMap = new Map([
+  ['EQ', '=='],
+  ['LT', '<'],
+  ['LE', '<='],
+  ['GE', '>='],
+  ['GT', '>'],
+  ['NULL', 'IS NULL'],
+  ['NOTNULL', 'IS NOT NULL']
+]);
 const unaryRelations = ['NULL', 'NOTNULL'];
 
 const InputCondition = ({ condition }: Props) => {
@@ -92,10 +101,8 @@ const InputCondition = ({ condition }: Props) => {
               {condition.action}
             </Tag>
           </div>
-          <div className="if-minimal-tag">
-            <Tag minimal={true}>IF</Tag>
-          </div>
           <div className="stacked-tags">
+            <Tag minimal={true}>COLUMN</Tag>
             <Breadcrumbs
               breadcrumbRenderer={(item: IBreadcrumbProps) => (
                 <div>{item.text}</div>
@@ -103,22 +110,16 @@ const InputCondition = ({ condition }: Props) => {
               items={[
                 {
                   text: (
-                    <div className="stacked-tags">
-                      <Tag minimal={true}>TABLE</Tag>
-                      <Tag intent={'primary'} large={true}>
-                        {condition.sqlValue.table}
-                      </Tag>
-                    </div>
+                    <Tag intent={'primary'} large={true}>
+                      {condition.sqlValue.table}
+                    </Tag>
                   )
                 },
                 {
                   text: (
-                    <div className="stacked-tags">
-                      <Tag minimal={true}>COLUMN</Tag>
-                      <Tag intent={'primary'} large={true}>
-                        {condition.sqlValue.column}
-                      </Tag>
-                    </div>
+                    <Tag intent={'primary'} large={true}>
+                      {condition.sqlValue.column}
+                    </Tag>
                   )
                 }
               ]}
@@ -136,28 +137,16 @@ const InputCondition = ({ condition }: Props) => {
           <div className="stacked-tags">
             <Tag minimal={true}>RELATION</Tag>
             <Tag intent={'primary'} large={true}>
-              {condition.relation}
+              {`${conditionsMap.get(condition.relation)} ${
+                unaryRelations.includes(condition.relation)
+                  ? ''
+                  : condition.value
+              }`}
             </Tag>
           </div>
-          {!unaryRelations.includes(condition.relation) && (
-            <div className="stacked-tags">
-              <Tag minimal={true}>VALUE</Tag>
-              <Tag intent={'primary'} large={true}>
-                {condition.value}
-              </Tag>
-            </div>
-          )}
         </div>
       </Card>
       <ButtonGroup vertical={true}>
-        <Button
-          icon={'annotation'}
-          loading={loadDelete}
-          minimal={true}
-          onClick={() => {
-            onClickDelete(condition);
-          }}
-        />
         <Button
           icon={'trash'}
           loading={loadDelete}

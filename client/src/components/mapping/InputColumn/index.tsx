@@ -94,33 +94,30 @@ const InputColumn = ({ input }: Props) => {
         ) : (
           <div>
             <div className="input-column-name">
-              <Breadcrumbs
-                breadcrumbRenderer={(item: IBreadcrumbProps) => {
-                  return <div>{item.text}</div>;
-                }}
-                items={[
-                  {
-                    text: (
-                      <div className="stacked-tags">
-                        <Tag minimal={true}>TABLE</Tag>
+              <div className="stacked-tags">
+                <Tag minimal={true}>COLUMN</Tag>
+                <Breadcrumbs
+                  breadcrumbRenderer={(item: IBreadcrumbProps) => {
+                    return <div>{item.text}</div>;
+                  }}
+                  items={[
+                    {
+                      text: (
                         <Tag intent={'success'} large={true}>
                           {input.sqlValue.table}
                         </Tag>
-                      </div>
-                    )
-                  },
-                  {
-                    text: (
-                      <div className="stacked-tags">
-                        <Tag minimal={true}>COLUMN</Tag>
+                      )
+                    },
+                    {
+                      text: (
                         <Tag intent={'success'} large={true}>
                           {input.sqlValue.column}
                         </Tag>
-                      </div>
-                    )
-                  }
-                ]}
-              />
+                      )
+                    }
+                  ]}
+                />
+              </div>
             </div>
             {input.script && (
               <div className="input-script">
@@ -149,12 +146,6 @@ const InputColumn = ({ input }: Props) => {
         )}
       </Card>
       <ButtonGroup vertical={true}>
-        <Button
-          icon={'annotation'}
-          loading={loadDelInput}
-          minimal={true}
-          onClick={onClickDelete}
-        />
         <Button
           icon={'trash'}
           loading={loadDelInput}
