@@ -44,38 +44,30 @@ export const createInput: FieldResolver<'Mutation', 'createInput'> = async (
     })
   }
 
-  const joins = sqlValue!.joins
-    ? await Promise.all(
-        sqlValue!.joins.map(j =>
-          ctx.prisma.join.create({
-            include: { tables: true },
-            data: {
-              tables: {
-                create: [
-                  {
-                    table: (j.tables && j.tables[0]?.table) || '',
-                    column: (j.tables && j.tables[0]?.column) || '',
-                  },
-                  {
-                    table: (j.tables && j.tables[1]?.table) || '',
-                    column: (j.tables && j.tables[1]?.column) || '',
-                  },
-                ],
-              },
-            },
-          }),
-        ),
-      )
-    : []
   return ctx.prisma.input.create({
     data: {
       sqlValue: {
         create: {
-          table: sqlValue!.table,
-          column: sqlValue!.column,
-          joins: {
-            connect: joins.map(j => ({ id: j.id })),
-          },
+          table: sqlValue.table,
+          column: sqlValue.column,
+          ...(sqlValue.joins && {
+            joins: {
+              create: sqlValue.joins.map(j => ({
+                tables: {
+                  create: [
+                    {
+                      table: (j.tables && j.tables[0]?.table) || '',
+                      column: (j.tables && j.tables[0]?.column) || '',
+                    },
+                    {
+                      table: (j.tables && j.tables[1]?.table) || '',
+                      column: (j.tables && j.tables[1]?.column) || '',
+                    },
+                  ],
+                },
+              })),
+            },
+          }),
         },
       },
       script,

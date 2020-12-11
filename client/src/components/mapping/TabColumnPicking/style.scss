@@ -61,35 +61,23 @@ $border-radius: 6px;
   }
 }
 
-.sql-input-form {
+.sql-input-form,
+.conditions-form {
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
 
   .sql-input-form-add-button,
-  .sql-input-form-script {
+  .sql-input-form-script,
+  .conditions-form-action,
+  .conditions-form-column,
+  .conditions-form-relation,
+  .conditions-form-value,
+  .conditions-form-condition-select,
+  .conditions-form-add-button {
     align-self: center;
-  }
-}
-
-.input-conditions {
-  width: 100%;
-
-  display: flex;
-  flex-direction: row;
-
-  & > *:not(:last-child) {
-    margin-right: $window-padding;
-  }
-
-  .condition-action {
-    display: flex;
-    align-items: center;
-  }
-
-  .condition-column {
-    display: flex;
-    align-items: center;
+    margin-left: 10px;
+    margin-right: 10px;
   }
 }
 

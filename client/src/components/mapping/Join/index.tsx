@@ -1,4 +1,4 @@
-import { Breadcrumbs, IBreadcrumbProps, Tag } from '@blueprintjs/core';
+import { Breadcrumbs, IBreadcrumbProps, Icon, Tag } from '@blueprintjs/core';
 import React from 'react';
 
 interface Props {
@@ -9,6 +9,7 @@ const Join = ({ joinData }: Props) => {
   return (
     <div className={'join'}>
       <div className="join-columns">
+        <Icon icon="left-join" />
         <Breadcrumbs
           breadcrumbRenderer={(item: IBreadcrumbProps) => (
             <div>{item.text}</div>

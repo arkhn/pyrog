@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Card, Elevation, Tag } from '@blueprintjs/core';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useSelector } from 'react-redux';
 import { loader } from 'graphql.macro';
 
 import { onError as onApolloError } from 'services/apollo';
-import { IAttribute, Condition, IReduxStore, ISourceSchema } from 'types';
+import { IAttribute, Condition, IReduxStore, ISourceSchema, Join } from 'types';
 
 import ColumnSelect from 'components/selects/columnSelect';
 import StringSelect from 'components/selects/stringSelect';
@@ -71,11 +71,12 @@ const ConditionForm = () => {
     onError
   });
 
-  const [conditionAction, setConditionAction] = React.useState('');
-  const [conditionTable, setConditionTable] = React.useState('');
-  const [conditionColumn, setConditionColumn] = React.useState('');
-  const [conditionRelation, setConditionRelation] = React.useState('EQ');
-  const [conditionValue, setConditionValue] = React.useState('');
+  const [conditionAction, setConditionAction] = useState('INCLUDE');
+  const [conditionTable, setConditionTable] = useState('');
+  const [conditionColumn, setConditionColumn] = useState('');
+  const [conditionJoins, setConditionJoins] = useState([] as Join[]);
+  const [conditionRelation, setConditionRelation] = useState('EQ');
+  const [conditionValue, setConditionValue] = useState('');
 
   useEffect(() => {});
   const ResourceAttributes: IAttribute[] =
@@ -111,58 +112,72 @@ const ConditionForm = () => {
         </div>
       </div>
 
-      <div className="input-conditions">
-        <div className="stacked-tags">
-          <Tag minimal={true}>ACTION</Tag>
-          <StringSelect
-            inputItem={conditionAction}
-            items={availableActions}
-            onChange={(action: string): void => {
-              setConditionAction(action);
-            }}
-          />
-        </div>
-        <div className="stacked-tags">
-          <Tag minimal={true}>COLUMN</Tag>
-          <ColumnSelect
-            initialTable={conditionTable}
-            initialColumn={conditionColumn}
-            tableChangeCallback={(e: string) => {
-              setConditionTable(e);
-              setConditionColumn('');
-            }}
-            columnChangeCallback={(e: string) => {
-              setConditionColumn(e);
-            }}
-            sourceSchema={schema as ISourceSchema}
-          />
-        </div>
-        <div className="stacked-tags">
-          <Tag minimal={true}>RELATION</Tag>
-          <StringSelect
-            inputItem={conditionRelation}
-            items={Array.from(conditionsMap.keys())}
-            displayItem={item => conditionsMap.get(item)!}
-            onChange={(relation: string): void => {
-              setConditionRelation(relation);
-            }}
-          />
-        </div>
-        {!unaryRelations.includes(conditionRelation) && (
+      <div className="conditions-form">
+        <div className="conditions-form-action">
           <div className="stacked-tags">
-            <Tag minimal={true}>VALUE</Tag>
-            <input
-              className="text-input"
-              value={conditionValue}
-              type="text"
-              placeholder="value..."
-              onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
-                setConditionValue(e.target.value);
+            <Tag minimal={true}>ACTION</Tag>
+            <StringSelect
+              inputItem={conditionAction}
+              items={availableActions}
+              onChange={(action: string): void => {
+                setConditionAction(action);
               }}
             />
           </div>
+        </div>
+        <div className="conditions-form-column">
+          <div className="stacked-tags">
+            <Tag minimal={true}>COLUMN</Tag>
+            <ColumnSelect
+              initialTable={conditionTable}
+              initialColumn={conditionColumn}
+              tableChangeCallback={(e: string) => {
+                setConditionTable(e);
+                setConditionColumn('');
+              }}
+              columnChangeCallback={(e: string) => {
+                setConditionColumn(e);
+              }}
+              joinsChangeCallback={(joins: Join[]): void => {
+                setConditionJoins(joins);
+              }}
+              sourceSchema={schema as ISourceSchema}
+              withJoins={true}
+            />
+          </div>
+        </div>
+        <div className="conditions-form-value">
+          <div className="conditions-form-relation">
+            <div className="stacked-tags">
+              <Tag minimal={true}>RELATION</Tag>
+              <StringSelect
+                inputItem={conditionRelation}
+                items={Array.from(conditionsMap.keys())}
+                displayItem={item => conditionsMap.get(item)!}
+                onChange={(relation: string): void => {
+                  setConditionRelation(relation);
+                }}
+              />
+            </div>
+          </div>
+        </div>
+        {!unaryRelations.includes(conditionRelation) && (
+          <div className="conditions-form-value">
+            <div className="stacked-tags">
+              <Tag minimal={true}>VALUE</Tag>
+              <input
+                className="text-input"
+                value={conditionValue}
+                type="text"
+                placeholder="value..."
+                onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
+                  setConditionValue(e.target.value);
+                }}
+              />
+            </div>
+          </div>
         )}
-        <div>
+        <div className="conditions-form-condition-select">
           <ConditionSelect
             items={resourceConditions}
             itemToKey={conditionToName}
@@ -175,21 +190,26 @@ const ConditionForm = () => {
             }}
           />
         </div>
-        <Button
-          icon={'add'}
-          onClick={() => {
-            createCondition({
-              variables: {
-                inputGroupId: inputGroupId,
-                action: conditionAction,
-                table: conditionTable,
-                column: conditionColumn,
-                relation: conditionRelation,
-                value: conditionValue
-              }
-            });
-          }}
-        />
+        <div className="conditions-form-add-button">
+          <Button
+            icon={'add'}
+            onClick={() => {
+              createCondition({
+                variables: {
+                  inputGroupId: inputGroupId,
+                  action: conditionAction,
+                  columnInput: {
+                    table: conditionTable,
+                    column: conditionColumn,
+                    joins: conditionJoins
+                  },
+                  relation: conditionRelation,
+                  value: conditionValue
+                }
+              });
+            }}
+          />
+        </div>
       </div>
     </Card>
   );

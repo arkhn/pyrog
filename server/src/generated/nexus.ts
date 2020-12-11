@@ -834,10 +834,9 @@ export interface NexusGenArgTypes {
   Mutation: {
     addConditionToInputGroup: { // args
       action: NexusGenEnums['ConditionAction']; // ConditionAction!
-      column?: string | null; // String
+      columnInput: NexusGenInputs['ColumnInput']; // ColumnInput!
       inputGroupId: string; // ID!
       relation: NexusGenEnums['ConditionRelation']; // ConditionRelation!
-      table?: string | null; // String
       value?: string | null; // String
     }
     addJoinToColumn: { // args
@@ -865,7 +864,7 @@ export interface NexusGenArgTypes {
       conceptMapId?: string | null; // String
       inputGroupId: string; // ID!
       script?: string | null; // String
-      sql?: NexusGenInputs['ColumnInput'] | null; // ColumnInput
+      sql: NexusGenInputs['ColumnInput']; // ColumnInput!
       static?: string | null; // String
     }
     createInputGroup: { // args

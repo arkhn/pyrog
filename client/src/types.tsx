@@ -98,10 +98,7 @@ export interface Resource {
 export interface Condition {
   id: string;
   action: string;
-  sqlValue: {
-    table: string;
-    column: string;
-  };
+  sqlValue: Column;
   relation: string;
   value: string;
 }

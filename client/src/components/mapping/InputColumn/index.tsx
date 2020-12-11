@@ -146,7 +146,6 @@ const InputColumn = ({ input }: Props) => {
             )}
             {input.sqlValue.joins.length > 0 && (
               <div className="input-column-joins">
-                <Icon icon="left-join" />
                 {input.sqlValue.joins.map((join: any, index: number) => (
                   <Join key={index} joinData={join} />
                 ))}

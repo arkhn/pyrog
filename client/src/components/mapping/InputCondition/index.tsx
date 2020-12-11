@@ -13,6 +13,7 @@ import { loader } from 'graphql.macro';
 
 import { onError as onApolloError } from 'services/apollo';
 import { Condition, IReduxStore } from 'types';
+import Join from 'components/mapping/Join';
 
 // GRAPHQL
 const qInputsForAttribute = loader(
@@ -129,6 +130,15 @@ const InputCondition = ({ condition }: Props) => {
                 }
               ]}
             />
+          </div>
+          <div className="input-column-joins">
+            {condition.sqlValue.joins && condition.sqlValue.joins.length > 0 && (
+              <div className="input-column-join">
+                {condition.sqlValue.joins.map((join: any, index: number) => (
+                  <Join key={index} joinData={join} />
+                ))}
+              </div>
+            )}
           </div>
           <div className="stacked-tags">
             <Tag minimal={true}>RELATION</Tag>

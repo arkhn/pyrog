@@ -196,8 +196,10 @@ export const Mutation = mutationType({
       args: {
         inputGroupId: idArg({ required: true }),
         action: arg({ type: 'ConditionAction', required: true }),
-        table: stringArg(),
-        column: stringArg(),
+        columnInput: arg({
+          type: 'ColumnInput',
+          required: true,
+        }),
         relation: arg({ type: 'ConditionRelation', required: true }),
         value: stringArg(),
       },
@@ -242,6 +244,7 @@ export const Mutation = mutationType({
         static: stringArg(),
         sql: arg({
           type: 'ColumnInput',
+          required: true,
         }),
       },
       resolve: createInput,

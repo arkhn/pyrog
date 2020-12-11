@@ -3,16 +3,14 @@
 mutation addConditionToInputGroup(
   $inputGroupId: ID!
   $action: ConditionAction!
-  $table: String
-  $column: String
+  $columnInput: ColumnInput!
   $relation: ConditionRelation!
   $value: String
 ) {
   addConditionToInputGroup(
     inputGroupId: $inputGroupId
     action: $action
-    table: $table
-    column: $column
+    columnInput: $columnInput
     relation: $relation
     value: $value
   ) {
