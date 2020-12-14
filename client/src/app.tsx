@@ -99,7 +99,10 @@ const redirectToLogin = () => {
 
 // Set axios interceptor
 axios.interceptors.request.use(config => {
-  if (!config.headers.Authorization) {
+  if (
+    !config.headers.Authorization ||
+    !config.headers.Authorization.startsWith('Bearer')
+  ) {
     const accessToken = localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY);
     config.headers.Authorization = `Bearer ${accessToken}`;
   }
