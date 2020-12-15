@@ -28,6 +28,11 @@ export const FilterInput = inputObjectType({
 export const UpdateInputInput = inputObjectType({
   name: 'UpdateInputInput',
   definition(t) {
+    t.field('table', { type: 'String' })
+    t.field('column', { type: 'String' })
+    t.list.field('joins', {
+      type: 'JoinTablesInput',
+    })
     t.field('script', { type: 'String' })
     t.field('conceptMapId', { type: 'String' })
   },

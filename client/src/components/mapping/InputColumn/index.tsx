@@ -1,28 +1,32 @@
 import {
-  Breadcrumbs,
   Button,
   ButtonGroup,
   Card,
   Elevation,
-  IBreadcrumbProps,
+  Position,
   Tag
 } from '@blueprintjs/core';
 import React from 'react';
+import { loader } from 'graphql.macro';
 import { useMutation } from '@apollo/react-hooks';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { onError as onApolloError } from 'services/apollo';
-import { IReduxStore } from 'types';
-
-// COMPONENTS
-import Join from '../Join';
-import { loader } from 'graphql.macro';
 import { setAttributeInMap } from 'services/resourceInputs/actions';
+import { IReduxStore, ISourceSchema, Join } from 'types';
+
+import ColumnSelect from 'components/selects/columnSelect';
+import ConceptMapDialog from 'components/mapping/ConceptMap';
+import ScriptSelect from 'components/selects/scriptSelect';
 
 // GRAPHQL
 const qInputsForAttribute = loader(
   'src/graphql/queries/inputsForAttribute.graphql'
 );
+const mUpdateInput = loader('src/graphql/mutations/updateInput.graphql');
+const mUpdateJoin = loader('src/graphql/mutations/updateJoin.graphql');
+const mAddJoin = loader('src/graphql/mutations/addJoinToColumn.graphql');
+const mDeleteJoin = loader('src/graphql/mutations/deleteJoin.graphql');
 const mDeleteInput = loader('src/graphql/mutations/deleteInput.graphql');
 
 interface Props {
@@ -34,12 +38,26 @@ const InputColumn = ({ input }: Props) => {
 
   const toaster = useSelector((state: IReduxStore) => state.toaster);
   const onError = onApolloError(toaster);
-  const { attribute } = useSelector((state: IReduxStore) => state.selectedNode);
+  const { attribute, resource, source } = useSelector(
+    (state: IReduxStore) => state.selectedNode
+  );
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
   );
   const attributeId = attributesForResource[attribute.path].id;
 
+  const [updateInput] = useMutation(mUpdateInput, {
+    onError
+  });
+  const [updateJoin] = useMutation(mUpdateJoin, {
+    onError
+  });
+  const [addJoin] = useMutation(mAddJoin, {
+    onError
+  });
+  const [deleteJoin] = useMutation(mDeleteJoin, {
+    onError
+  });
   const [deleteInput, { loading: loadDelInput }] = useMutation(mDeleteInput, {
     onError
   });
@@ -83,67 +101,120 @@ const InputColumn = ({ input }: Props) => {
 
   return (
     <div className="input-card">
-      <Card elevation={Elevation.ZERO} className="input-column-info">
-        {input.staticValue ? (
-          <div className="input-column-name">
-            <Tag large={true}>Static</Tag>
-            <Tag intent={'success'} large={true} minimal={true}>
-              {input.staticValue}
-            </Tag>
+      <Card elevation={Elevation.ONE}>
+        <div className="card-absolute">
+          <div className="card-flex">
+            <div className="card-tag">Dynamic</div>
+            {!source.credential && (
+              <div className="card-credentials-missing">
+                Database credentials missing
+              </div>
+            )}
           </div>
-        ) : (
-          <div>
-            <div className="input-column-name">
-              <div className="stacked-tags">
-                <Tag minimal={true}>COLUMN</Tag>
-                <Breadcrumbs
-                  breadcrumbRenderer={(item: IBreadcrumbProps) => {
-                    return <div>{item.text}</div>;
-                  }}
-                  items={[
-                    {
-                      text: (
-                        <Tag intent={'success'} large={true}>
-                          {input.sqlValue.table}
-                        </Tag>
-                      )
-                    },
-                    {
-                      text: (
-                        <Tag intent={'success'} large={true}>
-                          {input.sqlValue.column}
-                        </Tag>
-                      )
+        </div>
+        <div className="sql-input-form">
+          <ColumnSelect
+            tableChangeCallback={(table: string) => {
+              updateInput({
+                variables: {
+                  inputId: input.id,
+                  data: { table, column: '' }
+                }
+              });
+            }}
+            columnChangeCallback={(column: string) => {
+              updateInput({
+                variables: {
+                  inputId: input.id,
+                  data: { column }
+                }
+              });
+            }}
+            joinChangeCallback={(joinId: string, newjoin: Join): void => {
+              updateJoin({
+                variables: {
+                  joinId,
+                  data: newjoin
+                }
+              });
+            }}
+            addJoinCallback={(newjoin: Join): void => {
+              addJoin({
+                variables: {
+                  columnId: input.sqlValue.id,
+                  join: newjoin
+                }
+              });
+            }}
+            deleteJoinCallback={(joinId: string): void => {
+              deleteJoin({
+                variables: {
+                  joinId
+                }
+              });
+            }}
+            initialTable={input.sqlValue.table}
+            initialColumn={input.sqlValue.column}
+            initialJoins={input.sqlValue.joins}
+            sourceSchema={source.credential.schema as ISourceSchema}
+            primaryKeyTable={resource.primaryKeyTable}
+            popoverProps={{
+              autoFocus: true,
+              boundary: 'viewport',
+              canEscapeKeyClose: true,
+              lazy: true,
+              position: Position.TOP,
+              usePortal: true
+            }}
+          />
+          <div className="sql-input-form-script">
+            <div className="stacked-tags">
+              <Tag minimal={true}>SCRIPT</Tag>
+              <ScriptSelect
+                selectedScript={input.script || ''}
+                onChange={(script: string) => {
+                  updateInput({
+                    variables: {
+                      inputId: input.id,
+                      data: { script }
                     }
-                  ]}
-                />
-              </div>
+                  });
+                }}
+                onClear={(): void => {
+                  updateInput({
+                    variables: {
+                      inputId: input.id,
+                      data: { script: null }
+                    }
+                  });
+                }}
+              />
             </div>
-            {input.script && (
-              <div className="input-script">
-                <div className="stacked-tags">
-                  <Tag minimal={true}>SCRIPT</Tag>
-                  <Tag large={true}>{input.script}</Tag>
-                </div>
-              </div>
-            )}
-            {input.conceptMapId && (
-              <div className="input-script">
-                <div className="stacked-tags">
-                  <Tag>CONCEPT MAP</Tag>
-                  <Tag large={true}>{input.conceptMapId}</Tag>
-                </div>
-              </div>
-            )}
-            {input.sqlValue.joins.length > 0 && (
-              <div className="input-column-joins">
-                {input.sqlValue.joins.map((join: any, index: number) => (
-                  <Join key={index} joinData={join} />
-                ))}
-              </div>
-            )}
           </div>
-        )}
+          {['code', 'string'].includes(attribute.types[0]) && (
+            <div className="stacked-tags" onClick={e => e.stopPropagation()}>
+              <Tag minimal={true}>CONCEPT MAP</Tag>
+              <ButtonGroup>
+                <Button
+                  text={input.conceptMapId || 'None'}
+                  onClick={(_e: React.MouseEvent) => {
+                    // setConceptMapOverlayVisible(true);
+                  }}
+                />
+                <Button
+                  className="delete-button"
+                  icon="cross"
+                  minimal={true}
+                  disabled={!input.conceptMapId}
+                  onClick={(_e: React.MouseEvent) => {
+                    // setConceptMap(undefined);
+                  }}
+                />
+              </ButtonGroup>
+            </div>
+          )}
+          <span className="stretch"></span>
+        </div>
       </Card>
       <ButtonGroup vertical={true}>
         <Button

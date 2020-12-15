@@ -431,7 +431,7 @@ scalar JSON
 
 type Mutation {
   addConditionToInputGroup(action: ConditionAction!, columnInput: ColumnInput!, inputGroupId: ID!, relation: ConditionRelation!, value: String): InputGroup!
-  addJoinToColumn(columnId: ID!, join: JoinInput!): Column!
+  addJoinToColumn(columnId: ID!, join: JoinTablesInput!): Column!
   createAccessControl(role: SourceRole!, sourceId: ID!, userEmail: String!): AccessControl!
   createAttribute(data: AttributeInput, definitionId: ID!, path: String!, resourceId: ID!, sliceName: String): Attribute!
   createComment(attributeId: ID!, content: String!, validation: Boolean!): Comment!
@@ -451,10 +451,11 @@ type Mutation {
   deleteSource(sourceId: ID!): Source!
   deleteTemplate(id: ID!): Template!
   logout: User!
+  updateColumn(columnId: ID!, data: ColumnInputWithoutJoins!): Column!
   updateCondition(action: String, column: String, conditionId: ID!, relation: ConditionRelation, table: String, value: String): Condition!
   updateInput(data: UpdateInputInput!, inputId: ID!): Input!
   updateInputGroup(inputGroupId: ID!, mergingScript: String): InputGroup!
-  updateJoin(data: JoinInput!, joinId: ID!): Join!
+  updateJoin(data: JoinTablesInput!, joinId: ID!): Join!
   updateResource(data: UpdateResourceInput!, filters: [FilterInput!], resourceId: ID!): Resource!
   updateRole(newRole: Role!, userId: ID!): User!
   upsertCredential(database: String!, host: String!, login: String!, model: String!, owner: String!, password: String!, port: String!, sourceId: ID!): Credential!
@@ -642,8 +643,11 @@ input TemplateWhereInput {
 }
 
 input UpdateInputInput {
+  column: String
   conceptMapId: String
+  joins: [JoinTablesInput!]
   script: String
+  table: String
 }
 
 input UpdateResourceInput {

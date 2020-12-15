@@ -116,7 +116,13 @@ interface Column {
 }
 
 export interface Join {
+  id?: string;
   tables: Column[];
+}
+
+export interface JoinInput {
+  source: Column;
+  target: Column;
 }
 
 export interface ISelectedNode {

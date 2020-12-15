@@ -2,7 +2,7 @@ import { arg, idArg, mutationType, stringArg, booleanArg } from '@nexus/schema'
 
 import { createAttribute, deleteAttribute, deleteAttributes } from './Attribute'
 import { createAccessControl, deleteAccessControl } from './AccessControl'
-import { addJoinToColumn } from './Column'
+import { addJoinToColumn, updateColumn } from './Column'
 import { createComment } from './Comment'
 import { deleteCondition, updateCondition } from './Condition'
 import { deleteCredential, upsertCredential } from './Credential'
@@ -271,11 +271,20 @@ export const Mutation = mutationType({
      * COLUMN
      */
 
+    t.field('updateColumn', {
+      type: 'Column',
+      args: {
+        columnId: idArg({ required: true }),
+        data: arg({ type: 'ColumnInputWithoutJoins', required: true }),
+      },
+      resolve: updateColumn,
+    })
+
     t.field('addJoinToColumn', {
       type: 'Column',
       args: {
         columnId: idArg({ required: true }),
-        join: arg({ type: 'JoinInput', required: true }),
+        join: arg({ type: 'JoinTablesInput', required: true }),
       },
       resolve: addJoinToColumn,
     })
@@ -288,7 +297,7 @@ export const Mutation = mutationType({
       type: 'Join',
       args: {
         joinId: idArg({ required: true }),
-        data: arg({ type: 'JoinInput', required: true }),
+        data: arg({ type: 'JoinTablesInput', required: true }),
       },
       resolve: updateJoin,
     })

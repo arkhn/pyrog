@@ -137,9 +137,9 @@ const ConditionForm = () => {
               columnChangeCallback={(e: string) => {
                 setConditionColumn(e);
               }}
-              joinsChangeCallback={(joins: Join[]): void => {
-                setConditionJoins(joins);
-              }}
+              // joinsChangeCallback={(joins: Join[]): void => {
+              //   setConditionJoins(joins);
+              // }}
               sourceSchema={schema as ISourceSchema}
               primaryKeyTable={resource.primaryKeyTable}
             />

@@ -8,7 +8,9 @@ import { ISourceSchema, Join } from 'types';
 export interface Props {
   tableChangeCallback?: Function;
   columnChangeCallback?: Function;
-  joinsChangeCallback?: Function;
+  joinChangeCallback?: Function;
+  addJoinCallback?: Function;
+  deleteJoinCallback?: Function;
   initialTable?: string;
   initialColumn?: string;
   sourceSchema: ISourceSchema;
@@ -23,7 +25,9 @@ export interface Props {
 const ColumnSelect = ({
   tableChangeCallback,
   columnChangeCallback,
-  joinsChangeCallback,
+  joinChangeCallback,
+  addJoinCallback,
+  deleteJoinCallback,
   initialTable,
   initialColumn,
   sourceSchema,
@@ -47,6 +51,7 @@ const ColumnSelect = ({
   const changeTable = (e: string): void => {
     setTable(e);
     setColumn(undefined);
+    // TODO update joins mutation?
     setJoins([]);
 
     if (tableChangeCallback) {
@@ -59,31 +64,6 @@ const ColumnSelect = ({
 
     if (columnChangeCallback) {
       columnChangeCallback(e);
-    }
-  };
-
-  const changeJoins = (
-    sourceTable: string,
-    sourceColumn: string,
-    targetTable: string,
-    targetColumn: string,
-    index?: number
-  ): void => {
-    const newJoin = {
-      tables: [
-        { table: sourceTable, column: sourceColumn },
-        { table: targetTable, column: targetColumn }
-      ]
-    };
-    if (index !== undefined) {
-      joins![index] = newJoin;
-      setJoins([...joins!]);
-    } else {
-      setJoins([...joins!, newJoin]);
-    }
-
-    if (joinsChangeCallback) {
-      joinsChangeCallback(joins);
     }
   };
 
@@ -124,7 +104,12 @@ const ColumnSelect = ({
                     { table: '', column: '' }
                   ]
                 };
-                setJoins([...joins, emptyJoin]);
+
+                if (addJoinCallback) {
+                  addJoinCallback(emptyJoin);
+                } else {
+                  setJoins([...joins, emptyJoin]);
+                }
               }}
             />
           )}
@@ -138,7 +123,12 @@ const ColumnSelect = ({
                 icon="trash"
                 onClick={() => {
                   joins.splice(index, 1);
-                  setJoins([...joins]);
+
+                  if (deleteJoinCallback) {
+                    deleteJoinCallback(join.id);
+                  } else {
+                    setJoins([...joins]);
+                  }
                 }}
               />
               <JoinSelect
@@ -148,15 +138,21 @@ const ColumnSelect = ({
                   sourceColumn: string,
                   targetTable: string,
                   targetColumn: string
-                ) =>
-                  changeJoins(
-                    sourceTable,
-                    sourceColumn,
-                    targetTable,
-                    targetColumn,
-                    index
-                  )
-                }
+                ) => {
+                  const newJoin = {
+                    tables: [
+                      { table: sourceTable, column: sourceColumn },
+                      { table: targetTable, column: targetColumn }
+                    ]
+                  };
+                  joins[index] = newJoin;
+
+                  if (joinChangeCallback) {
+                    joinChangeCallback(join.id, newJoin);
+                  } else {
+                    setJoins([...joins]);
+                  }
+                }}
               />
             </ControlGroup>
           ))}

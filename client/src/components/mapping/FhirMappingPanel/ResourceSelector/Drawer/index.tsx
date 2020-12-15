@@ -233,16 +233,17 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
                     filters[index].sqlColumn.column = column;
                     setFilters([...filters]);
                   }}
-                  joinsChangeCallback={(joins: Join[]): void => {
-                    filters[index].sqlColumn.joins = joins;
-                    setFilters([...filters]);
-                  }}
+                  // joinsChangeCallback={(joins: Join[]): void => {
+                  //   filters[index].sqlColumn.joins = joins;
+                  //   setFilters([...filters]);
+                  // }}
                   initialTable={sqlColumn ? sqlColumn.table : ''}
                   initialColumn={sqlColumn ? sqlColumn.column : ''}
                   sourceSchema={source.credential.schema as ISourceSchema}
                   fill={true}
                   vertical={true}
-                  initialJoins={filters[index].sqlColumn.joins}
+                  // TODO
+                  // initialJoins={filters[index].sqlColumn.joins}
                   primaryKeyTable={pkTable}
                   popoverProps={{
                     autoFocus: true,

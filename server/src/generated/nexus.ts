@@ -385,8 +385,11 @@ export interface NexusGenInputs {
     startsWith?: any | null; // UUID
   }
   UpdateInputInput: { // input type
+    column?: string | null; // String
     conceptMapId?: string | null; // String
+    joins?: NexusGenInputs['JoinTablesInput'][] | null; // [JoinTablesInput!]
     script?: string | null; // String
+    table?: string | null; // String
   }
   UpdateResourceInput: { // input type
     label?: string | null; // String
@@ -710,6 +713,7 @@ export interface NexusGenFieldTypes {
     deleteSource: NexusGenRootTypes['Source']; // Source!
     deleteTemplate: NexusGenRootTypes['Template']; // Template!
     logout: NexusGenRootTypes['User']; // User!
+    updateColumn: NexusGenRootTypes['Column']; // Column!
     updateCondition: NexusGenRootTypes['Condition']; // Condition!
     updateInput: NexusGenRootTypes['Input']; // Input!
     updateInputGroup: NexusGenRootTypes['InputGroup']; // InputGroup!
@@ -841,7 +845,7 @@ export interface NexusGenArgTypes {
     }
     addJoinToColumn: { // args
       columnId: string; // ID!
-      join: NexusGenInputs['JoinInput']; // JoinInput!
+      join: NexusGenInputs['JoinTablesInput']; // JoinTablesInput!
     }
     createAccessControl: { // args
       role: NexusGenEnums['SourceRole']; // SourceRole!
@@ -912,6 +916,10 @@ export interface NexusGenArgTypes {
     deleteTemplate: { // args
       id: string; // ID!
     }
+    updateColumn: { // args
+      columnId: string; // ID!
+      data: NexusGenInputs['ColumnInputWithoutJoins']; // ColumnInputWithoutJoins!
+    }
     updateCondition: { // args
       action?: string | null; // String
       column?: string | null; // String
@@ -929,7 +937,7 @@ export interface NexusGenArgTypes {
       mergingScript?: string | null; // String
     }
     updateJoin: { // args
-      data: NexusGenInputs['JoinInput']; // JoinInput!
+      data: NexusGenInputs['JoinTablesInput']; // JoinTablesInput!
       joinId: string; // ID!
     }
     updateResource: { // args

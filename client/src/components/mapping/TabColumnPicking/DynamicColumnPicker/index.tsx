@@ -191,9 +191,9 @@ const DynamicColumnPicker = ({ attribute, schema, source }: Props) => {
             columnChangeCallback={(e: string) => {
               setColumn(e);
             }}
-            joinsChangeCallback={(joins: Join[]): void => {
-              setJoins(joins);
-            }}
+            // joinsChangeCallback={(joins: Join[]): void => {
+            //   setJoins(joins);
+            // }}
             initialTable={table}
             sourceSchema={schema}
             primaryKeyTable={resource.primaryKeyTable}

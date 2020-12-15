@@ -116,8 +116,67 @@ export const updateInput: FieldResolver<'Mutation', 'updateInput'> = async (
   { inputId, data },
   ctx,
 ) => {
+  const input = await ctx.prisma.input.findOne({
+    where: { id: inputId },
+    include: { sqlValue: { include: { joins: true } } },
+  })
+
+  if (!input) throw new Error('')
+
+  if (input.sqlValue && (data.table || data.column)) {
+    await ctx.prisma.column.upsert({
+      where: { id: input.sqlValue.id },
+      create: {
+        table: data.table,
+        column: data.column,
+      },
+      update: {
+        table: data.table,
+        column: data.column,
+      },
+    })
+  }
+
+  if (input.sqlValue && data.joins) {
+    await ctx.prisma.join.deleteMany({
+      where: { columnId: input.sqlValue?.id },
+    })
+    const newJoins = await Promise.all(
+      data.joins.map(join =>
+        ctx.prisma.join.create({
+          data: {
+            tables: {
+              create: [
+                {
+                  table: join.tables && join.tables[0].table || '',
+                  column: join.tables && join.tables[0].column || '',
+                },
+                {
+                  table: join.tables && join.tables[1].table || '',
+                  column: join.tables && join.tables[1].column || '',
+                },
+              ],
+            },
+          },
+        }),
+      ),
+    )
+
+    await ctx.prisma.column.update({
+      where: { id: input.sqlValue.id },
+      data: {
+        joins: {
+          connect: newJoins.map(newJoin => ({ id: newJoin.id })),
+        },
+      },
+    })
+  }
+
   return ctx.prisma.input.update({
     where: { id: inputId },
-    data,
+    data: {
+      script: data.script,
+      conceptMapId: data.conceptMapId,
+    },
   })
 }
