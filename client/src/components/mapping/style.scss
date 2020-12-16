@@ -313,6 +313,48 @@ body {
       flex-direction: row;
       align-items: center;
 
+      .sql-input-form,
+      .conditions-form {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+
+        .column-select {
+          display: flex;
+        
+          .column-select-input {
+            align-self: center;
+          }
+          .column-select-joins {
+            margin-left: 10px;
+          }
+        }
+        
+        .column-select-vertical {
+          .column-select-input {
+            align-self: center;
+          }
+          .column-select-joins {
+            margin-top: 10px;
+            margin-left: 20px;
+          }
+        }
+        
+        
+        .sql-input-form-add-button,
+        .sql-input-form-script,
+        .conditions-form-action,
+        .conditions-form-column,
+        .conditions-form-relation,
+        .conditions-form-value,
+        .conditions-form-condition-select,
+        .conditions-form-add-button {
+          align-self: center;
+          margin-left: 10px;
+          margin-right: 10px;
+        }
+      }
+
       .input-column-info {
         width: 100%;
         padding: 10px $window-padding;

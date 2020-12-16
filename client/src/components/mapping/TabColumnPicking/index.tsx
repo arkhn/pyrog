@@ -5,7 +5,6 @@ import { Attribute } from '@arkhn/fhir.ts';
 import { ISelectedSource } from 'types';
 
 import StaticValueForm from './StaticValueForm';
-import DynamicColumnPicker from './DynamicColumnPicker';
 import ConditionForm from './ConditionForm';
 import './style.scss';
 
@@ -19,11 +18,6 @@ const TabColumnPicking = ({ attribute, schema, source }: Props) => {
   return (
     <div id={'column-picker'}>
       <StaticValueForm attribute={attribute} />
-      <DynamicColumnPicker
-        attribute={attribute}
-        schema={schema}
-        source={source}
-      />
       <ConditionForm />
     </div>
   );
