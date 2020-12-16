@@ -39,7 +39,7 @@ enum DatabaseType {
 }
 
 model Owner {
-    id     String
+    id     String       @default(cuid()) @id
     name   String       @default("")
     schema String?
 }
