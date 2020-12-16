@@ -12,6 +12,7 @@ datasource db {
 model Template {
   id        String   @default(cuid()) @id
   name      String   @unique
+  // TODO:
   sources   Source[]
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
@@ -38,6 +39,12 @@ enum DatabaseType {
   MSSQL
 }
 
+model Owner {
+    id     String
+    name   String       @default("")
+    schema String?
+}
+
 model Credential {
   id        String       @default(cuid()) @id
   host      String
@@ -45,8 +52,7 @@ model Credential {
   database  String
   login     String
   password  String
-  owner     String       @default("")
-  schema    String?
+  owners    Owner[]
   model     DatabaseType
   // Parent
   sourceId  String       @map("source")
@@ -137,6 +143,8 @@ model Input {
 
 model Column {
   id        String     @default(cuid()) @id
+  ownerId   String?    @map("owner")
+  owner     Owner?     @relation(fields: [ownerId], references: [id])
   table     String?
   column    String?
   joins     Join[]     @relation("ColumnJoins")

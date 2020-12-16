@@ -71,7 +71,7 @@ export const upsertCredential: FieldResolver<
     include: { credential: true },
   })
   if (!source) {
-    throw new Error(`Source ${sourceId} does not exist`)
+    throw new Error(`Source ${sourceId} does not exist`)
   }
 
   const input: Partial<Credz> = {
