@@ -150,13 +150,7 @@ const MappingView = () => {
           >
             <Tab
               id="picker"
-              panel={
-                <TabColumnPicking
-                  attribute={attribute}
-                  schema={source.credential.schema}
-                  source={source}
-                />
-              }
+              panel={<TabColumnPicking attribute={attribute} />}
               title="Column Selection"
             />
             <Tab id="sql-parser" panel={<TabSQLParser />} title="SQL Parser" />

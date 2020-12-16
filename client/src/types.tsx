@@ -110,6 +110,7 @@ export interface Filter {
 }
 
 interface Column {
+  id?: string;
   table: string;
   column: string;
   joins?: Join[];
