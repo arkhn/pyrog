@@ -20,10 +20,6 @@ import { updateRole } from './User'
 import cache from 'cache'
 
 export const Mutation = mutationType({
-  /*
-   * AUTH
-   */
-
   definition(t) {
     /*
      * TEMPLATE
