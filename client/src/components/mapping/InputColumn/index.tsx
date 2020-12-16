@@ -100,130 +100,132 @@ const InputColumn = ({ input }: Props) => {
   };
 
   return (
-    <div className="input-card">
-      <Card elevation={Elevation.ONE}>
-        <div className="card-absolute">
-          <div className="card-flex">
-            <div className="card-tag">Dynamic</div>
-            {!source.credential && (
-              <div className="card-credentials-missing">
-                Database credentials missing
+    <div className="input-column">
+      <div className="input-card">
+        <Card elevation={Elevation.ONE}>
+          <div className="card-absolute">
+            <div className="card-flex">
+              <div className="card-tag">Dynamic</div>
+              {!source.credential && (
+                <div className="card-credentials-missing">
+                  Database credentials missing
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="sql-input-form">
+            <ColumnSelect
+              tableChangeCallback={(table: string) => {
+                updateInput({
+                  variables: {
+                    inputId: input.id,
+                    data: { table, column: '' }
+                  }
+                });
+              }}
+              columnChangeCallback={(column: string) => {
+                updateInput({
+                  variables: {
+                    inputId: input.id,
+                    data: { column }
+                  }
+                });
+              }}
+              joinChangeCallback={(joinId: string, newjoin: Join): void => {
+                updateJoin({
+                  variables: {
+                    joinId,
+                    data: newjoin
+                  }
+                });
+              }}
+              addJoinCallback={(newjoin: Join): void => {
+                addJoin({
+                  variables: {
+                    columnId: input.sqlValue.id,
+                    join: newjoin
+                  }
+                });
+              }}
+              deleteJoinCallback={(joinId: string): void => {
+                deleteJoin({
+                  variables: {
+                    joinId
+                  }
+                });
+              }}
+              initialTable={input.sqlValue.table}
+              initialColumn={input.sqlValue.column}
+              initialJoins={input.sqlValue.joins}
+              sourceSchema={source.credential.schema as ISourceSchema}
+              primaryKeyTable={resource.primaryKeyTable}
+              popoverProps={{
+                autoFocus: true,
+                boundary: 'viewport',
+                canEscapeKeyClose: true,
+                lazy: true,
+                position: Position.TOP,
+                usePortal: true
+              }}
+            />
+            <div className="sql-input-form-script">
+              <div className="stacked-tags">
+                <Tag minimal={true}>SCRIPT</Tag>
+                <ScriptSelect
+                  selectedScript={input.script || ''}
+                  onChange={(script: string) => {
+                    updateInput({
+                      variables: {
+                        inputId: input.id,
+                        data: { script }
+                      }
+                    });
+                  }}
+                  onClear={(): void => {
+                    updateInput({
+                      variables: {
+                        inputId: input.id,
+                        data: { script: null }
+                      }
+                    });
+                  }}
+                />
+              </div>
+            </div>
+            {['code', 'string'].includes(attribute.types[0]) && (
+              <div className="stacked-tags" onClick={e => e.stopPropagation()}>
+                <Tag minimal={true}>CONCEPT MAP</Tag>
+                <ButtonGroup>
+                  <Button
+                    text={input.conceptMapId || 'None'}
+                    onClick={(_e: React.MouseEvent) => {
+                      // setConceptMapOverlayVisible(true);
+                    }}
+                  />
+                  <Button
+                    className="delete-button"
+                    icon="cross"
+                    minimal={true}
+                    disabled={!input.conceptMapId}
+                    onClick={(_e: React.MouseEvent) => {
+                      // setConceptMap(undefined);
+                    }}
+                  />
+                </ButtonGroup>
               </div>
             )}
+            <span className="stretch"></span>
           </div>
-        </div>
-        <div className="sql-input-form">
-          <ColumnSelect
-            tableChangeCallback={(table: string) => {
-              updateInput({
-                variables: {
-                  inputId: input.id,
-                  data: { table, column: '' }
-                }
-              });
-            }}
-            columnChangeCallback={(column: string) => {
-              updateInput({
-                variables: {
-                  inputId: input.id,
-                  data: { column }
-                }
-              });
-            }}
-            joinChangeCallback={(joinId: string, newjoin: Join): void => {
-              updateJoin({
-                variables: {
-                  joinId,
-                  data: newjoin
-                }
-              });
-            }}
-            addJoinCallback={(newjoin: Join): void => {
-              addJoin({
-                variables: {
-                  columnId: input.sqlValue.id,
-                  join: newjoin
-                }
-              });
-            }}
-            deleteJoinCallback={(joinId: string): void => {
-              deleteJoin({
-                variables: {
-                  joinId
-                }
-              });
-            }}
-            initialTable={input.sqlValue.table}
-            initialColumn={input.sqlValue.column}
-            initialJoins={input.sqlValue.joins}
-            sourceSchema={source.credential.schema as ISourceSchema}
-            primaryKeyTable={resource.primaryKeyTable}
-            popoverProps={{
-              autoFocus: true,
-              boundary: 'viewport',
-              canEscapeKeyClose: true,
-              lazy: true,
-              position: Position.TOP,
-              usePortal: true
-            }}
+        </Card>
+        <ButtonGroup vertical={true}>
+          <Button
+            icon={'trash'}
+            loading={loadDelInput}
+            minimal={true}
+            onClick={onClickDelete}
           />
-          <div className="sql-input-form-script">
-            <div className="stacked-tags">
-              <Tag minimal={true}>SCRIPT</Tag>
-              <ScriptSelect
-                selectedScript={input.script || ''}
-                onChange={(script: string) => {
-                  updateInput({
-                    variables: {
-                      inputId: input.id,
-                      data: { script }
-                    }
-                  });
-                }}
-                onClear={(): void => {
-                  updateInput({
-                    variables: {
-                      inputId: input.id,
-                      data: { script: null }
-                    }
-                  });
-                }}
-              />
-            </div>
-          </div>
-          {['code', 'string'].includes(attribute.types[0]) && (
-            <div className="stacked-tags" onClick={e => e.stopPropagation()}>
-              <Tag minimal={true}>CONCEPT MAP</Tag>
-              <ButtonGroup>
-                <Button
-                  text={input.conceptMapId || 'None'}
-                  onClick={(_e: React.MouseEvent) => {
-                    // setConceptMapOverlayVisible(true);
-                  }}
-                />
-                <Button
-                  className="delete-button"
-                  icon="cross"
-                  minimal={true}
-                  disabled={!input.conceptMapId}
-                  onClick={(_e: React.MouseEvent) => {
-                    // setConceptMap(undefined);
-                  }}
-                />
-              </ButtonGroup>
-            </div>
-          )}
-          <span className="stretch"></span>
-        </div>
-      </Card>
-      <ButtonGroup vertical={true}>
-        <Button
-          icon={'trash'}
-          loading={loadDelInput}
-          minimal={true}
-          onClick={onClickDelete}
-        />
-      </ButtonGroup>
+        </ButtonGroup>
+      </div>
     </div>
   );
 };

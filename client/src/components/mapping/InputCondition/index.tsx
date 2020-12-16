@@ -125,121 +125,123 @@ const InputCondition = ({ condition }: Props) => {
     });
 
   return (
-    <div className="input-card">
-      <Card elevation={Elevation.ONE}>
-        <div className="card-absolute">
-          <div className="card-flex">
-            <div className="card-tag">Condition</div>
+    <div className="input-condition">
+      <div className="input-card">
+        <Card elevation={Elevation.ONE}>
+          <div className="card-absolute">
+            <div className="card-flex">
+              <div className="card-tag">Condition</div>
+            </div>
           </div>
-        </div>
-
-        <div className="conditions-form">
-          <div className="conditions-form-action">
-            <StringSelect
-              inputItem={condition.action}
-              items={availableActions}
-              onChange={(action: string): void => {
-                updateCondition({
-                  variables: {
-                    conditionId: condition.id,
-                    action
-                  }
-                });
-              }}
-            />
-          </div>
-          <div className="conditions-form-column">
-            <ColumnSelect
-              initialTable={condition.sqlValue.table}
-              initialColumn={condition.sqlValue.column}
-              initialJoins={condition.sqlValue.joins}
-              tableChangeCallback={(table: string) => {
-                updateCondition({
-                  variables: {
-                    conditionId: condition.id,
-                    table,
-                    column: ''
-                  }
-                });
-              }}
-              columnChangeCallback={(column: string) => {
-                updateCondition({
-                  variables: {
-                    conditionId: condition.id,
-                    column
-                  }
-                });
-              }}
-              joinChangeCallback={(joinId: string, newJoin: Join): void => {
-                updateJoin({
-                  variables: {
-                    joinId,
-                    data: newJoin
-                  }
-                });
-              }}
-              addJoinCallback={(newJoin: Join): void => {
-                addJoin({
-                  variables: {
-                    columnId: condition.sqlValue.id,
-                    join: newJoin
-                  }
-                });
-              }}
-              deleteJoinCallback={(joinId: string): void => {
-                deleteJoin({
-                  variables: {
-                    joinId
-                  }
-                });
-              }}
-              sourceSchema={schema as ISourceSchema}
-              primaryKeyTable={resource.primaryKeyTable}
-            />
-          </div>
-          <div className="conditions-form-value">
-            <div className="conditions-form-relation">
+          <div className="conditions-form">
+            <div className="conditions-form-action">
               <StringSelect
-                inputItem={condition.relation}
-                items={Array.from(conditionsMap.keys())}
-                displayItem={item => conditionsMap.get(item)!}
-                onChange={(relation: string): void => {
+                inputItem={condition.action}
+                items={availableActions}
+                onChange={(action: string): void => {
                   updateCondition({
                     variables: {
                       conditionId: condition.id,
-                      relation
+                      action
                     }
                   });
                 }}
               />
             </div>
-          </div>
-          {!unaryRelations.includes(condition.relation) && (
+            <div className="conditions-form-column">
+              <ColumnSelect
+                initialTable={condition.sqlValue.table}
+                initialColumn={condition.sqlValue.column}
+                initialJoins={condition.sqlValue.joins}
+                tableChangeCallback={(table: string) => {
+                  updateCondition({
+                    variables: {
+                      conditionId: condition.id,
+                      table,
+                      column: ''
+                    }
+                  });
+                }}
+                columnChangeCallback={(column: string) => {
+                  updateCondition({
+                    variables: {
+                      conditionId: condition.id,
+                      column
+                    }
+                  });
+                }}
+                joinChangeCallback={(joinId: string, newJoin: Join): void => {
+                  updateJoin({
+                    variables: {
+                      joinId,
+                      data: newJoin
+                    }
+                  });
+                }}
+                addJoinCallback={(newJoin: Join): void => {
+                  addJoin({
+                    variables: {
+                      columnId: condition.sqlValue.id,
+                      join: newJoin
+                    }
+                  });
+                }}
+                deleteJoinCallback={(joinId: string): void => {
+                  deleteJoin({
+                    variables: {
+                      joinId
+                    }
+                  });
+                }}
+                sourceSchema={schema as ISourceSchema}
+                primaryKeyTable={resource.primaryKeyTable}
+              />
+            </div>
             <div className="conditions-form-value">
-              <div className="stacked-tags">
-                <Tag minimal={true}>VALUE</Tag>
-                <input
-                  className="text-input"
-                  value={conditionValue}
-                  type="text"
-                  placeholder="value..."
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
-                    setConditionValue(e.target.value);
-                  }}
-                  onBlur={(e: React.ChangeEvent<HTMLInputElement>): void => {
+              <div className="conditions-form-relation">
+                <StringSelect
+                  inputItem={condition.relation}
+                  items={Array.from(conditionsMap.keys())}
+                  displayItem={item => conditionsMap.get(item)!}
+                  onChange={(relation: string): void => {
                     updateCondition({
                       variables: {
                         conditionId: condition.id,
-                        value: e.target.value
+                        relation
                       }
                     });
                   }}
                 />
               </div>
             </div>
-          )}
-          <div className="conditions-form-condition-select">
-            {/* <ConditionSelect
+            {!unaryRelations.includes(condition.relation) && (
+              <div className="conditions-form-value">
+                <div className="stacked-tags">
+                  <Tag minimal={true}>VALUE</Tag>
+                  <input
+                    className="text-input"
+                    value={conditionValue}
+                    type="text"
+                    placeholder="value..."
+                    onChange={(
+                      e: React.ChangeEvent<HTMLInputElement>
+                    ): void => {
+                      setConditionValue(e.target.value);
+                    }}
+                    onBlur={(e: React.ChangeEvent<HTMLInputElement>): void => {
+                      updateCondition({
+                        variables: {
+                          conditionId: condition.id,
+                          value: e.target.value
+                        }
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+            <div className="conditions-form-condition-select">
+              {/* <ConditionSelect
               items={resourceConditions}
               itemToKey={conditionToName}
               onChange={(c: Condition): void => {
@@ -250,19 +252,20 @@ const InputCondition = ({ condition }: Props) => {
                 // setConditionValue(c.value);
               }}
             /> */}
+            </div>
           </div>
-        </div>
-      </Card>
-      <ButtonGroup vertical={true}>
-        <Button
-          icon={'trash'}
-          loading={loadDelete}
-          minimal={true}
-          onClick={() => {
-            onClickDelete(condition);
-          }}
-        />
-      </ButtonGroup>
+        </Card>
+        <ButtonGroup vertical={true}>
+          <Button
+            icon={'trash'}
+            loading={loadDelete}
+            minimal={true}
+            onClick={() => {
+              onClickDelete(condition);
+            }}
+          />
+        </ButtonGroup>
+      </div>
     </div>
   );
 };

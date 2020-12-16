@@ -8,6 +8,7 @@ import { onError as onApolloError } from 'services/apollo';
 
 import ScriptSelect from 'components/selects/scriptSelect';
 import InputColumn from '../InputColumn';
+import InputStatic from '../InputStatic';
 import InputCondition from '../InputCondition';
 
 import { IReduxStore } from 'types';
@@ -15,9 +16,7 @@ import { IReduxStore } from 'types';
 const mUpdateInputGroup = loader(
   'src/graphql/mutations/updateInputGroup.graphql'
 );
-const mCreateSqlInput = loader(
-  'src/graphql/mutations/createSqlInput.graphql'
-);
+const mCreateSqlInput = loader('src/graphql/mutations/createSqlInput.graphql');
 const mCreateCondition = loader(
   'src/graphql/mutations/addConditionToInputGroup.graphql'
 );
@@ -61,12 +60,24 @@ const InputGroup = ({ inputGroup }: Props) => {
 
   return (
     <React.Fragment>
-      <div className="input-cards">
-        <div id="input-column-rows">
-          {inputGroup.inputs.map(
-            (input: any, index: number) =>
-              input && <InputColumn key={index} input={input} />
-          )}
+      <div className="attribute-inputs">
+        <div className="input-cards">
+          <div id="input-column-rows">
+            {inputGroup.inputs
+              .filter((input: any) => !input.staticValue)
+              .map(
+                (input: any, index: number) =>
+                  input && <InputColumn key={index} input={input} />
+              )}
+          </div>
+          <div id="input-column-rows">
+            {inputGroup.inputs
+              .filter((input: any) => !!input.staticValue)
+              .map(
+                (input: any, index: number) =>
+                  input && <InputStatic key={index} input={input.staticValue} />
+              )}
+          </div>
         </div>
         {inputGroup.inputs.length > 1 ? (
           <div id="input-column-merging-script">

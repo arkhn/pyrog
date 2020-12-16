@@ -285,11 +285,17 @@ body {
     }
   }
 
-  .input-cards {
+  .attribute-inputs {
     display: flex;
-    flex-direction: row;
-    align-items: stretch;
+  }
 
+  #input-column-merging-script {
+    border-left: 1px solid $gray4;
+    padding: calc(#{$window-padding} / 2);
+    margin-left: calc(#{$window-padding} / 2);
+  }
+
+  .input-cards {
     #input-column-rows {
       flex-grow: 1;
       margin-right: calc(#{$window-padding} / 2);
@@ -299,109 +305,95 @@ body {
       }
     }
 
-    #input-column-merging-script {
-      display: flex;
-      align-items: center;
-
-      border-left: 1px solid $gray4;
-      padding: calc(#{$window-padding} / 2);
-      margin-left: calc(#{$window-padding} / 2);
-    }
-
-    .input-card {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-
-      .sql-input-form,
-      .conditions-form {
-        width: 100%;
+    .input-column,
+    .input-condition {
+      .input-card {
         display: flex;
-        justify-content: center;
-
-        .column-select {
-          display: flex;
+        align-items: center;
         
-          .column-select-input {
-            align-self: center;
+        .bp3-card {
+          width: 100%;
+        }
+
+        .sql-input-form,
+        .conditions-form {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+
+          .column-select {
+            display: flex;
+
+            .column-select-input {
+              align-self: center;
+            }
+            .column-select-joins {
+              margin-left: 10px;
+            }
           }
-          .column-select-joins {
+
+          .sql-input-form-add-button,
+          .sql-input-form-script,
+          .conditions-form-action,
+          .conditions-form-column,
+          .conditions-form-relation,
+          .conditions-form-value,
+          .conditions-form-condition-select,
+          .conditions-form-add-button {
+            align-self: center;
             margin-left: 10px;
+            margin-right: 10px;
           }
         }
-        
-        .column-select-vertical {
-          .column-select-input {
-            align-self: center;
-          }
-          .column-select-joins {
-            margin-top: 10px;
-            margin-left: 20px;
-          }
-        }
-        
-        
-        .sql-input-form-add-button,
-        .sql-input-form-script,
-        .conditions-form-action,
-        .conditions-form-column,
-        .conditions-form-relation,
-        .conditions-form-value,
-        .conditions-form-condition-select,
-        .conditions-form-add-button {
-          align-self: center;
-          margin-left: 10px;
-          margin-right: 10px;
-        }
-      }
 
-      .input-column-info {
-        width: 100%;
-        padding: 10px $window-padding;
-      }
-
-      .input-column-info > * {
-        width: 100%;
-
-        display: flex;
-        flex-direction: row;
-        align-items: flex-start;
-
-        & > *:not(:last-child) {
-          margin-right: $window-padding;
+        .input-column-info {
+          width: 100%;
+          padding: 10px $window-padding;
         }
 
-        .input-column-name {
+        .input-column-info > * {
+          width: 100%;
+
           display: flex;
-          flex-basis: 50%;
-          flex-grow: 1;
-          align-self: center;
-        }
-
-        .input-script {
-          display: flex;
-          flex-basis: 50%;
-          flex-grow: 1;
-          align-self: center;
-        }
-
-        .input-column-join {
-          display: flex;
-          flex-basis: 25%;
-          flex-grow: 1;
-          flex-direction: column;
-          align-items: stretch;
+          flex-direction: row;
+          align-items: flex-start;
 
           & > *:not(:last-child) {
-            margin-bottom: calc(#{$window-padding} / 2);
+            margin-right: $window-padding;
           }
 
-          .join {
+          .input-column-name {
             display: flex;
-            align-items: center;
+            flex-basis: 50%;
+            flex-grow: 1;
+            align-self: center;
+          }
+
+          .input-script {
+            display: flex;
+            flex-basis: 50%;
+            flex-grow: 1;
+            align-self: center;
+          }
+
+          .input-column-join {
+            display: flex;
+            flex-basis: 25%;
+            flex-grow: 1;
+            flex-direction: column;
+            align-items: stretch;
 
             & > *:not(:last-child) {
-              margin-right: calc(#{$window-padding} / 2);
+              margin-bottom: calc(#{$window-padding} / 2);
+            }
+
+            .join {
+              display: flex;
+              align-items: center;
+
+              & > *:not(:last-child) {
+                margin-right: calc(#{$window-padding} / 2);
+              }
             }
           }
         }
