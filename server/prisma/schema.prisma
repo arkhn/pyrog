@@ -12,7 +12,6 @@ datasource db {
 model Template {
   id        String   @default(cuid()) @id
   name      String   @unique
-  // TODO:
   sources   Source[]
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
