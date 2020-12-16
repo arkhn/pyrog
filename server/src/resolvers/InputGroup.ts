@@ -62,12 +62,12 @@ export const addConditionToInputGroup: FieldResolver<
     data: {
       action: action as ConditionAction,
       value,
-      relation,
+      relation: relation || "EQ",
       sqlValue: {
         create: {
-          table: columnInput.table,
-          column: columnInput.column,
-          ...(columnInput.joins && {
+          table: columnInput?.table,
+          column: columnInput?.column,
+          ...(columnInput?.joins && {
             joins: {
               create: columnInput.joins.map(j => ({
                 tables: {

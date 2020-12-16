@@ -18,6 +18,50 @@ export const Input = objectType({
   },
 })
 
+export const createSqlInput: FieldResolver<
+  'Mutation',
+  'createSqlInput'
+> = async (
+  _parent,
+  { inputGroupId, script, conceptMapId, sql: sqlValue },
+  ctx,
+) =>
+  ctx.prisma.input.create({
+    data: {
+      sqlValue: {
+        create: {
+          table: sqlValue?.table,
+          column: sqlValue?.column,
+          ...(sqlValue?.joins && {
+            joins: {
+              create: sqlValue.joins.map(j => ({
+                tables: {
+                  create: [
+                    {
+                      table: (j.tables && j.tables[0]?.table) || '',
+                      column: (j.tables && j.tables[0]?.column) || '',
+                    },
+                    {
+                      table: (j.tables && j.tables[1]?.table) || '',
+                      column: (j.tables && j.tables[1]?.column) || '',
+                    },
+                  ],
+                },
+              })),
+            },
+          }),
+        },
+      },
+      script,
+      conceptMapId,
+      inputGroup: {
+        connect: {
+          id: inputGroupId,
+        },
+      },
+    },
+  })
+
 export const createInput: FieldResolver<'Mutation', 'createInput'> = async (
   _parent,
   { inputGroupId, script, conceptMapId, static: staticValue, sql: sqlValue },
@@ -48,9 +92,9 @@ export const createInput: FieldResolver<'Mutation', 'createInput'> = async (
     data: {
       sqlValue: {
         create: {
-          table: sqlValue.table,
-          column: sqlValue.column,
-          ...(sqlValue.joins && {
+          table: sqlValue?.table,
+          column: sqlValue?.column,
+          ...(sqlValue?.joins && {
             joins: {
               create: sqlValue.joins.map(j => ({
                 tables: {
@@ -148,12 +192,12 @@ export const updateInput: FieldResolver<'Mutation', 'updateInput'> = async (
             tables: {
               create: [
                 {
-                  table: join.tables && join.tables[0].table || '',
-                  column: join.tables && join.tables[0].column || '',
+                  table: (join.tables && join.tables[0].table) || '',
+                  column: (join.tables && join.tables[0].column) || '',
                 },
                 {
-                  table: join.tables && join.tables[1].table || '',
-                  column: join.tables && join.tables[1].column || '',
+                  table: (join.tables && join.tables[1].table) || '',
+                  column: (join.tables && join.tables[1].column) || '',
                 },
               ],
             },

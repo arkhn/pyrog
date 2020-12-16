@@ -701,6 +701,7 @@ export interface NexusGenFieldTypes {
     createInputGroup: NexusGenRootTypes['InputGroup']; // InputGroup!
     createResource: NexusGenRootTypes['Resource']; // Resource!
     createSource: NexusGenRootTypes['Source']; // Source!
+    createSqlInput: NexusGenRootTypes['Input']; // Input!
     createTemplate: NexusGenRootTypes['Template']; // Template!
     deleteAccessControl: NexusGenRootTypes['AccessControl']; // AccessControl!
     deleteAttribute: NexusGenRootTypes['Attribute']; // Attribute!
@@ -837,10 +838,10 @@ export interface NexusGenArgTypes {
   }
   Mutation: {
     addConditionToInputGroup: { // args
-      action: NexusGenEnums['ConditionAction']; // ConditionAction!
-      columnInput: NexusGenInputs['ColumnInput']; // ColumnInput!
+      action?: NexusGenEnums['ConditionAction'] | null; // ConditionAction
+      columnInput?: NexusGenInputs['ColumnInput'] | null; // ColumnInput
       inputGroupId: string; // ID!
-      relation: NexusGenEnums['ConditionRelation']; // ConditionRelation!
+      relation?: NexusGenEnums['ConditionRelation'] | null; // ConditionRelation
       value?: string | null; // String
     }
     addJoinToColumn: { // args
@@ -868,7 +869,7 @@ export interface NexusGenArgTypes {
       conceptMapId?: string | null; // String
       inputGroupId: string; // ID!
       script?: string | null; // String
-      sql: NexusGenInputs['ColumnInput']; // ColumnInput!
+      sql?: NexusGenInputs['ColumnInput'] | null; // ColumnInput
       static?: string | null; // String
     }
     createInputGroup: { // args
@@ -882,6 +883,12 @@ export interface NexusGenArgTypes {
       mapping?: string | null; // String
       name: string; // String!
       templateName: string; // String!
+    }
+    createSqlInput: { // args
+      conceptMapId?: string | null; // String
+      inputGroupId: string; // ID!
+      script?: string | null; // String
+      sql?: NexusGenInputs['ColumnInput'] | null; // ColumnInput
     }
     createTemplate: { // args
       name: string; // String!

@@ -1,9 +1,10 @@
 import React from 'react';
-import { Tag } from '@blueprintjs/core';
+import { Button, Tag } from '@blueprintjs/core';
 import { useMutation } from '@apollo/react-hooks';
 import { useSelector } from 'react-redux';
-import { onError } from 'services/apollo';
 import { loader } from 'graphql.macro';
+
+import { onError as onApolloError } from 'services/apollo';
 
 import ScriptSelect from 'components/selects/scriptSelect';
 import InputColumn from '../InputColumn';
@@ -11,11 +12,15 @@ import InputCondition from '../InputCondition';
 
 import { IReduxStore } from 'types';
 
-// GRAPHQL
 const mUpdateInputGroup = loader(
   'src/graphql/mutations/updateInputGroup.graphql'
 );
-
+const mCreateSqlInput = loader(
+  'src/graphql/mutations/createSqlInput.graphql'
+);
+const mCreateCondition = loader(
+  'src/graphql/mutations/addConditionToInputGroup.graphql'
+);
 interface Props {
   inputGroup: any;
 }
@@ -23,10 +28,18 @@ interface Props {
 const InputGroup = ({ inputGroup }: Props) => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
 
+  const onError = onApolloError(toaster);
+
   const [
     updateInputGroup,
     { loading: loadingMutation }
-  ] = useMutation(mUpdateInputGroup, { onError: onError(toaster) });
+  ] = useMutation(mUpdateInputGroup, { onError });
+  const [createCondition] = useMutation(mCreateCondition, {
+    onError
+  });
+  const [createSqlInput] = useMutation(mCreateSqlInput, {
+    onError
+  });
 
   const onChangeMergingScript = (script: string) => {
     updateInputGroup({
@@ -69,6 +82,19 @@ const InputGroup = ({ inputGroup }: Props) => {
           </div>
         ) : null}
       </div>
+      <div>
+        <Button
+          icon={'add'}
+          text={'Add sql input'}
+          onClick={() => {
+            createSqlInput({
+              variables: {
+                inputGroupId: inputGroup.id
+              }
+            });
+          }}
+        />
+      </div>
       <div className="input-cards">
         <div id="input-column-rows">
           {inputGroup.conditions.map(
@@ -76,6 +102,19 @@ const InputGroup = ({ inputGroup }: Props) => {
               condition && <InputCondition key={index} condition={condition} />
           )}
         </div>
+      </div>
+      <div>
+        <Button
+          icon={'add'}
+          text={'Add condition'}
+          onClick={() => {
+            createCondition({
+              variables: {
+                inputGroupId: inputGroup.id
+              }
+            });
+          }}
+        />
       </div>
     </React.Fragment>
   );

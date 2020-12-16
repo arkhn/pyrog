@@ -7,7 +7,7 @@ mutation createSQLInput(
   $script: String
   $conceptMapId: String
 ) {
-  createInput(
+  createSqlInput(
     inputGroupId: $inputGroupId
     sql: $columnInput
     script: $script

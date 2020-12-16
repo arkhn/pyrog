@@ -2,9 +2,9 @@
 
 mutation addConditionToInputGroup(
   $inputGroupId: ID!
-  $action: ConditionAction!
-  $columnInput: ColumnInput!
-  $relation: ConditionRelation!
+  $action: ConditionAction
+  $columnInput: ColumnInput
+  $relation: ConditionRelation
   $value: String
 ) {
   addConditionToInputGroup(

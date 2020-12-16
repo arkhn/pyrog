@@ -430,15 +430,16 @@ The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://
 scalar JSON
 
 type Mutation {
-  addConditionToInputGroup(action: ConditionAction!, columnInput: ColumnInput!, inputGroupId: ID!, relation: ConditionRelation!, value: String): InputGroup!
+  addConditionToInputGroup(action: ConditionAction, columnInput: ColumnInput, inputGroupId: ID!, relation: ConditionRelation, value: String): InputGroup!
   addJoinToColumn(columnId: ID!, join: JoinTablesInput!): Column!
   createAccessControl(role: SourceRole!, sourceId: ID!, userEmail: String!): AccessControl!
   createAttribute(data: AttributeInput, definitionId: ID!, path: String!, resourceId: ID!, sliceName: String): Attribute!
   createComment(attributeId: ID!, content: String!, validation: Boolean!): Comment!
-  createInput(conceptMapId: String, inputGroupId: ID!, script: String, sql: ColumnInput!, static: String): Input!
+  createInput(conceptMapId: String, inputGroupId: ID!, script: String, sql: ColumnInput, static: String): Input!
   createInputGroup(attributeId: ID!): InputGroup!
   createResource(definitionId: String!, sourceId: ID!): Resource!
   createSource(mapping: String, name: String!, templateName: String!): Source!
+  createSqlInput(conceptMapId: String, inputGroupId: ID!, script: String, sql: ColumnInput): Input!
   createTemplate(name: String!): Template!
   deleteAccessControl(accessControlId: ID!): AccessControl!
   deleteAttribute(attributeId: ID!): Attribute!
