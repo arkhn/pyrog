@@ -34,10 +34,8 @@ const MappingView = () => {
     (state: IReduxStore) => state.resourceInputs.attributesMap
   );
 
-  const path = attribute.path;
-  const attributeId = attributesForResource[path]
-    ? attributesForResource[path].id
-    : null;
+  const path = attribute?.path;
+  const attributeId = path && attributesForResource[path]?.id || null;
 
   const { data: dataAttribute } = useQuery(qInputsForAttribute, {
     variables: {
@@ -148,7 +146,9 @@ const MappingView = () => {
     }
   };
 
-  const renderExistingRules = () => <InputGroups attribute={dataAttribute?.attribute} />;
+  const renderExistingRules = () => (
+    <InputGroups attribute={dataAttribute?.attribute} isEmpty={!attributeId} />
+  );
 
   const renderTable = () => {
     return (
