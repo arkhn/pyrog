@@ -176,3 +176,14 @@ export const updateInput: FieldResolver<'Mutation', 'updateInput'> = async (
     },
   })
 }
+
+export const updateStaticInput: FieldResolver<
+  'Mutation',
+  'updateStaticInput'
+> = async (_parent, { inputId, value }, ctx) =>
+  ctx.prisma.input.update({
+    where: { id: inputId },
+    data: {
+      staticValue: value,
+    },
+  })

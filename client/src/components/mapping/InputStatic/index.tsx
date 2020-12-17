@@ -3,7 +3,6 @@ import {
   Card,
   ControlGroup,
   Elevation,
-  FormGroup,
   InputGroup,
   Position
 } from '@blueprintjs/core';
@@ -11,9 +10,9 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { loader } from 'graphql.macro';
-import { Attribute, ResourceDefinition } from '@arkhn/fhir.ts';
+import { ResourceDefinition } from '@arkhn/fhir.ts';
 
-import { onError } from 'services/apollo';
+import { onError as onApolloError } from 'services/apollo';
 import { IReduxStore } from 'types';
 
 import { setAttributeInMap } from 'services/resourceInputs/actions';
@@ -23,6 +22,9 @@ import StringSelect from 'components/selects/stringSelect';
 import IdentifierSystemInput from './IdentifierSystemInput';
 
 // GRAPHQL
+const qInputsForAttribute = loader(
+  'src/graphql/queries/inputsForAttribute.graphql'
+);
 const qSourcesAndResources = loader(
   'src/graphql/queries/sourcesAndResources.graphql'
 );
@@ -35,14 +37,20 @@ const mCreateInputGroup = loader(
 const mCreateStaticInput = loader(
   'src/graphql/mutations/createStaticInput.graphql'
 );
+const mUpdateStaticInput = loader(
+  'src/graphql/mutations/updateStaticInput.graphql'
+);
+const mDeleteInput = loader('src/graphql/mutations/deleteInput.graphql');
 
 interface Props {
-  input: string;
+  input: any;
 }
 
 const InputStatic = ({ input }: Props): React.ReactElement => {
   const dispatch = useDispatch();
   const toaster = useSelector((state: IReduxStore) => state.toaster);
+  const onError = onApolloError(toaster);
+
   const { attribute, resource, selectedInputGroup } = useSelector(
     (state: IReduxStore) => state.selectedNode
   );
@@ -58,6 +66,46 @@ const InputStatic = ({ input }: Props): React.ReactElement => {
   const { data: dataSources } = useQuery(qSourcesAndResources, {
     fetchPolicy: 'no-cache'
   });
+  const [deleteInput, { loading: loadDelInput }] = useMutation(mDeleteInput, {
+    onError
+  });
+
+  const removeInputFromCache = (cache: any) => {
+    const { attribute: dataAttribute } = cache.readQuery({
+      query: qInputsForAttribute,
+      variables: {
+        attributeId: attributeId
+      }
+    });
+    const newDataAttribute = {
+      ...dataAttribute,
+      inputGroups: dataAttribute.inputGroups
+        .map((group: any) => ({
+          ...group,
+          inputs: group.inputs.filter((i: any) => i.id !== input.id)
+        }))
+        .filter((group: any) => group.inputs.length > 0)
+    };
+    dispatch(setAttributeInMap(attribute.path, newDataAttribute));
+    cache.writeQuery({
+      query: qInputsForAttribute,
+      variables: {
+        attributeId: attributeId
+      },
+      data: { attribute: newDataAttribute }
+    });
+  };
+
+  const onClickDelete = async (e: React.MouseEvent) => {
+    // Mutation to remove from DB
+    e.stopPropagation();
+    await deleteInput({
+      variables: {
+        inputId: input.id
+      },
+      update: removeInputFromCache
+    });
+  };
 
   const sources = dataSources ? dataSources.sources : [];
   const path = attribute.path;
@@ -83,15 +131,16 @@ const InputStatic = ({ input }: Props): React.ReactElement => {
   }, [attribute]);
 
   const [createAttribute] = useMutation(mCreateAttribute, {
-    onError: onError(toaster)
+    onError
   });
   const [createInputGroup] = useMutation(mCreateInputGroup, {
-    onError: onError(toaster)
+    onError
   });
   const [
     createStaticInput,
     { loading: creatingStaticInput }
-  ] = useMutation(mCreateStaticInput, { onError: onError(toaster) });
+  ] = useMutation(mCreateStaticInput, { onError });
+  const [updateStaticInput] = useMutation(mUpdateStaticInput, { onError });
 
   const addStaticValue = async (value: string): Promise<void> => {
     try {
@@ -178,12 +227,20 @@ const InputStatic = ({ input }: Props): React.ReactElement => {
   const renderTextInput = (): React.ReactElement => (
     <React.Fragment>
       <InputGroup
+        value={staticValue}
+        placeholder="Static input"
         onChange={(event: React.FormEvent<HTMLElement>): void => {
           const target = event.target as HTMLInputElement;
           setStaticValue(target.value);
         }}
-        placeholder="Static input"
-        value={staticValue}
+        onBlur={(): void => {
+          updateStaticInput({
+            variables: {
+              inputId: input.id,
+              value: staticValue
+            }
+          });
+        }}
       />
     </React.Fragment>
   );
@@ -216,9 +273,9 @@ const InputStatic = ({ input }: Props): React.ReactElement => {
         </Card>
         <Button
           icon={'trash'}
-          // loading={loadDelInput}
+          loading={loadDelInput}
           minimal={true}
-          // onClick={onClickDelete}
+          onClick={onClickDelete}
         />
       </div>
     </div>

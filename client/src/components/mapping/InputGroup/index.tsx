@@ -79,7 +79,7 @@ const InputGroup = ({ inputGroup }: Props) => {
               .filter((input: any) => !input.sqlValue)
               .map(
                 (input: any, index: number) =>
-                  input && <InputStatic key={index} input={input.staticValue} />
+                  input && <InputStatic key={index} input={input} />
               )}
           </div>
         </div>

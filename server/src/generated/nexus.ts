@@ -721,6 +721,7 @@ export interface NexusGenFieldTypes {
     updateJoin: NexusGenRootTypes['Join']; // Join!
     updateResource: NexusGenRootTypes['Resource']; // Resource!
     updateRole: NexusGenRootTypes['User']; // User!
+    updateStaticInput: NexusGenRootTypes['Input']; // Input!
     upsertCredential: NexusGenRootTypes['Credential']; // Credential!
   }
   Query: { // field return type
@@ -952,6 +953,10 @@ export interface NexusGenArgTypes {
     updateRole: { // args
       newRole: NexusGenEnums['Role']; // Role!
       userId: string; // ID!
+    }
+    updateStaticInput: { // args
+      inputId: string; // ID!
+      value?: string | null; // String
     }
     upsertCredential: { // args
       database: string; // String!

@@ -459,6 +459,7 @@ type Mutation {
   updateJoin(data: JoinTablesInput!, joinId: ID!): Join!
   updateResource(data: UpdateResourceInput!, filters: [FilterInput!], resourceId: ID!): Resource!
   updateRole(newRole: Role!, userId: ID!): User!
+  updateStaticInput(inputId: ID!, value: String): Input!
   upsertCredential(database: String!, host: String!, login: String!, model: String!, owner: String!, password: String!, port: String!, sourceId: ID!): Credential!
 }
 
