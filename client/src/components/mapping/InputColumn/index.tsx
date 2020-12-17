@@ -217,14 +217,12 @@ const InputColumn = ({ input }: Props) => {
             <span className="stretch"></span>
           </div>
         </Card>
-        <ButtonGroup vertical={true}>
-          <Button
-            icon={'trash'}
-            loading={loadDelInput}
-            minimal={true}
-            onClick={onClickDelete}
-          />
-        </ButtonGroup>
+        <Button
+          icon={'trash'}
+          loading={loadDelInput}
+          minimal={true}
+          onClick={onClickDelete}
+        />
       </div>
     </div>
   );

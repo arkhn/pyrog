@@ -296,25 +296,28 @@ body {
   }
 
   .input-cards {
+    width: 100%;
+
     #input-column-rows {
       flex-grow: 1;
       margin-right: calc(#{$window-padding} / 2);
-
-      & > *:not(:last-child) {
-        margin-bottom: calc(#{$window-padding} / 2);
-      }
     }
 
+    .input-static,
     .input-column,
     .input-condition {
+      margin-top: #{$window-padding};
+      margin-bottom: #{$window-padding};
+
       .input-card {
         display: flex;
         align-items: center;
-        
+
         .bp3-card {
           width: 100%;
         }
 
+        .static-input-form,
         .sql-input-form,
         .conditions-form {
           width: 100%;
@@ -358,10 +361,6 @@ body {
           flex-direction: row;
           align-items: flex-start;
 
-          & > *:not(:last-child) {
-            margin-right: $window-padding;
-          }
-
           .input-column-name {
             display: flex;
             flex-basis: 50%;
@@ -383,17 +382,9 @@ body {
             flex-direction: column;
             align-items: stretch;
 
-            & > *:not(:last-child) {
-              margin-bottom: calc(#{$window-padding} / 2);
-            }
-
             .join {
               display: flex;
               align-items: center;
-
-              & > *:not(:last-child) {
-                margin-right: calc(#{$window-padding} / 2);
-              }
             }
           }
         }
