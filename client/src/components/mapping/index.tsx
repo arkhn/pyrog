@@ -1,24 +1,20 @@
-import * as React from 'react';
-import { Tab, Tabs, TabId } from '@blueprintjs/core';
+import React from 'react';
 import { loader } from 'graphql.macro';
 import { useQuery } from '@apollo/react-hooks';
 import { useApolloClient } from 'react-apollo';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 
-import Navbar from 'components/navbar';
-import InputGroups from './InputGroups';
-import TabColumnSuggestion from './TabColumnSuggestion';
-import TabColumnPicking from './TabColumnPicking';
-import TabSQLParser from './TabSQLParser';
 import Comments from './Comments';
 import FhirMappingPanel from './FhirMappingPanel';
+import InputGroups from './InputGroups';
+import Navbar from 'components/navbar';
+import TableViewer from './TableViewer';
 
 import { IReduxStore } from 'types';
 import { FHIR_API_URL } from '../../constants';
 
 import './style.scss';
-import TableViewer from './TableViewer';
 
 const qExportMapping = loader('src/graphql/queries/exportMapping.graphql');
 const qInputsForAttribute = loader(
@@ -35,7 +31,7 @@ const MappingView = () => {
   );
 
   const path = attribute?.path;
-  const attributeId = path && attributesForResource[path]?.id || null;
+  const attributeId = (path && attributesForResource[path]?.id) || null;
 
   const { data: dataAttribute } = useQuery(qInputsForAttribute, {
     variables: {
@@ -43,8 +39,6 @@ const MappingView = () => {
     },
     skip: !attributeId
   });
-
-  const [selectedTabId, setSelectedTabId] = React.useState('picker' as TabId);
 
   const client = useApolloClient();
 
@@ -158,37 +152,6 @@ const MappingView = () => {
     );
   };
 
-  const renderTabs = () => {
-    return (
-      <div id="exploration-tabs">
-        <div id="column-selection">
-          <Tabs
-            onChange={(tabId: TabId) => {
-              setSelectedTabId(tabId);
-            }}
-            selectedTabId={selectedTabId}
-          >
-            <Tab
-              id="picker"
-              panel={<TabColumnPicking attribute={attribute} />}
-              title="Column Selection"
-            />
-            <Tab id="sql-parser" panel={<TabSQLParser />} title="SQL Parser" />
-            <Tab
-              id="mb"
-              disabled
-              panel={<TabColumnSuggestion />}
-              title="Column Suggestion"
-            />
-          </Tabs>
-        </div>
-        <div>
-          <Comments />
-        </div>
-      </div>
-    );
-  };
-
   if (!source?.credential?.schema) {
     toaster.show({
       icon: 'error',
@@ -196,11 +159,7 @@ const MappingView = () => {
       message: `missing database schema for source ${source?.name || null}`,
       timeout: 4000
     });
-    return (
-      <div>
-        <Navbar />
-      </div>
-    );
+    return <Navbar />;
   }
 
   return (
@@ -216,7 +175,7 @@ const MappingView = () => {
           </div>
           <div id="exploration-panel">
             {attribute && renderExistingRules()}
-            {/* {attribute && renderTabs()} */}
+            <Comments />
             {source.credential &&
               resource &&
               resource.primaryKeyTable &&
