@@ -697,11 +697,11 @@ export interface NexusGenFieldTypes {
     createAccessControl: NexusGenRootTypes['AccessControl']; // AccessControl!
     createAttribute: NexusGenRootTypes['Attribute']; // Attribute!
     createComment: NexusGenRootTypes['Comment']; // Comment!
-    createInput: NexusGenRootTypes['Input']; // Input!
     createInputGroup: NexusGenRootTypes['InputGroup']; // InputGroup!
     createResource: NexusGenRootTypes['Resource']; // Resource!
     createSource: NexusGenRootTypes['Source']; // Source!
     createSqlInput: NexusGenRootTypes['Input']; // Input!
+    createStaticInput: NexusGenRootTypes['Input']; // Input!
     createTemplate: NexusGenRootTypes['Template']; // Template!
     deleteAccessControl: NexusGenRootTypes['AccessControl']; // AccessControl!
     deleteAttribute: NexusGenRootTypes['Attribute']; // Attribute!
@@ -865,13 +865,6 @@ export interface NexusGenArgTypes {
       content: string; // String!
       validation: boolean; // Boolean!
     }
-    createInput: { // args
-      conceptMapId?: string | null; // String
-      inputGroupId: string; // ID!
-      script?: string | null; // String
-      sql?: NexusGenInputs['ColumnInput'] | null; // ColumnInput
-      static?: string | null; // String
-    }
     createInputGroup: { // args
       attributeId: string; // ID!
     }
@@ -889,6 +882,10 @@ export interface NexusGenArgTypes {
       inputGroupId: string; // ID!
       script?: string | null; // String
       sql?: NexusGenInputs['ColumnInput'] | null; // ColumnInput
+    }
+    createStaticInput: { // args
+      inputGroupId: string; // ID!
+      value?: string | null; // String
     }
     createTemplate: { // args
       name: string; // String!

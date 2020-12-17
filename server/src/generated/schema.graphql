@@ -435,11 +435,11 @@ type Mutation {
   createAccessControl(role: SourceRole!, sourceId: ID!, userEmail: String!): AccessControl!
   createAttribute(data: AttributeInput, definitionId: ID!, path: String!, resourceId: ID!, sliceName: String): Attribute!
   createComment(attributeId: ID!, content: String!, validation: Boolean!): Comment!
-  createInput(conceptMapId: String, inputGroupId: ID!, script: String, sql: ColumnInput, static: String): Input!
   createInputGroup(attributeId: ID!): InputGroup!
   createResource(definitionId: String!, sourceId: ID!): Resource!
   createSource(mapping: String, name: String!, templateName: String!): Source!
   createSqlInput(conceptMapId: String, inputGroupId: ID!, script: String, sql: ColumnInput): Input!
+  createStaticInput(inputGroupId: ID!, value: String): Input!
   createTemplate(name: String!): Template!
   deleteAccessControl(accessControlId: ID!): AccessControl!
   deleteAttribute(attributeId: ID!): Attribute!

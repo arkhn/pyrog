@@ -62,60 +62,13 @@ export const createSqlInput: FieldResolver<
     },
   })
 
-export const createInput: FieldResolver<'Mutation', 'createInput'> = async (
-  _parent,
-  { inputGroupId, script, conceptMapId, static: staticValue, sql: sqlValue },
-  ctx,
-) => {
-  if (!sqlValue && !staticValue) {
-    throw new Error(`Input needs to have either a sql or static value`)
-  } else if (sqlValue && staticValue) {
-    throw new Error(`Input cannot have both a static and sql value`)
-  }
-
-  if (staticValue) {
-    return ctx.prisma.input.create({
-      data: {
-        staticValue,
-        script,
-        conceptMapId,
-        inputGroup: {
-          connect: {
-            id: inputGroupId,
-          },
-        },
-      },
-    })
-  }
-
-  return ctx.prisma.input.create({
+export const createStaticInput: FieldResolver<
+  'Mutation',
+  'createStaticInput'
+> = async (_parent, { inputGroupId, value }, ctx) =>
+  ctx.prisma.input.create({
     data: {
-      sqlValue: {
-        create: {
-          table: sqlValue?.table,
-          column: sqlValue?.column,
-          ...(sqlValue?.joins && {
-            joins: {
-              create: sqlValue.joins.map(j => ({
-                tables: {
-                  create: [
-                    {
-                      table: (j.tables && j.tables[0]?.table) || '',
-                      column: (j.tables && j.tables[0]?.column) || '',
-                    },
-                    {
-                      table: (j.tables && j.tables[1]?.table) || '',
-                      column: (j.tables && j.tables[1]?.column) || '',
-                    },
-                  ],
-                },
-              })),
-            },
-          }),
-        },
-      },
-      script,
-      conceptMapId,
+      staticValue: value,
       inputGroup: {
         connect: {
           id: inputGroupId,
@@ -123,7 +76,6 @@ export const createInput: FieldResolver<'Mutation', 'createInput'> = async (
       },
     },
   })
-}
 
 export const deleteInput: FieldResolver<'Mutation', 'deleteInput'> = async (
   _parent,

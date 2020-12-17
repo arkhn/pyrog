@@ -6,7 +6,7 @@ import { addJoinToColumn, updateColumn } from './Column'
 import { createComment } from './Comment'
 import { deleteCondition, updateCondition } from './Condition'
 import { deleteCredential, upsertCredential } from './Credential'
-import { createInput, createSqlInput, deleteInput, updateInput } from './Input'
+import { createStaticInput, createSqlInput, deleteInput, updateInput } from './Input'
 import {
   addConditionToInputGroup,
   createInputGroup,
@@ -243,18 +243,13 @@ export const Mutation = mutationType({
       resolve: createSqlInput,
     })
 
-    t.field('createInput', {
+    t.field('createStaticInput', {
       type: 'Input',
       args: {
         inputGroupId: idArg({ required: true }),
-        script: stringArg(),
-        conceptMapId: stringArg(),
-        static: stringArg(),
-        sql: arg({
-          type: 'ColumnInput',
-        }),
+        value: stringArg(),
       },
-      resolve: createInput,
+      resolve: createStaticInput,
     })
 
     t.field('updateInput', {

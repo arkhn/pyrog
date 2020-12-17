@@ -17,6 +17,7 @@ const mUpdateInputGroup = loader(
   'src/graphql/mutations/updateInputGroup.graphql'
 );
 const mCreateSqlInput = loader('src/graphql/mutations/createSqlInput.graphql');
+const mCreateStaticInput = loader('src/graphql/mutations/createStaticInput.graphql');
 const mCreateCondition = loader(
   'src/graphql/mutations/addConditionToInputGroup.graphql'
 );
@@ -37,6 +38,9 @@ const InputGroup = ({ inputGroup }: Props) => {
     onError
   });
   const [createSqlInput] = useMutation(mCreateSqlInput, {
+    onError
+  });
+  const [createStaticInput] = useMutation(mCreateStaticInput, {
     onError
   });
 
@@ -64,7 +68,7 @@ const InputGroup = ({ inputGroup }: Props) => {
         <div className="input-cards">
           <div id="input-column-rows">
             {inputGroup.inputs
-              .filter((input: any) => !input.staticValue)
+              .filter((input: any) => !!input.sqlValue)
               .map(
                 (input: any, index: number) =>
                   input && <InputColumn key={index} input={input} />
@@ -72,7 +76,7 @@ const InputGroup = ({ inputGroup }: Props) => {
           </div>
           <div id="input-column-rows">
             {inputGroup.inputs
-              .filter((input: any) => !!input.staticValue)
+              .filter((input: any) => !input.sqlValue)
               .map(
                 (input: any, index: number) =>
                   input && <InputStatic key={index} input={input.staticValue} />
@@ -99,6 +103,19 @@ const InputGroup = ({ inputGroup }: Props) => {
           text={'Add sql input'}
           onClick={() => {
             createSqlInput({
+              variables: {
+                inputGroupId: inputGroup.id
+              }
+            });
+          }}
+        />
+      </div>
+      <div>
+        <Button
+          icon={'add'}
+          text={'Add static input'}
+          onClick={() => {
+            createStaticInput({
               variables: {
                 inputGroupId: inputGroup.id
               }
