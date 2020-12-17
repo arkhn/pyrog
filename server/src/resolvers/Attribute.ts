@@ -132,3 +132,29 @@ export const deleteAttributes: FieldResolver<
   })
   return res
 }
+
+export const createInputGroup: FieldResolver<
+  'Mutation',
+  'createInputGroup'
+> = async (_parent, { attributeId }, ctx) =>
+  ctx.prisma.attribute.update({
+    where: { id: attributeId },
+    data: {
+      inputGroups: {
+        create: { inputs: { create: [] } },
+      },
+    },
+  })
+
+export const deleteInputGroup: FieldResolver<
+  'Mutation',
+  'deleteInputGroup'
+> = async (_parent, { attributeId, inputGroupId }, ctx) =>
+  ctx.prisma.attribute.update({
+    where: { id: attributeId },
+    data: {
+      inputGroups: {
+        delete: { id: inputGroupId },
+      },
+    },
+  })

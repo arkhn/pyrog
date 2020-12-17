@@ -16,8 +16,13 @@ import { IReduxStore } from 'types';
 const mUpdateInputGroup = loader(
   'src/graphql/mutations/updateInputGroup.graphql'
 );
+const mDeleteInputGroup = loader(
+  'src/graphql/mutations/deleteInputGroup.graphql'
+);
 const mCreateSqlInput = loader('src/graphql/mutations/createSqlInput.graphql');
-const mCreateStaticInput = loader('src/graphql/mutations/createStaticInput.graphql');
+const mCreateStaticInput = loader(
+  'src/graphql/mutations/createStaticInput.graphql'
+);
 const mCreateCondition = loader(
   'src/graphql/mutations/addConditionToInputGroup.graphql'
 );
@@ -27,6 +32,15 @@ interface Props {
 
 const InputGroup = ({ inputGroup }: Props) => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
+  const { attribute } = useSelector((state: IReduxStore) => state.selectedNode);
+  const path = attribute.path;
+
+  const attributesForResource = useSelector(
+    (state: IReduxStore) => state.resourceInputs.attributesMap
+  );
+  const attributeId = attributesForResource[path]
+    ? attributesForResource[path].id
+    : null;
 
   const onError = onApolloError(toaster);
 
@@ -34,6 +48,10 @@ const InputGroup = ({ inputGroup }: Props) => {
     updateInputGroup,
     { loading: loadingMutation }
   ] = useMutation(mUpdateInputGroup, { onError });
+  const [
+    deleteInputGroup,
+    { loading: loadingDeleteInputGroup }
+  ] = useMutation(mDeleteInputGroup, { onError });
   const [createCondition] = useMutation(mCreateCondition, {
     onError
   });
@@ -64,6 +82,18 @@ const InputGroup = ({ inputGroup }: Props) => {
 
   return (
     <React.Fragment>
+      <Button
+        icon={'trash'}
+        onClick={() => {
+          deleteInputGroup({
+            variables: {
+              attributeId,
+              inputGroupId: inputGroup.id
+            }
+          });
+        }}
+        loading={loadingDeleteInputGroup}
+      />
       <div className="attribute-inputs">
         <div className="input-cards">
           <div id="input-column-rows">

@@ -1,0 +1,7 @@
+#import "../fragments/entireAttribute.graphql"
+
+mutation createInputGroup($attributeId: ID!, $inputGroupId: ID!) {
+  deleteInputGroup(attributeId: $attributeId, inputGroupId: $inputGroupId) {
+    ...entireAttribute
+  }
+}

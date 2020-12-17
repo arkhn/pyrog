@@ -1,23 +1,26 @@
 import React from 'react';
-import { Card, Elevation, Spinner } from '@blueprintjs/core';
-import { useQuery } from '@apollo/react-hooks';
+import { Button, Card, Elevation, Spinner } from '@blueprintjs/core';
+import { useMutation } from '@apollo/react-hooks';
 import { useDispatch, useSelector } from 'react-redux';
-
-import { selectInputGroup } from 'services/selectedNode/actions';
-
-import { IReduxStore } from 'types';
-
-// COMPONENTS
-import InputGroup from '../InputGroup';
 import { loader } from 'graphql.macro';
 
-// GRAPHQL
-const qInputsForAttribute = loader(
-  'src/graphql/queries/inputsForAttribute.graphql'
+import { selectInputGroup } from 'services/selectedNode/actions';
+import { onError as onApolloError } from 'services/apollo';
+import InputGroup from '../InputGroup';
+import { IAttribute, IReduxStore } from 'types';
+
+const mCreateInputGroup = loader(
+  'src/graphql/mutations/createInputGroup.graphql'
 );
 
-const InputGroups = () => {
+interface Props {
+  attribute: IAttribute;
+}
+
+const InputGroups = ({ attribute }: Props) => {
   const dispatch = useDispatch();
+  const toaster = useSelector((state: IReduxStore) => state.toaster);
+  const onError = onApolloError(toaster);
 
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
   const path = selectedNode.attribute.path;
@@ -29,18 +32,14 @@ const InputGroups = () => {
     ? attributesForResource[path].id
     : null;
 
-  const { data, loading: loadingData } = useQuery(qInputsForAttribute, {
-    variables: {
-      attributeId: attributeId
-    },
-    skip: !attributeId
+  const [createInputGroup] = useMutation(mCreateInputGroup, {
+    onError
   });
 
-  if (loadingData) {
+  if (!attribute) {
     return <Spinner />;
   }
 
-  const attribute = data && data.attribute ? data.attribute : null;
   const inputGroups =
     attribute && attribute.inputGroups ? attribute.inputGroups : [];
 
@@ -65,6 +64,19 @@ const InputGroups = () => {
           </Card>
         ) : null
       )}
+      <div>
+        <Button
+          icon={'add'}
+          text={'Add input group'}
+          onClick={() => {
+            createInputGroup({
+              variables: {
+                attributeId
+              }
+            });
+          }}
+        />
+      </div>
     </div>
   );
 };

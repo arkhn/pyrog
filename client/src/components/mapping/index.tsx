@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Tab, Tabs, TabId } from '@blueprintjs/core';
 import { loader } from 'graphql.macro';
+import { useQuery } from '@apollo/react-hooks';
 import { useApolloClient } from 'react-apollo';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
@@ -20,12 +21,31 @@ import './style.scss';
 import TableViewer from './TableViewer';
 
 const qExportMapping = loader('src/graphql/queries/exportMapping.graphql');
+const qInputsForAttribute = loader(
+  'src/graphql/queries/inputsForAttribute.graphql'
+);
 
 const MappingView = () => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
   const { source, resource, attribute } = useSelector(
     (state: IReduxStore) => state.selectedNode
   );
+  const attributesForResource = useSelector(
+    (state: IReduxStore) => state.resourceInputs.attributesMap
+  );
+
+  const path = attribute.path;
+  const attributeId = attributesForResource[path]
+    ? attributesForResource[path].id
+    : null;
+
+  const { data: dataAttribute } = useQuery(qInputsForAttribute, {
+    variables: {
+      attributeId: attributeId
+    },
+    skip: !attributeId
+  });
+
   const [selectedTabId, setSelectedTabId] = React.useState('picker' as TabId);
 
   const client = useApolloClient();
@@ -128,7 +148,7 @@ const MappingView = () => {
     }
   };
 
-  const renderExistingRules = () => <InputGroups />;
+  const renderExistingRules = () => <InputGroups attribute={dataAttribute?.attribute} />;
 
   const renderTable = () => {
     return (
@@ -196,7 +216,7 @@ const MappingView = () => {
           </div>
           <div id="exploration-panel">
             {attribute && renderExistingRules()}
-            {attribute && renderTabs()}
+            {/* {attribute && renderTabs()} */}
             {source.credential &&
               resource &&
               resource.primaryKeyTable &&

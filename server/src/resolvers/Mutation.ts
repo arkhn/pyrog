@@ -1,6 +1,12 @@
 import { arg, idArg, mutationType, stringArg, booleanArg } from '@nexus/schema'
 
-import { createAttribute, deleteAttribute, deleteAttributes } from './Attribute'
+import {
+  createAttribute,
+  createInputGroup,
+  deleteAttribute,
+  deleteAttributes,
+  deleteInputGroup,
+} from './Attribute'
 import { createAccessControl, deleteAccessControl } from './AccessControl'
 import { addJoinToColumn, updateColumn } from './Column'
 import { createComment } from './Comment'
@@ -13,11 +19,7 @@ import {
   updateInput,
   updateStaticInput,
 } from './Input'
-import {
-  addConditionToInputGroup,
-  createInputGroup,
-  updateInputGroup,
-} from './InputGroup'
+import { addConditionToInputGroup, updateInputGroup } from './InputGroup'
 import { updateJoin, deleteJoin } from './Join'
 import { createResource, updateResource, deleteResource } from './Resource'
 import { deleteSource, createSource } from './Source'
@@ -172,17 +174,26 @@ export const Mutation = mutationType({
       resolve: deleteAttributes,
     })
 
-    /*
-     * INPUT GROUP
-     */
-
     t.field('createInputGroup', {
-      type: 'InputGroup',
+      type: 'Attribute',
       args: {
         attributeId: idArg({ required: true }),
       },
       resolve: createInputGroup,
     })
+
+    t.field('deleteInputGroup', {
+      type: 'Attribute',
+      args: {
+        attributeId: idArg({ required: true }),
+        inputGroupId: idArg({ required: true }),
+      },
+      resolve: deleteInputGroup,
+    })
+
+    /*
+     * INPUT GROUP
+     */
 
     t.field('updateInputGroup', {
       type: 'InputGroup',

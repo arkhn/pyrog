@@ -435,7 +435,7 @@ type Mutation {
   createAccessControl(role: SourceRole!, sourceId: ID!, userEmail: String!): AccessControl!
   createAttribute(data: AttributeInput, definitionId: ID!, path: String!, resourceId: ID!, sliceName: String): Attribute!
   createComment(attributeId: ID!, content: String!, validation: Boolean!): Comment!
-  createInputGroup(attributeId: ID!): InputGroup!
+  createInputGroup(attributeId: ID!): Attribute!
   createResource(definitionId: String!, sourceId: ID!): Resource!
   createSource(mapping: String, name: String!, templateName: String!): Source!
   createSqlInput(conceptMapId: String, inputGroupId: ID!, script: String, sql: ColumnInput): Input!
@@ -447,6 +447,7 @@ type Mutation {
   deleteCondition(conditionId: ID!): Condition!
   deleteCredential(credentialId: ID!): Credential!
   deleteInput(inputId: ID!): Input!
+  deleteInputGroup(attributeId: ID!, inputGroupId: ID!): Attribute!
   deleteJoin(joinId: ID!): Join!
   deleteResource(resourceId: ID!): Resource!
   deleteSource(sourceId: ID!): Source!

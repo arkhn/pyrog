@@ -697,7 +697,7 @@ export interface NexusGenFieldTypes {
     createAccessControl: NexusGenRootTypes['AccessControl']; // AccessControl!
     createAttribute: NexusGenRootTypes['Attribute']; // Attribute!
     createComment: NexusGenRootTypes['Comment']; // Comment!
-    createInputGroup: NexusGenRootTypes['InputGroup']; // InputGroup!
+    createInputGroup: NexusGenRootTypes['Attribute']; // Attribute!
     createResource: NexusGenRootTypes['Resource']; // Resource!
     createSource: NexusGenRootTypes['Source']; // Source!
     createSqlInput: NexusGenRootTypes['Input']; // Input!
@@ -709,6 +709,7 @@ export interface NexusGenFieldTypes {
     deleteCondition: NexusGenRootTypes['Condition']; // Condition!
     deleteCredential: NexusGenRootTypes['Credential']; // Credential!
     deleteInput: NexusGenRootTypes['Input']; // Input!
+    deleteInputGroup: NexusGenRootTypes['Attribute']; // Attribute!
     deleteJoin: NexusGenRootTypes['Join']; // Join!
     deleteResource: NexusGenRootTypes['Resource']; // Resource!
     deleteSource: NexusGenRootTypes['Source']; // Source!
@@ -908,6 +909,10 @@ export interface NexusGenArgTypes {
     }
     deleteInput: { // args
       inputId: string; // ID!
+    }
+    deleteInputGroup: { // args
+      attributeId: string; // ID!
+      inputGroupId: string; // ID!
     }
     deleteJoin: { // args
       joinId: string; // ID!
