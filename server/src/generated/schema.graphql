@@ -134,6 +134,8 @@ input ColumnWhereInput {
   joins: JoinFilter
   NOT: [ColumnWhereInput!]
   OR: [ColumnWhereInput!]
+  owner: OwnerWhereInput
+  ownerId: NullableStringFilter
   table: NullableStringFilter
   updatedAt: DateTimeFilter
 }
@@ -237,10 +239,9 @@ type Credential {
   id: String!
   login: String!
   model: DatabaseType!
-  owner: String!
+  owners(after: OwnerWhereUniqueInput, before: OwnerWhereUniqueInput, first: Int, last: Int): [Owner!]!
   password: String!
   port: String!
-  schema: String
   source: Source!
   updatedAt: DateTime!
 }
@@ -255,10 +256,9 @@ input CredentialWhereInput {
   model: DatabaseType
   NOT: [CredentialWhereInput!]
   OR: [CredentialWhereInput!]
-  owner: StringFilter
+  owners: OwnerFilter
   password: StringFilter
   port: StringFilter
-  schema: NullableStringFilter
   source: SourceWhereInput
   sourceId: StringFilter
   updatedAt: DateTimeFilter
@@ -453,7 +453,7 @@ type Mutation {
   updateJoin(data: JoinInput!, joinId: ID!): Join!
   updateResource(data: UpdateResourceInput!, filters: [FilterInput!], resourceId: ID!): Resource!
   updateRole(newRole: Role!, userId: ID!): User!
-  upsertCredential(database: String!, host: String!, login: String!, model: String!, owner: String!, password: String!, port: String!, sourceId: ID!): Credential!
+  upsertCredential(database: String!, host: String!, login: String!, model: String!, owners: [OwnerInput!], password: String!, port: String!, sourceId: ID!): Credential!
 }
 
 input NullableStringFilter {
@@ -468,6 +468,46 @@ input NullableStringFilter {
   not: String
   notIn: [String!]
   startsWith: String
+}
+
+type Owner {
+  credential: Credential!
+  id: String!
+  name: String!
+  schema: String
+}
+
+input Owner_name_credential_unique_constraintCompoundUniqueInput {
+  credentialId: String!
+  name: String!
+}
+
+input OwnerFilter {
+  every: OwnerWhereInput
+  none: OwnerWhereInput
+  some: OwnerWhereInput
+}
+
+input OwnerInput {
+  name: String!
+  schema: String
+}
+
+input OwnerWhereInput {
+  AND: [OwnerWhereInput!]
+  Column: ColumnFilter
+  credential: CredentialWhereInput
+  credentialId: StringFilter
+  id: StringFilter
+  name: StringFilter
+  NOT: [OwnerWhereInput!]
+  OR: [OwnerWhereInput!]
+  schema: NullableStringFilter
+}
+
+input OwnerWhereUniqueInput {
+  id: String
+  Owner_name_credential_unique_constraint: Owner_name_credential_unique_constraintCompoundUniqueInput
 }
 
 type Query {

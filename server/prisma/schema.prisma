@@ -39,9 +39,13 @@ enum DatabaseType {
 }
 
 model Owner {
-    id     String       @default(cuid()) @id
-    name   String       @default("")
-    schema String?
+    id              String      @default(cuid()) @id
+    name            String
+    schema          String?
+    credentialId    String
+    credential      Credential  @relation(fields: [credentialId], references: [id])
+
+    @@unique([name, credentialId], name: "Owner_name_credential_unique_constraint")
 }
 
 model Credential {

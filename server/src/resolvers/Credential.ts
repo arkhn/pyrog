@@ -1,6 +1,11 @@
 import axios from 'axios'
 import { objectType, FieldResolver } from '@nexus/schema'
-import { DatabaseType, Credential as Credz } from '@prisma/client'
+import {
+  DatabaseType,
+  Credential as Credz,
+  OwnerWhereUniqueInput,
+  OwnerCreateWithoutCredentialInput,
+} from '@prisma/client'
 
 import { PAGAI_URL } from '../constants'
 import { encrypt, decrypt } from 'utils'
@@ -16,8 +21,7 @@ export const Credential = objectType({
     t.model.database()
     t.model.model()
     t.model.login()
-    t.model.owner()
-    t.model.schema()
+    t.model.owners()
     t.model.password()
     t.field('decryptedPassword', {
       type: 'String',
@@ -34,19 +38,24 @@ export const Credential = objectType({
 const loadDatabaseSchema = async (
   ctx: Context,
   credentials: Partial<Credz>,
-): Promise<string> => {
-  const { model, owner, host, port, database, login, password } = credentials
+  owner: { name: string; schema?: string | null } | null,
+): Promise<{ name: string; schema?: string | null } | null> => {
+  const { model, host, port, database, login, password } = credentials
+  if (!owner) return null
   try {
     const { data } = await axios.post(`${PAGAI_URL}/get_db_schema`, {
       model,
-      owner,
       host,
       port,
       database,
       login,
+      owner: owner ? owner.name : owner,
       password: decrypt(password!),
     })
-    return JSON.stringify(data)
+    return {
+      ...owner,
+      schema: JSON.stringify(data),
+    }
   } catch (err) {
     throw new Error(
       `Could not fetch database schema using pagai: ${
@@ -61,7 +70,7 @@ export const upsertCredential: FieldResolver<
   'upsertCredential'
 > = async (
   _parent,
-  { sourceId, host, port, database, login, password, owner, model },
+  { sourceId, host, port, database, owners, login, password, model },
   ctx,
 ) => {
   const encryptedPassword = encrypt(password)
@@ -73,7 +82,6 @@ export const upsertCredential: FieldResolver<
   if (!source) {
     throw new Error(`Source ${sourceId} does not exist`)
   }
-
   const input: Partial<Credz> = {
     host,
     port,
@@ -81,25 +89,36 @@ export const upsertCredential: FieldResolver<
     database,
     password: encryptedPassword,
     login,
-    owner,
   }
-  input.schema = await loadDatabaseSchema(ctx, input)
+
+  const _owners = owners
+    ? await Promise.all(
+        owners.map(owner => loadDatabaseSchema(ctx, input, owner)),
+      )
+    : []
 
   let credz: Credz
   if (source.credential) {
     credz = await ctx.prisma.credential.update({
       where: { id: source.credential.id },
-      data: input,
+      data: {
+        ...input,
+        owners: {
+          set: _owners as OwnerWhereUniqueInput[],
+        },
+      },
     })
   } else {
     credz = await ctx.prisma.credential.create({
       data: {
         ...(input as Credz),
         source: { connect: { id: sourceId } },
+        owners: {
+          create: _owners as OwnerCreateWithoutCredentialInput[],
+        },
       },
     })
   }
-
   return credz
 }
 

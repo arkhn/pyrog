@@ -25,6 +25,14 @@ export const FilterInput = inputObjectType({
   },
 })
 
+export const OwnerInput = inputObjectType({
+  name: 'OwnerInput',
+  definition(t) {
+    t.field('name', { type: 'String', required: true })
+    t.field('schema', { type: 'String' })
+  },
+})
+
 export const UpdateInputInput = inputObjectType({
   name: 'UpdateInputInput',
   definition(t) {

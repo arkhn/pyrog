@@ -1,5 +1,4 @@
 import { arg, idArg, mutationType, stringArg, booleanArg } from '@nexus/schema'
-
 import { createAttribute, deleteAttribute, deleteAttributes } from './Attribute'
 import { createAccessControl, deleteAccessControl } from './AccessControl'
 import { addJoinToColumn } from './Column'
@@ -80,7 +79,7 @@ export const Mutation = mutationType({
         database: stringArg({ required: true }),
         login: stringArg({ required: true }),
         password: stringArg({ required: true }),
-        owner: stringArg({ required: true }),
+        owners: arg({ type: 'OwnerInput', list: true }),
         model: stringArg({ required: true }),
       },
       resolve: upsertCredential,
