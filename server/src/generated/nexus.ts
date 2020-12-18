@@ -475,6 +475,7 @@ export interface NexusGenRootTypes {
     conceptMapId?: string | null; // String
     createdAt: any; // DateTime!
     id: string; // String!
+    inputGroupId?: string | null; // String
     script?: string | null; // String
     staticValue?: string | null; // String
     updatedAt: any; // DateTime!
@@ -671,6 +672,7 @@ export interface NexusGenFieldTypes {
     createdAt: any; // DateTime!
     id: string; // String!
     inputGroup: NexusGenRootTypes['InputGroup'] | null; // InputGroup
+    inputGroupId: string | null; // String
     script: string | null; // String
     sqlValue: NexusGenRootTypes['Column'] | null; // Column
     staticValue: string | null; // String
@@ -708,7 +710,7 @@ export interface NexusGenFieldTypes {
     deleteAttributes: NexusGenRootTypes['Attribute'][] | null; // [Attribute!]
     deleteCondition: NexusGenRootTypes['Condition']; // Condition!
     deleteCredential: NexusGenRootTypes['Credential']; // Credential!
-    deleteInput: NexusGenRootTypes['Input']; // Input!
+    deleteInput: NexusGenRootTypes['InputGroup']; // InputGroup!
     deleteInputGroup: NexusGenRootTypes['Attribute']; // Attribute!
     deleteJoin: NexusGenRootTypes['Join']; // Join!
     deleteResource: NexusGenRootTypes['Resource']; // Resource!
@@ -908,6 +910,7 @@ export interface NexusGenArgTypes {
       credentialId: string; // ID!
     }
     deleteInput: { // args
+      inputGroupId: string; // ID!
       inputId: string; // ID!
     }
     deleteInputGroup: { // args

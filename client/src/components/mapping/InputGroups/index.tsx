@@ -33,9 +33,7 @@ const InputGroups = ({ attribute, isEmpty }: Props) => {
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
   );
-  let attributeId = attributesForResource[path]
-    ? attributesForResource[path].id
-    : null;
+  let attributeId = attribute?.id;
 
   const [createAttribute] = useMutation(mCreateAttribute, {
     onError

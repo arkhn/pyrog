@@ -15,11 +15,14 @@ import { deleteCredential, upsertCredential } from './Credential'
 import {
   createStaticInput,
   createSqlInput,
-  deleteInput,
   updateInput,
   updateStaticInput,
 } from './Input'
-import { addConditionToInputGroup, updateInputGroup } from './InputGroup'
+import {
+  addConditionToInputGroup,
+  deleteInput,
+  updateInputGroup,
+} from './InputGroup'
 import { updateJoin, deleteJoin } from './Join'
 import { createResource, updateResource, deleteResource } from './Resource'
 import { deleteSource, createSource } from './Source'
@@ -218,6 +221,15 @@ export const Mutation = mutationType({
       resolve: addConditionToInputGroup,
     })
 
+    t.field('deleteInput', {
+      type: 'InputGroup',
+      args: {
+        inputGroupId: idArg({ required: true }),
+        inputId: idArg({ required: true }),
+      },
+      resolve: deleteInput,
+    })
+
     /*
      * CONDITION
      */
@@ -285,14 +297,6 @@ export const Mutation = mutationType({
         value: stringArg(),
       },
       resolve: updateStaticInput,
-    })
-
-    t.field('deleteInput', {
-      type: 'Input',
-      args: {
-        inputId: idArg({ required: true }),
-      },
-      resolve: deleteInput,
     })
 
     /*

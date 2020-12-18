@@ -4,6 +4,7 @@ export const Input = objectType({
   name: 'Input',
   definition(t) {
     t.model.id()
+    t.model.inputGroupId()
 
     t.model.sqlValue()
     t.model.script()
@@ -76,36 +77,6 @@ export const createStaticInput: FieldResolver<
       },
     },
   })
-
-export const deleteInput: FieldResolver<'Mutation', 'deleteInput'> = async (
-  _parent,
-  { inputId },
-  ctx,
-) => {
-  const input = await ctx.prisma.input.delete({
-    where: { id: inputId },
-    include: {
-      inputGroup: {
-        include: { inputs: true, conditions: { include: { sqlValue: true } } },
-      },
-    },
-  })
-
-  if (input.inputGroup?.inputs.length === 1) {
-    await Promise.all(
-      input.inputGroup.conditions.map(async c => {
-        if (c.sqlValue)
-          await ctx.prisma.column.delete({ where: { id: c.sqlValue.id } })
-        return ctx.prisma.condition.delete({ where: { id: c.id } })
-      }),
-    )
-    await ctx.prisma.inputGroup.delete({
-      where: { id: input.inputGroup.id },
-    })
-  }
-
-  return input
-}
 
 export const updateInput: FieldResolver<'Mutation', 'updateInput'> = async (
   _parent,

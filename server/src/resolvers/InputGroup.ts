@@ -42,7 +42,7 @@ export const addConditionToInputGroup: FieldResolver<
     data: {
       action: action as ConditionAction,
       value,
-      relation: relation || "EQ",
+      relation: relation || 'EQ',
       sqlValue: {
         create: {
           table: columnInput?.table,
@@ -75,4 +75,24 @@ export const addConditionToInputGroup: FieldResolver<
     },
   })
   return inputGroup
+}
+
+export const deleteInput: FieldResolver<'Mutation', 'deleteInput'> = async (
+  _parent,
+  { inputGroupId, inputId },
+  ctx,
+) => {
+  // Delete columns associated to the input to delete
+  await ctx.prisma.column.deleteMany({
+    where: { input: { id: inputId } },
+  })
+
+  return ctx.prisma.inputGroup.update({
+    where: { id: inputGroupId },
+    data: {
+      inputs: {
+        delete: { id: inputId },
+      },
+    },
+  })
 }
