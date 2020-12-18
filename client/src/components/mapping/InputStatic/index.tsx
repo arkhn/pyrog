@@ -52,9 +52,8 @@ const InputStatic = ({ input }: Props): React.ReactElement => {
     onError
   });
 
-  const onClickDelete = (e: React.MouseEvent) => {
+  const onClickDelete = () => {
     // Mutation to remove from DB
-    e.stopPropagation();
     deleteInput({
       variables: {
         inputGroupId: input.inputGroupId,

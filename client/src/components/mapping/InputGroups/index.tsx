@@ -4,7 +4,6 @@ import { useMutation } from '@apollo/react-hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { loader } from 'graphql.macro';
 
-import { selectInputGroup } from 'services/selectedNode/actions';
 import { setAttributeInMap } from 'services/resourceInputs/actions';
 import { onError as onApolloError } from 'services/apollo';
 import InputGroup from '../InputGroup';
@@ -103,16 +102,7 @@ const InputGroups = ({ attribute, isEmpty }: Props) => {
         inputGroup ? (
           <Card
             key={index}
-            style={{
-              background:
-                index === selectedNode.selectedInputGroup ? '#ced9e0' : ''
-            }}
             elevation={Elevation.ONE}
-            onClick={() => {
-              index === selectedNode.selectedInputGroup
-                ? dispatch(selectInputGroup(null))
-                : dispatch(selectInputGroup(index));
-            }}
           >
             <InputGroup key={index} inputGroup={inputGroup} />
           </Card>

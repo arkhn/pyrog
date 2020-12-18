@@ -52,10 +52,8 @@ const InputColumn = ({ input }: Props) => {
     onError
   });
 
-  const onClickDelete = async (e: React.MouseEvent) => {
-    // Mutation to remove from DB
-    e.stopPropagation();
-    await deleteInput({
+  const onClickDelete = () => {
+    deleteInput({
       variables: {
         inputGroupId: input.inputGroupId,
         inputId: input.id
@@ -157,7 +155,7 @@ const InputColumn = ({ input }: Props) => {
               </div>
             </div>
             {['code', 'string'].includes(attribute.types[0]) && (
-              <div className="stacked-tags" onClick={e => e.stopPropagation()}>
+              <div className="stacked-tags">
                 <Tag minimal={true}>CONCEPT MAP</Tag>
                 <ButtonGroup>
                   <Button

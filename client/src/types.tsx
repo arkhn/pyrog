@@ -131,7 +131,6 @@ export interface ISelectedNode {
   source: ISelectedSource;
   resource: Resource;
   attribute: Attribute;
-  selectedInputGroup: number;
 }
 
 export interface IResourceInputs {

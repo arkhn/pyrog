@@ -115,7 +115,7 @@ const InputGroup = ({ inputGroup }: Props) => {
         </div>
         {inputGroup.inputs.length > 1 ? (
           <div id="input-column-merging-script">
-            <div className="stacked-tags" onClick={e => e.stopPropagation()}>
+            <div className="stacked-tags">
               <Tag>SCRIPT</Tag>
               <ScriptSelect
                 loading={loadingMutation}
