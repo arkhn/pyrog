@@ -75,6 +75,7 @@ const IdentifierSystemInput = ({
     if (customSystem) {
       updateCustomSystem();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [customSystem, selectedResource]);
 
   const handleSourceSelect = (source: Source): void => {

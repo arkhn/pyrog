@@ -52,7 +52,7 @@ const ColumnSelect = ({
 
   useEffect(() => {
     if (allJoinsChangeCallback) allJoinsChangeCallback(joins);
-  }, [joins]);
+  }, [joins, allJoinsChangeCallback]);
 
   const changeTable = (e: string): void => {
     setTable(e);

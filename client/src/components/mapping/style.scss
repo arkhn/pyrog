@@ -188,6 +188,7 @@ body {
     border-left: 1px solid $gray4;
     padding: calc(#{$window-padding} / 2);
     margin-left: calc(#{$window-padding} / 2);
+    display: flex;
   }
 
   .input-cards {

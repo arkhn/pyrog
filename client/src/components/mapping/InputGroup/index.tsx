@@ -19,7 +19,7 @@ const mUpdateInputGroup = loader(
 const mDeleteInputGroup = loader(
   'src/graphql/mutations/deleteInputGroup.graphql'
 );
-const mCreateSqlInput = loader('src/graphql/mutations/createSqlInput.graphql');
+const mCreateSqlInput = loader('src/graphql/mutations/createSQLInput.graphql');
 const mCreateStaticInput = loader(
   'src/graphql/mutations/createStaticInput.graphql'
 );
