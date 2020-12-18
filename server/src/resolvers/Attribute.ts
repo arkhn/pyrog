@@ -156,7 +156,10 @@ export const deleteInputGroup: FieldResolver<
       inputGroups: {
         update: {
           where: { id: inputGroupId },
-          data: { conditions: { deleteMany: {} } },
+          data: {
+            conditions: { deleteMany: {} },
+            inputs: { deleteMany: {} },
+          },
         },
         delete: { id: inputGroupId },
       },
