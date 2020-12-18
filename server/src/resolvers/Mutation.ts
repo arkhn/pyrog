@@ -10,7 +10,7 @@ import {
 import { createAccessControl, deleteAccessControl } from './AccessControl'
 import { addJoinToColumn, updateColumn } from './Column'
 import { createComment } from './Comment'
-import { deleteCondition, updateCondition } from './Condition'
+import { updateCondition } from './Condition'
 import { deleteCredential, upsertCredential } from './Credential'
 import {
   createStaticInput,
@@ -21,6 +21,7 @@ import {
 import {
   addConditionToInputGroup,
   deleteInput,
+  deleteCondition,
   updateInputGroup,
 } from './InputGroup'
 import { updateJoin, deleteJoin } from './Join'
@@ -230,6 +231,15 @@ export const Mutation = mutationType({
       resolve: deleteInput,
     })
 
+    t.field('deleteCondition', {
+      type: 'InputGroup',
+      args: {
+        inputGroupId: idArg({ required: true }),
+        conditionId: idArg({ required: true }),
+      },
+      resolve: deleteCondition,
+    })
+
     /*
      * CONDITION
      */
@@ -245,14 +255,6 @@ export const Mutation = mutationType({
         value: stringArg(),
       },
       resolve: updateCondition,
-    })
-
-    t.field('deleteCondition', {
-      type: 'Condition',
-      args: {
-        conditionId: idArg({ required: true }),
-      },
-      resolve: deleteCondition,
     })
 
     /*

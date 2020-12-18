@@ -11,9 +11,6 @@ import StringSelect from 'components/selects/stringSelect';
 import ConditionSelect from 'components/selects/conditionSelect';
 
 // GRAPHQL
-const qInputsForAttribute = loader(
-  'src/graphql/queries/inputsForAttribute.graphql'
-);
 const mUpdateCondition = loader(
   'src/graphql/mutations/updateCondition.graphql'
 );
@@ -45,23 +42,7 @@ const InputCondition = ({ condition }: Props) => {
   const schema = useSelector(
     (state: IReduxStore) => state.selectedNode.source.credential.schema
   );
-  const { attribute, resource, selectedInputGroup } = useSelector(
-    (state: IReduxStore) => state.selectedNode
-  );
-  const attributesForResource = useSelector(
-    (state: IReduxStore) => state.resourceInputs.attributesMap
-  );
-
-  const path = attribute.path;
-  const attributeId = attributesForResource[path].id;
-  // The id of the input group in which we want to put the new input.
-  // If it is null, it means that we'll need to create a new input group first.
-  let inputGroupId =
-    selectedInputGroup === null ||
-    !attributesForResource[path] ||
-    selectedInputGroup >= attributesForResource[path].inputGroups.length
-      ? null
-      : attributesForResource[path].inputGroups[selectedInputGroup].id;
+  const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
 
   const onError = onApolloError(toaster);
 
@@ -90,38 +71,12 @@ const InputCondition = ({ condition }: Props) => {
     setConditionValue(condition.value);
   }, [condition.value]);
 
-  // TODO can we avoid that?
-  const removeConditionFromCache = (conditionId: string) => (cache: any) => {
-    const { attribute: dataAttribute } = cache.readQuery({
-      query: qInputsForAttribute,
+  const onClickDelete = (condition: Condition) =>
+    deleteCondition({
       variables: {
-        attributeId: attributeId
-      }
-    });
-    const newDataAttribute = {
-      ...dataAttribute,
-      inputGroups: dataAttribute.inputGroups.map((group: any) => ({
-        ...group,
-        conditions: group.conditions.filter(
-          (c: Condition) => c.id !== conditionId
-        )
-      }))
-    };
-    cache.writeQuery({
-      query: qInputsForAttribute,
-      variables: {
-        attributeId: attributeId
-      },
-      data: { attribute: newDataAttribute }
-    });
-  };
-
-  const onClickDelete = async (condition: Condition) =>
-    await deleteCondition({
-      variables: {
+        inputGroupId: condition.inputGroupId,
         conditionId: condition.id
-      },
-      update: removeConditionFromCache(condition.id)
+      }
     });
 
   return (

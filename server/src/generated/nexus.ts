@@ -450,6 +450,7 @@ export interface NexusGenRootTypes {
   Condition: { // root type
     action?: NexusGenEnums['ConditionAction'] | null; // ConditionAction
     id: string; // String!
+    inputGroupId: string; // String!
     relation: NexusGenEnums['ConditionRelation']; // ConditionRelation!
     value?: string | null; // String
   }
@@ -642,6 +643,7 @@ export interface NexusGenFieldTypes {
   Condition: { // field return type
     action: NexusGenEnums['ConditionAction'] | null; // ConditionAction
     id: string; // String!
+    inputGroupId: string; // String!
     relation: NexusGenEnums['ConditionRelation']; // ConditionRelation!
     sqlValue: NexusGenRootTypes['Column'] | null; // Column
     value: string | null; // String
@@ -708,7 +710,7 @@ export interface NexusGenFieldTypes {
     deleteAccessControl: NexusGenRootTypes['AccessControl']; // AccessControl!
     deleteAttribute: NexusGenRootTypes['Attribute']; // Attribute!
     deleteAttributes: NexusGenRootTypes['Attribute'][] | null; // [Attribute!]
-    deleteCondition: NexusGenRootTypes['Condition']; // Condition!
+    deleteCondition: NexusGenRootTypes['InputGroup']; // InputGroup!
     deleteCredential: NexusGenRootTypes['Credential']; // Credential!
     deleteInput: NexusGenRootTypes['InputGroup']; // InputGroup!
     deleteInputGroup: NexusGenRootTypes['Attribute']; // Attribute!
@@ -905,6 +907,7 @@ export interface NexusGenArgTypes {
     }
     deleteCondition: { // args
       conditionId: string; // ID!
+      inputGroupId: string; // ID!
     }
     deleteCredential: { // args
       credentialId: string; // ID!

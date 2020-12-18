@@ -2,6 +2,7 @@
 
 fragment entireCondition on Condition {
   id
+  inputGroupId
   action
   sqlValue {
     id

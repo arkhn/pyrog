@@ -97,6 +97,7 @@ export interface Resource {
 
 export interface Condition {
   id: string;
+  inputGroupId?: string;
   action: string;
   sqlValue: Column;
   relation: string;

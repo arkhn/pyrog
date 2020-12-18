@@ -1,5 +1,7 @@
-mutation deleteCondition($conditionId: ID!) {
-  deleteCondition(conditionId: $conditionId) {
-    id
+#import "../fragments/entireInputGroup.graphql"
+
+mutation deleteCondition($inputGroupId: ID!, $conditionId: ID!) {
+  deleteCondition(inputGroupId: $inputGroupId, conditionId: $conditionId) {
+    ...entireInputGroup
   }
 }

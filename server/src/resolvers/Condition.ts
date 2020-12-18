@@ -5,6 +5,7 @@ export const Condition = objectType({
   name: 'Condition',
   definition(t) {
     t.model.id()
+    t.model.inputGroupId()
 
     t.model.action()
     t.model.sqlValue()
@@ -28,15 +29,5 @@ export const updateCondition: FieldResolver<
       sqlValue: {
         update: { table, column },
       },
-    },
-  })
-
-export const deleteCondition: FieldResolver<
-  'Mutation',
-  'deleteCondition'
-> = async (_, { conditionId }, ctx) =>
-  ctx.prisma.condition.delete({
-    where: {
-      id: conditionId,
     },
   })

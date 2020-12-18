@@ -185,6 +185,7 @@ type ConceptMap {
 type Condition {
   action: ConditionAction
   id: String!
+  inputGroupId: String!
   relation: ConditionRelation!
   sqlValue: Column
   value: String
@@ -445,7 +446,7 @@ type Mutation {
   deleteAccessControl(accessControlId: ID!): AccessControl!
   deleteAttribute(attributeId: ID!): Attribute!
   deleteAttributes(filter: AttributeWhereInput): [Attribute!]
-  deleteCondition(conditionId: ID!): Condition!
+  deleteCondition(conditionId: ID!, inputGroupId: ID!): InputGroup!
   deleteCredential(credentialId: ID!): Credential!
   deleteInput(inputGroupId: ID!, inputId: ID!): InputGroup!
   deleteInputGroup(attributeId: ID!, inputGroupId: ID!): Attribute!

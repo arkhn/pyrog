@@ -96,3 +96,22 @@ export const deleteInput: FieldResolver<'Mutation', 'deleteInput'> = async (
     },
   })
 }
+
+export const deleteCondition: FieldResolver<
+  'Mutation',
+  'deleteCondition'
+> = async (_parent, { inputGroupId, conditionId }, ctx) => {
+  // Delete columns associated to the condition to delete
+  await ctx.prisma.column.deleteMany({
+    where: { condition: { id: conditionId } },
+  })
+
+  return ctx.prisma.inputGroup.update({
+    where: { id: inputGroupId },
+    data: {
+      conditions: {
+        delete: { id: conditionId },
+      },
+    },
+  })
+}

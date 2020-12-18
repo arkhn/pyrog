@@ -7,7 +7,7 @@ import {
   SelectionModes,
   IRegion
 } from '@blueprintjs/table';
-import * as React from 'react';
+import React from 'react';
 import axios from 'axios';
 
 import './style.scss';
