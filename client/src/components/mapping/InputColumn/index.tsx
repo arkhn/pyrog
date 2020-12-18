@@ -6,13 +6,15 @@ import {
   Position,
   Tag
 } from '@blueprintjs/core';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 import { loader } from 'graphql.macro';
 import { useMutation } from '@apollo/react-hooks';
-import { useSelector } from 'react-redux';
 
 import { onError as onApolloError } from 'services/apollo';
-import { IInput, IReduxStore, ISourceSchema, Join } from 'types';
+import { ConceptMap, IInput, IReduxStore, ISourceSchema, Join } from 'types';
+import { FHIR_API_URL } from '../../../constants';
 
 import ColumnSelect from 'components/selects/columnSelect';
 import ConceptMapDialog from 'components/mapping/ConceptMap';
@@ -34,6 +36,13 @@ const InputColumn = ({ input }: Props) => {
   const onError = onApolloError(toaster);
   const { attribute, resource, source } = useSelector(
     (state: IReduxStore) => state.selectedNode
+  );
+
+  const [conceptMap, setConceptMap] = useState(
+    undefined as ConceptMap | undefined
+  );
+  const [isConceptMapOverlayVisible, setConceptMapOverlayVisible] = useState(
+    false
   );
 
   const [updateInput] = useMutation(mUpdateInput, {
@@ -60,6 +69,22 @@ const InputColumn = ({ input }: Props) => {
       }
     });
   };
+
+  useEffect(() => {
+    if (input.conceptMapId) {
+      const fetchConceptMap = async (conceptMapId: string) => {
+        const response = await axios.get(
+          `${FHIR_API_URL}/ConceptMap/${conceptMapId}`
+        );
+        if (response.data.resourceType === 'OperationOutcome')
+          throw new Error(response.data.issue[0].diagnostics);
+        setConceptMap(response.data as ConceptMap);
+      };
+      fetchConceptMap(input.conceptMapId).catch(e => {
+        console.error(e);
+      });
+    }
+  }, [input.conceptMapId]);
 
   return (
     <div className="input-column">
@@ -159,9 +184,9 @@ const InputColumn = ({ input }: Props) => {
                 <Tag minimal={true}>CONCEPT MAP</Tag>
                 <ButtonGroup>
                   <Button
-                    text={input.conceptMapId || 'None'}
+                    text={conceptMap?.title || 'None'}
                     onClick={(_e: React.MouseEvent) => {
-                      // setConceptMapOverlayVisible(true);
+                      setConceptMapOverlayVisible(true);
                     }}
                   />
                   <Button
@@ -170,7 +195,12 @@ const InputColumn = ({ input }: Props) => {
                     minimal={true}
                     disabled={!input.conceptMapId}
                     onClick={(_e: React.MouseEvent) => {
-                      // setConceptMap(undefined);
+                      updateInput({
+                        variables: {
+                          inputId: input.id,
+                          data: { conceptMapId: null }
+                        }
+                      });
                     }}
                   />
                 </ButtonGroup>
@@ -179,6 +209,20 @@ const InputColumn = ({ input }: Props) => {
             <span className="stretch"></span>
           </div>
         </Card>
+        <ConceptMapDialog
+          isOpen={isConceptMapOverlayVisible}
+          onClose={_ => setConceptMapOverlayVisible(false)}
+          currentConceptMap={conceptMap}
+          updateInputCallback={(conceptMapId: string) => {
+            updateInput({
+              variables: {
+                inputId: input.id,
+                data: { conceptMapId }
+              }
+            });
+            setConceptMapOverlayVisible(false);
+          }}
+        />
         <Button
           icon={'trash'}
           loading={loadDelInput}
