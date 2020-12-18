@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, ButtonGroup, Card, Elevation, Tag } from '@blueprintjs/core';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useSelector } from 'react-redux';
 import { loader } from 'graphql.macro';
 import { onError as onApolloError } from 'services/apollo';
@@ -20,7 +20,9 @@ const mDeleteJoin = loader('src/graphql/mutations/deleteJoin.graphql');
 const mDeleteCondition = loader(
   'src/graphql/mutations/deleteCondition.graphql'
 );
-
+const qConditionsForResource = loader(
+  'src/graphql/queries/conditionsForResource.graphql'
+);
 interface Props {
   condition: Condition;
 }
@@ -37,6 +39,11 @@ const conditionsMap = new Map([
 ]);
 const unaryRelations = ['NULL', 'NOTNULL'];
 
+const conditionToName = (condition: Condition): string =>
+  `${condition.action} ${condition.sqlValue.table} ${
+    condition.sqlValue.column
+  } ${conditionsMap.get(condition.relation)} ${condition.value}`;
+
 const InputCondition = ({ condition }: Props) => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
   const schema = useSelector(
@@ -44,8 +51,9 @@ const InputCondition = ({ condition }: Props) => {
   );
   const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
 
-  const onError = onApolloError(toaster);
+  const [conditionValue, setConditionValue] = useState(condition.value || '');
 
+  const onError = onApolloError(toaster);
   const [updateCondition] = useMutation(mUpdateCondition, {
     onError
   });
@@ -65,7 +73,26 @@ const InputCondition = ({ condition }: Props) => {
     }
   );
 
-  const [conditionValue, setConditionValue] = useState(condition.value || '');
+  const { data: conditionsData } = useQuery(qConditionsForResource, {
+    variables: {
+      resourceId: resource.id
+    }
+  });
+  const allConditions: Condition[] = (
+    conditionsData?.conditionsForResource || []
+  ).filter(
+    (condition: Condition) =>
+      condition.action &&
+      condition.sqlValue.table &&
+      condition.sqlValue.column &&
+      condition.relation
+  );
+  // Remove duplicates
+  const resourceConditions: Condition[] = allConditions.filter(
+    (condition, index) =>
+      allConditions.map(conditionToName).indexOf(conditionToName(condition)) ===
+      index
+  );
 
   useEffect(() => {
     setConditionValue(condition.value);
@@ -196,17 +223,22 @@ const InputCondition = ({ condition }: Props) => {
               </div>
             )}
             <div className="conditions-form-condition-select">
-              {/* <ConditionSelect
-              items={resourceConditions}
-              itemToKey={conditionToName}
-              onChange={(c: Condition): void => {
-                // setConditionAction(c.action);
-                // setConditionTable(c.sqlValue.table);
-                // setConditionColumn(c.sqlValue.column);
-                // setConditionRelation(c.relation);
-                // setConditionValue(c.value);
-              }}
-            /> */}
+              <ConditionSelect
+                items={resourceConditions}
+                itemToKey={conditionToName}
+                onChange={(c: Condition): void => {
+                  updateCondition({
+                    variables: {
+                      conditionId: condition.id,
+                      action: c.action,
+                      table: c.sqlValue.table,
+                      column: c.sqlValue.column,
+                      relation: c.relation,
+                      value: c.value
+                    }
+                  });
+                }}
+              />
             </div>
           </div>
         </Card>

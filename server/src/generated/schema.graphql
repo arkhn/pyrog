@@ -484,6 +484,7 @@ input NullableStringFilter {
 type Query {
   allSources: [Source!]
   attribute(attributeId: ID!): Attribute
+  conditionsForResource(resourceId: ID!): [Condition!]
   credential(credentialId: ID!): Credential
   me: User
   resource(resourceId: ID!): Resource

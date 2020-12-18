@@ -31,3 +31,13 @@ export const updateCondition: FieldResolver<
       },
     },
   })
+
+export const conditionsForResource: FieldResolver<
+  'Query',
+  'conditionsForResource'
+> = async (_, { resourceId }, ctx) =>
+  ctx.prisma.condition.findMany({
+    where: {
+      inputGroup: { attribute: { resourceId } },
+    },
+  })
