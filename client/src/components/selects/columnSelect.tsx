@@ -8,6 +8,7 @@ import { ISourceSchema, Join } from 'types';
 export interface Props {
   tableChangeCallback?: Function;
   columnChangeCallback?: Function;
+  allJoinsChangeCallback?: Function;
   joinChangeCallback?: Function;
   addJoinCallback?: Function;
   deleteJoinCallback?: Function;
@@ -25,6 +26,7 @@ export interface Props {
 const ColumnSelect = ({
   tableChangeCallback,
   columnChangeCallback,
+  allJoinsChangeCallback,
   joinChangeCallback,
   addJoinCallback,
   deleteJoinCallback,
@@ -47,6 +49,10 @@ const ColumnSelect = ({
     setColumn(initialColumn);
     setJoins(initialJoins || []);
   }, [initialTable, initialColumn, initialJoins]);
+
+  useEffect(() => {
+    if (allJoinsChangeCallback) allJoinsChangeCallback(joins);
+  }, [joins]);
 
   const changeTable = (e: string): void => {
     setTable(e);

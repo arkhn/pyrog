@@ -12,7 +12,7 @@ import { loader } from 'graphql.macro';
 import { useSelector, useDispatch } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
 
-import { Filter, IReduxStore, ISourceSchema } from 'types';
+import { Filter, IReduxStore, ISourceSchema, Join } from 'types';
 import ColumnSelect from 'components/selects/columnSelect';
 import {
   updateSelectedResource,
@@ -233,17 +233,16 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
                     filters[index].sqlColumn.column = column;
                     setFilters([...filters]);
                   }}
-                  // joinsChangeCallback={(joins: Join[]): void => {
-                  //   filters[index].sqlColumn.joins = joins;
-                  //   setFilters([...filters]);
-                  // }}
+                  allJoinsChangeCallback={(joins: Join[]): void => {
+                    filters[index].sqlColumn.joins = joins;
+                    setFilters([...filters]);
+                  }}
                   initialTable={sqlColumn ? sqlColumn.table : ''}
                   initialColumn={sqlColumn ? sqlColumn.column : ''}
                   sourceSchema={source.credential.schema as ISourceSchema}
                   fill={true}
                   vertical={true}
-                  // TODO
-                  // initialJoins={filters[index].sqlColumn.joins}
+                  initialJoins={filters[index].sqlColumn.joins}
                   primaryKeyTable={pkTable}
                   popoverProps={{
                     autoFocus: true,

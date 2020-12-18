@@ -14,41 +14,6 @@ body {
   justify-content: center;
 }
 
-.bp3-tabs {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-
-  .bp3-tab-panel:not([aria-hidden='true']) {
-    flex-grow: 1;
-    display: flex;
-    overflow: auto;
-    flex-direction: column;
-
-    .vertical-flex {
-      width: 100%;
-      flex-grow: 1;
-      display: flex;
-      overflow: auto;
-      flex-direction: column;
-
-      .column-viewer {
-        flex-grow: 1;
-        overflow: auto;
-
-        .column-flexbox {
-          overflow: auto;
-          min-height: -moz-min-content;
-          min-height: -webkit-min-content;
-          min-height: min-content;
-          height: 100%;
-          overflow-x: scroll;
-        }
-      }
-    }
-  }
-}
-
 #tableViewer {
   background-color: $light-gray2;
   display: flex;
@@ -141,6 +106,7 @@ body {
     display: flex;
     flex-direction: column;
     overflow: scroll;
+
     .panel-header {
       background-color: $gray5;
     }
