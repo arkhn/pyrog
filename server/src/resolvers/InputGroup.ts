@@ -1,4 +1,4 @@
-import { objectType, FieldResolver } from '@nexus/schema'
+import { objectType, FieldResolver } from 'nexus'
 import { ConditionAction } from '@prisma/client'
 
 export const InputGroup = objectType({

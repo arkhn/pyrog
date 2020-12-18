@@ -1,4 +1,4 @@
-import { objectType, FieldResolver } from '@nexus/schema'
+import { objectType, FieldResolver } from 'nexus'
 import { Condition, Input } from '@prisma/client'
 import { getDefinition } from 'fhir'
 

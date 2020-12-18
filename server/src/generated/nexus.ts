@@ -3,22 +3,14 @@
  * Do not make changes to this file directly
  */
 
-import * as Context from "../context"
-import { core } from "@nexus/schema"
-declare global {
-  interface NexusGenCustomInputMethods<TypeName extends string> {
-    JSON<FieldName extends string>(fieldName: FieldName, opts?: core.ScalarInputFieldConfig<core.GetGen3<"inputTypes", TypeName, FieldName>>): void // "JSON";
-  }
-}
-declare global {
-  interface NexusGenCustomOutputMethods<TypeName extends string> {
-    JSON<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void // "JSON";
-  }
-}
+
+import { Context } from "./../context"
+
+
 declare global {
   interface NexusGenCustomOutputProperties<TypeName extends string> {
+    crud: NexusPrisma<TypeName, 'crud'>
     model: NexusPrisma<TypeName, 'model'>
-    crud: any
   }
 }
 
@@ -27,7 +19,7 @@ declare global {
 }
 
 export interface NexusGenInputs {
-  AccessControlFilter: { // input type
+  AccessControlListRelationFilter: { // input type
     every?: NexusGenInputs['AccessControlWhereInput'] | null; // AccessControlWhereInput
     none?: NexusGenInputs['AccessControlWhereInput'] | null; // AccessControlWhereInput
     some?: NexusGenInputs['AccessControlWhereInput'] | null; // AccessControlWhereInput
@@ -37,7 +29,7 @@ export interface NexusGenInputs {
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     NOT?: NexusGenInputs['AccessControlWhereInput'][] | null; // [AccessControlWhereInput!]
     OR?: NexusGenInputs['AccessControlWhereInput'][] | null; // [AccessControlWhereInput!]
-    role?: NexusGenEnums['SourceRole'] | null; // SourceRole
+    role?: NexusGenInputs['EnumSourceRoleFilter'] | null; // EnumSourceRoleFilter
     source?: NexusGenInputs['SourceWhereInput'] | null; // SourceWhereInput
     sourceId?: NexusGenInputs['StringFilter'] | null; // StringFilter
     user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
@@ -51,70 +43,70 @@ export interface NexusGenInputs {
     sourceId: string; // String!
     userId: string; // String!
   }
-  AttributeFilter: { // input type
+  AttributeInput: { // input type
+    mergingScript?: string | null; // String
+  }
+  AttributeListRelationFilter: { // input type
     every?: NexusGenInputs['AttributeWhereInput'] | null; // AttributeWhereInput
     none?: NexusGenInputs['AttributeWhereInput'] | null; // AttributeWhereInput
     some?: NexusGenInputs['AttributeWhereInput'] | null; // AttributeWhereInput
   }
-  AttributeInput: { // input type
-    mergingScript?: string | null; // String
-  }
   AttributeWhereInput: { // input type
     AND?: NexusGenInputs['AttributeWhereInput'][] | null; // [AttributeWhereInput!]
-    comments?: NexusGenInputs['CommentFilter'] | null; // CommentFilter
+    comments?: NexusGenInputs['CommentListRelationFilter'] | null; // CommentListRelationFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     definitionId?: NexusGenInputs['StringFilter'] | null; // StringFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
-    inputGroups?: NexusGenInputs['InputGroupFilter'] | null; // InputGroupFilter
+    inputGroups?: NexusGenInputs['InputGroupListRelationFilter'] | null; // InputGroupListRelationFilter
     NOT?: NexusGenInputs['AttributeWhereInput'][] | null; // [AttributeWhereInput!]
     OR?: NexusGenInputs['AttributeWhereInput'][] | null; // [AttributeWhereInput!]
     path?: NexusGenInputs['StringFilter'] | null; // StringFilter
     resource?: NexusGenInputs['ResourceWhereInput'] | null; // ResourceWhereInput
-    resourceId?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
-    sliceName?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
+    resourceId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    sliceName?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
   AttributeWhereUniqueInput: { // input type
     id?: string | null; // String
   }
-  BooleanFilter: { // input type
+  BoolFilter: { // input type
     equals?: boolean | null; // Boolean
-    not?: boolean | null; // Boolean
-  }
-  ColumnFilter: { // input type
-    every?: NexusGenInputs['ColumnWhereInput'] | null; // ColumnWhereInput
-    none?: NexusGenInputs['ColumnWhereInput'] | null; // ColumnWhereInput
-    some?: NexusGenInputs['ColumnWhereInput'] | null; // ColumnWhereInput
+    not?: NexusGenInputs['NestedBoolFilter'] | null; // NestedBoolFilter
   }
   ColumnInput: { // input type
     column: string; // String!
-    joins?: NexusGenInputs['JoinInput'][] | null; // [JoinInput!]
+    joins?: Array<NexusGenInputs['JoinInput'] | null> | null; // [JoinInput]
     table: string; // String!
   }
   ColumnInputWithoutJoins: { // input type
     column?: string | null; // String
     table?: string | null; // String
   }
+  ColumnListRelationFilter: { // input type
+    every?: NexusGenInputs['ColumnWhereInput'] | null; // ColumnWhereInput
+    none?: NexusGenInputs['ColumnWhereInput'] | null; // ColumnWhereInput
+    some?: NexusGenInputs['ColumnWhereInput'] | null; // ColumnWhereInput
+  }
   ColumnWhereInput: { // input type
     AND?: NexusGenInputs['ColumnWhereInput'][] | null; // [ColumnWhereInput!]
-    column?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
+    column?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     condition?: NexusGenInputs['ConditionWhereInput'] | null; // ConditionWhereInput
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     filter?: NexusGenInputs['FilterWhereInput'] | null; // FilterWhereInput
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     input?: NexusGenInputs['InputWhereInput'] | null; // InputWhereInput
     join?: NexusGenInputs['JoinWhereInput'] | null; // JoinWhereInput
-    joinId?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
-    joins?: NexusGenInputs['JoinFilter'] | null; // JoinFilter
+    joinId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    joins?: NexusGenInputs['JoinListRelationFilter'] | null; // JoinListRelationFilter
     NOT?: NexusGenInputs['ColumnWhereInput'][] | null; // [ColumnWhereInput!]
     OR?: NexusGenInputs['ColumnWhereInput'][] | null; // [ColumnWhereInput!]
-    table?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
+    table?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
   ColumnWhereUniqueInput: { // input type
     id?: string | null; // String
   }
-  CommentFilter: { // input type
+  CommentListRelationFilter: { // input type
     every?: NexusGenInputs['CommentWhereInput'] | null; // CommentWhereInput
     none?: NexusGenInputs['CommentWhereInput'] | null; // CommentWhereInput
     some?: NexusGenInputs['CommentWhereInput'] | null; // CommentWhereInput
@@ -122,7 +114,7 @@ export interface NexusGenInputs {
   CommentWhereInput: { // input type
     AND?: NexusGenInputs['CommentWhereInput'][] | null; // [CommentWhereInput!]
     attribute?: NexusGenInputs['AttributeWhereInput'] | null; // AttributeWhereInput
-    attributeId?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
+    attributeId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     author?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
     authorId?: NexusGenInputs['StringFilter'] | null; // StringFilter
     content?: NexusGenInputs['StringFilter'] | null; // StringFilter
@@ -131,28 +123,28 @@ export interface NexusGenInputs {
     NOT?: NexusGenInputs['CommentWhereInput'][] | null; // [CommentWhereInput!]
     OR?: NexusGenInputs['CommentWhereInput'][] | null; // [CommentWhereInput!]
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
-    validation?: NexusGenInputs['BooleanFilter'] | null; // BooleanFilter
+    validation?: NexusGenInputs['BoolFilter'] | null; // BoolFilter
   }
   CommentWhereUniqueInput: { // input type
     id?: string | null; // String
   }
-  ConditionFilter: { // input type
+  ConditionListRelationFilter: { // input type
     every?: NexusGenInputs['ConditionWhereInput'] | null; // ConditionWhereInput
     none?: NexusGenInputs['ConditionWhereInput'] | null; // ConditionWhereInput
     some?: NexusGenInputs['ConditionWhereInput'] | null; // ConditionWhereInput
   }
   ConditionWhereInput: { // input type
-    action?: NexusGenEnums['ConditionAction'] | null; // ConditionAction
+    action?: NexusGenInputs['EnumConditionActionNullableFilter'] | null; // EnumConditionActionNullableFilter
     AND?: NexusGenInputs['ConditionWhereInput'][] | null; // [ConditionWhereInput!]
-    columnId?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
+    columnId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     inputGroup?: NexusGenInputs['InputGroupWhereInput'] | null; // InputGroupWhereInput
     inputGroupId?: NexusGenInputs['StringFilter'] | null; // StringFilter
     NOT?: NexusGenInputs['ConditionWhereInput'][] | null; // [ConditionWhereInput!]
     OR?: NexusGenInputs['ConditionWhereInput'][] | null; // [ConditionWhereInput!]
-    relation?: NexusGenEnums['ConditionRelation'] | null; // ConditionRelation
+    relation?: NexusGenInputs['EnumConditionRelationFilter'] | null; // EnumConditionRelationFilter
     sqlValue?: NexusGenInputs['ColumnWhereInput'] | null; // ColumnWhereInput
-    value?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
+    value?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
   }
   ConditionWhereUniqueInput: { // input type
     id?: string | null; // String
@@ -164,36 +156,69 @@ export interface NexusGenInputs {
     host?: NexusGenInputs['StringFilter'] | null; // StringFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     login?: NexusGenInputs['StringFilter'] | null; // StringFilter
-    model?: NexusGenEnums['DatabaseType'] | null; // DatabaseType
+    model?: NexusGenInputs['EnumDatabaseTypeFilter'] | null; // EnumDatabaseTypeFilter
     NOT?: NexusGenInputs['CredentialWhereInput'][] | null; // [CredentialWhereInput!]
     OR?: NexusGenInputs['CredentialWhereInput'][] | null; // [CredentialWhereInput!]
     owner?: NexusGenInputs['StringFilter'] | null; // StringFilter
     password?: NexusGenInputs['StringFilter'] | null; // StringFilter
     port?: NexusGenInputs['StringFilter'] | null; // StringFilter
-    schema?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
+    schema?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     source?: NexusGenInputs['SourceWhereInput'] | null; // SourceWhereInput
     sourceId?: NexusGenInputs['StringFilter'] | null; // StringFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
-  DateTimeFilter: { // input type
-    equals?: any | null; // DateTime
-    gt?: any | null; // DateTime
-    gte?: any | null; // DateTime
-    in?: any[] | null; // [DateTime!]
-    lt?: any | null; // DateTime
-    lte?: any | null; // DateTime
-    not?: any | null; // DateTime
-    notIn?: any[] | null; // [DateTime!]
+  CredentialWhereUniqueInput: { // input type
+    id?: string | null; // String
   }
-  FilterFilter: { // input type
-    every?: NexusGenInputs['FilterWhereInput'] | null; // FilterWhereInput
-    none?: NexusGenInputs['FilterWhereInput'] | null; // FilterWhereInput
-    some?: NexusGenInputs['FilterWhereInput'] | null; // FilterWhereInput
+  DateTimeFilter: { // input type
+    equals?: NexusGenScalars['DateTime'] | null; // DateTime
+    gt?: NexusGenScalars['DateTime'] | null; // DateTime
+    gte?: NexusGenScalars['DateTime'] | null; // DateTime
+    in?: NexusGenScalars['DateTime'][] | null; // [DateTime!]
+    lt?: NexusGenScalars['DateTime'] | null; // DateTime
+    lte?: NexusGenScalars['DateTime'] | null; // DateTime
+    not?: NexusGenInputs['NestedDateTimeFilter'] | null; // NestedDateTimeFilter
+    notIn?: NexusGenScalars['DateTime'][] | null; // [DateTime!]
+  }
+  EnumConditionActionNullableFilter: { // input type
+    equals?: NexusGenEnums['ConditionAction'] | null; // ConditionAction
+    in?: NexusGenEnums['ConditionAction'][] | null; // [ConditionAction!]
+    not?: NexusGenInputs['NestedEnumConditionActionNullableFilter'] | null; // NestedEnumConditionActionNullableFilter
+    notIn?: NexusGenEnums['ConditionAction'][] | null; // [ConditionAction!]
+  }
+  EnumConditionRelationFilter: { // input type
+    equals?: NexusGenEnums['ConditionRelation'] | null; // ConditionRelation
+    in?: NexusGenEnums['ConditionRelation'][] | null; // [ConditionRelation!]
+    not?: NexusGenInputs['NestedEnumConditionRelationFilter'] | null; // NestedEnumConditionRelationFilter
+    notIn?: NexusGenEnums['ConditionRelation'][] | null; // [ConditionRelation!]
+  }
+  EnumDatabaseTypeFilter: { // input type
+    equals?: NexusGenEnums['DatabaseType'] | null; // DatabaseType
+    in?: NexusGenEnums['DatabaseType'][] | null; // [DatabaseType!]
+    not?: NexusGenInputs['NestedEnumDatabaseTypeFilter'] | null; // NestedEnumDatabaseTypeFilter
+    notIn?: NexusGenEnums['DatabaseType'][] | null; // [DatabaseType!]
+  }
+  EnumRoleFilter: { // input type
+    equals?: NexusGenEnums['Role'] | null; // Role
+    in?: NexusGenEnums['Role'][] | null; // [Role!]
+    not?: NexusGenInputs['NestedEnumRoleFilter'] | null; // NestedEnumRoleFilter
+    notIn?: NexusGenEnums['Role'][] | null; // [Role!]
+  }
+  EnumSourceRoleFilter: { // input type
+    equals?: NexusGenEnums['SourceRole'] | null; // SourceRole
+    in?: NexusGenEnums['SourceRole'][] | null; // [SourceRole!]
+    not?: NexusGenInputs['NestedEnumSourceRoleFilter'] | null; // NestedEnumSourceRoleFilter
+    notIn?: NexusGenEnums['SourceRole'][] | null; // [SourceRole!]
   }
   FilterInput: { // input type
     relation: string; // String!
     sqlColumn: NexusGenInputs['ColumnInputWithoutJoins']; // ColumnInputWithoutJoins!
     value: string; // String!
+  }
+  FilterListRelationFilter: { // input type
+    every?: NexusGenInputs['FilterWhereInput'] | null; // FilterWhereInput
+    none?: NexusGenInputs['FilterWhereInput'] | null; // FilterWhereInput
+    some?: NexusGenInputs['FilterWhereInput'] | null; // FilterWhereInput
   }
   FilterWhereInput: { // input type
     AND?: NexusGenInputs['FilterWhereInput'][] | null; // [FilterWhereInput!]
@@ -202,17 +227,12 @@ export interface NexusGenInputs {
     OR?: NexusGenInputs['FilterWhereInput'][] | null; // [FilterWhereInput!]
     relation?: NexusGenInputs['StringFilter'] | null; // StringFilter
     resource?: NexusGenInputs['ResourceWhereInput'] | null; // ResourceWhereInput
-    resourceId?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
+    resourceId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     sqlColumn?: NexusGenInputs['ColumnWhereInput'] | null; // ColumnWhereInput
     sqlColumnId?: NexusGenInputs['StringFilter'] | null; // StringFilter
     value?: NexusGenInputs['StringFilter'] | null; // StringFilter
   }
-  InputFilter: { // input type
-    every?: NexusGenInputs['InputWhereInput'] | null; // InputWhereInput
-    none?: NexusGenInputs['InputWhereInput'] | null; // InputWhereInput
-    some?: NexusGenInputs['InputWhereInput'] | null; // InputWhereInput
-  }
-  InputGroupFilter: { // input type
+  InputGroupListRelationFilter: { // input type
     every?: NexusGenInputs['InputGroupWhereInput'] | null; // InputGroupWhereInput
     none?: NexusGenInputs['InputGroupWhereInput'] | null; // InputGroupWhereInput
     some?: NexusGenInputs['InputGroupWhereInput'] | null; // InputGroupWhereInput
@@ -220,12 +240,12 @@ export interface NexusGenInputs {
   InputGroupWhereInput: { // input type
     AND?: NexusGenInputs['InputGroupWhereInput'][] | null; // [InputGroupWhereInput!]
     attribute?: NexusGenInputs['AttributeWhereInput'] | null; // AttributeWhereInput
-    attributeId?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
-    conditions?: NexusGenInputs['ConditionFilter'] | null; // ConditionFilter
+    attributeId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    conditions?: NexusGenInputs['ConditionListRelationFilter'] | null; // ConditionListRelationFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
-    inputs?: NexusGenInputs['InputFilter'] | null; // InputFilter
-    mergingScript?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
+    inputs?: NexusGenInputs['InputListRelationFilter'] | null; // InputListRelationFilter
+    mergingScript?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     NOT?: NexusGenInputs['InputGroupWhereInput'][] | null; // [InputGroupWhereInput!]
     OR?: NexusGenInputs['InputGroupWhereInput'][] | null; // [InputGroupWhereInput!]
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
@@ -233,48 +253,97 @@ export interface NexusGenInputs {
   InputGroupWhereUniqueInput: { // input type
     id?: string | null; // String
   }
+  InputListRelationFilter: { // input type
+    every?: NexusGenInputs['InputWhereInput'] | null; // InputWhereInput
+    none?: NexusGenInputs['InputWhereInput'] | null; // InputWhereInput
+    some?: NexusGenInputs['InputWhereInput'] | null; // InputWhereInput
+  }
   InputWhereInput: { // input type
     AND?: NexusGenInputs['InputWhereInput'][] | null; // [InputWhereInput!]
-    conceptMapId?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
+    conceptMapId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     inputGroup?: NexusGenInputs['InputGroupWhereInput'] | null; // InputGroupWhereInput
-    inputGroupId?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
+    inputGroupId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     NOT?: NexusGenInputs['InputWhereInput'][] | null; // [InputWhereInput!]
     OR?: NexusGenInputs['InputWhereInput'][] | null; // [InputWhereInput!]
-    script?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
+    script?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     sqlValue?: NexusGenInputs['ColumnWhereInput'] | null; // ColumnWhereInput
-    sqlValueId?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
-    staticValue?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
+    sqlValueId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    staticValue?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
   InputWhereUniqueInput: { // input type
     id?: string | null; // String
   }
-  JoinFilter: { // input type
-    every?: NexusGenInputs['JoinWhereInput'] | null; // JoinWhereInput
-    none?: NexusGenInputs['JoinWhereInput'] | null; // JoinWhereInput
-    some?: NexusGenInputs['JoinWhereInput'] | null; // JoinWhereInput
-  }
   JoinInput: { // input type
     source?: NexusGenInputs['ColumnInputWithoutJoins'] | null; // ColumnInputWithoutJoins
     target?: NexusGenInputs['ColumnInputWithoutJoins'] | null; // ColumnInputWithoutJoins
   }
+  JoinListRelationFilter: { // input type
+    every?: NexusGenInputs['JoinWhereInput'] | null; // JoinWhereInput
+    none?: NexusGenInputs['JoinWhereInput'] | null; // JoinWhereInput
+    some?: NexusGenInputs['JoinWhereInput'] | null; // JoinWhereInput
+  }
   JoinWhereInput: { // input type
     AND?: NexusGenInputs['JoinWhereInput'][] | null; // [JoinWhereInput!]
     column?: NexusGenInputs['ColumnWhereInput'] | null; // ColumnWhereInput
-    columnId?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
+    columnId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     NOT?: NexusGenInputs['JoinWhereInput'][] | null; // [JoinWhereInput!]
     OR?: NexusGenInputs['JoinWhereInput'][] | null; // [JoinWhereInput!]
-    tables?: NexusGenInputs['ColumnFilter'] | null; // ColumnFilter
+    tables?: NexusGenInputs['ColumnListRelationFilter'] | null; // ColumnListRelationFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
   JoinWhereUniqueInput: { // input type
     id?: string | null; // String
   }
-  NullableStringFilter: { // input type
+  NestedBoolFilter: { // input type
+    equals?: boolean | null; // Boolean
+    not?: NexusGenInputs['NestedBoolFilter'] | null; // NestedBoolFilter
+  }
+  NestedDateTimeFilter: { // input type
+    equals?: NexusGenScalars['DateTime'] | null; // DateTime
+    gt?: NexusGenScalars['DateTime'] | null; // DateTime
+    gte?: NexusGenScalars['DateTime'] | null; // DateTime
+    in?: NexusGenScalars['DateTime'][] | null; // [DateTime!]
+    lt?: NexusGenScalars['DateTime'] | null; // DateTime
+    lte?: NexusGenScalars['DateTime'] | null; // DateTime
+    not?: NexusGenInputs['NestedDateTimeFilter'] | null; // NestedDateTimeFilter
+    notIn?: NexusGenScalars['DateTime'][] | null; // [DateTime!]
+  }
+  NestedEnumConditionActionNullableFilter: { // input type
+    equals?: NexusGenEnums['ConditionAction'] | null; // ConditionAction
+    in?: NexusGenEnums['ConditionAction'][] | null; // [ConditionAction!]
+    not?: NexusGenInputs['NestedEnumConditionActionNullableFilter'] | null; // NestedEnumConditionActionNullableFilter
+    notIn?: NexusGenEnums['ConditionAction'][] | null; // [ConditionAction!]
+  }
+  NestedEnumConditionRelationFilter: { // input type
+    equals?: NexusGenEnums['ConditionRelation'] | null; // ConditionRelation
+    in?: NexusGenEnums['ConditionRelation'][] | null; // [ConditionRelation!]
+    not?: NexusGenInputs['NestedEnumConditionRelationFilter'] | null; // NestedEnumConditionRelationFilter
+    notIn?: NexusGenEnums['ConditionRelation'][] | null; // [ConditionRelation!]
+  }
+  NestedEnumDatabaseTypeFilter: { // input type
+    equals?: NexusGenEnums['DatabaseType'] | null; // DatabaseType
+    in?: NexusGenEnums['DatabaseType'][] | null; // [DatabaseType!]
+    not?: NexusGenInputs['NestedEnumDatabaseTypeFilter'] | null; // NestedEnumDatabaseTypeFilter
+    notIn?: NexusGenEnums['DatabaseType'][] | null; // [DatabaseType!]
+  }
+  NestedEnumRoleFilter: { // input type
+    equals?: NexusGenEnums['Role'] | null; // Role
+    in?: NexusGenEnums['Role'][] | null; // [Role!]
+    not?: NexusGenInputs['NestedEnumRoleFilter'] | null; // NestedEnumRoleFilter
+    notIn?: NexusGenEnums['Role'][] | null; // [Role!]
+  }
+  NestedEnumSourceRoleFilter: { // input type
+    equals?: NexusGenEnums['SourceRole'] | null; // SourceRole
+    in?: NexusGenEnums['SourceRole'][] | null; // [SourceRole!]
+    not?: NexusGenInputs['NestedEnumSourceRoleFilter'] | null; // NestedEnumSourceRoleFilter
+    notIn?: NexusGenEnums['SourceRole'][] | null; // [SourceRole!]
+  }
+  NestedStringFilter: { // input type
     contains?: string | null; // String
     endsWith?: string | null; // String
     equals?: string | null; // String
@@ -283,28 +352,41 @@ export interface NexusGenInputs {
     in?: string[] | null; // [String!]
     lt?: string | null; // String
     lte?: string | null; // String
-    not?: string | null; // String
+    not?: NexusGenInputs['NestedStringFilter'] | null; // NestedStringFilter
     notIn?: string[] | null; // [String!]
     startsWith?: string | null; // String
   }
-  ResourceFilter: { // input type
+  NestedStringNullableFilter: { // input type
+    contains?: string | null; // String
+    endsWith?: string | null; // String
+    equals?: string | null; // String
+    gt?: string | null; // String
+    gte?: string | null; // String
+    in?: string[] | null; // [String!]
+    lt?: string | null; // String
+    lte?: string | null; // String
+    not?: NexusGenInputs['NestedStringNullableFilter'] | null; // NestedStringNullableFilter
+    notIn?: string[] | null; // [String!]
+    startsWith?: string | null; // String
+  }
+  ResourceListRelationFilter: { // input type
     every?: NexusGenInputs['ResourceWhereInput'] | null; // ResourceWhereInput
     none?: NexusGenInputs['ResourceWhereInput'] | null; // ResourceWhereInput
     some?: NexusGenInputs['ResourceWhereInput'] | null; // ResourceWhereInput
   }
   ResourceWhereInput: { // input type
     AND?: NexusGenInputs['ResourceWhereInput'][] | null; // [ResourceWhereInput!]
-    attributes?: NexusGenInputs['AttributeFilter'] | null; // AttributeFilter
+    attributes?: NexusGenInputs['AttributeListRelationFilter'] | null; // AttributeListRelationFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     definitionId?: NexusGenInputs['StringFilter'] | null; // StringFilter
-    filters?: NexusGenInputs['FilterFilter'] | null; // FilterFilter
+    filters?: NexusGenInputs['FilterListRelationFilter'] | null; // FilterListRelationFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
-    label?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
-    logicalReference?: NexusGenInputs['UUIDFilter'] | null; // UUIDFilter
+    label?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    logicalReference?: NexusGenInputs['StringFilter'] | null; // StringFilter
     NOT?: NexusGenInputs['ResourceWhereInput'][] | null; // [ResourceWhereInput!]
     OR?: NexusGenInputs['ResourceWhereInput'][] | null; // [ResourceWhereInput!]
-    primaryKeyColumn?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
-    primaryKeyTable?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
+    primaryKeyColumn?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    primaryKeyTable?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     source?: NexusGenInputs['SourceWhereInput'] | null; // SourceWhereInput
     sourceId?: NexusGenInputs['StringFilter'] | null; // StringFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
@@ -312,13 +394,13 @@ export interface NexusGenInputs {
   ResourceWhereUniqueInput: { // input type
     id?: string | null; // String
   }
-  SourceFilter: { // input type
+  SourceListRelationFilter: { // input type
     every?: NexusGenInputs['SourceWhereInput'] | null; // SourceWhereInput
     none?: NexusGenInputs['SourceWhereInput'] | null; // SourceWhereInput
     some?: NexusGenInputs['SourceWhereInput'] | null; // SourceWhereInput
   }
   SourceWhereInput: { // input type
-    accessControls?: NexusGenInputs['AccessControlFilter'] | null; // AccessControlFilter
+    accessControls?: NexusGenInputs['AccessControlListRelationFilter'] | null; // AccessControlListRelationFilter
     AND?: NexusGenInputs['SourceWhereInput'][] | null; // [SourceWhereInput!]
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     credential?: NexusGenInputs['CredentialWhereInput'] | null; // CredentialWhereInput
@@ -326,11 +408,11 @@ export interface NexusGenInputs {
     name?: NexusGenInputs['StringFilter'] | null; // StringFilter
     NOT?: NexusGenInputs['SourceWhereInput'][] | null; // [SourceWhereInput!]
     OR?: NexusGenInputs['SourceWhereInput'][] | null; // [SourceWhereInput!]
-    resources?: NexusGenInputs['ResourceFilter'] | null; // ResourceFilter
+    resources?: NexusGenInputs['ResourceListRelationFilter'] | null; // ResourceListRelationFilter
     template?: NexusGenInputs['TemplateWhereInput'] | null; // TemplateWhereInput
     templateId?: NexusGenInputs['StringFilter'] | null; // StringFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
-    version?: NexusGenInputs['NullableStringFilter'] | null; // NullableStringFilter
+    version?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
   }
   SourceWhereUniqueInput: { // input type
     id?: string | null; // String
@@ -349,7 +431,22 @@ export interface NexusGenInputs {
     in?: string[] | null; // [String!]
     lt?: string | null; // String
     lte?: string | null; // String
-    not?: string | null; // String
+    mode?: NexusGenEnums['QueryMode'] | null; // QueryMode
+    not?: NexusGenInputs['NestedStringFilter'] | null; // NestedStringFilter
+    notIn?: string[] | null; // [String!]
+    startsWith?: string | null; // String
+  }
+  StringNullableFilter: { // input type
+    contains?: string | null; // String
+    endsWith?: string | null; // String
+    equals?: string | null; // String
+    gt?: string | null; // String
+    gte?: string | null; // String
+    in?: string[] | null; // [String!]
+    lt?: string | null; // String
+    lte?: string | null; // String
+    mode?: NexusGenEnums['QueryMode'] | null; // QueryMode
+    not?: NexusGenInputs['NestedStringNullableFilter'] | null; // NestedStringNullableFilter
     notIn?: string[] | null; // [String!]
     startsWith?: string | null; // String
   }
@@ -365,21 +462,12 @@ export interface NexusGenInputs {
     name?: NexusGenInputs['StringFilter'] | null; // StringFilter
     NOT?: NexusGenInputs['TemplateWhereInput'][] | null; // [TemplateWhereInput!]
     OR?: NexusGenInputs['TemplateWhereInput'][] | null; // [TemplateWhereInput!]
-    sources?: NexusGenInputs['SourceFilter'] | null; // SourceFilter
+    sources?: NexusGenInputs['SourceListRelationFilter'] | null; // SourceListRelationFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
-  UUIDFilter: { // input type
-    contains?: any | null; // UUID
-    endsWith?: any | null; // UUID
-    equals?: any | null; // UUID
-    gt?: any | null; // UUID
-    gte?: any | null; // UUID
-    in?: any[] | null; // [UUID!]
-    lt?: any | null; // UUID
-    lte?: any | null; // UUID
-    not?: any | null; // UUID
-    notIn?: any[] | null; // [UUID!]
-    startsWith?: any | null; // UUID
+  TemplateWhereUniqueInput: { // input type
+    id?: string | null; // String
+    name?: string | null; // String
   }
   UpdateInputInput: { // input type
     conceptMapId?: string | null; // String
@@ -391,16 +479,16 @@ export interface NexusGenInputs {
     primaryKeyTable?: string | null; // String
   }
   UserWhereInput: { // input type
-    AccessControl?: NexusGenInputs['AccessControlFilter'] | null; // AccessControlFilter
+    AccessControl?: NexusGenInputs['AccessControlListRelationFilter'] | null; // AccessControlListRelationFilter
     AND?: NexusGenInputs['UserWhereInput'][] | null; // [UserWhereInput!]
-    Comment?: NexusGenInputs['CommentFilter'] | null; // CommentFilter
+    Comment?: NexusGenInputs['CommentListRelationFilter'] | null; // CommentListRelationFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     email?: NexusGenInputs['StringFilter'] | null; // StringFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     name?: NexusGenInputs['StringFilter'] | null; // StringFilter
     NOT?: NexusGenInputs['UserWhereInput'][] | null; // [UserWhereInput!]
     OR?: NexusGenInputs['UserWhereInput'][] | null; // [UserWhereInput!]
-    role?: NexusGenEnums['Role'] | null; // Role
+    role?: NexusGenInputs['EnumRoleFilter'] | null; // EnumRoleFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
 }
@@ -409,34 +497,45 @@ export interface NexusGenEnums {
   ConditionAction: "EXCLUDE" | "INCLUDE"
   ConditionRelation: "EQ" | "GE" | "GT" | "LE" | "LT" | "NOTNULL" | "NULL"
   DatabaseType: "MSSQL" | "ORACLE" | "POSTGRES"
+  QueryMode: "default" | "insensitive"
   Role: "ADMIN" | "USER"
   SourceRole: "READER" | "WRITER"
 }
 
-export interface NexusGenRootTypes {
+export interface NexusGenScalars {
+  String: string
+  Int: number
+  Float: number
+  Boolean: boolean
+  ID: string
+  DateTime: any
+  JSON: any
+}
+
+export interface NexusGenObjects {
   AccessControl: { // root type
     id: string; // String!
     role: NexusGenEnums['SourceRole']; // SourceRole!
   }
   Attribute: { // root type
-    createdAt: any; // DateTime!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     definitionId: string; // String!
     id: string; // String!
     path: string; // String!
     sliceName?: string | null; // String
-    updatedAt: any; // DateTime!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   AttributeDefinition: {};
   Column: { // root type
     column?: string | null; // String
-    createdAt: any; // DateTime!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
     table?: string | null; // String
-    updatedAt: any; // DateTime!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   Comment: { // root type
     content: string; // String!
-    createdAt: any; // DateTime!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
     validation: boolean; // Boolean!
   }
@@ -448,7 +547,7 @@ export interface NexusGenRootTypes {
     value?: string | null; // String
   }
   Credential: { // root type
-    createdAt: any; // DateTime!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     database: string; // String!
     host: string; // String!
     id: string; // String!
@@ -458,7 +557,7 @@ export interface NexusGenRootTypes {
     password: string; // String!
     port: string; // String!
     schema?: string | null; // String
-    updatedAt: any; // DateTime!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   Filter: { // root type
     id: string; // String!
@@ -467,124 +566,68 @@ export interface NexusGenRootTypes {
   }
   Input: { // root type
     conceptMapId?: string | null; // String
-    createdAt: any; // DateTime!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
     script?: string | null; // String
     staticValue?: string | null; // String
-    updatedAt: any; // DateTime!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   InputGroup: { // root type
-    createdAt: any; // DateTime!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
     mergingScript?: string | null; // String
-    updatedAt: any; // DateTime!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   Join: { // root type
-    createdAt: any; // DateTime!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
-    updatedAt: any; // DateTime!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   Mutation: {};
   Query: {};
   Resource: { // root type
-    createdAt: any; // DateTime!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     definitionId: string; // String!
     id: string; // String!
     label?: string | null; // String
     logicalReference: string; // String!
     primaryKeyColumn?: string | null; // String
     primaryKeyTable?: string | null; // String
-    updatedAt: any; // DateTime!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   Source: { // root type
-    createdAt: any; // DateTime!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
     name: string; // String!
-    updatedAt: any; // DateTime!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
     version?: string | null; // String
   }
   StructureDefinition: {};
   Template: { // root type
-    createdAt: any; // DateTime!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
     name: string; // String!
-    updatedAt: any; // DateTime!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   User: { // root type
-    createdAt: any; // DateTime!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     email: string; // String!
     id: string; // String!
     name: string; // String!
     role: NexusGenEnums['Role']; // Role!
-    updatedAt: any; // DateTime!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
-  String: string;
-  Int: number;
-  Float: number;
-  Boolean: boolean;
-  ID: string;
-  DateTime: any;
-  JSON: any;
-  UUID: any;
 }
 
-export interface NexusGenAllTypes extends NexusGenRootTypes {
-  AccessControlFilter: NexusGenInputs['AccessControlFilter'];
-  AccessControlWhereInput: NexusGenInputs['AccessControlWhereInput'];
-  AccessControlWhereUniqueInput: NexusGenInputs['AccessControlWhereUniqueInput'];
-  AccessControl_user_sourceCompoundUniqueInput: NexusGenInputs['AccessControl_user_sourceCompoundUniqueInput'];
-  AttributeFilter: NexusGenInputs['AttributeFilter'];
-  AttributeInput: NexusGenInputs['AttributeInput'];
-  AttributeWhereInput: NexusGenInputs['AttributeWhereInput'];
-  AttributeWhereUniqueInput: NexusGenInputs['AttributeWhereUniqueInput'];
-  BooleanFilter: NexusGenInputs['BooleanFilter'];
-  ColumnFilter: NexusGenInputs['ColumnFilter'];
-  ColumnInput: NexusGenInputs['ColumnInput'];
-  ColumnInputWithoutJoins: NexusGenInputs['ColumnInputWithoutJoins'];
-  ColumnWhereInput: NexusGenInputs['ColumnWhereInput'];
-  ColumnWhereUniqueInput: NexusGenInputs['ColumnWhereUniqueInput'];
-  CommentFilter: NexusGenInputs['CommentFilter'];
-  CommentWhereInput: NexusGenInputs['CommentWhereInput'];
-  CommentWhereUniqueInput: NexusGenInputs['CommentWhereUniqueInput'];
-  ConditionFilter: NexusGenInputs['ConditionFilter'];
-  ConditionWhereInput: NexusGenInputs['ConditionWhereInput'];
-  ConditionWhereUniqueInput: NexusGenInputs['ConditionWhereUniqueInput'];
-  CredentialWhereInput: NexusGenInputs['CredentialWhereInput'];
-  DateTimeFilter: NexusGenInputs['DateTimeFilter'];
-  FilterFilter: NexusGenInputs['FilterFilter'];
-  FilterInput: NexusGenInputs['FilterInput'];
-  FilterWhereInput: NexusGenInputs['FilterWhereInput'];
-  InputFilter: NexusGenInputs['InputFilter'];
-  InputGroupFilter: NexusGenInputs['InputGroupFilter'];
-  InputGroupWhereInput: NexusGenInputs['InputGroupWhereInput'];
-  InputGroupWhereUniqueInput: NexusGenInputs['InputGroupWhereUniqueInput'];
-  InputWhereInput: NexusGenInputs['InputWhereInput'];
-  InputWhereUniqueInput: NexusGenInputs['InputWhereUniqueInput'];
-  JoinFilter: NexusGenInputs['JoinFilter'];
-  JoinInput: NexusGenInputs['JoinInput'];
-  JoinWhereInput: NexusGenInputs['JoinWhereInput'];
-  JoinWhereUniqueInput: NexusGenInputs['JoinWhereUniqueInput'];
-  NullableStringFilter: NexusGenInputs['NullableStringFilter'];
-  ResourceFilter: NexusGenInputs['ResourceFilter'];
-  ResourceWhereInput: NexusGenInputs['ResourceWhereInput'];
-  ResourceWhereUniqueInput: NexusGenInputs['ResourceWhereUniqueInput'];
-  SourceFilter: NexusGenInputs['SourceFilter'];
-  SourceWhereInput: NexusGenInputs['SourceWhereInput'];
-  SourceWhereUniqueInput: NexusGenInputs['SourceWhereUniqueInput'];
-  Source_templateId_nameCompoundUniqueInput: NexusGenInputs['Source_templateId_nameCompoundUniqueInput'];
-  StringFilter: NexusGenInputs['StringFilter'];
-  StructureDefinitionWhereFilter: NexusGenInputs['StructureDefinitionWhereFilter'];
-  TemplateWhereInput: NexusGenInputs['TemplateWhereInput'];
-  UUIDFilter: NexusGenInputs['UUIDFilter'];
-  UpdateInputInput: NexusGenInputs['UpdateInputInput'];
-  UpdateResourceInput: NexusGenInputs['UpdateResourceInput'];
-  UserWhereInput: NexusGenInputs['UserWhereInput'];
-  ConditionAction: NexusGenEnums['ConditionAction'];
-  ConditionRelation: NexusGenEnums['ConditionRelation'];
-  DatabaseType: NexusGenEnums['DatabaseType'];
-  Role: NexusGenEnums['Role'];
-  SourceRole: NexusGenEnums['SourceRole'];
+export interface NexusGenInterfaces {
 }
+
+export interface NexusGenUnions {
+}
+
+export type NexusGenRootTypes = NexusGenObjects
+
+export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnums
 
 export interface NexusGenFieldTypes {
   AccessControl: { // field return type
@@ -595,41 +638,41 @@ export interface NexusGenFieldTypes {
   }
   Attribute: { // field return type
     comments: NexusGenRootTypes['Comment'][]; // [Comment!]!
-    createdAt: any; // DateTime!
-    definition: NexusGenRootTypes['StructureDefinition']; // StructureDefinition!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    definition: NexusGenRootTypes['StructureDefinition'] | null; // StructureDefinition
     definitionId: string; // String!
     id: string; // String!
     inputGroups: NexusGenRootTypes['InputGroup'][]; // [InputGroup!]!
     path: string; // String!
     resource: NexusGenRootTypes['Resource'] | null; // Resource
     sliceName: string | null; // String
-    updatedAt: any; // DateTime!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   AttributeDefinition: { // field return type
-    attribute: any; // JSON!
-    extensions: NexusGenRootTypes['StructureDefinition'][]; // [StructureDefinition!]!
-    id: string; // String!
+    attribute: NexusGenScalars['JSON'] | null; // JSON
+    extensions: Array<NexusGenRootTypes['StructureDefinition'] | null> | null; // [StructureDefinition]
+    id: string | null; // String
   }
   Column: { // field return type
     column: string | null; // String
-    createdAt: any; // DateTime!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
     joins: NexusGenRootTypes['Join'][]; // [Join!]!
     table: string | null; // String
-    updatedAt: any; // DateTime!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   Comment: { // field return type
     attribute: NexusGenRootTypes['Attribute'] | null; // Attribute
     author: NexusGenRootTypes['User']; // User!
     content: string; // String!
-    createdAt: any; // DateTime!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
     validation: boolean; // Boolean!
   }
   ConceptMap: { // field return type
-    id: string; // String!
-    name: string; // String!
-    title: string; // String!
+    id: string | null; // String
+    name: string | null; // String
+    title: string | null; // String
   }
   Condition: { // field return type
     action: NexusGenEnums['ConditionAction'] | null; // ConditionAction
@@ -639,9 +682,9 @@ export interface NexusGenFieldTypes {
     value: string | null; // String
   }
   Credential: { // field return type
-    createdAt: any; // DateTime!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     database: string; // String!
-    decryptedPassword: string; // String!
+    decryptedPassword: string | null; // String
     host: string; // String!
     id: string; // String!
     login: string; // String!
@@ -651,7 +694,7 @@ export interface NexusGenFieldTypes {
     port: string; // String!
     schema: string | null; // String
     source: NexusGenRootTypes['Source']; // Source!
-    updatedAt: any; // DateTime!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   Filter: { // field return type
     id: string; // String!
@@ -661,75 +704,75 @@ export interface NexusGenFieldTypes {
   }
   Input: { // field return type
     conceptMapId: string | null; // String
-    createdAt: any; // DateTime!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
     inputGroup: NexusGenRootTypes['InputGroup'] | null; // InputGroup
     script: string | null; // String
     sqlValue: NexusGenRootTypes['Column'] | null; // Column
     staticValue: string | null; // String
-    updatedAt: any; // DateTime!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   InputGroup: { // field return type
     attribute: NexusGenRootTypes['Attribute'] | null; // Attribute
     conditions: NexusGenRootTypes['Condition'][]; // [Condition!]!
-    createdAt: any; // DateTime!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
     inputs: NexusGenRootTypes['Input'][]; // [Input!]!
     mergingScript: string | null; // String
-    updatedAt: any; // DateTime!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   Join: { // field return type
-    createdAt: any; // DateTime!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
     tables: NexusGenRootTypes['Column'][]; // [Column!]!
-    updatedAt: any; // DateTime!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   Mutation: { // field return type
-    addConditionToInputGroup: NexusGenRootTypes['InputGroup']; // InputGroup!
-    addJoinToColumn: NexusGenRootTypes['Column']; // Column!
-    createAccessControl: NexusGenRootTypes['AccessControl']; // AccessControl!
-    createAttribute: NexusGenRootTypes['Attribute']; // Attribute!
-    createComment: NexusGenRootTypes['Comment']; // Comment!
-    createInput: NexusGenRootTypes['Input']; // Input!
-    createInputGroup: NexusGenRootTypes['InputGroup']; // InputGroup!
-    createResource: NexusGenRootTypes['Resource']; // Resource!
-    createSource: NexusGenRootTypes['Source']; // Source!
-    createTemplate: NexusGenRootTypes['Template']; // Template!
-    deleteAccessControl: NexusGenRootTypes['AccessControl']; // AccessControl!
-    deleteAttribute: NexusGenRootTypes['Attribute']; // Attribute!
-    deleteAttributes: NexusGenRootTypes['Attribute'][] | null; // [Attribute!]
-    deleteCondition: NexusGenRootTypes['Condition']; // Condition!
-    deleteCredential: NexusGenRootTypes['Credential']; // Credential!
-    deleteInput: NexusGenRootTypes['Input']; // Input!
-    deleteJoin: NexusGenRootTypes['Join']; // Join!
-    deleteResource: NexusGenRootTypes['Resource']; // Resource!
-    deleteSource: NexusGenRootTypes['Source']; // Source!
-    deleteTemplate: NexusGenRootTypes['Template']; // Template!
-    logout: NexusGenRootTypes['User']; // User!
-    updateCondition: NexusGenRootTypes['Condition']; // Condition!
-    updateInput: NexusGenRootTypes['Input']; // Input!
-    updateInputGroup: NexusGenRootTypes['InputGroup']; // InputGroup!
-    updateJoin: NexusGenRootTypes['Join']; // Join!
-    updateResource: NexusGenRootTypes['Resource']; // Resource!
-    updateRole: NexusGenRootTypes['User']; // User!
-    upsertCredential: NexusGenRootTypes['Credential']; // Credential!
+    addConditionToInputGroup: NexusGenRootTypes['InputGroup'] | null; // InputGroup
+    addJoinToColumn: NexusGenRootTypes['Column'] | null; // Column
+    createAccessControl: NexusGenRootTypes['AccessControl'] | null; // AccessControl
+    createAttribute: NexusGenRootTypes['Attribute'] | null; // Attribute
+    createComment: NexusGenRootTypes['Comment'] | null; // Comment
+    createInput: NexusGenRootTypes['Input'] | null; // Input
+    createInputGroup: NexusGenRootTypes['InputGroup'] | null; // InputGroup
+    createResource: NexusGenRootTypes['Resource'] | null; // Resource
+    createSource: NexusGenRootTypes['Source'] | null; // Source
+    createTemplate: NexusGenRootTypes['Template'] | null; // Template
+    deleteAccessControl: NexusGenRootTypes['AccessControl'] | null; // AccessControl
+    deleteAttribute: NexusGenRootTypes['Attribute'] | null; // Attribute
+    deleteAttributes: NexusGenRootTypes['Attribute'] | null; // Attribute
+    deleteCondition: NexusGenRootTypes['Condition'] | null; // Condition
+    deleteCredential: NexusGenRootTypes['Credential'] | null; // Credential
+    deleteInput: NexusGenRootTypes['Input'] | null; // Input
+    deleteJoin: NexusGenRootTypes['Join'] | null; // Join
+    deleteResource: NexusGenRootTypes['Resource'] | null; // Resource
+    deleteSource: NexusGenRootTypes['Source'] | null; // Source
+    deleteTemplate: NexusGenRootTypes['Template'] | null; // Template
+    logout: NexusGenRootTypes['User'] | null; // User
+    updateCondition: NexusGenRootTypes['Condition'] | null; // Condition
+    updateInput: NexusGenRootTypes['Input'] | null; // Input
+    updateInputGroup: NexusGenRootTypes['InputGroup'] | null; // InputGroup
+    updateJoin: NexusGenRootTypes['Join'] | null; // Join
+    updateResource: NexusGenRootTypes['Resource'] | null; // Resource
+    updateRole: NexusGenRootTypes['User'] | null; // User
+    upsertCredential: NexusGenRootTypes['Credential'] | null; // Credential
   }
   Query: { // field return type
-    allSources: NexusGenRootTypes['Source'][] | null; // [Source!]
     attribute: NexusGenRootTypes['Attribute'] | null; // Attribute
+    attributes: NexusGenRootTypes['Attribute'][]; // [Attribute!]!
     credential: NexusGenRootTypes['Credential'] | null; // Credential
     me: NexusGenRootTypes['User'] | null; // User
     resource: NexusGenRootTypes['Resource'] | null; // Resource
     source: NexusGenRootTypes['Source'] | null; // Source
-    sources: NexusGenRootTypes['Source'][] | null; // [Source!]
+    sources: Array<NexusGenRootTypes['Source'] | null> | null; // [Source]
     structureDefinition: NexusGenRootTypes['StructureDefinition'] | null; // StructureDefinition
     template: NexusGenRootTypes['Template'] | null; // Template
-    templates: NexusGenRootTypes['Template'][] | null; // [Template!]
+    templates: NexusGenRootTypes['Template'][]; // [Template!]!
   }
   Resource: { // field return type
     attributes: NexusGenRootTypes['Attribute'][]; // [Attribute!]!
-    createdAt: any; // DateTime!
-    definition: NexusGenRootTypes['StructureDefinition']; // StructureDefinition!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    definition: NexusGenRootTypes['StructureDefinition'] | null; // StructureDefinition
     definitionId: string; // String!
     filters: NexusGenRootTypes['Filter'][]; // [Filter!]!
     id: string; // String!
@@ -738,47 +781,243 @@ export interface NexusGenFieldTypes {
     primaryKeyColumn: string | null; // String
     primaryKeyTable: string | null; // String
     source: NexusGenRootTypes['Source']; // Source!
-    updatedAt: any; // DateTime!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   Source: { // field return type
     accessControls: NexusGenRootTypes['AccessControl'][]; // [AccessControl!]!
-    createdAt: any; // DateTime!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     credential: NexusGenRootTypes['Credential'] | null; // Credential
     id: string; // String!
-    mapping: string; // String!
-    mappingProgress: number[] | null; // [Int!]
+    mapping: string | null; // String
+    mappingProgress: Array<number | null> | null; // [Int]
     name: string; // String!
     resources: NexusGenRootTypes['Resource'][]; // [Resource!]!
     template: NexusGenRootTypes['Template']; // Template!
-    updatedAt: any; // DateTime!
-    usedConceptMapIds: string[]; // [String!]!
-    usedProfileIds: string[]; // [String!]!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    usedConceptMapIds: Array<string | null> | null; // [String]
+    usedProfileIds: Array<string | null> | null; // [String]
     version: string | null; // String
   }
   StructureDefinition: { // field return type
-    attributes: NexusGenRootTypes['AttributeDefinition'][]; // [AttributeDefinition!]!
-    derivation: string; // String!
-    id: string; // String!
-    kind: string; // String!
-    name: string; // String!
-    publisher: string; // String!
-    type: string; // String!
-    url: string; // String!
+    attributes: Array<NexusGenRootTypes['AttributeDefinition'] | null> | null; // [AttributeDefinition]
+    derivation: string | null; // String
+    id: string | null; // String
+    kind: string | null; // String
+    name: string | null; // String
+    publisher: string | null; // String
+    type: string | null; // String
+    url: string | null; // String
   }
   Template: { // field return type
-    createdAt: any; // DateTime!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
     name: string; // String!
     sources: NexusGenRootTypes['Source'][]; // [Source!]!
-    updatedAt: any; // DateTime!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   User: { // field return type
-    createdAt: any; // DateTime!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     email: string; // String!
     id: string; // String!
     name: string; // String!
     role: NexusGenEnums['Role']; // Role!
-    updatedAt: any; // DateTime!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
+}
+
+export interface NexusGenFieldTypeNames {
+  AccessControl: { // field return type name
+    id: 'String'
+    role: 'SourceRole'
+    source: 'Source'
+    user: 'User'
+  }
+  Attribute: { // field return type name
+    comments: 'Comment'
+    createdAt: 'DateTime'
+    definition: 'StructureDefinition'
+    definitionId: 'String'
+    id: 'String'
+    inputGroups: 'InputGroup'
+    path: 'String'
+    resource: 'Resource'
+    sliceName: 'String'
+    updatedAt: 'DateTime'
+  }
+  AttributeDefinition: { // field return type name
+    attribute: 'JSON'
+    extensions: 'StructureDefinition'
+    id: 'String'
+  }
+  Column: { // field return type name
+    column: 'String'
+    createdAt: 'DateTime'
+    id: 'String'
+    joins: 'Join'
+    table: 'String'
+    updatedAt: 'DateTime'
+  }
+  Comment: { // field return type name
+    attribute: 'Attribute'
+    author: 'User'
+    content: 'String'
+    createdAt: 'DateTime'
+    id: 'String'
+    validation: 'Boolean'
+  }
+  ConceptMap: { // field return type name
+    id: 'String'
+    name: 'String'
+    title: 'String'
+  }
+  Condition: { // field return type name
+    action: 'ConditionAction'
+    id: 'String'
+    relation: 'ConditionRelation'
+    sqlValue: 'Column'
+    value: 'String'
+  }
+  Credential: { // field return type name
+    createdAt: 'DateTime'
+    database: 'String'
+    decryptedPassword: 'String'
+    host: 'String'
+    id: 'String'
+    login: 'String'
+    model: 'DatabaseType'
+    owner: 'String'
+    password: 'String'
+    port: 'String'
+    schema: 'String'
+    source: 'Source'
+    updatedAt: 'DateTime'
+  }
+  Filter: { // field return type name
+    id: 'String'
+    relation: 'String'
+    sqlColumn: 'Column'
+    value: 'String'
+  }
+  Input: { // field return type name
+    conceptMapId: 'String'
+    createdAt: 'DateTime'
+    id: 'String'
+    inputGroup: 'InputGroup'
+    script: 'String'
+    sqlValue: 'Column'
+    staticValue: 'String'
+    updatedAt: 'DateTime'
+  }
+  InputGroup: { // field return type name
+    attribute: 'Attribute'
+    conditions: 'Condition'
+    createdAt: 'DateTime'
+    id: 'String'
+    inputs: 'Input'
+    mergingScript: 'String'
+    updatedAt: 'DateTime'
+  }
+  Join: { // field return type name
+    createdAt: 'DateTime'
+    id: 'String'
+    tables: 'Column'
+    updatedAt: 'DateTime'
+  }
+  Mutation: { // field return type name
+    addConditionToInputGroup: 'InputGroup'
+    addJoinToColumn: 'Column'
+    createAccessControl: 'AccessControl'
+    createAttribute: 'Attribute'
+    createComment: 'Comment'
+    createInput: 'Input'
+    createInputGroup: 'InputGroup'
+    createResource: 'Resource'
+    createSource: 'Source'
+    createTemplate: 'Template'
+    deleteAccessControl: 'AccessControl'
+    deleteAttribute: 'Attribute'
+    deleteAttributes: 'Attribute'
+    deleteCondition: 'Condition'
+    deleteCredential: 'Credential'
+    deleteInput: 'Input'
+    deleteJoin: 'Join'
+    deleteResource: 'Resource'
+    deleteSource: 'Source'
+    deleteTemplate: 'Template'
+    logout: 'User'
+    updateCondition: 'Condition'
+    updateInput: 'Input'
+    updateInputGroup: 'InputGroup'
+    updateJoin: 'Join'
+    updateResource: 'Resource'
+    updateRole: 'User'
+    upsertCredential: 'Credential'
+  }
+  Query: { // field return type name
+    attribute: 'Attribute'
+    attributes: 'Attribute'
+    credential: 'Credential'
+    me: 'User'
+    resource: 'Resource'
+    source: 'Source'
+    sources: 'Source'
+    structureDefinition: 'StructureDefinition'
+    template: 'Template'
+    templates: 'Template'
+  }
+  Resource: { // field return type name
+    attributes: 'Attribute'
+    createdAt: 'DateTime'
+    definition: 'StructureDefinition'
+    definitionId: 'String'
+    filters: 'Filter'
+    id: 'String'
+    label: 'String'
+    logicalReference: 'String'
+    primaryKeyColumn: 'String'
+    primaryKeyTable: 'String'
+    source: 'Source'
+    updatedAt: 'DateTime'
+  }
+  Source: { // field return type name
+    accessControls: 'AccessControl'
+    createdAt: 'DateTime'
+    credential: 'Credential'
+    id: 'String'
+    mapping: 'String'
+    mappingProgress: 'Int'
+    name: 'String'
+    resources: 'Resource'
+    template: 'Template'
+    updatedAt: 'DateTime'
+    usedConceptMapIds: 'String'
+    usedProfileIds: 'String'
+    version: 'String'
+  }
+  StructureDefinition: { // field return type name
+    attributes: 'AttributeDefinition'
+    derivation: 'String'
+    id: 'String'
+    kind: 'String'
+    name: 'String'
+    publisher: 'String'
+    type: 'String'
+    url: 'String'
+  }
+  Template: { // field return type name
+    createdAt: 'DateTime'
+    id: 'String'
+    name: 'String'
+    sources: 'Source'
+    updatedAt: 'DateTime'
+  }
+  User: { // field return type name
+    createdAt: 'DateTime'
+    email: 'String'
+    id: 'String'
+    name: 'String'
+    role: 'Role'
+    updatedAt: 'DateTime'
   }
 }
 
@@ -930,7 +1169,7 @@ export interface NexusGenArgTypes {
     }
     updateResource: { // args
       data: NexusGenInputs['UpdateResourceInput']; // UpdateResourceInput!
-      filters?: NexusGenInputs['FilterInput'][] | null; // [FilterInput!]
+      filters?: Array<NexusGenInputs['FilterInput'] | null> | null; // [FilterInput]
       resourceId: string; // ID!
     }
     updateRole: { // args
@@ -950,22 +1189,35 @@ export interface NexusGenArgTypes {
   }
   Query: {
     attribute: { // args
-      attributeId: string; // ID!
+      where: NexusGenInputs['AttributeWhereUniqueInput']; // AttributeWhereUniqueInput!
+    }
+    attributes: { // args
+      after?: NexusGenInputs['AttributeWhereUniqueInput'] | null; // AttributeWhereUniqueInput
+      before?: NexusGenInputs['AttributeWhereUniqueInput'] | null; // AttributeWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+      where?: NexusGenInputs['AttributeWhereInput'] | null; // AttributeWhereInput
     }
     credential: { // args
-      credentialId: string; // ID!
+      where: NexusGenInputs['CredentialWhereUniqueInput']; // CredentialWhereUniqueInput!
     }
     resource: { // args
-      resourceId: string; // ID!
+      where: NexusGenInputs['ResourceWhereUniqueInput']; // ResourceWhereUniqueInput!
     }
     source: { // args
-      sourceId: string; // ID!
+      where: NexusGenInputs['SourceWhereUniqueInput']; // SourceWhereUniqueInput!
     }
     structureDefinition: { // args
       definitionId: string; // ID!
     }
     template: { // args
-      templateId: string; // ID!
+      where: NexusGenInputs['TemplateWhereUniqueInput']; // TemplateWhereUniqueInput!
+    }
+    templates: { // args
+      after?: NexusGenInputs['TemplateWhereUniqueInput'] | null; // TemplateWhereUniqueInput
+      before?: NexusGenInputs['TemplateWhereUniqueInput'] | null; // TemplateWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
     }
   }
   Resource: {
@@ -991,7 +1243,6 @@ export interface NexusGenArgTypes {
       before?: NexusGenInputs['ResourceWhereUniqueInput'] | null; // ResourceWhereUniqueInput
       first?: number | null; // Int
       last?: number | null; // Int
-      where?: NexusGenInputs['ResourceWhereInput'] | null; // ResourceWhereInput
     }
   }
   Template: {
@@ -1004,31 +1255,46 @@ export interface NexusGenArgTypes {
   }
 }
 
-export interface NexusGenAbstractResolveReturnTypes {
+export interface NexusGenAbstractTypeMembers {
 }
 
-export interface NexusGenInheritedFields {}
+export interface NexusGenTypeInterfaces {
+}
 
-export type NexusGenObjectNames = "AccessControl" | "Attribute" | "AttributeDefinition" | "Column" | "Comment" | "ConceptMap" | "Condition" | "Credential" | "Filter" | "Input" | "InputGroup" | "Join" | "Mutation" | "Query" | "Resource" | "Source" | "StructureDefinition" | "Template" | "User";
+export type NexusGenObjectNames = keyof NexusGenObjects;
 
-export type NexusGenInputNames = "AccessControlFilter" | "AccessControlWhereInput" | "AccessControlWhereUniqueInput" | "AccessControl_user_sourceCompoundUniqueInput" | "AttributeFilter" | "AttributeInput" | "AttributeWhereInput" | "AttributeWhereUniqueInput" | "BooleanFilter" | "ColumnFilter" | "ColumnInput" | "ColumnInputWithoutJoins" | "ColumnWhereInput" | "ColumnWhereUniqueInput" | "CommentFilter" | "CommentWhereInput" | "CommentWhereUniqueInput" | "ConditionFilter" | "ConditionWhereInput" | "ConditionWhereUniqueInput" | "CredentialWhereInput" | "DateTimeFilter" | "FilterFilter" | "FilterInput" | "FilterWhereInput" | "InputFilter" | "InputGroupFilter" | "InputGroupWhereInput" | "InputGroupWhereUniqueInput" | "InputWhereInput" | "InputWhereUniqueInput" | "JoinFilter" | "JoinInput" | "JoinWhereInput" | "JoinWhereUniqueInput" | "NullableStringFilter" | "ResourceFilter" | "ResourceWhereInput" | "ResourceWhereUniqueInput" | "SourceFilter" | "SourceWhereInput" | "SourceWhereUniqueInput" | "Source_templateId_nameCompoundUniqueInput" | "StringFilter" | "StructureDefinitionWhereFilter" | "TemplateWhereInput" | "UUIDFilter" | "UpdateInputInput" | "UpdateResourceInput" | "UserWhereInput";
+export type NexusGenInputNames = keyof NexusGenInputs;
 
-export type NexusGenEnumNames = "ConditionAction" | "ConditionRelation" | "DatabaseType" | "Role" | "SourceRole";
+export type NexusGenEnumNames = keyof NexusGenEnums;
 
 export type NexusGenInterfaceNames = never;
 
-export type NexusGenScalarNames = "Boolean" | "DateTime" | "Float" | "ID" | "Int" | "JSON" | "String" | "UUID";
+export type NexusGenScalarNames = keyof NexusGenScalars;
 
 export type NexusGenUnionNames = never;
 
+export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = never;
+
+export type NexusGenAbstractsUsingStrategyResolveType = never;
+
+export type NexusGenFeaturesConfig = {
+  abstractTypeStrategies: {
+    isTypeOf: false
+    resolveType: true
+    __typename: false
+  }
+}
+
 export interface NexusGenTypes {
-  context: Context.Context;
+  context: Context;
   inputTypes: NexusGenInputs;
   rootTypes: NexusGenRootTypes;
+  inputTypeShapes: NexusGenInputs & NexusGenEnums & NexusGenScalars;
   argTypes: NexusGenArgTypes;
   fieldTypes: NexusGenFieldTypes;
+  fieldTypeNames: NexusGenFieldTypeNames;
   allTypes: NexusGenAllTypes;
-  inheritedFields: NexusGenInheritedFields;
+  typeInterfaces: NexusGenTypeInterfaces;
   objectNames: NexusGenObjectNames;
   inputNames: NexusGenInputNames;
   enumNames: NexusGenEnumNames;
@@ -1039,7 +1305,10 @@ export interface NexusGenTypes {
   allOutputTypes: NexusGenTypes['objectNames'] | NexusGenTypes['enumNames'] | NexusGenTypes['unionNames'] | NexusGenTypes['interfaceNames'] | NexusGenTypes['scalarNames'];
   allNamedTypes: NexusGenTypes['allInputTypes'] | NexusGenTypes['allOutputTypes']
   abstractTypes: NexusGenTypes['interfaceNames'] | NexusGenTypes['unionNames'];
-  abstractResolveReturn: NexusGenAbstractResolveReturnTypes;
+  abstractTypeMembers: NexusGenAbstractTypeMembers;
+  objectsUsingAbstractStrategyIsTypeOf: NexusGenObjectsUsingAbstractStrategyIsTypeOf;
+  abstractsUsingStrategyResolveType: NexusGenAbstractsUsingStrategyResolveType;
+  features: NexusGenFeaturesConfig;
 }
 
 
@@ -1048,6 +1317,10 @@ declare global {
   }
   interface NexusGenPluginFieldConfig<TypeName extends string, FieldName extends string> {
   }
+  interface NexusGenPluginInputFieldConfig<TypeName extends string, FieldName extends string> {
+  }
   interface NexusGenPluginSchemaConfig {
+  }
+  interface NexusGenPluginArgConfig {
   }
 }

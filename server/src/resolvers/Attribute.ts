@@ -1,6 +1,6 @@
-import { objectType, FieldResolver } from '@nexus/schema'
+import { objectType, FieldResolver } from 'nexus'
 import { getDefinition } from 'fhir'
-import { AttributeWhereInput, Condition, Input } from '@prisma/client'
+import { Prisma, Condition, Input } from '@prisma/client'
 
 export const Attribute = objectType({
   name: 'Attribute',
@@ -71,7 +71,7 @@ export const deleteAttributes: FieldResolver<
   'deleteAttributes'
 > = async (_parent, { filter }, ctx) => {
   const res = await ctx.prisma.attribute.findMany({
-    where: filter as AttributeWhereInput | undefined,
+    where: filter as Prisma.AttributeWhereInput | undefined,
     include: {
       inputGroups: {
         include: {
@@ -128,7 +128,7 @@ export const deleteAttributes: FieldResolver<
   )
 
   await ctx.prisma.attribute.deleteMany({
-    where: filter as AttributeWhereInput | undefined,
+    where: filter as Prisma.AttributeWhereInput | undefined,
   })
   return res
 }

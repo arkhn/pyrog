@@ -1,4 +1,4 @@
-import { inputObjectType } from '@nexus/schema'
+import { inputObjectType } from 'nexus'
 
 export const UpdateResourceInput = inputObjectType({
   name: 'UpdateResourceInput',
@@ -19,9 +19,9 @@ export const AttributeInput = inputObjectType({
 export const FilterInput = inputObjectType({
   name: 'FilterInput',
   definition(t) {
-    t.field('sqlColumn', { type: 'ColumnInputWithoutJoins', required: true })
-    t.field('relation', { type: 'String', required: true })
-    t.field('value', { type: 'String', required: true })
+    t.nonNull.field('sqlColumn', { type: 'ColumnInputWithoutJoins' })
+    t.nonNull.field('relation', { type: 'String' })
+    t.nonNull.field('value', { type: 'String' })
   },
 })
 
@@ -36,8 +36,8 @@ export const UpdateInputInput = inputObjectType({
 export const ColumnInput = inputObjectType({
   name: 'ColumnInput',
   definition(t) {
-    t.field('table', { type: 'String', required: true })
-    t.field('column', { type: 'String', required: true })
+    t.nonNull.field('table', { type: 'String' })
+    t.nonNull.field('column', { type: 'String' })
     t.list.field('joins', {
       type: 'JoinInput',
     })
