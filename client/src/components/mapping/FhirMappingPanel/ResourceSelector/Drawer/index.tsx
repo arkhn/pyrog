@@ -12,7 +12,7 @@ import { loader } from 'graphql.macro';
 import { useSelector, useDispatch } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
 
-import { Filter, IReduxStore, ISourceSchema, Join } from 'types';
+import { Filter, IReduxStore, ISourceSchema } from 'types';
 import ColumnSelect from 'components/selects/columnSelect';
 import {
   updateSelectedResource,

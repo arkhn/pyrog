@@ -7,7 +7,7 @@ import { loader } from 'graphql.macro';
 import { setAttributeInMap } from 'services/resourceInputs/actions';
 import { onError as onApolloError } from 'services/apollo';
 import InputGroup from '../InputGroup';
-import { IAttribute, IReduxStore } from 'types';
+import { IAttribute, IInputGroup, IReduxStore } from 'types';
 
 const mCreateAttribute = loader(
   'src/graphql/mutations/createAttribute.graphql'
@@ -98,7 +98,7 @@ const InputGroups = ({ attribute, isEmpty }: Props) => {
 
   return (
     <div id="input-groups">
-      {inputGroups.map((inputGroup: any, index: number) =>
+      {inputGroups.map((inputGroup: IInputGroup, index: number) =>
         inputGroup ? (
           <Card
             key={index}

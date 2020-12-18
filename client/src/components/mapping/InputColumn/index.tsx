@@ -12,7 +12,7 @@ import { useMutation } from '@apollo/react-hooks';
 import { useSelector } from 'react-redux';
 
 import { onError as onApolloError } from 'services/apollo';
-import { IReduxStore, ISourceSchema, Join } from 'types';
+import { IInput, IReduxStore, ISourceSchema, Join } from 'types';
 
 import ColumnSelect from 'components/selects/columnSelect';
 import ConceptMapDialog from 'components/mapping/ConceptMap';
@@ -26,7 +26,7 @@ const mDeleteJoin = loader('src/graphql/mutations/deleteJoin.graphql');
 const mDeleteInput = loader('src/graphql/mutations/deleteInput.graphql');
 
 interface Props {
-  input: any;
+  input: IInput;
 }
 
 const InputColumn = ({ input }: Props) => {

@@ -336,6 +336,7 @@ input InputFilter {
 
 type InputGroup {
   attribute: Attribute
+  attributeId: String
   conditions(after: ConditionWhereUniqueInput, before: ConditionWhereUniqueInput, first: Int, last: Int): [Condition!]!
   createdAt: DateTime!
   id: String!

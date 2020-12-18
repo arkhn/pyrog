@@ -95,6 +95,23 @@ export interface Resource {
   };
 }
 
+export interface IInputGroup {
+  id: string;
+  attributeId: string;
+  inputs: IInput[];
+  conditions: Condition[];
+  mergingScript: string;
+}
+
+export interface IInput {
+  id: string;
+  inputGroupId: string;
+  sqlValue: Column;
+  staticValue: string;
+  conceptMapId: string;
+  script: string;
+}
+
 export interface Condition {
   id: string;
   inputGroupId?: string;

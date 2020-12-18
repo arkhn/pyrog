@@ -482,6 +482,7 @@ export interface NexusGenRootTypes {
     updatedAt: any; // DateTime!
   }
   InputGroup: { // root type
+    attributeId?: string | null; // String
     createdAt: any; // DateTime!
     id: string; // String!
     mergingScript?: string | null; // String
@@ -682,6 +683,7 @@ export interface NexusGenFieldTypes {
   }
   InputGroup: { // field return type
     attribute: NexusGenRootTypes['Attribute'] | null; // Attribute
+    attributeId: string | null; // String
     conditions: NexusGenRootTypes['Condition'][]; // [Condition!]!
     createdAt: any; // DateTime!
     id: string; // String!

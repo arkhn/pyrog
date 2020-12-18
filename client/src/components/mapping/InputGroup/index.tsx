@@ -11,7 +11,7 @@ import InputColumn from '../InputColumn';
 import InputStatic from '../InputStatic';
 import InputCondition from '../InputCondition';
 
-import { IReduxStore } from 'types';
+import { IInputGroup, IReduxStore } from 'types';
 
 const mUpdateInputGroup = loader(
   'src/graphql/mutations/updateInputGroup.graphql'
@@ -27,21 +27,11 @@ const mCreateCondition = loader(
   'src/graphql/mutations/addConditionToInputGroup.graphql'
 );
 interface Props {
-  inputGroup: any;
+  inputGroup: IInputGroup;
 }
 
 const InputGroup = ({ inputGroup }: Props) => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const { attribute } = useSelector((state: IReduxStore) => state.selectedNode);
-  const path = attribute.path;
-
-  const attributesForResource = useSelector(
-    (state: IReduxStore) => state.resourceInputs.attributesMap
-  );
-  const attributeId = attributesForResource[path]
-    ? attributesForResource[path].id
-    : null;
-
   const onError = onApolloError(toaster);
 
   const [
@@ -87,7 +77,7 @@ const InputGroup = ({ inputGroup }: Props) => {
         onClick={() => {
           deleteInputGroup({
             variables: {
-              attributeId,
+              attributeId: inputGroup.attributeId,
               inputGroupId: inputGroup.id
             }
           });

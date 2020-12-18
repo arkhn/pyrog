@@ -13,7 +13,7 @@ import { loader } from 'graphql.macro';
 import { ResourceDefinition } from '@arkhn/fhir.ts';
 
 import { onError as onApolloError } from 'services/apollo';
-import { IReduxStore } from 'types';
+import { IInput, IReduxStore } from 'types';
 
 import StringSelect from 'components/selects/stringSelect';
 import IdentifierSystemInput from './IdentifierSystemInput';
@@ -31,7 +31,7 @@ const mUpdateStaticInput = loader(
 const mDeleteInput = loader('src/graphql/mutations/deleteInput.graphql');
 
 interface Props {
-  input: any;
+  input: IInput;
 }
 
 const InputStatic = ({ input }: Props): React.ReactElement => {
@@ -63,7 +63,6 @@ const InputStatic = ({ input }: Props): React.ReactElement => {
   };
 
   const sources = dataSources ? dataSources.sources : [];
-  let inputGroupId = input.inputGroupId;
 
   useEffect(() => {
     // TODO we should use attribute.isReferenceType here but Attribute objects
@@ -87,7 +86,7 @@ const InputStatic = ({ input }: Props): React.ReactElement => {
   const addStaticValue = async (value: string): Promise<void> => {
     createStaticInput({
       variables: {
-        inputGroupId,
+        inputGroupId: input.inputGroupId,
         staticValue: value
       }
     });

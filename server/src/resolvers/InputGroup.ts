@@ -5,6 +5,7 @@ export const InputGroup = objectType({
   name: 'InputGroup',
   definition(t) {
     t.model.id()
+    t.model.attributeId()
 
     t.model.mergingScript()
     t.model.conditions()
