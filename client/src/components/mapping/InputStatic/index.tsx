@@ -22,9 +22,6 @@ import IdentifierSystemInput from './IdentifierSystemInput';
 const qSourcesAndResources = loader(
   'src/graphql/queries/sourcesAndResources.graphql'
 );
-const mCreateStaticInput = loader(
-  'src/graphql/mutations/createStaticInput.graphql'
-);
 const mUpdateStaticInput = loader(
   'src/graphql/mutations/updateStaticInput.graphql'
 );
@@ -48,12 +45,27 @@ const InputStatic = ({ input }: Props): React.ReactElement => {
   const { data: dataSources } = useQuery(qSourcesAndResources, {
     fetchPolicy: 'no-cache'
   });
+  const [updateStaticInput] = useMutation(mUpdateStaticInput, { onError });
   const [deleteInput, { loading: loadDelInput }] = useMutation(mDeleteInput, {
     onError
   });
 
+  const sources = dataSources ? dataSources.sources : [];
+
+  useEffect(() => {
+    setStaticValue(input.staticValue);
+  }, [input]);
+
+  const onUpdate = async (value: string): Promise<void> => {
+    updateStaticInput({
+      variables: {
+        inputId: input.id,
+        value: value
+      }
+    });
+  };
+
   const onClickDelete = () => {
-    // Mutation to remove from DB
     deleteInput({
       variables: {
         inputGroupId: input.inputGroupId,
@@ -62,73 +74,41 @@ const InputStatic = ({ input }: Props): React.ReactElement => {
     });
   };
 
-  const sources = dataSources ? dataSources.sources : [];
-
-  useEffect(() => {
-    // TODO we should use attribute.isReferenceType here but Attribute objects
-    // lose their accessors in Redux
-    if (attribute.definition.id === 'Reference.type') {
-      setStaticValue('');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [attribute]);
-
-  useEffect(() => {
-    setStaticValue(input.staticValue);
-  }, [input]);
-
-  const [
-    createStaticInput,
-    { loading: creatingStaticInput }
-  ] = useMutation(mCreateStaticInput, { onError });
-  const [updateStaticInput] = useMutation(mUpdateStaticInput, { onError });
-
-  const addStaticValue = async (value: string): Promise<void> => {
-    createStaticInput({
-      variables: {
-        inputGroupId: input.inputGroupId,
-        staticValue: value
-      }
-    });
-  };
-
   const renderReferenceTypeDropDown = (): React.ReactElement => (
-    <React.Fragment>
-      <StringSelect
-        items={availableResources.map((t: ResourceDefinition) => t.name)}
-        onChange={setStaticValue}
-        inputItem={staticValue}
-        popoverProps={{
-          autoFocus: true,
-          boundary: 'viewport',
-          canEscapeKeyClose: true,
-          lazy: true,
-          position: Position.LEFT_TOP,
-          usePortal: true
-        }}
-      />
-    </React.Fragment>
+    <StringSelect
+      items={availableResources.map((t: ResourceDefinition) => t.name)}
+      onChange={onUpdate}
+      inputItem={staticValue}
+      popoverProps={{
+        autoFocus: true,
+        boundary: 'viewport',
+        canEscapeKeyClose: true,
+        lazy: true,
+        position: Position.LEFT_TOP,
+        usePortal: true
+      }}
+    />
   );
 
   const renderTextInput = (): React.ReactElement => (
-    <React.Fragment>
-      <InputGroup
-        value={staticValue}
-        placeholder="Static input"
-        onChange={(event: React.FormEvent<HTMLElement>): void => {
-          const target = event.target as HTMLInputElement;
-          setStaticValue(target.value);
-        }}
-        onBlur={(): void => {
-          updateStaticInput({
-            variables: {
-              inputId: input.id,
-              value: staticValue
-            }
-          });
-        }}
-      />
-    </React.Fragment>
+    <InputGroup
+      value={staticValue}
+      placeholder="Static input"
+      onChange={(event: React.FormEvent<HTMLElement>): void => {
+        const target = event.target as HTMLInputElement;
+        setStaticValue(target.value);
+      }}
+      onBlur={() => onUpdate(staticValue)}
+    />
+  );
+
+  const renderIdentifierSystemInput = (): React.ReactElement => (
+    <IdentifierSystemInput
+      value={input.staticValue}
+      attribute={attribute}
+      sources={sources}
+      onUpdate={onUpdate}
+    />
   );
 
   return (
@@ -142,18 +122,11 @@ const InputStatic = ({ input }: Props): React.ReactElement => {
           </div>
           <div className="static-input-form">
             <ControlGroup>
-              {attribute.definition.id === 'Reference.type' ? (
-                renderReferenceTypeDropDown()
-              ) : attribute.definition.id === 'Identifier.system' ? (
-                <IdentifierSystemInput
-                  attribute={attribute}
-                  sources={sources}
-                  creatingStaticInput={creatingStaticInput}
-                  addStaticValue={addStaticValue}
-                />
-              ) : (
-                renderTextInput()
-              )}
+              {attribute.definition.id === 'Reference.type'
+                ? renderReferenceTypeDropDown()
+                : attribute.definition.id === 'Identifier.system'
+                ? renderIdentifierSystemInput()
+                : renderTextInput()}
             </ControlGroup>
           </div>
         </Card>
