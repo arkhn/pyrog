@@ -16,7 +16,6 @@ module.exports = {
     es6: true,
   },
   plugins: ['@typescript-eslint', 'prettier'],
-  // ignorePatterns: ['src/generated'],
   rules: {
     'no-underscore-dangle': 0,
     'no-debugger': 1,
