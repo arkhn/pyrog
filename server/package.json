@@ -70,7 +70,10 @@
     "ts-node": "8.5.4",
     "ts-node-dev": "1.0.0-pre.44",
     "tsconfig-paths": "^3.9.0",
-    "typescript": "3.7.2"
+    "typescript": "3.9.7"
+  },
+  "peerDependencies": {
+    "@graphql-tools/delegate": "^7.0.8"
   },
   "prettier": {
     "singleQuote": true,

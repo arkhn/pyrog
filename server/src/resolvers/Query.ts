@@ -1,4 +1,4 @@
-import { idArg, nonNull, nullable, queryType } from 'nexus'
+import { idArg, nonNull, queryType } from 'nexus'
 
 import { getDefinition } from 'fhir'
 import { sources } from './Source'

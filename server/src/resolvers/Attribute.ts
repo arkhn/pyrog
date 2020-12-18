@@ -71,7 +71,7 @@ export const deleteAttributes: FieldResolver<
   'deleteAttributes'
 > = async (_parent, { filter }, ctx) => {
   const res = await ctx.prisma.attribute.findMany({
-    where: filter as Prisma.AttributeWhereInput | undefined,
+    where: filter as Prisma.AttributeWhereInput,
     include: {
       inputGroups: {
         include: {
@@ -128,7 +128,7 @@ export const deleteAttributes: FieldResolver<
   )
 
   await ctx.prisma.attribute.deleteMany({
-    where: filter as Prisma.AttributeWhereInput | undefined,
+    where: filter as Prisma.AttributeWhereInput,
   })
   return res
 }

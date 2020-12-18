@@ -27,7 +27,6 @@ import { deleteSource, createSource } from './Source'
 import { createTemplate, deleteTemplate } from './Template'
 import { updateRole } from './User'
 import cache from 'cache'
-import { Prisma } from '@prisma/client'
 
 export const Mutation = mutationType({
   /*
@@ -130,7 +129,7 @@ export const Mutation = mutationType({
       args: {
         resourceId: nonNull(idArg()),
         data: nonNull(arg({ type: 'UpdateResourceInput' })),
-        filters: list(arg({ type: 'FilterInput' })),
+        filters: list(nonNull(arg({ type: 'FilterInput' }))),
       },
       resolve: updateResource,
     })
@@ -170,10 +169,10 @@ export const Mutation = mutationType({
     })
 
     t.field('deleteAttributes', {
-      type: nullable('Attribute'),
+      type: nullable(list('Attribute')),
       args: {
         filter: arg({
-          type: 'AttributeWhereInput',
+          type: nonNull('AttributeWhereInput'),
         }),
       },
       resolve: deleteAttributes,

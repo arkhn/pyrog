@@ -106,7 +106,7 @@ type Column {
 
 input ColumnInput {
   column: String!
-  joins: [JoinInput]
+  joins: [JoinInput!]
   table: String!
 }
 
@@ -226,6 +226,7 @@ input ConditionWhereInput {
 }
 
 input ConditionWhereUniqueInput {
+  columnId: String
   id: String
 }
 
@@ -266,6 +267,7 @@ input CredentialWhereInput {
 
 input CredentialWhereUniqueInput {
   id: String
+  sourceId: String
 }
 
 enum DatabaseType {
@@ -423,6 +425,7 @@ input InputWhereInput {
 
 input InputWhereUniqueInput {
   id: String
+  sqlValueId: String
 }
 
 type Join {
@@ -433,8 +436,8 @@ type Join {
 }
 
 input JoinInput {
-  source: ColumnInputWithoutJoins
-  target: ColumnInputWithoutJoins
+  source: ColumnInputWithoutJoins!
+  target: ColumnInputWithoutJoins!
 }
 
 input JoinListRelationFilter {
@@ -462,7 +465,7 @@ input JoinWhereUniqueInput {
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
-scalar JSON
+scalar JSON @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
 
 type Mutation {
   addConditionToInputGroup(action: String, column: String, inputGroupId: ID!, relation: ConditionRelation, table: String, value: String): InputGroup
@@ -477,7 +480,7 @@ type Mutation {
   createTemplate(name: String!): Template
   deleteAccessControl(accessControlId: ID!): AccessControl
   deleteAttribute(attributeId: ID!): Attribute
-  deleteAttributes(filter: AttributeWhereInput): Attribute
+  deleteAttributes(filter: AttributeWhereInput!): [Attribute]
   deleteCondition(conditionId: ID!): Condition
   deleteCredential(credentialId: ID!): Credential
   deleteInput(inputId: ID!): Input
@@ -490,7 +493,7 @@ type Mutation {
   updateInput(data: UpdateInputInput!, inputId: ID!): Input
   updateInputGroup(inputGroupId: ID!, mergingScript: String): InputGroup
   updateJoin(data: JoinInput!, joinId: ID!): Join
-  updateResource(data: UpdateResourceInput!, filters: [FilterInput], resourceId: ID!): Resource
+  updateResource(data: UpdateResourceInput!, filters: [FilterInput!], resourceId: ID!): Resource
   updateRole(newRole: Role!, userId: ID!): User
   upsertCredential(database: String!, host: String!, login: String!, model: String!, owner: String!, password: String!, port: String!, sourceId: ID!): Credential
 }

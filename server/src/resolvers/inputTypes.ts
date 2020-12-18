@@ -1,4 +1,4 @@
-import { inputObjectType } from 'nexus'
+import { inputObjectType, nonNull } from 'nexus'
 
 export const UpdateResourceInput = inputObjectType({
   name: 'UpdateResourceInput',
@@ -38,7 +38,7 @@ export const ColumnInput = inputObjectType({
   definition(t) {
     t.nonNull.field('table', { type: 'String' })
     t.nonNull.field('column', { type: 'String' })
-    t.list.field('joins', {
+    t.list.nonNull.field('joins', {
       type: 'JoinInput',
     })
   },
@@ -55,10 +55,10 @@ export const ColumnInputWithoutJoins = inputObjectType({
 export const JoinInput = inputObjectType({
   name: 'JoinInput',
   definition(t) {
-    t.field('source', {
+    t.nonNull.field('source', {
       type: 'ColumnInputWithoutJoins',
     })
-    t.field('target', {
+    t.nonNull.field('target', {
       type: 'ColumnInputWithoutJoins',
     })
   },

@@ -75,7 +75,7 @@ export interface NexusGenInputs {
   }
   ColumnInput: { // input type
     column: string; // String!
-    joins?: Array<NexusGenInputs['JoinInput'] | null> | null; // [JoinInput]
+    joins?: NexusGenInputs['JoinInput'][] | null; // [JoinInput!]
     table: string; // String!
   }
   ColumnInputWithoutJoins: { // input type
@@ -147,6 +147,7 @@ export interface NexusGenInputs {
     value?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
   }
   ConditionWhereUniqueInput: { // input type
+    columnId?: string | null; // String
     id?: string | null; // String
   }
   CredentialWhereInput: { // input type
@@ -169,6 +170,7 @@ export interface NexusGenInputs {
   }
   CredentialWhereUniqueInput: { // input type
     id?: string | null; // String
+    sourceId?: string | null; // String
   }
   DateTimeFilter: { // input type
     equals?: NexusGenScalars['DateTime'] | null; // DateTime
@@ -275,10 +277,11 @@ export interface NexusGenInputs {
   }
   InputWhereUniqueInput: { // input type
     id?: string | null; // String
+    sqlValueId?: string | null; // String
   }
   JoinInput: { // input type
-    source?: NexusGenInputs['ColumnInputWithoutJoins'] | null; // ColumnInputWithoutJoins
-    target?: NexusGenInputs['ColumnInputWithoutJoins'] | null; // ColumnInputWithoutJoins
+    source: NexusGenInputs['ColumnInputWithoutJoins']; // ColumnInputWithoutJoins!
+    target: NexusGenInputs['ColumnInputWithoutJoins']; // ColumnInputWithoutJoins!
   }
   JoinListRelationFilter: { // input type
     every?: NexusGenInputs['JoinWhereInput'] | null; // JoinWhereInput
@@ -740,7 +743,7 @@ export interface NexusGenFieldTypes {
     createTemplate: NexusGenRootTypes['Template'] | null; // Template
     deleteAccessControl: NexusGenRootTypes['AccessControl'] | null; // AccessControl
     deleteAttribute: NexusGenRootTypes['Attribute'] | null; // Attribute
-    deleteAttributes: NexusGenRootTypes['Attribute'] | null; // Attribute
+    deleteAttributes: Array<NexusGenRootTypes['Attribute'] | null> | null; // [Attribute]
     deleteCondition: NexusGenRootTypes['Condition'] | null; // Condition
     deleteCredential: NexusGenRootTypes['Credential'] | null; // Credential
     deleteInput: NexusGenRootTypes['Input'] | null; // Input
@@ -1124,7 +1127,7 @@ export interface NexusGenArgTypes {
       attributeId: string; // ID!
     }
     deleteAttributes: { // args
-      filter?: NexusGenInputs['AttributeWhereInput'] | null; // AttributeWhereInput
+      filter: NexusGenInputs['AttributeWhereInput']; // AttributeWhereInput!
     }
     deleteCondition: { // args
       conditionId: string; // ID!
@@ -1169,7 +1172,7 @@ export interface NexusGenArgTypes {
     }
     updateResource: { // args
       data: NexusGenInputs['UpdateResourceInput']; // UpdateResourceInput!
-      filters?: Array<NexusGenInputs['FilterInput'] | null> | null; // [FilterInput]
+      filters?: NexusGenInputs['FilterInput'][] | null; // [FilterInput!]
       resourceId: string; // ID!
     }
     updateRole: { // args
