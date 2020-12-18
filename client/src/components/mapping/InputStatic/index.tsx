@@ -61,7 +61,7 @@ const InputStatic = ({ input }: Props): React.ReactElement => {
     (state: IReduxStore) => state.fhir
   );
 
-  const [staticValue, setStaticValue] = useState('');
+  const [staticValue, setStaticValue] = useState(input.staticValue);
 
   const { data: dataSources } = useQuery(qSourcesAndResources, {
     fetchPolicy: 'no-cache'
@@ -129,6 +129,10 @@ const InputStatic = ({ input }: Props): React.ReactElement => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [attribute]);
+
+  useEffect(() => {
+    setStaticValue(input.staticValue);
+  }, [input]);
 
   const [createAttribute] = useMutation(mCreateAttribute, {
     onError

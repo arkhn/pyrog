@@ -13,29 +13,30 @@ import axios from 'axios';
 import './style.scss';
 import { Icon } from '@blueprintjs/core';
 import { useSelector } from 'react-redux';
-import { IReduxStore } from 'types';
+import { IReduxStore, ISelectedSource } from 'types';
 import { PAGAI_URL, RIVER_URL } from '../../../constants';
 import FhirPreview from './FhirPreview';
+import StringSelect from 'components/selects/stringSelect';
 
-interface IProps {
-  table: string;
+interface Props {
+  source: ISelectedSource;
 }
 
-const TableViewer = ({ table }: IProps) => {
+const TableViewer = ({ source }: Props) => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const {
-    resource,
-    source: { credential }
-  } = useSelector((state: IReduxStore) => state.selectedNode);
+  const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
 
+  const [table, setTable] = React.useState(resource?.primaryKeyTable);
   const [compatiblePreview, setCompatiblePreview] = React.useState(false);
 
   const [loadingTable, setLoadingTable] = React.useState(false);
   const [fields, setFields] = React.useState([] as string[]);
-  const [rows, setRows] = React.useState([]);
+  const [rows, setRows] = React.useState([] as any);
 
   const [previewData, setPreviewData] = React.useState(undefined as any);
   const [loadingPreview, setLoadingPreview] = React.useState(false);
+
+  const tables = Object.keys(source.credential.schema);
 
   const fetchPreview = React.useCallback(
     async selectedRows => {
@@ -85,10 +86,17 @@ const TableViewer = ({ table }: IProps) => {
   );
 
   React.useEffect(() => {
-    table === resource.primaryKeyTable
-      ? setCompatiblePreview(true)
-      : setCompatiblePreview(false);
+    setCompatiblePreview(resource && table === resource?.primaryKeyTable);
+    setTable(resource?.primaryKeyTable);
   }, [table, resource]);
+
+  React.useEffect(() => {
+    setFields(['A', 'B']);
+    setRows([
+      [1, 2, 3],
+      [4, 5, 6]
+    ]);
+  }, []);
 
   React.useEffect(() => {
     if (resource && table) {
@@ -110,10 +118,19 @@ const TableViewer = ({ table }: IProps) => {
           });
         });
     }
-  }, [resource, credential.owner, table, toaster]);
+  }, [resource, source.credential.owner, table, toaster]);
 
   return (
     <React.Fragment>
+      <StringSelect
+        icon={'th'}
+        inputItem={table}
+        items={tables}
+        maxItems={100}
+        onChange={(t: string) => {
+          setTable(t);
+        }}
+      />
       <Table
         numRows={rows.length}
         enableColumnReordering={false}

@@ -50,42 +50,19 @@ body {
 }
 
 #tableViewer {
+  background-color: $light-gray2;
   display: flex;
   flex-direction: column;
-  padding-top: 5%;
-  padding-left: 20px;
-}
-.bp3-tab-list {
-  background-color: $light-gray1;
-  overflow: hidden;
+  padding: 20px;
 
-  & > * {
-    text-align: center;
-    flex-grow: 1;
+  .bp3-popover-wrapper {
+    align-self: center;
+    margin-bottom: 15px;
   }
 
-  .tab-title {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    & > *:first-child {
-      margin-right: 5px;
-    }
+  .bp3-table-container {
+    align-self: center;
   }
-}
-
-.bp3-tab {
-  padding: 5px 0px;
-
-  &:focus {
-    outline: none;
-  }
-}
-
-.bp3-tab-indicator-wrapper .bp3-tab-indicator {
-  background-color: $light-gray3;
-  height: 100%;
 }
 
 #mapping-explorer-container {

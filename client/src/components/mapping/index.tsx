@@ -23,7 +23,7 @@ const qInputsForAttribute = loader(
 
 const MappingView = () => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const { source, resource, attribute } = useSelector(
+  const { source, attribute } = useSelector(
     (state: IReduxStore) => state.selectedNode
   );
   const attributesForResource = useSelector(
@@ -144,14 +144,6 @@ const MappingView = () => {
     <InputGroups attribute={dataAttribute?.attribute} isEmpty={!attributeId} />
   );
 
-  const renderTable = () => {
-    return (
-      <div id="tableViewer">
-        <TableViewer table={resource.primaryKeyTable} />
-      </div>
-    );
-  };
-
   if (!source?.credential?.schema) {
     toaster.show({
       icon: 'error',
@@ -175,12 +167,12 @@ const MappingView = () => {
           </div>
           <div id="exploration-panel">
             {attribute && renderExistingRules()}
-            <Comments />
-            {source.credential &&
-              resource &&
-              resource.primaryKeyTable &&
-              !attribute &&
-              renderTable()}
+            {source.credential && (
+              <div id="tableViewer">
+                <TableViewer source={source} />
+              </div>
+            )}
+            <div>{attribute && <Comments />}</div>
           </div>
         </div>
       </div>
