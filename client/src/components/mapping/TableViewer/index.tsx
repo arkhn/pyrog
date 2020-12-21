@@ -113,7 +113,7 @@ const TableViewer = ({ source }: Props) => {
   }, [resource, source.credential.owner, table, toaster]);
 
   return (
-    <React.Fragment>
+    <div id="tableViewer">
       <StringSelect
         icon={'th'}
         inputItem={table}
@@ -150,7 +150,7 @@ const TableViewer = ({ source }: Props) => {
         ))}
       </Table>
       <FhirPreview previewData={previewData} loading={loadingPreview} />
-    </React.Fragment>
+    </div>
   );
 };
 

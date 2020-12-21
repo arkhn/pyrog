@@ -180,21 +180,13 @@ const MappingView = () => {
                 <Tab
                   id="exploration"
                   disabled={!source.credential}
-                  panel={
-                    <div id="tableViewer">
-                      <TableViewer source={source} />
-                    </div>
-                  }
+                  panel={<TableViewer source={source} />}
                   title="Exploration"
                 />
                 <Tab id="comments" panel={<Comments />} title="Comments" />
               </Tabs>
             ) : (
-              source.credential && (
-                <div id="tableViewer">
-                  <TableViewer source={source} />
-                </div>
-              )
+              source.credential && <TableViewer source={source} />
             )}
           </div>
         </div>
