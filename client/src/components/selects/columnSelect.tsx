@@ -50,18 +50,19 @@ const ColumnSelect = ({
     setJoins(initialJoins || []);
   }, [initialTable, initialColumn, initialJoins]);
 
-  useEffect(() => {
-    if (allJoinsChangeCallback) allJoinsChangeCallback(joins);
-  }, [joins, allJoinsChangeCallback]);
-
   const changeTable = (e: string): void => {
-    setTable(e);
-    setColumn(undefined);
-    // TODO update joins mutation?
-    setJoins([]);
-
     if (tableChangeCallback) {
       tableChangeCallback(e);
+    } else {
+      setTable(e);
+      setColumn(undefined);
+    }
+
+    // Update joins
+    if (deleteJoinCallback) {
+      joins.forEach(join => deleteJoinCallback(join.id));
+    } else if (allJoinsChangeCallback) {
+      allJoinsChangeCallback([]);
     }
   };
 
@@ -113,8 +114,8 @@ const ColumnSelect = ({
 
                 if (addJoinCallback) {
                   addJoinCallback(emptyJoin);
-                } else {
-                  setJoins([...joins, emptyJoin]);
+                } else if (allJoinsChangeCallback) {
+                  allJoinsChangeCallback([...joins, emptyJoin]);
                 }
               }}
             />
@@ -132,8 +133,8 @@ const ColumnSelect = ({
 
                   if (deleteJoinCallback) {
                     deleteJoinCallback(join.id);
-                  } else {
-                    setJoins([...joins]);
+                  } else if (allJoinsChangeCallback) {
+                    allJoinsChangeCallback(joins);
                   }
                 }}
               />
@@ -155,8 +156,8 @@ const ColumnSelect = ({
 
                   if (joinChangeCallback) {
                     joinChangeCallback(join.id, newJoin);
-                  } else {
-                    setJoins([...joins]);
+                  } else if (allJoinsChangeCallback) {
+                    allJoinsChangeCallback(joins);
                   }
                 }}
               />

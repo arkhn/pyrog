@@ -87,8 +87,10 @@ const TableViewer = ({ source }: Props) => {
 
   React.useEffect(() => {
     setCompatiblePreview(resource && table === resource?.primaryKeyTable);
-    setTable(resource?.primaryKeyTable);
   }, [table, resource]);
+  React.useEffect(() => {
+    setTable(resource?.primaryKeyTable);
+  }, [resource]);
 
   React.useEffect(() => {
     if (resource && table) {

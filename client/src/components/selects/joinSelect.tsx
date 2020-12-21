@@ -38,7 +38,7 @@ const JoinSelect = ({ join, updateJoin }: Props): React.ReactElement => {
       <ColumnSelect
         tableChangeCallback={(e: string) => {
           setSourceTable(e);
-          updateJoin(e, sourceColumn, targetTable, targetColumn);
+          updateJoin(e, '', targetTable, targetColumn);
         }}
         columnChangeCallback={(e: string) => {
           setSourceColumn(e);
@@ -51,7 +51,7 @@ const JoinSelect = ({ join, updateJoin }: Props): React.ReactElement => {
       <ColumnSelect
         tableChangeCallback={(e: string) => {
           setTargetTable(e);
-          updateJoin(sourceTable, sourceColumn, e, targetColumn);
+          updateJoin(sourceTable, sourceColumn, e, '');
         }}
         columnChangeCallback={(e: string) => {
           setTargetColumn(e);

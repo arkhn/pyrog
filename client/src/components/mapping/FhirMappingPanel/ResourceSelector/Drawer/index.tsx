@@ -234,11 +234,8 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
                     setFilters([...filters]);
                   }}
                   allJoinsChangeCallback={(joins: Join[]): void => {
-                    // The if is an ugly fix to avoid infinite rerenderings
-                    if (joins !== filters[index].sqlColumn.joins) {
-                      filters[index].sqlColumn.joins = joins;
-                      setFilters([...filters]);
-                    }
+                    filters[index].sqlColumn.joins = joins;
+                    setFilters([...filters]);
                   }}
                   initialTable={sqlColumn ? sqlColumn.table : ''}
                   initialColumn={sqlColumn ? sqlColumn.column : ''}
