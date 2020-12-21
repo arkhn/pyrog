@@ -52,7 +52,7 @@ const ConditionSelect = ({
   return (
     <TSelect<Condition>
       disabled={!!disabled}
-      displayItem={() => ''}
+      displayItem={() => 'Existing conditions'}
       filterList={filterList}
       filterable={filterable}
       loading={loading}

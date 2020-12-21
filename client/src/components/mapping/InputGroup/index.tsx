@@ -1,5 +1,12 @@
 import React from 'react';
-import { Button, Tag } from '@blueprintjs/core';
+import {
+  Button,
+  ButtonGroup,
+  Card,
+  Divider,
+  Elevation,
+  Tag
+} from '@blueprintjs/core';
 import { useMutation } from '@apollo/react-hooks';
 import { useSelector } from 'react-redux';
 import { loader } from 'graphql.macro';
@@ -28,9 +35,10 @@ const mCreateCondition = loader(
 );
 interface Props {
   inputGroup: IInputGroup;
+  key: number;
 }
 
-const InputGroup = ({ inputGroup }: Props) => {
+const InputGroup = ({ inputGroup, key }: Props) => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
   const onError = onApolloError(toaster);
 
@@ -71,19 +79,23 @@ const InputGroup = ({ inputGroup }: Props) => {
   };
 
   return (
-    <React.Fragment>
-      <Button
-        icon={'trash'}
-        onClick={() => {
-          deleteInputGroup({
-            variables: {
-              attributeId: inputGroup.attributeId,
-              inputGroupId: inputGroup.id
-            }
-          });
-        }}
-        loading={loadingDeleteInputGroup}
-      />
+    <Card key={key} elevation={Elevation.ONE}>
+      <div className="delete-input-group">
+        <Button
+          icon="trash"
+          intent="danger"
+          minimal={true}
+          onClick={() => {
+            deleteInputGroup({
+              variables: {
+                attributeId: inputGroup.attributeId,
+                inputGroupId: inputGroup.id
+              }
+            });
+          }}
+          loading={loadingDeleteInputGroup}
+        />
+      </div>
       <div className="attribute-inputs">
         <div className="input-cards">
           <div id="input-column-rows">
@@ -103,10 +115,51 @@ const InputGroup = ({ inputGroup }: Props) => {
               )}
           </div>
         </div>
-        {inputGroup.inputs.length > 1 ? (
-          <div id="input-column-merging-script">
+      </div>
+      <div className="add-input-buttons">
+        <ButtonGroup>
+          <Button
+            icon={'add'}
+            text={'SQL input'}
+            onClick={() => {
+              createSqlInput({
+                variables: {
+                  inputGroupId: inputGroup.id
+                }
+              });
+            }}
+          />
+          <Button
+            icon={'add'}
+            text={'Static input'}
+            onClick={() => {
+              createStaticInput({
+                variables: {
+                  inputGroupId: inputGroup.id
+                }
+              });
+            }}
+          />
+        </ButtonGroup>
+      </div>
+      {inputGroup.inputs.length > 1 && (
+        <div>
+          <div className="divider-conditions">
+            <div className="divider-conditions-before">
+              <Divider />
+            </div>
+            <div className="divider-conditions-tag">MERGING SCRIPT</div>
+            <div className="divider-conditions-after">
+              <Divider />
+            </div>
+          </div>
+          <div id="input-group-merging-script">
             <div className="stacked-tags">
-              <Tag>SCRIPT</Tag>
+              {inputGroup.mergingScript ? (
+                <Tag>MERGING SCRIPT</Tag>
+              ) : (
+                <Tag intent="danger">CHOOSE A MERGING SCRIPT</Tag>
+              )}
               <ScriptSelect
                 loading={loadingMutation}
                 selectedScript={inputGroup.mergingScript}
@@ -115,33 +168,16 @@ const InputGroup = ({ inputGroup }: Props) => {
               />
             </div>
           </div>
-        ) : null}
-      </div>
-      <div>
-        <Button
-          icon={'add'}
-          text={'Add sql input'}
-          onClick={() => {
-            createSqlInput({
-              variables: {
-                inputGroupId: inputGroup.id
-              }
-            });
-          }}
-        />
-      </div>
-      <div>
-        <Button
-          icon={'add'}
-          text={'Add static input'}
-          onClick={() => {
-            createStaticInput({
-              variables: {
-                inputGroupId: inputGroup.id
-              }
-            });
-          }}
-        />
+        </div>
+      )}
+      <div className="divider-conditions">
+        <div className="divider-conditions-before">
+          <Divider />
+        </div>
+        <div className="divider-conditions-tag">CONDITIONS</div>
+        <div className="divider-conditions-after">
+          <Divider />
+        </div>
       </div>
       <div className="input-cards">
         <div id="input-column-rows">
@@ -154,7 +190,7 @@ const InputGroup = ({ inputGroup }: Props) => {
       <div>
         <Button
           icon={'add'}
-          text={'Add condition'}
+          text={'Condition'}
           onClick={() => {
             createCondition({
               variables: {
@@ -164,7 +200,7 @@ const InputGroup = ({ inputGroup }: Props) => {
           }}
         />
       </div>
-    </React.Fragment>
+    </Card>
   );
 };
 

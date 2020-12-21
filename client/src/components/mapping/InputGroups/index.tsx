@@ -99,19 +99,12 @@ const InputGroups = ({ attribute, isEmpty }: Props) => {
   return (
     <div id="input-groups">
       {inputGroups.map((inputGroup: IInputGroup, index: number) =>
-        inputGroup ? (
-          <Card
-            key={index}
-            elevation={Elevation.ONE}
-          >
-            <InputGroup key={index} inputGroup={inputGroup} />
-          </Card>
-        ) : null
+        inputGroup ? <InputGroup key={index} inputGroup={inputGroup} /> : null
       )}
       <div>
         <Button
           icon={'add'}
-          text={'Add input group'}
+          text={'Input group'}
           onClick={onAddInputGroup}
         />
       </div>

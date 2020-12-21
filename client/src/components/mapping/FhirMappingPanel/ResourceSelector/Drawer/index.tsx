@@ -68,7 +68,7 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
 
   const removeResourceFromCache = (
     cache: any,
-    { data: { deleteResource } }: any
+    { data: { dataDeleteResource } }: any
   ): void => {
     try {
       const { source: cachedSource } = cache.readQuery({
@@ -80,7 +80,7 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
       const newSource = {
         ...cachedSource,
         resources: cachedSource.resources.filter(
-          (r: any) => r.id !== deleteResource.id
+          (r: any) => r.id !== dataDeleteResource.id
         )
       };
       cache.writeQuery({
@@ -234,8 +234,11 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
                     setFilters([...filters]);
                   }}
                   allJoinsChangeCallback={(joins: Join[]): void => {
-                    filters[index].sqlColumn.joins = joins;
-                    setFilters([...filters]);
+                    // The if is an ugly fix to avoid infinite rerenderings
+                    if (joins !== filters[index].sqlColumn.joins) {
+                      filters[index].sqlColumn.joins = joins;
+                      setFilters([...filters]);
+                    }
                   }}
                   initialTable={sqlColumn ? sqlColumn.table : ''}
                   initialColumn={sqlColumn ? sqlColumn.column : ''}
@@ -259,9 +262,11 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
                 <StringSelect
                   inputItem={relation}
                   items={sqlRelations}
-                  displayItem={(r: string): string => r || 'select relation'}
-                  onChange={(relation: string): void => {
-                    filters[index].relation = relation;
+                  displayItem={(rel: string): string =>
+                    rel || 'select relation'
+                  }
+                  onChange={(rel: string): void => {
+                    filters[index].relation = rel;
                     setFilters([...filters]);
                   }}
                 />

@@ -158,13 +158,37 @@ body {
   display: none;
 }
 #input-groups {
-  margin-right: calc(#{$window-padding} / 2);
   padding: $window-padding;
   min-height: 20%;
   overflow-x: scroll;
 
   & > *:not(:last-child) {
     margin-bottom: calc(#{$window-padding} / 2);
+  }
+
+  .delete-input-group {
+    text-align: right;
+    margin: 0%;
+    padding: 0%;
+  }
+
+  .add-input-buttons {
+    .bp3-button {
+      margin-left: 10px;
+    }
+  }
+
+  .divider-conditions {
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+
+    .divider-conditions-before {
+      flex-grow: 1;
+    }
+    .divider-conditions-after {
+      flex-grow: 10;
+    }
   }
 
   .stacked-tags {
@@ -184,11 +208,13 @@ body {
     display: flex;
   }
 
-  #input-column-merging-script {
-    border-left: 1px solid $gray4;
+  #input-group-merging-script {
     padding: calc(#{$window-padding} / 2);
     margin-left: calc(#{$window-padding} / 2);
-    display: flex;
+
+    .stacked-tags {
+      width: fit-content;
+    }
   }
 
   .input-cards {
@@ -305,11 +331,19 @@ body {
     flex-direction: row;
     font-size: 14px;
 
-    .card-tag {
+    .card-tag,
+    .card-tag-dynamic,
+    .card-tag-condition {
       background-color: $gray1;
       color: $light-gray5;
       padding: 2px 8px;
       border-radius: 3px;
+    }
+    .card-tag-dynamic {
+      background-color: $blue1;
+    }
+    .card-tag-condition {
+      background-color: $gold1;
     }
 
     .card-credentials-missing {

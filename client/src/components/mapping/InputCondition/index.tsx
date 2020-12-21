@@ -112,7 +112,7 @@ const InputCondition = ({ condition }: Props) => {
         <Card elevation={Elevation.ONE}>
           <div className="card-absolute">
             <div className="card-flex">
-              <div className="card-tag">Condition</div>
+              <div className="card-tag-condition">Condition</div>
             </div>
           </div>
           <div className="conditions-form">
@@ -198,28 +198,23 @@ const InputCondition = ({ condition }: Props) => {
             </div>
             {!unaryRelations.includes(condition.relation) && (
               <div className="conditions-form-value">
-                <div className="stacked-tags">
-                  <Tag minimal={true}>VALUE</Tag>
-                  <input
-                    className="text-input"
-                    value={conditionValue}
-                    type="text"
-                    placeholder="value..."
-                    onChange={(
-                      e: React.ChangeEvent<HTMLInputElement>
-                    ): void => {
-                      setConditionValue(e.target.value);
-                    }}
-                    onBlur={(e: React.ChangeEvent<HTMLInputElement>): void => {
-                      updateCondition({
-                        variables: {
-                          conditionId: condition.id,
-                          value: e.target.value
-                        }
-                      });
-                    }}
-                  />
-                </div>
+                <input
+                  className="text-input"
+                  value={conditionValue}
+                  type="text"
+                  placeholder="value..."
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
+                    setConditionValue(e.target.value);
+                  }}
+                  onBlur={(e: React.ChangeEvent<HTMLInputElement>): void => {
+                    updateCondition({
+                      variables: {
+                        conditionId: condition.id,
+                        value: e.target.value
+                      }
+                    });
+                  }}
+                />
               </div>
             )}
             <div className="conditions-form-condition-select">
@@ -244,7 +239,7 @@ const InputCondition = ({ condition }: Props) => {
         </Card>
         <ButtonGroup vertical={true}>
           <Button
-            icon={'trash'}
+            icon={'cross'}
             loading={loadDelete}
             minimal={true}
             onClick={() => {

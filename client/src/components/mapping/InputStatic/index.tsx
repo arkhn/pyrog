@@ -131,7 +131,7 @@ const InputStatic = ({ input }: Props): React.ReactElement => {
           </div>
         </Card>
         <Button
-          icon={'trash'}
+          icon={'cross'}
           loading={loadDelInput}
           minimal={true}
           onClick={onClickDelete}

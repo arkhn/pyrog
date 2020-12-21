@@ -92,7 +92,7 @@ const InputColumn = ({ input }: Props) => {
         <Card elevation={Elevation.ONE}>
           <div className="card-absolute">
             <div className="card-flex">
-              <div className="card-tag">Dynamic</div>
+              <div className="card-tag-dynamic">Dynamic</div>
               {!source.credential && (
                 <div className="card-credentials-missing">
                   Database credentials missing
@@ -224,7 +224,7 @@ const InputColumn = ({ input }: Props) => {
           }}
         />
         <Button
-          icon={'trash'}
+          icon={'cross'}
           loading={loadDelInput}
           minimal={true}
           onClick={onClickDelete}
