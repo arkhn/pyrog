@@ -91,14 +91,6 @@ const TableViewer = ({ source }: Props) => {
   }, [table, resource]);
 
   React.useEffect(() => {
-    setFields(['A', 'B']);
-    setRows([
-      [1, 2, 3],
-      [4, 5, 6]
-    ]);
-  }, []);
-
-  React.useEffect(() => {
     if (resource && table) {
       setLoadingTable(true);
       axios
