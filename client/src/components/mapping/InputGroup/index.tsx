@@ -187,7 +187,7 @@ const InputGroup = ({ inputGroup, key }: Props) => {
           )}
         </div>
       </div>
-      <div>
+      <div className="add-input-buttons">
         <Button
           icon={'add'}
           text={'Condition'}

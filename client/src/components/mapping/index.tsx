@@ -1,4 +1,5 @@
 import React from 'react';
+import { Tab, Tabs, TabId } from '@blueprintjs/core';
 import { loader } from 'graphql.macro';
 import { useQuery } from '@apollo/react-hooks';
 import { useApolloClient } from 'react-apollo';
@@ -32,6 +33,8 @@ const MappingView = () => {
 
   const path = attribute?.path;
   const attributeId = (path && attributesForResource[path]?.id) || null;
+
+  const [selectedTabId, setSelectedTabId] = React.useState('rules' as TabId);
 
   const { data: dataAttribute } = useQuery(qInputsForAttribute, {
     variables: {
@@ -166,13 +169,33 @@ const MappingView = () => {
             <FhirMappingPanel />
           </div>
           <div id="exploration-panel">
-            {attribute && renderExistingRules()}
-            {source.credential && (
-              <div id="tableViewer">
-                <TableViewer source={source} />
-              </div>
+            {attribute ? (
+              <Tabs
+                onChange={(tabId: TabId) => {
+                  setSelectedTabId(tabId);
+                }}
+                selectedTabId={selectedTabId}
+              >
+                <Tab id="rules" panel={renderExistingRules()} title="Rules" />
+                <Tab
+                  id="exploration"
+                  disabled={!source.credential}
+                  panel={
+                    <div id="tableViewer">
+                      <TableViewer source={source} />
+                    </div>
+                  }
+                  title="Exploration"
+                />
+                <Tab id="comments" panel={<Comments />} title="Comments" />
+              </Tabs>
+            ) : (
+              source.credential && (
+                <div id="tableViewer">
+                  <TableViewer source={source} />
+                </div>
+              )
             )}
-            <div>{attribute && <Comments />}</div>
           </div>
         </div>
       </div>
