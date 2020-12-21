@@ -7,7 +7,7 @@ datasource db {
   url      = env("POSTGRES_URL")
 }
 
-/// 
+///
 model Template {
   id        String   @id @default(cuid())
   name      String   @unique
@@ -32,19 +32,30 @@ model Source {
 }
 
 model Credential {
-  database  String
-  host      String
   id        String       @id @default(cuid())
+  host      String
+  port      String
+  database  String
   login     String
   password  String
-  port      String
-  sourceId  String       @unique @map("source")
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
+  owners    Owner[]
   model     DatabaseType
-  owner     String       @default("")
-  schema    String?
+  // Parent
+  sourceId  String       @unique @map("source")
   source    Source       @relation(fields: [sourceId], references: [id])
+  updatedAt DateTime     @updatedAt
+  createdAt DateTime     @default(now())
+}
+
+model Owner {
+  id           String     @id @default(cuid())
+  name         String
+  schema       Json?
+  credentialId String     @map("credential")
+  credential   Credential @relation(fields: [credentialId], references: [id])
+  Column       Column[]
+
+  @@unique([name, credentialId], name: "Owner_name_credential_unique_constraint")
 }
 
 model Resource {
@@ -110,7 +121,6 @@ model InputGroup {
 
 model Input {
   id           String      @id @default(cuid())
-  sqlValueId   String?     @unique @map("sqlValue")
   createdAt    DateTime    @default(now())
   script       String?
   staticValue  String?
@@ -118,20 +128,26 @@ model Input {
   conceptMapId String?
   inputGroupId String?
   inputGroup   InputGroup? @relation(fields: [inputGroupId], references: [id])
-  sqlValue     Column?     @relation(fields: [sqlValueId], references: [id])
+  sqlValue     Column?
 }
 
 model Column {
-  id        String     @id @default(cuid())
-  joinId    String?    @map("join")
+  id        String   @id @default(cuid())
+  joinId    String?  @map("join")
   column    String?
-  createdAt DateTime   @default(now())
+  createdAt DateTime @default(now())
   table     String?
-  updatedAt DateTime   @updatedAt
+  updatedAt DateTime @updatedAt
+
+  inputId String @unique @map("input")
+  input   Input  @relation(fields: [inputId], references: [id])
+
+  ownerId String @map("owner")
+  owner   Owner  @relation(fields: [ownerId], references: [id])
+
   join      Join?      @relation("JoinedColumns", fields: [joinId], references: [id])
   condition Condition?
   filter    Filter?
-  input     Input?
   joins     Join[]     @relation("ColumnJoins")
 }
 
