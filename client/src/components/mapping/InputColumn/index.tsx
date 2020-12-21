@@ -118,19 +118,19 @@ const InputColumn = ({ input }: Props) => {
                   }
                 });
               }}
-              joinChangeCallback={(joinId: string, newjoin: Join): void => {
+              joinChangeCallback={(joinId: string, newJoin: Join): void => {
                 updateJoin({
                   variables: {
                     joinId,
-                    data: newjoin
+                    data: newJoin
                   }
                 });
               }}
-              addJoinCallback={(newjoin: Join): void => {
+              addJoinCallback={(newJoin: Join): void => {
                 addJoin({
                   variables: {
                     columnId: input.sqlValue.id,
-                    join: newjoin
+                    join: newJoin
                   }
                 });
               }}
@@ -159,7 +159,7 @@ const InputColumn = ({ input }: Props) => {
               <div className="stacked-tags">
                 <Tag minimal={true}>SCRIPT</Tag>
                 <ScriptSelect
-                  selectedScript={input.script || ''}
+                  selectedScript={input.script}
                   onChange={(script: string) => {
                     updateInput({
                       variables: {

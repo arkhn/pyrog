@@ -88,7 +88,8 @@ export const updateInput: FieldResolver<'Mutation', 'updateInput'> = async (
     include: { sqlValue: { include: { joins: true } } },
   })
 
-  if (!input) throw new Error('')
+  if (!input)
+    throw new Error('Could not find the Input to apply updateInput to.')
 
   if (input.sqlValue && (data.table || data.column)) {
     await ctx.prisma.column.upsert({

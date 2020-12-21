@@ -57,7 +57,6 @@ const ConditionSelect = ({
       filterable={filterable}
       loading={loading}
       icon={icon}
-      inputItem={{} as Condition}
       intent={intent}
       items={items}
       onChange={onChange}

@@ -149,19 +149,34 @@ export const createInputGroup: FieldResolver<
 export const deleteInputGroup: FieldResolver<
   'Mutation',
   'deleteInputGroup'
-> = async (_parent, { attributeId, inputGroupId }, ctx) =>
-  ctx.prisma.attribute.update({
+> = async (_parent, { attributeId, inputGroupId }, ctx) => {
+  // Delete joins of the associated inputs
+  ctx.prisma.join.deleteMany({
+    where: { column: { input: { inputGroupId } } },
+  })
+  // Delete columns of the associated input joins
+  ctx.prisma.column.deleteMany({
+    where: { join: { column: { input: { inputGroupId } } } },
+  })
+  // Delete associated inputs
+  ctx.prisma.input.deleteMany({
+    where: { inputGroupId },
+  })
+  // Delete associated inputs
+  ctx.prisma.condition.deleteMany({
+    where: { inputGroupId },
+  })
+  // Delete associated conditions
+  ctx.prisma.condition.deleteMany({
+    where: { inputGroupId },
+  })
+
+  return ctx.prisma.attribute.update({
     where: { id: attributeId },
     data: {
       inputGroups: {
-        update: {
-          where: { id: inputGroupId },
-          data: {
-            conditions: { deleteMany: {} },
-            inputs: { deleteMany: {} },
-          },
-        },
         delete: { id: inputGroupId },
       },
     },
   })
+}

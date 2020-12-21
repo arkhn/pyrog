@@ -143,8 +143,26 @@ const MappingView = () => {
     }
   };
 
-  const renderExistingRules = () => (
+  const renderInputGroups = () => (
     <InputGroups attribute={dataAttribute?.attribute} isEmpty={!attributeId} />
+  );
+
+  const renderMappingTabs = () => (
+    <Tabs
+      onChange={(tabId: TabId) => {
+        setSelectedTabId(tabId);
+      }}
+      selectedTabId={selectedTabId}
+    >
+      <Tab id="rules" panel={renderInputGroups()} title="Rules" />
+      <Tab
+        id="exploration"
+        disabled={!source.credential}
+        panel={<TableViewer source={source} />}
+        title="Exploration"
+      />
+      <Tab id="comments" panel={<Comments />} title="Comments" />
+    </Tabs>
   );
 
   if (!source?.credential?.schema) {
@@ -169,25 +187,9 @@ const MappingView = () => {
             <FhirMappingPanel />
           </div>
           <div id="exploration-panel">
-            {attribute ? (
-              <Tabs
-                onChange={(tabId: TabId) => {
-                  setSelectedTabId(tabId);
-                }}
-                selectedTabId={selectedTabId}
-              >
-                <Tab id="rules" panel={renderExistingRules()} title="Rules" />
-                <Tab
-                  id="exploration"
-                  disabled={!source.credential}
-                  panel={<TableViewer source={source} />}
-                  title="Exploration"
-                />
-                <Tab id="comments" panel={<Comments />} title="Comments" />
-              </Tabs>
-            ) : (
-              source.credential && <TableViewer source={source} />
-            )}
+            {attribute
+              ? renderMappingTabs()
+              : source.credential && <TableViewer source={source} />}
           </div>
         </div>
       </div>

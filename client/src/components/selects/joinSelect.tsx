@@ -36,26 +36,26 @@ const JoinSelect = ({ join, updateJoin }: Props): React.ReactElement => {
   return (
     <div className="join-columns">
       <ColumnSelect
-        tableChangeCallback={(e: string) => {
-          setSourceTable(e);
-          updateJoin(e, '', targetTable, targetColumn);
+        tableChangeCallback={(t: string) => {
+          setSourceTable(t);
+          updateJoin(t, '', targetTable, targetColumn);
         }}
-        columnChangeCallback={(e: string) => {
-          setSourceColumn(e);
-          updateJoin(sourceTable, e, targetTable, targetColumn);
+        columnChangeCallback={(c: string) => {
+          setSourceColumn(c);
+          updateJoin(sourceTable, c, targetTable, targetColumn);
         }}
         initialTable={sourceTable}
         initialColumn={sourceColumn}
         sourceSchema={source.credential.schema as ISourceSchema}
       />
       <ColumnSelect
-        tableChangeCallback={(e: string) => {
-          setTargetTable(e);
-          updateJoin(sourceTable, sourceColumn, e, '');
+        tableChangeCallback={(t: string) => {
+          setTargetTable(t);
+          updateJoin(sourceTable, sourceColumn, t, '');
         }}
-        columnChangeCallback={(e: string) => {
-          setTargetColumn(e);
-          updateJoin(sourceTable, sourceColumn, targetTable, e);
+        columnChangeCallback={(c: string) => {
+          setTargetColumn(c);
+          updateJoin(sourceTable, sourceColumn, targetTable, c);
         }}
         initialTable={targetTable}
         initialColumn={targetColumn}

@@ -112,11 +112,9 @@ const ColumnSelect = ({
                   ]
                 };
 
-                if (addJoinCallback) {
-                  addJoinCallback(emptyJoin);
-                } else if (allJoinsChangeCallback) {
+                addJoinCallback && addJoinCallback(emptyJoin);
+                allJoinsChangeCallback &&
                   allJoinsChangeCallback([...joins, emptyJoin]);
-                }
               }}
             />
           )}
@@ -130,12 +128,8 @@ const ColumnSelect = ({
                 icon="trash"
                 onClick={() => {
                   joins.splice(index, 1);
-
-                  if (deleteJoinCallback) {
-                    deleteJoinCallback(join.id);
-                  } else if (allJoinsChangeCallback) {
-                    allJoinsChangeCallback(joins);
-                  }
+                  deleteJoinCallback && deleteJoinCallback(join.id);
+                  allJoinsChangeCallback && allJoinsChangeCallback(joins);
                 }}
               />
               <JoinSelect
@@ -154,11 +148,8 @@ const ColumnSelect = ({
                   };
                   joins[index] = newJoin;
 
-                  if (joinChangeCallback) {
-                    joinChangeCallback(join.id, newJoin);
-                  } else if (allJoinsChangeCallback) {
-                    allJoinsChangeCallback(joins);
-                  }
+                  joinChangeCallback && joinChangeCallback(join.id, newJoin);
+                  allJoinsChangeCallback && allJoinsChangeCallback(joins);
                 }}
               />
             </ControlGroup>

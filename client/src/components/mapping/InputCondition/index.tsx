@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, ButtonGroup, Card, Elevation } from '@blueprintjs/core';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useSelector } from 'react-redux';
@@ -51,7 +51,7 @@ const InputCondition = ({ condition }: Props) => {
   );
   const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
 
-  const [conditionValue, setConditionValue] = useState(condition.value || '');
+  const [conditionValue, setConditionValue] = useState(condition.value);
 
   const onError = onApolloError(toaster);
   const [updateCondition] = useMutation(mUpdateCondition, {
@@ -81,28 +81,21 @@ const InputCondition = ({ condition }: Props) => {
   const allConditions: Condition[] = (
     conditionsData?.conditionsForResource || []
   ).filter(
-    (condition: Condition) =>
-      condition.action &&
-      condition.sqlValue.table &&
-      condition.sqlValue.column &&
-      condition.relation
+    (c: Condition) =>
+      c.action && c.sqlValue.table && c.sqlValue.column && c.relation
   );
   // Remove duplicates
   const resourceConditions: Condition[] = allConditions.filter(
-    (condition, index) =>
-      allConditions.map(conditionToName).indexOf(conditionToName(condition)) ===
+    (cond, index) =>
+      allConditions.map(conditionToName).indexOf(conditionToName(cond)) ===
       index
   );
 
-  useEffect(() => {
-    setConditionValue(condition.value);
-  }, [condition.value]);
-
-  const onClickDelete = (condition: Condition) =>
+  const onClickDelete = (cond: Condition) =>
     deleteCondition({
       variables: {
-        inputGroupId: condition.inputGroupId,
-        conditionId: condition.id
+        inputGroupId: cond.inputGroupId,
+        conditionId: cond.id
       }
     });
 
