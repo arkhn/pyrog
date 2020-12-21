@@ -84,7 +84,13 @@ export const exportMapping = async (
     where: { source: { id: source.id } },
     include: {
       source: true,
-      filters: { include: { sqlColumn: true } },
+      filters: {
+        include: {
+          sqlColumn: {
+            include: { joins: { include: { tables: true } } },
+          },
+        },
+      },
       attributes: {
         include: {
           ...(includeComments && {
@@ -101,7 +107,9 @@ export const exportMapping = async (
               },
               conditions: {
                 include: {
-                  sqlValue: true,
+                  sqlValue: {
+                    include: { joins: { include: { tables: true } } },
+                  },
                 },
               },
             },
