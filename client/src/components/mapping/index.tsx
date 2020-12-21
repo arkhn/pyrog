@@ -153,6 +153,7 @@ const MappingView = () => {
         setSelectedTabId(tabId);
       }}
       selectedTabId={selectedTabId}
+      large
     >
       <Tab id="rules" panel={renderInputGroups()} title="Rules" />
       <Tab
