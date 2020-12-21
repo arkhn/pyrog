@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, Elevation, Spinner } from '@blueprintjs/core';
+import { Button, Spinner } from '@blueprintjs/core';
 import { useMutation } from '@apollo/react-hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { loader } from 'graphql.macro';

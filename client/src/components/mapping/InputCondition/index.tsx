@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, ButtonGroup, Card, Elevation, Tag } from '@blueprintjs/core';
+import { Button, ButtonGroup, Card, Elevation } from '@blueprintjs/core';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useSelector } from 'react-redux';
 import { loader } from 'graphql.macro';
