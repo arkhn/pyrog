@@ -1,11 +1,6 @@
 import axios from 'axios'
 import { objectType, FieldResolver } from '@nexus/schema'
-import {
-  DatabaseType,
-  Credential as Credz,
-  OwnerWhereUniqueInput,
-  OwnerCreateWithoutCredentialInput,
-} from '@prisma/client'
+import { DatabaseType, Credential as Credz } from '@prisma/client'
 
 import { PAGAI_URL } from '../constants'
 import { encrypt, decrypt } from 'utils'
@@ -38,8 +33,12 @@ export const Credential = objectType({
 const loadDatabaseSchema = async (
   ctx: Context,
   credentials: Partial<Credz>,
-  owner: { name: string; schema?: string | null } | null,
-): Promise<{ name: string; schema?: string | null } | null> => {
+  owner: { id?: string | null; name?: string | null; schema?: string | null },
+): Promise<{
+  schema: string
+  name?: string | null
+  id?: string | null
+} | null> => {
   const { model, host, port, database, login, password } = credentials
   if (!owner) return null
   try {
@@ -99,13 +98,34 @@ export const upsertCredential: FieldResolver<
 
   let credz: Credz
   if (source.credential) {
+    await Promise.all(
+      _owners.map(_o =>
+        ctx.prisma.owner.upsert({
+          where: {
+            Owner_name_credential_unique_constraint: {
+              credentialId: source.credential?.id as string,
+              name: _o?.name as string,
+            },
+          },
+          update: {
+            schema: _o?.schema,
+          },
+          create: {
+            credential: {
+              connect: {
+                id: source.credential?.id,
+              },
+            },
+            name: _o?.name as string,
+            schema: _o?.schema,
+          },
+        }),
+      ),
+    )
     credz = await ctx.prisma.credential.update({
       where: { id: source.credential.id },
       data: {
         ...input,
-        owners: {
-          set: _owners as OwnerWhereUniqueInput[],
-        },
       },
     })
   } else {
@@ -113,11 +133,23 @@ export const upsertCredential: FieldResolver<
       data: {
         ...(input as Credz),
         source: { connect: { id: sourceId } },
-        owners: {
-          create: _owners as OwnerCreateWithoutCredentialInput[],
-        },
       },
     })
+    await Promise.all(
+      _owners.map(_o =>
+        ctx.prisma.owner.create({
+          data: {
+            name: _o?.name as string,
+            schema: _o?.schema,
+            credential: {
+              connect: {
+                id: credz.id,
+              },
+            },
+          },
+        }),
+      ),
+    )
   }
   return credz
 }

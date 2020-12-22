@@ -28,7 +28,8 @@ export const FilterInput = inputObjectType({
 export const OwnerInput = inputObjectType({
   name: 'OwnerInput',
   definition(t) {
-    t.field('name', { type: 'String', required: true })
+    t.field('id', { type: 'String' })
+    t.field('name', { type: 'String' })
     t.field('schema', { type: 'String' })
   },
 })
@@ -55,6 +56,7 @@ export const ColumnInput = inputObjectType({
 export const ColumnInputWithoutJoins = inputObjectType({
   name: 'ColumnInputWithoutJoins',
   definition(t) {
+    t.field('owner', { type: 'OwnerInput' })
     t.field('table', { type: 'String' })
     t.field('column', { type: 'String' })
   },

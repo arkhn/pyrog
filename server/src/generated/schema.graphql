@@ -118,6 +118,7 @@ input ColumnInput {
 
 input ColumnInputWithoutJoins {
   column: String
+  owner: OwnerInput
   table: String
 }
 
@@ -489,7 +490,8 @@ input OwnerFilter {
 }
 
 input OwnerInput {
-  name: String!
+  id: String
+  name: String
   schema: String
 }
 

@@ -93,6 +93,7 @@ export interface NexusGenInputs {
   }
   ColumnInputWithoutJoins: { // input type
     column?: string | null; // String
+    owner?: NexusGenInputs['OwnerInput'] | null; // OwnerInput
     table?: string | null; // String
   }
   ColumnWhereInput: { // input type
@@ -294,7 +295,8 @@ export interface NexusGenInputs {
     some?: NexusGenInputs['OwnerWhereInput'] | null; // OwnerWhereInput
   }
   OwnerInput: { // input type
-    name: string; // String!
+    id?: string | null; // String
+    name?: string | null; // String
     schema?: string | null; // String
   }
   OwnerWhereInput: { // input type
