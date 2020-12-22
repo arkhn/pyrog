@@ -1,5 +1,7 @@
-mutation deleteInput($inputId: ID!) {
-  deleteInput(inputId: $inputId) {
-    id
+#import "../fragments/entireInputGroup.graphql"
+
+mutation deleteInput($inputGroupId: ID!, $inputId: ID!) {
+  deleteInput(inputGroupId: $inputGroupId, inputId: $inputId) {
+    ...entireInputGroup
   }
 }

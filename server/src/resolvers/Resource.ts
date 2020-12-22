@@ -141,13 +141,18 @@ export const updateResource: FieldResolver<
     const resource = await ctx.prisma.resource.findOne({
       where: { id: resourceId },
       include: {
-        filters: true,
+        filters: { include: { sqlColumn: { include: { joins: true } } } },
       },
     })
     await Promise.all(
-      resource!.filters.map(f =>
-        ctx.prisma.filter.delete({ where: { id: f.id } }),
-      ),
+      resource!.filters.map(async f => {
+        await Promise.all(
+          f.sqlColumn.joins.map(j =>
+            ctx.prisma.join.delete({ where: { id: j.id } }),
+          ),
+        )
+        await ctx.prisma.filter.delete({ where: { id: f.id } })
+      }),
     )
     const newFilters = await Promise.all(
       filters.map(f =>
@@ -157,6 +162,22 @@ export const updateResource: FieldResolver<
               create: {
                 table: f.sqlColumn.table,
                 column: f.sqlColumn.column,
+                joins: {
+                  create: f.sqlColumn?.joins?.map(j => ({
+                    tables: {
+                      create: [
+                        {
+                          table: (j.tables && j.tables[0].table) || '',
+                          column: (j.tables && j.tables[0].column) || '',
+                        },
+                        {
+                          table: (j.tables && j.tables[1].table) || '',
+                          column: (j.tables && j.tables[1].column) || '',
+                        },
+                      ],
+                    },
+                  })),
+                },
               },
             },
             relation: f.relation,

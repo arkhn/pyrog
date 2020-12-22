@@ -1,5 +1,4 @@
 import {
-  Button,
   Checkbox,
   ControlGroup,
   InputGroup,
@@ -16,10 +15,10 @@ import SourceSelect from 'components/selects/sourceSelect';
 import ResourceSelect from 'components/selects/resourceSelect';
 
 interface Props {
+  value: string;
   attribute: Attribute;
   sources: Source[];
-  creatingStaticInput: boolean;
-  addStaticValue: (value: string) => Promise<void>;
+  onUpdate: (value: string) => Promise<void>;
 }
 
 interface Source {
@@ -32,16 +31,16 @@ interface Source {
 }
 
 const IdentifierSystemInput = ({
+  value,
   attribute,
   sources,
-  creatingStaticInput,
-  addStaticValue
+  onUpdate
 }: Props): React.ReactElement => {
   const { source, resource } = useSelector(
     (state: IReduxStore) => state.selectedNode
   );
 
-  const [staticValue, setStaticValue] = useState('');
+  const [staticValue, setStaticValue] = useState(value);
   const [customSystem, setCustomSystem] = useState(false);
   const [customKeyName, setCustomKeyName] = useState('');
   const [selectedSource, setSelectedSource] = useState(
@@ -50,6 +49,17 @@ const IdentifierSystemInput = ({
   const [selectedResource, setSelectedResource] = useState(
     undefined as Resource | undefined
   );
+
+  const updateCustomSystem = () => {
+    onUpdate(
+      `http://terminology.arkhn.org/${selectedResource?.logicalReference ||
+        ''}${customKeyName ? '/' + customKeyName : ''}`
+    );
+  };
+
+  useEffect(() => {
+    setStaticValue(value);
+  }, [value]);
 
   useEffect(() => {
     if (attribute.parent?.isRootIdentifier) {
@@ -61,24 +71,19 @@ const IdentifierSystemInput = ({
     }
   }, [attribute, source, resource]);
 
+  useEffect(() => {
+    if (customSystem) {
+      updateCustomSystem();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [customSystem, selectedResource]);
+
   const handleSourceSelect = (source: Source): void => {
     setSelectedSource(source);
     setSelectedResource(undefined);
   };
   const handleResourceSelect = (resource: Resource): void => {
     setSelectedResource(resource);
-  };
-
-  const onClickAddButton = () => {
-    if (customSystem) {
-      addStaticValue(
-        `http://terminology.arkhn.org/${selectedResource!.logicalReference}${
-          customKeyName ? '/' + customKeyName : ''
-        }`
-      );
-    } else {
-      addStaticValue(staticValue);
-    }
   };
 
   const customSystemTootip = (
@@ -88,14 +93,14 @@ const IdentifierSystemInput = ({
       "http://hl7.org/fhir/sid/us-ssn" for United States Social Security Number
       (SSN) identifier values. Sometimes, the identifiers are not a recognized
       standard so we need to use a custom system. Pyrog's custom systems have
-      the form "http://terminology.arkhn.org/sourceId/resourceId".
+      the form "http://terminology.arkhn.org/reference-id/custom-key".
     </p>
   );
 
   return (
     <ControlGroup>
       {customSystem ? (
-        <>
+        <React.Fragment>
           <SourceSelect
             items={sources}
             onChange={handleSourceSelect}
@@ -111,14 +116,15 @@ const IdentifierSystemInput = ({
             }
           />
           <InputGroup
+            placeholder="Custom key name"
+            value={customKeyName}
             onChange={(event: React.FormEvent<HTMLElement>): void => {
               const target = event.target as HTMLInputElement;
               setCustomKeyName(target.value);
             }}
-            placeholder="Custom key name"
-            value={customKeyName}
+            onBlur={updateCustomSystem}
           />
-        </>
+        </React.Fragment>
       ) : (
         <InputGroup
           onChange={(event: React.FormEvent<HTMLElement>): void => {
@@ -129,15 +135,6 @@ const IdentifierSystemInput = ({
           value={staticValue}
         />
       )}
-      <Button
-        disabled={
-          (customSystem && selectedResource === undefined) ||
-          (!customSystem && staticValue.length === 0)
-        }
-        icon={'add'}
-        loading={creatingStaticInput}
-        onClick={onClickAddButton}
-      />
       <Checkbox
         className="custom-checkbox"
         checked={customSystem}

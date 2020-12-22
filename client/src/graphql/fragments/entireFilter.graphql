@@ -2,6 +2,12 @@ fragment entireFilter on Filter {
   sqlColumn {
     table
     column
+    joins {
+      tables {
+        table
+        column
+      }
+    }
   }
   relation
   value

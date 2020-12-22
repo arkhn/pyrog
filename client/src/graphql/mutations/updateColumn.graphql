@@ -1,0 +1,7 @@
+mutation updateColumn($columnId: ID!, $data: ColumnInputWithoutJoins!) {
+  updateColumn(columnId: $columnId, data: $data) {
+    id
+    table
+    column
+  }
+}

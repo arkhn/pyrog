@@ -33,7 +33,7 @@ interface ISelectProps<T> {
   items: T[];
   itemDisabled?: (item: T, index: number) => boolean;
   icon?: IconName;
-  inputItem: T;
+  inputItem?: T;
   intent?: Intent;
   loading?: boolean;
   onChange: Function;

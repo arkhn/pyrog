@@ -2,7 +2,7 @@
 
 mutation updateJoin(
   $joinId: ID!,
-  $data: JoinInput!,
+  $data: JoinTablesInput!,
 ) {
   updateJoin(joinId: $joinId, data: $data) {
     ...entireJoin

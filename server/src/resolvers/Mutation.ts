@@ -1,15 +1,27 @@
 import { arg, idArg, mutationType, stringArg, booleanArg } from '@nexus/schema'
 
-import { createAttribute, deleteAttribute, deleteAttributes } from './Attribute'
+import {
+  createAttribute,
+  createInputGroup,
+  deleteAttribute,
+  deleteAttributes,
+  deleteInputGroup,
+} from './Attribute'
 import { createAccessControl, deleteAccessControl } from './AccessControl'
-import { addJoinToColumn } from './Column'
+import { addJoinToColumn, updateColumn } from './Column'
 import { createComment } from './Comment'
-import { deleteCondition, updateCondition } from './Condition'
+import { updateCondition } from './Condition'
 import { deleteCredential, upsertCredential } from './Credential'
-import { createInput, deleteInput, updateInput } from './Input'
+import {
+  createStaticInput,
+  createSqlInput,
+  updateInput,
+  updateStaticInput,
+} from './Input'
 import {
   addConditionToInputGroup,
-  createInputGroup,
+  deleteInput,
+  deleteCondition,
   updateInputGroup,
 } from './InputGroup'
 import { updateJoin, deleteJoin } from './Join'
@@ -20,10 +32,6 @@ import { updateRole } from './User'
 import cache from 'cache'
 
 export const Mutation = mutationType({
-  /*
-   * AUTH
-   */
-
   definition(t) {
     /*
      * TEMPLATE
@@ -170,17 +178,26 @@ export const Mutation = mutationType({
       resolve: deleteAttributes,
     })
 
-    /*
-     * INPUT GROUP
-     */
-
     t.field('createInputGroup', {
-      type: 'InputGroup',
+      type: 'Attribute',
       args: {
         attributeId: idArg({ required: true }),
       },
       resolve: createInputGroup,
     })
+
+    t.field('deleteInputGroup', {
+      type: 'Attribute',
+      args: {
+        attributeId: idArg({ required: true }),
+        inputGroupId: idArg({ required: true }),
+      },
+      resolve: deleteInputGroup,
+    })
+
+    /*
+     * INPUT GROUP
+     */
 
     t.field('updateInputGroup', {
       type: 'InputGroup',
@@ -195,13 +212,32 @@ export const Mutation = mutationType({
       type: 'InputGroup',
       args: {
         inputGroupId: idArg({ required: true }),
-        action: stringArg(),
-        table: stringArg(),
-        column: stringArg(),
+        action: arg({ type: 'ConditionAction' }),
+        columnInput: arg({
+          type: 'ColumnInput',
+        }),
         relation: arg({ type: 'ConditionRelation' }),
         value: stringArg(),
       },
       resolve: addConditionToInputGroup,
+    })
+
+    t.field('deleteInput', {
+      type: 'InputGroup',
+      args: {
+        inputGroupId: idArg({ required: true }),
+        inputId: idArg({ required: true }),
+      },
+      resolve: deleteInput,
+    })
+
+    t.field('deleteCondition', {
+      type: 'InputGroup',
+      args: {
+        inputGroupId: idArg({ required: true }),
+        conditionId: idArg({ required: true }),
+      },
+      resolve: deleteCondition,
     })
 
     /*
@@ -221,29 +257,30 @@ export const Mutation = mutationType({
       resolve: updateCondition,
     })
 
-    t.field('deleteCondition', {
-      type: 'Condition',
-      args: {
-        conditionId: idArg({ required: true }),
-      },
-      resolve: deleteCondition,
-    })
-
     /*
      * INPUT
      */
 
-    t.field('createInput', {
+    t.field('createSqlInput', {
       type: 'Input',
       args: {
         inputGroupId: idArg({ required: true }),
         script: stringArg(),
-        static: stringArg(),
+        conceptMapId: stringArg(),
         sql: arg({
           type: 'ColumnInput',
         }),
       },
-      resolve: createInput,
+      resolve: createSqlInput,
+    })
+
+    t.field('createStaticInput', {
+      type: 'Input',
+      args: {
+        inputGroupId: idArg({ required: true }),
+        value: stringArg(),
+      },
+      resolve: createStaticInput,
     })
 
     t.field('updateInput', {
@@ -255,23 +292,33 @@ export const Mutation = mutationType({
       resolve: updateInput,
     })
 
-    t.field('deleteInput', {
+    t.field('updateStaticInput', {
       type: 'Input',
       args: {
         inputId: idArg({ required: true }),
+        value: stringArg(),
       },
-      resolve: deleteInput,
+      resolve: updateStaticInput,
     })
 
     /*
      * COLUMN
      */
 
+    t.field('updateColumn', {
+      type: 'Column',
+      args: {
+        columnId: idArg({ required: true }),
+        data: arg({ type: 'ColumnInputWithoutJoins', required: true }),
+      },
+      resolve: updateColumn,
+    })
+
     t.field('addJoinToColumn', {
       type: 'Column',
       args: {
         columnId: idArg({ required: true }),
-        join: arg({ type: 'JoinInput' }),
+        join: arg({ type: 'JoinTablesInput', required: true }),
       },
       resolve: addJoinToColumn,
     })
@@ -284,7 +331,7 @@ export const Mutation = mutationType({
       type: 'Join',
       args: {
         joinId: idArg({ required: true }),
-        data: arg({ type: 'JoinInput', required: true }),
+        data: arg({ type: 'JoinTablesInput', required: true }),
       },
       resolve: updateJoin,
     })

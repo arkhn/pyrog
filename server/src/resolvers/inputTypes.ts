@@ -19,7 +19,7 @@ export const AttributeInput = inputObjectType({
 export const FilterInput = inputObjectType({
   name: 'FilterInput',
   definition(t) {
-    t.field('sqlColumn', { type: 'ColumnInputWithoutJoins', required: true })
+    t.field('sqlColumn', { type: 'ColumnInput', required: true })
     t.field('relation', { type: 'String', required: true })
     t.field('value', { type: 'String', required: true })
   },
@@ -28,6 +28,11 @@ export const FilterInput = inputObjectType({
 export const UpdateInputInput = inputObjectType({
   name: 'UpdateInputInput',
   definition(t) {
+    t.field('table', { type: 'String' })
+    t.field('column', { type: 'String' })
+    t.list.field('joins', {
+      type: 'JoinTablesInput',
+    })
     t.field('script', { type: 'String' })
     t.field('conceptMapId', { type: 'String' })
   },
@@ -39,7 +44,16 @@ export const ColumnInput = inputObjectType({
     t.field('table', { type: 'String', required: true })
     t.field('column', { type: 'String', required: true })
     t.list.field('joins', {
-      type: 'JoinInput',
+      type: 'JoinTablesInput',
+    })
+  },
+})
+
+export const JoinTablesInput = inputObjectType({
+  name: 'JoinTablesInput',
+  definition(t) {
+    t.list.field('tables', {
+      type: 'ColumnInputWithoutJoins',
     })
   },
 })

@@ -1,6 +1,7 @@
 import { idArg, queryType } from '@nexus/schema'
 
 import { getDefinition } from 'fhir'
+import { conditionsForResource } from './Condition'
 import { sources } from './Source'
 
 export const Query = queryType({
@@ -80,6 +81,15 @@ export const Query = queryType({
       nullable: true,
       resolve: async (parent, { attributeId }, ctx) =>
         ctx.prisma.attribute.findOne({ where: { id: attributeId } }),
+    })
+
+    t.list.field('conditionsForResource', {
+      type: 'Condition',
+      args: {
+        resourceId: idArg({ nullable: false }),
+      },
+      nullable: true,
+      resolve: conditionsForResource,
     })
 
     t.field('structureDefinition', {
