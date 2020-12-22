@@ -15,6 +15,16 @@ export const Column = objectType({
   },
 })
 
+export const updateColumn: FieldResolver<'Mutation', 'updateColumn'> = async (
+  _parent,
+  { columnId, data },
+  ctx,
+) =>
+  ctx.prisma.column.update({
+    where: { id: columnId },
+    data,
+  })
+
 export const addJoinToColumn: FieldResolver<
   'Mutation',
   'addJoinToColumn'
@@ -24,20 +34,12 @@ export const addJoinToColumn: FieldResolver<
       tables: {
         create: [
           {
-            table:
-              join && join.source && join.source.table ? join.source.table : '',
-            column:
-              join && join.source && join.source.column
-                ? join.source.column
-                : '',
+            table: join.tables && join.tables[0].table,
+            column: join.tables && join.tables[0].column,
           },
           {
-            table:
-              join && join.target && join.target.table ? join.target.table : '',
-            column:
-              join && join.target && join.target.column
-                ? join.target.column
-                : '',
+            table: join.tables && join.tables[1].table,
+            column: join.tables && join.tables[1].column,
           },
         ],
       },

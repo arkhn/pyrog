@@ -141,7 +141,8 @@ export const permissions = shield(
           updateCondition: rules.isSourceWriter,
           deleteCondition: rules.isSourceWriter,
 
-          createInput: rules.isSourceWriter,
+          createSqlInput: rules.isSourceWriter,
+          createStaticInput: rules.isSourceWriter,
           updateInput: rules.isSourceWriter,
           deleteInput: rules.isSourceWriter,
 

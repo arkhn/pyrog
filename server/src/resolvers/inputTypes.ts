@@ -1,4 +1,4 @@
-import { inputObjectType, nonNull } from 'nexus'
+import { inputObjectType } from 'nexus'
 
 export const UpdateResourceInput = inputObjectType({
   name: 'UpdateResourceInput',
@@ -19,7 +19,7 @@ export const AttributeInput = inputObjectType({
 export const FilterInput = inputObjectType({
   name: 'FilterInput',
   definition(t) {
-    t.nonNull.field('sqlColumn', { type: 'ColumnInputWithoutJoins' })
+    t.nonNull.field('sqlColumn', { type: 'ColumnInput' })
     t.nonNull.field('relation', { type: 'String' })
     t.nonNull.field('value', { type: 'String' })
   },
@@ -28,6 +28,11 @@ export const FilterInput = inputObjectType({
 export const UpdateInputInput = inputObjectType({
   name: 'UpdateInputInput',
   definition(t) {
+    t.field('table', { type: 'String' })
+    t.field('column', { type: 'String' })
+    t.list.field('joins', {
+      type: 'JoinTablesInput',
+    })
     t.field('script', { type: 'String' })
     t.field('conceptMapId', { type: 'String' })
   },
@@ -39,7 +44,16 @@ export const ColumnInput = inputObjectType({
     t.nonNull.field('table', { type: 'String' })
     t.nonNull.field('column', { type: 'String' })
     t.list.nonNull.field('joins', {
-      type: 'JoinInput',
+      type: 'JoinTablesInput',
+    })
+  },
+})
+
+export const JoinTablesInput = inputObjectType({
+  name: 'JoinTablesInput',
+  definition(t) {
+    t.list.field('tables', {
+      type: 'ColumnInputWithoutJoins',
     })
   },
 })

@@ -106,7 +106,7 @@ type Column {
 
 input ColumnInput {
   column: String!
-  joins: [JoinInput!]
+  joins: [JoinTablesInput!]
   table: String!
 }
 
@@ -189,6 +189,7 @@ type ConceptMap {
 type Condition {
   action: ConditionAction
   id: String!
+  inputGroupId: String!
   relation: ConditionRelation!
   sqlValue: Column
   value: String
@@ -334,7 +335,7 @@ type Filter {
 
 input FilterInput {
   relation: String!
-  sqlColumn: ColumnInputWithoutJoins!
+  sqlColumn: ColumnInput!
   value: String!
 }
 
@@ -362,6 +363,7 @@ type Input {
   createdAt: DateTime!
   id: String!
   inputGroup: InputGroup
+  inputGroupId: String
   script: String
   sqlValue: Column
   staticValue: String
@@ -370,6 +372,7 @@ type Input {
 
 type InputGroup {
   attribute: Attribute
+  attributeId: String
   conditions(after: ConditionWhereUniqueInput, before: ConditionWhereUniqueInput, first: Int, last: Int): [Condition!]!
   createdAt: DateTime!
   id: String!
@@ -445,6 +448,10 @@ input JoinListRelationFilter {
   some: JoinWhereInput
 }
 
+input JoinTablesInput {
+  tables: [ColumnInputWithoutJoins]
+}
+
 input JoinWhereInput {
   AND: [JoinWhereInput!]
   column: ColumnWhereInput
@@ -474,33 +481,37 @@ input JsonNullableFilter {
 }
 
 type Mutation {
-  addConditionToInputGroup(action: String, column: String, inputGroupId: ID!, relation: ConditionRelation, table: String, value: String): InputGroup
-  addJoinToColumn(columnId: ID!, join: JoinInput): Column
+  addConditionToInputGroup(action: ConditionAction, columnInput: ColumnInput, inputGroupId: ID!, relation: ConditionRelation, value: String): InputGroup
+  addJoinToColumn(columnId: ID!, join: JoinTablesInput!): Column
   createAccessControl(role: SourceRole!, sourceId: ID!, userEmail: String!): AccessControl
   createAttribute(data: AttributeInput, definitionId: ID!, path: String!, resourceId: ID!, sliceName: String): Attribute
   createComment(attributeId: ID!, content: String!, validation: Boolean!): Comment
-  createInput(inputGroupId: ID!, script: String, sql: ColumnInput, static: String): Input
-  createInputGroup(attributeId: ID!): InputGroup
+  createInputGroup(attributeId: ID!): Attribute
   createResource(definitionId: String!, sourceId: ID!): Resource
   createSource(mapping: String, name: String!, templateName: String!): Source
+  createSqlInput(conceptMapId: String, inputGroupId: ID!, script: String, sql: ColumnInput): Input
+  createStaticInput(inputGroupId: ID!, value: String): Input
   createTemplate(name: String!): Template
   deleteAccessControl(accessControlId: ID!): AccessControl
   deleteAttribute(attributeId: ID!): Attribute
   deleteAttributes(filter: AttributeWhereInput!): [Attribute]
-  deleteCondition(conditionId: ID!): Condition
+  deleteCondition(conditionId: ID!, inputGroupId: ID!): InputGroup
   deleteCredential(credentialId: ID!): Credential
-  deleteInput(inputId: ID!): Input
+  deleteInput(inputGroupId: ID!, inputId: ID!): InputGroup
+  deleteInputGroup(attributeId: ID, inputGroupId: ID): Attribute
   deleteJoin(joinId: ID!): Join
   deleteResource(resourceId: ID!): Resource
   deleteSource(sourceId: ID!): Source
   deleteTemplate(id: ID!): Template
   logout: User
+  updateColumn(columnId: ID!, data: ColumnInputWithoutJoins!): Column
   updateCondition(action: String, column: String, conditionId: ID!, relation: ConditionRelation, table: String, value: String): Condition
   updateInput(data: UpdateInputInput!, inputId: ID!): Input
   updateInputGroup(inputGroupId: ID!, mergingScript: String): InputGroup
-  updateJoin(data: JoinInput!, joinId: ID!): Join
+  updateJoin(data: JoinTablesInput!, joinId: ID!): Join
   updateResource(data: UpdateResourceInput!, filters: [FilterInput!], resourceId: ID!): Resource
   updateRole(newRole: Role!, userId: ID!): User
+  updateStaticInput(inputId: ID!, value: String): Input
   upsertCredential(database: String!, host: String!, login: String!, model: String!, owner: String!, password: String!, port: String!, sourceId: ID!): Credential
 }
 
@@ -604,6 +615,7 @@ input OwnerWhereInput {
 type Query {
   attribute(where: AttributeWhereUniqueInput!): Attribute
   attributes(after: AttributeWhereUniqueInput, before: AttributeWhereUniqueInput, first: Int, last: Int, where: AttributeWhereInput): [Attribute!]!
+  conditionsForResource(resourceId: ID!): [Condition]
   credential(where: CredentialWhereUniqueInput!): Credential
   me: User
   resource(where: ResourceWhereUniqueInput!): Resource
@@ -795,8 +807,11 @@ input TemplateWhereUniqueInput {
 }
 
 input UpdateInputInput {
+  column: String
   conceptMapId: String
+  joins: [JoinTablesInput]
   script: String
+  table: String
 }
 
 input UpdateResourceInput {

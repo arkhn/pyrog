@@ -1,8 +1,8 @@
 #import "../fragments/entireInput.graphql"
 #import "../fragments/entireAttribute.graphql"
 
-mutation createStaticInput($inputGroupId: ID!, $staticValue: String) {
-  createInput(inputGroupId: $inputGroupId, static: $staticValue) {
+mutation createStaticInput($inputGroupId: ID!, $value: String) {
+  createStaticInput(inputGroupId: $inputGroupId, value: $value) {
     ...entireInput
     inputGroup {
       id

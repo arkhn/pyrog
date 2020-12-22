@@ -1,16 +1,7 @@
 #import "../fragments/entireCondition.graphql"
 
 query conditionsForResource($resourceId: ID!) {
-  resource(resourceId: $resourceId) {
-    id
-    attributes {
-      id
-      inputGroups {
-        id
-        conditions {
-          ...entireCondition
-        }
-      }
-    }
+  conditionsForResource(resourceId: $resourceId) {
+    ...entireCondition
   }
 }

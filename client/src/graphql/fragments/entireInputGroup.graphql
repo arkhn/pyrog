@@ -3,6 +3,7 @@
 
 fragment entireInputGroup on InputGroup {
   id
+  attributeId
   mergingScript
   inputs {
     ...entireInput

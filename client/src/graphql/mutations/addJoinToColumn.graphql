@@ -2,7 +2,7 @@
 
 mutation addJoinToColumn(
   $columnId: ID!
-  $join: JoinInput
+  $join: JoinTablesInput!
 ) {
   addJoinToColumn(columnId: $columnId, join: $join) {
     id

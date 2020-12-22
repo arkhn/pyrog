@@ -5,6 +5,7 @@ export const InputGroup = objectType({
   name: 'InputGroup',
   definition(t) {
     t.model.id()
+    t.model.attributeId()
 
     t.model.mergingScript()
     t.model.conditions()
@@ -16,26 +17,6 @@ export const InputGroup = objectType({
     t.model.createdAt()
   },
 })
-
-export const createInputGroup: FieldResolver<
-  'Mutation',
-  'createInputGroup'
-> = async (_parent, { attributeId }, ctx) => {
-  const newGroup = await ctx.prisma.inputGroup.create({
-    data: { inputs: { create: [] } },
-  })
-
-  await ctx.prisma.attribute.update({
-    where: { id: attributeId },
-    data: {
-      inputGroups: {
-        connect: { id: newGroup.id },
-      },
-    },
-  })
-
-  return newGroup
-}
 
 export const updateInputGroup: FieldResolver<
   'Mutation',
@@ -51,7 +32,7 @@ export const updateInputGroup: FieldResolver<
 export const addConditionToInputGroup: FieldResolver<
   'Mutation',
   'addConditionToInputGroup'
-> = async (_, { inputGroupId, action, table, column, value }, ctx) => {
+> = async (_, { inputGroupId, action, columnInput, relation, value }, ctx) => {
   const inputGroup = await ctx.prisma.inputGroup.findOne({
     where: { id: inputGroupId },
   })
@@ -62,8 +43,30 @@ export const addConditionToInputGroup: FieldResolver<
     data: {
       action: action as ConditionAction,
       value,
+      relation: relation || 'EQ',
       sqlValue: {
-        create: { table, column },
+        create: {
+          table: columnInput?.table,
+          column: columnInput?.column,
+          ...(columnInput?.joins && {
+            joins: {
+              create: columnInput.joins.map(j => ({
+                tables: {
+                  create: [
+                    {
+                      table: (j.tables && j.tables[0]?.table) || '',
+                      column: (j.tables && j.tables[0]?.column) || '',
+                    },
+                    {
+                      table: (j.tables && j.tables[1]?.table) || '',
+                      column: (j.tables && j.tables[1]?.column) || '',
+                    },
+                  ],
+                },
+              })),
+            },
+          }),
+        },
       },
       inputGroup: {
         connect: {
@@ -73,4 +76,43 @@ export const addConditionToInputGroup: FieldResolver<
     },
   })
   return inputGroup
+}
+
+export const deleteInput: FieldResolver<'Mutation', 'deleteInput'> = async (
+  _parent,
+  { inputGroupId, inputId },
+  ctx,
+) => {
+  // Delete columns associated to the input to delete
+  await ctx.prisma.column.deleteMany({
+    where: { input: { id: inputId } },
+  })
+
+  return ctx.prisma.inputGroup.update({
+    where: { id: inputGroupId },
+    data: {
+      inputs: {
+        delete: { id: inputId },
+      },
+    },
+  })
+}
+
+export const deleteCondition: FieldResolver<
+  'Mutation',
+  'deleteCondition'
+> = async (_parent, { inputGroupId, conditionId }, ctx) => {
+  // Delete columns associated to the condition to delete
+  await ctx.prisma.column.deleteMany({
+    where: { condition: { id: conditionId } },
+  })
+
+  return ctx.prisma.inputGroup.update({
+    where: { id: inputGroupId },
+    data: {
+      conditions: {
+        delete: { id: conditionId },
+      },
+    },
+  })
 }

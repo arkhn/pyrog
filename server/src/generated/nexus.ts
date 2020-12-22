@@ -75,7 +75,7 @@ export interface NexusGenInputs {
   }
   ColumnInput: { // input type
     column: string; // String!
-    joins?: NexusGenInputs['JoinInput'][] | null; // [JoinInput!]
+    joins?: NexusGenInputs['JoinTablesInput'][] | null; // [JoinTablesInput!]
     table: string; // String!
   }
   ColumnInputWithoutJoins: { // input type
@@ -217,7 +217,7 @@ export interface NexusGenInputs {
   }
   FilterInput: { // input type
     relation: string; // String!
-    sqlColumn: NexusGenInputs['ColumnInputWithoutJoins']; // ColumnInputWithoutJoins!
+    sqlColumn: NexusGenInputs['ColumnInput']; // ColumnInput!
     value: string; // String!
   }
   FilterListRelationFilter: { // input type
@@ -288,6 +288,9 @@ export interface NexusGenInputs {
     every?: NexusGenInputs['JoinWhereInput'] | null; // JoinWhereInput
     none?: NexusGenInputs['JoinWhereInput'] | null; // JoinWhereInput
     some?: NexusGenInputs['JoinWhereInput'] | null; // JoinWhereInput
+  }
+  JoinTablesInput: { // input type
+    tables?: Array<NexusGenInputs['ColumnInputWithoutJoins'] | null> | null; // [ColumnInputWithoutJoins]
   }
   JoinWhereInput: { // input type
     AND?: NexusGenInputs['JoinWhereInput'][] | null; // [JoinWhereInput!]
@@ -494,8 +497,11 @@ export interface NexusGenInputs {
     name?: string | null; // String
   }
   UpdateInputInput: { // input type
+    column?: string | null; // String
     conceptMapId?: string | null; // String
+    joins?: Array<NexusGenInputs['JoinTablesInput'] | null> | null; // [JoinTablesInput]
     script?: string | null; // String
+    table?: string | null; // String
   }
   UpdateResourceInput: { // input type
     label?: string | null; // String
@@ -568,6 +574,7 @@ export interface NexusGenObjects {
   Condition: { // root type
     action?: NexusGenEnums['ConditionAction'] | null; // ConditionAction
     id: string; // String!
+    inputGroupId: string; // String!
     relation: NexusGenEnums['ConditionRelation']; // ConditionRelation!
     value?: string | null; // String
   }
@@ -591,11 +598,13 @@ export interface NexusGenObjects {
     conceptMapId?: string | null; // String
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
+    inputGroupId?: string | null; // String
     script?: string | null; // String
     staticValue?: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   InputGroup: { // root type
+    attributeId?: string | null; // String
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
     mergingScript?: string | null; // String
@@ -700,6 +709,7 @@ export interface NexusGenFieldTypes {
   Condition: { // field return type
     action: NexusGenEnums['ConditionAction'] | null; // ConditionAction
     id: string; // String!
+    inputGroupId: string; // String!
     relation: NexusGenEnums['ConditionRelation']; // ConditionRelation!
     sqlValue: NexusGenRootTypes['Column'] | null; // Column
     value: string | null; // String
@@ -728,6 +738,7 @@ export interface NexusGenFieldTypes {
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
     inputGroup: NexusGenRootTypes['InputGroup'] | null; // InputGroup
+    inputGroupId: string | null; // String
     script: string | null; // String
     sqlValue: NexusGenRootTypes['Column'] | null; // Column
     staticValue: string | null; // String
@@ -735,6 +746,7 @@ export interface NexusGenFieldTypes {
   }
   InputGroup: { // field return type
     attribute: NexusGenRootTypes['Attribute'] | null; // Attribute
+    attributeId: string | null; // String
     conditions: NexusGenRootTypes['Condition'][]; // [Condition!]!
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
@@ -754,33 +766,38 @@ export interface NexusGenFieldTypes {
     createAccessControl: NexusGenRootTypes['AccessControl'] | null; // AccessControl
     createAttribute: NexusGenRootTypes['Attribute'] | null; // Attribute
     createComment: NexusGenRootTypes['Comment'] | null; // Comment
-    createInput: NexusGenRootTypes['Input'] | null; // Input
-    createInputGroup: NexusGenRootTypes['InputGroup'] | null; // InputGroup
+    createInputGroup: NexusGenRootTypes['Attribute'] | null; // Attribute
     createResource: NexusGenRootTypes['Resource'] | null; // Resource
     createSource: NexusGenRootTypes['Source'] | null; // Source
+    createSqlInput: NexusGenRootTypes['Input'] | null; // Input
+    createStaticInput: NexusGenRootTypes['Input'] | null; // Input
     createTemplate: NexusGenRootTypes['Template'] | null; // Template
     deleteAccessControl: NexusGenRootTypes['AccessControl'] | null; // AccessControl
     deleteAttribute: NexusGenRootTypes['Attribute'] | null; // Attribute
     deleteAttributes: Array<NexusGenRootTypes['Attribute'] | null> | null; // [Attribute]
-    deleteCondition: NexusGenRootTypes['Condition'] | null; // Condition
+    deleteCondition: NexusGenRootTypes['InputGroup'] | null; // InputGroup
     deleteCredential: NexusGenRootTypes['Credential'] | null; // Credential
-    deleteInput: NexusGenRootTypes['Input'] | null; // Input
+    deleteInput: NexusGenRootTypes['InputGroup'] | null; // InputGroup
+    deleteInputGroup: NexusGenRootTypes['Attribute'] | null; // Attribute
     deleteJoin: NexusGenRootTypes['Join'] | null; // Join
     deleteResource: NexusGenRootTypes['Resource'] | null; // Resource
     deleteSource: NexusGenRootTypes['Source'] | null; // Source
     deleteTemplate: NexusGenRootTypes['Template'] | null; // Template
     logout: NexusGenRootTypes['User'] | null; // User
+    updateColumn: NexusGenRootTypes['Column'] | null; // Column
     updateCondition: NexusGenRootTypes['Condition'] | null; // Condition
     updateInput: NexusGenRootTypes['Input'] | null; // Input
     updateInputGroup: NexusGenRootTypes['InputGroup'] | null; // InputGroup
     updateJoin: NexusGenRootTypes['Join'] | null; // Join
     updateResource: NexusGenRootTypes['Resource'] | null; // Resource
     updateRole: NexusGenRootTypes['User'] | null; // User
+    updateStaticInput: NexusGenRootTypes['Input'] | null; // Input
     upsertCredential: NexusGenRootTypes['Credential'] | null; // Credential
   }
   Query: { // field return type
     attribute: NexusGenRootTypes['Attribute'] | null; // Attribute
     attributes: NexusGenRootTypes['Attribute'][]; // [Attribute!]!
+    conditionsForResource: Array<NexusGenRootTypes['Condition'] | null> | null; // [Condition]
     credential: NexusGenRootTypes['Credential'] | null; // Credential
     me: NexusGenRootTypes['User'] | null; // User
     resource: NexusGenRootTypes['Resource'] | null; // Resource
@@ -894,6 +911,7 @@ export interface NexusGenFieldTypeNames {
   Condition: { // field return type name
     action: 'ConditionAction'
     id: 'String'
+    inputGroupId: 'String'
     relation: 'ConditionRelation'
     sqlValue: 'Column'
     value: 'String'
@@ -922,6 +940,7 @@ export interface NexusGenFieldTypeNames {
     createdAt: 'DateTime'
     id: 'String'
     inputGroup: 'InputGroup'
+    inputGroupId: 'String'
     script: 'String'
     sqlValue: 'Column'
     staticValue: 'String'
@@ -929,6 +948,7 @@ export interface NexusGenFieldTypeNames {
   }
   InputGroup: { // field return type name
     attribute: 'Attribute'
+    attributeId: 'String'
     conditions: 'Condition'
     createdAt: 'DateTime'
     id: 'String'
@@ -948,33 +968,38 @@ export interface NexusGenFieldTypeNames {
     createAccessControl: 'AccessControl'
     createAttribute: 'Attribute'
     createComment: 'Comment'
-    createInput: 'Input'
-    createInputGroup: 'InputGroup'
+    createInputGroup: 'Attribute'
     createResource: 'Resource'
     createSource: 'Source'
+    createSqlInput: 'Input'
+    createStaticInput: 'Input'
     createTemplate: 'Template'
     deleteAccessControl: 'AccessControl'
     deleteAttribute: 'Attribute'
     deleteAttributes: 'Attribute'
-    deleteCondition: 'Condition'
+    deleteCondition: 'InputGroup'
     deleteCredential: 'Credential'
-    deleteInput: 'Input'
+    deleteInput: 'InputGroup'
+    deleteInputGroup: 'Attribute'
     deleteJoin: 'Join'
     deleteResource: 'Resource'
     deleteSource: 'Source'
     deleteTemplate: 'Template'
     logout: 'User'
+    updateColumn: 'Column'
     updateCondition: 'Condition'
     updateInput: 'Input'
     updateInputGroup: 'InputGroup'
     updateJoin: 'Join'
     updateResource: 'Resource'
     updateRole: 'User'
+    updateStaticInput: 'Input'
     upsertCredential: 'Credential'
   }
   Query: { // field return type name
     attribute: 'Attribute'
     attributes: 'Attribute'
+    conditionsForResource: 'Condition'
     credential: 'Credential'
     me: 'User'
     resource: 'Resource'
@@ -1087,16 +1112,15 @@ export interface NexusGenArgTypes {
   }
   Mutation: {
     addConditionToInputGroup: { // args
-      action?: string | null; // String
-      column?: string | null; // String
+      action?: NexusGenEnums['ConditionAction'] | null; // ConditionAction
+      columnInput?: NexusGenInputs['ColumnInput'] | null; // ColumnInput
       inputGroupId: string; // ID!
       relation?: NexusGenEnums['ConditionRelation'] | null; // ConditionRelation
-      table?: string | null; // String
       value?: string | null; // String
     }
     addJoinToColumn: { // args
       columnId: string; // ID!
-      join?: NexusGenInputs['JoinInput'] | null; // JoinInput
+      join: NexusGenInputs['JoinTablesInput']; // JoinTablesInput!
     }
     createAccessControl: { // args
       role: NexusGenEnums['SourceRole']; // SourceRole!
@@ -1115,12 +1139,6 @@ export interface NexusGenArgTypes {
       content: string; // String!
       validation: boolean; // Boolean!
     }
-    createInput: { // args
-      inputGroupId: string; // ID!
-      script?: string | null; // String
-      sql?: NexusGenInputs['ColumnInput'] | null; // ColumnInput
-      static?: string | null; // String
-    }
     createInputGroup: { // args
       attributeId: string; // ID!
     }
@@ -1132,6 +1150,16 @@ export interface NexusGenArgTypes {
       mapping?: string | null; // String
       name: string; // String!
       templateName: string; // String!
+    }
+    createSqlInput: { // args
+      conceptMapId?: string | null; // String
+      inputGroupId: string; // ID!
+      script?: string | null; // String
+      sql?: NexusGenInputs['ColumnInput'] | null; // ColumnInput
+    }
+    createStaticInput: { // args
+      inputGroupId: string; // ID!
+      value?: string | null; // String
     }
     createTemplate: { // args
       name: string; // String!
@@ -1147,12 +1175,18 @@ export interface NexusGenArgTypes {
     }
     deleteCondition: { // args
       conditionId: string; // ID!
+      inputGroupId: string; // ID!
     }
     deleteCredential: { // args
       credentialId: string; // ID!
     }
     deleteInput: { // args
+      inputGroupId: string; // ID!
       inputId: string; // ID!
+    }
+    deleteInputGroup: { // args
+      attributeId?: string | null; // ID
+      inputGroupId?: string | null; // ID
     }
     deleteJoin: { // args
       joinId: string; // ID!
@@ -1165,6 +1199,10 @@ export interface NexusGenArgTypes {
     }
     deleteTemplate: { // args
       id: string; // ID!
+    }
+    updateColumn: { // args
+      columnId: string; // ID!
+      data: NexusGenInputs['ColumnInputWithoutJoins']; // ColumnInputWithoutJoins!
     }
     updateCondition: { // args
       action?: string | null; // String
@@ -1183,7 +1221,7 @@ export interface NexusGenArgTypes {
       mergingScript?: string | null; // String
     }
     updateJoin: { // args
-      data: NexusGenInputs['JoinInput']; // JoinInput!
+      data: NexusGenInputs['JoinTablesInput']; // JoinTablesInput!
       joinId: string; // ID!
     }
     updateResource: { // args
@@ -1194,6 +1232,10 @@ export interface NexusGenArgTypes {
     updateRole: { // args
       newRole: NexusGenEnums['Role']; // Role!
       userId: string; // ID!
+    }
+    updateStaticInput: { // args
+      inputId: string; // ID!
+      value?: string | null; // String
     }
     upsertCredential: { // args
       database: string; // String!
@@ -1216,6 +1258,9 @@ export interface NexusGenArgTypes {
       first?: number | null; // Int
       last?: number | null; // Int
       where?: NexusGenInputs['AttributeWhereInput'] | null; // AttributeWhereInput
+    }
+    conditionsForResource: { // args
+      resourceId: string; // ID!
     }
     credential: { // args
       where: NexusGenInputs['CredentialWhereUniqueInput']; // CredentialWhereUniqueInput!

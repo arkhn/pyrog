@@ -1,7 +1,7 @@
+#import "../fragments/entireInput.graphql"
+
 mutation updateInput($inputId: ID!, $data: UpdateInputInput!) {
   updateInput(inputId: $inputId, data: $data) {
-    id
-    script
-    conceptMapId
+    ...entireInput
   }
 }

@@ -1,14 +1,15 @@
-@import "~@blueprintjs/core/lib/css/blueprint.css";
-@import "~@blueprintjs/core/lib/scss/variables";
+@import '~@blueprintjs/core/lib/css/blueprint.css';
+@import '~@blueprintjs/core/lib/scss/variables';
 
 .bp3-form-group {
   margin-bottom: 20px;
 }
 
 .filters-form {
-
   .bp3-html-table {
-
+    .align-top {
+      vertical-align: top;
+    }
     td {
       vertical-align: middle;
 

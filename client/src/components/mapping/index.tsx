@@ -1,32 +1,47 @@
-import * as React from 'react';
+import React from 'react';
 import { Tab, Tabs, TabId } from '@blueprintjs/core';
 import { loader } from 'graphql.macro';
+import { useQuery } from '@apollo/react-hooks';
 import { useApolloClient } from 'react-apollo';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 
-import Navbar from 'components/navbar';
-import InputColumns from './InputGroups';
-import TabColumnSuggestion from './TabColumnSuggestion';
-import TabColumnPicking from './TabColumnPicking';
-import TabSQLParser from './TabSQLParser';
 import Comments from './Comments';
 import FhirMappingPanel from './FhirMappingPanel';
+import InputGroups from './InputGroups';
+import Navbar from 'components/navbar';
+import TableViewer from './TableViewer';
 
 import { IReduxStore } from 'types';
 import { FHIR_API_URL } from '../../constants';
 
 import './style.scss';
-import TableViewer from './TableViewer';
 
 const qExportMapping = loader('src/graphql/queries/exportMapping.graphql');
+const qInputsForAttribute = loader(
+  'src/graphql/queries/inputsForAttribute.graphql'
+);
 
 const MappingView = () => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const { source, resource, attribute } = useSelector(
+  const { source, attribute } = useSelector(
     (state: IReduxStore) => state.selectedNode
   );
-  const [selectedTabId, setSelectedTabId] = React.useState('picker' as TabId);
+  const attributesForResource = useSelector(
+    (state: IReduxStore) => state.resourceInputs.attributesMap
+  );
+
+  const path = attribute?.path;
+  const attributeId = (path && attributesForResource[path]?.id) || null;
+
+  const [selectedTabId, setSelectedTabId] = React.useState('rules' as TabId);
+
+  const { data: dataAttribute } = useQuery(qInputsForAttribute, {
+    variables: {
+      attributeId: attributeId
+    },
+    skip: !attributeId
+  });
 
   const client = useApolloClient();
 
@@ -128,52 +143,28 @@ const MappingView = () => {
     }
   };
 
-  const renderExistingRules = () => <InputColumns />;
+  const renderInputGroups = () => (
+    <InputGroups attribute={dataAttribute?.attribute} isEmpty={!attributeId} />
+  );
 
-  const renderTable = () => {
-    return (
-      <div id="tableViewer">
-        <TableViewer table={resource.primaryKeyTable} />
-      </div>
-    );
-  };
-
-  const renderTabs = () => {
-    return (
-      <div id="exploration-tabs">
-        <div id="column-selection">
-          <Tabs
-            onChange={(tabId: TabId) => {
-              setSelectedTabId(tabId);
-            }}
-            selectedTabId={selectedTabId}
-          >
-            <Tab
-              id="picker"
-              panel={
-                <TabColumnPicking
-                  attribute={attribute}
-                  schema={source.credential.schema}
-                  source={source}
-                />
-              }
-              title="Column Selection"
-            />
-            <Tab id="sql-parser" panel={<TabSQLParser />} title="SQL Parser" />
-            <Tab
-              id="mb"
-              disabled
-              panel={<TabColumnSuggestion />}
-              title="Column Suggestion"
-            />
-          </Tabs>
-        </div>
-        <div>
-          <Comments />
-        </div>
-      </div>
-    );
-  };
+  const renderMappingTabs = () => (
+    <Tabs
+      onChange={(tabId: TabId) => {
+        setSelectedTabId(tabId);
+      }}
+      selectedTabId={selectedTabId}
+      large
+    >
+      <Tab id="rules" panel={renderInputGroups()} title="Rules" />
+      <Tab
+        id="exploration"
+        disabled={!source.credential}
+        panel={<TableViewer source={source} />}
+        title="Exploration"
+      />
+      <Tab id="comments" panel={<Comments />} title="Comments" />
+    </Tabs>
+  );
 
   if (!source?.credential?.schema) {
     toaster.show({
@@ -182,11 +173,7 @@ const MappingView = () => {
       message: `missing database schema for source ${source?.name || null}`,
       timeout: 4000
     });
-    return (
-      <div>
-        <Navbar />
-      </div>
-    );
+    return <Navbar />;
   }
 
   return (
@@ -201,13 +188,9 @@ const MappingView = () => {
             <FhirMappingPanel />
           </div>
           <div id="exploration-panel">
-            {attribute && renderExistingRules()}
-            {attribute && renderTabs()}
-            {source.credential &&
-              resource &&
-              resource.primaryKeyTable &&
-              !attribute &&
-              renderTable()}
+            {attribute
+              ? renderMappingTabs()
+              : source.credential && <TableViewer source={source} />}
           </div>
         </div>
       </div>

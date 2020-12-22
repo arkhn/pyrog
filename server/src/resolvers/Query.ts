@@ -1,6 +1,7 @@
 import { idArg, nonNull, queryType } from 'nexus'
 
 import { getDefinition } from 'fhir'
+import { conditionsForResource } from './Condition'
 import { sources } from './Source'
 
 export const Query = queryType({
@@ -27,6 +28,14 @@ export const Query = queryType({
 
     t.crud.attribute()
     t.crud.attributes({ filtering: true })
+
+    t.nullable.list.field('conditionsForResource', {
+      type: 'Condition',
+      args: {
+        resourceId: nonNull(idArg()),
+      },
+      resolve: conditionsForResource,
+    })
 
     t.nullable.field('structureDefinition', {
       type: 'StructureDefinition',

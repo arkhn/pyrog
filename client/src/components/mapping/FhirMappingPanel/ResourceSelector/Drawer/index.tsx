@@ -12,7 +12,7 @@ import { loader } from 'graphql.macro';
 import { useSelector, useDispatch } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
 
-import { Filter, IReduxStore, ISourceSchema } from 'types';
+import { Filter, IReduxStore, ISourceSchema, Join } from 'types';
 import ColumnSelect from 'components/selects/columnSelect';
 import {
   updateSelectedResource,
@@ -68,7 +68,7 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
 
   const removeResourceFromCache = (
     cache: any,
-    { data: { deleteResource } }: any
+    { data: { dataDeleteResource } }: any
   ): void => {
     try {
       const { source: cachedSource } = cache.readQuery({
@@ -80,7 +80,7 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
       const newSource = {
         ...cachedSource,
         resources: cachedSource.resources.filter(
-          (r: any) => r.id !== deleteResource.id
+          (r: any) => r.id !== dataDeleteResource.id
         )
       };
       cache.writeQuery({
@@ -233,11 +233,17 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
                     filters[index].sqlColumn.column = column;
                     setFilters([...filters]);
                   }}
+                  allJoinsChangeCallback={(joins: Join[]): void => {
+                    filters[index].sqlColumn.joins = joins;
+                    setFilters([...filters]);
+                  }}
                   initialTable={sqlColumn ? sqlColumn.table : ''}
                   initialColumn={sqlColumn ? sqlColumn.column : ''}
                   sourceSchema={source.credential.schema as ISourceSchema}
-                  vertical={true}
                   fill={true}
+                  vertical={true}
+                  initialJoins={filters[index].sqlColumn.joins}
+                  primaryKeyTable={pkTable}
                   popoverProps={{
                     autoFocus: true,
                     boundary: 'viewport',
@@ -249,18 +255,20 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
                   disabled={updatingResource || !resource}
                 />
               </td>
-              <td>
+              <td className="align-top">
                 <StringSelect
                   inputItem={relation}
                   items={sqlRelations}
-                  displayItem={(r: string): string => r || 'select relation'}
-                  onChange={(relation: string): void => {
-                    filters[index].relation = relation;
+                  displayItem={(rel: string): string =>
+                    rel || 'select relation'
+                  }
+                  onChange={(rel: string): void => {
+                    filters[index].relation = rel;
                     setFilters([...filters]);
                   }}
                 />
               </td>
-              <td>
+              <td className="align-top">
                 <input
                   className="bp3-input"
                   type="text"

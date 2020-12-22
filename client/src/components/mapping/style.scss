@@ -14,47 +14,20 @@ body {
   justify-content: center;
 }
 
-.bp3-tabs {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-
-  .bp3-tab-panel:not([aria-hidden='true']) {
-    flex-grow: 1;
-    display: flex;
-    overflow: auto;
-    flex-direction: column;
-
-    .vertical-flex {
-      width: 100%;
-      flex-grow: 1;
-      display: flex;
-      overflow: auto;
-      flex-direction: column;
-
-      .column-viewer {
-        flex-grow: 1;
-        overflow: auto;
-
-        .column-flexbox {
-          overflow: auto;
-          min-height: -moz-min-content;
-          min-height: -webkit-min-content;
-          min-height: min-content;
-          height: 100%;
-          overflow-x: scroll;
-        }
-      }
-    }
-  }
-}
-
 #tableViewer {
   display: flex;
   flex-direction: column;
-  padding-top: 5%;
-  padding-left: 20px;
+
+  .bp3-popover-wrapper {
+    align-self: center;
+    margin-bottom: 15px;
+  }
+
+  .bp3-table-container {
+    align-self: center;
+  }
 }
+
 .bp3-tab-list {
   background-color: $light-gray1;
   overflow: hidden;
@@ -164,56 +137,9 @@ body {
     display: flex;
     flex-direction: column;
     overflow: scroll;
+
     .panel-header {
       background-color: $gray5;
-    }
-
-    #column-picker {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-
-      padding: $window-padding;
-
-      & > *:not(:last-child) {
-        margin-bottom: $window-padding;
-      }
-      .bp3-card h3 {
-        margin: 0;
-      }
-
-      .bp3-label {
-        min-width: 250px;
-      }
-    }
-
-    #sql-request-parser {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-
-      padding: $window-padding;
-
-      & > *:not(:last-child) {
-        margin-bottom: $window-padding;
-      }
-
-      .bp3-card h3 {
-        margin: 0;
-      }
-
-      .bp3-label {
-        min-width: 250px;
-      }
-    }
-
-    #exploration-tabs {
-      min-height: 40%;
-      overflow-x: scroll;
-
-      #column-selection {
-        background-color: $light-gray3;
-      }
     }
   }
 }
@@ -259,8 +185,10 @@ body {
   }
 }
 
+#input-groups:empty {
+  display: none;
+}
 #input-groups {
-  margin-right: calc(#{$window-padding} / 2);
   padding: $window-padding;
   min-height: 20%;
   overflow-x: scroll;
@@ -269,10 +197,35 @@ body {
     margin-bottom: calc(#{$window-padding} / 2);
   }
 
+  .delete-input-group {
+    text-align: right;
+    margin: 0%;
+    padding: 0%;
+  }
+
+  .add-input-buttons {
+    .bp3-button {
+      margin-left: 10px;
+    }
+  }
+
+  .divider-conditions {
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+
+    .divider-conditions-before {
+      flex-grow: 1;
+    }
+    .divider-conditions-after {
+      flex-grow: 10;
+    }
+  }
+
   .stacked-tags {
     display: flex;
     flex-direction: column;
-    align-items: stretch;
+    align-self: center;
 
     .bp3-tag {
       text-align: center;
@@ -282,103 +235,176 @@ body {
     }
   }
 
-  .input-conditions {
-    width: 100%;
-
+  .attribute-inputs {
     display: flex;
-    flex-direction: row;
+  }
 
-    & > *:not(:last-child) {
-      margin-right: $window-padding;
-    }
+  #input-group-merging-script {
+    padding: calc(#{$window-padding} / 2);
+    margin-left: calc(#{$window-padding} / 2);
 
-    .condition-action {
-      display: flex;
-      align-items: center;
-    }
-
-    .condition-column {
-      display: flex;
-      align-items: center;
+    .stacked-tags {
+      width: fit-content;
     }
   }
 
-  #input-columns {
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
+  .input-cards {
+    width: 100%;
 
     #input-column-rows {
       flex-grow: 1;
       margin-right: calc(#{$window-padding} / 2);
-
-      & > *:not(:last-child) {
-        margin-bottom: calc(#{$window-padding} / 2);
-      }
     }
 
-    #input-column-merging-script {
-      display: flex;
-      align-items: center;
+    .input-static,
+    .input-column,
+    .input-condition {
+      margin-top: #{$window-padding};
+      margin-bottom: #{$window-padding};
 
-      border-left: 1px solid $gray4;
-      padding: calc(#{$window-padding} / 2);
-      margin-left: calc(#{$window-padding} / 2);
-    }
-
-    .input-column {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-
-      .input-column-info {
-        width: 100%;
-        padding: 10px $window-padding;
-      }
-
-      .input-column-info > * {
-        width: 100%;
-
+      .input-card {
         display: flex;
-        flex-direction: row;
-        align-items: flex-start;
+        align-items: center;
 
-        & > *:not(:last-child) {
-          margin-right: $window-padding;
+        .bp3-card {
+          width: 100%;
         }
 
-        .input-column-name {
+        .static-input-form,
+        .sql-input-form,
+        .conditions-form {
+          width: 100%;
           display: flex;
-          flex-basis: 50%;
-          flex-grow: 1;
-          align-items: center;
+          justify-content: center;
 
-          & > *:not(:last-child) {
-            margin-right: calc(#{$window-padding} / 2);
-          }
-        }
-
-        .input-column-joins {
-          display: flex;
-          flex-basis: 25%;
-          flex-grow: 1;
-          flex-direction: column;
-          align-items: stretch;
-
-          & > *:not(:last-child) {
-            margin-bottom: calc(#{$window-padding} / 2);
-          }
-
-          .join {
+          .column-select {
             display: flex;
-            align-items: center;
 
-            & > *:not(:last-child) {
-              margin-right: calc(#{$window-padding} / 2);
+            .column-select-input {
+              align-self: center;
+            }
+            .column-select-joins {
+              margin-left: 10px;
+            }
+          }
+
+          .sql-input-form-script,
+          .conditions-form-action,
+          .conditions-form-column,
+          .conditions-form-relation,
+          .conditions-form-value,
+          .conditions-form-condition-select {
+            align-self: center;
+            margin-left: 10px;
+            margin-right: 10px;
+          }
+        }
+
+        .input-column-info {
+          width: 100%;
+          padding: 10px $window-padding;
+        }
+
+        .input-column-info > * {
+          width: 100%;
+
+          display: flex;
+          flex-direction: row;
+          align-items: flex-start;
+
+          .input-column-name {
+            display: flex;
+            flex-basis: 50%;
+            flex-grow: 1;
+            align-self: center;
+          }
+
+          .input-script {
+            display: flex;
+            flex-basis: 50%;
+            flex-grow: 1;
+            align-self: center;
+          }
+
+          .input-column-join {
+            display: flex;
+            flex-basis: 25%;
+            flex-grow: 1;
+            flex-direction: column;
+            align-items: stretch;
+
+            .join {
+              display: flex;
+              align-items: center;
             }
           }
         }
       }
     }
+  }
+}
+
+.bp3-card {
+  position: relative;
+
+  .bp3-inline {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  & > *:not(:last-child) {
+    margin-bottom: 15px;
+  }
+
+  .card-flex {
+    display: flex;
+    flex-direction: row;
+    font-size: 14px;
+
+    .card-tag,
+    .card-tag-dynamic,
+    .card-tag-condition {
+      background-color: $gray1;
+      color: $light-gray5;
+      padding: 2px 8px;
+      border-radius: 3px;
+    }
+    .card-tag-dynamic {
+      background-color: $blue1;
+    }
+    .card-tag-condition {
+      background-color: $turquoise3;
+    }
+
+    .card-credentials-missing {
+      background-color: $orange1;
+      color: $light-gray5;
+      margin-left: 1rem;
+      padding: 2px 8px;
+      border-radius: 3px;
+    }
+  }
+
+  .card-absolute {
+    position: absolute;
+    top: -7px;
+  }
+
+  .custom-checkbox {
+    margin: auto;
+    margin-left: 8px;
+  }
+
+  .centered-question-mark {
+    align-self: center;
+    padding-left: 5px;
+  }
+}
+
+.bp3-popover-content {
+  .text {
+    width: min-content;
+    margin: 5px;
   }
 }

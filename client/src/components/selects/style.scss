@@ -17,3 +17,28 @@
 .TSelect button.bp3-button {
   transform: none;
 }
+
+.bp3-icon-left-join {
+  align-self: center;
+}
+
+.column-select {
+  display: flex;
+
+  .column-select-input {
+    align-self: center;
+  }
+  .column-select-joins {
+    margin-left: 10px;
+  }
+}
+
+.column-select-vertical {
+  .column-select-input {
+    align-self: center;
+  }
+  .column-select-joins {
+    margin-top: 10px;
+    margin-left: 20px;
+  }
+}

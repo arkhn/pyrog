@@ -1,23 +1,30 @@
 import React from 'react';
-import { Card, Elevation, Spinner } from '@blueprintjs/core';
-import { useQuery } from '@apollo/react-hooks';
+import { Button, Spinner } from '@blueprintjs/core';
+import { useMutation } from '@apollo/react-hooks';
 import { useDispatch, useSelector } from 'react-redux';
-
-import { selectInputGroup } from 'services/selectedNode/actions';
-
-import { IReduxStore } from 'types';
-
-// COMPONENTS
-import InputGroup from '../InputGroup';
 import { loader } from 'graphql.macro';
 
-// GRAPHQL
-const qInputsForAttribute = loader(
-  'src/graphql/queries/inputsForAttribute.graphql'
+import { setAttributeInMap } from 'services/resourceInputs/actions';
+import { onError as onApolloError } from 'services/apollo';
+import InputGroup from '../InputGroup';
+import { IAttribute, IInputGroup, IReduxStore } from 'types';
+
+const mCreateAttribute = loader(
+  'src/graphql/mutations/createAttribute.graphql'
+);
+const mCreateInputGroup = loader(
+  'src/graphql/mutations/createInputGroup.graphql'
 );
 
-const InputGroups = () => {
+interface Props {
+  attribute: IAttribute;
+  isEmpty: boolean;
+}
+
+const InputGroups = ({ attribute, isEmpty }: Props) => {
   const dispatch = useDispatch();
+  const toaster = useSelector((state: IReduxStore) => state.toaster);
+  const onError = onApolloError(toaster);
 
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
   const path = selectedNode.attribute.path;
@@ -25,46 +32,82 @@ const InputGroups = () => {
   const attributesForResource = useSelector(
     (state: IReduxStore) => state.resourceInputs.attributesMap
   );
-  const attributeId = attributesForResource[path]
-    ? attributesForResource[path].id
-    : null;
+  let attributeId = attribute?.id;
 
-  const { data, loading: loadingData } = useQuery(qInputsForAttribute, {
-    variables: {
-      attributeId: attributeId
-    },
-    skip: !attributeId
+  const [createAttribute] = useMutation(mCreateAttribute, {
+    onError
+  });
+  const [createInputGroup] = useMutation(mCreateInputGroup, {
+    onError
   });
 
-  if (loadingData) {
+  if (!attribute && !isEmpty) {
     return <Spinner />;
   }
 
-  const attribute = data && data.attribute ? data.attribute : null;
-  const inputGroups =
-    attribute && attribute.inputGroups ? attribute.inputGroups : [];
+  const inputGroups = attribute?.inputGroups || [];
+
+  const onAddInputGroup = async () => {
+    if (isEmpty) {
+      // First, we create the attribute if it doesn't exist
+      const { data: attr } = await createAttribute({
+        variables: {
+          resourceId: selectedNode.resource.id,
+          definitionId: selectedNode.attribute.types[0],
+          path,
+          sliceName: selectedNode.attribute.definition.sliceName
+        }
+      });
+      attributeId = attr.createAttribute.id;
+      // Then, we create the inputGroup if needed
+      const { data: dataAttribute } = await createInputGroup({
+        variables: {
+          attributeId: attr.createAttribute.id
+        }
+      });
+      // Also, we create the parent attributes if they don't exist
+      let currentAttribute = selectedNode.attribute;
+      while (currentAttribute.parent) {
+        currentAttribute = currentAttribute.parent;
+        const parentPath = currentAttribute.path;
+        if (
+          !attributesForResource[parentPath] &&
+          !currentAttribute.isArray &&
+          currentAttribute.types.length <= 1
+        ) {
+          const { data: attr } = await createAttribute({
+            variables: {
+              resourceId: selectedNode.resource.id,
+              definitionId: currentAttribute.types[0],
+              path: parentPath,
+              sliceName: currentAttribute.definition.sliceName
+            }
+          });
+          dispatch(setAttributeInMap(parentPath, attr.createAttribute));
+        }
+      }
+      dispatch(setAttributeInMap(path, dataAttribute.createInputGroup));
+    } else {
+      createInputGroup({
+        variables: {
+          attributeId
+        }
+      });
+    }
+  };
 
   return (
     <div id="input-groups">
-      {inputGroups.map((inputGroup: any, index: number) =>
-        inputGroup ? (
-          <Card
-            key={index}
-            style={{
-              background:
-                index === selectedNode.selectedInputGroup ? '#ced9e0' : ''
-            }}
-            elevation={Elevation.ONE}
-            onClick={() => {
-              index === selectedNode.selectedInputGroup
-                ? dispatch(selectInputGroup(null))
-                : dispatch(selectInputGroup(index));
-            }}
-          >
-            <InputGroup key={index} inputGroup={inputGroup} />
-          </Card>
-        ) : null
+      {inputGroups.map((inputGroup: IInputGroup, index: number) =>
+        inputGroup ? <InputGroup key={index} inputGroup={inputGroup} /> : null
       )}
+      <div>
+        <Button
+          icon={'add'}
+          text={'Input group'}
+          onClick={onAddInputGroup}
+        />
+      </div>
     </div>
   );
 };
