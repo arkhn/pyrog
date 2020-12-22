@@ -170,6 +170,11 @@ export const buildConditionsQuery = (
     relation: c.relation,
     sqlValue: {
       create: {
+        owner: {
+          connect: {
+            id: c.sqlValue.ownerId,
+          },
+        },
         table: c.sqlValue.table,
         column: c.sqlValue.column,
       },

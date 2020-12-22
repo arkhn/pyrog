@@ -28,18 +28,17 @@ export const FilterInput = inputObjectType({
 export const OwnerInput = inputObjectType({
   name: 'OwnerInput',
   definition(t) {
-    t.field('id', { type: 'String' })
-    t.field('name', { type: 'String' })
-    t.field('schema', { type: 'String' })
+    t.nonNull.field('id', { type: 'String' })
   },
 })
 
 export const UpdateInputInput = inputObjectType({
   name: 'UpdateInputInput',
   definition(t) {
+    t.field('owner', { type: 'OwnerInput' })
     t.field('table', { type: 'String' })
     t.field('column', { type: 'String' })
-    t.list.field('joins', {
+    t.list.nonNull.field('joins', {
       type: 'JoinTablesInput',
     })
     t.field('script', { type: 'String' })
@@ -50,6 +49,7 @@ export const UpdateInputInput = inputObjectType({
 export const ColumnInput = inputObjectType({
   name: 'ColumnInput',
   definition(t) {
+    t.nonNull.field('owner', { type: 'OwnerInput' })
     t.nonNull.field('table', { type: 'String' })
     t.nonNull.field('column', { type: 'String' })
     t.list.nonNull.field('joins', {
@@ -61,7 +61,7 @@ export const ColumnInput = inputObjectType({
 export const JoinTablesInput = inputObjectType({
   name: 'JoinTablesInput',
   definition(t) {
-    t.list.field('tables', {
+    t.list.nonNull.field('tables', {
       type: 'ColumnInputWithoutJoins',
     })
   },
@@ -70,9 +70,9 @@ export const JoinTablesInput = inputObjectType({
 export const ColumnInputWithoutJoins = inputObjectType({
   name: 'ColumnInputWithoutJoins',
   definition(t) {
-    t.field('owner', { type: 'OwnerInput' })
-    t.field('table', { type: 'String' })
-    t.field('column', { type: 'String' })
+    t.nonNull.field('owner', { type: 'OwnerInput' })
+    t.nonNull.field('table', { type: 'String' })
+    t.nonNull.field('column', { type: 'String' })
   },
 })
 

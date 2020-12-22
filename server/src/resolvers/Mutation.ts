@@ -57,7 +57,7 @@ export const Mutation = mutationType({
     t.field('deleteTemplate', {
       type: 'Template',
       args: {
-        id: nonNull(idArg()),
+        templateId: nonNull(idArg()),
       },
       resolve: deleteTemplate,
     })
@@ -97,7 +97,7 @@ export const Mutation = mutationType({
         database: nonNull(stringArg()),
         login: nonNull(stringArg()),
         password: nonNull(stringArg()),
-        owners: list(arg({ type: 'OwnerInput' })),
+        owners: list(nonNull(stringArg())),
         model: nonNull(stringArg()),
       },
       resolve: upsertCredential,
@@ -197,8 +197,8 @@ export const Mutation = mutationType({
     t.field('deleteInputGroup', {
       type: 'Attribute',
       args: {
-        attributeId: idArg(),
-        inputGroupId: idArg(),
+        attributeId: nonNull(idArg()),
+        inputGroupId: nonNull(idArg()),
       },
       resolve: deleteInputGroup,
     })

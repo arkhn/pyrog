@@ -116,6 +116,9 @@ export const permissions = shield(
           logout: rules.isAuthenticatedUser,
           updateRole: rules.isAdmin,
 
+          createTemplate: rules.isAuthenticatedUser,
+          deleteTemplate: rules.isAdmin,
+
           createAccessControl: rules.isSourceWriter,
           deleteAccessControl: rules.isSourceWriter,
 

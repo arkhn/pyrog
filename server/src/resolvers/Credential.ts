@@ -5,6 +5,7 @@ import { DatabaseType, Credential as Credz } from '@prisma/client'
 import { PAGAI_URL } from '../constants'
 import { encrypt, decrypt } from 'utils'
 import { Context } from 'context'
+import { NexusGenAllTypes, NexusGenInputs } from 'generated/nexus'
 
 export const Credential = objectType({
   name: 'Credential',
@@ -33,7 +34,7 @@ export const Credential = objectType({
 const loadDatabaseSchema = async (
   ctx: Context,
   credentials: Partial<Credz>,
-  owner: { id?: string | null; name?: string | null; schema?: string | null },
+  owner: string,
 ): Promise<{
   schema: string
   name?: string | null
@@ -48,11 +49,11 @@ const loadDatabaseSchema = async (
       port,
       database,
       login,
-      owner: owner ? owner.name : owner,
+      owner,
       password: decrypt(password!),
     })
     return {
-      ...owner,
+      name: owner,
       schema: JSON.stringify(data),
     }
   } catch (err) {

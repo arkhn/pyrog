@@ -46,6 +46,7 @@
     "uuid": "^8.3.0"
   },
   "devDependencies": {
+    "@graphql-tools/delegate": "^7.0.8",
     "@prisma/cli": "^2.13.1",
     "@prisma/sdk": "^2.13.1",
     "@types/graphql-type-json": "^0.3.2",
@@ -72,9 +73,6 @@
     "ts-node-dev": "1.0.0-pre.44",
     "tsconfig-paths": "^3.9.0",
     "typescript": "3.9.7"
-  },
-  "peerDependencies": {
-    "@graphql-tools/delegate": "^7.0.8"
   },
   "prettier": {
     "singleQuote": true,

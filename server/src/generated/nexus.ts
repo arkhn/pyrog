@@ -76,12 +76,13 @@ export interface NexusGenInputs {
   ColumnInput: { // input type
     column: string; // String!
     joins?: NexusGenInputs['JoinTablesInput'][] | null; // [JoinTablesInput!]
+    owner: NexusGenInputs['OwnerInput']; // OwnerInput!
     table: string; // String!
   }
   ColumnInputWithoutJoins: { // input type
-    column?: string | null; // String
-    owner?: NexusGenInputs['OwnerInput'] | null; // OwnerInput
-    table?: string | null; // String
+    column: string; // String!
+    owner: NexusGenInputs['OwnerInput']; // OwnerInput!
+    table: string; // String!
   }
   ColumnListRelationFilter: { // input type
     every?: NexusGenInputs['ColumnWhereInput'] | null; // ColumnWhereInput
@@ -96,7 +97,7 @@ export interface NexusGenInputs {
     filter?: NexusGenInputs['FilterWhereInput'] | null; // FilterWhereInput
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     input?: NexusGenInputs['InputWhereInput'] | null; // InputWhereInput
-    inputId?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    inputId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     join?: NexusGenInputs['JoinWhereInput'] | null; // JoinWhereInput
     joinId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     joins?: NexusGenInputs['JoinListRelationFilter'] | null; // JoinListRelationFilter
@@ -291,7 +292,7 @@ export interface NexusGenInputs {
     some?: NexusGenInputs['JoinWhereInput'] | null; // JoinWhereInput
   }
   JoinTablesInput: { // input type
-    tables?: Array<NexusGenInputs['ColumnInputWithoutJoins'] | null> | null; // [ColumnInputWithoutJoins]
+    tables?: NexusGenInputs['ColumnInputWithoutJoins'][] | null; // [ColumnInputWithoutJoins!]
   }
   JoinWhereInput: { // input type
     AND?: NexusGenInputs['JoinWhereInput'][] | null; // [JoinWhereInput!]
@@ -382,9 +383,7 @@ export interface NexusGenInputs {
     startsWith?: string | null; // String
   }
   OwnerInput: { // input type
-    id?: string | null; // String
-    name?: string | null; // String
-    schema?: string | null; // String
+    id: string; // String!
   }
   OwnerListRelationFilter: { // input type
     every?: NexusGenInputs['OwnerWhereInput'] | null; // OwnerWhereInput
@@ -513,7 +512,8 @@ export interface NexusGenInputs {
   UpdateInputInput: { // input type
     column?: string | null; // String
     conceptMapId?: string | null; // String
-    joins?: Array<NexusGenInputs['JoinTablesInput'] | null> | null; // [JoinTablesInput]
+    joins?: NexusGenInputs['JoinTablesInput'][] | null; // [JoinTablesInput!]
+    owner?: NexusGenInputs['OwnerInput'] | null; // OwnerInput
     script?: string | null; // String
     table?: string | null; // String
   }
@@ -1226,8 +1226,8 @@ export interface NexusGenArgTypes {
       inputId: string; // ID!
     }
     deleteInputGroup: { // args
-      attributeId?: string | null; // ID
-      inputGroupId?: string | null; // ID
+      attributeId: string; // ID!
+      inputGroupId: string; // ID!
     }
     deleteJoin: { // args
       joinId: string; // ID!
@@ -1239,7 +1239,7 @@ export interface NexusGenArgTypes {
       sourceId: string; // ID!
     }
     deleteTemplate: { // args
-      id: string; // ID!
+      templateId: string; // ID!
     }
     updateColumn: { // args
       columnId: string; // ID!
@@ -1283,7 +1283,7 @@ export interface NexusGenArgTypes {
       host: string; // String!
       login: string; // String!
       model: string; // String!
-      owners?: Array<NexusGenInputs['OwnerInput'] | null> | null; // [OwnerInput]
+      owners?: string[] | null; // [String!]
       password: string; // String!
       port: string; // String!
       sourceId: string; // ID!

@@ -107,13 +107,14 @@ type Column {
 input ColumnInput {
   column: String!
   joins: [JoinTablesInput!]
+  owner: OwnerInput!
   table: String!
 }
 
 input ColumnInputWithoutJoins {
-  column: String
-  owner: OwnerInput
-  table: String
+  column: String!
+  owner: OwnerInput!
+  table: String!
 }
 
 input ColumnListRelationFilter {
@@ -130,7 +131,7 @@ input ColumnWhereInput {
   filter: FilterWhereInput
   id: StringFilter
   input: InputWhereInput
-  inputId: StringFilter
+  inputId: StringNullableFilter
   join: JoinWhereInput
   joinId: StringNullableFilter
   joins: JoinListRelationFilter
@@ -451,7 +452,7 @@ input JoinListRelationFilter {
 }
 
 input JoinTablesInput {
-  tables: [ColumnInputWithoutJoins]
+  tables: [ColumnInputWithoutJoins!]
 }
 
 input JoinWhereInput {
@@ -500,11 +501,11 @@ type Mutation {
   deleteCondition(conditionId: ID!, inputGroupId: ID!): InputGroup
   deleteCredential(credentialId: ID!): Credential
   deleteInput(inputGroupId: ID!, inputId: ID!): InputGroup
-  deleteInputGroup(attributeId: ID, inputGroupId: ID): Attribute
+  deleteInputGroup(attributeId: ID!, inputGroupId: ID!): Attribute
   deleteJoin(joinId: ID!): Join
   deleteResource(resourceId: ID!): Resource
   deleteSource(sourceId: ID!): Source
-  deleteTemplate(id: ID!): Template
+  deleteTemplate(templateId: ID!): Template
   logout: User
   updateColumn(columnId: ID!, data: ColumnInputWithoutJoins!): Column
   updateCondition(action: String, column: String, conditionId: ID!, relation: ConditionRelation, table: String, value: String): Condition
@@ -514,7 +515,7 @@ type Mutation {
   updateResource(data: UpdateResourceInput!, filters: [FilterInput!], resourceId: ID!): Resource
   updateRole(newRole: Role!, userId: ID!): User
   updateStaticInput(inputId: ID!, value: String): Input
-  upsertCredential(database: String!, host: String!, login: String!, model: String!, owners: [OwnerInput], password: String!, port: String!, sourceId: ID!): Credential
+  upsertCredential(database: String!, host: String!, login: String!, model: String!, owners: [String!], password: String!, port: String!, sourceId: ID!): Credential
 }
 
 input NestedBoolFilter {
@@ -609,9 +610,7 @@ input Owner_name_credential_unique_constraintCompoundUniqueInput {
 }
 
 input OwnerInput {
-  id: String
-  name: String
-  schema: String
+  id: String!
 }
 
 input OwnerListRelationFilter {
@@ -834,7 +833,8 @@ input TemplateWhereUniqueInput {
 input UpdateInputInput {
   column: String
   conceptMapId: String
-  joins: [JoinTablesInput]
+  joins: [JoinTablesInput!]
+  owner: OwnerInput
   script: String
   table: String
 }

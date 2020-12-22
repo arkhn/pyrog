@@ -136,8 +136,8 @@ model Column {
   column String?
   table  String?
 
-  inputId String  @unique @map("input")
-  input   Input   @relation(fields: [inputId], references: [id])
+  inputId String? @unique @map("input")
+  input   Input?  @relation(fields: [inputId], references: [id])
   ownerId String  @map("owner")
   owner   Owner   @relation(fields: [ownerId], references: [id])
   joinId  String? @map("join")
@@ -152,12 +152,14 @@ model Column {
 }
 
 model Join {
-  id        String   @id @default(cuid())
-  columnId  String?  @map("column")
+  id     String   @id @default(cuid())
+  tables Column[] @relation("JoinedColumns")
+
+  columnId String? @map("column")
+  column   Column? @relation("ColumnJoins", fields: [columnId], references: [id])
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  column    Column?  @relation("ColumnJoins", fields: [columnId], references: [id])
-  tables    Column[] @relation("JoinedColumns")
 }
 
 model Condition {

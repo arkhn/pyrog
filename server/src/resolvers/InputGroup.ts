@@ -46,6 +46,11 @@ export const addConditionToInputGroup: FieldResolver<
       relation: relation || 'EQ',
       sqlValue: {
         create: {
+          owner: {
+            connect: {
+              id: columnInput?.owner.id,
+            },
+          },
           table: columnInput?.table,
           column: columnInput?.column,
           ...(columnInput?.joins && {
@@ -54,10 +59,20 @@ export const addConditionToInputGroup: FieldResolver<
                 tables: {
                   create: [
                     {
+                      owner: {
+                        connect: {
+                          id: (j.tables && j.tables[0].owner.id) || undefined,
+                        },
+                      },
                       table: (j.tables && j.tables[0]?.table) || '',
                       column: (j.tables && j.tables[0]?.column) || '',
                     },
                     {
+                      owner: {
+                        connect: {
+                          id: (j.tables && j.tables[1].owner.id) || undefined,
+                        },
+                      },
                       table: (j.tables && j.tables[1]?.table) || '',
                       column: (j.tables && j.tables[1]?.column) || '',
                     },

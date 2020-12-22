@@ -43,7 +43,7 @@ DROP COLUMN "owner",
 DROP COLUMN "schema";
 
 -- Move foreignKey Input.sqlValue to Column.input
-DROP INDEX "Input_sqlValue";
+DROP INDEX IF EXISTS "Input_sqlValue";
 ALTER TABLE "Input" DROP CONSTRAINT "Input_sqlValue_fkey";
 
 ALTER TABLE "Column"
@@ -53,11 +53,6 @@ UPDATE "Column" set "input" = "Input"."id"
 FROM "Input"
 WHERE "Input"."sqlValue" = "Column"."id";
 
--- !!!!!! Delete all columns with missing relations !!!!!!!!
--- These are legacy columns that should have been removed before
-DELETE FROM "Column" WHERE "input" is NULL;
-
-ALTER TABLE "Column" ALTER COLUMN "input" SET NOT NULL;
 ALTER TABLE "Input" DROP COLUMN "sqlValue";
 
 -- Add "Owner" foreign key on "Column"
@@ -74,6 +69,15 @@ JOIN "Credential" cred on cred.source = source.id
 JOIN "Owner" _owner on _owner.credential = cred.id
 WHERE input.id = "Column".input;
 
+UPDATE "Column" set "owner" = _owner.id
+FROM "Join" _join
+JOIN "Column" _col on _col.id = _join."column"
+JOIN "Owner" _owner on _owner.id = _col."owner"
+WHERE "Column".join = _join.id;
+
+-- !!!!!! Delete all columns with missing relations !!!!!!!!
+-- These are legacy columns that should have been removed before
+DELETE from "Column" WHERE "owner" is NULL;
 ALTER TABLE "Column" ALTER COLUMN "owner" SET NOT NULL;
 
 -- CreateIndex
@@ -87,4 +91,3 @@ ALTER TABLE "Column" ADD FOREIGN KEY("input")REFERENCES "Input"("id") ON DELETE 
 
 -- AddForeignKey
 ALTER TABLE "Column" ADD FOREIGN KEY("owner")REFERENCES "Owner"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
