@@ -95,16 +95,20 @@ export interface NexusGenInputs {
     filter?: NexusGenInputs['FilterWhereInput'] | null; // FilterWhereInput
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     input?: NexusGenInputs['InputWhereInput'] | null; // InputWhereInput
+    inputId?: NexusGenInputs['StringFilter'] | null; // StringFilter
     join?: NexusGenInputs['JoinWhereInput'] | null; // JoinWhereInput
     joinId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     joins?: NexusGenInputs['JoinListRelationFilter'] | null; // JoinListRelationFilter
     NOT?: NexusGenInputs['ColumnWhereInput'][] | null; // [ColumnWhereInput!]
     OR?: NexusGenInputs['ColumnWhereInput'][] | null; // [ColumnWhereInput!]
+    owner?: NexusGenInputs['OwnerWhereInput'] | null; // OwnerWhereInput
+    ownerId?: NexusGenInputs['StringFilter'] | null; // StringFilter
     table?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
   ColumnWhereUniqueInput: { // input type
     id?: string | null; // String
+    inputId?: string | null; // String
   }
   CommentListRelationFilter: { // input type
     every?: NexusGenInputs['CommentWhereInput'] | null; // CommentWhereInput
@@ -160,10 +164,9 @@ export interface NexusGenInputs {
     model?: NexusGenInputs['EnumDatabaseTypeFilter'] | null; // EnumDatabaseTypeFilter
     NOT?: NexusGenInputs['CredentialWhereInput'][] | null; // [CredentialWhereInput!]
     OR?: NexusGenInputs['CredentialWhereInput'][] | null; // [CredentialWhereInput!]
-    owner?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    owners?: NexusGenInputs['OwnerListRelationFilter'] | null; // OwnerListRelationFilter
     password?: NexusGenInputs['StringFilter'] | null; // StringFilter
     port?: NexusGenInputs['StringFilter'] | null; // StringFilter
-    schema?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     source?: NexusGenInputs['SourceWhereInput'] | null; // SourceWhereInput
     sourceId?: NexusGenInputs['StringFilter'] | null; // StringFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
@@ -271,13 +274,11 @@ export interface NexusGenInputs {
     OR?: NexusGenInputs['InputWhereInput'][] | null; // [InputWhereInput!]
     script?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     sqlValue?: NexusGenInputs['ColumnWhereInput'] | null; // ColumnWhereInput
-    sqlValueId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     staticValue?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
   InputWhereUniqueInput: { // input type
     id?: string | null; // String
-    sqlValueId?: string | null; // String
   }
   JoinInput: { // input type
     source: NexusGenInputs['ColumnInputWithoutJoins']; // ColumnInputWithoutJoins!
@@ -301,6 +302,10 @@ export interface NexusGenInputs {
   }
   JoinWhereUniqueInput: { // input type
     id?: string | null; // String
+  }
+  JsonNullableFilter: { // input type
+    equals?: NexusGenScalars['Json'] | null; // Json
+    not?: NexusGenScalars['Json'] | null; // Json
   }
   NestedBoolFilter: { // input type
     equals?: boolean | null; // Boolean
@@ -371,6 +376,22 @@ export interface NexusGenInputs {
     not?: NexusGenInputs['NestedStringNullableFilter'] | null; // NestedStringNullableFilter
     notIn?: string[] | null; // [String!]
     startsWith?: string | null; // String
+  }
+  OwnerListRelationFilter: { // input type
+    every?: NexusGenInputs['OwnerWhereInput'] | null; // OwnerWhereInput
+    none?: NexusGenInputs['OwnerWhereInput'] | null; // OwnerWhereInput
+    some?: NexusGenInputs['OwnerWhereInput'] | null; // OwnerWhereInput
+  }
+  OwnerWhereInput: { // input type
+    AND?: NexusGenInputs['OwnerWhereInput'][] | null; // [OwnerWhereInput!]
+    Column?: NexusGenInputs['ColumnListRelationFilter'] | null; // ColumnListRelationFilter
+    credential?: NexusGenInputs['CredentialWhereInput'] | null; // CredentialWhereInput
+    credentialId?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    name?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    NOT?: NexusGenInputs['OwnerWhereInput'][] | null; // [OwnerWhereInput!]
+    OR?: NexusGenInputs['OwnerWhereInput'][] | null; // [OwnerWhereInput!]
+    schema?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
   }
   ResourceListRelationFilter: { // input type
     every?: NexusGenInputs['ResourceWhereInput'] | null; // ResourceWhereInput
@@ -513,6 +534,7 @@ export interface NexusGenScalars {
   ID: string
   DateTime: any
   JSON: any
+  Json: any
 }
 
 export interface NexusGenObjects {
@@ -556,10 +578,8 @@ export interface NexusGenObjects {
     id: string; // String!
     login: string; // String!
     model: NexusGenEnums['DatabaseType']; // DatabaseType!
-    owner: string; // String!
     password: string; // String!
     port: string; // String!
-    schema?: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   Filter: { // root type
@@ -692,10 +712,8 @@ export interface NexusGenFieldTypes {
     id: string; // String!
     login: string; // String!
     model: NexusGenEnums['DatabaseType']; // DatabaseType!
-    owner: string; // String!
     password: string; // String!
     port: string; // String!
-    schema: string | null; // String
     source: NexusGenRootTypes['Source']; // Source!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
@@ -888,10 +906,8 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     login: 'String'
     model: 'DatabaseType'
-    owner: 'String'
     password: 'String'
     port: 'String'
-    schema: 'String'
     source: 'Source'
     updatedAt: 'DateTime'
   }

@@ -129,17 +129,21 @@ input ColumnWhereInput {
   filter: FilterWhereInput
   id: StringFilter
   input: InputWhereInput
+  inputId: StringFilter
   join: JoinWhereInput
   joinId: StringNullableFilter
   joins: JoinListRelationFilter
   NOT: [ColumnWhereInput!]
   OR: [ColumnWhereInput!]
+  owner: OwnerWhereInput
+  ownerId: StringFilter
   table: StringNullableFilter
   updatedAt: DateTimeFilter
 }
 
 input ColumnWhereUniqueInput {
   id: String
+  inputId: String
 }
 
 type Comment {
@@ -238,10 +242,8 @@ type Credential {
   id: String!
   login: String!
   model: DatabaseType!
-  owner: String!
   password: String!
   port: String!
-  schema: String
   source: Source!
   updatedAt: DateTime!
 }
@@ -256,10 +258,9 @@ input CredentialWhereInput {
   model: EnumDatabaseTypeFilter
   NOT: [CredentialWhereInput!]
   OR: [CredentialWhereInput!]
-  owner: StringFilter
+  owners: OwnerListRelationFilter
   password: StringFilter
   port: StringFilter
-  schema: StringNullableFilter
   source: SourceWhereInput
   sourceId: StringFilter
   updatedAt: DateTimeFilter
@@ -418,14 +419,12 @@ input InputWhereInput {
   OR: [InputWhereInput!]
   script: StringNullableFilter
   sqlValue: ColumnWhereInput
-  sqlValueId: StringNullableFilter
   staticValue: StringNullableFilter
   updatedAt: DateTimeFilter
 }
 
 input InputWhereUniqueInput {
   id: String
-  sqlValueId: String
 }
 
 type Join {
@@ -462,10 +461,17 @@ input JoinWhereUniqueInput {
   id: String
 }
 
+scalar Json
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
 scalar JSON @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
+
+input JsonNullableFilter {
+  equals: Json
+  not: Json
+}
 
 type Mutation {
   addConditionToInputGroup(action: String, column: String, inputGroupId: ID!, relation: ConditionRelation, table: String, value: String): InputGroup
@@ -575,6 +581,24 @@ input NestedStringNullableFilter {
   not: NestedStringNullableFilter
   notIn: [String!]
   startsWith: String
+}
+
+input OwnerListRelationFilter {
+  every: OwnerWhereInput
+  none: OwnerWhereInput
+  some: OwnerWhereInput
+}
+
+input OwnerWhereInput {
+  AND: [OwnerWhereInput!]
+  Column: ColumnListRelationFilter
+  credential: CredentialWhereInput
+  credentialId: StringFilter
+  id: StringFilter
+  name: StringFilter
+  NOT: [OwnerWhereInput!]
+  OR: [OwnerWhereInput!]
+  schema: JsonNullableFilter
 }
 
 type Query {
