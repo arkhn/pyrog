@@ -1,8 +1,18 @@
 #import "../fragments/entireInput.graphql"
 #import "../fragments/entireAttribute.graphql"
 
-mutation createSQLInput($inputGroupId: ID!, $columnInput: ColumnInput) {
-  createInput(inputGroupId: $inputGroupId, sql: $columnInput) {
+mutation createSQLInput(
+  $inputGroupId: ID!
+  $columnInput: ColumnInput
+  $script: String
+  $conceptMapId: String
+) {
+  createSqlInput(
+    inputGroupId: $inputGroupId
+    sql: $columnInput
+    script: $script
+    conceptMapId: $conceptMapId
+  ) {
     ...entireInput
     inputGroup {
       id

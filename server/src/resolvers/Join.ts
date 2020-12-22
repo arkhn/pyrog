@@ -1,4 +1,4 @@
-import { objectType, FieldResolver } from '@nexus/schema'
+import { objectType, FieldResolver } from 'nexus'
 
 export const Join = objectType({
   name: 'Join',
@@ -34,35 +34,15 @@ export const updateJoin: FieldResolver<'Mutation', 'updateJoin'> = async (
           {
             where: { id: join!.tables[0].id },
             data: {
-              table:
-                !data.source || data.source.table === undefined
-                  ? join!.tables[0].table
-                  : data.source.table
-                  ? data.source.table
-                  : null,
-              column:
-                !data.source || data.source.column === undefined
-                  ? join!.tables[0].column
-                  : data.source.column
-                  ? data.source.column
-                  : null,
+              table: data.tables && data.tables[0].table,
+              column: data.tables && data.tables[0].column,
             },
           },
           {
             where: { id: join!.tables[1].id },
             data: {
-              table:
-                !data.target || data.target.table === undefined
-                  ? join!.tables[1].table
-                  : data.target.table
-                  ? data.target.table
-                  : null,
-              column:
-                !data.target || data.target.column === undefined
-                  ? join!.tables[1].column
-                  : data.target.column
-                  ? data.target.column
-                  : null,
+              table: data.tables && data.tables[1].table,
+              column: data.tables && data.tables[1].column,
             },
           },
         ],

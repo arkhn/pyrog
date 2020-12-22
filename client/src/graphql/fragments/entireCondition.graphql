@@ -1,10 +1,16 @@
+#import "./entireJoin.graphql"
+
 fragment entireCondition on Condition {
   id
+  inputGroupId
   action
   sqlValue {
     id
     table
     column
+    joins {
+      ...entireJoin
+    }
   }
   relation
   value

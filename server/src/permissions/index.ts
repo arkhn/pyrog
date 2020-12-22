@@ -106,7 +106,6 @@ export const permissions = shield(
         Query: {
           me: rules.isAuthenticatedUser,
           credential: rules.isAuthenticatedUser,
-          allSources: rules.isAdmin,
           sources: rules.isAuthenticatedUser,
           source: rules.isAuthenticatedUser,
           resource: rules.isAuthenticatedUser,
@@ -142,7 +141,8 @@ export const permissions = shield(
           updateCondition: rules.isSourceWriter,
           deleteCondition: rules.isSourceWriter,
 
-          createInput: rules.isSourceWriter,
+          createSqlInput: rules.isSourceWriter,
+          createStaticInput: rules.isSourceWriter,
           updateInput: rules.isSourceWriter,
           deleteInput: rules.isSourceWriter,
 

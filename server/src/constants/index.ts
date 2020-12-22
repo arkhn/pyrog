@@ -32,6 +32,6 @@ export const HL7_AUTHOR = 'HL7'
 export const TEST_ADMIN_USER = {
   id: 'admin',
   name: 'admin',
-  email: 'admin@arkhn.com',
+  email: 'test@arkhn.com',
   role: 'ADMIN',
 } as User

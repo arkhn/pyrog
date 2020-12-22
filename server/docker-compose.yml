@@ -42,7 +42,7 @@ services:
     ports:
       - 5432:5432
     environment:
-      POSTGRES_USER: prisma
+      POSTGRES_USER: pyrog
       POSTGRES_PASSWORD: prisma
       POSTGRES_DB: prisma
     volumes:

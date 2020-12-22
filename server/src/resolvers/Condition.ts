@@ -1,10 +1,11 @@
-import { objectType, FieldResolver } from '@nexus/schema'
+import { objectType, FieldResolver } from 'nexus'
 import { ConditionAction, ConditionRelation } from '@prisma/client'
 
 export const Condition = objectType({
   name: 'Condition',
   definition(t) {
     t.model.id()
+    t.model.inputGroupId()
 
     t.model.action()
     t.model.sqlValue()
@@ -31,12 +32,12 @@ export const updateCondition: FieldResolver<
     },
   })
 
-export const deleteCondition: FieldResolver<
-  'Mutation',
-  'deleteCondition'
-> = async (_, { conditionId }, ctx) =>
-  ctx.prisma.condition.delete({
+export const conditionsForResource: FieldResolver<
+  'Query',
+  'conditionsForResource'
+> = async (_, { resourceId }, ctx) =>
+  ctx.prisma.condition.findMany({
     where: {
-      id: conditionId,
+      inputGroup: { attribute: { resourceId } },
     },
   })

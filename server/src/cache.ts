@@ -4,7 +4,7 @@ import { promisify } from 'util'
 import { REDIS_URL } from './constants'
 
 let rcache: RedisClient
-let get: (arg: string) => Promise<string>
+let get: (arg: string) => Promise<string | null>
 let del: (arg: string) => Promise<number>
 let mget: OverloadedKeyCommand<string[], string[], Promise<string[]>>
 let set: (

@@ -14,7 +14,7 @@ input AccessControl_user_sourceCompoundUniqueInput {
   userId: String!
 }
 
-input AccessControlFilter {
+input AccessControlListRelationFilter {
   every: AccessControlWhereInput
   none: AccessControlWhereInput
   some: AccessControlWhereInput
@@ -25,7 +25,7 @@ input AccessControlWhereInput {
   id: StringFilter
   NOT: [AccessControlWhereInput!]
   OR: [AccessControlWhereInput!]
-  role: SourceRole
+  role: EnumSourceRoleFilter
   source: SourceWhereInput
   sourceId: StringFilter
   user: UserWhereInput
@@ -42,7 +42,7 @@ type Attribute {
   createdAt: DateTime!
 
   """Structured version of a definition"""
-  definition: StructureDefinition!
+  definition: StructureDefinition
   definitionId: String!
   id: String!
   inputGroups(after: InputGroupWhereUniqueInput, before: InputGroupWhereUniqueInput, first: Int, last: Int): [InputGroup!]!
@@ -53,36 +53,36 @@ type Attribute {
 }
 
 type AttributeDefinition {
-  attribute: JSON!
+  attribute: JSON
 
   """List of extensions on this type"""
-  extensions: [StructureDefinition!]!
-  id: String!
-}
-
-input AttributeFilter {
-  every: AttributeWhereInput
-  none: AttributeWhereInput
-  some: AttributeWhereInput
+  extensions: [StructureDefinition]
+  id: String
 }
 
 input AttributeInput {
   mergingScript: String
 }
 
+input AttributeListRelationFilter {
+  every: AttributeWhereInput
+  none: AttributeWhereInput
+  some: AttributeWhereInput
+}
+
 input AttributeWhereInput {
   AND: [AttributeWhereInput!]
-  comments: CommentFilter
+  comments: CommentListRelationFilter
   createdAt: DateTimeFilter
   definitionId: StringFilter
   id: StringFilter
-  inputGroups: InputGroupFilter
+  inputGroups: InputGroupListRelationFilter
   NOT: [AttributeWhereInput!]
   OR: [AttributeWhereInput!]
   path: StringFilter
   resource: ResourceWhereInput
-  resourceId: NullableStringFilter
-  sliceName: NullableStringFilter
+  resourceId: StringNullableFilter
+  sliceName: StringNullableFilter
   updatedAt: DateTimeFilter
 }
 
@@ -90,9 +90,9 @@ input AttributeWhereUniqueInput {
   id: String
 }
 
-input BooleanFilter {
+input BoolFilter {
   equals: Boolean
-  not: Boolean
+  not: NestedBoolFilter
 }
 
 type Column {
@@ -104,15 +104,9 @@ type Column {
   updatedAt: DateTime!
 }
 
-input ColumnFilter {
-  every: ColumnWhereInput
-  none: ColumnWhereInput
-  some: ColumnWhereInput
-}
-
 input ColumnInput {
   column: String!
-  joins: [JoinInput!]
+  joins: [JoinTablesInput!]
   table: String!
 }
 
@@ -122,27 +116,35 @@ input ColumnInputWithoutJoins {
   table: String
 }
 
+input ColumnListRelationFilter {
+  every: ColumnWhereInput
+  none: ColumnWhereInput
+  some: ColumnWhereInput
+}
+
 input ColumnWhereInput {
   AND: [ColumnWhereInput!]
-  column: NullableStringFilter
+  column: StringNullableFilter
   condition: ConditionWhereInput
   createdAt: DateTimeFilter
   filter: FilterWhereInput
   id: StringFilter
   input: InputWhereInput
+  inputId: StringFilter
   join: JoinWhereInput
-  joinId: NullableStringFilter
-  joins: JoinFilter
+  joinId: StringNullableFilter
+  joins: JoinListRelationFilter
   NOT: [ColumnWhereInput!]
   OR: [ColumnWhereInput!]
   owner: OwnerWhereInput
-  ownerId: NullableStringFilter
-  table: NullableStringFilter
+  ownerId: StringFilter
+  table: StringNullableFilter
   updatedAt: DateTimeFilter
 }
 
 input ColumnWhereUniqueInput {
   id: String
+  inputId: String
 }
 
 type Comment {
@@ -154,7 +156,7 @@ type Comment {
   validation: Boolean!
 }
 
-input CommentFilter {
+input CommentListRelationFilter {
   every: CommentWhereInput
   none: CommentWhereInput
   some: CommentWhereInput
@@ -163,7 +165,7 @@ input CommentFilter {
 input CommentWhereInput {
   AND: [CommentWhereInput!]
   attribute: AttributeWhereInput
-  attributeId: NullableStringFilter
+  attributeId: StringNullableFilter
   author: UserWhereInput
   authorId: StringFilter
   content: StringFilter
@@ -172,7 +174,7 @@ input CommentWhereInput {
   NOT: [CommentWhereInput!]
   OR: [CommentWhereInput!]
   updatedAt: DateTimeFilter
-  validation: BooleanFilter
+  validation: BoolFilter
 }
 
 input CommentWhereUniqueInput {
@@ -180,14 +182,15 @@ input CommentWhereUniqueInput {
 }
 
 type ConceptMap {
-  id: String!
-  name: String!
-  title: String!
+  id: String
+  name: String
+  title: String
 }
 
 type Condition {
   action: ConditionAction
   id: String!
+  inputGroupId: String!
   relation: ConditionRelation!
   sqlValue: Column
   value: String
@@ -198,7 +201,7 @@ enum ConditionAction {
   INCLUDE
 }
 
-input ConditionFilter {
+input ConditionListRelationFilter {
   every: ConditionWhereInput
   none: ConditionWhereInput
   some: ConditionWhereInput
@@ -215,27 +218,28 @@ enum ConditionRelation {
 }
 
 input ConditionWhereInput {
-  action: ConditionAction
+  action: EnumConditionActionNullableFilter
   AND: [ConditionWhereInput!]
-  columnId: NullableStringFilter
+  columnId: StringNullableFilter
   id: StringFilter
   inputGroup: InputGroupWhereInput
   inputGroupId: StringFilter
   NOT: [ConditionWhereInput!]
   OR: [ConditionWhereInput!]
-  relation: ConditionRelation
+  relation: EnumConditionRelationFilter
   sqlValue: ColumnWhereInput
-  value: NullableStringFilter
+  value: StringNullableFilter
 }
 
 input ConditionWhereUniqueInput {
+  columnId: String
   id: String
 }
 
 type Credential {
   createdAt: DateTime!
   database: String!
-  decryptedPassword: String!
+  decryptedPassword: String
   host: String!
   id: String!
   login: String!
@@ -254,15 +258,20 @@ input CredentialWhereInput {
   host: StringFilter
   id: StringFilter
   login: StringFilter
-  model: DatabaseType
+  model: EnumDatabaseTypeFilter
   NOT: [CredentialWhereInput!]
   OR: [CredentialWhereInput!]
-  owners: OwnerFilter
+  owners: OwnerListRelationFilter
   password: StringFilter
   port: StringFilter
   source: SourceWhereInput
   sourceId: StringFilter
   updatedAt: DateTimeFilter
+}
+
+input CredentialWhereUniqueInput {
+  id: String
+  sourceId: String
 }
 
 enum DatabaseType {
@@ -280,8 +289,43 @@ input DateTimeFilter {
   in: [DateTime!]
   lt: DateTime
   lte: DateTime
-  not: DateTime
+  not: NestedDateTimeFilter
   notIn: [DateTime!]
+}
+
+input EnumConditionActionNullableFilter {
+  equals: ConditionAction
+  in: [ConditionAction!]
+  not: NestedEnumConditionActionNullableFilter
+  notIn: [ConditionAction!]
+}
+
+input EnumConditionRelationFilter {
+  equals: ConditionRelation
+  in: [ConditionRelation!]
+  not: NestedEnumConditionRelationFilter
+  notIn: [ConditionRelation!]
+}
+
+input EnumDatabaseTypeFilter {
+  equals: DatabaseType
+  in: [DatabaseType!]
+  not: NestedEnumDatabaseTypeFilter
+  notIn: [DatabaseType!]
+}
+
+input EnumRoleFilter {
+  equals: Role
+  in: [Role!]
+  not: NestedEnumRoleFilter
+  notIn: [Role!]
+}
+
+input EnumSourceRoleFilter {
+  equals: SourceRole
+  in: [SourceRole!]
+  not: NestedEnumSourceRoleFilter
+  notIn: [SourceRole!]
 }
 
 type Filter {
@@ -291,16 +335,16 @@ type Filter {
   value: String!
 }
 
-input FilterFilter {
+input FilterInput {
+  relation: String!
+  sqlColumn: ColumnInput!
+  value: String!
+}
+
+input FilterListRelationFilter {
   every: FilterWhereInput
   none: FilterWhereInput
   some: FilterWhereInput
-}
-
-input FilterInput {
-  relation: String!
-  sqlColumn: ColumnInputWithoutJoins!
-  value: String!
 }
 
 input FilterWhereInput {
@@ -310,7 +354,7 @@ input FilterWhereInput {
   OR: [FilterWhereInput!]
   relation: StringFilter
   resource: ResourceWhereInput
-  resourceId: NullableStringFilter
+  resourceId: StringNullableFilter
   sqlColumn: ColumnWhereInput
   sqlColumnId: StringFilter
   value: StringFilter
@@ -321,20 +365,16 @@ type Input {
   createdAt: DateTime!
   id: String!
   inputGroup: InputGroup
+  inputGroupId: String
   script: String
   sqlValue: Column
   staticValue: String
   updatedAt: DateTime!
 }
 
-input InputFilter {
-  every: InputWhereInput
-  none: InputWhereInput
-  some: InputWhereInput
-}
-
 type InputGroup {
   attribute: Attribute
+  attributeId: String
   conditions(after: ConditionWhereUniqueInput, before: ConditionWhereUniqueInput, first: Int, last: Int): [Condition!]!
   createdAt: DateTime!
   id: String!
@@ -343,7 +383,7 @@ type InputGroup {
   updatedAt: DateTime!
 }
 
-input InputGroupFilter {
+input InputGroupListRelationFilter {
   every: InputGroupWhereInput
   none: InputGroupWhereInput
   some: InputGroupWhereInput
@@ -352,12 +392,12 @@ input InputGroupFilter {
 input InputGroupWhereInput {
   AND: [InputGroupWhereInput!]
   attribute: AttributeWhereInput
-  attributeId: NullableStringFilter
-  conditions: ConditionFilter
+  attributeId: StringNullableFilter
+  conditions: ConditionListRelationFilter
   createdAt: DateTimeFilter
   id: StringFilter
-  inputs: InputFilter
-  mergingScript: NullableStringFilter
+  inputs: InputListRelationFilter
+  mergingScript: StringNullableFilter
   NOT: [InputGroupWhereInput!]
   OR: [InputGroupWhereInput!]
   updatedAt: DateTimeFilter
@@ -367,19 +407,24 @@ input InputGroupWhereUniqueInput {
   id: String
 }
 
+input InputListRelationFilter {
+  every: InputWhereInput
+  none: InputWhereInput
+  some: InputWhereInput
+}
+
 input InputWhereInput {
   AND: [InputWhereInput!]
-  conceptMapId: NullableStringFilter
+  conceptMapId: StringNullableFilter
   createdAt: DateTimeFilter
   id: StringFilter
   inputGroup: InputGroupWhereInput
-  inputGroupId: NullableStringFilter
+  inputGroupId: StringNullableFilter
   NOT: [InputWhereInput!]
   OR: [InputWhereInput!]
-  script: NullableStringFilter
+  script: StringNullableFilter
   sqlValue: ColumnWhereInput
-  sqlValueId: NullableStringFilter
-  staticValue: NullableStringFilter
+  staticValue: StringNullableFilter
   updatedAt: DateTimeFilter
 }
 
@@ -394,26 +439,30 @@ type Join {
   updatedAt: DateTime!
 }
 
-input JoinFilter {
+input JoinInput {
+  source: ColumnInputWithoutJoins!
+  target: ColumnInputWithoutJoins!
+}
+
+input JoinListRelationFilter {
   every: JoinWhereInput
   none: JoinWhereInput
   some: JoinWhereInput
 }
 
-input JoinInput {
-  source: ColumnInputWithoutJoins
-  target: ColumnInputWithoutJoins
+input JoinTablesInput {
+  tables: [ColumnInputWithoutJoins]
 }
 
 input JoinWhereInput {
   AND: [JoinWhereInput!]
   column: ColumnWhereInput
-  columnId: NullableStringFilter
+  columnId: StringNullableFilter
   createdAt: DateTimeFilter
   id: StringFilter
   NOT: [JoinWhereInput!]
   OR: [JoinWhereInput!]
-  tables: ColumnFilter
+  tables: ColumnListRelationFilter
   updatedAt: DateTimeFilter
 }
 
@@ -421,43 +470,105 @@ input JoinWhereUniqueInput {
   id: String
 }
 
+scalar Json
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
-scalar JSON
+scalar JSON @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
 
-type Mutation {
-  addConditionToInputGroup(action: String, column: String, inputGroupId: ID!, relation: ConditionRelation, table: String, value: String): InputGroup!
-  addJoinToColumn(columnId: ID!, join: JoinInput): Column!
-  createAccessControl(role: SourceRole!, sourceId: ID!, userEmail: String!): AccessControl!
-  createAttribute(data: AttributeInput, definitionId: ID!, path: String!, resourceId: ID!, sliceName: String): Attribute!
-  createComment(attributeId: ID!, content: String!, validation: Boolean!): Comment!
-  createInput(inputGroupId: ID!, script: String, sql: ColumnInput, static: String): Input!
-  createInputGroup(attributeId: ID!): InputGroup!
-  createResource(definitionId: String!, sourceId: ID!): Resource!
-  createSource(mapping: String, name: String!, templateName: String!): Source!
-  createTemplate(name: String!): Template!
-  deleteAccessControl(accessControlId: ID!): AccessControl!
-  deleteAttribute(attributeId: ID!): Attribute!
-  deleteAttributes(filter: AttributeWhereInput): [Attribute!]
-  deleteCondition(conditionId: ID!): Condition!
-  deleteCredential(credentialId: ID!): Credential!
-  deleteInput(inputId: ID!): Input!
-  deleteJoin(joinId: ID!): Join!
-  deleteResource(resourceId: ID!): Resource!
-  deleteSource(sourceId: ID!): Source!
-  deleteTemplate(id: ID!): Template!
-  logout: User!
-  updateCondition(action: String, column: String, conditionId: ID!, relation: ConditionRelation, table: String, value: String): Condition!
-  updateInput(data: UpdateInputInput!, inputId: ID!): Input!
-  updateInputGroup(inputGroupId: ID!, mergingScript: String): InputGroup!
-  updateJoin(data: JoinInput!, joinId: ID!): Join!
-  updateResource(data: UpdateResourceInput!, filters: [FilterInput!], resourceId: ID!): Resource!
-  updateRole(newRole: Role!, userId: ID!): User!
-  upsertCredential(database: String!, host: String!, login: String!, model: String!, owners: [OwnerInput!], password: String!, port: String!, sourceId: ID!): Credential!
+input JsonNullableFilter {
+  equals: Json
+  not: Json
 }
 
-input NullableStringFilter {
+type Mutation {
+  addConditionToInputGroup(action: ConditionAction, columnInput: ColumnInput, inputGroupId: ID!, relation: ConditionRelation, value: String): InputGroup
+  addJoinToColumn(columnId: ID!, join: JoinTablesInput!): Column
+  createAccessControl(role: SourceRole!, sourceId: ID!, userEmail: String!): AccessControl
+  createAttribute(data: AttributeInput, definitionId: ID!, path: String!, resourceId: ID!, sliceName: String): Attribute
+  createComment(attributeId: ID!, content: String!, validation: Boolean!): Comment
+  createInputGroup(attributeId: ID!): Attribute
+  createResource(definitionId: String!, sourceId: ID!): Resource
+  createSource(mapping: String, name: String!, templateName: String!): Source
+  createSqlInput(conceptMapId: String, inputGroupId: ID!, script: String, sql: ColumnInput): Input
+  createStaticInput(inputGroupId: ID!, value: String): Input
+  createTemplate(name: String!): Template
+  deleteAccessControl(accessControlId: ID!): AccessControl
+  deleteAttribute(attributeId: ID!): Attribute
+  deleteAttributes(filter: AttributeWhereInput!): [Attribute]
+  deleteCondition(conditionId: ID!, inputGroupId: ID!): InputGroup
+  deleteCredential(credentialId: ID!): Credential
+  deleteInput(inputGroupId: ID!, inputId: ID!): InputGroup
+  deleteInputGroup(attributeId: ID, inputGroupId: ID): Attribute
+  deleteJoin(joinId: ID!): Join
+  deleteResource(resourceId: ID!): Resource
+  deleteSource(sourceId: ID!): Source
+  deleteTemplate(id: ID!): Template
+  logout: User
+  updateColumn(columnId: ID!, data: ColumnInputWithoutJoins!): Column
+  updateCondition(action: String, column: String, conditionId: ID!, relation: ConditionRelation, table: String, value: String): Condition
+  updateInput(data: UpdateInputInput!, inputId: ID!): Input
+  updateInputGroup(inputGroupId: ID!, mergingScript: String): InputGroup
+  updateJoin(data: JoinTablesInput!, joinId: ID!): Join
+  updateResource(data: UpdateResourceInput!, filters: [FilterInput!], resourceId: ID!): Resource
+  updateRole(newRole: Role!, userId: ID!): User
+  updateStaticInput(inputId: ID!, value: String): Input
+  upsertCredential(database: String!, host: String!, login: String!, model: String!, owners: [OwnerInput], password: String!, port: String!, sourceId: ID!): Credential
+}
+
+input NestedBoolFilter {
+  equals: Boolean
+  not: NestedBoolFilter
+}
+
+input NestedDateTimeFilter {
+  equals: DateTime
+  gt: DateTime
+  gte: DateTime
+  in: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  not: NestedDateTimeFilter
+  notIn: [DateTime!]
+}
+
+input NestedEnumConditionActionNullableFilter {
+  equals: ConditionAction
+  in: [ConditionAction!]
+  not: NestedEnumConditionActionNullableFilter
+  notIn: [ConditionAction!]
+}
+
+input NestedEnumConditionRelationFilter {
+  equals: ConditionRelation
+  in: [ConditionRelation!]
+  not: NestedEnumConditionRelationFilter
+  notIn: [ConditionRelation!]
+}
+
+input NestedEnumDatabaseTypeFilter {
+  equals: DatabaseType
+  in: [DatabaseType!]
+  not: NestedEnumDatabaseTypeFilter
+  notIn: [DatabaseType!]
+}
+
+input NestedEnumRoleFilter {
+  equals: Role
+  in: [Role!]
+  not: NestedEnumRoleFilter
+  notIn: [Role!]
+}
+
+input NestedEnumSourceRoleFilter {
+  equals: SourceRole
+  in: [SourceRole!]
+  not: NestedEnumSourceRoleFilter
+  notIn: [SourceRole!]
+}
+
+input NestedStringFilter {
   contains: String
   endsWith: String
   equals: String
@@ -466,7 +577,21 @@ input NullableStringFilter {
   in: [String!]
   lt: String
   lte: String
-  not: String
+  not: NestedStringFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+input NestedStringNullableFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: NestedStringNullableFilter
   notIn: [String!]
   startsWith: String
 }
@@ -475,18 +600,12 @@ type Owner {
   credential: Credential!
   id: String!
   name: String!
-  schema: String
+  schema: Json
 }
 
 input Owner_name_credential_unique_constraintCompoundUniqueInput {
   credentialId: String!
   name: String!
-}
-
-input OwnerFilter {
-  every: OwnerWhereInput
-  none: OwnerWhereInput
-  some: OwnerWhereInput
 }
 
 input OwnerInput {
@@ -495,16 +614,22 @@ input OwnerInput {
   schema: String
 }
 
+input OwnerListRelationFilter {
+  every: OwnerWhereInput
+  none: OwnerWhereInput
+  some: OwnerWhereInput
+}
+
 input OwnerWhereInput {
   AND: [OwnerWhereInput!]
-  Column: ColumnFilter
+  Column: ColumnListRelationFilter
   credential: CredentialWhereInput
   credentialId: StringFilter
   id: StringFilter
   name: StringFilter
   NOT: [OwnerWhereInput!]
   OR: [OwnerWhereInput!]
-  schema: NullableStringFilter
+  schema: JsonNullableFilter
 }
 
 input OwnerWhereUniqueInput {
@@ -513,16 +638,22 @@ input OwnerWhereUniqueInput {
 }
 
 type Query {
-  allSources: [Source!]
-  attribute(attributeId: ID!): Attribute
-  credential(credentialId: ID!): Credential
+  attribute(where: AttributeWhereUniqueInput!): Attribute
+  attributes(after: AttributeWhereUniqueInput, before: AttributeWhereUniqueInput, first: Int, last: Int, where: AttributeWhereInput): [Attribute!]!
+  conditionsForResource(resourceId: ID!): [Condition]
+  credential(where: CredentialWhereUniqueInput!): Credential
   me: User
-  resource(resourceId: ID!): Resource
-  source(sourceId: ID!): Source
-  sources: [Source!]
+  resource(where: ResourceWhereUniqueInput!): Resource
+  source(where: SourceWhereUniqueInput!): Source
+  sources: [Source]
   structureDefinition(definitionId: ID!): StructureDefinition
-  template(templateId: ID!): Template
-  templates: [Template!]
+  template(where: TemplateWhereUniqueInput!): Template
+  templates(after: TemplateWhereUniqueInput, before: TemplateWhereUniqueInput, first: Int, last: Int): [Template!]!
+}
+
+enum QueryMode {
+  default
+  insensitive
 }
 
 type Resource {
@@ -530,7 +661,7 @@ type Resource {
   createdAt: DateTime!
 
   """Structured version of a definition"""
-  definition: StructureDefinition!
+  definition: StructureDefinition
   definitionId: String!
   filters: [Filter!]!
   id: String!
@@ -542,7 +673,7 @@ type Resource {
   updatedAt: DateTime!
 }
 
-input ResourceFilter {
+input ResourceListRelationFilter {
   every: ResourceWhereInput
   none: ResourceWhereInput
   some: ResourceWhereInput
@@ -550,17 +681,17 @@ input ResourceFilter {
 
 input ResourceWhereInput {
   AND: [ResourceWhereInput!]
-  attributes: AttributeFilter
+  attributes: AttributeListRelationFilter
   createdAt: DateTimeFilter
   definitionId: StringFilter
-  filters: FilterFilter
+  filters: FilterListRelationFilter
   id: StringFilter
-  label: NullableStringFilter
-  logicalReference: UUIDFilter
+  label: StringNullableFilter
+  logicalReference: StringFilter
   NOT: [ResourceWhereInput!]
   OR: [ResourceWhereInput!]
-  primaryKeyColumn: NullableStringFilter
-  primaryKeyTable: NullableStringFilter
+  primaryKeyColumn: StringNullableFilter
+  primaryKeyTable: StringNullableFilter
   source: SourceWhereInput
   sourceId: StringFilter
   updatedAt: DateTimeFilter
@@ -580,14 +711,14 @@ type Source {
   createdAt: DateTime!
   credential: Credential
   id: String!
-  mapping(includeComments: Boolean! = true): String!
-  mappingProgress: [Int!]
+  mapping(includeComments: Boolean! = true): String
+  mappingProgress: [Int]
   name: String!
-  resources(after: ResourceWhereUniqueInput, before: ResourceWhereUniqueInput, first: Int, last: Int, where: ResourceWhereInput): [Resource!]!
+  resources(after: ResourceWhereUniqueInput, before: ResourceWhereUniqueInput, first: Int, last: Int): [Resource!]!
   template: Template!
   updatedAt: DateTime!
-  usedConceptMapIds: [String!]!
-  usedProfileIds: [String!]!
+  usedConceptMapIds: [String]
+  usedProfileIds: [String]
   version: String
 }
 
@@ -596,7 +727,7 @@ input Source_templateId_nameCompoundUniqueInput {
   templateId: String!
 }
 
-input SourceFilter {
+input SourceListRelationFilter {
   every: SourceWhereInput
   none: SourceWhereInput
   some: SourceWhereInput
@@ -608,7 +739,7 @@ enum SourceRole {
 }
 
 input SourceWhereInput {
-  accessControls: AccessControlFilter
+  accessControls: AccessControlListRelationFilter
   AND: [SourceWhereInput!]
   createdAt: DateTimeFilter
   credential: CredentialWhereInput
@@ -616,11 +747,11 @@ input SourceWhereInput {
   name: StringFilter
   NOT: [SourceWhereInput!]
   OR: [SourceWhereInput!]
-  resources: ResourceFilter
+  resources: ResourceListRelationFilter
   template: TemplateWhereInput
   templateId: StringFilter
   updatedAt: DateTimeFilter
-  version: NullableStringFilter
+  version: StringNullableFilter
 }
 
 input SourceWhereUniqueInput {
@@ -637,21 +768,37 @@ input StringFilter {
   in: [String!]
   lt: String
   lte: String
-  not: String
+  mode: QueryMode
+  not: NestedStringFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+input StringNullableFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  mode: QueryMode
+  not: NestedStringNullableFilter
   notIn: [String!]
   startsWith: String
 }
 
 type StructureDefinition {
   """Structured version of the attributes"""
-  attributes: [AttributeDefinition!]!
-  derivation: String!
-  id: String!
-  kind: String!
-  name: String!
-  publisher: String!
-  type: String!
-  url: String!
+  attributes: [AttributeDefinition]
+  derivation: String
+  id: String
+  kind: String
+  name: String
+  publisher: String
+  type: String
+  url: String
 }
 
 input StructureDefinitionWhereFilter {
@@ -675,13 +822,21 @@ input TemplateWhereInput {
   name: StringFilter
   NOT: [TemplateWhereInput!]
   OR: [TemplateWhereInput!]
-  sources: SourceFilter
+  sources: SourceListRelationFilter
   updatedAt: DateTimeFilter
 }
 
+input TemplateWhereUniqueInput {
+  id: String
+  name: String
+}
+
 input UpdateInputInput {
+  column: String
   conceptMapId: String
+  joins: [JoinTablesInput]
   script: String
+  table: String
 }
 
 input UpdateResourceInput {
@@ -700,31 +855,15 @@ type User {
 }
 
 input UserWhereInput {
-  AccessControl: AccessControlFilter
+  AccessControl: AccessControlListRelationFilter
   AND: [UserWhereInput!]
-  Comment: CommentFilter
+  Comment: CommentListRelationFilter
   createdAt: DateTimeFilter
   email: StringFilter
   id: StringFilter
   name: StringFilter
   NOT: [UserWhereInput!]
   OR: [UserWhereInput!]
-  role: Role
+  role: EnumRoleFilter
   updatedAt: DateTimeFilter
-}
-
-scalar UUID
-
-input UUIDFilter {
-  contains: UUID
-  endsWith: UUID
-  equals: UUID
-  gt: UUID
-  gte: UUID
-  in: [UUID!]
-  lt: UUID
-  lte: UUID
-  not: UUID
-  notIn: [UUID!]
-  startsWith: UUID
 }

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { objectType, FieldResolver } from '@nexus/schema'
+import { objectType, FieldResolver } from 'nexus'
 import { DatabaseType, Credential as Credz } from '@prisma/client'
 
 import { PAGAI_URL } from '../constants'

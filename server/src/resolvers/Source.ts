@@ -1,4 +1,4 @@
-import { objectType, FieldResolver, booleanArg } from '@nexus/schema'
+import { objectType, FieldResolver, booleanArg, nonNull } from 'nexus'
 
 import { getDefinition } from 'fhir'
 import { importMapping, exportMapping } from 'resolvers/mapping'
@@ -17,25 +17,23 @@ export const Source = objectType({
     t.model.name()
     t.model.version()
 
-    t.model.resources({ filtering: true })
+    t.model.resources()
     t.model.credential()
     t.model.template()
-    t.model.accessControls({ filtering: false })
+    t.model.accessControls()
 
     t.model.updatedAt()
     t.model.createdAt()
 
-    t.field('mapping', {
+    t.nullable.field('mapping', {
       type: 'String',
-      nullable: false,
-      args: { includeComments: booleanArg({ default: true, required: true }) },
+      args: { includeComments: nonNull(booleanArg({ default: true })) },
       resolve: (parent, { includeComments }, ctx) =>
-        exportMapping(ctx.prisma, parent.id, includeComments),
+        exportMapping(ctx.prisma, parent.id, includeComments!),
     })
 
-    t.list.field('mappingProgress', {
+    t.nullable.list.field('mappingProgress', {
       type: 'Int',
-      nullable: true,
       resolve: async (parent, _, ctx) => {
         const resources = await ctx.prisma.resource.findMany({
           include: {

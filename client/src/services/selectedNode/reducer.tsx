@@ -3,8 +3,7 @@ import { ISimpleAction } from 'types';
 const initialState: any = {
   source: null,
   resource: null,
-  attribute: null,
-  selectedInputGroup: null
+  attribute: null
 };
 
 const selectedNodeReducer = (
@@ -40,8 +39,7 @@ const selectedNodeReducer = (
       return {
         ...state,
         resource: action.payload.resource,
-        attribute: null,
-        selectedInputGroup: 0
+        attribute: null
       };
 
     case 'UPDATE_ATTRIBUTE':
@@ -64,14 +62,7 @@ const selectedNodeReducer = (
       return {
         ...state,
         resource: null,
-        attribute: null,
-        selectedInputGroup: 0
-      };
-
-    case 'SELECT_INPUT_GROUP':
-      return {
-        ...state,
-        selectedInputGroup: action.payload.selectedGroup
+        attribute: null
       };
 
     default:

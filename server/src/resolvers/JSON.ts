@@ -1,4 +1,4 @@
-import { asNexusMethod } from '@nexus/schema'
+// import { asNexusMethod, scalarType } from 'nexus'
 import GraphQLJSON from 'graphql-type-json'
 
-export const JSON = asNexusMethod(GraphQLJSON, 'JSON')
+export const JSON = GraphQLJSON

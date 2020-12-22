@@ -1,6 +1,10 @@
 import { IToaster } from '@blueprintjs/core';
 import * as redux from 'redux';
-import { Attribute, AttributeDefinition, ResourceDefinition } from '@arkhn/fhir.ts';
+import {
+  Attribute,
+  AttributeDefinition,
+  ResourceDefinition
+} from '@arkhn/fhir.ts';
 
 // REDUX
 export interface ISimpleAction {
@@ -91,28 +95,59 @@ export interface Resource {
   };
 }
 
+export interface IInputGroup {
+  id: string;
+  attributeId: string;
+  inputs: IInput[];
+  conditions: Condition[];
+  mergingScript: string;
+}
+
+export interface IInput {
+  id: string;
+  inputGroupId: string;
+  sqlValue: Column;
+  staticValue: string;
+  conceptMapId: string;
+  script: string;
+}
+
 export interface Condition {
   id: string;
+  inputGroupId?: string;
   action: string;
-  sqlValue: {
-    table: string;
-    column: string;
-  };
+  sqlValue: Column;
   relation: string;
   value: string;
 }
 
 export interface Filter {
-  sqlColumn: ISourceColumn;
+  sqlColumn: Column;
   relation: string;
   value: string;
+}
+
+interface Column {
+  id?: string;
+  table: string;
+  column: string;
+  joins?: Join[];
+}
+
+export interface Join {
+  id?: string;
+  tables: Column[];
+}
+
+export interface JoinInput {
+  source: Column;
+  target: Column;
 }
 
 export interface ISelectedNode {
   source: ISelectedSource;
   resource: Resource;
   attribute: Attribute;
-  selectedInputGroup: number;
 }
 
 export interface IResourceInputs {
@@ -241,9 +276,4 @@ export interface ITemplate {
 
 export interface ISourceSchema {
   [table: string]: string[];
-}
-
-export interface ISourceColumn {
-  table: string;
-  column: string;
 }

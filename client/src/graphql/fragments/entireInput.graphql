@@ -2,6 +2,7 @@
 
 fragment entireInput on Input {
   id
+  inputGroupId
   script
   conceptMapId
   staticValue

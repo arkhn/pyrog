@@ -1,0 +1,7 @@
+#import "../fragments/entireInput.graphql"
+
+mutation updateStaticInput($inputId: ID!, $value: String) {
+  updateStaticInput(inputId: $inputId, value: $value) {
+    ...entireInput
+  }
+}

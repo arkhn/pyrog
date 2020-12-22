@@ -1,4 +1,4 @@
-import { inputObjectType } from '@nexus/schema'
+import { inputObjectType } from 'nexus'
 
 export const UpdateResourceInput = inputObjectType({
   name: 'UpdateResourceInput',
@@ -19,9 +19,9 @@ export const AttributeInput = inputObjectType({
 export const FilterInput = inputObjectType({
   name: 'FilterInput',
   definition(t) {
-    t.field('sqlColumn', { type: 'ColumnInputWithoutJoins', required: true })
-    t.field('relation', { type: 'String', required: true })
-    t.field('value', { type: 'String', required: true })
+    t.nonNull.field('sqlColumn', { type: 'ColumnInput' })
+    t.nonNull.field('relation', { type: 'String' })
+    t.nonNull.field('value', { type: 'String' })
   },
 })
 
@@ -37,6 +37,11 @@ export const OwnerInput = inputObjectType({
 export const UpdateInputInput = inputObjectType({
   name: 'UpdateInputInput',
   definition(t) {
+    t.field('table', { type: 'String' })
+    t.field('column', { type: 'String' })
+    t.list.field('joins', {
+      type: 'JoinTablesInput',
+    })
     t.field('script', { type: 'String' })
     t.field('conceptMapId', { type: 'String' })
   },
@@ -45,10 +50,19 @@ export const UpdateInputInput = inputObjectType({
 export const ColumnInput = inputObjectType({
   name: 'ColumnInput',
   definition(t) {
-    t.field('table', { type: 'String', required: true })
-    t.field('column', { type: 'String', required: true })
-    t.list.field('joins', {
-      type: 'JoinInput',
+    t.nonNull.field('table', { type: 'String' })
+    t.nonNull.field('column', { type: 'String' })
+    t.list.nonNull.field('joins', {
+      type: 'JoinTablesInput',
+    })
+  },
+})
+
+export const JoinTablesInput = inputObjectType({
+  name: 'JoinTablesInput',
+  definition(t) {
+    t.list.field('tables', {
+      type: 'ColumnInputWithoutJoins',
     })
   },
 })
@@ -65,10 +79,10 @@ export const ColumnInputWithoutJoins = inputObjectType({
 export const JoinInput = inputObjectType({
   name: 'JoinInput',
   definition(t) {
-    t.field('source', {
+    t.nonNull.field('source', {
       type: 'ColumnInputWithoutJoins',
     })
-    t.field('target', {
+    t.nonNull.field('target', {
       type: 'ColumnInputWithoutJoins',
     })
   },
