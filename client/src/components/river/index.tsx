@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { Button } from '@blueprintjs/core';
-import React, { useState } from 'react';
+import { Select } from '@blueprintjs/select';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useQuery } from '@apollo/react-hooks';
 
@@ -29,6 +30,13 @@ interface Source {
   resources: Resource[];
 }
 
+type Batch = {
+  id: string;
+  timestamp: string;
+};
+
+const BatchSelect = Select.ofType<Batch>();
+
 // GRAPHQL
 const qSourcesAndResources = loader(
   'src/graphql/queries/sourcesAndResources.graphql'
@@ -40,6 +48,7 @@ const FhirRiverView = (): React.ReactElement => {
   const [selectedSource, setSelectedSource] = useState({} as Source);
   const [selectedResources, setSelectedResources] = useState([] as Resource[]);
   const [running, setRunning] = useState(false);
+  const [batchList, setBatchList] = useState([] as Batch[]);
 
   const { data } = useQuery(qSourcesAndResources, {
     fetchPolicy: 'no-cache'
@@ -84,11 +93,13 @@ const FhirRiverView = (): React.ReactElement => {
     setRunning(true);
 
     try {
-      await axios.post(
+      const response = await axios.post(
         `${RIVER_URL}/batch`,
         {
           resources: selectedResources.map(r => ({
+            // eslint-disable-next-line @typescript-eslint/camelcase
             resource_id: r.id,
+            // eslint-disable-next-line @typescript-eslint/camelcase
             resource_type: r.definition.type
           }))
         },
@@ -96,7 +107,13 @@ const FhirRiverView = (): React.ReactElement => {
           headers: { 'Content-Type': 'application/json' }
         }
       );
-
+      setBatchList([
+        ...batchList,
+        {
+          id: response.data as string,
+          timestamp: new Date().toLocaleString()
+        } as Batch
+      ]);
       toaster.show({
         message: 'fhir-river ran successfully',
         intent: 'success',
@@ -114,6 +131,16 @@ const FhirRiverView = (): React.ReactElement => {
     }
     setRunning(false);
   };
+
+  useEffect(() => {
+    if (batchList.length)
+      localStorage.setItem('batchHistory', JSON.stringify(batchList));
+  }, [batchList]);
+
+  useEffect(() => {
+    const batchHistory = localStorage.getItem('batchHistory');
+    if (batchHistory) setBatchList(JSON.parse(batchHistory) as Batch[]);
+  }, []);
 
   return (
     <div>
