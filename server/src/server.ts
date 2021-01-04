@@ -57,7 +57,7 @@ const server = new ApolloServer({
   cors: {
     origin: '*',
     methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Authorization', 'Content-Type'],
+    allowedHeaders: ['Authorization', 'Content-Type', 'IDToken'],
   },
   formatError: (err: GraphQLError): GraphQLFormattedError => {
     if (err.message.startsWith(authenticationError.code)) {
