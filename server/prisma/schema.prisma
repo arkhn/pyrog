@@ -59,18 +59,20 @@ model Owner {
 }
 
 model Resource {
-  id               String      @id @default(cuid())
-  sourceId         String      @map("source")
-  createdAt        DateTime    @default(now())
-  label            String?
-  primaryKeyColumn String?
-  primaryKeyTable  String?
-  updatedAt        DateTime    @updatedAt
-  definitionId     String
-  logicalReference String      @default(uuid())
-  source           Source      @relation(fields: [sourceId], references: [id])
-  attributes       Attribute[]
-  filters          Filter[]
+  id                String      @id @default(cuid())
+  sourceId          String      @map("source")
+  createdAt         DateTime    @default(now())
+  label             String?
+  primaryKeyOwnerId String?     @map("primaryKeyOwner")
+  primaryKeyOwner   Owner?      @relation(fields: [primaryKeyOwnerId], references: [id])
+  primaryKeyColumn  String?
+  primaryKeyTable   String?
+  updatedAt         DateTime    @updatedAt
+  definitionId      String
+  logicalReference  String      @default(uuid())
+  source            Source      @relation(fields: [sourceId], references: [id])
+  attributes        Attribute[]
+  filters           Filter[]
 }
 
 model Filter {

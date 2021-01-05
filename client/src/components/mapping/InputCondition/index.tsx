@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { loader } from 'graphql.macro';
 import { onError as onApolloError } from 'services/apollo';
 
-import { Condition, IReduxStore, ISourceSchema, Join } from 'types';
+import { Condition, IReduxStore, Owner, Join } from 'types';
 import ColumnSelect from 'components/selects/columnSelect';
 import StringSelect from 'components/selects/stringSelect';
 import ConditionSelect from 'components/selects/conditionSelect';
@@ -46,8 +46,8 @@ const conditionToName = (condition: Condition): string =>
 
 const InputCondition = ({ condition }: Props) => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const schema = useSelector(
-    (state: IReduxStore) => state.selectedNode.source.credential.schema
+  const owners = useSelector(
+    (state: IReduxStore) => state.selectedNode.source.credential.owners
   );
   const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
 
@@ -125,9 +125,20 @@ const InputCondition = ({ condition }: Props) => {
             </div>
             <div className="conditions-form-column">
               <ColumnSelect
+                initialOwner={condition.sqlValue.owner}
                 initialTable={condition.sqlValue.table}
                 initialColumn={condition.sqlValue.column}
                 initialJoins={condition.sqlValue.joins}
+                ownerChangeCallback={(owner: Owner) => {
+                  updateCondition({
+                    variables: {
+                      conditionId: condition.id,
+                      owner,
+                      table: '',
+                      column: ''
+                    }
+                  });
+                }}
                 tableChangeCallback={(table: string) => {
                   updateCondition({
                     variables: {
@@ -168,7 +179,7 @@ const InputCondition = ({ condition }: Props) => {
                     }
                   });
                 }}
-                sourceSchema={schema as ISourceSchema}
+                sourceOwners={owners}
                 primaryKeyTable={resource.primaryKeyTable}
               />
             </div>

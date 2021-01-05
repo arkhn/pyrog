@@ -59,6 +59,12 @@ export interface ISelectedSource {
   resources: Resource[];
 }
 
+export interface Owner {
+  id: string;
+  name: string;
+  schema: ISourceSchema;
+}
+
 export interface ICredential {
   id: string;
   host: string;
@@ -67,8 +73,7 @@ export interface ICredential {
   model: string;
   login: string;
   decryptedPassword: string;
-  owner: string;
-  schema: ISourceSchema | string;
+  owners: Owner[];
 }
 
 export interface IAccessControl {
@@ -84,6 +89,7 @@ export interface Resource {
   logicalReference: string;
   name: string;
   type: string;
+  primaryKeyOwner: Owner;
   primaryKeyTable: string;
   primaryKeyColumn: string;
   filters: Filter[];
@@ -129,6 +135,7 @@ export interface Filter {
 
 interface Column {
   id?: string;
+  owner?: Owner;
   table: string;
   column: string;
   joins?: Join[];

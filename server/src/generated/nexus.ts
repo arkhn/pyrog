@@ -399,6 +399,7 @@ export interface NexusGenInputs {
     name?: NexusGenInputs['StringFilter'] | null; // StringFilter
     NOT?: NexusGenInputs['OwnerWhereInput'][] | null; // [OwnerWhereInput!]
     OR?: NexusGenInputs['OwnerWhereInput'][] | null; // [OwnerWhereInput!]
+    Resource?: NexusGenInputs['ResourceListRelationFilter'] | null; // ResourceListRelationFilter
     schema?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
   }
   OwnerWhereUniqueInput: { // input type
@@ -426,6 +427,8 @@ export interface NexusGenInputs {
     NOT?: NexusGenInputs['ResourceWhereInput'][] | null; // [ResourceWhereInput!]
     OR?: NexusGenInputs['ResourceWhereInput'][] | null; // [ResourceWhereInput!]
     primaryKeyColumn?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    primaryKeyOwner?: NexusGenInputs['OwnerWhereInput'] | null; // OwnerWhereInput
+    primaryKeyOwnerId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     primaryKeyTable?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     source?: NexusGenInputs['SourceWhereInput'] | null; // SourceWhereInput
     sourceId?: NexusGenInputs['StringFilter'] | null; // StringFilter

@@ -166,11 +166,14 @@ const MappingView = () => {
     </Tabs>
   );
 
-  if (!source?.credential?.schema) {
+  if (source.credential.owners.some(o => !o.schema)) {
     toaster.show({
       icon: 'error',
       intent: 'danger',
-      message: `missing database schema for source ${source?.name || null}`,
+      message: `missing database schema for 
+      source ${source?.name || null} owner ${source.credential.owners.find(
+        o => !o.schema
+      )?.name || null}`,
       timeout: 4000
     });
     return <Navbar />;

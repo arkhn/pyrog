@@ -1,6 +1,6 @@
 import { Attribute } from '@arkhn/fhir.ts';
 
-import { IAction, ISourceSchema, Resource } from 'types';
+import { IAction, ICredential, ISourceSchema, Resource } from 'types';
 
 // Fhir Source
 export const updateSelectedSource = (source: {
@@ -26,10 +26,7 @@ export const changeSelectedSource = (source: {
   template: {
     name: string;
   };
-  credential: {
-    id: string;
-    schema: ISourceSchema | string;
-  };
+  credential: ICredential;
 }): IAction => {
   return {
     type: 'CHANGE_SOURCE',
