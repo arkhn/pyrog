@@ -13,7 +13,7 @@ import { loader } from 'graphql.macro';
 import { useMutation } from '@apollo/react-hooks';
 
 import { onError as onApolloError } from 'services/apollo';
-import { ConceptMap, IInput, IReduxStore, ISourceSchema, Join } from 'types';
+import { ConceptMap, IInput, IReduxStore, Owner, Join } from 'types';
 import { FHIR_API_URL } from '../../../constants';
 
 import ColumnSelect from 'components/selects/columnSelect';
@@ -102,6 +102,14 @@ const InputColumn = ({ input }: Props) => {
           </div>
           <div className="sql-input-form">
             <ColumnSelect
+              ownerChangeCallback={(owner: Owner) => {
+                updateInput({
+                  variables: {
+                    inputId: input.id,
+                    data: { owner, table: '', column: '' }
+                  }
+                });
+              }}
               tableChangeCallback={(table: string) => {
                 updateInput({
                   variables: {
@@ -141,10 +149,11 @@ const InputColumn = ({ input }: Props) => {
                   }
                 });
               }}
+              initialOwner={input.sqlValue.owner}
               initialTable={input.sqlValue.table}
               initialColumn={input.sqlValue.column}
               initialJoins={input.sqlValue.joins}
-              sourceSchema={source.credential.schema as ISourceSchema}
+              sourceOwners={source.credential.owners}
               primaryKeyTable={resource.primaryKeyTable}
               popoverProps={{
                 autoFocus: true,

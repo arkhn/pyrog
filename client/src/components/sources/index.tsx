@@ -36,7 +36,8 @@ const SourcesView = (): React.ReactElement => {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
 
   const { data: dataSources, loading: loadingSources } = useQuery(qSources, {
-    fetchPolicy: 'cache-and-network', onError
+    fetchPolicy: 'cache-and-network',
+    onError
   });
 
   React.useEffect(() => {

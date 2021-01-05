@@ -24,7 +24,7 @@ const selectedNodeReducer = (
           ...action.payload,
           credential: action.payload.credential && {
             ...action.payload.credential,
-            schema: JSON.parse(action.payload.credential.schema)
+            owners: action.payload.credential.owners
           }
         }
       };

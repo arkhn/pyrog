@@ -628,6 +628,7 @@ input OwnerWhereInput {
   name: StringFilter
   NOT: [OwnerWhereInput!]
   OR: [OwnerWhereInput!]
+  Resource: ResourceListRelationFilter
   schema: JsonNullableFilter
 }
 
@@ -690,6 +691,8 @@ input ResourceWhereInput {
   NOT: [ResourceWhereInput!]
   OR: [ResourceWhereInput!]
   primaryKeyColumn: StringNullableFilter
+  primaryKeyOwner: OwnerWhereInput
+  primaryKeyOwnerId: StringNullableFilter
   primaryKeyTable: StringNullableFilter
   source: SourceWhereInput
   sourceId: StringFilter

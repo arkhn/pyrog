@@ -13,7 +13,7 @@ import axios from 'axios';
 import './style.scss';
 import { Icon } from '@blueprintjs/core';
 import { useSelector } from 'react-redux';
-import { IReduxStore, ISelectedSource } from 'types';
+import { IReduxStore, ISelectedSource, Owner } from 'types';
 import { PAGAI_URL, RIVER_URL } from '../../../constants';
 import FhirPreview from './FhirPreview';
 import StringSelect from 'components/selects/stringSelect';
@@ -26,6 +26,7 @@ const TableViewer = ({ source }: Props) => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
   const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
 
+  const [owner, setOwner] = React.useState(resource?.primaryKeyOwner);
   const [table, setTable] = React.useState(resource?.primaryKeyTable);
   const [compatiblePreview, setCompatiblePreview] = React.useState(false);
 
@@ -36,7 +37,7 @@ const TableViewer = ({ source }: Props) => {
   const [previewData, setPreviewData] = React.useState(undefined as any);
   const [loadingPreview, setLoadingPreview] = React.useState(false);
 
-  const tables = Object.keys(source.credential.schema);
+  const owners = source.credential.owners.map(o => o.name);
 
   const fetchPreview = React.useCallback(
     async selectedRows => {
@@ -78,7 +79,7 @@ const TableViewer = ({ source }: Props) => {
     fetchPreview(rowIndex);
   };
 
-  const renderRowHeader = (index: number) => (
+  const renderRowHeader = () => (
     <RowHeaderCell
       className="previewButton"
       nameRenderer={() => <Icon icon="flame" />}
@@ -93,10 +94,10 @@ const TableViewer = ({ source }: Props) => {
   }, [resource]);
 
   React.useEffect(() => {
-    if (resource && table) {
+    if (resource && owner && table) {
       setLoadingTable(true);
       axios
-        .get(`${PAGAI_URL}/explore/${resource.id}/${table}`)
+        .get(`${PAGAI_URL}/explore/${resource.id}/${owner.name}/${table}`)
         .then((res: any) => {
           setLoadingTable(false);
           setRows(res.data.rows);
@@ -112,14 +113,23 @@ const TableViewer = ({ source }: Props) => {
           });
         });
     }
-  }, [resource, source.credential.owner, table, toaster]);
+  }, [resource, source.credential.owners, owner, table, toaster]);
 
   return (
     <div id="tableViewer">
       <StringSelect
         icon={'th'}
+        inputItem={owner.name}
+        items={owners}
+        maxItems={100}
+        onChange={(o: Owner) => {
+          setOwner(o);
+        }}
+      />
+      <StringSelect
+        icon={'th'}
         inputItem={table}
-        items={tables}
+        items={Object.keys(owner?.schema)}
         maxItems={100}
         onChange={(t: string) => {
           setTable(t);

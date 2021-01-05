@@ -3,18 +3,20 @@ import React, { useState, useEffect } from 'react';
 
 import JoinSelect from './joinSelect';
 import StringSelect from 'components/selects/stringSelect';
-import { ISourceSchema, Join } from 'types';
+import { Owner, Join, ISourceSchema } from 'types';
 
 export interface Props {
+  ownerChangeCallback?: Function;
   tableChangeCallback?: Function;
   columnChangeCallback?: Function;
   allJoinsChangeCallback?: Function;
   joinChangeCallback?: Function;
   addJoinCallback?: Function;
   deleteJoinCallback?: Function;
+  initialOwner?: Owner;
   initialTable?: string;
   initialColumn?: string;
-  sourceSchema: ISourceSchema;
+  sourceOwners: Owner[];
   vertical?: boolean;
   fill?: boolean;
   initialJoins?: Join[];
@@ -24,15 +26,17 @@ export interface Props {
 }
 
 const ColumnSelect = ({
+  ownerChangeCallback,
   tableChangeCallback,
   columnChangeCallback,
   allJoinsChangeCallback,
   joinChangeCallback,
   addJoinCallback,
   deleteJoinCallback,
+  initialOwner,
   initialTable,
   initialColumn,
-  sourceSchema,
+  sourceOwners,
   vertical,
   fill,
   initialJoins,
@@ -40,15 +44,28 @@ const ColumnSelect = ({
   popoverProps,
   disabled
 }: Props): React.ReactElement => {
+  const [owner, setOwner] = useState(initialOwner);
   const [table, setTable] = useState(initialTable);
   const [column, setColumn] = useState(initialColumn);
   const [joins, setJoins] = useState(initialJoins || []);
 
   useEffect(() => {
+    setOwner(initialOwner);
     setTable(initialTable);
     setColumn(initialColumn);
     setJoins(initialJoins || []);
-  }, [initialTable, initialColumn, initialJoins]);
+  }, [initialOwner, initialTable, initialColumn, initialJoins]);
+
+  const changeOwner = (e: string): void => {
+    const _owner = sourceOwners.find(o => o.name === e);
+    if (ownerChangeCallback) {
+      ownerChangeCallback(_owner);
+    } else {
+      setOwner(_owner);
+      setTable(undefined);
+      setColumn(undefined);
+    }
+  };
 
   const changeTable = (e: string): void => {
     if (tableChangeCallback) {
@@ -74,9 +91,18 @@ const ColumnSelect = ({
     }
   };
 
-  const tables = Object.keys(sourceSchema);
-
-  const columns = table ? sourceSchema[table] : [];
+  const owners = sourceOwners.map((o: Owner) => o.name);
+  const tables = owner
+    ? Object.keys(
+        sourceOwners.find((o: Owner) => owner && o.name === owner.name)
+          ?.schema as ISourceSchema
+      )
+    : [];
+  const columns = table
+    ? (sourceOwners.find((o: Owner) => owner && o.name === owner.name)?.schema[
+        table
+      ] as string[])
+    : [];
   const withJoins = table && primaryKeyTable && primaryKeyTable !== table;
 
   return (
@@ -86,7 +112,16 @@ const ColumnSelect = ({
           <StringSelect
             disabled={disabled}
             icon={'th'}
-            inputItem={table!}
+            inputItem={owner?.name || ''}
+            items={owners}
+            maxItems={100}
+            onChange={changeOwner}
+            popoverProps={popoverProps || {}}
+          />
+          <StringSelect
+            disabled={disabled}
+            icon={'th'}
+            inputItem={table || ''}
             items={tables}
             maxItems={100}
             onChange={changeTable}
@@ -95,7 +130,7 @@ const ColumnSelect = ({
           <StringSelect
             disabled={disabled || !table}
             icon={'column-layout'}
-            inputItem={column!}
+            inputItem={column || ''}
             items={columns}
             maxItems={100}
             onChange={changeColumn}
