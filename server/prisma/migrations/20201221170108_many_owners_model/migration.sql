@@ -80,6 +80,18 @@ WHERE "Column".join = _join.id;
 DELETE from "Column" WHERE "owner" is NULL;
 ALTER TABLE "Column" ALTER COLUMN "owner" SET NOT NULL;
 
+-- Add "Owner" foreign key on "Column"
+ALTER TABLE "Resource"
+ADD COLUMN     "primaryKeyOwner" TEXT;
+
+UPDATE "Resource" _resource set "primaryKeyOwner" = _owner.id
+FROM "Source" source
+JOIN "Credential" cred on cred.source = source.id
+JOIN "Owner" _owner on _owner.credential = cred.id
+WHERE _resource.source = source.id;
+
+ALTER TABLE "Resource" ALTER COLUMN "primaryKeyOwner" SET NOT NULL;
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Column.input_unique" ON "Column"("input");
 
@@ -91,3 +103,6 @@ ALTER TABLE "Column" ADD FOREIGN KEY("input")REFERENCES "Input"("id") ON DELETE 
 
 -- AddForeignKey
 ALTER TABLE "Column" ADD FOREIGN KEY("owner")REFERENCES "Owner"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Resource" ADD FOREIGN KEY("primaryKeyOwner")REFERENCES "Owner"("id") ON DELETE CASCADE ON UPDATE CASCADE;
