@@ -128,6 +128,7 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
 
   React.useEffect(() => {
     setLabel(resource.label || '');
+    setPkOwner(resource.primaryKeyOwner || '');
     setPkTable(resource.primaryKeyTable || '');
     setPkColumn(resource.primaryKeyColumn || '');
     setFilters(resource.filters || []);
@@ -140,6 +141,7 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
         resourceId: resource.id,
         data: {
           label,
+          primaryKeyOwner: pkOwner,
           primaryKeyTable: pkTable,
           primaryKeyColumn: pkColumn
         },
@@ -159,6 +161,7 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
         updateSelectedResource({
           ...resource,
           label,
+          primaryKeyOwner: pkOwner as Owner,
           primaryKeyTable: pkTable,
           primaryKeyColumn: pkColumn,
           filters

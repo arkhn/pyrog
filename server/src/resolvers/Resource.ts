@@ -9,7 +9,7 @@ export const Resource = objectType({
 
     t.model.logicalReference()
     t.model.label()
-
+    t.model.primaryKeyOwner()
     t.model.primaryKeyTable()
     t.model.primaryKeyColumn()
 

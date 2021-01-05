@@ -668,6 +668,7 @@ type Resource {
   label: String
   logicalReference: String!
   primaryKeyColumn: String
+  primaryKeyOwner: Owner
   primaryKeyTable: String
   source: Source!
   updatedAt: DateTime!

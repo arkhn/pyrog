@@ -119,7 +119,7 @@ const TableViewer = ({ source }: Props) => {
     <div id="tableViewer">
       <StringSelect
         icon={'th'}
-        inputItem={owner.name}
+        inputItem={owner?.name || ''}
         items={owners}
         maxItems={100}
         onChange={(o: Owner) => {
@@ -129,7 +129,7 @@ const TableViewer = ({ source }: Props) => {
       <StringSelect
         icon={'th'}
         inputItem={table}
-        items={Object.keys(owner?.schema)}
+        items={owner?.schema ? Object.keys(owner.schema) : []}
         maxItems={100}
         onChange={(t: string) => {
           setTable(t);

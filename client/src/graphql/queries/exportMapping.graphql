@@ -1,5 +1,5 @@
-query exportMapping($sourceId: ID!, $includeComments: Boolean) {
-  source(sourceId: $sourceId) {
+query exportMapping($sourceId: String!, $includeComments: Boolean!) {
+  source(where: {id: $sourceId }) {
     id
     name
     template {

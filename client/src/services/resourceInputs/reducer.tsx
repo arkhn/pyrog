@@ -1,6 +1,7 @@
 import { ISimpleAction } from 'types';
 
 const initialState: any = {
+  primaryKeyOwner: null,
   primaryKeyTable: null,
   primaryKeyColumn: null,
   attributesMap: null

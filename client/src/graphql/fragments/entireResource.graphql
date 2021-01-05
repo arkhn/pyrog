@@ -5,6 +5,11 @@ fragment entireResource on Resource {
   id
   label
   logicalReference
+  primaryKeyOwner {
+    id
+    name
+    schema
+  }
   primaryKeyTable
   primaryKeyColumn
   attributes {

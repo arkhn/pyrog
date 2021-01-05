@@ -846,6 +846,7 @@ export interface NexusGenFieldTypes {
     label: string | null; // String
     logicalReference: string; // String!
     primaryKeyColumn: string | null; // String
+    primaryKeyOwner: NexusGenRootTypes['Owner'] | null; // Owner
     primaryKeyTable: string | null; // String
     source: NexusGenRootTypes['Source']; // Source!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
@@ -1055,6 +1056,7 @@ export interface NexusGenFieldTypeNames {
     label: 'String'
     logicalReference: 'String'
     primaryKeyColumn: 'String'
+    primaryKeyOwner: 'Owner'
     primaryKeyTable: 'String'
     source: 'Source'
     updatedAt: 'DateTime'
