@@ -1,6 +1,4 @@
-import { Column, Join, Prisma } from '@prisma/client'
 import { objectType, FieldResolver } from 'nexus'
-import { NexusInputObjectTypeDef } from 'nexus/dist/core'
 
 export const Input = objectType({
   name: 'Input',

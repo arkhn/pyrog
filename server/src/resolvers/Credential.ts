@@ -5,7 +5,6 @@ import { DatabaseType, Credential as Credz } from '@prisma/client'
 import { PAGAI_URL } from '../constants'
 import { encrypt, decrypt } from 'utils'
 import { Context } from 'context'
-import { NexusGenAllTypes, NexusGenInputs } from 'generated/nexus'
 
 export const Credential = objectType({
   name: 'Credential',
