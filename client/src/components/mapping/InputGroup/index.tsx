@@ -69,7 +69,7 @@ const InputGroup = ({ inputGroup, key }: Props) => {
     });
   };
 
-  const onClearMergingScript = (): any => {
+  const onClearMergingScript = () => {
     updateInputGroup({
       variables: {
         inputGroupId: inputGroup.id,
@@ -100,17 +100,17 @@ const InputGroup = ({ inputGroup, key }: Props) => {
         <div className="input-cards">
           <div id="input-column-rows">
             {inputGroup.inputs
-              .filter((input: any) => !!input.sqlValue)
+              .filter(input => !!input.sqlValue)
               .map(
-                (input: any, index: number) =>
+                (input, index) =>
                   input && <InputColumn key={index} input={input} />
               )}
           </div>
           <div id="input-column-rows">
             {inputGroup.inputs
-              .filter((input: any) => !input.sqlValue)
+              .filter(input => !input.sqlValue)
               .map(
-                (input: any, index: number) =>
+                (input, index) =>
                   input && <InputStatic key={index} input={input} />
               )}
           </div>
@@ -182,7 +182,7 @@ const InputGroup = ({ inputGroup, key }: Props) => {
       <div className="input-cards">
         <div id="input-column-rows">
           {inputGroup.conditions.map(
-            (condition: any, index: number) =>
+            (condition, index) =>
               condition && <InputCondition key={index} condition={condition} />
           )}
         </div>

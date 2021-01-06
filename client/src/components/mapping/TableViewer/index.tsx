@@ -31,9 +31,9 @@ const TableViewer = ({ source }: Props) => {
 
   const [loadingTable, setLoadingTable] = React.useState(false);
   const [fields, setFields] = React.useState([] as string[]);
-  const [rows, setRows] = React.useState([] as any);
+  const [rows, setRows] = React.useState<any[]>([]);
 
-  const [previewData, setPreviewData] = React.useState(undefined as any);
+  const [previewData, setPreviewData] = React.useState<any>(undefined);
   const [loadingPreview, setLoadingPreview] = React.useState(false);
 
   const tables = Object.keys(source.credential.schema);
@@ -125,32 +125,36 @@ const TableViewer = ({ source }: Props) => {
           setTable(t);
         }}
       />
-      <Table
-        numRows={rows.length}
-        enableColumnReordering={false}
-        enableRowResizing={false}
-        rowHeaderCellRenderer={compatiblePreview ? renderRowHeader : undefined}
-        enableMultipleSelection={false}
-        onSelection={onSelection}
-        selectionModes={SelectionModes.ROWS_ONLY}
-        loadingOptions={
-          loadingTable
-            ? [
-                TableLoadingOption.CELLS,
-                TableLoadingOption.COLUMN_HEADERS,
-                TableLoadingOption.ROW_HEADERS
-              ]
-            : []
-        }
-      >
-        {fields.map((field: string, index: number) => (
-          <Column
-            key={index}
-            name={field}
-            cellRenderer={(i: number) => <Cell>{rows[i][index]}</Cell>}
-          />
-        ))}
-      </Table>
+      {rows.length > 0 && (
+        <Table
+          numRows={rows.length}
+          enableColumnReordering={false}
+          enableRowResizing={false}
+          rowHeaderCellRenderer={
+            compatiblePreview ? renderRowHeader : undefined
+          }
+          enableMultipleSelection={false}
+          onSelection={onSelection}
+          selectionModes={SelectionModes.ROWS_ONLY}
+          loadingOptions={
+            loadingTable
+              ? [
+                  TableLoadingOption.CELLS,
+                  TableLoadingOption.COLUMN_HEADERS,
+                  TableLoadingOption.ROW_HEADERS
+                ]
+              : []
+          }
+        >
+          {fields.map((field: string, index: number) => (
+            <Column
+              key={index}
+              name={field}
+              cellRenderer={(i: number) => <Cell>{rows[i][index]}</Cell>}
+            />
+          ))}
+        </Table>
+      )}
       <FhirPreview previewData={previewData} loading={loadingPreview} />
     </div>
   );

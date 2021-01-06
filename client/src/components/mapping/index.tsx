@@ -24,7 +24,7 @@ const qInputsForAttribute = loader(
 
 const MappingView = () => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const { source, attribute } = useSelector(
+  const { source, resource, attribute } = useSelector(
     (state: IReduxStore) => state.selectedNode
   );
   const attributesForResource = useSelector(
@@ -34,7 +34,7 @@ const MappingView = () => {
   const path = attribute?.path;
   const attributeId = (path && attributesForResource[path]?.id) || null;
 
-  const [selectedTabId, setSelectedTabId] = React.useState('rules' as TabId);
+  const [selectedTabId, setSelectedTabId] = React.useState<TabId>('rules');
 
   const { data: dataAttribute } = useQuery(qInputsForAttribute, {
     variables: {
@@ -190,7 +190,7 @@ const MappingView = () => {
           <div id="exploration-panel">
             {attribute
               ? renderMappingTabs()
-              : source.credential && <TableViewer source={source} />}
+              : source.credential && resource && <TableViewer source={source} />}
           </div>
         </div>
       </div>
