@@ -56,7 +56,7 @@ const InputStatic = ({ input }: Props): React.ReactElement => {
     setStaticValue(input.staticValue);
   }, [input]);
 
-  const onUpdate = async (value: string): Promise<void> => {
+  const onUpdate = (value: string): void => {
     updateStaticInput({
       variables: {
         inputId: input.id,

@@ -34,7 +34,7 @@ const MappingView = () => {
   const path = attribute?.path;
   const attributeId = (path && attributesForResource[path]?.id) || null;
 
-  const [selectedTabId, setSelectedTabId] = React.useState('rules' as TabId);
+  const [selectedTabId, setSelectedTabId] = React.useState<TabId>('rules');
 
   const { data: dataAttribute } = useQuery(qInputsForAttribute, {
     variables: {

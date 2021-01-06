@@ -31,9 +31,9 @@ const TableViewer = ({ source }: Props) => {
 
   const [loadingTable, setLoadingTable] = React.useState(false);
   const [fields, setFields] = React.useState([] as string[]);
-  const [rows, setRows] = React.useState([] as any);
+  const [rows, setRows] = React.useState<any[]>([]);
 
-  const [previewData, setPreviewData] = React.useState(undefined as any);
+  const [previewData, setPreviewData] = React.useState<any>(undefined);
   const [loadingPreview, setLoadingPreview] = React.useState(false);
 
   const tables = Object.keys(source.credential.schema);
