@@ -24,7 +24,7 @@ const qInputsForAttribute = loader(
 
 const MappingView = () => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const { source, attribute } = useSelector(
+  const { source, resource, attribute } = useSelector(
     (state: IReduxStore) => state.selectedNode
   );
   const attributesForResource = useSelector(
@@ -190,7 +190,7 @@ const MappingView = () => {
           <div id="exploration-panel">
             {attribute
               ? renderMappingTabs()
-              : source.credential && <TableViewer source={source} />}
+              : source.credential && resource && <TableViewer source={source} />}
           </div>
         </div>
       </div>
