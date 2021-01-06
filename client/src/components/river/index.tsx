@@ -45,7 +45,9 @@ const FhirRiverView = (): React.ReactElement => {
   const [selectedSource, setSelectedSource] = useState({} as Source);
   const [selectedResources, setSelectedResources] = useState([] as Resource[]);
   const [running, setRunning] = useState(false);
-  const [selectedBatch, setSelectedBatch] = useState({} as Batch);
+  const [selectedBatch, setSelectedBatch] = useState(
+    undefined as Batch | undefined
+  );
 
   const { data } = useQuery(qSourcesAndResources, {
     fetchPolicy: 'no-cache'
@@ -132,6 +134,7 @@ const FhirRiverView = (): React.ReactElement => {
     e: React.MouseEvent<HTMLElement, MouseEvent>
   ): Promise<void> => {
     e.preventDefault();
+    if (!selectedBatch) return;
     try {
       await axios.delete(`${RIVER_URL}/batch/${selectedBatch.id}`);
       dispatch(removeBatch(selectedBatch.id));
