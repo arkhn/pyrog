@@ -38,8 +38,8 @@ const InputColumn = ({ input }: Props) => {
     (state: IReduxStore) => state.selectedNode
   );
 
-  const [conceptMap, setConceptMap] = useState(
-    undefined as ConceptMap | undefined
+  const [conceptMap, setConceptMap] = useState<ConceptMap | undefined>(
+    undefined
   );
   const [isConceptMapOverlayVisible, setConceptMapOverlayVisible] = useState(
     false

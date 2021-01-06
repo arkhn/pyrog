@@ -18,7 +18,7 @@ interface Props {
   value: string;
   attribute: Attribute;
   sources: Source[];
-  onUpdate: (value: string) => Promise<void>;
+  onUpdate: (value: string) => void;
 }
 
 interface Source {
