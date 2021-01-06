@@ -200,7 +200,7 @@ const FhirRiverView = (): React.ReactElement => {
               ? `${selectedBatch.id} ${selectedBatch.timestamp}`
               : 'Select batch to cancel'
           }
-          onChange={(item: string) =>
+          onChange={(item: string): void =>
             setSelectedBatch({
               id: item.split(' ')[0],
               timestamp: item.split(' ')[1]
