@@ -1,14 +1,17 @@
 import axios from 'axios';
 import { Button } from '@blueprintjs/core';
 import { Select } from '@blueprintjs/select';
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addBatch, removeBatch } from '../../services/batchList/actions';
+import getBatchList from '../../services/batchList/selectors';
+import StringSelect from '../selects/stringSelect';
 import { useQuery } from '@apollo/react-hooks';
 
 import { loader } from 'graphql.macro';
 
 import Navbar from 'components/navbar';
-import { IReduxStore } from 'types';
+import { IReduxStore, Batch } from 'types';
 
 import SourceSelect from 'components/selects/sourceSelect';
 import ResourceMultiSelect from 'components/selects/resourceMultiSelect';
@@ -30,25 +33,20 @@ interface Source {
   resources: Resource[];
 }
 
-type Batch = {
-  id: string;
-  timestamp: string;
-};
-
-const BatchSelect = Select.ofType<Batch>();
-
 // GRAPHQL
 const qSourcesAndResources = loader(
   'src/graphql/queries/sourcesAndResources.graphql'
 );
 
 const FhirRiverView = (): React.ReactElement => {
+  const dispatch = useDispatch();
   const toaster = useSelector((state: IReduxStore) => state.toaster);
+  const batchList = useSelector(getBatchList);
 
   const [selectedSource, setSelectedSource] = useState({} as Source);
   const [selectedResources, setSelectedResources] = useState([] as Resource[]);
   const [running, setRunning] = useState(false);
-  const [batchList, setBatchList] = useState([] as Batch[]);
+  const [selectedBatch, setSelectedBatch] = useState({} as Batch);
 
   const { data } = useQuery(qSourcesAndResources, {
     fetchPolicy: 'no-cache'
@@ -86,7 +84,7 @@ const FhirRiverView = (): React.ReactElement => {
     setSelectedResources([...selectedResources]);
   };
 
-  const onClickRun = async (
+  const onClickCreateBatch = async (
     e: React.MouseEvent<HTMLElement, MouseEvent>
   ): Promise<void> => {
     e.preventDefault();
@@ -107,13 +105,12 @@ const FhirRiverView = (): React.ReactElement => {
           headers: { 'Content-Type': 'application/json' }
         }
       );
-      setBatchList([
-        ...batchList,
-        {
+      dispatch(
+        addBatch({
           id: response.data as string,
           timestamp: new Date().toLocaleString()
-        } as Batch
-      ]);
+        } as Batch)
+      );
       toaster.show({
         message: 'fhir-river ran successfully',
         intent: 'success',
@@ -132,15 +129,23 @@ const FhirRiverView = (): React.ReactElement => {
     setRunning(false);
   };
 
-  useEffect(() => {
-    if (batchList.length)
-      localStorage.setItem('batchHistory', JSON.stringify(batchList));
-  }, [batchList]);
-
-  useEffect(() => {
-    const batchHistory = localStorage.getItem('batchHistory');
-    if (batchHistory) setBatchList(JSON.parse(batchHistory) as Batch[]);
-  }, []);
+  const onClickCancelBatch = async (
+    e: React.MouseEvent<HTMLElement, MouseEvent>
+  ): Promise<void> => {
+    e.preventDefault();
+    try {
+      await axios.delete(`${RIVER_URL}/batch/${selectedBatch.id}`);
+      dispatch(removeBatch(selectedBatch.id));
+    } catch (err) {
+      const errMessage = err.response ? err.response.data : err.message;
+      toaster.show({
+        message: `Problem while deleting a batch: ${errMessage}`,
+        intent: 'danger',
+        icon: 'warning-sign',
+        timeout: 6000
+      });
+    }
+  };
 
   return (
     <div>
@@ -182,11 +187,27 @@ const FhirRiverView = (): React.ReactElement => {
             disabled={!selectedSource.id || credentialsMissing}
             loading={running}
             className="button-submit"
-            onClick={onClickRun}
+            onClick={onClickCreateBatch}
           >
             Make the river flow
           </Button>
         </div>
+        <StringSelect
+          items={Object.keys(batchList).map(
+            (batchId: string) => `${batchId} ${batchList[batchId].timestamp}`
+          )}
+          inputItem={
+            selectedBatch
+              ? `${selectedBatch.id} ${selectedBatch.timestamp}`
+              : 'Select batch to stop'
+          }
+          onChange={(item: string) =>
+            setSelectedBatch({
+              id: item.split(' ')[0],
+              timestamp: item.split(' ')[1]
+            } as Batch)
+          }
+        />
       </div>
     </div>
   );

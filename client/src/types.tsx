@@ -177,6 +177,12 @@ export interface IFhir {
   extensions: { [path: string]: ResourceDefinition[] };
   availableResources: ResourceDefinition[];
 }
+
+export interface Batch {
+  id: string;
+  timestamp: string;
+}
+
 // Store
 export interface IReduxStore {
   data: IData;
@@ -184,6 +190,7 @@ export interface IReduxStore {
   fhir: IFhir;
   selectedNode: ISelectedNode;
   resourceInputs: IResourceInputs;
+  batchList: Record<string, Batch>;
   structure: any;
   toaster: IToaster;
   user: IUser;
