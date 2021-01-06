@@ -197,7 +197,7 @@ const FhirRiverView = (): React.ReactElement => {
             (batchId: string) => batchList[batchId].timestamp
           )}
           inputItem={
-            selectedBatch ? selectedBatch.timestamp : 'Select batch to cancel'
+            selectedBatch ? selectedBatch.timestamp : 'Select a batch to cancel'
           }
           onChange={(item: string): void => {
             const batchId = Object.keys(batchList).find(
