@@ -191,6 +191,7 @@ const FhirRiverView = (): React.ReactElement => {
             Make the river flow
           </Button>
         </div>
+        <h1>Cancel a batch</h1>
         <StringSelect
           items={Object.keys(batchList).map(
             (batchId: string) => batchList[batchId].timestamp
@@ -205,15 +206,18 @@ const FhirRiverView = (): React.ReactElement => {
             if (batchId) setSelectedBatch(batchList[batchId]);
           }}
         />
-        <Button
-          intent="danger"
-          type="submit"
-          disabled={!selectedBatch}
-          className="button-submit"
-          onClick={onClickCancelBatch}
-        >
-          Cancel
-        </Button>
+        <div className="align-right">
+          <Button
+            intent="danger"
+            type="submit"
+            large
+            disabled={!selectedBatch}
+            className="button-submit"
+            onClick={onClickCancelBatch}
+          >
+            Cancel
+          </Button>
+        </div>
       </div>
     </div>
   );
