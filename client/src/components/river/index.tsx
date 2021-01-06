@@ -193,19 +193,17 @@ const FhirRiverView = (): React.ReactElement => {
         </div>
         <StringSelect
           items={Object.keys(batchList).map(
-            (batchId: string) => `${batchId} ${batchList[batchId].timestamp}`
+            (batchId: string) => batchList[batchId].timestamp
           )}
           inputItem={
-            selectedBatch
-              ? `${selectedBatch.id} ${selectedBatch.timestamp}`
-              : 'Select batch to cancel'
+            selectedBatch ? selectedBatch.timestamp : 'Select batch to cancel'
           }
-          onChange={(item: string): void =>
-            setSelectedBatch({
-              id: item.split(' ')[0],
-              timestamp: item.split(' ')[1]
-            } as Batch)
-          }
+          onChange={(item: string): void => {
+            const batchId = Object.keys(batchList).find(
+              batchId => batchList[batchId].timestamp === item
+            );
+            if (batchId) setSelectedBatch(batchList[batchId]);
+          }}
         />
         <Button
           intent="danger"
