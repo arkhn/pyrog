@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { Button } from '@blueprintjs/core';
-import { Select } from '@blueprintjs/select';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addBatch, removeBatch } from '../../services/batchList/actions';
@@ -208,6 +207,15 @@ const FhirRiverView = (): React.ReactElement => {
             } as Batch)
           }
         />
+        <Button
+          intent="danger"
+          type="submit"
+          disabled={!selectedBatch}
+          className="button-submit"
+          onClick={onClickCancelBatch}
+        >
+          Cancel
+        </Button>
       </div>
     </div>
   );
