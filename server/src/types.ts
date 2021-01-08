@@ -29,7 +29,7 @@ export type InputGroupWithInputs = InputGroup & {
 }
 
 export type ConditionWithSqlValue = Condition & {
-  sqlValue: Column
+  sqlValue: ColumnWithJoins
 }
 
 export type AttributeWithInputGroups = Attribute & {
@@ -60,5 +60,5 @@ export type AttributeWithComments = AttributeWithInputs & {
 }
 
 export type FilterWithSqlColumn = Filter & {
-  sqlColumn: Column
+  sqlColumn: ColumnWithJoins
 }

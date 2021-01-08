@@ -40,8 +40,8 @@ const InputColumn = ({ input }: Props) => {
   );
   const availableOwners = useSelector(getDatabaseOwners);
 
-  const [conceptMap, setConceptMap] = useState(
-    undefined as ConceptMap | undefined
+  const [conceptMap, setConceptMap] = useState<ConceptMap | undefined>(
+    undefined
   );
   const [isConceptMapOverlayVisible, setConceptMapOverlayVisible] = useState(
     false

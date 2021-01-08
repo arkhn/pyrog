@@ -1,6 +1,5 @@
 import {
   AttributeCreateWithoutResourceInput,
-  Column,
   ColumnCreateWithoutInputInput,
   CommentCreateWithoutAttributeInput,
   FilterCreateInput,
@@ -168,19 +167,7 @@ export const buildConditionsQuery = (
     action: c.action,
     value: c.value,
     relation: c.relation,
-    sqlValue: {
-      create: {
-        owner: c.sqlValue.ownerId
-          ? {
-              connect: {
-                id: c.sqlValue.ownerId,
-              },
-            }
-          : undefined,
-        table: c.sqlValue.table,
-        column: c.sqlValue.column,
-      },
-    },
+    sqlValue: { create: buildColumnQuery(c.sqlValue) },
   }))
 
 export const buildCommentQueryPreV7 = (
@@ -305,15 +292,11 @@ export const buildAttributesQueryV9 = (
     return attr
   })
 
-const buildColumnWithoutJoinsQuery = (
-  c: Column,
-): ColumnCreateWithoutInputInput => clean(c)
-
 export const buildFiltersQuery = (
   filters: FilterWithSqlColumn[],
 ): FilterCreateInput[] | undefined =>
   filters.map(f => {
     const filter: FilterCreateInput = clean(f)
-    filter.sqlColumn = { create: buildColumnWithoutJoinsQuery(f.sqlColumn) }
+    filter.sqlColumn = { create: buildColumnQuery(f.sqlColumn) }
     return filter
   })

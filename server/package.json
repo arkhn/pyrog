@@ -27,7 +27,7 @@
     "@arkhn/fhir.ts": "^3.4.3",
     "@prisma/client": "^2.13.1",
     "apollo-server": "^2.19.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "client-oauth2": "^4.3.3",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
