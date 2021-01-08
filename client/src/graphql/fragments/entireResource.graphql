@@ -1,14 +1,13 @@
 #import "../fragments/entireAttribute.graphql"
 #import "../fragments/entireFilter.graphql"
+#import "../fragments/entireOwner.graphql"
 
 fragment entireResource on Resource {
   id
   label
   logicalReference
   primaryKeyOwner {
-    id
-    name
-    schema
+    ...entireOwner
   }
   primaryKeyTable
   primaryKeyColumn

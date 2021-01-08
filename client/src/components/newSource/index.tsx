@@ -17,6 +17,7 @@ import { loader } from 'graphql.macro';
 
 import Navbar from 'components/navbar';
 import { onError } from 'services/apollo';
+import StringMultiSelect from 'components/selects/stringMultiSelect';
 
 import { FHIR_API_URL, PAGAI_URL } from '../../constants';
 import { ITemplate, IReduxStore } from 'types';
@@ -51,7 +52,7 @@ const NewSourceView = (): React.ReactElement => {
   const [host, setHost] = React.useState('');
   const [port, setPort] = React.useState('');
   const [login, setLogin] = React.useState('');
-  const [owner, setOwner] = React.useState('');
+  const [owners, setOwners] = React.useState<string[]>([]);
   const [password, setPassword] = React.useState('');
   const [database, setDatabase] = React.useState('');
   const [model, setModel] = React.useState(models[0]);
@@ -235,7 +236,7 @@ const NewSourceView = (): React.ReactElement => {
         port,
         login,
         database,
-        owner,
+        owners,
         password,
         model,
         sourceId: source.id
@@ -291,6 +292,20 @@ const NewSourceView = (): React.ReactElement => {
         toastID
       );
     }
+  };
+
+  const handleOwnerSelect = (owner: string): void => {
+    if (!owners.includes(owner)) {
+      setOwners([...owners, owner]);
+    } else {
+      owners.splice(owners.indexOf(owner), 1);
+      setOwners([...owners]);
+    }
+  };
+
+  const handleTagRemove = (_value: string, index: number): void => {
+    owners.splice(index, 1);
+    setOwners([...owners]);
   };
 
   return (
@@ -438,12 +453,13 @@ const NewSourceView = (): React.ReactElement => {
                 labelFor="text-input"
                 className="credential-field"
               >
-                <HTMLSelect
-                  disabled={!availableOwners}
-                  options={availableOwners || []}
-                  onChange={ev => {
-                    setOwner(ev.currentTarget.value);
+                <StringMultiSelect
+                  items={availableOwners || []}
+                  selectedItems={owners}
+                  onItemSelect={(item: string): void => {
+                    handleOwnerSelect(item);
                   }}
+                  onRemoveTag={handleTagRemove}
                 />
               </FormGroup>
             </div>
@@ -481,7 +497,7 @@ const NewSourceView = (): React.ReactElement => {
                   login &&
                   password &&
                   model &&
-                  owner
+                  owners
                 ) ||
                 (templateName in mapTemplateToSourceNames &&
                   mapTemplateToSourceNames[templateName].indexOf(sourceName) >=

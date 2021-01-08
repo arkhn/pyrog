@@ -35,10 +35,9 @@ const mCreateCondition = loader(
 );
 interface Props {
   inputGroup: IInputGroup;
-  key: number;
 }
 
-const InputGroup = ({ inputGroup, key }: Props) => {
+const InputGroup = ({ inputGroup }: Props) => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
   const onError = onApolloError(toaster);
 
@@ -79,7 +78,7 @@ const InputGroup = ({ inputGroup, key }: Props) => {
   };
 
   return (
-    <Card key={key} elevation={Elevation.ONE}>
+    <Card elevation={Elevation.ONE}>
       <div className="delete-input-group">
         <Button
           icon="trash"

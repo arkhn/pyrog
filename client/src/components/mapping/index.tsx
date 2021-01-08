@@ -159,7 +159,7 @@ const MappingView = () => {
       <Tab
         id="exploration"
         disabled={!source.credential}
-        panel={<TableViewer source={source} />}
+        panel={<TableViewer />}
         title="Exploration"
       />
       <Tab id="comments" panel={<Comments />} title="Comments" />
@@ -193,7 +193,7 @@ const MappingView = () => {
           <div id="exploration-panel">
             {attribute
               ? renderMappingTabs()
-              : source.credential && <TableViewer source={source} />}
+              : source.credential && <TableViewer />}
           </div>
         </div>
       </div>

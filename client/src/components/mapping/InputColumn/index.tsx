@@ -13,12 +13,13 @@ import { loader } from 'graphql.macro';
 import { useMutation } from '@apollo/react-hooks';
 
 import { onError as onApolloError } from 'services/apollo';
-import { ConceptMap, IInput, IReduxStore, Owner, Join } from 'types';
+import { ConceptMap, IInput, IReduxStore, Owner, Join, Column } from 'types';
 import { FHIR_API_URL } from '../../../constants';
 
 import ColumnSelect from 'components/selects/columnSelect';
 import ConceptMapDialog from 'components/mapping/ConceptMap';
 import ScriptSelect from 'components/selects/scriptSelect';
+import { getDatabaseOwners } from 'services/selectedNode/selectors';
 
 // GRAPHQL
 const mUpdateInput = loader('src/graphql/mutations/updateInput.graphql');
@@ -37,6 +38,7 @@ const InputColumn = ({ input }: Props) => {
   const { attribute, resource, source } = useSelector(
     (state: IReduxStore) => state.selectedNode
   );
+  const availableOwners = useSelector(getDatabaseOwners);
 
   const [conceptMap, setConceptMap] = useState(
     undefined as ConceptMap | undefined
@@ -102,38 +104,22 @@ const InputColumn = ({ input }: Props) => {
           </div>
           <div className="sql-input-form">
             <ColumnSelect
-              ownerChangeCallback={(owner: Owner) => {
+              columnChangeCallback={({ owner, table, column }: Column) =>
                 updateInput({
                   variables: {
                     inputId: input.id,
-                    data: { owner, table: '', column: '' }
+                    data: { owner: { id: owner!.id }, table, column }
                   }
-                });
-              }}
-              tableChangeCallback={(table: string) => {
-                updateInput({
-                  variables: {
-                    inputId: input.id,
-                    data: { table, column: '' }
-                  }
-                });
-              }}
-              columnChangeCallback={(column: string) => {
-                updateInput({
-                  variables: {
-                    inputId: input.id,
-                    data: { column }
-                  }
-                });
-              }}
-              joinChangeCallback={(joinId: string, newJoin: Join): void => {
+                })
+              }
+              joinChangeCallback={(joinId: string, newJoin: Join) =>
                 updateJoin({
                   variables: {
                     joinId,
                     data: newJoin
                   }
-                });
-              }}
+                })
+              }
               addJoinCallback={(newJoin: Join): void => {
                 addJoin({
                   variables: {
@@ -153,7 +139,7 @@ const InputColumn = ({ input }: Props) => {
               initialTable={input.sqlValue.table}
               initialColumn={input.sqlValue.column}
               initialJoins={input.sqlValue.joins}
-              sourceOwners={source.credential.owners}
+              sourceOwners={availableOwners}
               primaryKeyTable={resource.primaryKeyTable}
               popoverProps={{
                 autoFocus: true,

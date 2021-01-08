@@ -17,16 +17,18 @@ import { IReduxStore, ISelectedSource, Owner } from 'types';
 import { PAGAI_URL, RIVER_URL } from '../../../constants';
 import FhirPreview from './FhirPreview';
 import StringSelect from 'components/selects/stringSelect';
+import {
+  getDatabaseOwners,
+  getResourcePrimaryKeyOwner
+} from 'services/selectedNode/selectors';
 
-interface Props {
-  source: ISelectedSource;
-}
-
-const TableViewer = ({ source }: Props) => {
+const TableViewer = () => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
   const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
+  const availableOwners = useSelector(getDatabaseOwners);
+  const resourcePkOwner = useSelector(getResourcePrimaryKeyOwner);
 
-  const [owner, setOwner] = React.useState(resource?.primaryKeyOwner);
+  const [owner, setOwner] = React.useState(resourcePkOwner);
   const [table, setTable] = React.useState(resource?.primaryKeyTable);
   const [compatiblePreview, setCompatiblePreview] = React.useState(false);
 
@@ -36,8 +38,6 @@ const TableViewer = ({ source }: Props) => {
 
   const [previewData, setPreviewData] = React.useState(undefined as any);
   const [loadingPreview, setLoadingPreview] = React.useState(false);
-
-  const owners = source.credential.owners.map(o => o.name);
 
   const fetchPreview = React.useCallback(
     async selectedRows => {
@@ -89,7 +89,9 @@ const TableViewer = ({ source }: Props) => {
   React.useEffect(() => {
     setCompatiblePreview(resource && table === resource?.primaryKeyTable);
   }, [table, resource]);
+
   React.useEffect(() => {
+    setOwner(resourcePkOwner);
     setTable(resource?.primaryKeyTable);
   }, [resource]);
 
@@ -113,17 +115,18 @@ const TableViewer = ({ source }: Props) => {
           });
         });
     }
-  }, [resource, source.credential.owners, owner, table, toaster]);
+  }, [resource, availableOwners, owner, table, toaster]);
 
   return (
     <div id="tableViewer">
       <StringSelect
         icon={'th'}
         inputItem={owner?.name || ''}
-        items={owners}
+        items={availableOwners.map(o => o.name)}
         maxItems={100}
-        onChange={(o: Owner) => {
-          setOwner(o);
+        onChange={(name: string) => {
+          setOwner(availableOwners.find(o => o.name === name)!);
+          setTable('');
         }}
       />
       <StringSelect

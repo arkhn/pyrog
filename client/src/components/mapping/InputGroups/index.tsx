@@ -102,11 +102,7 @@ const InputGroups = ({ attribute, isEmpty }: Props) => {
         inputGroup ? <InputGroup key={index} inputGroup={inputGroup} /> : null
       )}
       <div>
-        <Button
-          icon={'add'}
-          text={'Input group'}
-          onClick={onAddInputGroup}
-        />
+        <Button icon={'add'} text={'Input group'} onClick={onAddInputGroup} />
       </div>
     </div>
   );

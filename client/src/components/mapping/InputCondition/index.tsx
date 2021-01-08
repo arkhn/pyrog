@@ -5,10 +5,11 @@ import { useSelector } from 'react-redux';
 import { loader } from 'graphql.macro';
 import { onError as onApolloError } from 'services/apollo';
 
-import { Condition, IReduxStore, Owner, Join } from 'types';
+import { Condition, IReduxStore, Owner, Join, Column } from 'types';
 import ColumnSelect from 'components/selects/columnSelect';
 import StringSelect from 'components/selects/stringSelect';
 import ConditionSelect from 'components/selects/conditionSelect';
+import { getDatabaseOwners } from 'services/selectedNode/selectors';
 
 // GRAPHQL
 const mUpdateCondition = loader(
@@ -46,9 +47,7 @@ const conditionToName = (condition: Condition): string =>
 
 const InputCondition = ({ condition }: Props) => {
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const owners = useSelector(
-    (state: IReduxStore) => state.selectedNode.source.credential.owners
-  );
+  const availableOwners = useSelector(getDatabaseOwners);
   const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
 
   const [conditionValue, setConditionValue] = useState(condition.value);
@@ -129,33 +128,18 @@ const InputCondition = ({ condition }: Props) => {
                 initialTable={condition.sqlValue.table}
                 initialColumn={condition.sqlValue.column}
                 initialJoins={condition.sqlValue.joins}
-                ownerChangeCallback={(owner: Owner) => {
+                columnChangeCallback={({ owner, table, column }: Column) =>
                   updateCondition({
                     variables: {
                       conditionId: condition.id,
-                      owner,
-                      table: '',
-                      column: ''
+                      column: {
+                        owner: { id: owner!.id },
+                        table,
+                        column
+                      }
                     }
-                  });
-                }}
-                tableChangeCallback={(table: string) => {
-                  updateCondition({
-                    variables: {
-                      conditionId: condition.id,
-                      table,
-                      column: ''
-                    }
-                  });
-                }}
-                columnChangeCallback={(column: string) => {
-                  updateCondition({
-                    variables: {
-                      conditionId: condition.id,
-                      column
-                    }
-                  });
-                }}
+                  })
+                }
                 joinChangeCallback={(joinId: string, newJoin: Join): void => {
                   updateJoin({
                     variables: {
@@ -179,7 +163,7 @@ const InputCondition = ({ condition }: Props) => {
                     }
                   });
                 }}
-                sourceOwners={owners}
+                sourceOwners={availableOwners}
                 primaryKeyTable={resource.primaryKeyTable}
               />
             </div>
@@ -204,7 +188,7 @@ const InputCondition = ({ condition }: Props) => {
               <div className="conditions-form-value">
                 <input
                   className="text-input"
-                  value={conditionValue}
+                  value={conditionValue || ''}
                   type="text"
                   placeholder="value..."
                   onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -230,8 +214,7 @@ const InputCondition = ({ condition }: Props) => {
                     variables: {
                       conditionId: condition.id,
                       action: c.action,
-                      table: c.sqlValue.table,
-                      column: c.sqlValue.column,
+                      column: c.sqlValue,
                       relation: c.relation,
                       value: c.value
                     }

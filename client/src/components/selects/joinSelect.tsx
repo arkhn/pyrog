@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import ColumnSelect from 'components/selects/columnSelect';
+import { getDatabaseOwners } from 'services/selectedNode/selectors';
 
-import { IReduxStore, Owner } from 'types';
+import { Column } from 'types';
 
 interface Props {
   join?: any;
@@ -11,7 +12,7 @@ interface Props {
 }
 
 const JoinSelect = ({ join, updateJoin }: Props): React.ReactElement => {
-  const { source } = useSelector((state: IReduxStore) => state.selectedNode);
+  const availableOwners = useSelector(getDatabaseOwners);
 
   const [sourceOwner, setSourceOwner] = useState(
     join?.tables && join.tables[0]?.owner
@@ -33,8 +34,10 @@ const JoinSelect = ({ join, updateJoin }: Props): React.ReactElement => {
   );
 
   useEffect(() => {
+    setSourceOwner(join?.tables && join.tables[0]?.owner);
     setSourceTable(join?.tables && join.tables[0]?.table);
     setSourceColumn(join?.tables && join.tables[0]?.column);
+    setTargetOwner(join?.tables && join.tables[1]?.owner);
     setTargetTable(join?.tables && join.tables[1]?.table);
     setTargetColumn(join?.tables && join.tables[1]?.column);
   }, [join]);
@@ -42,66 +45,42 @@ const JoinSelect = ({ join, updateJoin }: Props): React.ReactElement => {
   return (
     <div className="join-columns">
       <ColumnSelect
-        ownerChangeCallback={(o: Owner) => {
-          setSourceOwner(o);
-          updateJoin(o, '', '', targetOwner, targetTable, targetColumn);
-        }}
-        tableChangeCallback={(t: string) => {
-          setSourceTable(t);
+        columnChangeCallback={({ owner, table, column }: Column) => {
+          setSourceOwner(owner);
+          setSourceTable(table);
+          setSourceColumn(column);
           updateJoin(
-            sourceOwner,
-            t,
-            '',
+            owner,
+            table,
+            column,
             targetOwner,
             targetTable,
             targetColumn
           );
         }}
-        columnChangeCallback={(c: string) => {
-          setSourceColumn(c);
-          updateJoin(
-            sourceOwner,
-            sourceTable,
-            c,
-            targetOwner,
-            targetTable,
-            targetColumn
-          );
-        }}
+        initialOwner={sourceOwner}
         initialTable={sourceTable}
         initialColumn={sourceColumn}
-        sourceOwners={source.credential.owners}
+        sourceOwners={availableOwners}
       />
       <ColumnSelect
-        ownerChangeCallback={(o: Owner) => {
-          setTargetOwner(o);
-          updateJoin(sourceOwner, sourceTable, sourceColumn, o, '', '');
-        }}
-        tableChangeCallback={(t: string) => {
-          setTargetTable(t);
+        columnChangeCallback={({ owner, table, column }: Column) => {
+          setTargetOwner(owner);
+          setTargetTable(table);
+          setTargetColumn(column);
           updateJoin(
             sourceOwner,
             sourceTable,
             sourceColumn,
-            targetOwner,
-            t,
-            ''
+            owner,
+            table,
+            column
           );
         }}
-        columnChangeCallback={(c: string) => {
-          setTargetColumn(c);
-          updateJoin(
-            sourceOwner,
-            sourceTable,
-            sourceColumn,
-            targetOwner,
-            targetTable,
-            c
-          );
-        }}
+        initialOwner={targetOwner}
         initialTable={targetTable}
         initialColumn={targetColumn}
-        sourceOwners={source.credential.owners}
+        sourceOwners={availableOwners}
       />
     </div>
   );

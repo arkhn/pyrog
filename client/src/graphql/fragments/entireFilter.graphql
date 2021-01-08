@@ -1,12 +1,15 @@
+#import "./entireJoin.graphql"
+#import "./entireOwner.graphql"
+
 fragment entireFilter on Filter {
   sqlColumn {
+    owner {
+      ...entireOwner
+    }
     table
     column
     joins {
-      tables {
-        table
-        column
-      }
+      ...entireJoin
     }
   }
   relation

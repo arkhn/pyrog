@@ -6,8 +6,6 @@ import StringSelect from 'components/selects/stringSelect';
 import { Owner, Join, ISourceSchema } from 'types';
 
 export interface Props {
-  ownerChangeCallback?: Function;
-  tableChangeCallback?: Function;
   columnChangeCallback?: Function;
   allJoinsChangeCallback?: Function;
   joinChangeCallback?: Function;
@@ -26,8 +24,6 @@ export interface Props {
 }
 
 const ColumnSelect = ({
-  ownerChangeCallback,
-  tableChangeCallback,
   columnChangeCallback,
   allJoinsChangeCallback,
   joinChangeCallback,
@@ -50,30 +46,26 @@ const ColumnSelect = ({
   const [joins, setJoins] = useState(initialJoins || []);
 
   useEffect(() => {
-    setOwner(initialOwner);
+    if (sourceOwners.length === 1) {
+      setOwner(sourceOwners[0]);
+    } else {
+      setOwner(initialOwner);
+    }
     setTable(initialTable);
     setColumn(initialColumn);
     setJoins(initialJoins || []);
-  }, [initialOwner, initialTable, initialColumn, initialJoins]);
+  }, [initialOwner, initialTable, initialColumn, initialJoins, sourceOwners]);
 
   const changeOwner = (e: string): void => {
     const _owner = sourceOwners.find(o => o.name === e);
-    if (ownerChangeCallback) {
-      ownerChangeCallback(_owner);
-    } else {
-      setOwner(_owner);
-      setTable(undefined);
-      setColumn(undefined);
-    }
+    setOwner(_owner);
+    setTable(undefined);
+    setColumn(undefined);
   };
 
   const changeTable = (e: string): void => {
-    if (tableChangeCallback) {
-      tableChangeCallback(e);
-    } else {
-      setTable(e);
-      setColumn(undefined);
-    }
+    setTable(e);
+    setColumn(undefined);
 
     // Update joins
     if (deleteJoinCallback) {
@@ -83,23 +75,23 @@ const ColumnSelect = ({
     }
   };
 
-  const changeColumn = (e: string): void => {
-    setColumn(e);
+  const changeColumn = (c: string): void => {
+    setColumn(c);
 
     if (columnChangeCallback) {
-      columnChangeCallback(e);
+      columnChangeCallback({ owner, table, column: c });
     }
   };
 
   const owners = sourceOwners.map((o: Owner) => o.name);
   const tables = owner
     ? Object.keys(
-        sourceOwners.find((o: Owner) => owner && o.name === owner.name)
+        sourceOwners.find((o: Owner) => owner && o.id === owner.id)
           ?.schema as ISourceSchema
       )
     : [];
   const columns = table
-    ? (sourceOwners.find((o: Owner) => owner && o.name === owner.name)?.schema[
+    ? (sourceOwners.find((o: Owner) => owner && o.id === owner.id)?.schema[
         table
       ] as string[])
     : [];
@@ -109,15 +101,17 @@ const ColumnSelect = ({
     <div className={vertical ? 'column-select-vertical' : 'column-select'}>
       <div className="column-select-input">
         <ControlGroup fill={fill || false}>
-          <StringSelect
-            disabled={disabled}
-            icon={'th'}
-            inputItem={owner?.name || ''}
-            items={owners}
-            maxItems={100}
-            onChange={changeOwner}
-            popoverProps={popoverProps || {}}
-          />
+          {sourceOwners.length > 1 && (
+            <StringSelect
+              disabled={disabled}
+              icon={'th'}
+              inputItem={owner?.name || ''}
+              items={owners}
+              maxItems={100}
+              onChange={changeOwner}
+              popoverProps={popoverProps || {}}
+            />
+          )}
           <StringSelect
             disabled={disabled}
             icon={'th'}
@@ -142,8 +136,8 @@ const ColumnSelect = ({
               onClick={() => {
                 const emptyJoin = {
                   tables: [
-                    { table: '', column: '' },
-                    { table: '', column: '' }
+                    { owner: null, table: '', column: '' },
+                    { owner: null, table: '', column: '' }
                   ]
                 };
 
@@ -170,18 +164,39 @@ const ColumnSelect = ({
               <JoinSelect
                 join={join}
                 updateJoin={(
+                  sourceOwner: Owner,
                   sourceTable: string,
                   sourceColumn: string,
+                  targetOwner: Owner,
                   targetTable: string,
                   targetColumn: string
                 ) => {
                   const newJoin = {
                     tables: [
-                      { table: sourceTable, column: sourceColumn },
-                      { table: targetTable, column: targetColumn }
+                      {
+                        owner: sourceOwner
+                          ? ({
+                              id: sourceOwner.id,
+                              name: sourceOwner.name
+                            } as Owner)
+                          : undefined,
+                        table: sourceTable,
+                        column: sourceColumn
+                      },
+                      {
+                        owner: targetOwner
+                          ? ({
+                              id: targetOwner.id,
+                              name: sourceOwner.name
+                            } as Owner)
+                          : undefined,
+                        table: targetTable,
+                        column: targetColumn
+                      }
                     ]
                   };
                   joins[index] = newJoin;
+                  setJoins([...joins]);
 
                   joinChangeCallback && joinChangeCallback(join.id, newJoin);
                   allJoinsChangeCallback && allJoinsChangeCallback(joins);

@@ -65,6 +65,12 @@ export interface Owner {
   schema: ISourceSchema;
 }
 
+export interface SerializedOwner {
+  id: string;
+  name: string;
+  schema: string;
+}
+
 export interface ICredential {
   id: string;
   host: string;
@@ -73,7 +79,7 @@ export interface ICredential {
   model: string;
   login: string;
   decryptedPassword: string;
-  owners: Owner[];
+  owners: SerializedOwner[];
 }
 
 export interface IAccessControl {
@@ -89,7 +95,7 @@ export interface Resource {
   logicalReference: string;
   name: string;
   type: string;
-  primaryKeyOwner: Owner;
+  primaryKeyOwner: SerializedOwner;
   primaryKeyTable: string;
   primaryKeyColumn: string;
   filters: Filter[];
@@ -133,7 +139,7 @@ export interface Filter {
   value: string;
 }
 
-interface Column {
+export interface Column {
   id?: string;
   owner?: Owner;
   table: string;

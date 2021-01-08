@@ -9,10 +9,7 @@ export const updateSelectedSource = (source: {
   template: {
     name: string;
   };
-  credential: {
-    id: string;
-  };
-  schema?: ISourceSchema;
+  credential: ICredential;
 }): IAction => {
   return {
     type: 'UPDATE_SOURCE',
