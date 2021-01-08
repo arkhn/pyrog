@@ -55,6 +55,7 @@ model Owner {
   credential   Credential @relation(fields: [credentialId], references: [id])
   Column       Column[]
 
+  Resource Resource[]
   @@unique([name, credentialId], name: "Owner_name_credential_unique_constraint")
 }
 
@@ -140,8 +141,8 @@ model Column {
 
   inputId String? @unique @map("input")
   input   Input?  @relation(fields: [inputId], references: [id])
-  ownerId String  @map("owner")
-  owner   Owner   @relation(fields: [ownerId], references: [id])
+  ownerId String? @map("owner")
+  owner   Owner?  @relation(fields: [ownerId], references: [id])
   joinId  String? @map("join")
   join    Join?   @relation("JoinedColumns", fields: [joinId], references: [id])
 

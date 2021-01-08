@@ -55,7 +55,7 @@ export const deleteResource: FieldResolver<
   'Mutation',
   'deleteResource'
 > = async (_parent, { resourceId }, ctx) => {
-  const res = await ctx.prisma.resource.findOne({
+  const res = await ctx.prisma.resource.findUnique({
     where: { id: resourceId },
     include: {
       filters: {
@@ -138,7 +138,7 @@ export const updateResource: FieldResolver<
   'updateResource'
 > = async (_parent, { resourceId, data, filters }, ctx) => {
   if (filters) {
-    const resource = await ctx.prisma.resource.findOne({
+    const resource = await ctx.prisma.resource.findUnique({
       where: { id: resourceId },
       include: {
         filters: { include: { sqlColumn: { include: { joins: true } } } },
@@ -146,12 +146,20 @@ export const updateResource: FieldResolver<
     })
     await Promise.all(
       resource!.filters.map(async f => {
-        await Promise.all(
-          f.sqlColumn.joins.map(j =>
-            ctx.prisma.join.delete({ where: { id: j.id } }),
-          ),
+        console.log(
+          'delete',
+          f.sqlColumn.joins.map(j => j.id),
         )
-        await ctx.prisma.filter.delete({ where: { id: f.id } })
+        await ctx.prisma.column.deleteMany({
+          where: { joinId: { in: f.sqlColumn.joins.map(j => j.id) } },
+        })
+        await ctx.prisma.join.deleteMany({
+          where: { columnId: f.sqlColumn.id },
+        })
+        await ctx.prisma.filter.delete({
+          where: { sqlColumnId: f.sqlColumn.id },
+        })
+        await ctx.prisma.column.delete({ where: { id: f.sqlColumn.id } })
       }),
     )
     const newFilters = await Promise.all(
@@ -160,41 +168,49 @@ export const updateResource: FieldResolver<
           data: {
             sqlColumn: {
               create: {
-                owner: {
-                  connect: {
-                    id: f.sqlColumn.owner.id,
-                  },
-                },
+                owner: f.sqlColumn.owner
+                  ? {
+                      connect: {
+                        id: f.sqlColumn.owner.id,
+                      },
+                    }
+                  : undefined,
                 table: f.sqlColumn.table,
                 column: f.sqlColumn.column,
-                joins: {
-                  create: f.sqlColumn?.joins?.map(j => ({
-                    tables: {
-                      create: [
-                        {
-                          owner: {
-                            connect: {
-                              id:
-                                (j.tables && j.tables[0].owner.id) || undefined,
+                joins: f.sqlColumn?.joins?.length
+                  ? {
+                      create: f.sqlColumn.joins.map(j => ({
+                        tables: {
+                          create: [
+                            {
+                              owner:
+                                j.tables && j.tables[0].owner
+                                  ? {
+                                      connect: {
+                                        id: j.tables[0].owner.id,
+                                      },
+                                    }
+                                  : undefined,
+                              table: (j.tables && j.tables[0].table) || '',
+                              column: (j.tables && j.tables[0].column) || '',
                             },
-                          },
-                          table: (j.tables && j.tables[0].table) || '',
-                          column: (j.tables && j.tables[0].column) || '',
-                        },
-                        {
-                          owner: {
-                            connect: {
-                              id:
-                                (j.tables && j.tables[1].owner.id) || undefined,
+                            {
+                              owner:
+                                j.tables && j.tables[1].owner
+                                  ? {
+                                      connect: {
+                                        id: j.tables[1].owner.id,
+                                      },
+                                    }
+                                  : undefined,
+                              table: (j.tables && j.tables[1].table) || '',
+                              column: (j.tables && j.tables[1].column) || '',
                             },
-                          },
-                          table: (j.tables && j.tables[1].table) || '',
-                          column: (j.tables && j.tables[1].column) || '',
+                          ],
                         },
-                      ],
-                    },
-                  })),
-                },
+                      })),
+                    }
+                  : undefined,
               },
             },
             relation: f.relation,
@@ -216,6 +232,11 @@ export const updateResource: FieldResolver<
   }
   return ctx.prisma.resource.update({
     where: { id: resourceId },
-    data,
+    data: {
+      ...data,
+      primaryKeyOwner: data.primaryKeyOwner
+        ? { connect: { id: data.primaryKeyOwner.id } }
+        : undefined,
+    },
   })
 }

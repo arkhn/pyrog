@@ -72,7 +72,7 @@ export const exportMapping = async (
   sourceId: string,
   includeComments: boolean,
 ): Promise<string> => {
-  const source = await prismaClient.source.findOne({
+  const source = await prismaClient.source.findUnique({
     where: { id: sourceId },
     include: { template: true },
   })
@@ -84,10 +84,14 @@ export const exportMapping = async (
     where: { source: { id: source.id } },
     include: {
       source: true,
+      primaryKeyOwner: true,
       filters: {
         include: {
           sqlColumn: {
-            include: { joins: { include: { tables: true } } },
+            include: {
+              joins: { include: { tables: { include: { owner: true } } } },
+              owner: true,
+            },
           },
         },
       },
@@ -101,14 +105,24 @@ export const exportMapping = async (
               inputs: {
                 include: {
                   sqlValue: {
-                    include: { joins: { include: { tables: true } } },
+                    include: {
+                      joins: {
+                        include: { tables: { include: { owner: true } } },
+                      },
+                      owner: true,
+                    },
                   },
                 },
               },
               conditions: {
                 include: {
                   sqlValue: {
-                    include: { joins: { include: { tables: true } } },
+                    include: {
+                      joins: {
+                        include: { tables: { include: { owner: true } } },
+                      },
+                      owner: true,
+                    },
                   },
                 },
               },

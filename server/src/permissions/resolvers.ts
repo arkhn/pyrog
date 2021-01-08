@@ -49,7 +49,7 @@ const getSourceFromAccessControl = async (
   accessControlId: any,
   ctx: Context,
 ) => {
-  const acl = await ctx.prisma.accessControl.findOne({
+  const acl = await ctx.prisma.accessControl.findUnique({
     where: { id: accessControlId },
     include: {
       source: true,
@@ -59,7 +59,7 @@ const getSourceFromAccessControl = async (
 }
 
 const getSourceFromCredential = async (credentialId: any, ctx: Context) => {
-  const credential = await ctx.prisma.credential.findOne({
+  const credential = await ctx.prisma.credential.findUnique({
     where: { id: credentialId },
     include: {
       source: true,
@@ -69,7 +69,7 @@ const getSourceFromCredential = async (credentialId: any, ctx: Context) => {
 }
 
 const getSourceFromResource = async (resourceId: any, ctx: Context) => {
-  const resource = await ctx.prisma.resource.findOne({
+  const resource = await ctx.prisma.resource.findUnique({
     where: { id: resourceId },
     include: {
       source: true,
@@ -79,7 +79,7 @@ const getSourceFromResource = async (resourceId: any, ctx: Context) => {
 }
 
 const getSourceFromAttribute = async (attributeId: any, ctx: Context) => {
-  const attribute = await ctx.prisma.attribute.findOne({
+  const attribute = await ctx.prisma.attribute.findUnique({
     where: { id: attributeId },
     include: {
       resource: {
@@ -93,7 +93,7 @@ const getSourceFromAttribute = async (attributeId: any, ctx: Context) => {
 }
 
 const getSourceFromInputGroup = async (inputGroupId: any, ctx: Context) => {
-  const inputGroup = await ctx.prisma.inputGroup.findOne({
+  const inputGroup = await ctx.prisma.inputGroup.findUnique({
     where: { id: inputGroupId },
     include: {
       attribute: {
@@ -111,7 +111,7 @@ const getSourceFromInputGroup = async (inputGroupId: any, ctx: Context) => {
 }
 
 const getSourceFromInput = async (inputId: any, ctx: Context) => {
-  const input = await ctx.prisma.input.findOne({
+  const input = await ctx.prisma.input.findUnique({
     where: { id: inputId },
     include: {
       inputGroup: {
@@ -133,7 +133,7 @@ const getSourceFromInput = async (inputId: any, ctx: Context) => {
 }
 
 const getSourceFromCondition = async (conditionId: any, ctx: Context) => {
-  const input = await ctx.prisma.condition.findOne({
+  const input = await ctx.prisma.condition.findUnique({
     where: { id: conditionId },
     include: {
       inputGroup: {
@@ -155,7 +155,7 @@ const getSourceFromCondition = async (conditionId: any, ctx: Context) => {
 }
 
 const getSourceFromColumn = async (columnId: any, ctx: Context) => {
-  const column = await ctx.prisma.column.findOne({
+  const column = await ctx.prisma.column.findUnique({
     where: { id: columnId },
     include: {
       input: {
@@ -181,7 +181,7 @@ const getSourceFromColumn = async (columnId: any, ctx: Context) => {
 }
 
 const getSourceFromJoin = async (JoinId: any, ctx: Context) => {
-  const join = await ctx.prisma.join.findOne({
+  const join = await ctx.prisma.join.findUnique({
     where: { id: JoinId },
     include: {
       column: {

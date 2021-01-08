@@ -124,7 +124,7 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
   { sourceId },
   ctx,
 ) => {
-  const source = await ctx.prisma.source.findOne({
+  const source = await ctx.prisma.source.findUnique({
     where: { id: sourceId },
     include: {
       credential: true,
@@ -235,7 +235,7 @@ const usedConceptMaps: FieldResolver<'Source', 'usedConceptMapIds'> = async (
   _,
   ctx,
 ) => {
-  const sourceWithMapIds = await ctx.prisma.source.findOne({
+  const sourceWithMapIds = await ctx.prisma.source.findUnique({
     where: { id: parent.id },
     include: {
       resources: {

@@ -15,7 +15,7 @@ export const createAccessControl: FieldResolver<
   'Mutation',
   'createAccessControl'
 > = async (_parent, { userEmail, sourceId, role }, ctx) => {
-  const user = await ctx.prisma.user.findOne({ where: { email: userEmail } })
+  const user = await ctx.prisma.user.findUnique({ where: { email: userEmail } })
   if (!user) throw new Error(`user ${userEmail} does not exist`)
 
   return ctx.prisma.accessControl.create({

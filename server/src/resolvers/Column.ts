@@ -5,6 +5,7 @@ export const Column = objectType({
   definition(t) {
     t.model.id()
 
+    t.model.owner()
     t.model.table()
     t.model.column()
 
@@ -25,9 +26,11 @@ export const updateColumn: FieldResolver<'Mutation', 'updateColumn'> = async (
     data: {
       column: data.column,
       table: data.table,
-      owner: {
-        connect: { id: data.owner.id },
-      },
+      owner: data.owner
+        ? {
+            connect: { id: data.owner.id },
+          }
+        : undefined,
     },
   })
 
@@ -40,20 +43,26 @@ export const addJoinToColumn: FieldResolver<
       tables: {
         create: [
           {
-            owner: {
-              connect: {
-                id: join.tables ? join.tables[0].owner.id : undefined,
-              },
-            },
+            owner:
+              join.tables && join.tables[0].owner
+                ? {
+                    connect: {
+                      id: join.tables[0].owner.id,
+                    },
+                  }
+                : undefined,
             table: join.tables && join.tables[0].table,
             column: join.tables && join.tables[0].column,
           },
           {
-            owner: {
-              connect: {
-                id: join.tables ? join.tables[1].owner.id : undefined,
-              },
-            },
+            owner:
+              join.tables && join.tables[1].owner
+                ? {
+                    connect: {
+                      id: join.tables[1].owner.id,
+                    },
+                  }
+                : undefined,
             table: join.tables && join.tables[1].table,
             column: join.tables && join.tables[1].column,
           },

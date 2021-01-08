@@ -1,0 +1,5 @@
+fragment entireOwner on Owner {
+  id
+  name
+  schema
+}

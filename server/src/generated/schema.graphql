@@ -100,6 +100,7 @@ type Column {
   createdAt: DateTime!
   id: String!
   joins(after: JoinWhereUniqueInput, before: JoinWhereUniqueInput, first: Int, last: Int): [Join!]!
+  owner: Owner
   table: String
   updatedAt: DateTime!
 }
@@ -107,13 +108,13 @@ type Column {
 input ColumnInput {
   column: String!
   joins: [JoinTablesInput!]
-  owner: OwnerInput!
+  owner: OwnerInput
   table: String!
 }
 
 input ColumnInputWithoutJoins {
   column: String!
-  owner: OwnerInput!
+  owner: OwnerInput
   table: String!
 }
 
@@ -138,7 +139,7 @@ input ColumnWhereInput {
   NOT: [ColumnWhereInput!]
   OR: [ColumnWhereInput!]
   owner: OwnerWhereInput
-  ownerId: StringFilter
+  ownerId: StringNullableFilter
   table: StringNullableFilter
   updatedAt: DateTimeFilter
 }
@@ -508,7 +509,7 @@ type Mutation {
   deleteTemplate(templateId: ID!): Template
   logout: User
   updateColumn(columnId: ID!, data: ColumnInputWithoutJoins!): Column
-  updateCondition(action: String, column: String, conditionId: ID!, relation: ConditionRelation, table: String, value: String): Condition
+  updateCondition(action: String, column: ColumnInput, conditionId: ID!, relation: ConditionRelation, value: String): Condition
   updateInput(data: UpdateInputInput!, inputId: ID!): Input
   updateInputGroup(inputGroupId: ID!, mergingScript: String): InputGroup
   updateJoin(data: JoinTablesInput!, joinId: ID!): Join
@@ -611,6 +612,7 @@ input Owner_name_credential_unique_constraintCompoundUniqueInput {
 
 input OwnerInput {
   id: String!
+  name: String
 }
 
 input OwnerListRelationFilter {
@@ -846,6 +848,7 @@ input UpdateInputInput {
 input UpdateResourceInput {
   label: String
   primaryKeyColumn: String
+  primaryKeyOwner: OwnerInput
   primaryKeyTable: String
 }
 

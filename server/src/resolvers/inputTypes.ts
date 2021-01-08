@@ -4,6 +4,7 @@ export const UpdateResourceInput = inputObjectType({
   name: 'UpdateResourceInput',
   definition(t) {
     t.field('label', { type: 'String' })
+    t.field('primaryKeyOwner', { type: 'OwnerInput' })
     t.field('primaryKeyTable', { type: 'String' })
     t.field('primaryKeyColumn', { type: 'String' })
   },
@@ -29,6 +30,7 @@ export const OwnerInput = inputObjectType({
   name: 'OwnerInput',
   definition(t) {
     t.nonNull.field('id', { type: 'String' })
+    t.field('name', { type: 'String' })
   },
 })
 
@@ -49,7 +51,7 @@ export const UpdateInputInput = inputObjectType({
 export const ColumnInput = inputObjectType({
   name: 'ColumnInput',
   definition(t) {
-    t.nonNull.field('owner', { type: 'OwnerInput' })
+    t.field('owner', { type: 'OwnerInput' })
     t.nonNull.field('table', { type: 'String' })
     t.nonNull.field('column', { type: 'String' })
     t.list.nonNull.field('joins', {
@@ -70,7 +72,7 @@ export const JoinTablesInput = inputObjectType({
 export const ColumnInputWithoutJoins = inputObjectType({
   name: 'ColumnInputWithoutJoins',
   definition(t) {
-    t.nonNull.field('owner', { type: 'OwnerInput' })
+    t.field('owner', { type: 'OwnerInput' })
     t.nonNull.field('table', { type: 'String' })
     t.nonNull.field('column', { type: 'String' })
   },

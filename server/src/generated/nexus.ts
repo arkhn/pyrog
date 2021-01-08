@@ -76,12 +76,12 @@ export interface NexusGenInputs {
   ColumnInput: { // input type
     column: string; // String!
     joins?: NexusGenInputs['JoinTablesInput'][] | null; // [JoinTablesInput!]
-    owner: NexusGenInputs['OwnerInput']; // OwnerInput!
+    owner?: NexusGenInputs['OwnerInput'] | null; // OwnerInput
     table: string; // String!
   }
   ColumnInputWithoutJoins: { // input type
     column: string; // String!
-    owner: NexusGenInputs['OwnerInput']; // OwnerInput!
+    owner?: NexusGenInputs['OwnerInput'] | null; // OwnerInput
     table: string; // String!
   }
   ColumnListRelationFilter: { // input type
@@ -104,7 +104,7 @@ export interface NexusGenInputs {
     NOT?: NexusGenInputs['ColumnWhereInput'][] | null; // [ColumnWhereInput!]
     OR?: NexusGenInputs['ColumnWhereInput'][] | null; // [ColumnWhereInput!]
     owner?: NexusGenInputs['OwnerWhereInput'] | null; // OwnerWhereInput
-    ownerId?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    ownerId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     table?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
@@ -384,6 +384,7 @@ export interface NexusGenInputs {
   }
   OwnerInput: { // input type
     id: string; // String!
+    name?: string | null; // String
   }
   OwnerListRelationFilter: { // input type
     every?: NexusGenInputs['OwnerWhereInput'] | null; // OwnerWhereInput
@@ -523,6 +524,7 @@ export interface NexusGenInputs {
   UpdateResourceInput: { // input type
     label?: string | null; // String
     primaryKeyColumn?: string | null; // String
+    primaryKeyOwner?: NexusGenInputs['OwnerInput'] | null; // OwnerInput
     primaryKeyTable?: string | null; // String
   }
   UserWhereInput: { // input type
@@ -712,6 +714,7 @@ export interface NexusGenFieldTypes {
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
     joins: NexusGenRootTypes['Join'][]; // [Join!]!
+    owner: NexusGenRootTypes['Owner'] | null; // Owner
     table: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
@@ -922,6 +925,7 @@ export interface NexusGenFieldTypeNames {
     createdAt: 'DateTime'
     id: 'String'
     joins: 'Join'
+    owner: 'Owner'
     table: 'String'
     updatedAt: 'DateTime'
   }
@@ -1252,10 +1256,9 @@ export interface NexusGenArgTypes {
     }
     updateCondition: { // args
       action?: string | null; // String
-      column?: string | null; // String
+      column?: NexusGenInputs['ColumnInput'] | null; // ColumnInput
       conditionId: string; // ID!
       relation?: NexusGenEnums['ConditionRelation'] | null; // ConditionRelation
-      table?: string | null; // String
       value?: string | null; // String
     }
     updateInput: { // args

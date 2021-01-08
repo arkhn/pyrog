@@ -9,28 +9,23 @@ import {
   nullable,
 } from 'nexus'
 
-import {
-  createAttribute,
-  createInputGroup,
-  deleteAttribute,
-  deleteAttributes,
-  deleteInputGroup,
-} from './Attribute'
+import { createAttribute, deleteAttribute, deleteAttributes } from './Attribute'
 import { createAccessControl, deleteAccessControl } from './AccessControl'
 import { addJoinToColumn, updateColumn } from './Column'
 import { createComment } from './Comment'
-import { updateCondition } from './Condition'
+import { deleteCondition, updateCondition } from './Condition'
 import { deleteCredential, upsertCredential } from './Credential'
 import {
   createStaticInput,
   createSqlInput,
   updateInput,
   updateStaticInput,
+  deleteInput,
 } from './Input'
 import {
   addConditionToInputGroup,
-  deleteInput,
-  deleteCondition,
+  createInputGroup,
+  deleteInputGroup,
   updateInputGroup,
 } from './InputGroup'
 import { updateJoin, deleteJoin } from './Join'
@@ -256,9 +251,10 @@ export const Mutation = mutationType({
       type: 'Condition',
       args: {
         conditionId: nonNull(idArg()),
+        column: arg({
+          type: 'ColumnInput',
+        }),
         action: stringArg(),
-        table: stringArg(),
-        column: stringArg(),
         relation: arg({ type: 'ConditionRelation' }),
         value: stringArg(),
       },

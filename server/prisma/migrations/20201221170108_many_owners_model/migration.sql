@@ -78,7 +78,6 @@ WHERE "Column".join = _join.id;
 -- !!!!!! Delete all columns with missing relations !!!!!!!!
 -- These are legacy columns that should have been removed before
 DELETE from "Column" WHERE "owner" is NULL;
-ALTER TABLE "Column" ALTER COLUMN "owner" SET NOT NULL;
 
 -- Add "Owner" foreign key on "Column"
 ALTER TABLE "Resource"

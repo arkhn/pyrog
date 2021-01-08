@@ -38,9 +38,8 @@ const loadDatabaseSchema = async (
   schema: string
   name?: string | null
   id?: string | null
-} | null> => {
+}> => {
   const { model, host, port, database, login, password } = credentials
-  if (!owner) return null
   try {
     const { data } = await axios.post(`${PAGAI_URL}/get_db_schema`, {
       model,
@@ -74,9 +73,9 @@ export const upsertCredential: FieldResolver<
 ) => {
   const encryptedPassword = encrypt(password)
 
-  const source = await ctx.prisma.source.findOne({
+  const source = await ctx.prisma.source.findUnique({
     where: { id: sourceId },
-    include: { credential: true },
+    include: { credential: { include: { owners: true } } },
   })
   if (!source) {
     throw new Error(`Source ${sourceId} does not exist`)
@@ -98,17 +97,24 @@ export const upsertCredential: FieldResolver<
 
   let credz: Credz
   if (source.credential) {
+    // remove owners if needed
+    const ownersIDToRemove = source.credential.owners
+      .filter(o => !owners?.find(newOwner => o.name === newOwner))
+      .map(o => o.id)
+    await ctx.prisma.owner.deleteMany({
+      where: { id: { in: ownersIDToRemove } },
+    })
     await Promise.all(
       _owners.map(_o =>
         ctx.prisma.owner.upsert({
           where: {
             Owner_name_credential_unique_constraint: {
               credentialId: source.credential?.id as string,
-              name: _o?.name as string,
+              name: _o.name as string,
             },
           },
           update: {
-            schema: _o?.schema,
+            schema: _o.schema,
           },
           create: {
             credential: {
@@ -116,8 +122,8 @@ export const upsertCredential: FieldResolver<
                 id: source.credential?.id,
               },
             },
-            name: _o?.name as string,
-            schema: _o?.schema,
+            name: _o.name as string,
+            schema: _o.schema,
           },
         }),
       ),
@@ -139,8 +145,8 @@ export const upsertCredential: FieldResolver<
       _owners.map(_o =>
         ctx.prisma.owner.create({
           data: {
-            name: _o?.name as string,
-            schema: _o?.schema,
+            name: _o.name as string,
+            schema: _o.schema,
             credential: {
               connect: {
                 id: credz.id,

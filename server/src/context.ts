@@ -12,5 +12,5 @@ export interface Context {
 export const createContext = async (context: any) => ({
   ...context,
   prisma,
-  user: await getUser(context.request, prisma),
+  user: await getUser(context.req, prisma),
 })

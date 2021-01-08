@@ -50,7 +50,7 @@ const main = async (path: string) => {
   if (!mapping.template || !mapping.template.name) {
     throw new Error('missing template in mapping')
   }
-  let template = await prismaClient.template.findOne({
+  let template = await prismaClient.template.findUnique({
     where: { name: mapping.template.name },
   })
   if (!template) {

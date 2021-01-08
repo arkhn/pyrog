@@ -33,7 +33,7 @@ export const addConditionToInputGroup: FieldResolver<
   'Mutation',
   'addConditionToInputGroup'
 > = async (_, { inputGroupId, action, columnInput, relation, value }, ctx) => {
-  const inputGroup = await ctx.prisma.inputGroup.findOne({
+  const inputGroup = await ctx.prisma.inputGroup.findUnique({
     where: { id: inputGroupId },
   })
   if (!inputGroup)
@@ -46,11 +46,13 @@ export const addConditionToInputGroup: FieldResolver<
       relation: relation || 'EQ',
       sqlValue: {
         create: {
-          owner: {
-            connect: {
-              id: columnInput?.owner.id,
-            },
-          },
+          owner: columnInput?.owner
+            ? {
+                connect: {
+                  id: columnInput.owner.id,
+                },
+              }
+            : undefined,
           table: columnInput?.table,
           column: columnInput?.column,
           ...(columnInput?.joins && {
@@ -59,20 +61,26 @@ export const addConditionToInputGroup: FieldResolver<
                 tables: {
                   create: [
                     {
-                      owner: {
-                        connect: {
-                          id: (j.tables && j.tables[0].owner.id) || undefined,
-                        },
-                      },
+                      owner:
+                        j.tables && j.tables[0].owner
+                          ? {
+                              connect: {
+                                id: j.tables[0].owner.id,
+                              },
+                            }
+                          : undefined,
                       table: (j.tables && j.tables[0]?.table) || '',
                       column: (j.tables && j.tables[0]?.column) || '',
                     },
                     {
-                      owner: {
-                        connect: {
-                          id: (j.tables && j.tables[1].owner.id) || undefined,
-                        },
-                      },
+                      owner:
+                        j.tables && j.tables[1].owner
+                          ? {
+                              connect: {
+                                id: j.tables[1].owner.id,
+                              },
+                            }
+                          : undefined,
                       table: (j.tables && j.tables[1]?.table) || '',
                       column: (j.tables && j.tables[1]?.column) || '',
                     },
@@ -93,40 +101,51 @@ export const addConditionToInputGroup: FieldResolver<
   return inputGroup
 }
 
-export const deleteInput: FieldResolver<'Mutation', 'deleteInput'> = async (
-  _parent,
-  { inputGroupId, inputId },
-  ctx,
-) => {
-  // Delete columns associated to the input to delete
-  await ctx.prisma.column.deleteMany({
-    where: { input: { id: inputId } },
-  })
-
-  return ctx.prisma.inputGroup.update({
-    where: { id: inputGroupId },
+export const createInputGroup: FieldResolver<
+  'Mutation',
+  'createInputGroup'
+> = async (_parent, { attributeId }, ctx) =>
+  ctx.prisma.attribute.update({
+    where: { id: attributeId },
     data: {
-      inputs: {
-        delete: { id: inputId },
+      inputGroups: {
+        create: { inputs: { create: [] } },
       },
     },
   })
-}
 
-export const deleteCondition: FieldResolver<
+export const deleteInputGroup: FieldResolver<
   'Mutation',
-  'deleteCondition'
-> = async (_parent, { inputGroupId, conditionId }, ctx) => {
-  // Delete columns associated to the condition to delete
-  await ctx.prisma.column.deleteMany({
-    where: { condition: { id: conditionId } },
-  })
+  'deleteInputGroup'
+> = async (_parent, { attributeId, inputGroupId }, ctx) => {
+  await Promise.all([
+    // Delete joins of the associated inputs
+    ctx.prisma.join.deleteMany({
+      where: { column: { input: { inputGroupId } } },
+    }),
+    // Delete columns of the associated input joins
+    ctx.prisma.column.deleteMany({
+      where: { join: { column: { input: { inputGroupId } } } },
+    }),
+    // Delete associated inputs
+    ctx.prisma.input.deleteMany({
+      where: { inputGroupId },
+    }),
+    // Delete associated inputs
+    ctx.prisma.condition.deleteMany({
+      where: { inputGroupId },
+    }),
+    // Delete associated conditions
+    ctx.prisma.condition.deleteMany({
+      where: { inputGroupId },
+    }),
+  ])
 
-  return ctx.prisma.inputGroup.update({
-    where: { id: inputGroupId },
+  return ctx.prisma.attribute.update({
+    where: { id: attributeId },
     data: {
-      conditions: {
-        delete: { id: conditionId },
+      inputGroups: {
+        delete: { id: inputGroupId },
       },
     },
   })
