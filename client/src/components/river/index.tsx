@@ -55,6 +55,17 @@ const FhirRiverView = (): React.ReactElement => {
     dispatch(listBatch());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (batchList.error) {
+      toaster.show({
+        message: `Problem while listing current batches: ${batchList.error}`,
+        intent: 'danger',
+        icon: 'warning-sign',
+        timeout: 6000
+      });
+    }
+  }, [batchList.error, toaster]);
+
   const sources = data ? data.sources : [];
   const credentials = selectedSource.id ? selectedSource.credential : undefined;
   const credentialsMissing = !!selectedSource.id && !credentials;
@@ -194,7 +205,7 @@ const FhirRiverView = (): React.ReactElement => {
         <h1>Cancel a batch</h1>
         <StringSelect
           items={
-            batchList?.data
+            batchList.data
               ? Object.keys(batchList.data).map(
                   (batchId: string) => batchList.data[batchId]
                 )
