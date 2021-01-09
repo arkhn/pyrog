@@ -1,15 +1,24 @@
-import { IAction, Batch } from 'types';
+import axios from 'axios';
 
-export const addBatch = (batch: Batch): IAction => {
-  return {
-    type: 'ADD_BATCH',
-    payload: batch
+import { IAction } from 'types';
+import { RIVER_URL } from '../../constants';
+
+const listBatch = (): IAction => {
+  return async (dispatch: any) => {
+    try {
+      const { data } = await axios.get(`${RIVER_URL}/batch`);
+      dispatch({
+        type: 'LIST_BATCH_SUCCESS',
+        payload: data
+      });
+    } catch (err) {
+      const errMessage = err.response ? err.response.data : err.message;
+      dispatch({
+        type: 'LIST_BATCH_FAILED',
+        payload: errMessage
+      });
+    }
   };
 };
 
-export const removeBatch = (batchId: string): IAction => {
-  return {
-    type: 'REMOVE_BATCH',
-    payload: batchId
-  };
-};
+export default listBatch;

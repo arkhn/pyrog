@@ -1,6 +1,5 @@
-import { IReduxStore, Batch } from 'types';
+import { IReduxStore } from 'types';
 
-const getBatchList = (state: IReduxStore): Record<string, Batch> =>
-  state.batchList;
+const getBatchList = (state: IReduxStore) => state.batchList;
 
 export default getBatchList;

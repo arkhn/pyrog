@@ -1,19 +1,23 @@
-import { ISimpleAction, Batch } from 'types';
+import { ISimpleAction, BatchList } from 'types';
 
-const initialState: Record<string, Batch> = {};
+const initialState: BatchList = {
+  data: {},
+  error: null
+};
 
 const batchList = (state = initialState, action: ISimpleAction): any => {
   switch (action.type) {
-    case 'ADD_BATCH': {
+    case 'LIST_BATCH_SUCCESS': {
       return {
-        ...state,
-        [action.payload.id]: action.payload
+        data: { ...action.payload },
+        error: null
       };
     }
-    case 'REMOVE_BATCH': {
-      const ret = { ...state };
-      delete ret[action.payload];
-      return ret;
+    case 'LIST_BATCH_FAILED': {
+      return {
+        ...state,
+        error: action.payload
+      };
     }
     default:
       return state;
