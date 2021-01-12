@@ -13,7 +13,7 @@ import axios from 'axios';
 import './style.scss';
 import { Icon } from '@blueprintjs/core';
 import { useSelector } from 'react-redux';
-import { IReduxStore, ISelectedSource, Owner } from 'types';
+import { IReduxStore } from 'types';
 import { PAGAI_URL, RIVER_URL } from '../../../constants';
 import FhirPreview from './FhirPreview';
 import StringSelect from 'components/selects/stringSelect';
@@ -93,7 +93,7 @@ const TableViewer = () => {
   React.useEffect(() => {
     setOwner(resourcePkOwner);
     setTable(resource?.primaryKeyTable);
-  }, [resource]);
+  }, [resource, resourcePkOwner]);
 
   React.useEffect(() => {
     if (resource && owner && table) {

@@ -13,7 +13,7 @@ import { loader } from 'graphql.macro';
 import { useMutation } from '@apollo/react-hooks';
 
 import { onError as onApolloError } from 'services/apollo';
-import { ConceptMap, IInput, IReduxStore, Owner, Join, Column } from 'types';
+import { ConceptMap, IInput, IReduxStore, Join, Column } from 'types';
 import { FHIR_API_URL } from '../../../constants';
 
 import ColumnSelect from 'components/selects/columnSelect';

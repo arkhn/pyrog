@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { loader } from 'graphql.macro';
 import { onError as onApolloError } from 'services/apollo';
 
-import { Condition, IReduxStore, Owner, Join, Column } from 'types';
+import { Condition, IReduxStore, Join, Column } from 'types';
 import ColumnSelect from 'components/selects/columnSelect';
 import StringSelect from 'components/selects/stringSelect';
 import ConditionSelect from 'components/selects/conditionSelect';

@@ -1,6 +1,6 @@
 import { Attribute } from '@arkhn/fhir.ts';
 
-import { IAction, ICredential, ISourceSchema, Resource } from 'types';
+import { IAction, ICredential, Resource } from 'types';
 
 // Fhir Source
 export const updateSelectedSource = (source: {
