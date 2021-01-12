@@ -7,7 +7,7 @@ import {
   ResourceWithAttributes,
   InputGroupWithInputs,
 } from 'types'
-import { Comment, Condition, Input } from '@prisma/client'
+import { Comment, Condition, Input, Owner } from '@prisma/client'
 
 export const Source = objectType({
   name: 'Source',
@@ -97,7 +97,31 @@ export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
     data: {
       name,
       template: { connect: { name: templateName } },
+      credential:
+        // if a credential is present in the mapping (it should), create an empty credential object
+        // but re-create the credential's owners (required to bind columns)
+        parsedMapping && parsedMapping.source.credential
+          ? {
+              create: {
+                host: '',
+                port: '',
+                database: '',
+                password: '',
+                login: '',
+                model: parsedMapping.source.credential.model,
+                owners: {
+                  create: parsedMapping.source.credential.owners.map(
+                    (o: any) => ({
+                      name: o.name,
+                      schema: o.schema,
+                    }),
+                  ) as Owner[],
+                },
+              },
+            }
+          : undefined,
     },
+    include: { credential: { include: { owners: true } } },
   })
 
   // create a row in ACL
@@ -112,7 +136,7 @@ export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
   // import mapping if present
   if (parsedMapping) {
     await ctx.prisma.$transaction(
-      await importMapping(ctx.prisma, source.id, parsedMapping),
+      await importMapping(ctx.prisma, source, parsedMapping),
     )
   }
 
