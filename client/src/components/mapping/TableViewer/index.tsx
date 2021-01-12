@@ -132,6 +132,7 @@ const TableViewer = () => {
       <StringSelect
         icon={'th'}
         inputItem={table}
+        disabled={!owner}
         items={owner?.schema ? Object.keys(owner.schema) : []}
         maxItems={100}
         onChange={(t: string) => {

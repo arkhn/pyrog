@@ -37,7 +37,7 @@ const UpdateDatabaseCredentials = (): React.ReactElement => {
   const [host, setHost] = React.useState('');
   const [port, setPort] = React.useState('');
   const [login, setLogin] = React.useState('');
-  const [owners, setOwners] = React.useState([] as string[]);
+  const [owners, setOwners] = React.useState<string[]>([]);
   const [password, setPassword] = React.useState('');
   const [database, setDatabase] = React.useState('');
   const [model, setModel] = React.useState(models[0]);

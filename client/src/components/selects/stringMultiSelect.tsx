@@ -21,7 +21,7 @@ const StringMultiSelect = ({
     return list.includes(item);
   };
 
-  const renderstring = (item: string, { handleClick }: any) => (
+  const renderString = (item: string, { handleClick }: any) => (
     <MenuItem
       key={item}
       text={item}
@@ -42,7 +42,7 @@ const StringMultiSelect = ({
       tagInputProps={{
         onRemove: onRemoveTag as (value: React.ReactNode, index: number) => void
       }}
-      itemRenderer={renderstring}
+      itemRenderer={renderString}
       itemPredicate={filterItems}
       onItemSelect={onItemSelect}
       resetOnSelect={true}
