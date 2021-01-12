@@ -48,7 +48,7 @@ model Credential {
 }
 
 model Owner {
-  id           String     @id @default(cuid())
+  id           String     @id @default(uuid())
   name         String
   schema       Json?
   credentialId String     @map("credential")

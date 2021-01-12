@@ -75,6 +75,24 @@ JOIN "Column" _col on _col.id = _join."column"
 JOIN "Owner" _owner on _owner.id = _col."owner"
 WHERE "Column".join = _join.id;
 
+UPDATE "Column" set "owner" = _owner.id
+FROM "Condition" condition
+JOIN "InputGroup" input_group on input_group.id = condition."inputGroup"
+JOIN "Attribute" attribute on attribute.id = input_group."attributeId"
+JOIN "Resource" resource on resource.id = attribute.resource
+JOIN "Source" source on source.id = resource.source
+JOIN "Credential" cred on cred.source = source.id
+JOIN "Owner" _owner on _owner.credential = cred.id
+WHERE condition.column = "Column".id;
+
+UPDATE "Column" set "owner" = _owner.id
+FROM "Filter" _filter
+JOIN "Resource" resource on resource.id = _filter.resource
+JOIN "Source" source on source.id = resource.source
+JOIN "Credential" cred on cred.source = source.id
+JOIN "Owner" _owner on _owner.credential = cred.id
+WHERE _filter."sqlColumn" = "Column".id;
+
 -- !!!!!! Delete all columns with missing relations !!!!!!!!
 -- These are legacy columns that should have been removed before
 DELETE from "Column" WHERE "owner" is NULL;
