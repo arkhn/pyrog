@@ -6,7 +6,6 @@ import {
   checkAuthors,
   buildFiltersQuery,
   buildAttributesQuery,
-  buildColumnQuery,
 } from './utils'
 
 export default async (

@@ -3,20 +3,46 @@ import {
   Column,
   Comment,
   Condition,
+  Credential,
   Filter,
   Input,
   InputGroup,
   Join,
+  Owner,
   Resource,
+  Source,
   User,
 } from '@prisma/client'
 
-export type JoinWithColumn = Join & {
-  tables: Column[]
+export type CredentialWithOwners = Credential & {
+  owners: Owner[]
 }
 
-export type ColumnWithJoins = Column & {
+export type SourceWithCredentials = Source & {
+  credential?: CredentialWithOwners
+}
+
+export type ExportedSource = {
+  source: {
+    id: string
+    name: string
+    credential: { owners: Owner[]; model: string }
+  }
+  template: { name: string }
+  resources: Resource[]
+  version: number
+}
+
+export type JoinWithColumn = Join & {
+  tables: ColumnWithOwner[]
+}
+
+export type ColumnWithJoins = ColumnWithOwner & {
   joins: JoinWithColumn[]
+}
+
+export type ColumnWithOwner = Column & {
+  owner: Owner
 }
 
 export type InputWithColumn = Input & {

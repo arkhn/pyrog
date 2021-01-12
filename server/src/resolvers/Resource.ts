@@ -146,10 +146,6 @@ export const updateResource: FieldResolver<
     })
     await Promise.all(
       resource!.filters.map(async f => {
-        console.log(
-          'delete',
-          f.sqlColumn.joins.map(j => j.id),
-        )
         await ctx.prisma.column.deleteMany({
           where: { joinId: { in: f.sqlColumn.joins.map(j => j.id) } },
         })
