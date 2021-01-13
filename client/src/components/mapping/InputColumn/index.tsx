@@ -141,7 +141,7 @@ const InputColumn = ({ input }: Props) => {
                   }
                 });
               }}
-              initialTable={input.sqlValue.table}
+              initialTable={input.sqlValue.table || resource.primaryKeyTable}
               initialColumn={input.sqlValue.column}
               initialJoins={input.sqlValue.joins}
               sourceSchema={source.credential.schema as ISourceSchema}
