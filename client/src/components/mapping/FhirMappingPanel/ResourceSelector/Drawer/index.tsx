@@ -35,6 +35,12 @@ const qResourcesForSource = loader(
 const mDeleteResource = loader('src/graphql/mutations/deleteResource.graphql');
 const mUpdateResource = loader('src/graphql/mutations/updateResource.graphql');
 
+const remove__typenameField = (obj: any) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { __typename, ...ret } = obj;
+  return ret;
+};
+
 const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
   const dispatch = useDispatch();
   const { source, resource } = useSelector(
@@ -142,15 +148,20 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
           primaryKeyTable: pkTable,
           primaryKeyColumn: pkColumn
         },
-        filters: filters.map(filter => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const { __typename, ...sqlColumn } = filter.sqlColumn as any;
-          return {
-            sqlColumn,
-            relation: filter.relation,
-            value: filter.value
-          };
-        })
+        filters: filters.map(filter => ({
+          sqlColumn: {
+            ...remove__typenameField(filter.sqlColumn),
+            joins: filter.sqlColumn.joins?.map(j => ({
+              ...remove__typenameField(j),
+              tables: j.tables.map(remove__typenameField)
+            })),
+            owner: filter.sqlColumn.owner
+              ? { id: filter.sqlColumn.owner.id }
+              : undefined
+          },
+          relation: filter.relation,
+          value: filter.value
+        }))
       }
     });
     if (updatedResource) {

@@ -131,6 +131,7 @@ interface Column {
   id?: string;
   table: string;
   column: string;
+  owner?: any;
   joins?: Join[];
 }
 
