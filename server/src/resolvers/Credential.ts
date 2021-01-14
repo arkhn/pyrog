@@ -41,15 +41,17 @@ const loadDatabaseSchema = async (
 }> => {
   const { model, host, port, database, login, password } = credentials
   try {
-    const { data } = await axios.post(`${PAGAI_URL}/get_db_schema`, {
-      model,
-      host,
-      port,
-      database,
-      login,
-      owner,
-      password: decrypt(password!),
-    })
+    const { data } = await axios.post(
+      `${PAGAI_URL}/get_owner_schema/${owner}`,
+      {
+        model,
+        host,
+        port,
+        database,
+        login,
+        password: decrypt(password!),
+      },
+    )
     return {
       name: owner,
       schema: JSON.stringify(data),
