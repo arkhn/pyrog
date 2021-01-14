@@ -5,6 +5,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { useApolloClient } from 'react-apollo';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import { useSnackbar } from 'notistack';
 
 import Comments from './Comments';
 import FhirMappingPanel from './FhirMappingPanel';
@@ -23,7 +24,7 @@ const qInputsForAttribute = loader(
 );
 
 const MappingView = () => {
-  const toaster = useSelector((state: IReduxStore) => state.toaster);
+  const { enqueueSnackbar } = useSnackbar();
   const { source, resource, attribute } = useSelector(
     (state: IReduxStore) => state.selectedNode
   );
@@ -56,12 +57,7 @@ const MappingView = () => {
     });
 
     if (errors && errors.length) {
-      toaster.show({
-        icon: 'error',
-        intent: 'danger',
-        message: 'error while exporting mapping',
-        timeout: 4000
-      });
+      enqueueSnackbar('error while exporting mapping', { variant: 'error' });
       return;
     }
 
@@ -109,12 +105,10 @@ const MappingView = () => {
       ];
     } catch (err) {
       const errMessage = err.response ? err.response.data : err.message;
-      toaster.show({
-        icon: 'error',
-        intent: 'danger',
-        message: `error while fetching additional resources: ${errMessage}`,
-        timeout: 4000
-      });
+      enqueueSnackbar(
+        `error while fetching additional resources: ${errMessage}`,
+        { variant: 'error' }
+      );
     }
   };
 
@@ -167,15 +161,13 @@ const MappingView = () => {
   );
 
   if (source.credential.owners.some(o => !o.schema)) {
-    toaster.show({
-      icon: 'error',
-      intent: 'danger',
-      message: `missing database schema for 
+    enqueueSnackbar(
+      `missing database schema for 
       source ${source?.name || null} owner ${source.credential.owners.find(
         o => !o.schema
       )?.name || null}`,
-      timeout: 4000
-    });
+      { variant: 'error' }
+    );
     return <Navbar />;
   }
 

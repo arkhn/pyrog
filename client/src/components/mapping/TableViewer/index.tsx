@@ -9,6 +9,7 @@ import {
 } from '@blueprintjs/table';
 import React from 'react';
 import axios from 'axios';
+import { useSnackbar } from 'notistack';
 
 import './style.scss';
 import { Icon } from '@blueprintjs/core';
@@ -23,7 +24,7 @@ import {
 } from 'services/selectedNode/selectors';
 
 const TableViewer = () => {
-  const toaster = useSelector((state: IReduxStore) => state.toaster);
+  const { enqueueSnackbar } = useSnackbar();
   const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
   const availableOwners = useSelector(getDatabaseOwners);
   const resourcePkOwner = useSelector(getResourcePrimaryKeyOwner);
@@ -56,16 +57,14 @@ const TableViewer = () => {
         );
         setPreviewData(res.data);
       } catch (err) {
-        toaster.show({
-          message: err.response ? err.response.data : err.message,
-          intent: 'danger',
-          icon: 'warning-sign',
-          timeout: 6000
+        enqueueSnackbar(err.response ? err.response.data : err.message, {
+          variant: 'warning',
+          autoHideDuration: 6000
         });
       }
       setLoadingPreview(false);
     },
-    [fields, rows, resource, toaster]
+    [fields, rows, resource, enqueueSnackbar]
   );
 
   const onSelection = (regions: IRegion[]) => {
@@ -107,15 +106,13 @@ const TableViewer = () => {
         })
         .catch((err: any) => {
           setLoadingTable(false);
-          toaster.show({
-            message: err.response ? err.response.data : err.message,
-            intent: 'danger',
-            icon: 'properties',
-            timeout: 10000
+          enqueueSnackbar(err.response ? err.response.data : err.message, {
+            variant: 'warning',
+            autoHideDuration: 6000
           });
         });
     }
-  }, [resource, availableOwners, owner, table, toaster]);
+  }, [resource, availableOwners, owner, table, enqueueSnackbar]);
 
   return (
     <div id="tableViewer">

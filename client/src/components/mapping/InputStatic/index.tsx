@@ -11,8 +11,9 @@ import { useSelector } from 'react-redux';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { loader } from 'graphql.macro';
 import { ResourceDefinition } from '@arkhn/fhir.ts';
+import { useSnackbar } from 'notistack';
 
-import { onError as onApolloError } from 'services/apollo';
+import { onError } from 'services/apollo';
 import { IInput, IReduxStore } from 'types';
 
 import StringSelect from 'components/selects/stringSelect';
@@ -32,9 +33,7 @@ interface Props {
 }
 
 const InputStatic = ({ input }: Props): React.ReactElement => {
-  const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const onError = onApolloError(toaster);
-
+  const { enqueueSnackbar } = useSnackbar();
   const { attribute } = useSelector((state: IReduxStore) => state.selectedNode);
   const { availableResources } = useSelector(
     (state: IReduxStore) => state.fhir
@@ -45,9 +44,11 @@ const InputStatic = ({ input }: Props): React.ReactElement => {
   const { data: dataSources } = useQuery(qSourcesAndResources, {
     fetchPolicy: 'no-cache'
   });
-  const [updateStaticInput] = useMutation(mUpdateStaticInput, { onError });
+  const [updateStaticInput] = useMutation(mUpdateStaticInput, {
+    onError: onError(enqueueSnackbar)
+  });
   const [deleteInput, { loading: loadDelInput }] = useMutation(mDeleteInput, {
-    onError
+    onError: onError(enqueueSnackbar)
   });
 
   const sources = dataSources ? dataSources.sources : [];

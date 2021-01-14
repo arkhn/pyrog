@@ -12,7 +12,7 @@ import axios from 'axios';
 import { loader } from 'graphql.macro';
 import { useMutation } from '@apollo/react-hooks';
 
-import { onError as onApolloError } from 'services/apollo';
+import { onError } from 'services/apollo';
 import { ConceptMap, IInput, IReduxStore, Join, Column } from 'types';
 import { FHIR_API_URL } from '../../../constants';
 
@@ -20,6 +20,7 @@ import ColumnSelect from 'components/selects/columnSelect';
 import ConceptMapDialog from 'components/mapping/ConceptMap';
 import ScriptSelect from 'components/selects/scriptSelect';
 import { getDatabaseOwners } from 'services/selectedNode/selectors';
+import { useSnackbar } from 'notistack';
 
 // GRAPHQL
 const mUpdateInput = loader('src/graphql/mutations/updateInput.graphql');
@@ -33,8 +34,7 @@ interface Props {
 }
 
 const InputColumn = ({ input }: Props) => {
-  const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const onError = onApolloError(toaster);
+  const { enqueueSnackbar } = useSnackbar();
   const { attribute, resource, source } = useSelector(
     (state: IReduxStore) => state.selectedNode
   );
@@ -48,19 +48,19 @@ const InputColumn = ({ input }: Props) => {
   );
 
   const [updateInput] = useMutation(mUpdateInput, {
-    onError
+    onError: onError(enqueueSnackbar)
   });
   const [updateJoin] = useMutation(mUpdateJoin, {
-    onError
+    onError: onError(enqueueSnackbar)
   });
   const [addJoin] = useMutation(mAddJoin, {
-    onError
+    onError: onError(enqueueSnackbar)
   });
   const [deleteJoin] = useMutation(mDeleteJoin, {
-    onError
+    onError: onError(enqueueSnackbar)
   });
   const [deleteInput, { loading: loadDelInput }] = useMutation(mDeleteInput, {
-    onError
+    onError: onError(enqueueSnackbar)
   });
 
   const onClickDelete = () => {

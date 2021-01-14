@@ -11,6 +11,7 @@ import * as React from 'react';
 import { useQuery, useMutation } from 'react-apollo';
 import { useSelector, useDispatch } from 'react-redux';
 import { loader } from 'graphql.macro';
+import { useSnackbar } from 'notistack';
 
 import StringSelect from 'components/selects/stringSelect';
 import { onError } from 'services/apollo';
@@ -30,7 +31,8 @@ const mUpsertCredential = loader(
 const UpdateDatabaseCredentials = (): React.ReactElement => {
   const models = ['POSTGRES', 'ORACLE', 'MSSQL'];
 
-  const toaster = useSelector((state: IReduxStore) => state.toaster);
+  const { enqueueSnackbar } = useSnackbar();
+
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
 
   const dispatch = useDispatch();
@@ -70,14 +72,12 @@ const UpdateDatabaseCredentials = (): React.ReactElement => {
       setAvailableOwners(data);
     } catch (err) {
       setAvailableOwners(null);
-      toaster.show({
-        message: `Could not fetch available database owners: ${
+      enqueueSnackbar(
+        `Could not fetch available database owners: ${
           err.response ? err.response.data.error : err.message
         }`,
-        intent: 'danger',
-        icon: 'warning-sign',
-        timeout: 5000
-      });
+        { variant: 'error' }
+      );
     }
   };
 
@@ -97,7 +97,7 @@ const UpdateDatabaseCredentials = (): React.ReactElement => {
 
   const [upsertCredential] = useMutation(mUpsertCredential, {
     onCompleted: onUpsertCompleted,
-    onError: onError(toaster)
+    onError: onError(enqueueSnackbar)
   });
 
   const handleOwnerSelect = (owner: string): void => {

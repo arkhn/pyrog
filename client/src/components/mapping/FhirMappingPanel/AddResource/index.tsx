@@ -14,13 +14,16 @@ import { loader } from 'graphql.macro';
 
 import { FHIR_API_URL } from '../../../../constants';
 import { fetchAvailableResources } from 'services/fhir';
+import { useSnackbar } from 'notistack';
 
 const qResourcesForSource = loader(
   'src/graphql/queries/resourcesForSource.graphql'
 );
 const mCreateResource = loader('src/graphql/mutations/createResource.graphql');
 
-const fetchProfiles: (r: ResourceDefinition) => Promise<any[]> = async (r: ResourceDefinition) => {
+const fetchProfiles: (r: ResourceDefinition) => Promise<any[]> = async (
+  r: ResourceDefinition
+) => {
   let profiles = [];
   try {
     const response = await axios.get(
@@ -41,19 +44,19 @@ const AddResource = () => {
   const dispatch = useDispatch();
 
   const { source } = useSelector((state: IReduxStore) => state.selectedNode);
-  const { availableResources } = useSelector((state: IReduxStore) => state.fhir);
-  const toaster = useSelector((state: IReduxStore) => state.toaster);
+  const { availableResources } = useSelector(
+    (state: IReduxStore) => state.fhir
+  );
+  const { enqueueSnackbar } = useSnackbar();
   const [selectedDefinition, setSelectedDefinition] = React.useState(
     undefined as ResourceDefinition | undefined
   );
 
   const onCompleted = (data: any) => {
-    toaster.show({
-      icon: 'layout-hierarchy',
-      intent: 'success',
-      message: `Ressource ${data.createResource.definition.type} créée pour ${source.name}.`,
-      timeout: 4000
-    });
+    enqueueSnackbar(
+      `Ressource ${data.createResource.definition.type} has been created for ${source.name}.`,
+      { variant: 'success' }
+    );
   };
 
   const addResourceToCache = (
@@ -88,7 +91,7 @@ const AddResource = () => {
     mCreateResource,
     {
       onCompleted,
-      onError: onError(toaster),
+      onError: onError(enqueueSnackbar),
       update: addResourceToCache
     }
   );
@@ -111,7 +114,7 @@ const AddResource = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchAvailableResources)
+    dispatch(fetchAvailableResources);
   }, [dispatch]);
 
   return (

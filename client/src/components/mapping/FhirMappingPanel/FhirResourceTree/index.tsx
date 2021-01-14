@@ -4,12 +4,9 @@ import { Classes, ITreeNode, Tree } from '@blueprintjs/core';
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useQuery } from '@apollo/react-hooks';
-import {
-  IReduxStore,
-  IAttributeDefinition,
-  IAttribute
-} from 'types';
+import { IReduxStore, IAttributeDefinition, IAttribute } from 'types';
 import { loader } from 'graphql.macro';
+import { useSnackbar } from 'notistack';
 
 import { Attribute, ResourceDefinition } from '@arkhn/fhir.ts';
 
@@ -37,7 +34,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
   const client = useApolloClient();
   const dispatch = useDispatch();
 
-  const toaster = useSelector((state: IReduxStore) => state.toaster);
+  const { enqueueSnackbar } = useSnackbar();
   const { resource, source, attribute: selectedAttribute } = useSelector(
     (state: IReduxStore) => state.selectedNode
   );
@@ -50,7 +47,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
   });
 
   const [deleteAttributes] = useMutation(mDeleteAttributesStartingWith, {
-    onError: onError(toaster)
+    onError: onError(enqueueSnackbar)
   });
 
   const [nodes, setNodes] = useState([] as TreeNode[]);
@@ -141,12 +138,10 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
   ): Promise<void> => {
     // TODO: handle primitive extensions
     if (node.nodeData.isPrimitive) {
-      toaster.show({
-        icon: 'error',
-        intent: 'danger',
-        message: 'adding extensions to primitive types is not handled yet',
-        timeout: 4000
-      });
+      enqueueSnackbar(
+        'adding extensions to primitive types is not handled yet',
+        { variant: 'error' }
+      );
       return;
     }
     const isRootExtensions = !node.nodeData.parent && node.nodeData.isExtension;
@@ -165,8 +160,8 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
       variables: { definitionId: extensionDefinition.id }
     });
     if (!data) {
-      console.error('could not add extension:', errors)
-      return
+      console.error('could not add extension:', errors);
+      return;
     }
     const extensionNode = (extensionArrayNode as TreeNode).addExtension(
       data.structureDefinition

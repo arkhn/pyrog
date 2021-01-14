@@ -11,6 +11,7 @@ import React, { ReactElement } from 'react';
 import { loader } from 'graphql.macro';
 import { useSelector, useDispatch } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
+import { useSnackbar } from 'notistack';
 
 import {
   Column,
@@ -54,7 +55,7 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
   const resourcePkOwner = useSelector(getResourcePrimaryKeyOwner);
   const availableOwners = useSelector(getDatabaseOwners);
 
-  const toaster = useSelector((state: IReduxStore) => state.toaster);
+  const { enqueueSnackbar } = useSnackbar();
 
   const [label, setLabel] = React.useState('');
   const [pkOwner, setPkOwner] = React.useState(undefined as Owner | undefined);
@@ -63,20 +64,14 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
   const [filters, setFilters] = React.useState([] as Filter[]);
 
   const onUpdateCompleted = (): void => {
-    toaster.show({
-      message: `Successfully updated ${resource.definition.type} properties`,
-      intent: 'success',
-      icon: 'properties'
-    });
+    enqueueSnackbar(
+      `Successfully updated ${resource.definition.type} properties`,
+      { variant: 'success' }
+    );
   };
 
   const onDeletionCompleted = (): void => {
-    toaster.show({
-      icon: 'layout-hierarchy',
-      intent: 'success',
-      message: 'Resource deleted.',
-      timeout: 4000
-    });
+    enqueueSnackbar('Resource deleted.', { variant: 'success' });
     dispatch(deselectResource());
   };
 
@@ -112,17 +107,17 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
   const [updateResource, { loading: updatingResource }] = useMutation(
     mUpdateResource,
     {
-      onCompleted: onUpdateCompleted,
-      onError: onError(toaster)
+      onError: onError(enqueueSnackbar),
+      onCompleted: onUpdateCompleted
     }
   );
 
   const [deleteResource, { loading: deletingResource }] = useMutation(
     mDeleteResource,
     {
+      onError: onError(enqueueSnackbar),
       update: removeResourceFromCache,
-      onCompleted: onDeletionCompleted,
-      onError: onError(toaster)
+      onCompleted: onDeletionCompleted
     }
   );
 

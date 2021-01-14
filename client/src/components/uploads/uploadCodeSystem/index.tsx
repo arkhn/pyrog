@@ -1,11 +1,9 @@
 import { Button, ButtonGroup } from '@blueprintjs/core';
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 
 import axios from 'axios';
 import { FHIR_API_URL } from '../../../constants';
-
-import { IReduxStore } from 'types';
 
 import { validator } from '../validation/validate';
 import fhirSchema from '../validation/CodeSystem.schema.json';
@@ -15,7 +13,7 @@ import './style.scss';
 const validateCodeSystem = validator(fhirSchema);
 
 const UploadCodeSystem = (): React.ReactElement => {
-  const toaster = useSelector((state: IReduxStore) => state.toaster);
+  const { enqueueSnackbar } = useSnackbar();
 
   const [newCodeSystem, setNewCodeSystem] = useState(undefined as any);
   const [uploading, setUploading] = useState(false);
@@ -23,11 +21,8 @@ const UploadCodeSystem = (): React.ReactElement => {
 
   const reader = new FileReader();
   reader.onerror = () => {
-    toaster.show({
-      message: 'Could not read CodeSystem',
-      intent: 'danger',
-      icon: 'warning-sign',
-      timeout: 5000
+    enqueueSnackbar('Could not read CodeSystem', {
+      variant: 'error'
     });
   };
   reader.onload = () => {
@@ -46,14 +41,14 @@ const UploadCodeSystem = (): React.ReactElement => {
     try {
       await axios.post(`${FHIR_API_URL}/CodeSystem`, newCodeSystem);
     } catch (err) {
-      toaster.show({
-        message: `Could not upload CodeSystem: ${
+      enqueueSnackbar(
+        `Could not upload CodeSystem: ${
           err.response ? err.response.data : err.message
         }`,
-        intent: 'danger',
-        icon: 'warning-sign',
-        timeout: 5000
-      });
+        {
+          variant: 'error'
+        }
+      );
     }
     setUploading(false);
   };

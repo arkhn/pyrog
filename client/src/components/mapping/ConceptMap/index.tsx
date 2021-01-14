@@ -1,6 +1,6 @@
 import { Button, ButtonGroup, Dialog, InputGroup } from '@blueprintjs/core';
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 
 import axios from 'axios';
 import { FHIR_API_URL } from '../../../constants';
@@ -8,14 +8,7 @@ import { FHIR_API_URL } from '../../../constants';
 import TerminologySelect from 'components/selects/terminologySelect';
 import CodeSelect from 'components/selects/codeSelect';
 import StringSelect from 'components/selects/stringSelect';
-import {
-  Code,
-  CodeSystem,
-  ConceptMap,
-  Group,
-  IReduxStore,
-  Terminology
-} from 'types';
+import { Code, CodeSystem, ConceptMap, Group, Terminology } from 'types';
 
 import UploadCodeSystem from 'components/uploads/uploadCodeSystem';
 
@@ -42,7 +35,7 @@ const ConceptMapDialog = ({
   updateInputCallback,
   currentConceptMap
 }: Props): React.ReactElement => {
-  const toaster = useSelector((state: IReduxStore) => state.toaster);
+  const { enqueueSnackbar } = useSnackbar();
 
   const [existingCodeSystems, setExistingCodeSystems] = useState(
     [] as Terminology[]
@@ -478,14 +471,12 @@ const ConceptMapDialog = ({
       try {
         await axios.post(`${FHIR_API_URL}/CodeSystem`, codeSystem);
       } catch (err) {
-        toaster.show({
-          message: `Could not create CodeSystem: ${
+        enqueueSnackbar(
+          `Could not create CodeSystem: ${
             err.response ? err.response.data : err.message
           }`,
-          intent: 'danger',
-          icon: 'warning-sign',
-          timeout: 5000
-        });
+          { variant: 'error' }
+        );
       }
     }
     let createdConceptMapId = '';
@@ -498,14 +489,12 @@ const ConceptMapDialog = ({
         );
         createdConceptMapId = created.data.id;
       } catch (err) {
-        toaster.show({
-          message: `Could not create ConceptMap: ${
+        enqueueSnackbar(
+          `Could not create ConceptMap: ${
             err.response ? err.response.data : err.message
           }`,
-          intent: 'danger',
-          icon: 'warning-sign',
-          timeout: 5000
-        });
+          { variant: 'error' }
+        );
       }
     } else if (modifyAnyway) {
       const conceptMap = createConceptMap();
@@ -515,14 +504,12 @@ const ConceptMapDialog = ({
           conceptMap
         );
       } catch (err) {
-        toaster.show({
-          message: `Could not update ConceptMap: ${
+        enqueueSnackbar(
+          `Could not create ConceptMap: ${
             err.response ? err.response.data : err.message
           }`,
-          intent: 'danger',
-          icon: 'warning-sign',
-          timeout: 5000
-        });
+          { variant: 'error' }
+        );
       }
     }
     updateInputCallback(existingConceptMapId || createdConceptMapId);

@@ -1,4 +1,3 @@
-import { IToaster } from '@blueprintjs/core';
 import * as redux from 'redux';
 import {
   Attribute,
@@ -198,7 +197,6 @@ export interface IReduxStore {
   selectedNode: ISelectedNode;
   resourceInputs: IResourceInputs;
   structure: any;
-  toaster: IToaster;
   user: IUser;
   views: any;
 }
@@ -270,7 +268,6 @@ export interface IView {
   // Router location (withRouter from 'react-router-dom')
   location?: any;
   selectedNode?: ISelectedNode;
-  toaster?: IToaster;
   user?: IUser;
 }
 
