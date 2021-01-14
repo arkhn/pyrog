@@ -6,7 +6,7 @@ import { FormGroup, TextArea, Button, Card, Icon } from '@blueprintjs/core';
 import { IReduxStore, IComment } from 'types';
 import { loader } from 'graphql.macro';
 
-import { setAttributeInMap } from 'services/resourceInputs/actions';
+import { setAttributeInMap } from 'services/resourceAttributes/actions';
 
 import './style.scss';
 
@@ -27,7 +27,7 @@ const Comments = () => {
   const me = useSelector((state: IReduxStore) => state.user);
 
   const attributesForResource = useSelector(
-    (state: IReduxStore) => state.resourceInputs.attributesMap
+    (state: IReduxStore) => state.resourceAttributes
   );
   const attributeForNode = attributesForResource[attribute.path];
 

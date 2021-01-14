@@ -15,7 +15,7 @@ export const SecondaryLabel = ({
   attribute
 }: SecondaryLabelProps): React.ReactElement => {
   const attributesForResource: { [k: string]: IAttribute } = useSelector(
-    (state: IReduxStore) => state.resourceInputs.attributesMap
+    (state: IReduxStore) => state.resourceAttributes
   );
   const attributesWithInputs = Object.keys(attributesForResource).filter(path =>
     attributesForResource[path].inputGroups.some(

@@ -8,17 +8,18 @@ import {
   Tag
 } from '@blueprintjs/core';
 import { useMutation } from '@apollo/react-hooks';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { loader } from 'graphql.macro';
 
 import { onError as onApolloError } from 'services/apollo';
-
 import ScriptSelect from 'components/selects/scriptSelect';
+
 import InputColumn from '../InputColumn';
 import InputStatic from '../InputStatic';
 import InputCondition from '../InputCondition';
 
-import { IInputGroup, IReduxStore } from 'types';
+import { setAttributeInMap } from 'services/resourceAttributes/actions';
+import { IAttribute, IInputGroup, IReduxStore } from 'types';
 
 const mUpdateInputGroup = loader(
   'src/graphql/mutations/updateInputGroup.graphql'
@@ -34,11 +35,12 @@ const mCreateCondition = loader(
   'src/graphql/mutations/addConditionToInputGroup.graphql'
 );
 interface Props {
+  attribute: IAttribute;
   inputGroup: IInputGroup;
-  key: number;
 }
 
-const InputGroup = ({ inputGroup, key }: Props) => {
+const InputGroup = ({ attribute, inputGroup }: Props) => {
+  const dispatch = useDispatch();
   const toaster = useSelector((state: IReduxStore) => state.toaster);
   const onError = onApolloError(toaster);
 
@@ -78,21 +80,37 @@ const InputGroup = ({ inputGroup, key }: Props) => {
     });
   };
 
+  const onDeleteInputGroup = () => {
+    deleteInputGroup({
+      variables: {
+        attributeId: inputGroup.attributeId,
+        inputGroupId: inputGroup.id
+      }
+    });
+    attribute.inputGroups = attribute.inputGroups.filter(
+      g => g.id !== inputGroup.id
+    );
+
+    dispatch(setAttributeInMap(attribute.path, attribute));
+  };
+
+  const addInputToReduxState = (input: any) => {
+    const updatedGroup = attribute.inputGroups.find(
+      group => group.id === inputGroup.id
+    );
+    updatedGroup!.inputs = [...updatedGroup!.inputs, input];
+
+    dispatch(setAttributeInMap(attribute.path, attribute));
+  };
+
   return (
-    <Card key={key} elevation={Elevation.ONE}>
+    <Card elevation={Elevation.ONE}>
       <div className="delete-input-group">
         <Button
           icon="trash"
           intent="danger"
           minimal={true}
-          onClick={() => {
-            deleteInputGroup({
-              variables: {
-                attributeId: inputGroup.attributeId,
-                inputGroupId: inputGroup.id
-              }
-            });
-          }}
+          onClick={onDeleteInputGroup}
           loading={loadingDeleteInputGroup}
         />
       </div>
@@ -103,7 +121,13 @@ const InputGroup = ({ inputGroup, key }: Props) => {
               .filter(input => !!input.sqlValue)
               .map(
                 (input, index) =>
-                  input && <InputColumn key={index} input={input} />
+                  input && (
+                    <InputColumn
+                      key={index}
+                      attributeRules={attribute}
+                      input={input}
+                    />
+                  )
               )}
           </div>
           <div id="input-column-rows">
@@ -111,7 +135,13 @@ const InputGroup = ({ inputGroup, key }: Props) => {
               .filter(input => !input.sqlValue)
               .map(
                 (input, index) =>
-                  input && <InputStatic key={index} input={input} />
+                  input && (
+                    <InputStatic
+                      key={index}
+                      attributeRules={attribute}
+                      input={input}
+                    />
+                  )
               )}
           </div>
         </div>
@@ -121,23 +151,25 @@ const InputGroup = ({ inputGroup, key }: Props) => {
           <Button
             icon={'add'}
             text={'SQL input'}
-            onClick={() => {
-              createSqlInput({
+            onClick={async () => {
+              const { data: dataInput } = await createSqlInput({
                 variables: {
                   inputGroupId: inputGroup.id
                 }
               });
+              addInputToReduxState(dataInput.createSqlInput);
             }}
           />
           <Button
             icon={'add'}
             text={'Static input'}
-            onClick={() => {
-              createStaticInput({
+            onClick={async () => {
+              const { data: dataInput } = await createStaticInput({
                 variables: {
                   inputGroupId: inputGroup.id
                 }
               });
+              addInputToReduxState(dataInput.createStaticInput);
             }}
           />
         </ButtonGroup>

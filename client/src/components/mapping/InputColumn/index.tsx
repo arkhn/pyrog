@@ -7,13 +7,21 @@ import {
   Tag
 } from '@blueprintjs/core';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { loader } from 'graphql.macro';
 import { useMutation } from '@apollo/react-hooks';
 
 import { onError as onApolloError } from 'services/apollo';
-import { ConceptMap, IInput, IReduxStore, ISourceSchema, Join } from 'types';
+import { setAttributeInMap } from 'services/resourceAttributes/actions';
+import {
+  ConceptMap,
+  IAttribute,
+  IInput,
+  IReduxStore,
+  ISourceSchema,
+  Join
+} from 'types';
 import { FHIR_API_URL } from '../../../constants';
 
 import ColumnSelect from 'components/selects/columnSelect';
@@ -28,10 +36,12 @@ const mDeleteJoin = loader('src/graphql/mutations/deleteJoin.graphql');
 const mDeleteInput = loader('src/graphql/mutations/deleteInput.graphql');
 
 interface Props {
+  attributeRules: IAttribute;
   input: IInput;
 }
 
-const InputColumn = ({ input }: Props) => {
+const InputColumn = ({ input, attributeRules }: Props) => {
+  const dispatch = useDispatch();
   const toaster = useSelector((state: IReduxStore) => state.toaster);
   const onError = onApolloError(toaster);
   const { attribute, resource, source } = useSelector(
@@ -68,6 +78,12 @@ const InputColumn = ({ input }: Props) => {
         inputId: input.id
       }
     });
+    const updatedGroup = attributeRules.inputGroups.find(
+      group => group.id === input.inputGroupId
+    );
+    updatedGroup!.inputs = updatedGroup!.inputs.filter(i => i.id !== input.id);
+
+    dispatch(setAttributeInMap(attributeRules.path, attributeRules));
   };
 
   useEffect(() => {

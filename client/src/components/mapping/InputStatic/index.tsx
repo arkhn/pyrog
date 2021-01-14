@@ -7,13 +7,14 @@ import {
   Position
 } from '@blueprintjs/core';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { loader } from 'graphql.macro';
 import { ResourceDefinition } from '@arkhn/fhir.ts';
 
 import { onError as onApolloError } from 'services/apollo';
-import { IInput, IReduxStore } from 'types';
+import { setAttributeInMap } from 'services/resourceAttributes/actions';
+import { IAttribute, IInput, IReduxStore } from 'types';
 
 import StringSelect from 'components/selects/stringSelect';
 import IdentifierSystemInput from './IdentifierSystemInput';
@@ -28,10 +29,12 @@ const mUpdateStaticInput = loader(
 const mDeleteInput = loader('src/graphql/mutations/deleteInput.graphql');
 
 interface Props {
+  attributeRules: IAttribute;
   input: IInput;
 }
 
-const InputStatic = ({ input }: Props): React.ReactElement => {
+const InputStatic = ({ attributeRules, input }: Props): React.ReactElement => {
+  const dispatch = useDispatch();
   const toaster = useSelector((state: IReduxStore) => state.toaster);
   const onError = onApolloError(toaster);
 
@@ -53,7 +56,7 @@ const InputStatic = ({ input }: Props): React.ReactElement => {
   const sources = dataSources ? dataSources.sources : [];
 
   useEffect(() => {
-    setStaticValue(input.staticValue);
+    setStaticValue(input.staticValue || '');
   }, [input]);
 
   const onUpdate = (value: string): void => {
@@ -72,6 +75,12 @@ const InputStatic = ({ input }: Props): React.ReactElement => {
         inputId: input.id
       }
     });
+    const updatedGroup = attributeRules.inputGroups.find(
+      group => group.id === input.inputGroupId
+    );
+    updatedGroup!.inputs = updatedGroup!.inputs.filter(i => i.id !== input.id);
+
+    dispatch(setAttributeInMap(attributeRules.path, attributeRules));
   };
 
   const renderReferenceTypeDropDown = (): React.ReactElement => (

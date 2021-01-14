@@ -28,7 +28,7 @@ const MappingView = () => {
     (state: IReduxStore) => state.selectedNode
   );
   const attributesForResource = useSelector(
-    (state: IReduxStore) => state.resourceInputs.attributesMap
+    (state: IReduxStore) => state.resourceAttributes
   );
 
   const path = attribute?.path;
