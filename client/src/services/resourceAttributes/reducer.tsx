@@ -2,7 +2,7 @@ import { ISimpleAction } from 'types';
 
 const initialState: any = {};
 
-const resourceInputsReducer = (
+const resourceAttributesReducer = (
   state = initialState,
   action: ISimpleAction
 ): any => {
@@ -33,4 +33,4 @@ const resourceInputsReducer = (
   }
 };
 
-export default resourceInputsReducer;
+export default resourceAttributesReducer;

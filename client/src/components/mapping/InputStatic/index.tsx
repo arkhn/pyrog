@@ -29,16 +29,18 @@ const mUpdateStaticInput = loader(
 const mDeleteInput = loader('src/graphql/mutations/deleteInput.graphql');
 
 interface Props {
-  attributeRules: IAttribute;
+  attribute: IAttribute;
   input: IInput;
 }
 
-const InputStatic = ({ attributeRules, input }: Props): React.ReactElement => {
+const InputStatic = ({ attribute, input }: Props): React.ReactElement => {
   const dispatch = useDispatch();
   const toaster = useSelector((state: IReduxStore) => state.toaster);
   const onError = onApolloError(toaster);
 
-  const { attribute } = useSelector((state: IReduxStore) => state.selectedNode);
+  const { attribute: selectedAttribute } = useSelector(
+    (state: IReduxStore) => state.selectedNode
+  );
   const { availableResources } = useSelector(
     (state: IReduxStore) => state.fhir
   );
@@ -68,19 +70,19 @@ const InputStatic = ({ attributeRules, input }: Props): React.ReactElement => {
     });
   };
 
-  const onClickDelete = () => {
-    deleteInput({
+  const onClickDelete = async () => {
+    const { data } = await deleteInput({
       variables: {
         inputGroupId: input.inputGroupId,
         inputId: input.id
       }
     });
-    const updatedGroup = attributeRules.inputGroups.find(
-      group => group.id === input.inputGroupId
-    );
-    updatedGroup!.inputs = updatedGroup!.inputs.filter(i => i.id !== input.id);
+    attribute.inputGroups.forEach((group, ind) => {
+      if (group.id === input.inputGroupId)
+        attribute.inputGroups[ind] = data.deleteInput;
+    });
 
-    dispatch(setAttributeInMap(attributeRules.path, attributeRules));
+    dispatch(setAttributeInMap(attribute.path, attribute));
   };
 
   const renderReferenceTypeDropDown = (): React.ReactElement => (
@@ -114,7 +116,7 @@ const InputStatic = ({ attributeRules, input }: Props): React.ReactElement => {
   const renderIdentifierSystemInput = (): React.ReactElement => (
     <IdentifierSystemInput
       value={input.staticValue}
-      attribute={attribute}
+      attribute={selectedAttribute}
       sources={sources}
       onUpdate={onUpdate}
     />
@@ -131,9 +133,9 @@ const InputStatic = ({ attributeRules, input }: Props): React.ReactElement => {
           </div>
           <div className="static-input-form">
             <ControlGroup>
-              {attribute.definition.id === 'Reference.type'
+              {selectedAttribute.definition.id === 'Reference.type'
                 ? renderReferenceTypeDropDown()
-                : attribute.definition.id === 'Identifier.system'
+                : selectedAttribute.definition.id === 'Identifier.system'
                 ? renderIdentifierSystemInput()
                 : renderTextInput()}
             </ControlGroup>

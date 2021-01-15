@@ -80,18 +80,15 @@ const InputGroup = ({ attribute, inputGroup }: Props) => {
     });
   };
 
-  const onDeleteInputGroup = () => {
-    deleteInputGroup({
+  const onDeleteInputGroup = async () => {
+    const { data } = await deleteInputGroup({
       variables: {
         attributeId: inputGroup.attributeId,
         inputGroupId: inputGroup.id
       }
     });
-    attribute.inputGroups = attribute.inputGroups.filter(
-      g => g.id !== inputGroup.id
-    );
 
-    dispatch(setAttributeInMap(attribute.path, attribute));
+    dispatch(setAttributeInMap(attribute.path, data.deleteInputGroup));
   };
 
   const addInputToReduxState = (input: any) => {
@@ -124,7 +121,7 @@ const InputGroup = ({ attribute, inputGroup }: Props) => {
                   input && (
                     <InputColumn
                       key={index}
-                      attributeRules={attribute}
+                      attribute={attribute}
                       input={input}
                     />
                   )
@@ -138,7 +135,7 @@ const InputGroup = ({ attribute, inputGroup }: Props) => {
                   input && (
                     <InputStatic
                       key={index}
-                      attributeRules={attribute}
+                      attribute={attribute}
                       input={input}
                     />
                   )

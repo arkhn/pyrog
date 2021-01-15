@@ -36,15 +36,15 @@ const mDeleteJoin = loader('src/graphql/mutations/deleteJoin.graphql');
 const mDeleteInput = loader('src/graphql/mutations/deleteInput.graphql');
 
 interface Props {
-  attributeRules: IAttribute;
+  attribute: IAttribute;
   input: IInput;
 }
 
-const InputColumn = ({ input, attributeRules }: Props) => {
+const InputColumn = ({ input, attribute }: Props) => {
   const dispatch = useDispatch();
   const toaster = useSelector((state: IReduxStore) => state.toaster);
   const onError = onApolloError(toaster);
-  const { attribute, resource, source } = useSelector(
+  const { attribute: selectedAttribute, resource, source } = useSelector(
     (state: IReduxStore) => state.selectedNode
   );
 
@@ -71,19 +71,20 @@ const InputColumn = ({ input, attributeRules }: Props) => {
     onError
   });
 
-  const onClickDelete = () => {
-    deleteInput({
+  const onClickDelete = async () => {
+    const { data } = await deleteInput({
       variables: {
         inputGroupId: input.inputGroupId,
         inputId: input.id
       }
     });
-    const updatedGroup = attributeRules.inputGroups.find(
+
+    const ind = attribute.inputGroups.findIndex(
       group => group.id === input.inputGroupId
     );
-    updatedGroup!.inputs = updatedGroup!.inputs.filter(i => i.id !== input.id);
+    attribute.inputGroups[ind] = data.deleteInput;
 
-    dispatch(setAttributeInMap(attributeRules.path, attributeRules));
+    dispatch(setAttributeInMap(attribute.path, attribute));
   };
 
   useEffect(() => {
@@ -195,7 +196,7 @@ const InputColumn = ({ input, attributeRules }: Props) => {
                 />
               </div>
             </div>
-            {['code', 'string'].includes(attribute.types[0]) && (
+            {['code', 'string'].includes(selectedAttribute.types[0]) && (
               <div className="stacked-tags">
                 <Tag minimal={true}>CONCEPT MAP</Tag>
                 <ButtonGroup>

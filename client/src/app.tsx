@@ -32,7 +32,7 @@ import { logout as logoutAction } from 'services/user/actions';
 import fhirReducer from './services/fhir';
 import recommendedColumns from './services/recommendedColumns/reducer';
 import selectedNodeReducer from './services/selectedNode/reducer';
-import resourceInputsReducer from 'services/resourceAttributes/reducer';
+import resourceAttributesReducer from 'services/resourceAttributes/reducer';
 import toasterReducer from './services/toaster/reducer';
 import userReducer from './services/user/reducer';
 
@@ -72,7 +72,7 @@ const mainReducer = combineReducers({
   data: dataReducer,
   fhir: fhirReducer,
   selectedNode: selectedNodeReducer,
-  resourceAttributes: resourceInputsReducer,
+  resourceAttributes: resourceAttributesReducer,
   toaster: toasterReducer,
   views: viewReducer,
   user: userReducer
