@@ -1,13 +1,12 @@
 import axios from 'axios';
 import { Button } from '@blueprintjs/core';
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useQuery } from '@apollo/react-hooks';
+import { useSnackbar } from 'notistack';
 
 import { loader } from 'graphql.macro';
 
 import Navbar from 'components/navbar';
-import { IReduxStore } from 'types';
 
 import SourceSelect from 'components/selects/sourceSelect';
 import ResourceMultiSelect from 'components/selects/resourceMultiSelect';
@@ -35,7 +34,7 @@ const qSourcesAndResources = loader(
 );
 
 const FhirRiverView = (): React.ReactElement => {
-  const toaster = useSelector((state: IReduxStore) => state.toaster);
+  const { enqueueSnackbar } = useSnackbar();
 
   const [selectedSource, setSelectedSource] = useState({} as Source);
   const [selectedResources, setSelectedResources] = useState([] as Resource[]);
@@ -97,19 +96,13 @@ const FhirRiverView = (): React.ReactElement => {
         }
       );
 
-      toaster.show({
-        message: 'fhir-river ran successfully',
-        intent: 'success',
-        icon: 'tick-circle',
-        timeout: 4000
+      enqueueSnackbar(`Batch was successfully created`, {
+        variant: 'success'
       });
     } catch (err) {
-      const errMessage = err.response ? err.response.data : err.message;
-      toaster.show({
-        message: `Problem while running fhir-river: ${errMessage}`,
-        intent: 'danger',
-        icon: 'warning-sign',
-        timeout: 6000
+      const errMessage = err.response ? err.response.data.error : err.message;
+      enqueueSnackbar(`Error while creating batch ${errMessage}`, {
+        variant: 'error'
       });
     }
     setRunning(false);

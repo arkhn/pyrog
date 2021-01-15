@@ -3,13 +3,14 @@ import { Button, ButtonGroup, Card, Elevation } from '@blueprintjs/core';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useSelector } from 'react-redux';
 import { loader } from 'graphql.macro';
-import { onError as onApolloError } from 'services/apollo';
+import { onError } from 'services/apollo';
 
 import { Condition, IReduxStore, Join, Column } from 'types';
 import ColumnSelect from 'components/selects/columnSelect';
 import StringSelect from 'components/selects/stringSelect';
 import ConditionSelect from 'components/selects/conditionSelect';
 import { getDatabaseOwners } from 'services/selectedNode/selectors';
+import { useSnackbar } from 'notistack';
 
 // GRAPHQL
 const mUpdateCondition = loader(
@@ -46,29 +47,28 @@ const conditionToName = (condition: Condition): string =>
   } ${conditionsMap.get(condition.relation)} ${condition.value}`;
 
 const InputCondition = ({ condition }: Props) => {
-  const toaster = useSelector((state: IReduxStore) => state.toaster);
+  const { enqueueSnackbar } = useSnackbar();
   const availableOwners = useSelector(getDatabaseOwners);
   const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
 
   const [conditionValue, setConditionValue] = useState(condition.value);
 
-  const onError = onApolloError(toaster);
   const [updateCondition] = useMutation(mUpdateCondition, {
-    onError
+    onError: onError(enqueueSnackbar)
   });
   const [updateJoin] = useMutation(mUpdateJoin, {
-    onError
+    onError: onError(enqueueSnackbar)
   });
   const [addJoin] = useMutation(mAddJoin, {
-    onError
+    onError: onError(enqueueSnackbar)
   });
   const [deleteJoin] = useMutation(mDeleteJoin, {
-    onError
+    onError: onError(enqueueSnackbar)
   });
   const [deleteCondition, { loading: loadDelete }] = useMutation(
     mDeleteCondition,
     {
-      onError
+      onError: onError(enqueueSnackbar)
     }
   );
 

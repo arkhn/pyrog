@@ -98,12 +98,12 @@ const UploadExtension = ({ isOpen, onClose, onUpload }: Props) => {
         query: qStructureDisplay,
         variables: { definitionId: extensionDefinition.id }
       });
-      dispatch(fetchAvailableExtensions)
+      dispatch(fetchAvailableExtensions);
       onUpload(data.structureDefinition);
       onClose();
     } catch (err) {
       setinvalidExtensionErrors([
-        err.response ? err.response.data : err.message
+        err.response ? err.response.data.error : err.message
       ]);
     }
     setUploadingExtension(false);

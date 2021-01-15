@@ -3,9 +3,10 @@ import { Button, Spinner } from '@blueprintjs/core';
 import { useMutation } from '@apollo/react-hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { loader } from 'graphql.macro';
+import { useSnackbar } from 'notistack';
 
 import { setAttributeInMap } from 'services/resourceInputs/actions';
-import { onError as onApolloError } from 'services/apollo';
+import { onError } from 'services/apollo';
 import InputGroup from '../InputGroup';
 import { IAttribute, IInputGroup, IReduxStore } from 'types';
 
@@ -23,8 +24,7 @@ interface Props {
 
 const InputGroups = ({ attribute, isEmpty }: Props) => {
   const dispatch = useDispatch();
-  const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const onError = onApolloError(toaster);
+  const { enqueueSnackbar } = useSnackbar();
 
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
   const path = selectedNode.attribute.path;
@@ -35,10 +35,10 @@ const InputGroups = ({ attribute, isEmpty }: Props) => {
   let attributeId = attribute?.id;
 
   const [createAttribute] = useMutation(mCreateAttribute, {
-    onError
+    onError: onError(enqueueSnackbar)
   });
   const [createInputGroup] = useMutation(mCreateInputGroup, {
-    onError
+    onError: onError(enqueueSnackbar)
   });
 
   if (!attribute && !isEmpty) {
