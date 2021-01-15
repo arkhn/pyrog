@@ -107,8 +107,6 @@ JOIN "Credential" cred on cred.source = source.id
 JOIN "Owner" _owner on _owner.credential = cred.id
 WHERE _resource.source = source.id;
 
-ALTER TABLE "Resource" ALTER COLUMN "primaryKeyOwner" SET NOT NULL;
-
 -- CreateIndex
 CREATE UNIQUE INDEX "Column.input_unique" ON "Column"("input");
 
@@ -119,7 +117,7 @@ ALTER TABLE "Owner" ADD FOREIGN KEY("credential")REFERENCES "Credential"("id") O
 ALTER TABLE "Column" ADD FOREIGN KEY("input")REFERENCES "Input"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Column" ADD FOREIGN KEY("owner")REFERENCES "Owner"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Column" ADD FOREIGN KEY("owner")REFERENCES "Owner"("id") ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Resource" ADD FOREIGN KEY("primaryKeyOwner")REFERENCES "Owner"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Resource" ADD FOREIGN KEY("primaryKeyOwner")REFERENCES "Owner"("id") ON UPDATE CASCADE;
