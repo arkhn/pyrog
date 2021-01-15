@@ -104,7 +104,7 @@ const MappingView = () => {
           })
       ];
     } catch (err) {
-      const errMessage = err.response ? err.response.data.error : err.message;
+      const errMessage = err.response ? err.response.data : err.message;
       enqueueSnackbar(
         `error while fetching additional resources: ${errMessage}`,
         { variant: 'error' }

@@ -91,7 +91,7 @@ const ConceptMapDialog = ({
     } catch (err) {
       console.error(
         `Could not fetch code systems: ${
-          err.response ? err.response.data.error : err.message
+          err.response ? err.response.data : err.message
         }`
       );
     }
@@ -140,7 +140,7 @@ const ConceptMapDialog = ({
     } catch (err) {
       console.error(
         `Could not fetch value sets: ${
-          err.response ? err.response.data.error : err.message
+          err.response ? err.response.data : err.message
         }`
       );
     }
@@ -158,7 +158,7 @@ const ConceptMapDialog = ({
     } catch (err) {
       console.error(
         `Could not fetch concept maps: ${
-          err.response ? err.response.data.error : err.message
+          err.response ? err.response.data : err.message
         }`
       );
     }
@@ -473,7 +473,7 @@ const ConceptMapDialog = ({
       } catch (err) {
         enqueueSnackbar(
           `Could not create CodeSystem: ${
-            err.response ? err.response.data.error : err.message
+            err.response ? err.response.data : err.message
           }`,
           { variant: 'error' }
         );
@@ -491,7 +491,7 @@ const ConceptMapDialog = ({
       } catch (err) {
         enqueueSnackbar(
           `Could not create ConceptMap: ${
-            err.response ? err.response.data.error : err.message
+            err.response ? err.response.data : err.message
           }`,
           { variant: 'error' }
         );
@@ -506,7 +506,7 @@ const ConceptMapDialog = ({
       } catch (err) {
         enqueueSnackbar(
           `Could not update ConceptMap: ${
-            err.response ? err.response.data.error : err.message
+            err.response ? err.response.data : err.message
           }`,
           { variant: 'error' }
         );

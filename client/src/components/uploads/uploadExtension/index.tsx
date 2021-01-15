@@ -103,7 +103,7 @@ const UploadExtension = ({ isOpen, onClose, onUpload }: Props) => {
       onClose();
     } catch (err) {
       setinvalidExtensionErrors([
-        err.response ? err.response.data.error : err.message
+        err.response ? err.response.data : err.message
       ]);
     }
     setUploadingExtension(false);

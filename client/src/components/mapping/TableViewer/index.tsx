@@ -57,7 +57,7 @@ const TableViewer = () => {
         );
         setPreviewData(res.data);
       } catch (err) {
-        enqueueSnackbar(err.response ? err.response.data.error : err.message, {
+        enqueueSnackbar(err.response ? err.response.data : err.message, {
           variant: 'warning',
           autoHideDuration: 6000
         });

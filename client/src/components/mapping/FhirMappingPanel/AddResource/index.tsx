@@ -33,7 +33,7 @@ const fetchProfiles: (r: ResourceDefinition) => Promise<any[]> = async (
   } catch (err) {
     console.error(
       `Could not fetch available resources: ${
-        err.response ? err.response.data.error : err.message
+        err.response ? err.response.data : err.message
       }`
     );
   }

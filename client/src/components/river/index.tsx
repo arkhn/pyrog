@@ -100,7 +100,7 @@ const FhirRiverView = (): React.ReactElement => {
         variant: 'success'
       });
     } catch (err) {
-      const errMessage = err.response ? err.response.data.error : err.message;
+      const errMessage = err.response ? err.response.data : err.message;
       enqueueSnackbar(`Error while creating batch ${errMessage}`, {
         variant: 'error'
       });
