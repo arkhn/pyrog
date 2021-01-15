@@ -60,6 +60,7 @@ const server = new ApolloServer({
     allowedHeaders: ['Authorization', 'Content-Type', 'IDToken'],
   },
   formatError: (err: GraphQLError): GraphQLFormattedError => {
+    console.error(err)
     if (err.message.startsWith(authenticationError.code)) {
       return {
         message: err.message,
