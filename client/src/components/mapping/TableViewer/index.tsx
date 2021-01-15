@@ -57,7 +57,7 @@ const TableViewer = () => {
         );
         setPreviewData(res.data);
       } catch (err) {
-        enqueueSnackbar(err.response ? err.response.data : err.message, {
+        enqueueSnackbar(err.response ? err.response.data.error : err.message, {
           variant: 'warning',
           autoHideDuration: 6000
         });
@@ -106,10 +106,13 @@ const TableViewer = () => {
         })
         .catch((err: any) => {
           setLoadingTable(false);
-          enqueueSnackbar(err.response ? err.response.data : err.message, {
-            variant: 'warning',
-            autoHideDuration: 6000
-          });
+          enqueueSnackbar(
+            err.response ? err.response.data.error : err.message,
+            {
+              variant: 'warning',
+              autoHideDuration: 6000
+            }
+          );
         });
     }
   }, [resource, availableOwners, owner, table, enqueueSnackbar]);

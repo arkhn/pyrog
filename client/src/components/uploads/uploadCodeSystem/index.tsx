@@ -43,7 +43,7 @@ const UploadCodeSystem = (): React.ReactElement => {
     } catch (err) {
       enqueueSnackbar(
         `Could not upload CodeSystem: ${
-          err.response ? err.response.data : err.message
+          err.response ? err.response.data.error : err.message
         }`,
         {
           variant: 'error'

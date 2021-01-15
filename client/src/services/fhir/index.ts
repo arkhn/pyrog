@@ -32,7 +32,7 @@ export const fetchAvailableExtensions = async (
   } catch (err) {
     console.error(
       `Could not fetch available extensions: ${
-        err.response ? err.response.data : err.message
+        err.response ? err.response.data.error : err.message
       }`
     );
     dispatch({ type: 'FETCH_EXTENSIONS', payload: getState().extensions });
@@ -57,7 +57,7 @@ export const fetchAvailableResources = async (
   } catch (err) {
     console.error(
       `Could not fetch available resources: ${
-        err.response ? err.response.data : err.message
+        err.response ? err.response.data.error : err.message
       }`
     );
     dispatch({

@@ -247,7 +247,7 @@ const App = (): React.ReactElement => (
           ref={notistackRef}
           action={key => (
             <Button onClick={onClickDismiss(key)}>
-              <Icon icon="cross"></Icon>
+              <Icon icon="cross" />
             </Button>
           )}
         >
