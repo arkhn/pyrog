@@ -151,7 +151,9 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
   const source = await ctx.prisma.source.findUnique({
     where: { id: sourceId },
     include: {
-      credential: true,
+      credential: {
+        include: { owners: true },
+      },
       resources: {
         include: {
           filters: {
@@ -188,11 +190,6 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
       },
     },
   })
-  if (source!.credential) {
-    await ctx.prisma.credential.delete({
-      where: { id: source!.credential.id },
-    })
-  }
   await ctx.prisma.accessControl.deleteMany({
     where: { source: { id: sourceId } },
   })
@@ -251,6 +248,18 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
       return ctx.prisma.resource.delete({ where: { id: r.id } })
     }),
   )
+  if (source!.credential) {
+    await ctx.prisma.column.deleteMany({
+      where: { ownerId: { in: source!.credential.owners.map(o => o.id) } },
+    })
+    await ctx.prisma.owner.deleteMany({
+      where: { credentialId: source!.credential.id },
+    })
+    await ctx.prisma.credential.delete({
+      where: { id: source!.credential.id },
+    })
+  }
+
   return ctx.prisma.source.delete({ where: { id: sourceId } })
 }
 

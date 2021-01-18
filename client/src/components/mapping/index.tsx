@@ -68,7 +68,7 @@ const MappingView = () => {
       const fileName = `${template.name}_${name}_mapping.json`;
       const element = document.createElement('a');
       const file = new File(
-        [mapping],
+        [JSON.stringify(JSON.parse(mapping), null, 2)],
         `${template.name}_${name}_mapping.json`,
         {
           type: 'application/json'
@@ -127,7 +127,7 @@ const MappingView = () => {
     if (bundle.entry.length > 0) {
       const fileName = `${source.template.name}_${source.name}_additional_resources.json`;
       const element = document.createElement('a');
-      const file = new File([JSON.stringify(bundle)], fileName, {
+      const file = new File([JSON.stringify(bundle, null, 2)], fileName, {
         type: 'application/json'
       });
       element.href = URL.createObjectURL(file);

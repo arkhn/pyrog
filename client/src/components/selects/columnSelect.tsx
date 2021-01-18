@@ -171,35 +171,44 @@ const ColumnSelect = ({
                   targetTable: string,
                   targetColumn: string
                 ) => {
-                  const newJoin = {
-                    tables: [
-                      {
-                        owner: sourceOwner
-                          ? ({
-                              id: sourceOwner.id,
-                              name: sourceOwner.name
-                            } as Owner)
-                          : undefined,
-                        table: sourceTable,
-                        column: sourceColumn
-                      },
-                      {
-                        owner: targetOwner
-                          ? ({
-                              id: targetOwner.id,
-                              name: sourceOwner.name
-                            } as Owner)
-                          : undefined,
-                        table: targetTable,
-                        column: targetColumn
-                      }
-                    ]
-                  };
-                  joins[index] = newJoin;
-                  setJoins([...joins]);
+                  if (
+                    sourceOwner &&
+                    sourceTable &&
+                    sourceColumn &&
+                    targetOwner &&
+                    targetTable &&
+                    targetColumn
+                  ) {
+                    const newJoin = {
+                      tables: [
+                        {
+                          owner: sourceOwner
+                            ? ({
+                                id: sourceOwner.id,
+                                name: sourceOwner.name
+                              } as Owner)
+                            : undefined,
+                          table: sourceTable,
+                          column: sourceColumn
+                        },
+                        {
+                          owner: targetOwner
+                            ? ({
+                                id: targetOwner.id,
+                                name: sourceOwner.name
+                              } as Owner)
+                            : undefined,
+                          table: targetTable,
+                          column: targetColumn
+                        }
+                      ]
+                    };
+                    joins[index] = newJoin;
+                    setJoins([...joins]);
 
-                  joinChangeCallback && joinChangeCallback(join.id, newJoin);
-                  allJoinsChangeCallback && allJoinsChangeCallback(joins);
+                    joinChangeCallback && joinChangeCallback(join.id, newJoin);
+                    allJoinsChangeCallback && allJoinsChangeCallback(joins);
+                  }
                 }}
               />
             </ControlGroup>

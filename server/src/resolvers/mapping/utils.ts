@@ -133,7 +133,12 @@ const buildJoinsQuery = (
     const join: JoinCreateWithoutColumnInput = clean(j)
     if (j.tables && j.tables.length) {
       join.tables = {
-        create: j.tables.map(clean).map(t => buildColumnQuery(t, credentialId)),
+        create: j.tables
+          .map(clean)
+          // WARNING: we need to reverse the array for the joins to be created
+          // in the right order: yeah I know it's stupid
+          .reverse()
+          .map(t => buildColumnQuery(t, credentialId)),
       }
     } else {
       delete join.tables

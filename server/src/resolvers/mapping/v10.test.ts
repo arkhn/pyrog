@@ -259,4 +259,153 @@ describe('import mapping V9', () => {
       }
     `)
   })
+
+  it('should have cleaned the resource and attributes', async () => {
+    await importMappingV10(new PrismaClient(), source, resources)
+    expect(mockCreateResource.mock.calls[4][0]).toMatchInlineSnapshot(`
+      Object {
+        "data": Object {
+          "attributes": Object {
+            "create": Array [
+              Object {
+                "definitionId": "uri",
+                "inputGroups": Object {
+                  "create": Array [
+                    Object {
+                      "inputs": Object {
+                        "create": Array [
+                          Object {
+                            "conceptMapId": null,
+                            "script": null,
+                            "staticValue": "http://terminology.arkhn.org/33684f2e-bb84-4863-baea-7f1f199e0dd4",
+                          },
+                        ],
+                      },
+                      "mergingScript": null,
+                    },
+                  ],
+                },
+                "path": "identifier[0].system",
+                "sliceName": null,
+              },
+              Object {
+                "definitionId": "string",
+                "inputGroups": Object {
+                  "create": Array [
+                    Object {
+                      "inputs": Object {
+                        "create": Array [
+                          Object {
+                            "conceptMapId": null,
+                            "script": null,
+                            "sqlValue": Object {
+                              "create": Object {
+                                "column": "hadm_id",
+                                "joins": Object {
+                                  "create": Array [
+                                    Object {
+                                      "tables": Object {
+                                        "create": Array [
+                                          Object {
+                                            "column": "subject_id",
+                                            "owner": Object {
+                                              "connect": Object {
+                                                "Owner_name_credential_unique_constraint": Object {
+                                                  "credentialId": "456",
+                                                  "name": "mimiciii",
+                                                },
+                                              },
+                                            },
+                                            "table": "admissions",
+                                          },
+                                          Object {
+                                            "column": "subject_id",
+                                            "owner": Object {
+                                              "connect": Object {
+                                                "Owner_name_credential_unique_constraint": Object {
+                                                  "credentialId": "456",
+                                                  "name": "mimiciii",
+                                                },
+                                              },
+                                            },
+                                            "table": "patients",
+                                          },
+                                        ],
+                                      },
+                                    },
+                                  ],
+                                },
+                                "owner": Object {
+                                  "connect": Object {
+                                    "Owner_name_credential_unique_constraint": Object {
+                                      "credentialId": "456",
+                                      "name": "mimiciii",
+                                    },
+                                  },
+                                },
+                                "table": "admissions",
+                              },
+                            },
+                            "staticValue": null,
+                          },
+                        ],
+                      },
+                      "mergingScript": null,
+                    },
+                  ],
+                },
+                "path": "identifier[0].value",
+                "sliceName": null,
+              },
+              Object {
+                "definitionId": "Identifier",
+                "path": "identifier[0]",
+                "sliceName": null,
+              },
+            ],
+          },
+          "definitionId": "Patient",
+          "filters": Object {
+            "create": Array [
+              Object {
+                "relation": "=",
+                "sqlColumn": Object {
+                  "create": Object {
+                    "column": "subject_id",
+                    "owner": Object {
+                      "connect": Object {
+                        "Owner_name_credential_unique_constraint": Object {
+                          "credentialId": "456",
+                          "name": "mimiciii",
+                        },
+                      },
+                    },
+                    "table": "patients",
+                  },
+                },
+                "value": "10059",
+              },
+            ],
+          },
+          "label": "feat_2_joins that fill lists of attributes patient.identifier",
+          "logicalReference": "33684f2e-bb84-4863-baea-7f1f199e0dd4",
+          "primaryKeyColumn": "row_id",
+          "primaryKeyOwner": Object {
+            "connect": Object {
+              "Owner_name_credential_unique_constraint": Object {
+                "credentialId": "456",
+                "name": "mimiciii",
+              },
+            },
+          },
+          "primaryKeyTable": "patients",
+          "source": Object {
+            "connect": Object {
+              "id": "01234567",
+            },
+          },
+        },
+      }
+    `)
+  })
 })
