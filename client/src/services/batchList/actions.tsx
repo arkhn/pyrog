@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-import { IAction } from 'types';
+import { IAction, IThunkAction } from 'types';
 import { RIVER_URL } from '../../constants';
 
-const listBatch = (): IAction => {
-  return async (dispatch: any) => {
+export const listBatch = (): IThunkAction => {
+  return async (dispatch): Promise<IAction> => {
     try {
       const { data } = await axios.get(`${RIVER_URL}/batch`);
       dispatch({

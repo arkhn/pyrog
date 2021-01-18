@@ -1,6 +1,6 @@
-import { ISimpleAction, BatchList } from 'types';
+import { ISimpleAction, Batch, BatchResponse } from 'types';
 
-const initialState: BatchList = {
+const initialState: BatchResponse = {
   data: {},
   error: null
 };
@@ -9,7 +9,13 @@ const batchList = (state = initialState, action: ISimpleAction): any => {
   switch (action.type) {
     case 'LIST_BATCH_SUCCESS': {
       return {
-        data: { ...action.payload },
+        data: action.payload.reduce(
+          (acc: Record<string, Batch>, batch: Batch) => ({
+            ...acc,
+            [batch.id]: { ...batch }
+          }),
+          {}
+        ),
         error: null
       };
     }

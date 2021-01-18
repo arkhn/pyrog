@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Button } from '@blueprintjs/core';
+import { Button, Tag } from '@blueprintjs/core';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import listBatch from '../../services/batchList/actions';
@@ -40,7 +40,7 @@ const qSourcesAndResources = loader(
 const FhirRiverView = (): React.ReactElement => {
   const dispatch = useDispatch();
   const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const batchList = useSelector(getBatchList);
+  const { data: batchList, error: batchListError } = useSelector(getBatchList);
 
   const [selectedSource, setSelectedSource] = useState({} as Source);
   const [selectedResources, setSelectedResources] = useState([] as Resource[]);
@@ -67,6 +67,15 @@ const FhirRiverView = (): React.ReactElement => {
   }, [batchList.error, toaster]);
 
   const sources = data ? data.sources : [];
+  const resources =
+    sources.length > 0
+      ? sources
+          .map((source: any) => source.resources)
+          .reduce(
+            (acc: Resource[], resources: Resource[]) => [...acc, ...resources],
+            []
+          )
+      : [];
   const credentials = selectedSource.id ? selectedSource.credential : undefined;
   const credentialsMissing = !!selectedSource.id && !credentials;
 
@@ -180,7 +189,7 @@ const FhirRiverView = (): React.ReactElement => {
         <p>
           Choose all the resources you want to process with the ETL. If you
           select none of them, all we be processed. Note that you need to select
-          a source before.
+          a source before
         </p>
         <ResourceMultiSelect
           resources={selectedSource.resources || []}
@@ -207,22 +216,38 @@ const FhirRiverView = (): React.ReactElement => {
           items={
             batchList.data
               ? Object.keys(batchList.data).map(
-                  (batchId: string) => batchList.data[batchId]
+                  (batchId: string) => batchList[batchId].timestamp
                 )
               : []
           }
           inputItem={
-            !!selectedBatch && !batchList.error
-              ? batchList.data[selectedBatch]
+            !!selectedBatch && !batchListError
+              ? batchList[selectedBatch].timestamp
               : 'Select a batch to cancel'
           }
           onChange={(item: string): void => {
             const batchId = Object.keys(batchList.data).find(
-              batchId => batchList.data[batchId] === item
+              batchId => batchList[batchId].timestamp === item
             );
             if (batchId) setSelectedBatch(batchId);
           }}
         />
+        <ul>
+          {!!selectedBatch &&
+            batchList[selectedBatch].resources.map(resource => {
+              return (
+                <li key={resource.resource_id}>
+                  <Tag>
+                    {
+                      resources.find(
+                        (r: Resource) => r.id === resource.resource_id
+                      ).definition.type
+                    }
+                  </Tag>
+                </li>
+              );
+            })}
+        </ul>
         <div className="align-right">
           <Button
             intent="danger"

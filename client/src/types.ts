@@ -178,8 +178,19 @@ export interface IFhir {
   availableResources: ResourceDefinition[];
 }
 
-export interface BatchList {
-  data: Record<string, string>;
+export interface BatchResource {
+  resource_id: string;
+  resource_type?: string;
+}
+
+export interface Batch {
+  id: string;
+  timestamp: string;
+  resources: BatchResource[];
+}
+
+export interface BatchResponse {
+  data: Record<string, Batch>;
   error: string | null;
 }
 
@@ -188,7 +199,7 @@ export interface IReduxStore {
   data: IData;
   dispatch?: any;
   fhir: IFhir;
-  batchList: BatchList;
+  batchList: BatchResponse;
   selectedNode: ISelectedNode;
   resourceInputs: IResourceInputs;
   structure: any;
