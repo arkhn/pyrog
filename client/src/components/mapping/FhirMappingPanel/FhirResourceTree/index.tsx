@@ -11,7 +11,7 @@ import { useSnackbar } from 'notistack';
 import { Attribute, ResourceDefinition } from '@arkhn/fhir.ts';
 
 // ACTIONS
-import { removeAttributesFromMap } from 'services/resourceInputs/actions';
+import { removeAttributesFromMap } from 'services/resourceAttributes/actions';
 import { onError } from 'services/apollo';
 
 import { TreeNode } from './treeNode';
@@ -56,7 +56,7 @@ const FhirResourceTree = ({ onClickCallback }: Props) => {
   );
 
   const attributesForResource: { [k: string]: IAttribute } = useSelector(
-    (state: IReduxStore) => state.resourceInputs.attributesMap
+    (state: IReduxStore) => state.resourceAttributes
   );
   const attributesWithInputs = Object.keys(attributesForResource).filter(path =>
     attributesForResource[path].inputGroups.some(

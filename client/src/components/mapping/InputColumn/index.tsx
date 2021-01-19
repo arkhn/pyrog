@@ -7,13 +7,21 @@ import {
   Tag
 } from '@blueprintjs/core';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { loader } from 'graphql.macro';
 import { useMutation } from '@apollo/react-hooks';
 
 import { onError } from 'services/apollo';
-import { ConceptMap, IInput, IReduxStore, Join, Column } from 'types';
+import { setAttributeInMap } from 'services/resourceAttributes/actions';
+import {
+  Column,
+  ConceptMap,
+  IAttribute,
+  IInput,
+  IReduxStore,
+  Join
+} from 'types';
 import { FHIR_API_URL } from '../../../constants';
 
 import ColumnSelect from 'components/selects/columnSelect';
@@ -30,12 +38,14 @@ const mDeleteJoin = loader('src/graphql/mutations/deleteJoin.graphql');
 const mDeleteInput = loader('src/graphql/mutations/deleteInput.graphql');
 
 interface Props {
+  attribute: IAttribute;
   input: IInput;
 }
 
-const InputColumn = ({ input }: Props) => {
+const InputColumn = ({ input, attribute }: Props) => {
+  const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-  const { attribute, resource, source } = useSelector(
+  const { attribute: selectedAttribute, resource, source } = useSelector(
     (state: IReduxStore) => state.selectedNode
   );
   const availableOwners = useSelector(getDatabaseOwners);
@@ -63,13 +73,20 @@ const InputColumn = ({ input }: Props) => {
     onError: onError(enqueueSnackbar)
   });
 
-  const onClickDelete = () => {
-    deleteInput({
+  const onClickDelete = async () => {
+    const { data } = await deleteInput({
       variables: {
         inputGroupId: input.inputGroupId,
         inputId: input.id
       }
     });
+
+    const ind = attribute.inputGroups.findIndex(
+      group => group.id === input.inputGroupId
+    );
+    attribute.inputGroups[ind] = data.deleteInput;
+
+    dispatch(setAttributeInMap(attribute.path, attribute));
   };
 
   useEffect(() => {
@@ -136,7 +153,7 @@ const InputColumn = ({ input }: Props) => {
                 });
               }}
               initialOwner={input.sqlValue.owner}
-              initialTable={input.sqlValue.table}
+              initialTable={input.sqlValue.table || resource.primaryKeyTable}
               initialColumn={input.sqlValue.column}
               initialJoins={input.sqlValue.joins}
               sourceOwners={availableOwners}
@@ -174,7 +191,7 @@ const InputColumn = ({ input }: Props) => {
                 />
               </div>
             </div>
-            {['code', 'string'].includes(attribute.types[0]) && (
+            {['code', 'string'].includes(selectedAttribute.types[0]) && (
               <div className="stacked-tags">
                 <Tag minimal={true}>CONCEPT MAP</Tag>
                 <ButtonGroup>

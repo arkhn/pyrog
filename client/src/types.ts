@@ -33,7 +33,7 @@ export interface IAttribute {
   path: string;
   sliceName: string;
   definitionId: string;
-  inputGroups: any[];
+  inputGroups: IInputGroup[];
   comments: IComment[];
 }
 export interface IAttributeDefinition {
@@ -163,11 +163,6 @@ export interface ISelectedNode {
   attribute: Attribute;
 }
 
-export interface IResourceInputs {
-  primaryKeyTable: string;
-  primaryKeyColumn: string;
-  attributesMap: any;
-}
 export interface IComment {
   id: string;
   author: IUser;
@@ -196,7 +191,7 @@ export interface IReduxStore {
   dispatch?: any;
   fhir: IFhir;
   selectedNode: ISelectedNode;
-  resourceInputs: IResourceInputs;
+  resourceAttributes: any;
   structure: any;
   user: IUser;
   views: any;

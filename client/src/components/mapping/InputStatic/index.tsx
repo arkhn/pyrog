@@ -7,14 +7,15 @@ import {
   Position
 } from '@blueprintjs/core';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { loader } from 'graphql.macro';
 import { ResourceDefinition } from '@arkhn/fhir.ts';
 import { useSnackbar } from 'notistack';
 
 import { onError } from 'services/apollo';
-import { IInput, IReduxStore } from 'types';
+import { setAttributeInMap } from 'services/resourceAttributes/actions';
+import { IAttribute, IInput, IReduxStore } from 'types';
 
 import StringSelect from 'components/selects/stringSelect';
 import IdentifierSystemInput from './IdentifierSystemInput';
@@ -29,12 +30,17 @@ const mUpdateStaticInput = loader(
 const mDeleteInput = loader('src/graphql/mutations/deleteInput.graphql');
 
 interface Props {
+  attribute: IAttribute;
   input: IInput;
 }
 
-const InputStatic = ({ input }: Props): React.ReactElement => {
+const InputStatic = ({ attribute, input }: Props): React.ReactElement => {
   const { enqueueSnackbar } = useSnackbar();
-  const { attribute } = useSelector((state: IReduxStore) => state.selectedNode);
+  const dispatch = useDispatch();
+
+  const { attribute: selectedAttribute } = useSelector(
+    (state: IReduxStore) => state.selectedNode
+  );
   const { availableResources } = useSelector(
     (state: IReduxStore) => state.fhir
   );
@@ -54,7 +60,7 @@ const InputStatic = ({ input }: Props): React.ReactElement => {
   const sources = dataSources ? dataSources.sources : [];
 
   useEffect(() => {
-    setStaticValue(input.staticValue);
+    setStaticValue(input.staticValue || '');
   }, [input]);
 
   const onUpdate = (value: string): void => {
@@ -66,13 +72,19 @@ const InputStatic = ({ input }: Props): React.ReactElement => {
     });
   };
 
-  const onClickDelete = () => {
-    deleteInput({
+  const onClickDelete = async () => {
+    const { data } = await deleteInput({
       variables: {
         inputGroupId: input.inputGroupId,
         inputId: input.id
       }
     });
+    attribute.inputGroups.forEach((group, ind) => {
+      if (group.id === input.inputGroupId)
+        attribute.inputGroups[ind] = data.deleteInput;
+    });
+
+    dispatch(setAttributeInMap(attribute.path, attribute));
   };
 
   const renderReferenceTypeDropDown = (): React.ReactElement => (
@@ -106,7 +118,7 @@ const InputStatic = ({ input }: Props): React.ReactElement => {
   const renderIdentifierSystemInput = (): React.ReactElement => (
     <IdentifierSystemInput
       value={input.staticValue}
-      attribute={attribute}
+      attribute={selectedAttribute}
       sources={sources}
       onUpdate={onUpdate}
     />
@@ -123,9 +135,9 @@ const InputStatic = ({ input }: Props): React.ReactElement => {
           </div>
           <div className="static-input-form">
             <ControlGroup>
-              {attribute.definition.id === 'Reference.type'
+              {selectedAttribute.definition.id === 'Reference.type'
                 ? renderReferenceTypeDropDown()
-                : attribute.definition.id === 'Identifier.system'
+                : selectedAttribute.definition.id === 'Identifier.system'
                 ? renderIdentifierSystemInput()
                 : renderTextInput()}
             </ControlGroup>

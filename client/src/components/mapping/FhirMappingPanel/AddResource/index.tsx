@@ -7,7 +7,7 @@ import { ResourceDefinition } from '@arkhn/fhir.ts';
 
 import AddResourceSelect from 'components/selects/addResourceSelect';
 import { changeSelectedResource } from 'services/selectedNode/actions';
-import { initAttributesMap } from 'services/resourceInputs/actions';
+import { initAttributesMap } from 'services/resourceAttributes/actions';
 import { onError } from 'services/apollo';
 import { IReduxStore } from 'types';
 import { loader } from 'graphql.macro';
