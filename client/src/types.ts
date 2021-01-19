@@ -143,6 +143,7 @@ export interface Column {
   owner?: Owner;
   table: string;
   column: string;
+  // owner?: any;
   joins?: Join[];
 }
 
