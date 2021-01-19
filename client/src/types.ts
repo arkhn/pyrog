@@ -189,6 +189,7 @@ export interface IReduxStore {
 // FHIR
 
 export interface CodeSystem {
+  resourceType: string;
   title: string;
   name: string;
   status: string;
