@@ -107,8 +107,8 @@ const ColumnSelect = ({
               onClick={() => {
                 const emptyJoin = {
                   tables: [
-                    { table: '', column: '' },
-                    { table: '', column: '' }
+                    { table: primaryKeyTable, column: '' },
+                    { table: table, column: '' }
                   ]
                 };
 

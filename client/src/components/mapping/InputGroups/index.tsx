@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/react-hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { loader } from 'graphql.macro';
 
-import { setAttributeInMap } from 'services/resourceInputs/actions';
+import { setAttributeInMap } from 'services/resourceAttributes/actions';
 import { onError as onApolloError } from 'services/apollo';
 import InputGroup from '../InputGroup';
 import { IAttribute, IInputGroup, IReduxStore } from 'types';
@@ -30,7 +30,7 @@ const InputGroups = ({ attribute, isEmpty }: Props) => {
   const path = selectedNode.attribute.path;
 
   const attributesForResource = useSelector(
-    (state: IReduxStore) => state.resourceInputs.attributesMap
+    (state: IReduxStore) => state.resourceAttributes
   );
   let attributeId = attribute?.id;
 
@@ -75,7 +75,7 @@ const InputGroups = ({ attribute, isEmpty }: Props) => {
           !currentAttribute.isArray &&
           currentAttribute.types.length <= 1
         ) {
-          const { data: attr } = await createAttribute({
+          createAttribute({
             variables: {
               resourceId: selectedNode.resource.id,
               definitionId: currentAttribute.types[0],
@@ -83,7 +83,6 @@ const InputGroups = ({ attribute, isEmpty }: Props) => {
               sliceName: currentAttribute.definition.sliceName
             }
           });
-          dispatch(setAttributeInMap(parentPath, attr.createAttribute));
         }
       }
       dispatch(setAttributeInMap(path, dataAttribute.createInputGroup));
@@ -99,14 +98,10 @@ const InputGroups = ({ attribute, isEmpty }: Props) => {
   return (
     <div id="input-groups">
       {inputGroups.map((inputGroup: IInputGroup, index: number) =>
-        inputGroup ? <InputGroup key={index} inputGroup={inputGroup} /> : null
+        inputGroup ? <InputGroup key={index} inputGroup={inputGroup} attribute={attribute} /> : null
       )}
       <div>
-        <Button
-          icon={'add'}
-          text={'Input group'}
-          onClick={onAddInputGroup}
-        />
+        <Button icon={'add'} text={'Input group'} onClick={onAddInputGroup} />
       </div>
     </div>
   );

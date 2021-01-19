@@ -4,6 +4,7 @@
 query inputsForAttribute($attributeId: ID!) {
   attribute(attributeId: $attributeId) {
     id
+    path
     inputGroups {
       ...entireInputGroup
     }
