@@ -56,15 +56,15 @@ const FhirRiverView = (): React.ReactElement => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (batchList.error) {
+    if (batchListError) {
       toaster.show({
-        message: `Problem while listing current batches: ${batchList.error}`,
+        message: `Problem while listing current batches: ${batchListError}`,
         intent: 'danger',
         icon: 'warning-sign',
         timeout: 6000
       });
     }
-  }, [batchList.error, toaster]);
+  }, [batchListError, toaster]);
 
   const sources = data ? data.sources : [];
   const resources =
@@ -107,12 +107,8 @@ const FhirRiverView = (): React.ReactElement => {
     setSelectedResources([...selectedResources]);
   };
 
-  const onClickCreateBatch = async (
-    e: React.MouseEvent<HTMLElement, MouseEvent>
-  ): Promise<void> => {
-    e.preventDefault();
+  const handleClickCreateBatch = async (): Promise<void> => {
     setRunning(true);
-
     try {
       await axios.post(
         `${RIVER_URL}/batch`,
@@ -147,10 +143,7 @@ const FhirRiverView = (): React.ReactElement => {
     setRunning(false);
   };
 
-  const onClickCancelBatch = async (
-    e: React.MouseEvent<HTMLElement, MouseEvent>
-  ): Promise<void> => {
-    e.preventDefault();
+  const handleClickCancelBatch = async (): Promise<void> => {
     if (!selectedBatch) return;
     try {
       await axios.delete(`${RIVER_URL}/batch/${selectedBatch}`);
@@ -187,9 +180,8 @@ const FhirRiverView = (): React.ReactElement => {
         )}
         <h1>Select resources</h1>
         <p>
-          Choose all the resources you want to process with the ETL. If you
-          select none of them, all we be processed. Note that you need to select
-          a source before
+          Choose all the resources you want to process with the ETL. Note that
+          you need to select a source before
         </p>
         <ResourceMultiSelect
           resources={selectedSource.resources || []}
@@ -202,11 +194,10 @@ const FhirRiverView = (): React.ReactElement => {
           <Button
             intent="primary"
             large
-            type="submit"
             disabled={!selectedSource.id || credentialsMissing}
             loading={running}
             className="button-submit"
-            onClick={onClickCreateBatch}
+            onClick={handleClickCreateBatch}
           >
             Make the river flow
           </Button>
@@ -214,8 +205,8 @@ const FhirRiverView = (): React.ReactElement => {
         <h1>Cancel a batch</h1>
         <StringSelect
           items={
-            batchList.data
-              ? Object.keys(batchList.data).map(
+            batchList
+              ? Object.keys(batchList).map(
                   (batchId: string) => batchList[batchId].timestamp
                 )
               : []
@@ -226,36 +217,40 @@ const FhirRiverView = (): React.ReactElement => {
               : 'Select a batch to cancel'
           }
           onChange={(item: string): void => {
-            const batchId = Object.keys(batchList.data).find(
+            const batchId = Object.keys(batchList).find(
               batchId => batchList[batchId].timestamp === item
             );
             if (batchId) setSelectedBatch(batchId);
           }}
         />
-        <ul>
-          {!!selectedBatch &&
-            batchList[selectedBatch].resources.map(resource => {
-              return (
-                <li key={resource.resource_id}>
-                  <Tag>
-                    {
-                      resources.find(
-                        (r: Resource) => r.id === resource.resource_id
-                      ).definition.type
-                    }
-                  </Tag>
-                </li>
-              );
-            })}
-        </ul>
+        {selectedBatch ? (
+          <div>
+            <h2>The selected batch contains the following resources</h2>
+            <ul>
+              {!!selectedBatch &&
+                batchList[selectedBatch].resources.map(resource => {
+                  return (
+                    <li key={resource.resource_id}>
+                      <Tag>
+                        {
+                          resources.find(
+                            (r: Resource) => r.id === resource.resource_id
+                          ).definition.type
+                        }
+                      </Tag>
+                    </li>
+                  );
+                })}
+            </ul>
+          </div>
+        ) : null}
         <div className="align-right">
           <Button
             intent="danger"
-            type="submit"
             large
             disabled={!selectedBatch || !!batchList.error}
             className="button-submit"
-            onClick={onClickCancelBatch}
+            onClick={handleClickCancelBatch}
           >
             Cancel
           </Button>
