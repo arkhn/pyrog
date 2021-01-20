@@ -34,7 +34,7 @@ export interface IAttribute {
   path: string;
   sliceName: string;
   definitionId: string;
-  inputGroups: any[];
+  inputGroups: IInputGroup[];
   comments: IComment[];
 }
 export interface IAttributeDefinition {
@@ -131,6 +131,7 @@ interface Column {
   id?: string;
   table: string;
   column: string;
+  owner?: any;
   joins?: Join[];
 }
 
@@ -150,11 +151,6 @@ export interface ISelectedNode {
   attribute: Attribute;
 }
 
-export interface IResourceInputs {
-  primaryKeyTable: string;
-  primaryKeyColumn: string;
-  attributesMap: any;
-}
 export interface IComment {
   id: string;
   author: IUser;
@@ -201,7 +197,7 @@ export interface IReduxStore {
   fhir: IFhir;
   batchList: BatchResponse;
   selectedNode: ISelectedNode;
-  resourceInputs: IResourceInputs;
+  resourceAttributes: any;
   structure: any;
   toaster: IToaster;
   user: IUser;
@@ -211,6 +207,7 @@ export interface IReduxStore {
 // FHIR
 
 export interface CodeSystem {
+  resourceType: string;
   title: string;
   name: string;
   status: string;

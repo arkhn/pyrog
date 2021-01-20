@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { loader } from 'graphql.macro';
 
 import { changeSelectedResource } from 'services/selectedNode/actions';
-import { initAttributesMap } from 'services/resourceInputs/actions';
+import { initAttributesMap } from 'services/resourceAttributes/actions';
 import { IReduxStore, Resource } from 'types';
 
 import Drawer from './Drawer';
