@@ -9,13 +9,15 @@ const batchList = (state = initialState, action: ISimpleAction): any => {
   switch (action.type) {
     case 'LIST_BATCH_SUCCESS': {
       return {
-        data: action.payload.reduce(
-          (acc: Record<string, Batch>, batch: Batch) => ({
-            ...acc,
-            [batch.id]: { ...batch }
-          }),
-          {}
-        ),
+        data: action.payload
+          ? action.payload.reduce(
+              (acc: Record<string, Batch>, batch: Batch) => ({
+                ...acc,
+                [batch.id]: { ...batch }
+              }),
+              {}
+            )
+          : [],
         error: null
       };
     }

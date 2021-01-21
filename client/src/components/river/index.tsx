@@ -147,6 +147,7 @@ const FhirRiverView = (): React.ReactElement => {
     if (!selectedBatch) return;
     try {
       await axios.delete(`${RIVER_URL}/batch/${selectedBatch}`);
+      setSelectedBatch('');
       dispatch(listBatch());
     } catch (err) {
       const errMessage = err.response ? err.response.data : err.message;
