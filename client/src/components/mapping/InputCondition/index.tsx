@@ -214,7 +214,10 @@ const InputCondition = ({ condition }: Props) => {
                     variables: {
                       conditionId: condition.id,
                       action: c.action,
-                      column: c.sqlValue,
+                      column: {
+                        ...c.sqlValue,
+                        owner: { id: c.sqlValue.owner!.id }
+                      },
                       relation: c.relation,
                       value: c.value
                     }
