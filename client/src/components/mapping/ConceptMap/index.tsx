@@ -373,6 +373,7 @@ const ConceptMapDialog = ({
     }, []);
 
     return {
+      resourceType: 'CodeSystem',
       name: newTerminologyName,
       title: newTerminologyName,
       status: 'active',
