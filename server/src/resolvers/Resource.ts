@@ -40,7 +40,6 @@ export const createResource: FieldResolver<
   'Mutation',
   'createResource'
 > = async (_parent, { sourceId, definitionId }, ctx) => {
-  // console.log('OK')
   return ctx.prisma.resource.create({
     data: {
       definitionId,
@@ -57,7 +56,6 @@ export const deleteResource: FieldResolver<
   'Mutation',
   'deleteResource'
 > = async (_parent, { resourceId }, ctx) => {
-  // console.log('KO')
   const res = await ctx.prisma.resource.findUnique({
     where: { id: resourceId },
     include: {
