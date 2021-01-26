@@ -34,7 +34,6 @@ import fhirReducer from './services/fhir';
 import batchListReducer from './services/batchList/reducer';
 import recommendedColumns from './services/recommendedColumns/reducer';
 import selectedNodeReducer from './services/selectedNode/reducer';
-import resourceInputsReducer from 'services/resourceInputs/reducer';
 import resourceAttributesReducer from 'services/resourceAttributes/reducer';
 import userReducer from './services/user/reducer';
 
@@ -77,7 +76,6 @@ const mainReducer = combineReducers({
   fhir: fhirReducer,
   batchList: batchListReducer,
   selectedNode: selectedNodeReducer,
-  resourceInputs: resourceInputsReducer,
   resourceAttributes: resourceAttributesReducer,
   views: viewReducer,
   user: userReducer

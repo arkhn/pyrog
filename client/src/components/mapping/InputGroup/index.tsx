@@ -8,7 +8,7 @@ import {
   Tag
 } from '@blueprintjs/core';
 import { useMutation } from '@apollo/react-hooks';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { loader } from 'graphql.macro';
 import { useSnackbar } from 'notistack';
 
