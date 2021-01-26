@@ -12,9 +12,8 @@
     "generate:nexus": "yarn run-ts --transpile-only src/schema",
     "dev": "ts-node-dev --project tsconfig.build.json -r tsconfig-paths/register --no-notify --respawn --transpileOnly src/server",
     "lint": "eslint './src/**/*.ts'",
-    "migrate:new": "prisma migrate save --experimental",
-    "migrate:up": "prisma migrate up --experimental",
-    "migrate:preview": "prisma migrate up --experimental --preview --auto-approve",
+    "migrate:new": "yarn prisma migrate dev --preview-feature",
+    "migrate:up": "yarn prisma migrate deploy --preview-feature",
     "seed:mapping": "yarn run-ts scripts/importMapping.ts",
     "seed:superuser": "yarn run-ts scripts/createSuperUser.ts",
     "export:mappings": "yarn run-ts scripts/exportMapping.ts backup",
@@ -25,25 +24,30 @@
   },
   "dependencies": {
     "@arkhn/fhir.ts": "^3.4.3",
-    "@nexus/schema": "^0.14.0",
+    "@prisma/client": "^2.13.1",
+    "apollo-server": "^2.19.0",
     "axios": "^0.21.1",
     "client-oauth2": "^4.3.3",
     "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "dotenv-cli": "^3.1.0",
-    "graphql": "14.5.8",
-    "graphql-shield": "6.0.6",
+    "graphql": "15.3.0",
+    "graphql-middleware": "^6.0.0",
+    "graphql-shield": "7.4.4",
     "graphql-type-json": "^0.3.1",
-    "graphql-yoga": "1.18.3",
     "jwt-decode": "^3.0.0-beta.2",
     "lodash.set": "^4.3.2",
     "multer": "^1.4.2",
-    "nexus-plugin-prisma": "^0.17.0",
+    "nexus": "^1.0.0",
+    "nexus-plugin-prisma": "^0.27.0",
     "pg": "^7.14.0",
     "redis": "^3.0.2",
     "uuid": "^8.3.0"
   },
   "devDependencies": {
-    "@prisma/sdk": "2.4.1",
+    "@graphql-tools/delegate": "^7.0.8",
+    "@prisma/cli": "^2.13.1",
+    "@prisma/sdk": "^2.13.1",
     "@types/graphql-type-json": "^0.3.2",
     "@types/jest": "^24.9.0",
     "@types/jwt-decode": "^2.2.1",
@@ -56,7 +60,7 @@
     "@types/uuid": "^8.0.1",
     "@types/ws": "6.0.4",
     "@typescript-eslint/eslint-plugin": "^2.10.0",
-    "@typescript-eslint/parser": "^2.10.0",
+    "@typescript-eslint/parser": "^4.10.0",
     "eslint": "^6.7.2",
     "eslint-config-prettier": "^6.7.0",
     "eslint-plugin-prettier": "^3.1.1",
@@ -67,11 +71,12 @@
     "ts-node": "8.5.4",
     "ts-node-dev": "1.0.0-pre.44",
     "tsconfig-paths": "^3.9.0",
-    "typescript": "3.7.2"
+    "typescript": "3.9.7"
   },
   "prettier": {
     "singleQuote": true,
     "semi": false,
     "trailingComma": "all"
-  }
+  },
+  "main": "index.js"
 }

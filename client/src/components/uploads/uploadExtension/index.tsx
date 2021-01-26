@@ -98,7 +98,7 @@ const UploadExtension = ({ isOpen, onClose, onUpload }: Props) => {
         query: qStructureDisplay,
         variables: { definitionId: extensionDefinition.id }
       });
-      dispatch(fetchAvailableExtensions)
+      dispatch(fetchAvailableExtensions);
       onUpload(data.structureDefinition);
       onClose();
     } catch (err) {

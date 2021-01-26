@@ -1,4 +1,4 @@
-import { objectType, FieldResolver, booleanArg } from '@nexus/schema'
+import { objectType, FieldResolver, booleanArg, nonNull } from 'nexus'
 
 import { getDefinition } from 'fhir'
 import { importMapping, exportMapping } from 'resolvers/mapping'
@@ -7,7 +7,7 @@ import {
   ResourceWithAttributes,
   InputGroupWithInputs,
 } from 'types'
-import { Comment, Condition, Input } from '@prisma/client'
+import { Comment, Condition, Input, Owner } from '@prisma/client'
 
 export const Source = objectType({
   name: 'Source',
@@ -17,25 +17,23 @@ export const Source = objectType({
     t.model.name()
     t.model.version()
 
-    t.model.resources({ filtering: true })
+    t.model.resources()
     t.model.credential()
     t.model.template()
-    t.model.accessControls({ filtering: false })
+    t.model.accessControls()
 
     t.model.updatedAt()
     t.model.createdAt()
 
-    t.field('mapping', {
+    t.nullable.field('mapping', {
       type: 'String',
-      nullable: false,
-      args: { includeComments: booleanArg({ default: true, required: true }) },
+      args: { includeComments: nonNull(booleanArg({ default: true })) },
       resolve: (parent, { includeComments }, ctx) =>
-        exportMapping(ctx.prisma, parent.id, includeComments),
+        exportMapping(ctx.prisma, parent.id, includeComments!),
     })
 
-    t.list.field('mappingProgress', {
+    t.nullable.list.field('mappingProgress', {
       type: 'Int',
-      nullable: true,
       resolve: async (parent, _, ctx) => {
         const resources = await ctx.prisma.resource.findMany({
           include: {
@@ -99,7 +97,31 @@ export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
     data: {
       name,
       template: { connect: { name: templateName } },
+      credential:
+        // if a credential is present in the mapping (it should), create an empty credential object
+        // but re-create the credential's owners (required to bind columns)
+        parsedMapping && parsedMapping.source.credential
+          ? {
+              create: {
+                host: '',
+                port: '',
+                database: '',
+                password: '',
+                login: '',
+                model: parsedMapping.source.credential.model,
+                owners: {
+                  create: parsedMapping.source.credential.owners.map(
+                    (o: any) => ({
+                      name: o.name,
+                      schema: o.schema,
+                    }),
+                  ) as Owner[],
+                },
+              },
+            }
+          : undefined,
     },
+    include: { credential: { include: { owners: true } } },
   })
 
   // create a row in ACL
@@ -114,7 +136,7 @@ export const createSource: FieldResolver<'Mutation', 'createSource'> = async (
   // import mapping if present
   if (parsedMapping) {
     await ctx.prisma.$transaction(
-      await importMapping(ctx.prisma, source.id, parsedMapping),
+      await importMapping(ctx.prisma, source, parsedMapping),
     )
   }
 
@@ -126,10 +148,12 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
   { sourceId },
   ctx,
 ) => {
-  const source = await ctx.prisma.source.findOne({
+  const source = await ctx.prisma.source.findUnique({
     where: { id: sourceId },
     include: {
-      credential: true,
+      credential: {
+        include: { owners: true },
+      },
       resources: {
         include: {
           filters: {
@@ -166,11 +190,6 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
       },
     },
   })
-  if (source!.credential) {
-    await ctx.prisma.credential.delete({
-      where: { id: source!.credential.id },
-    })
-  }
   await ctx.prisma.accessControl.deleteMany({
     where: { source: { id: sourceId } },
   })
@@ -229,6 +248,18 @@ export const deleteSource: FieldResolver<'Mutation', 'deleteSource'> = async (
       return ctx.prisma.resource.delete({ where: { id: r.id } })
     }),
   )
+  if (source!.credential) {
+    await ctx.prisma.column.deleteMany({
+      where: { ownerId: { in: source!.credential.owners.map(o => o.id) } },
+    })
+    await ctx.prisma.owner.deleteMany({
+      where: { credentialId: source!.credential.id },
+    })
+    await ctx.prisma.credential.delete({
+      where: { id: source!.credential.id },
+    })
+  }
+
   return ctx.prisma.source.delete({ where: { id: sourceId } })
 }
 
@@ -237,7 +268,7 @@ const usedConceptMaps: FieldResolver<'Source', 'usedConceptMapIds'> = async (
   _,
   ctx,
 ) => {
-  const sourceWithMapIds = await ctx.prisma.source.findOne({
+  const sourceWithMapIds = await ctx.prisma.source.findUnique({
     where: { id: parent.id },
     include: {
       resources: {

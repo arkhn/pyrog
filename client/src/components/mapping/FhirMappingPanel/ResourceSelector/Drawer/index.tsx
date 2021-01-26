@@ -11,8 +11,16 @@ import React, { ReactElement } from 'react';
 import { loader } from 'graphql.macro';
 import { useSelector, useDispatch } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
+import { useSnackbar } from 'notistack';
 
-import { Filter, IReduxStore, ISourceSchema, Join } from 'types';
+import {
+  Column,
+  Filter,
+  IReduxStore,
+  Join,
+  Owner,
+  SerializedOwner
+} from 'types';
 import ColumnSelect from 'components/selects/columnSelect';
 import {
   updateSelectedResource,
@@ -22,6 +30,10 @@ import { onError } from 'services/apollo';
 
 import './style.scss';
 import StringSelect from 'components/selects/stringSelect';
+import {
+  getDatabaseOwners,
+  getResourcePrimaryKeyOwner
+} from 'services/selectedNode/selectors';
 
 interface Props {
   isOpen: boolean;
@@ -46,29 +58,26 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
   const { source, resource } = useSelector(
     (state: IReduxStore) => state.selectedNode
   );
+  const resourcePkOwner = useSelector(getResourcePrimaryKeyOwner);
+  const availableOwners = useSelector(getDatabaseOwners);
 
-  const toaster = useSelector((state: IReduxStore) => state.toaster);
+  const { enqueueSnackbar } = useSnackbar();
 
   const [label, setLabel] = React.useState('');
+  const [pkOwner, setPkOwner] = React.useState(undefined as Owner | undefined);
   const [pkTable, setPkTable] = React.useState('');
   const [pkColumn, setPkColumn] = React.useState('');
   const [filters, setFilters] = React.useState([] as Filter[]);
 
   const onUpdateCompleted = (): void => {
-    toaster.show({
-      message: `Successfully updated ${resource.definition.type} properties`,
-      intent: 'success',
-      icon: 'properties'
-    });
+    enqueueSnackbar(
+      `Successfully updated ${resource.definition.type} properties`,
+      { variant: 'success' }
+    );
   };
 
   const onDeletionCompleted = (): void => {
-    toaster.show({
-      icon: 'layout-hierarchy',
-      intent: 'success',
-      message: 'Resource deleted.',
-      timeout: 4000
-    });
+    enqueueSnackbar('Resource deleted.', { variant: 'success' });
     dispatch(deselectResource());
   };
 
@@ -104,17 +113,17 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
   const [updateResource, { loading: updatingResource }] = useMutation(
     mUpdateResource,
     {
-      onCompleted: onUpdateCompleted,
-      onError: onError(toaster)
+      onError: onError(enqueueSnackbar),
+      onCompleted: onUpdateCompleted
     }
   );
 
   const [deleteResource, { loading: deletingResource }] = useMutation(
     mDeleteResource,
     {
+      onError: onError(enqueueSnackbar),
       update: removeResourceFromCache,
-      onCompleted: onDeletionCompleted,
-      onError: onError(toaster)
+      onCompleted: onDeletionCompleted
     }
   );
 
@@ -133,10 +142,11 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
 
   React.useEffect(() => {
     setLabel(resource.label || '');
+    setPkOwner(resourcePkOwner);
     setPkTable(resource.primaryKeyTable || '');
     setPkColumn(resource.primaryKeyColumn || '');
     setFilters(resource.filters || []);
-  }, [resource]);
+  }, [resource, resourcePkOwner]);
 
   const onFormSubmit = (e: React.FormEvent<HTMLElement>): void => {
     e.preventDefault();
@@ -145,6 +155,7 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
         resourceId: resource.id,
         data: {
           label,
+          primaryKeyOwner: pkOwner ? { id: pkOwner.id } : undefined,
           primaryKeyTable: pkTable,
           primaryKeyColumn: pkColumn
         },
@@ -153,7 +164,10 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
             ...remove__typenameField(filter.sqlColumn),
             joins: filter.sqlColumn.joins?.map(j => ({
               ...remove__typenameField(j),
-              tables: j.tables.map(remove__typenameField)
+              tables: j.tables.map(t => ({
+                ...remove__typenameField(t),
+                owner: t.owner ? { id: t.owner.id } : undefined
+              }))
             })),
             owner: filter.sqlColumn.owner
               ? { id: filter.sqlColumn.owner.id }
@@ -169,6 +183,10 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
         updateSelectedResource({
           ...resource,
           label,
+          primaryKeyOwner: {
+            ...pkOwner,
+            schema: JSON.stringify(pkOwner?.schema)
+          } as SerializedOwner,
           primaryKeyTable: pkTable,
           primaryKeyColumn: pkColumn,
           filters
@@ -188,16 +206,15 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
   const pickPrimaryKey = (
     <FormGroup label="Primary Key" disabled={updatingResource || !resource}>
       <ColumnSelect
-        tableChangeCallback={(table: string): void => {
+        columnChangeCallback={({ owner, table, column }: Column): void => {
+          setPkOwner(owner);
           setPkTable(table);
-          setPkColumn('');
-        }}
-        columnChangeCallback={(column: string): void => {
           setPkColumn(column);
         }}
+        initialOwner={pkOwner}
         initialTable={pkTable}
         initialColumn={pkColumn}
-        sourceSchema={source.credential.schema as ISourceSchema}
+        sourceOwners={availableOwners}
         popoverProps={{
           autoFocus: true,
           boundary: 'viewport',
@@ -235,22 +252,18 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
               <td>{deleteFilterButton(index)}</td>
               <td>
                 <ColumnSelect
-                  tableChangeCallback={(table: string): void => {
-                    filters[index].sqlColumn.table = table;
-                    filters[index].sqlColumn.column = '';
-                    setFilters([...filters]);
-                  }}
-                  columnChangeCallback={(column: string): void => {
-                    filters[index].sqlColumn.column = column;
+                  columnChangeCallback={(column: Column): void => {
+                    filters[index].sqlColumn = column;
                     setFilters([...filters]);
                   }}
                   allJoinsChangeCallback={(joins: Join[]): void => {
                     filters[index].sqlColumn.joins = joins;
                     setFilters([...filters]);
                   }}
+                  initialOwner={sqlColumn ? sqlColumn.owner : undefined}
                   initialTable={sqlColumn ? sqlColumn.table : ''}
                   initialColumn={sqlColumn ? sqlColumn.column : ''}
-                  sourceSchema={source.credential.schema as ISourceSchema}
+                  sourceOwners={availableOwners}
                   fill={true}
                   vertical={true}
                   initialJoins={filters[index].sqlColumn.joins}
@@ -295,7 +308,6 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
           ))}
         </tbody>
       </table>
-
       <Button
         disabled={!resource}
         loading={deletingResource}
@@ -304,7 +316,7 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
           setFilters(prev => [
             ...prev,
             {
-              sqlColumn: { table: '', column: '' },
+              sqlColumn: { owner: undefined, table: '', column: '' },
               relation: '',
               value: ''
             }

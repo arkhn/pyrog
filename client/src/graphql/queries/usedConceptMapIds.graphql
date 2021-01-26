@@ -1,5 +1,5 @@
-query usedConceptMapIds($sourceId: ID!) {
-  source(sourceId: $sourceId) {
+query usedConceptMapIds($sourceId: String!) {
+  source(where: {id: $sourceId}) {
     id
     usedConceptMapIds
   }

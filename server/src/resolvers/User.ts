@@ -1,4 +1,4 @@
-import { objectType, FieldResolver } from '@nexus/schema'
+import { objectType, FieldResolver } from 'nexus'
 import { Role } from '@prisma/client'
 
 export const User = objectType({

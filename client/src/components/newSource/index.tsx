@@ -3,23 +3,22 @@ import {
   FileInput,
   FormGroup,
   InputGroup,
-  IToastProps,
-  ProgressBar,
   HTMLSelect,
   Icon
 } from '@blueprintjs/core';
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useApolloClient, useQuery, useMutation } from '@apollo/react-hooks';
-import { useSelector } from 'react-redux';
 import useReactRouter from 'use-react-router';
 import { loader } from 'graphql.macro';
+import { useSnackbar } from 'notistack';
 
 import Navbar from 'components/navbar';
 import { onError } from 'services/apollo';
+import StringMultiSelect from 'components/selects/stringMultiSelect';
 
 import { FHIR_API_URL, PAGAI_URL } from '../../constants';
-import { ITemplate, IReduxStore } from 'types';
+import { ITemplate } from 'types';
 
 import './style.scss';
 
@@ -39,7 +38,7 @@ const NewSourceView = (): React.ReactElement => {
   const client = useApolloClient();
   const { history } = useReactRouter();
 
-  const toaster = useSelector((state: IReduxStore) => state.toaster);
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const [templateName, setTemplateName] = useState('');
   const [templateExists, setTemplateExists] = useState(false);
@@ -51,7 +50,7 @@ const NewSourceView = (): React.ReactElement => {
   const [host, setHost] = React.useState('');
   const [port, setPort] = React.useState('');
   const [login, setLogin] = React.useState('');
-  const [owner, setOwner] = React.useState('');
+  const [owners, setOwners] = React.useState<string[]>([]);
   const [password, setPassword] = React.useState('');
   const [database, setDatabase] = React.useState('');
   const [model, setModel] = React.useState(models[0]);
@@ -74,33 +73,6 @@ const NewSourceView = (): React.ReactElement => {
         {}
       )
     : {};
-
-  const renderToastProps = ({
-    action,
-    uploadProgress,
-    success,
-    message
-  }: any): IToastProps => {
-    return {
-      action,
-      icon: 'cloud-upload',
-      intent:
-        typeof uploadProgress !== 'undefined'
-          ? undefined
-          : success
-          ? 'success'
-          : 'danger',
-      message: uploadProgress ? (
-        <ProgressBar
-          intent={uploadProgress < 1 ? 'primary' : 'success'}
-          value={uploadProgress}
-        />
-      ) : (
-        message
-      ),
-      timeout: uploadProgress < 1 ? 0 : 2500
-    };
-  };
 
   const createTemplate = () =>
     client.mutate({
@@ -217,14 +189,14 @@ const NewSourceView = (): React.ReactElement => {
       setAvailableOwners(data);
     } catch (err) {
       setAvailableOwners(null);
-      toaster.show({
-        message: `Could not fetch available database owners: ${
+      enqueueSnackbar(
+        `Could not fetch available database owners: ${
           err.response ? err.response.data.error : err.message
         }`,
-        intent: 'danger',
-        icon: 'warning-sign',
-        timeout: 5000
-      });
+        {
+          variant: 'error'
+        }
+      );
     }
   };
 
@@ -235,7 +207,7 @@ const NewSourceView = (): React.ReactElement => {
         port,
         login,
         database,
-        owner,
+        owners,
         password,
         model,
         sourceId: source.id
@@ -244,20 +216,16 @@ const NewSourceView = (): React.ReactElement => {
   };
 
   const [upsertCredential] = useMutation(mUpsertCredential, {
-    onError: onError(toaster)
+    onError: onError(enqueueSnackbar)
   });
 
   const onFormSubmit = async (e: any): Promise<void> => {
     e.preventDefault();
 
-    const toastID = toaster.show(
-      renderToastProps({
-        action: {
-          text: 'Interrompre'
-        },
-        uploadProgress: 0
-      })
-    );
+    const snack = enqueueSnackbar(`Creating source ${sourceName}...`, {
+      variant: 'info',
+      persist: true
+    });
 
     try {
       // Create new template in Graphql if it doesn't exist
@@ -274,23 +242,30 @@ const NewSourceView = (): React.ReactElement => {
       await uploadFhirBundle();
       // After source is created,
       // redirect to /sources page.
-      toaster.show(
-        renderToastProps({
-          message: `Source ${sourceName} was created`,
-          success: true
-        }),
-        toastID
-      );
+      closeSnackbar(snack);
+      enqueueSnackbar(`Source ${sourceName} has been created`, {
+        variant: 'success'
+      });
       history.push('/');
     } catch (e) {
-      toaster.show(
-        renderToastProps({
-          message: e.message,
-          success: false
-        }),
-        toastID
-      );
+      enqueueSnackbar(e.message, {
+        variant: 'error'
+      });
     }
+  };
+
+  const handleOwnerSelect = (owner: string): void => {
+    if (!owners.includes(owner)) {
+      setOwners([...owners, owner]);
+    } else {
+      owners.splice(owners.indexOf(owner), 1);
+      setOwners([...owners]);
+    }
+  };
+
+  const handleTagRemove = (_value: string, index: number): void => {
+    owners.splice(index, 1);
+    setOwners([...owners]);
   };
 
   return (
@@ -438,12 +413,13 @@ const NewSourceView = (): React.ReactElement => {
                 labelFor="text-input"
                 className="credential-field"
               >
-                <HTMLSelect
-                  disabled={!availableOwners}
-                  options={availableOwners || []}
-                  onChange={ev => {
-                    setOwner(ev.currentTarget.value);
+                <StringMultiSelect
+                  items={availableOwners || []}
+                  selectedItems={owners}
+                  onItemSelect={(item: string): void => {
+                    handleOwnerSelect(item);
                   }}
+                  onRemoveTag={handleTagRemove}
                 />
               </FormGroup>
             </div>
@@ -481,7 +457,7 @@ const NewSourceView = (): React.ReactElement => {
                   login &&
                   password &&
                   model &&
-                  owner
+                  owners
                 ) ||
                 (templateName in mapTemplateToSourceNames &&
                   mapTemplateToSourceNames[templateName].indexOf(sourceName) >=

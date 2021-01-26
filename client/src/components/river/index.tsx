@@ -6,11 +6,11 @@ import listBatch from '../../services/batchList/actions';
 import getBatchList from '../../services/batchList/selectors';
 import StringSelect from '../selects/stringSelect';
 import { useQuery } from '@apollo/react-hooks';
+import { useSnackbar } from 'notistack';
 
 import { loader } from 'graphql.macro';
 
 import Navbar from 'components/navbar';
-import { IReduxStore } from 'types';
 
 import SourceSelect from 'components/selects/sourceSelect';
 import ResourceMultiSelect from 'components/selects/resourceMultiSelect';
@@ -39,7 +39,7 @@ const qSourcesAndResources = loader(
 
 const FhirRiverView = (): React.ReactElement => {
   const dispatch = useDispatch();
-  const toaster = useSelector((state: IReduxStore) => state.toaster);
+  const { enqueueSnackbar } = useSnackbar();
   const { data: batchList, error: batchListError } = useSelector(getBatchList);
 
   const [selectedSource, setSelectedSource] = useState({} as Source);
@@ -57,14 +57,14 @@ const FhirRiverView = (): React.ReactElement => {
 
   useEffect(() => {
     if (batchListError) {
-      toaster.show({
-        message: `Problem while listing current batches: ${batchListError}`,
-        intent: 'danger',
-        icon: 'warning-sign',
-        timeout: 6000
-      });
+      enqueueSnackbar(
+        `Problem while listing current batches: ${batchListError}`,
+        {
+          variant: 'error'
+        }
+      );
     }
-  }, [batchListError, toaster]);
+  }, [batchListError, enqueueSnackbar]);
 
   const sources = data ? data.sources : [];
   const resources =
@@ -125,19 +125,14 @@ const FhirRiverView = (): React.ReactElement => {
         }
       );
       dispatch(listBatch());
-      toaster.show({
-        message: 'fhir-river ran successfully',
-        intent: 'success',
-        icon: 'tick-circle',
-        timeout: 4000
+
+      enqueueSnackbar(`Batch was successfully created`, {
+        variant: 'success'
       });
     } catch (err) {
       const errMessage = err.response ? err.response.data : err.message;
-      toaster.show({
-        message: `Problem while running fhir-river: ${errMessage}`,
-        intent: 'danger',
-        icon: 'warning-sign',
-        timeout: 6000
+      enqueueSnackbar(`Error while creating batch ${errMessage}`, {
+        variant: 'error'
       });
     }
     setRunning(false);
@@ -151,11 +146,8 @@ const FhirRiverView = (): React.ReactElement => {
       dispatch(listBatch());
     } catch (err) {
       const errMessage = err.response ? err.response.data : err.message;
-      toaster.show({
-        message: `Problem while deleting a batch: ${errMessage}`,
-        intent: 'danger',
-        icon: 'warning-sign',
-        timeout: 6000
+      enqueueSnackbar(`Problem while deleting a batch: ${errMessage}`, {
+        variant: 'error'
       });
     }
   };

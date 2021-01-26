@@ -8,18 +8,19 @@ import {
   Tag
 } from '@blueprintjs/core';
 import { useMutation } from '@apollo/react-hooks';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { loader } from 'graphql.macro';
+import { useSnackbar } from 'notistack';
 
-import { onError as onApolloError } from 'services/apollo';
 import ScriptSelect from 'components/selects/scriptSelect';
 
 import InputColumn from '../InputColumn';
 import InputStatic from '../InputStatic';
 import InputCondition from '../InputCondition';
 
+import { onError } from 'services/apollo';
 import { setAttributeInMap } from 'services/resourceAttributes/actions';
-import { IAttribute, IInputGroup, IReduxStore } from 'types';
+import { IAttribute, IInputGroup } from 'types';
 
 const mUpdateInputGroup = loader(
   'src/graphql/mutations/updateInputGroup.graphql'
@@ -41,25 +42,24 @@ interface Props {
 
 const InputGroup = ({ attribute, inputGroup }: Props) => {
   const dispatch = useDispatch();
-  const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const onError = onApolloError(toaster);
+  const { enqueueSnackbar } = useSnackbar();
 
   const [
     updateInputGroup,
     { loading: loadingMutation }
-  ] = useMutation(mUpdateInputGroup, { onError });
+  ] = useMutation(mUpdateInputGroup, { onError: onError(enqueueSnackbar) });
   const [
     deleteInputGroup,
     { loading: loadingDeleteInputGroup }
-  ] = useMutation(mDeleteInputGroup, { onError });
+  ] = useMutation(mDeleteInputGroup, { onError: onError(enqueueSnackbar) });
   const [createCondition] = useMutation(mCreateCondition, {
-    onError
+    onError: onError(enqueueSnackbar)
   });
   const [createSqlInput] = useMutation(mCreateSqlInput, {
-    onError
+    onError: onError(enqueueSnackbar)
   });
   const [createStaticInput] = useMutation(mCreateStaticInput, {
-    onError
+    onError: onError(enqueueSnackbar)
   });
 
   const onChangeMergingScript = (script: string) => {

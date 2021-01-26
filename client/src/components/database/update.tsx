@@ -11,13 +11,15 @@ import * as React from 'react';
 import { useQuery, useMutation } from 'react-apollo';
 import { useSelector, useDispatch } from 'react-redux';
 import { loader } from 'graphql.macro';
+import { useSnackbar } from 'notistack';
 
 import StringSelect from 'components/selects/stringSelect';
 import { onError } from 'services/apollo';
-import { IReduxStore } from 'types';
+import { IReduxStore, Owner } from 'types';
 import { updateSelectedSource } from 'services/selectedNode/actions';
 import { PAGAI_URL } from '../../constants';
 import axios from 'axios';
+import StringMultiSelect from 'components/selects/stringMultiSelect';
 
 const qCredentialForSource = loader(
   'src/graphql/queries/credentialForSource.graphql'
@@ -29,14 +31,15 @@ const mUpsertCredential = loader(
 const UpdateDatabaseCredentials = (): React.ReactElement => {
   const models = ['POSTGRES', 'ORACLE', 'MSSQL'];
 
-  const toaster = useSelector((state: IReduxStore) => state.toaster);
+  const { enqueueSnackbar } = useSnackbar();
+
   const selectedNode = useSelector((state: IReduxStore) => state.selectedNode);
 
   const dispatch = useDispatch();
   const [host, setHost] = React.useState('');
   const [port, setPort] = React.useState('');
   const [login, setLogin] = React.useState('');
-  const [owner, setOwner] = React.useState('');
+  const [owners, setOwners] = React.useState<string[]>([]);
   const [password, setPassword] = React.useState('');
   const [database, setDatabase] = React.useState('');
   const [model, setModel] = React.useState(models[0]);
@@ -69,14 +72,12 @@ const UpdateDatabaseCredentials = (): React.ReactElement => {
       setAvailableOwners(data);
     } catch (err) {
       setAvailableOwners(null);
-      toaster.show({
-        message: `Could not fetch available database owners: ${
+      enqueueSnackbar(
+        `Could not fetch available database owners: ${
           err.response ? err.response.data.error : err.message
         }`,
-        intent: 'danger',
-        icon: 'warning-sign',
-        timeout: 5000
-      });
+        { variant: 'error' }
+      );
     }
   };
 
@@ -88,8 +89,7 @@ const UpdateDatabaseCredentials = (): React.ReactElement => {
       updateSelectedSource({
         ...selectedNode.source,
         credential: {
-          ...data.upsertCredential,
-          schema: JSON.parse(data.upsertCredential.schema)
+          ...data.upsertCredential
         }
       })
     );
@@ -97,8 +97,22 @@ const UpdateDatabaseCredentials = (): React.ReactElement => {
 
   const [upsertCredential] = useMutation(mUpsertCredential, {
     onCompleted: onUpsertCompleted,
-    onError: onError(toaster)
+    onError: onError(enqueueSnackbar)
   });
+
+  const handleOwnerSelect = (owner: string): void => {
+    if (!owners.includes(owner)) {
+      setOwners([...owners, owner]);
+    } else {
+      owners.splice(owners.indexOf(owner), 1);
+      setOwners([...owners]);
+    }
+  };
+
+  const handleTagRemove = (_value: string, index: number): void => {
+    owners.splice(index, 1);
+    setOwners([...owners]);
+  };
 
   React.useEffect(() => {
     if (!loading && data && data.source && data.source.credential) {
@@ -106,7 +120,7 @@ const UpdateDatabaseCredentials = (): React.ReactElement => {
         host,
         port,
         login,
-        owner,
+        owners,
         decryptedPassword: password,
         database,
         model
@@ -114,7 +128,7 @@ const UpdateDatabaseCredentials = (): React.ReactElement => {
       setHost(host);
       setPort(port);
       setLogin(login);
-      setOwner(owner);
+      setOwners(owners.map((o: Owner) => o.name));
       setPassword(password);
       setDatabase(database);
       setModel(model);
@@ -150,7 +164,7 @@ const UpdateDatabaseCredentials = (): React.ReactElement => {
               port,
               login,
               database,
-              owner,
+              owners,
               password,
               model,
               sourceId: selectedNode.source.id
@@ -219,16 +233,15 @@ const UpdateDatabaseCredentials = (): React.ReactElement => {
             type={'password'}
           />
         </FormGroup>
-        <FormGroup label="Owner">
-          <StringSelect
-            filterable={false}
+        <FormGroup label="Owners">
+          <StringMultiSelect
             items={availableOwners || []}
-            disabled={!availableOwners}
-            inputItem={owner}
-            onChange={(item: string): void => {
+            selectedItems={owners}
+            onItemSelect={(item: string): void => {
               setHasChanged(true);
-              setOwner(item);
+              handleOwnerSelect(item);
             }}
+            onRemoveTag={handleTagRemove}
           />
         </FormGroup>
         <FormGroup label="Type">

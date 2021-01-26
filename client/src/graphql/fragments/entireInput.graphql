@@ -1,4 +1,5 @@
 #import "./entireJoin.graphql"
+#import "./entireOwner.graphql"
 
 fragment entireInput on Input {
   id
@@ -8,6 +9,9 @@ fragment entireInput on Input {
   staticValue
   sqlValue {
     id
+    owner {
+      ...entireOwner
+    }
     table
     column
     joins {

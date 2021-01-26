@@ -3,8 +3,9 @@ import { promisify } from 'util'
 
 import { REDIS_URL } from './constants'
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 let rcache: RedisClient
-let get: (arg: string) => Promise<string>
+let get: (arg: string) => Promise<string | null>
 let del: (arg: string) => Promise<number>
 let mget: OverloadedKeyCommand<string[], string[], Promise<string[]>>
 let set: (
@@ -15,6 +16,7 @@ let set: (
 ) => Promise<unknown>
 let sadd: OverloadedKeyCommand<string, number, Promise<number>>
 let smembers: (arg: string) => Promise<string[]>
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 // The cache has to be exported as a function otherwise
 // it gets executed when running "yarn generate" and it fails

@@ -1,9 +1,10 @@
-import { inputObjectType } from '@nexus/schema'
+import { inputObjectType } from 'nexus'
 
 export const UpdateResourceInput = inputObjectType({
   name: 'UpdateResourceInput',
   definition(t) {
     t.field('label', { type: 'String' })
+    t.field('primaryKeyOwner', { type: 'OwnerInput' })
     t.field('primaryKeyTable', { type: 'String' })
     t.field('primaryKeyColumn', { type: 'String' })
   },
@@ -19,18 +20,27 @@ export const AttributeInput = inputObjectType({
 export const FilterInput = inputObjectType({
   name: 'FilterInput',
   definition(t) {
-    t.field('sqlColumn', { type: 'ColumnInput', required: true })
-    t.field('relation', { type: 'String', required: true })
-    t.field('value', { type: 'String', required: true })
+    t.nonNull.field('sqlColumn', { type: 'ColumnInput' })
+    t.nonNull.field('relation', { type: 'String' })
+    t.nonNull.field('value', { type: 'String' })
+  },
+})
+
+export const OwnerInput = inputObjectType({
+  name: 'OwnerInput',
+  definition(t) {
+    t.nonNull.field('id', { type: 'String' })
+    t.field('name', { type: 'String' })
   },
 })
 
 export const UpdateInputInput = inputObjectType({
   name: 'UpdateInputInput',
   definition(t) {
+    t.field('owner', { type: 'OwnerInput' })
     t.field('table', { type: 'String' })
     t.field('column', { type: 'String' })
-    t.list.field('joins', {
+    t.list.nonNull.field('joins', {
       type: 'JoinTablesInput',
     })
     t.field('script', { type: 'String' })
@@ -41,9 +51,10 @@ export const UpdateInputInput = inputObjectType({
 export const ColumnInput = inputObjectType({
   name: 'ColumnInput',
   definition(t) {
-    t.field('table', { type: 'String', required: true })
-    t.field('column', { type: 'String', required: true })
-    t.list.field('joins', {
+    t.field('owner', { type: 'OwnerInput' })
+    t.nonNull.field('table', { type: 'String' })
+    t.nonNull.field('column', { type: 'String' })
+    t.list.nonNull.field('joins', {
       type: 'JoinTablesInput',
     })
   },
@@ -52,7 +63,7 @@ export const ColumnInput = inputObjectType({
 export const JoinTablesInput = inputObjectType({
   name: 'JoinTablesInput',
   definition(t) {
-    t.list.field('tables', {
+    t.list.nonNull.field('tables', {
       type: 'ColumnInputWithoutJoins',
     })
   },
@@ -61,18 +72,19 @@ export const JoinTablesInput = inputObjectType({
 export const ColumnInputWithoutJoins = inputObjectType({
   name: 'ColumnInputWithoutJoins',
   definition(t) {
-    t.field('table', { type: 'String' })
-    t.field('column', { type: 'String' })
+    t.field('owner', { type: 'OwnerInput' })
+    t.nonNull.field('table', { type: 'String' })
+    t.nonNull.field('column', { type: 'String' })
   },
 })
 
 export const JoinInput = inputObjectType({
   name: 'JoinInput',
   definition(t) {
-    t.field('source', {
+    t.nonNull.field('source', {
       type: 'ColumnInputWithoutJoins',
     })
-    t.field('target', {
+    t.nonNull.field('target', {
       type: 'ColumnInputWithoutJoins',
     })
   },

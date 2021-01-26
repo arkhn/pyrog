@@ -1,0 +1,310 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`import mapping V9 should send a query per resource 1`] = `
+Array [
+  Object {
+    "data": Object {
+      "attributes": Object {
+        "create": Array [
+          Object {
+            "comments": Object {
+              "create": Array [
+                Object {
+                  "author": Object {
+                    "connect": Object {
+                      "email": "admin@arkhn.com",
+                    },
+                  },
+                  "content": "test",
+                  "createdAt": "2020-04-02T08:53:07.997Z",
+                },
+              ],
+            },
+            "definitionId": "Extension",
+            "path": "extension[1]",
+            "sliceName": null,
+          },
+          Object {
+            "definitionId": "uri",
+            "inputGroups": Object {
+              "create": Array [
+                Object {
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "script": null,
+                        "staticValue": "http://hl7.org/fhir/StructureDefinition/patient-congregation",
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
+                },
+              ],
+            },
+            "path": "extension[1].url",
+            "sliceName": null,
+          },
+          Object {
+            "definitionId": "string",
+            "inputGroups": Object {
+              "create": Array [
+                Object {
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "gender",
+                            "owner": Object {
+                              "connect": Object {
+                                "Owner_name_credential_unique_constraint": Object {
+                                  "credentialId": "456",
+                                  "name": "mimiciii",
+                                },
+                              },
+                            },
+                            "table": "patients",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
+                },
+              ],
+            },
+            "path": "extension[1].valueString",
+            "sliceName": null,
+          },
+          Object {
+            "definitionId": "string",
+            "inputGroups": Object {
+              "create": Array [
+                Object {
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "script": null,
+                        "staticValue": "Jean",
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
+                },
+              ],
+            },
+            "path": "name[0].given[0]",
+            "sliceName": null,
+          },
+          Object {
+            "definitionId": "HumanName",
+            "path": "name[0]",
+            "sliceName": null,
+          },
+          Object {
+            "definitionId": "string",
+            "inputGroups": Object {
+              "create": Array [
+                Object {
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "script": null,
+                        "staticValue": "Georges",
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
+                },
+              ],
+            },
+            "path": "name[0].given[1]",
+            "sliceName": null,
+          },
+          Object {
+            "definitionId": "uri",
+            "inputGroups": Object {
+              "create": Array [
+                Object {
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "script": null,
+                        "staticValue": "http://terminology.arkhn.org/b8efd322-3e38-4072-9c68-e62e15d84d04",
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
+                },
+              ],
+            },
+            "path": "identifier[0].system",
+            "sliceName": null,
+          },
+          Object {
+            "definitionId": "Identifier",
+            "path": "identifier[0]",
+            "sliceName": null,
+          },
+          Object {
+            "definitionId": "string",
+            "inputGroups": Object {
+              "create": Array [
+                Object {
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "subject_id",
+                            "owner": Object {
+                              "connect": Object {
+                                "Owner_name_credential_unique_constraint": Object {
+                                  "credentialId": "456",
+                                  "name": "mimiciii",
+                                },
+                              },
+                            },
+                            "table": "patients",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
+                  },
+                  "mergingScript": null,
+                },
+              ],
+            },
+            "path": "identifier[0].value",
+            "sliceName": null,
+          },
+        ],
+      },
+      "definitionId": "Patient",
+      "filters": Object {
+        "create": Array [],
+      },
+      "label": "feat_1_extension+Observation(microbio)Ref",
+      "logicalReference": "b8efd322-3e38-4072-9c68-e62e15d84d04",
+      "primaryKeyColumn": "row_id",
+      "primaryKeyOwner": Object {
+        "connect": Object {
+          "Owner_name_credential_unique_constraint": Object {
+            "credentialId": "456",
+            "name": "mimiciii",
+          },
+        },
+      },
+      "primaryKeyTable": "patients",
+      "source": Object {
+        "connect": Object {
+          "id": "01234567",
+        },
+      },
+    },
+  },
+]
+`;
+
+exports[`import mapping V9 should send a query per resource 2`] = `
+Array [
+  Object {
+    "data": Object {
+      "attributes": Object {
+        "create": Array [
+          Object {
+            "definitionId": "string",
+            "inputGroups": Object {
+              "create": Array [
+                Object {
+                  "inputs": Object {
+                    "create": Array [
+                      Object {
+                        "conceptMapId": null,
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "subject_id",
+                            "owner": Object {
+                              "connect": Object {
+                                "Owner_name_credential_unique_constraint": Object {
+                                  "credentialId": "456",
+                                  "name": "mimiciii",
+                                },
+                              },
+                            },
+                            "table": "patients",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                      Object {
+                        "conceptMapId": null,
+                        "script": null,
+                        "sqlValue": Object {
+                          "create": Object {
+                            "column": "row_id",
+                            "owner": Object {
+                              "connect": Object {
+                                "Owner_name_credential_unique_constraint": Object {
+                                  "credentialId": "456",
+                                  "name": "mimiciii",
+                                },
+                              },
+                            },
+                            "table": "patients",
+                          },
+                        },
+                        "staticValue": null,
+                      },
+                    ],
+                  },
+                  "mergingScript": "merge_concat",
+                },
+              ],
+            },
+            "path": "photo[0].title",
+            "sliceName": null,
+          },
+          Object {
+            "definitionId": "Attachment",
+            "path": "photo[0]",
+            "sliceName": null,
+          },
+        ],
+      },
+      "definitionId": "Patient",
+      "filters": Object {
+        "create": Array [],
+      },
+      "label": "feat_10_merge_concat(photo.title)",
+      "logicalReference": "7b421f8c-0b62-46f3-96fb-8f182119d8a3",
+      "primaryKeyColumn": "row_id",
+      "primaryKeyOwner": Object {
+        "connect": Object {
+          "Owner_name_credential_unique_constraint": Object {
+            "credentialId": "456",
+            "name": "mimiciii",
+          },
+        },
+      },
+      "primaryKeyTable": "patients",
+      "source": Object {
+        "connect": Object {
+          "id": "01234567",
+        },
+      },
+    },
+  },
+]
+`;

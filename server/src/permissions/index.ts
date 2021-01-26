@@ -106,7 +106,6 @@ export const permissions = shield(
         Query: {
           me: rules.isAuthenticatedUser,
           credential: rules.isAuthenticatedUser,
-          allSources: rules.isAdmin,
           sources: rules.isAuthenticatedUser,
           source: rules.isAuthenticatedUser,
           resource: rules.isAuthenticatedUser,
@@ -116,6 +115,9 @@ export const permissions = shield(
         Mutation: {
           logout: rules.isAuthenticatedUser,
           updateRole: rules.isAdmin,
+
+          createTemplate: rules.isAuthenticatedUser,
+          deleteTemplate: rules.isAdmin,
 
           createAccessControl: rules.isSourceWriter,
           deleteAccessControl: rules.isSourceWriter,

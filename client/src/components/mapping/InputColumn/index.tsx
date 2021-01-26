@@ -12,14 +12,14 @@ import axios from 'axios';
 import { loader } from 'graphql.macro';
 import { useMutation } from '@apollo/react-hooks';
 
-import { onError as onApolloError } from 'services/apollo';
+import { onError } from 'services/apollo';
 import { setAttributeInMap } from 'services/resourceAttributes/actions';
 import {
+  Column,
   ConceptMap,
   IAttribute,
   IInput,
   IReduxStore,
-  ISourceSchema,
   Join
 } from 'types';
 import { FHIR_API_URL } from '../../../constants';
@@ -27,6 +27,8 @@ import { FHIR_API_URL } from '../../../constants';
 import ColumnSelect from 'components/selects/columnSelect';
 import ConceptMapDialog from 'components/mapping/ConceptMap';
 import ScriptSelect from 'components/selects/scriptSelect';
+import { getDatabaseOwners } from 'services/selectedNode/selectors';
+import { useSnackbar } from 'notistack';
 
 // GRAPHQL
 const mUpdateInput = loader('src/graphql/mutations/updateInput.graphql');
@@ -42,11 +44,11 @@ interface Props {
 
 const InputColumn = ({ input, attribute }: Props) => {
   const dispatch = useDispatch();
-  const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const onError = onApolloError(toaster);
+  const { enqueueSnackbar } = useSnackbar();
   const { attribute: selectedAttribute, resource, source } = useSelector(
     (state: IReduxStore) => state.selectedNode
   );
+  const availableOwners = useSelector(getDatabaseOwners);
 
   const [conceptMap, setConceptMap] = useState<ConceptMap | undefined>(
     undefined
@@ -56,19 +58,19 @@ const InputColumn = ({ input, attribute }: Props) => {
   );
 
   const [updateInput] = useMutation(mUpdateInput, {
-    onError
+    onError: onError(enqueueSnackbar)
   });
   const [updateJoin] = useMutation(mUpdateJoin, {
-    onError
+    onError: onError(enqueueSnackbar)
   });
   const [addJoin] = useMutation(mAddJoin, {
-    onError
+    onError: onError(enqueueSnackbar)
   });
   const [deleteJoin] = useMutation(mDeleteJoin, {
-    onError
+    onError: onError(enqueueSnackbar)
   });
   const [deleteInput, { loading: loadDelInput }] = useMutation(mDeleteInput, {
-    onError
+    onError: onError(enqueueSnackbar)
   });
 
   const onClickDelete = async () => {
@@ -119,30 +121,22 @@ const InputColumn = ({ input, attribute }: Props) => {
           </div>
           <div className="sql-input-form">
             <ColumnSelect
-              tableChangeCallback={(table: string) => {
+              columnChangeCallback={({ owner, table, column }: Column) =>
                 updateInput({
                   variables: {
                     inputId: input.id,
-                    data: { table, column: '' }
+                    data: { owner: { id: owner!.id }, table, column }
                   }
-                });
-              }}
-              columnChangeCallback={(column: string) => {
-                updateInput({
-                  variables: {
-                    inputId: input.id,
-                    data: { column }
-                  }
-                });
-              }}
-              joinChangeCallback={(joinId: string, newJoin: Join): void => {
+                })
+              }
+              joinChangeCallback={(joinId: string, newJoin: Join) =>
                 updateJoin({
                   variables: {
                     joinId,
                     data: newJoin
                   }
-                });
-              }}
+                })
+              }
               addJoinCallback={(newJoin: Join): void => {
                 addJoin({
                   variables: {
@@ -158,10 +152,11 @@ const InputColumn = ({ input, attribute }: Props) => {
                   }
                 });
               }}
+              initialOwner={input.sqlValue.owner}
               initialTable={input.sqlValue.table || resource.primaryKeyTable}
               initialColumn={input.sqlValue.column}
               initialJoins={input.sqlValue.joins}
-              sourceSchema={source.credential.schema as ISourceSchema}
+              sourceOwners={availableOwners}
               primaryKeyTable={resource.primaryKeyTable}
               popoverProps={{
                 autoFocus: true,

@@ -1,4 +1,4 @@
-import { objectType } from '@nexus/schema'
+import { objectType } from 'nexus'
 
 import { typeExtensions } from 'fhir/definitions'
 

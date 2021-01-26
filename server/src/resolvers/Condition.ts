@@ -1,4 +1,4 @@
-import { objectType, FieldResolver } from '@nexus/schema'
+import { objectType, FieldResolver } from 'nexus'
 import { ConditionAction, ConditionRelation } from '@prisma/client'
 
 export const Condition = objectType({
@@ -17,7 +17,7 @@ export const Condition = objectType({
 export const updateCondition: FieldResolver<
   'Mutation',
   'updateCondition'
-> = async (_, { conditionId, action, table, column, relation, value }, ctx) =>
+> = async (_, { conditionId, action, column, relation, value }, ctx) =>
   ctx.prisma.condition.update({
     where: {
       id: conditionId,
@@ -26,9 +26,19 @@ export const updateCondition: FieldResolver<
       action: action as ConditionAction,
       relation: relation as ConditionRelation,
       value,
-      sqlValue: {
-        update: { table, column },
-      },
+      sqlValue: column
+        ? {
+            update: {
+              owner: column.owner
+                ? {
+                    connect: { id: column.owner.id },
+                  }
+                : undefined,
+              table: column.table,
+              column: column.column,
+            },
+          }
+        : undefined,
     },
   })
 
@@ -41,3 +51,22 @@ export const conditionsForResource: FieldResolver<
       inputGroup: { attribute: { resourceId } },
     },
   })
+
+export const deleteCondition: FieldResolver<
+  'Mutation',
+  'deleteCondition'
+> = async (_parent, { inputGroupId, conditionId }, ctx) => {
+  // Delete columns associated to the condition to delete
+  await ctx.prisma.column.deleteMany({
+    where: { condition: { id: conditionId } },
+  })
+
+  return ctx.prisma.inputGroup.update({
+    where: { id: inputGroupId },
+    data: {
+      conditions: {
+        delete: { id: conditionId },
+      },
+    },
+  })
+}

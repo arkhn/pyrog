@@ -3,15 +3,13 @@
 mutation updateCondition(
   $conditionId: ID!
   $action: String
-  $table: String
-  $column: String
+  $column: ColumnInput
   $relation: ConditionRelation
   $value: String
 ) {
   updateCondition(
     conditionId: $conditionId
     action: $action
-    table: $table
     column: $column
     relation: $relation
     value: $value

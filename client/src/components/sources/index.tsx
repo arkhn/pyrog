@@ -12,7 +12,8 @@ import {
   changeSelectedSource,
   deselectSource
 } from 'services/selectedNode/actions';
-import { onError as onApolloError } from 'services/apollo';
+import { onError } from 'services/apollo';
+import { useSnackbar } from 'notistack';
 import { IReduxStore, ISelectedSource } from 'types';
 
 import { SourceCard } from './sourceCard';
@@ -27,8 +28,7 @@ const SourcesView = (): React.ReactElement => {
   const { history } = useReactRouter();
 
   const { source } = useSelector((state: IReduxStore) => state.selectedNode);
-  const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const onError = onApolloError(toaster);
+  const { enqueueSnackbar } = useSnackbar();
 
   const [sourceToDelete, setSourceToDelete] = useState(
     undefined as ISelectedSource | undefined
@@ -36,7 +36,8 @@ const SourcesView = (): React.ReactElement => {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
 
   const { data: dataSources, loading: loadingSources } = useQuery(qSources, {
-    fetchPolicy: 'cache-and-network', onError
+    fetchPolicy: 'cache-and-network',
+    onError: onError(enqueueSnackbar)
   });
 
   React.useEffect(() => {
@@ -79,7 +80,7 @@ const SourcesView = (): React.ReactElement => {
 
   const [deleteSource, { loading: deletingSource }] = useMutation(
     mDeleteSource,
-    { update: removeSourceFromCache, onError }
+    { update: removeSourceFromCache, onError: onError(enqueueSnackbar) }
   );
 
   const onSelectSource = async (source: ISelectedSource): Promise<void> => {

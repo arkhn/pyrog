@@ -1,4 +1,4 @@
-import { objectType, FieldResolver } from '@nexus/schema'
+import { objectType, FieldResolver } from 'nexus'
 
 export const Join = objectType({
   name: 'Join',
@@ -21,7 +21,7 @@ export const updateJoin: FieldResolver<'Mutation', 'updateJoin'> = async (
     throw new Error('Update payload cannot be null')
   }
 
-  const join = await ctx.prisma.join.findOne({
+  const join = await ctx.prisma.join.findUnique({
     where: { id: joinId },
     include: { tables: true },
   })
@@ -34,6 +34,14 @@ export const updateJoin: FieldResolver<'Mutation', 'updateJoin'> = async (
           {
             where: { id: join!.tables[0].id },
             data: {
+              owner:
+                data.tables && data.tables[0].owner
+                  ? {
+                      connect: {
+                        id: data.tables[0].owner.id,
+                      },
+                    }
+                  : undefined,
               table: data.tables && data.tables[0].table,
               column: data.tables && data.tables[0].column,
             },
@@ -41,6 +49,14 @@ export const updateJoin: FieldResolver<'Mutation', 'updateJoin'> = async (
           {
             where: { id: join!.tables[1].id },
             data: {
+              owner:
+                data.tables && data.tables[1].owner
+                  ? {
+                      connect: {
+                        id: data.tables[1].owner.id,
+                      },
+                    }
+                  : undefined,
               table: data.tables && data.tables[1].table,
               column: data.tables && data.tables[1].column,
             },

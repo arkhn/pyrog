@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { SnackbarKey, SnackbarProvider } from 'notistack';
 import { Provider } from 'react-redux';
 import { combineReducers, createStore, applyMiddleware } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
@@ -34,11 +35,12 @@ import batchListReducer from './services/batchList/reducer';
 import recommendedColumns from './services/recommendedColumns/reducer';
 import selectedNodeReducer from './services/selectedNode/reducer';
 import resourceAttributesReducer from 'services/resourceAttributes/reducer';
-import toasterReducer from './services/toaster/reducer';
 import userReducer from './services/user/reducer';
 
 // View reducers
 import mimic from './components/mimic/reducer';
+import { Button } from '@material-ui/core';
+import { Icon } from '@blueprintjs/core';
 
 // REDUX
 
@@ -75,7 +77,6 @@ const mainReducer = combineReducers({
   batchList: batchListReducer,
   selectedNode: selectedNodeReducer,
   resourceAttributes: resourceAttributesReducer,
-  toaster: toasterReducer,
   views: viewReducer,
   user: userReducer
 });
@@ -235,11 +236,25 @@ export const client = new ApolloClient({
   link: ApolloLink.from(links)
 });
 
+// add action to all snackbars
+const notistackRef = React.createRef<SnackbarProvider>();
+const onClickDismiss = (key: SnackbarKey) => () => {
+  notistackRef.current!.closeSnackbar(key);
+};
 const App = (): React.ReactElement => (
   <Provider store={store}>
     <ApolloProvider client={client}>
       <PersistGate loading={null} persistor={persistor}>
-        <Routes />
+        <SnackbarProvider
+          ref={notistackRef}
+          action={key => (
+            <Button onClick={onClickDismiss(key)}>
+              <Icon icon="cross" />
+            </Button>
+          )}
+        >
+          <Routes />
+        </SnackbarProvider>
       </PersistGate>
     </ApolloProvider>
   </Provider>

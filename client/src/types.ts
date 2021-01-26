@@ -1,4 +1,3 @@
-import { IToaster } from '@blueprintjs/core';
 import * as redux from 'redux';
 import {
   Attribute,
@@ -59,6 +58,18 @@ export interface ISelectedSource {
   resources: Resource[];
 }
 
+export interface Owner {
+  id: string;
+  name: string;
+  schema: ISourceSchema;
+}
+
+export interface SerializedOwner {
+  id: string;
+  name: string;
+  schema: string;
+}
+
 export interface ICredential {
   id: string;
   host: string;
@@ -67,8 +78,7 @@ export interface ICredential {
   model: string;
   login: string;
   decryptedPassword: string;
-  owner: string;
-  schema: ISourceSchema | string;
+  owners: SerializedOwner[];
 }
 
 export interface IAccessControl {
@@ -84,6 +94,7 @@ export interface Resource {
   logicalReference: string;
   name: string;
   type: string;
+  primaryKeyOwner: SerializedOwner;
   primaryKeyTable: string;
   primaryKeyColumn: string;
   filters: Filter[];
@@ -127,11 +138,11 @@ export interface Filter {
   value: string;
 }
 
-interface Column {
+export interface Column {
   id?: string;
+  owner?: Owner;
   table: string;
   column: string;
-  owner?: any;
   joins?: Join[];
 }
 
@@ -199,7 +210,6 @@ export interface IReduxStore {
   selectedNode: ISelectedNode;
   resourceAttributes: any;
   structure: any;
-  toaster: IToaster;
   user: IUser;
   views: any;
 }
@@ -272,7 +282,6 @@ export interface IView {
   // Router location (withRouter from 'react-router-dom')
   location?: any;
   selectedNode?: ISelectedNode;
-  toaster?: IToaster;
   user?: IUser;
 }
 

@@ -1,4 +1,4 @@
-import { objectType, FieldResolver } from '@nexus/schema'
+import { objectType, FieldResolver } from 'nexus'
 
 export const Template = objectType({
   name: 'Template',
@@ -22,5 +22,5 @@ export const createTemplate: FieldResolver<
 export const deleteTemplate: FieldResolver<
   'Mutation',
   'deleteTemplate'
-> = async (_parent, { id }, ctx) =>
-  ctx.prisma.template.delete({ where: { id } })
+> = async (_parent, { templateId }, ctx) =>
+  ctx.prisma.template.delete({ where: { id: templateId } })

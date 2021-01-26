@@ -3,12 +3,14 @@ import { Button, ButtonGroup, Card, Elevation } from '@blueprintjs/core';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useSelector } from 'react-redux';
 import { loader } from 'graphql.macro';
-import { onError as onApolloError } from 'services/apollo';
+import { onError } from 'services/apollo';
 
-import { Condition, IReduxStore, ISourceSchema, Join } from 'types';
+import { Condition, IReduxStore, Join, Column } from 'types';
 import ColumnSelect from 'components/selects/columnSelect';
 import StringSelect from 'components/selects/stringSelect';
 import ConditionSelect from 'components/selects/conditionSelect';
+import { getDatabaseOwners } from 'services/selectedNode/selectors';
+import { useSnackbar } from 'notistack';
 
 // GRAPHQL
 const mUpdateCondition = loader(
@@ -45,31 +47,28 @@ const conditionToName = (condition: Condition): string =>
   } ${conditionsMap.get(condition.relation)} ${condition.value}`;
 
 const InputCondition = ({ condition }: Props) => {
-  const toaster = useSelector((state: IReduxStore) => state.toaster);
-  const schema = useSelector(
-    (state: IReduxStore) => state.selectedNode.source.credential.schema
-  );
+  const { enqueueSnackbar } = useSnackbar();
+  const availableOwners = useSelector(getDatabaseOwners);
   const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
 
   const [conditionValue, setConditionValue] = useState(condition.value);
 
-  const onError = onApolloError(toaster);
   const [updateCondition] = useMutation(mUpdateCondition, {
-    onError
+    onError: onError(enqueueSnackbar)
   });
   const [updateJoin] = useMutation(mUpdateJoin, {
-    onError
+    onError: onError(enqueueSnackbar)
   });
   const [addJoin] = useMutation(mAddJoin, {
-    onError
+    onError: onError(enqueueSnackbar)
   });
   const [deleteJoin] = useMutation(mDeleteJoin, {
-    onError
+    onError: onError(enqueueSnackbar)
   });
   const [deleteCondition, { loading: loadDelete }] = useMutation(
     mDeleteCondition,
     {
-      onError
+      onError: onError(enqueueSnackbar)
     }
   );
 
@@ -125,26 +124,22 @@ const InputCondition = ({ condition }: Props) => {
             </div>
             <div className="conditions-form-column">
               <ColumnSelect
+                initialOwner={condition.sqlValue.owner}
                 initialTable={condition.sqlValue.table}
                 initialColumn={condition.sqlValue.column}
                 initialJoins={condition.sqlValue.joins}
-                tableChangeCallback={(table: string) => {
+                columnChangeCallback={({ owner, table, column }: Column) =>
                   updateCondition({
                     variables: {
                       conditionId: condition.id,
-                      table,
-                      column: ''
+                      column: {
+                        owner: { id: owner!.id },
+                        table,
+                        column
+                      }
                     }
-                  });
-                }}
-                columnChangeCallback={(column: string) => {
-                  updateCondition({
-                    variables: {
-                      conditionId: condition.id,
-                      column
-                    }
-                  });
-                }}
+                  })
+                }
                 joinChangeCallback={(joinId: string, newJoin: Join): void => {
                   updateJoin({
                     variables: {
@@ -168,7 +163,7 @@ const InputCondition = ({ condition }: Props) => {
                     }
                   });
                 }}
-                sourceSchema={schema as ISourceSchema}
+                sourceOwners={availableOwners}
                 primaryKeyTable={resource.primaryKeyTable}
               />
             </div>
@@ -193,7 +188,7 @@ const InputCondition = ({ condition }: Props) => {
               <div className="conditions-form-value">
                 <input
                   className="text-input"
-                  value={conditionValue}
+                  value={conditionValue || ''}
                   type="text"
                   placeholder="value..."
                   onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -219,8 +214,10 @@ const InputCondition = ({ condition }: Props) => {
                     variables: {
                       conditionId: condition.id,
                       action: c.action,
-                      table: c.sqlValue.table,
-                      column: c.sqlValue.column,
+                      column: {
+                        ...c.sqlValue,
+                        owner: { id: c.sqlValue.owner!.id }
+                      },
                       relation: c.relation,
                       value: c.value
                     }

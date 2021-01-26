@@ -1,8 +1,8 @@
 import * as React from 'react';
-import {Intent, IPopoverProps, MenuItem} from '@blueprintjs/core';
+import { Intent, IPopoverProps, MenuItem } from '@blueprintjs/core';
 
-import {ItemListPredicate, ItemRenderer} from '@blueprintjs/select';
-import {IconName} from '@blueprintjs/icons';
+import { ItemListPredicate, ItemRenderer } from '@blueprintjs/select';
+import { IconName } from '@blueprintjs/icons';
 
 import TSelect from './TSelect';
 

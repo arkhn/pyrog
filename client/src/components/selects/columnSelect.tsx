@@ -3,18 +3,18 @@ import React, { useState, useEffect } from 'react';
 
 import JoinSelect from './joinSelect';
 import StringSelect from 'components/selects/stringSelect';
-import { ISourceSchema, Join } from 'types';
+import { Owner, Join, ISourceSchema } from 'types';
 
 export interface Props {
-  tableChangeCallback?: Function;
   columnChangeCallback?: Function;
   allJoinsChangeCallback?: Function;
   joinChangeCallback?: Function;
   addJoinCallback?: Function;
   deleteJoinCallback?: Function;
+  initialOwner?: Owner;
   initialTable?: string;
   initialColumn?: string;
-  sourceSchema: ISourceSchema;
+  sourceOwners: Owner[];
   vertical?: boolean;
   fill?: boolean;
   initialJoins?: Join[];
@@ -24,15 +24,15 @@ export interface Props {
 }
 
 const ColumnSelect = ({
-  tableChangeCallback,
   columnChangeCallback,
   allJoinsChangeCallback,
   joinChangeCallback,
   addJoinCallback,
   deleteJoinCallback,
+  initialOwner,
   initialTable,
   initialColumn,
-  sourceSchema,
+  sourceOwners,
   vertical,
   fill,
   initialJoins,
@@ -40,23 +40,32 @@ const ColumnSelect = ({
   popoverProps,
   disabled
 }: Props): React.ReactElement => {
+  const [owner, setOwner] = useState(initialOwner);
   const [table, setTable] = useState(initialTable);
   const [column, setColumn] = useState(initialColumn);
   const [joins, setJoins] = useState(initialJoins || []);
 
   useEffect(() => {
+    if (sourceOwners.length === 1) {
+      setOwner(sourceOwners[0]);
+    } else {
+      setOwner(initialOwner);
+    }
     setTable(initialTable);
     setColumn(initialColumn);
     setJoins(initialJoins || []);
-  }, [initialTable, initialColumn, initialJoins]);
+  }, [initialOwner, initialTable, initialColumn, initialJoins, sourceOwners]);
+
+  const changeOwner = (e: string): void => {
+    const _owner = sourceOwners.find(o => o.name === e);
+    setOwner(_owner);
+    setTable(undefined);
+    setColumn(undefined);
+  };
 
   const changeTable = (e: string): void => {
-    if (tableChangeCallback) {
-      tableChangeCallback(e);
-    } else {
-      setTable(e);
-      setColumn(undefined);
-    }
+    setTable(e);
+    setColumn(undefined);
 
     // Update joins
     if (deleteJoinCallback) {
@@ -66,27 +75,47 @@ const ColumnSelect = ({
     }
   };
 
-  const changeColumn = (e: string): void => {
-    setColumn(e);
+  const changeColumn = (c: string): void => {
+    setColumn(c);
 
     if (columnChangeCallback) {
-      columnChangeCallback(e);
+      columnChangeCallback({ owner, table, column: c });
     }
   };
 
-  const tables = Object.keys(sourceSchema);
-
-  const columns = table ? sourceSchema[table] : [];
+  const owners = sourceOwners.map((o: Owner) => o.name);
+  const tables = owner
+    ? Object.keys(
+        sourceOwners.find((o: Owner) => owner && o.id === owner.id)
+          ?.schema as ISourceSchema
+      )
+    : [];
+  const columns = table
+    ? (sourceOwners.find((o: Owner) => owner && o.id === owner.id)?.schema[
+        table
+      ] as string[])
+    : [];
   const withJoins = table && primaryKeyTable && primaryKeyTable !== table;
 
   return (
     <div className={vertical ? 'column-select-vertical' : 'column-select'}>
       <div className="column-select-input">
         <ControlGroup fill={fill || false}>
+          {sourceOwners.length > 1 && (
+            <StringSelect
+              disabled={disabled}
+              icon={'th'}
+              inputItem={owner?.name || ''}
+              items={owners}
+              maxItems={100}
+              onChange={changeOwner}
+              popoverProps={popoverProps || {}}
+            />
+          )}
           <StringSelect
             disabled={disabled}
             icon={'th'}
-            inputItem={table!}
+            inputItem={table || ''}
             items={tables}
             maxItems={100}
             onChange={changeTable}
@@ -95,7 +124,7 @@ const ColumnSelect = ({
           <StringSelect
             disabled={disabled || !table}
             icon={'column-layout'}
-            inputItem={column!}
+            inputItem={column || ''}
             items={columns}
             maxItems={100}
             onChange={changeColumn}
@@ -107,8 +136,8 @@ const ColumnSelect = ({
               onClick={() => {
                 const emptyJoin = {
                   tables: [
-                    { table: primaryKeyTable, column: '' },
-                    { table: table, column: '' }
+                    { owner: null, table: primaryKeyTable, column: '' },
+                    { owner: null, table: table, column: '' }
                   ]
                 };
 
@@ -135,21 +164,51 @@ const ColumnSelect = ({
               <JoinSelect
                 join={join}
                 updateJoin={(
+                  sourceOwner: Owner,
                   sourceTable: string,
                   sourceColumn: string,
+                  targetOwner: Owner,
                   targetTable: string,
                   targetColumn: string
                 ) => {
-                  const newJoin = {
-                    tables: [
-                      { table: sourceTable, column: sourceColumn },
-                      { table: targetTable, column: targetColumn }
-                    ]
-                  };
-                  joins[index] = newJoin;
+                  if (
+                    sourceOwner &&
+                    sourceTable &&
+                    sourceColumn &&
+                    targetOwner &&
+                    targetTable &&
+                    targetColumn
+                  ) {
+                    const newJoin = {
+                      tables: [
+                        {
+                          owner: sourceOwner
+                            ? ({
+                                id: sourceOwner.id,
+                                name: sourceOwner.name
+                              } as Owner)
+                            : undefined,
+                          table: sourceTable,
+                          column: sourceColumn
+                        },
+                        {
+                          owner: targetOwner
+                            ? ({
+                                id: targetOwner.id,
+                                name: sourceOwner.name
+                              } as Owner)
+                            : undefined,
+                          table: targetTable,
+                          column: targetColumn
+                        }
+                      ]
+                    };
+                    joins[index] = newJoin;
+                    setJoins([...joins]);
 
-                  joinChangeCallback && joinChangeCallback(join.id, newJoin);
-                  allJoinsChangeCallback && allJoinsChangeCallback(joins);
+                    joinChangeCallback && joinChangeCallback(join.id, newJoin);
+                    allJoinsChangeCallback && allJoinsChangeCallback(joins);
+                  }
                 }}
               />
             </ControlGroup>

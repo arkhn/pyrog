@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { objectType, FieldResolver } from '@nexus/schema'
+import { objectType, FieldResolver } from 'nexus'
 import { DatabaseType, Credential as Credz } from '@prisma/client'
 
 import { PAGAI_URL } from '../constants'
@@ -16,8 +16,7 @@ export const Credential = objectType({
     t.model.database()
     t.model.model()
     t.model.login()
-    t.model.owner()
-    t.model.schema()
+    t.model.owners()
     t.model.password()
     t.field('decryptedPassword', {
       type: 'String',
@@ -34,19 +33,29 @@ export const Credential = objectType({
 const loadDatabaseSchema = async (
   ctx: Context,
   credentials: Partial<Credz>,
-): Promise<string> => {
-  const { model, owner, host, port, database, login, password } = credentials
+  owner: string,
+): Promise<{
+  schema: string
+  name?: string | null
+  id?: string | null
+}> => {
+  const { model, host, port, database, login, password } = credentials
   try {
-    const { data } = await axios.post(`${PAGAI_URL}/get_db_schema`, {
-      model,
-      owner,
-      host,
-      port,
-      database,
-      login,
-      password: decrypt(password!),
-    })
-    return JSON.stringify(data)
+    const { data } = await axios.post(
+      `${PAGAI_URL}/get_owner_schema/${owner}`,
+      {
+        model,
+        host,
+        port,
+        database,
+        login,
+        password: decrypt(password!),
+      },
+    )
+    return {
+      name: owner,
+      schema: JSON.stringify(data),
+    }
   } catch (err) {
     throw new Error(
       `Could not fetch database schema using pagai: ${
@@ -61,19 +70,18 @@ export const upsertCredential: FieldResolver<
   'upsertCredential'
 > = async (
   _parent,
-  { sourceId, host, port, database, login, password, owner, model },
+  { sourceId, host, port, database, owners, login, password, model },
   ctx,
 ) => {
   const encryptedPassword = encrypt(password)
 
-  const source = await ctx.prisma.source.findOne({
+  const source = await ctx.prisma.source.findUnique({
     where: { id: sourceId },
-    include: { credential: true },
+    include: { credential: { include: { owners: true } } },
   })
   if (!source) {
-    throw new Error(`Source ${sourceId} does not exist`)
+    throw new Error(`Source ${sourceId} does not exist`)
   }
-
   const input: Partial<Credz> = {
     host,
     port,
@@ -81,15 +89,52 @@ export const upsertCredential: FieldResolver<
     database,
     password: encryptedPassword,
     login,
-    owner,
   }
-  input.schema = await loadDatabaseSchema(ctx, input)
+
+  const _owners = owners
+    ? await Promise.all(
+        owners.map(owner => loadDatabaseSchema(ctx, input, owner)),
+      )
+    : []
 
   let credz: Credz
   if (source.credential) {
+    // remove owners if needed
+    const ownersIDToRemove = source.credential.owners
+      .filter(o => !owners?.find(newOwner => o.name === newOwner))
+      .map(o => o.id)
+    await ctx.prisma.owner.deleteMany({
+      where: { id: { in: ownersIDToRemove } },
+    })
+    await Promise.all(
+      _owners.map(_o =>
+        ctx.prisma.owner.upsert({
+          where: {
+            Owner_name_credential_unique_constraint: {
+              credentialId: source.credential?.id as string,
+              name: _o.name as string,
+            },
+          },
+          update: {
+            schema: _o.schema,
+          },
+          create: {
+            credential: {
+              connect: {
+                id: source.credential?.id,
+              },
+            },
+            name: _o.name as string,
+            schema: _o.schema,
+          },
+        }),
+      ),
+    )
     credz = await ctx.prisma.credential.update({
       where: { id: source.credential.id },
-      data: input,
+      data: {
+        ...input,
+      },
     })
   } else {
     credz = await ctx.prisma.credential.create({
@@ -98,8 +143,22 @@ export const upsertCredential: FieldResolver<
         source: { connect: { id: sourceId } },
       },
     })
+    await Promise.all(
+      _owners.map(_o =>
+        ctx.prisma.owner.create({
+          data: {
+            name: _o.name as string,
+            schema: _o.schema,
+            credential: {
+              connect: {
+                id: credz.id,
+              },
+            },
+          },
+        }),
+      ),
+    )
   }
-
   return credz
 }
 

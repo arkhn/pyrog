@@ -1,6 +1,5 @@
-import { GraphQLServer, Options } from 'graphql-yoga'
-import cors from 'cors'
 import axios from 'axios'
+import { applyMiddleware } from 'graphql-middleware'
 
 import {
   authenticationError,
@@ -13,6 +12,8 @@ import { createContext } from './context'
 import { bootstrapDefinitions } from './fhir'
 import { authClient } from './oauth'
 import { IN_PROD } from './constants'
+import { ApolloServer } from 'apollo-server'
+import { GraphQLError, GraphQLFormattedError } from 'graphql'
 
 // AXIOS
 let accessToken: string | null = null
@@ -50,37 +51,36 @@ if (IN_PROD) {
   )
 }
 
-const server = new GraphQLServer({
-  schema,
+const server = new ApolloServer({
+  schema: applyMiddleware(schema, permissions),
   context: createContext,
-  middlewares: [permissions],
-})
-
-server.express.use(cors())
-
-const options: Options = {
   cors: {
     origin: '*',
     methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Authorization', 'Content-Type'],
+    allowedHeaders: ['Authorization', 'Content-Type', 'IDToken'],
   },
-  bodyParserOptions: { limit: '10mb', type: 'application/json' },
-  formatError: (err: any) => {
+  formatError: (err: GraphQLError): GraphQLFormattedError => {
+    console.error(err)
     if (err.message.startsWith(authenticationError.code)) {
       return {
         message: err.message,
-        statusCode: authenticationError.statusCode,
+        extensions: {
+          statusCode: authenticationError.statusCode,
+        },
       }
     } else if (err.message.startsWith(authorizationError.code)) {
       return {
         message: err.message,
-        statusCode: authorizationError.statusCode,
+        extensions: {
+          statusCode: authenticationError.statusCode,
+        },
       }
     } else {
       return err
     }
   },
-}
+})
+
 const { PORT } = process.env
 
 const main = async () => {
@@ -88,7 +88,7 @@ const main = async () => {
     await setAccessToken()
   }
   await bootstrapDefinitions()
-  server.start(options, () =>
+  server.listen({ port: PORT }, () =>
     console.log(
       `🚀 Server ready at: http://localhost:${PORT || 4000}
       \n⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️`,

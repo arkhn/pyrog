@@ -4,15 +4,14 @@ import {
   HTMLTable,
   Button,
   Intent,
-  InputGroup,
+  InputGroup
 } from '@blueprintjs/core';
 import { useQuery, useApolloClient } from '@apollo/react-hooks';
 import { loader } from 'graphql.macro';
+import { useSnackbar } from 'notistack';
 
-import { ISelectedSource, IAccessControl, IReduxStore } from 'types';
+import { ISelectedSource, IAccessControl } from 'types';
 import StringSelect from 'components/selects/stringSelect';
-import { useSelector } from 'react-redux';
-import { onError as onApolloError } from 'services/apollo';
 
 interface Props {
   isOpen: boolean;
@@ -36,13 +35,12 @@ export const CollaboratorsDialog = ({
   isOpen
 }: Props): React.ReactElement => {
   const { data, loading } = useQuery(meQuery);
+  const { enqueueSnackbar } = useSnackbar();
   const [role, setRole] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [creatingPermission, setCreatingPermission] = React.useState(false);
   const [removingCollaborator, setRemovingCollaborator] = React.useState('');
-  const toaster = useSelector((state: IReduxStore) => state.toaster);
   const client = useApolloClient();
-  const onError = onApolloError(toaster);
 
   const renderAclRow = (acl: IAccessControl) => (
     <tr key={acl.id} className="collaboratorsRow">
@@ -66,7 +64,10 @@ export const CollaboratorsDialog = ({
                   }
                 });
               } catch (err) {
-                onError(err);
+                enqueueSnackbar(
+                  `Could not remove collaborator from source: ${err}`,
+                  { variant: 'error' }
+                );
               }
               setRemovingCollaborator('');
             }}
@@ -122,7 +123,10 @@ export const CollaboratorsDialog = ({
                 setRole('');
                 setEmail('');
               } catch (err) {
-                onError(err);
+                enqueueSnackbar(
+                  `Could not add collaborator for source: ${err}`,
+                  { variant: 'error' }
+                );
               }
               setCreatingPermission(false);
             }}

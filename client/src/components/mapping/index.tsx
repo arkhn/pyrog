@@ -5,6 +5,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { useApolloClient } from 'react-apollo';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import { useSnackbar } from 'notistack';
 
 import Comments from './Comments';
 import FhirMappingPanel from './FhirMappingPanel';
@@ -23,7 +24,7 @@ const qInputsForAttribute = loader(
 );
 
 const MappingView = () => {
-  const toaster = useSelector((state: IReduxStore) => state.toaster);
+  const { enqueueSnackbar } = useSnackbar();
   const { source, resource, attribute } = useSelector(
     (state: IReduxStore) => state.selectedNode
   );
@@ -56,12 +57,7 @@ const MappingView = () => {
     });
 
     if (errors && errors.length) {
-      toaster.show({
-        icon: 'error',
-        intent: 'danger',
-        message: 'error while exporting mapping',
-        timeout: 4000
-      });
+      enqueueSnackbar('error while exporting mapping', { variant: 'error' });
       return;
     }
 
@@ -72,7 +68,7 @@ const MappingView = () => {
       const fileName = `${template.name}_${name}_mapping.json`;
       const element = document.createElement('a');
       const file = new File(
-        [mapping],
+        [JSON.stringify(JSON.parse(mapping), null, 2)],
         `${template.name}_${name}_mapping.json`,
         {
           type: 'application/json'
@@ -109,12 +105,10 @@ const MappingView = () => {
       ];
     } catch (err) {
       const errMessage = err.response ? err.response.data : err.message;
-      toaster.show({
-        icon: 'error',
-        intent: 'danger',
-        message: `error while fetching additional resources: ${errMessage}`,
-        timeout: 4000
-      });
+      enqueueSnackbar(
+        `error while fetching additional resources: ${errMessage}`,
+        { variant: 'error' }
+      );
     }
   };
 
@@ -133,7 +127,7 @@ const MappingView = () => {
     if (bundle.entry.length > 0) {
       const fileName = `${source.template.name}_${source.name}_additional_resources.json`;
       const element = document.createElement('a');
-      const file = new File([JSON.stringify(bundle)], fileName, {
+      const file = new File([JSON.stringify(bundle, null, 2)], fileName, {
         type: 'application/json'
       });
       element.href = URL.createObjectURL(file);
@@ -159,20 +153,21 @@ const MappingView = () => {
       <Tab
         id="exploration"
         disabled={!source.credential}
-        panel={<TableViewer source={source} />}
+        panel={<TableViewer />}
         title="Exploration"
       />
       <Tab id="comments" panel={<Comments />} title="Comments" />
     </Tabs>
   );
 
-  if (!source?.credential?.schema) {
-    toaster.show({
-      icon: 'error',
-      intent: 'danger',
-      message: `missing database schema for source ${source?.name || null}`,
-      timeout: 4000
-    });
+  if (source.credential.owners.some(o => !o.schema)) {
+    enqueueSnackbar(
+      `missing database schema for 
+      source ${source?.name || null} owner ${source.credential.owners.find(
+        o => !o.schema
+      )?.name || null}`,
+      { variant: 'error' }
+    );
     return <Navbar />;
   }
 
@@ -190,7 +185,7 @@ const MappingView = () => {
           <div id="exploration-panel">
             {attribute
               ? renderMappingTabs()
-              : source.credential && resource && <TableViewer source={source} />}
+              : source.credential && resource && <TableViewer />}
           </div>
         </div>
       </div>

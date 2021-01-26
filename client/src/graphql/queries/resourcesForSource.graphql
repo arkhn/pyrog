@@ -1,7 +1,7 @@
 #import "../fragments/entireResource.graphql"
 
-query resourcesForSource($sourceId: ID!) {
-  source(sourceId: $sourceId) {
+query resourcesForSource($sourceId: String!) {
+  source(where: {id: $sourceId}) {
     id
     resources {
       ...entireResource

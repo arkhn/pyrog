@@ -1,5 +1,5 @@
-query usedProfileIds($sourceId: ID!) {
-  source(sourceId: $sourceId) {
+query usedProfileIds($sourceId: String!) {
+  source(where: {id: $sourceId}) {
     id
     usedProfileIds
   }

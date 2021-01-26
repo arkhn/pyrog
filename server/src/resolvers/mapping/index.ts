@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, Source } from '@prisma/client'
 
 import {
   MAPPING_VERSION_1,
@@ -11,17 +11,17 @@ import {
   MAPPING_VERSION_8,
   MAPPING_VERSION_9,
   CURRENT_MAPPING_VERSION,
+  MAPPING_VERSION_10,
 } from '../../constants'
-import handleV7 from './v7'
-import handleV8 from './v8'
-import handleV9 from './v9'
+import handleV10 from './v10'
 import { getDefinition } from 'fhir'
+import { ExportedSource } from 'types'
 
 // copy all the resources from the mapping and their attributes.
 // this is done through a single query matching the graph of the mapping.
 export const importMapping = async (
   prismaClient: PrismaClient,
-  sourceId: string,
+  source: Source,
   mapping: any,
 ) => {
   const { resources, version } = mapping
@@ -57,11 +57,19 @@ export const importMapping = async (
         `Your mapping version (v${MAPPING_VERSION_6}) is no longer supported. Please upgrade your export.`,
       )
     case MAPPING_VERSION_7:
-      return handleV7(prismaClient, sourceId, resources)
+      throw new Error(
+        `Your mapping version (v${MAPPING_VERSION_7}) is no longer supported. Please upgrade your export.`,
+      )
     case MAPPING_VERSION_8:
-      return handleV8(prismaClient, sourceId, resources)
+      throw new Error(
+        `Your mapping version (v${MAPPING_VERSION_8}) is no longer supported. Please upgrade your export.`,
+      )
     case MAPPING_VERSION_9:
-      return handleV9(prismaClient, sourceId, resources)
+      throw new Error(
+        `Your mapping version (v${MAPPING_VERSION_9}) is no longer supported. Please upgrade your export.`,
+      )
+    case MAPPING_VERSION_10:
+      return handleV10(prismaClient, source, resources)
     default:
       throw new Error(`Unknown mapping version: "${version}"`)
   }
@@ -72,9 +80,9 @@ export const exportMapping = async (
   sourceId: string,
   includeComments: boolean,
 ): Promise<string> => {
-  const source = await prismaClient.source.findOne({
+  const source = await prismaClient.source.findUnique({
     where: { id: sourceId },
-    include: { template: true },
+    include: { template: true, credential: { include: { owners: true } } },
   })
   if (!source) {
     throw new Error(`source ${sourceId} does not exist`)
@@ -84,10 +92,20 @@ export const exportMapping = async (
     where: { source: { id: source.id } },
     include: {
       source: true,
+      primaryKeyOwner: { select: { name: true, id: true } },
       filters: {
         include: {
           sqlColumn: {
-            include: { joins: { include: { tables: true } } },
+            include: {
+              joins: {
+                include: {
+                  tables: {
+                    include: { owner: { select: { name: true, id: true } } },
+                  },
+                },
+              },
+              owner: { select: { name: true, id: true } },
+            },
           },
         },
       },
@@ -101,14 +119,36 @@ export const exportMapping = async (
               inputs: {
                 include: {
                   sqlValue: {
-                    include: { joins: { include: { tables: true } } },
+                    include: {
+                      joins: {
+                        include: {
+                          tables: {
+                            include: {
+                              owner: { select: { name: true, id: true } },
+                            },
+                          },
+                        },
+                      },
+                      owner: { select: { name: true, id: true } },
+                    },
                   },
                 },
               },
               conditions: {
                 include: {
                   sqlValue: {
-                    include: { joins: { include: { tables: true } } },
+                    include: {
+                      joins: {
+                        include: {
+                          tables: {
+                            include: {
+                              owner: { select: { name: true, id: true } },
+                            },
+                          },
+                        },
+                      },
+                      owner: { select: { name: true, id: true } },
+                    },
                   },
                 },
               },
@@ -133,9 +173,16 @@ export const exportMapping = async (
   )
 
   return JSON.stringify({
-    source: { id: source.id, name: source.name },
+    source: {
+      id: source.id,
+      name: source.name,
+      credential: {
+        owners: source.credential?.owners,
+        model: source.credential?.model,
+      },
+    },
     template: { name: source.template.name },
     resources,
     version: CURRENT_MAPPING_VERSION,
-  })
+  } as ExportedSource)
 }

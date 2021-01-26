@@ -1,4 +1,4 @@
-import { objectType, FieldResolver } from '@nexus/schema'
+import { objectType, FieldResolver } from 'nexus'
 
 export const Input = objectType({
   name: 'Input',
@@ -31,25 +31,50 @@ export const createSqlInput: FieldResolver<
     data: {
       sqlValue: {
         create: {
+          owner: sqlValue?.owner
+            ? {
+                connect: {
+                  id: sqlValue?.owner.id,
+                },
+              }
+            : undefined,
           table: sqlValue?.table,
           column: sqlValue?.column,
           ...(sqlValue?.joins && {
-            joins: {
-              create: sqlValue.joins.map(j => ({
-                tables: {
-                  create: [
-                    {
-                      table: (j.tables && j.tables[0]?.table) || '',
-                      column: (j.tables && j.tables[0]?.column) || '',
+            joins: sqlValue.joins?.length
+              ? {
+                  create: sqlValue.joins.map(j => ({
+                    tables: {
+                      create: [
+                        {
+                          owner:
+                            j.tables && j.tables[0].owner
+                              ? {
+                                  connect: {
+                                    id: j.tables[0].owner.id,
+                                  },
+                                }
+                              : undefined,
+                          table: (j.tables && j.tables[0]?.table) || '',
+                          column: (j.tables && j.tables[0]?.column) || '',
+                        },
+                        {
+                          owner:
+                            j.tables && j.tables[1].owner
+                              ? {
+                                  connect: {
+                                    id: j.tables[1].owner.id,
+                                  },
+                                }
+                              : undefined,
+                          table: (j.tables && j.tables[1]?.table) || '',
+                          column: (j.tables && j.tables[1]?.column) || '',
+                        },
+                      ],
                     },
-                    {
-                      table: (j.tables && j.tables[1]?.table) || '',
-                      column: (j.tables && j.tables[1]?.column) || '',
-                    },
-                  ],
-                },
-              })),
-            },
+                  })),
+                }
+              : undefined,
           }),
         },
       },
@@ -83,7 +108,7 @@ export const updateInput: FieldResolver<'Mutation', 'updateInput'> = async (
   { inputId, data },
   ctx,
 ) => {
-  const input = await ctx.prisma.input.findOne({
+  const input = await ctx.prisma.input.findUnique({
     where: { id: inputId },
     include: { sqlValue: { include: { joins: true } } },
   })
@@ -91,14 +116,24 @@ export const updateInput: FieldResolver<'Mutation', 'updateInput'> = async (
   if (!input)
     throw new Error('Could not find the Input to apply updateInput to.')
 
-  if (input.sqlValue && (data.table || data.column)) {
+  if (input.sqlValue && (data.owner || data.table || data.column)) {
     await ctx.prisma.column.upsert({
       where: { id: input.sqlValue.id },
       create: {
+        owner: data.owner
+          ? {
+              connect: { id: data.owner.id },
+            }
+          : undefined,
         table: data.table,
         column: data.column,
       },
       update: {
+        owner: data.owner
+          ? {
+              connect: { id: data.owner.id },
+            }
+          : undefined,
         table: data.table,
         column: data.column,
       },
@@ -116,10 +151,26 @@ export const updateInput: FieldResolver<'Mutation', 'updateInput'> = async (
             tables: {
               create: [
                 {
+                  owner:
+                    join.tables && join.tables[0].owner
+                      ? {
+                          connect: {
+                            id: join.tables[0].owner.id,
+                          },
+                        }
+                      : undefined,
                   table: (join.tables && join.tables[0].table) || '',
                   column: (join.tables && join.tables[0].column) || '',
                 },
                 {
+                  owner:
+                    join.tables && join.tables[1].owner
+                      ? {
+                          connect: {
+                            id: join.tables[1].owner.id,
+                          },
+                        }
+                      : undefined,
                   table: (join.tables && join.tables[1].table) || '',
                   column: (join.tables && join.tables[1].column) || '',
                 },
@@ -159,3 +210,23 @@ export const updateStaticInput: FieldResolver<
       staticValue: value,
     },
   })
+
+export const deleteInput: FieldResolver<'Mutation', 'deleteInput'> = async (
+  _parent,
+  { inputGroupId, inputId },
+  ctx,
+) => {
+  // Delete columns associated to the input to delete
+  await ctx.prisma.column.deleteMany({
+    where: { input: { id: inputId } },
+  })
+
+  return ctx.prisma.inputGroup.update({
+    where: { id: inputGroupId },
+    data: {
+      inputs: {
+        delete: { id: inputId },
+      },
+    },
+  })
+}

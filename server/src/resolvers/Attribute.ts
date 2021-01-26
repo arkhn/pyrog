@@ -1,6 +1,6 @@
-import { objectType, FieldResolver } from '@nexus/schema'
+import { objectType, FieldResolver } from 'nexus'
 import { getDefinition } from 'fhir'
-import { AttributeWhereInput, Condition, Input } from '@prisma/client'
+import { Prisma, Condition, Input } from '@prisma/client'
 
 export const Attribute = objectType({
   name: 'Attribute',
@@ -71,7 +71,7 @@ export const deleteAttributes: FieldResolver<
   'deleteAttributes'
 > = async (_parent, { filter }, ctx) => {
   const res = await ctx.prisma.attribute.findMany({
-    where: filter as AttributeWhereInput | undefined,
+    where: filter as Prisma.AttributeWhereInput,
     include: {
       inputGroups: {
         include: {
@@ -128,55 +128,7 @@ export const deleteAttributes: FieldResolver<
   )
 
   await ctx.prisma.attribute.deleteMany({
-    where: filter as AttributeWhereInput | undefined,
+    where: filter as Prisma.AttributeWhereInput,
   })
   return res
-}
-
-export const createInputGroup: FieldResolver<
-  'Mutation',
-  'createInputGroup'
-> = async (_parent, { attributeId }, ctx) =>
-  ctx.prisma.attribute.update({
-    where: { id: attributeId },
-    data: {
-      inputGroups: {
-        create: { inputs: { create: [] } },
-      },
-    },
-  })
-
-export const deleteInputGroup: FieldResolver<
-  'Mutation',
-  'deleteInputGroup'
-> = async (_parent, { attributeId, inputGroupId }, ctx) => {
-  // Delete joins of the associated inputs
-  ctx.prisma.join.deleteMany({
-    where: { column: { input: { inputGroupId } } },
-  })
-  // Delete columns of the associated input joins
-  ctx.prisma.column.deleteMany({
-    where: { join: { column: { input: { inputGroupId } } } },
-  })
-  // Delete associated inputs
-  ctx.prisma.input.deleteMany({
-    where: { inputGroupId },
-  })
-  // Delete associated inputs
-  ctx.prisma.condition.deleteMany({
-    where: { inputGroupId },
-  })
-  // Delete associated conditions
-  ctx.prisma.condition.deleteMany({
-    where: { inputGroupId },
-  })
-
-  return ctx.prisma.attribute.update({
-    where: { id: attributeId },
-    data: {
-      inputGroups: {
-        delete: { id: inputGroupId },
-      },
-    },
-  })
 }

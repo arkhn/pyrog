@@ -1,8 +1,8 @@
 #import "../fragments/entireInputGroup.graphql"
 #import "../fragments/comment.graphql"
 
-query inputsForAttribute($attributeId: ID!) {
-  attribute(attributeId: $attributeId) {
+query inputsForAttribute($attributeId: String!) {
+  attribute(where: {id: $attributeId}) {
     id
     path
     inputGroups {

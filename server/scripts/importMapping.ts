@@ -1,47 +1,23 @@
 import { readFileSync } from 'fs'
 import { encrypt } from 'utils'
-import { PrismaClient, Credential } from '@prisma/client'
+import { Owner, PrismaClient } from '@prisma/client'
 import { importMapping } from '../src/resolvers/mapping'
 
 const prismaClient = new PrismaClient()
 
-const importCredentials = (path: string, sourceId: string) => {
-  // read a json file containing a Credential object
-  // and use it to create credentials for the source with id sourceId
-  let content: string
-  let credentials: Credential
-  try {
-    content = readFileSync(path).toString()
-    credentials = JSON.parse(content)
-  } catch (err) {
-    throw new Error(`file must be a JSON file: ${err}`)
-  }
-
-  const encryptedPassword = encrypt(credentials.password)
-
-  return prismaClient.credential.create({
-    data: {
-      host: credentials.host,
-      port: credentials.port,
-      database: credentials.database,
-      login: credentials.login,
-      password: encryptedPassword,
-      owner: credentials.owner,
-      schema: credentials.schema,
-      model: credentials.model,
-      source: {
-        connect: { id: sourceId },
-      },
-    },
-  })
-}
-
 const main = async (path: string) => {
   let content: string
   let mapping: any
+  let credential: any
   try {
     content = readFileSync(path).toString()
     mapping = JSON.parse(content)
+    if (process.argv.length === 4) {
+      // if a second file is provided, use it to add credentials to the source
+      console.log(`Seeding credentials from ${process.argv[3]}...`)
+      content = readFileSync(process.argv[3]).toString()
+      credential = JSON.parse(content)
+    }
   } catch (err) {
     throw new Error(`file must be a JSON file: ${err}`)
   }
@@ -50,7 +26,7 @@ const main = async (path: string) => {
   if (!mapping.template || !mapping.template.name) {
     throw new Error('missing template in mapping')
   }
-  let template = await prismaClient.template.findOne({
+  let template = await prismaClient.template.findUnique({
     where: { name: mapping.template.name },
   })
   if (!template) {
@@ -66,14 +42,42 @@ const main = async (path: string) => {
   }
   let [source] = await prismaClient.source.findMany({
     where: { template: { name: template.name }, name: mapping.source.name },
+    include: { credential: { include: { owners: true } } },
   })
   if (!source) {
+    console.log(credential.password, encrypt(credential.password))
     console.log(`Creating source ${mapping.source.name}...`)
     source = await prismaClient.source.create({
       data: {
         name: mapping.source.name,
         template: { connect: { name: template.name } },
+        credential: mapping.source.credential
+          ? {
+              create: {
+                ...(credential
+                  ? {
+                      ...credential,
+                      password: encrypt(credential.password),
+                    }
+                  : {
+                      host: '',
+                      port: '',
+                      database: '',
+                      password: '',
+                      login: '',
+                    }),
+                model: mapping.source.credential.model,
+                owners: {
+                  create: mapping.source.credential.owners.map((o: any) => ({
+                    name: o.name,
+                    schema: o.schema,
+                  })) as Owner[],
+                },
+              },
+            }
+          : undefined,
       },
+      include: { credential: { include: { owners: true } } },
     })
   } else {
     throw new Error(
@@ -87,13 +91,7 @@ const main = async (path: string) => {
       .join(', ')}...`,
   )
 
-  let operations: any[] = await importMapping(prismaClient, source.id, mapping)
-
-  if (process.argv.length === 4) {
-    // if a second file is provided, use it to add credentials to the source
-    console.log(`Seeding credentials from ${process.argv[3]}...`)
-    operations = [...operations, importCredentials(process.argv[3], source.id)]
-  }
+  let operations: any[] = await importMapping(prismaClient, source, mapping)
 
   return prismaClient.$transaction(operations)
 }

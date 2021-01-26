@@ -1,27 +1,31 @@
-import { arg, idArg, mutationType, stringArg, booleanArg } from '@nexus/schema'
-
 import {
-  createAttribute,
-  createInputGroup,
-  deleteAttribute,
-  deleteAttributes,
-  deleteInputGroup,
-} from './Attribute'
+  arg,
+  idArg,
+  mutationType,
+  stringArg,
+  booleanArg,
+  nonNull,
+  list,
+  nullable,
+} from 'nexus'
+
+import { createAttribute, deleteAttribute, deleteAttributes } from './Attribute'
 import { createAccessControl, deleteAccessControl } from './AccessControl'
 import { addJoinToColumn, updateColumn } from './Column'
 import { createComment } from './Comment'
-import { updateCondition } from './Condition'
+import { deleteCondition, updateCondition } from './Condition'
 import { deleteCredential, upsertCredential } from './Credential'
 import {
   createStaticInput,
   createSqlInput,
   updateInput,
   updateStaticInput,
+  deleteInput,
 } from './Input'
 import {
   addConditionToInputGroup,
-  deleteInput,
-  deleteCondition,
+  createInputGroup,
+  deleteInputGroup,
   updateInputGroup,
 } from './InputGroup'
 import { updateJoin, deleteJoin } from './Join'
@@ -40,7 +44,7 @@ export const Mutation = mutationType({
     t.field('createTemplate', {
       type: 'Template',
       args: {
-        name: stringArg({ required: true }),
+        name: nonNull(stringArg()),
       },
       resolve: createTemplate,
     })
@@ -48,7 +52,7 @@ export const Mutation = mutationType({
     t.field('deleteTemplate', {
       type: 'Template',
       args: {
-        id: idArg({ required: true }),
+        templateId: nonNull(idArg()),
       },
       resolve: deleteTemplate,
     })
@@ -60,9 +64,9 @@ export const Mutation = mutationType({
     t.field('createSource', {
       type: 'Source',
       args: {
-        templateName: stringArg({ required: true }),
-        name: stringArg({ required: true }),
-        mapping: stringArg({ required: false }),
+        templateName: nonNull(stringArg()),
+        name: nonNull(stringArg()),
+        mapping: stringArg(),
       },
       resolve: createSource,
     })
@@ -70,7 +74,7 @@ export const Mutation = mutationType({
     t.field('deleteSource', {
       type: 'Source',
       args: {
-        sourceId: idArg({ required: true }),
+        sourceId: nonNull(idArg()),
       },
       resolve: deleteSource,
     })
@@ -82,14 +86,14 @@ export const Mutation = mutationType({
     t.field('upsertCredential', {
       type: 'Credential',
       args: {
-        sourceId: idArg({ required: true }),
-        host: stringArg({ required: true }),
-        port: stringArg({ required: true }),
-        database: stringArg({ required: true }),
-        login: stringArg({ required: true }),
-        password: stringArg({ required: true }),
-        owner: stringArg({ required: true }),
-        model: stringArg({ required: true }),
+        sourceId: nonNull(idArg()),
+        host: nonNull(stringArg()),
+        port: nonNull(stringArg()),
+        database: nonNull(stringArg()),
+        login: nonNull(stringArg()),
+        password: nonNull(stringArg()),
+        owners: list(nonNull(stringArg())),
+        model: nonNull(stringArg()),
       },
       resolve: upsertCredential,
     })
@@ -97,7 +101,7 @@ export const Mutation = mutationType({
     t.field('deleteCredential', {
       type: 'Credential',
       args: {
-        credentialId: idArg({ required: true }),
+        credentialId: nonNull(idArg()),
       },
       resolve: deleteCredential,
     })
@@ -109,8 +113,8 @@ export const Mutation = mutationType({
     t.field('createResource', {
       type: 'Resource',
       args: {
-        sourceId: idArg({ required: true }),
-        definitionId: stringArg({ required: true }),
+        sourceId: nonNull(idArg()),
+        definitionId: nonNull(stringArg()),
       },
       resolve: createResource,
     })
@@ -118,7 +122,7 @@ export const Mutation = mutationType({
     t.field('deleteResource', {
       type: 'Resource',
       args: {
-        resourceId: idArg({ required: true }),
+        resourceId: nonNull(idArg()),
       },
       resolve: deleteResource,
     })
@@ -126,9 +130,9 @@ export const Mutation = mutationType({
     t.field('updateResource', {
       type: 'Resource',
       args: {
-        resourceId: idArg({ required: true }),
-        data: arg({ type: 'UpdateResourceInput', required: true }),
-        filters: arg({ type: 'FilterInput', list: true }),
+        resourceId: nonNull(idArg()),
+        data: nonNull(arg({ type: 'UpdateResourceInput' })),
+        filters: list(nonNull(arg({ type: 'FilterInput' }))),
       },
       resolve: updateResource,
     })
@@ -140,10 +144,10 @@ export const Mutation = mutationType({
     t.field('createAttribute', {
       type: 'Attribute',
       args: {
-        resourceId: idArg({ required: true }),
-        definitionId: idArg({ required: true }),
-        path: stringArg({ required: true }),
-        sliceName: stringArg({ required: false }),
+        resourceId: nonNull(idArg()),
+        definitionId: nonNull(idArg()),
+        path: nonNull(stringArg()),
+        sliceName: stringArg(),
         data: arg({ type: 'AttributeInput' }),
       },
       resolve: createAttribute,
@@ -152,9 +156,9 @@ export const Mutation = mutationType({
     t.field('createComment', {
       type: 'Comment',
       args: {
-        attributeId: idArg({ required: true }),
-        content: stringArg({ required: true }),
-        validation: booleanArg({ required: true }),
+        attributeId: nonNull(idArg()),
+        content: nonNull(stringArg()),
+        validation: nonNull(booleanArg()),
       },
       resolve: createComment,
     })
@@ -162,17 +166,16 @@ export const Mutation = mutationType({
     t.field('deleteAttribute', {
       type: 'Attribute',
       args: {
-        attributeId: idArg({ required: true }),
+        attributeId: nonNull(idArg()),
       },
       resolve: deleteAttribute,
     })
 
-    t.list.field('deleteAttributes', {
-      type: 'Attribute',
-      nullable: true,
+    t.field('deleteAttributes', {
+      type: nullable(list('Attribute')),
       args: {
         filter: arg({
-          type: 'AttributeWhereInput',
+          type: nonNull('AttributeWhereInput'),
         }),
       },
       resolve: deleteAttributes,
@@ -181,7 +184,7 @@ export const Mutation = mutationType({
     t.field('createInputGroup', {
       type: 'Attribute',
       args: {
-        attributeId: idArg({ required: true }),
+        attributeId: nonNull(idArg()),
       },
       resolve: createInputGroup,
     })
@@ -189,8 +192,8 @@ export const Mutation = mutationType({
     t.field('deleteInputGroup', {
       type: 'Attribute',
       args: {
-        attributeId: idArg({ required: true }),
-        inputGroupId: idArg({ required: true }),
+        attributeId: nonNull(idArg()),
+        inputGroupId: nonNull(idArg()),
       },
       resolve: deleteInputGroup,
     })
@@ -202,7 +205,7 @@ export const Mutation = mutationType({
     t.field('updateInputGroup', {
       type: 'InputGroup',
       args: {
-        inputGroupId: idArg({ required: true }),
+        inputGroupId: nonNull(idArg()),
         mergingScript: stringArg(),
       },
       resolve: updateInputGroup,
@@ -211,7 +214,7 @@ export const Mutation = mutationType({
     t.field('addConditionToInputGroup', {
       type: 'InputGroup',
       args: {
-        inputGroupId: idArg({ required: true }),
+        inputGroupId: nonNull(idArg()),
         action: arg({ type: 'ConditionAction' }),
         columnInput: arg({
           type: 'ColumnInput',
@@ -225,8 +228,8 @@ export const Mutation = mutationType({
     t.field('deleteInput', {
       type: 'InputGroup',
       args: {
-        inputGroupId: idArg({ required: true }),
-        inputId: idArg({ required: true }),
+        inputGroupId: nonNull(idArg()),
+        inputId: nonNull(idArg()),
       },
       resolve: deleteInput,
     })
@@ -234,8 +237,8 @@ export const Mutation = mutationType({
     t.field('deleteCondition', {
       type: 'InputGroup',
       args: {
-        inputGroupId: idArg({ required: true }),
-        conditionId: idArg({ required: true }),
+        inputGroupId: nonNull(idArg()),
+        conditionId: nonNull(idArg()),
       },
       resolve: deleteCondition,
     })
@@ -247,10 +250,11 @@ export const Mutation = mutationType({
     t.field('updateCondition', {
       type: 'Condition',
       args: {
-        conditionId: idArg({ required: true }),
+        conditionId: nonNull(idArg()),
+        column: arg({
+          type: 'ColumnInput',
+        }),
         action: stringArg(),
-        table: stringArg(),
-        column: stringArg(),
         relation: arg({ type: 'ConditionRelation' }),
         value: stringArg(),
       },
@@ -264,7 +268,7 @@ export const Mutation = mutationType({
     t.field('createSqlInput', {
       type: 'Input',
       args: {
-        inputGroupId: idArg({ required: true }),
+        inputGroupId: nonNull(idArg()),
         script: stringArg(),
         conceptMapId: stringArg(),
         sql: arg({
@@ -277,7 +281,7 @@ export const Mutation = mutationType({
     t.field('createStaticInput', {
       type: 'Input',
       args: {
-        inputGroupId: idArg({ required: true }),
+        inputGroupId: nonNull(idArg()),
         value: stringArg(),
       },
       resolve: createStaticInput,
@@ -286,8 +290,8 @@ export const Mutation = mutationType({
     t.field('updateInput', {
       type: 'Input',
       args: {
-        inputId: idArg({ required: true }),
-        data: arg({ type: 'UpdateInputInput', required: true }),
+        inputId: nonNull(idArg()),
+        data: nonNull(arg({ type: 'UpdateInputInput' })),
       },
       resolve: updateInput,
     })
@@ -295,7 +299,7 @@ export const Mutation = mutationType({
     t.field('updateStaticInput', {
       type: 'Input',
       args: {
-        inputId: idArg({ required: true }),
+        inputId: nonNull(idArg()),
         value: stringArg(),
       },
       resolve: updateStaticInput,
@@ -308,8 +312,8 @@ export const Mutation = mutationType({
     t.field('updateColumn', {
       type: 'Column',
       args: {
-        columnId: idArg({ required: true }),
-        data: arg({ type: 'ColumnInputWithoutJoins', required: true }),
+        columnId: nonNull(idArg()),
+        data: nonNull(arg({ type: 'ColumnInputWithoutJoins' })),
       },
       resolve: updateColumn,
     })
@@ -317,8 +321,8 @@ export const Mutation = mutationType({
     t.field('addJoinToColumn', {
       type: 'Column',
       args: {
-        columnId: idArg({ required: true }),
-        join: arg({ type: 'JoinTablesInput', required: true }),
+        columnId: nonNull(idArg()),
+        join: nonNull(arg({ type: 'JoinTablesInput' })),
       },
       resolve: addJoinToColumn,
     })
@@ -330,8 +334,8 @@ export const Mutation = mutationType({
     t.field('updateJoin', {
       type: 'Join',
       args: {
-        joinId: idArg({ required: true }),
-        data: arg({ type: 'JoinTablesInput', required: true }),
+        joinId: nonNull(idArg()),
+        data: nonNull(arg({ type: 'JoinTablesInput' })),
       },
       resolve: updateJoin,
     })
@@ -339,7 +343,7 @@ export const Mutation = mutationType({
     t.field('deleteJoin', {
       type: 'Join',
       args: {
-        joinId: idArg({ required: true }),
+        joinId: nonNull(idArg()),
       },
       resolve: deleteJoin,
     })
@@ -351,9 +355,9 @@ export const Mutation = mutationType({
     t.field('createAccessControl', {
       type: 'AccessControl',
       args: {
-        userEmail: stringArg({ required: true }),
-        sourceId: idArg({ required: true }),
-        role: arg({ type: 'SourceRole', required: true }),
+        userEmail: nonNull(stringArg()),
+        sourceId: nonNull(idArg()),
+        role: nonNull(arg({ type: 'SourceRole' })),
       },
       resolve: createAccessControl,
     })
@@ -361,7 +365,7 @@ export const Mutation = mutationType({
     t.field('deleteAccessControl', {
       type: 'AccessControl',
       args: {
-        accessControlId: idArg({ required: true }),
+        accessControlId: nonNull(idArg()),
       },
       resolve: deleteAccessControl,
     })
@@ -382,8 +386,8 @@ export const Mutation = mutationType({
     t.field('updateRole', {
       type: 'User',
       args: {
-        userId: idArg({ required: true }),
-        newRole: arg({ type: 'Role', required: true }),
+        userId: nonNull(idArg()),
+        newRole: nonNull(arg({ type: 'Role' })),
       },
       resolve: updateRole,
     })
