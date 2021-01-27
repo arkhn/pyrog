@@ -95,7 +95,7 @@ const TableViewer = () => {
   }, [resource, resourcePkOwner]);
 
   React.useEffect(() => {
-    if (!loadingTable && resource && owner && table) {
+    if (resource && owner && table) {
       setLoadingTable(true);
       axios
         .get(`${PAGAI_URL}/explore/${resource.id}/${owner.name}/${table}`)
@@ -115,7 +115,7 @@ const TableViewer = () => {
           );
         });
     }
-  }, [resource, availableOwners, owner, table, enqueueSnackbar, loadingTable]);
+  }, [resource, availableOwners, owner, table, enqueueSnackbar]);
 
   return (
     <div id="tableViewer">
