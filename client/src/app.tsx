@@ -10,14 +10,12 @@ import { createLogger } from 'redux-logger';
 
 import { HttpLink, InMemoryCache, ApolloClient } from 'apollo-client-preset';
 import { ApolloLink, fromPromise } from 'apollo-link';
-import { RestLink } from 'apollo-link-rest';
 import { onError } from 'apollo-link-error';
 import { ApolloProvider } from 'react-apollo';
 
 import './style.scss';
 import Routes from './routes';
 import {
-  CLEANING_SCRIPTS_URL,
   HTTP_BACKEND_URL,
   ACCESS_TOKEN_STORAGE_KEY,
   ID_TOKEN_STORAGE_KEY,
@@ -32,6 +30,7 @@ import { logout as logoutAction } from 'services/user/actions';
 // Data fetching reducers
 import fhirReducer from './services/fhir';
 import batchListReducer from './services/batchList/reducer';
+import scriptListReducer from './services/scripts/reducer';
 import recommendedColumns from './services/recommendedColumns/reducer';
 import selectedNodeReducer from './services/selectedNode/reducer';
 import resourceAttributesReducer from 'services/resourceAttributes/reducer';
@@ -75,6 +74,7 @@ const mainReducer = combineReducers({
   data: dataReducer,
   fhir: fhirReducer,
   batchList: batchListReducer,
+  scriptList: scriptListReducer,
   selectedNode: selectedNodeReducer,
   resourceAttributes: resourceAttributesReducer,
   views: viewReducer,
@@ -217,16 +217,6 @@ if (process.env.NODE_ENV === 'development') {
 }
 links.push(tokenExpiredLink);
 links.push(afterwareLink);
-if (CLEANING_SCRIPTS_URL) {
-  links.push(
-    new RestLink({
-      uri: CLEANING_SCRIPTS_URL + '/',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-  );
-}
 links.push(httpLinkAuth);
 
 // Client

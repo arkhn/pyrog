@@ -3,7 +3,7 @@ import { Tab, Tabs, TabId } from '@blueprintjs/core';
 import { loader } from 'graphql.macro';
 import { useQuery } from '@apollo/react-hooks';
 import { useApolloClient } from 'react-apollo';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
 
@@ -17,6 +17,7 @@ import { IReduxStore } from 'types';
 import { FHIR_API_URL } from '../../constants';
 
 import './style.scss';
+import listScripts from 'services/scripts/actions';
 
 const qExportMapping = loader('src/graphql/queries/exportMapping.graphql');
 const qInputsForAttribute = loader(
@@ -25,6 +26,7 @@ const qInputsForAttribute = loader(
 
 const MappingView = () => {
   const { enqueueSnackbar } = useSnackbar();
+  const dispatch = useDispatch();
   const { source, resource, attribute } = useSelector(
     (state: IReduxStore) => state.selectedNode
   );
@@ -45,6 +47,10 @@ const MappingView = () => {
   });
 
   const client = useApolloClient();
+
+  React.useEffect(() => {
+    dispatch(listScripts());
+  }, [dispatch]);
 
   const exportMapping = async (includeComments = true): Promise<void> => {
     const { data, errors } = await client.query({
