@@ -200,6 +200,10 @@ export interface BatchResponse {
   data: Record<string, Batch>;
   error: string | null;
 }
+export interface ScriptsResponse {
+  data: Script[];
+  error: string | null;
+}
 
 // Store
 export interface IReduxStore {
@@ -207,6 +211,7 @@ export interface IReduxStore {
   dispatch?: any;
   fhir: IFhir;
   batchList: BatchResponse;
+  scriptList: ScriptsResponse;
   selectedNode: ISelectedNode;
   resourceAttributes: any;
   structure: any;
@@ -238,6 +243,11 @@ export interface ConceptMap {
   group: Group[];
 }
 
+export interface Script {
+  name: string;
+  category: string;
+  description: string;
+}
 interface Concept {
   code: string;
 }

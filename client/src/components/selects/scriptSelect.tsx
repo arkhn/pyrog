@@ -1,20 +1,13 @@
 import { ItemPredicate, ItemRenderer } from '@blueprintjs/select';
 import { MenuItem, Button, ButtonGroup, Position } from '@blueprintjs/core';
 import * as React from 'react';
-import { loader } from 'graphql.macro';
 
 import TSelect from './TSelect';
-import { useQuery } from 'react-apollo';
-
-const cleaningScripts = loader('src/graphql/queries/cleaningScripts.graphql');
+import { useSelector } from 'react-redux';
+import { IReduxStore, Script } from 'types';
 
 interface OnChange {
   (script: string): any;
-}
-
-interface Script {
-  name: string;
-  description?: string;
 }
 
 interface Props {
@@ -32,16 +25,14 @@ const sortItems = (scripts: Script[]): Script[] =>
     s1.name.localeCompare(s2.name)
   );
 
-const renderItem: ItemRenderer<Script> = (item, { handleClick }) => {
-  return (
-    <MenuItem
-      key={item.name}
-      onClick={handleClick}
-      label={item.description}
-      text={item.name}
-    />
-  );
-};
+const renderItem: ItemRenderer<Script> = (item, { index, handleClick }) => (
+  <MenuItem
+    key={index}
+    onClick={handleClick}
+    label={item.description}
+    text={item.name}
+  />
+);
 
 const ScriptSelect = ({
   selectedScript,
@@ -49,25 +40,21 @@ const ScriptSelect = ({
   onChange,
   onClear
 }: Props) => {
-  const { loading: queryLoading, data } = useQuery(cleaningScripts);
-  const [items, setItems] = React.useState([] as Script[]);
-  React.useEffect(() => {
-    if (data && data.cleaningScripts) {
-      setItems(data.cleaningScripts.scripts);
-    }
-  }, [data]);
+  const scriptsList = useSelector(
+    ({ scriptList }: IReduxStore) => scriptList.data
+  );
 
   return (
     <ButtonGroup>
       <TSelect<Script>
-        disabled={false}
-        displayItem={({ name }: Script): string => {
-          return name || 'None';
+        disabled={scriptsList.length === 0}
+        displayItem={(script: Script | undefined): string => {
+          return script?.name || 'None';
         }}
         filterItems={filterByName}
-        loading={loading || queryLoading}
-        inputItem={{ name: selectedScript }}
-        items={sortItems(items)}
+        loading={loading}
+        inputItem={scriptsList.find(s => s.name === selectedScript)}
+        items={sortItems(scriptsList)}
         onChange={(script: Script): void => onChange(script.name)}
         renderItem={renderItem}
         popoverProps={{
@@ -82,7 +69,7 @@ const ScriptSelect = ({
       <Button
         className="delete-button"
         disabled={!selectedScript}
-        loading={loading || queryLoading}
+        loading={loading}
         icon={'cross'}
         minimal={true}
         onClick={() => onClear()}

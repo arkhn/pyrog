@@ -15,7 +15,7 @@ Using Pyrog, you can manage any data sources including medical softwares, to ext
 
 This project comprises a `server` built with Prisma (GraphQL), a `client` which consists of a React application. Installation instructions can be found in the `README.md` in `./client` and `./server`.
 
-_Note: Pyrog is a very modular platform, you will benefit from using our dedicated modules for [data retrieval (Pagai)](https://github.com/arkhn/pagai), [data cleaning](https://github.com/arkhn/cleaning-scripts), [data transformation](https://github.com/arkhn/fhir-river) and more on [our GitHub page](https://github.com/arkhn)_
+_Note: Pyrog is a very modular platform, you will benefit from using our dedicated modules for [data retrieval (Pagai)](https://github.com/arkhn/pagai), [data transformation](https://github.com/arkhn/fhir-river) and more on [our GitHub page](https://github.com/arkhn)_
 
 ## Start contributing
 
