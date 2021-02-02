@@ -4,8 +4,7 @@ import * as React from 'react';
 
 import TSelect from './TSelect';
 import { useSelector } from 'react-redux';
-import getScriptList from 'services/scripts/selectors';
-import { Script } from 'types';
+import { IReduxStore, Script } from 'types';
 
 interface OnChange {
   (script: string): any;
@@ -41,7 +40,9 @@ const ScriptSelect = ({
   onChange,
   onClear
 }: Props) => {
-  const { data: scriptsList } = useSelector(getScriptList);
+  const scriptsList = useSelector(
+    ({ scriptList }: IReduxStore) => scriptList.data
+  );
 
   return (
     <ButtonGroup>
