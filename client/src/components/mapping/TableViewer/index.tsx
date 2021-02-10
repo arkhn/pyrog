@@ -46,7 +46,7 @@ const TableViewer = () => {
       setPreviewData(undefined);
       try {
         const res = await axios.post(
-          `${RIVER_URL}/preview`,
+          `${RIVER_URL}/api/preview/`,
           {
             resource_id: resource.id,
             primary_key_values: [
