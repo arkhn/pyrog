@@ -18,13 +18,9 @@ body {
   display: flex;
   flex-direction: column;
 
-  .bp3-popover-wrapper {
+  .bp3-control-group {
     align-self: center;
-    margin-bottom: 15px;
-  }
-
-  .bp3-table-container {
-    align-self: center;
+    margin: 15px;
   }
 }
 

@@ -12,7 +12,7 @@ import axios from 'axios';
 import { useSnackbar } from 'notistack';
 
 import './style.scss';
-import { Icon } from '@blueprintjs/core';
+import { ControlGroup, Icon } from '@blueprintjs/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { IReduxStore, Owner } from 'types';
 import { RIVER_URL } from '../../../constants';
@@ -95,37 +95,35 @@ const TableViewer = () => {
   }, [resource, resourcePkOwner]);
 
   React.useEffect(() => {
-    if (
-      resource &&
-      owner &&
-      table
-    ) {
+    if (resource && owner && table) {
       dispatch(exploreTable(resource.id, owner.name, table));
     }
   }, [resource, owner, table, dispatch]);
 
   return (
     <div id="tableViewer">
-      <StringSelect
-        icon={'th'}
-        inputItem={owner?.name || ''}
-        items={availableOwners.map(o => o.name)}
-        maxItems={100}
-        onChange={(name: string) => {
-          setOwner(availableOwners.find(o => o.name === name)!);
-          setTable('');
-        }}
-      />
-      <StringSelect
-        icon={'th'}
-        inputItem={table}
-        disabled={!owner}
-        items={owner?.schema ? Object.keys(owner.schema) : []}
-        maxItems={100}
-        onChange={(t: string) => {
-          setTable(t);
-        }}
-      />
+      <ControlGroup>
+        <StringSelect
+          icon={'th'}
+          inputItem={owner?.name || ''}
+          items={availableOwners.map(o => o.name)}
+          maxItems={100}
+          onChange={(name: string) => {
+            setOwner(availableOwners.find(o => o.name === name)!);
+            setTable('');
+          }}
+        />
+        <StringSelect
+          icon={'th'}
+          inputItem={table}
+          disabled={!owner}
+          items={owner?.schema ? Object.keys(owner.schema) : []}
+          maxItems={100}
+          onChange={(t: string) => {
+            setTable(t);
+          }}
+        />
+      </ControlGroup>
       {rows.length > 0 && (
         <Table
           numRows={rows.length}
