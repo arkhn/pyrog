@@ -252,11 +252,11 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
               <td>{deleteFilterButton(index)}</td>
               <td>
                 <ColumnSelect
-                  columnChangeCallback={(column: Column): void => {
+                  columnWithJoinsChangeCallback={(
+                    column: Column,
+                    joins: Join[]
+                  ): void => {
                     filters[index].sqlColumn = column;
-                    setFilters([...filters]);
-                  }}
-                  allJoinsChangeCallback={(joins: Join[]): void => {
                     filters[index].sqlColumn.joins = joins;
                     setFilters([...filters]);
                   }}

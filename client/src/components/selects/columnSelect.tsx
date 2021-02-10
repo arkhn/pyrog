@@ -7,7 +7,7 @@ import { Owner, Join, ISourceSchema } from 'types';
 
 export interface Props {
   columnChangeCallback?: Function;
-  allJoinsChangeCallback?: Function;
+  columnWithJoinsChangeCallback?: Function;
   joinChangeCallback?: Function;
   addJoinCallback?: Function;
   deleteJoinCallback?: Function;
@@ -25,7 +25,7 @@ export interface Props {
 
 const ColumnSelect = ({
   columnChangeCallback,
-  allJoinsChangeCallback,
+  columnWithJoinsChangeCallback,
   joinChangeCallback,
   addJoinCallback,
   deleteJoinCallback,
@@ -61,26 +61,39 @@ const ColumnSelect = ({
     setOwner(_owner);
     setTable(undefined);
     setColumn(undefined);
+
+    // Remove joins
+    if (joins.length > 0) {
+      deleteJoinCallback && joins.forEach(join => deleteJoinCallback(join.id));
+      columnWithJoinsChangeCallback &&
+        columnWithJoinsChangeCallback(
+          { owner: _owner, table: undefined, column: undefined },
+          []
+        );
+      setJoins([]);
+    }
   };
 
   const changeTable = (e: string): void => {
     setTable(e);
     setColumn(undefined);
 
-    // Update joins
-    if (deleteJoinCallback) {
-      joins.forEach(join => deleteJoinCallback(join.id));
-    } else if (allJoinsChangeCallback) {
-      allJoinsChangeCallback([]);
+    // Remove joins
+    if (joins.length > 0) {
+      deleteJoinCallback && joins.forEach(join => deleteJoinCallback(join.id));
+      columnWithJoinsChangeCallback &&
+        columnWithJoinsChangeCallback(
+          { owner, table: e, column: undefined },
+          []
+        );
+      setJoins([]);
     }
   };
 
   const changeColumn = (c: string): void => {
     setColumn(c);
 
-    if (columnChangeCallback) {
-      columnChangeCallback({ owner, table, column: c });
-    }
+    columnChangeCallback && columnChangeCallback({ owner, table, column: c });
   };
 
   const owners = sourceOwners.map((o: Owner) => o.name);
@@ -142,8 +155,11 @@ const ColumnSelect = ({
                 };
 
                 addJoinCallback && addJoinCallback(emptyJoin);
-                allJoinsChangeCallback &&
-                  allJoinsChangeCallback([...joins, emptyJoin]);
+                columnWithJoinsChangeCallback &&
+                  columnWithJoinsChangeCallback({ owner, table, column }, [
+                    ...joins,
+                    emptyJoin
+                  ]);
               }}
             />
           )}
@@ -158,7 +174,11 @@ const ColumnSelect = ({
                 onClick={() => {
                   joins.splice(index, 1);
                   deleteJoinCallback && deleteJoinCallback(join.id);
-                  allJoinsChangeCallback && allJoinsChangeCallback(joins);
+                  columnWithJoinsChangeCallback &&
+                    columnWithJoinsChangeCallback(
+                      { owner, table, column },
+                      joins
+                    );
                 }}
               />
               <JoinSelect
@@ -207,7 +227,11 @@ const ColumnSelect = ({
                     setJoins([...joins]);
 
                     joinChangeCallback && joinChangeCallback(join.id, newJoin);
-                    allJoinsChangeCallback && allJoinsChangeCallback(joins);
+                    columnWithJoinsChangeCallback &&
+                      columnWithJoinsChangeCallback(
+                        { owner, table, column },
+                        joins
+                      );
                   }
                 }}
               />
