@@ -29,6 +29,7 @@ import { logout as logoutAction } from 'services/user/actions';
 
 // Data fetching reducers
 import fhirReducer from './services/fhir';
+import exploredTableReducer from './services/exploredTable/reducer';
 import batchListReducer from './services/batchList/reducer';
 import scriptListReducer from './services/scripts/reducer';
 import recommendedColumns from './services/recommendedColumns/reducer';
@@ -72,6 +73,7 @@ const viewReducer = combineReducers({
 
 const mainReducer = combineReducers({
   data: dataReducer,
+  exploredTable: exploredTableReducer,
   fhir: fhirReducer,
   batchList: batchListReducer,
   scriptList: scriptListReducer,

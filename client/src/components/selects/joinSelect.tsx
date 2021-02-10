@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import ColumnSelect from 'components/selects/columnSelect';
-import { getDatabaseOwners } from 'services/selectedNode/selectors';
 
-import { Column } from 'types';
+import { Column, IReduxStore, Owner } from 'types';
 
 interface Props {
   join?: any;
@@ -12,7 +11,9 @@ interface Props {
 }
 
 const JoinSelect = ({ join, updateJoin }: Props): React.ReactElement => {
-  const availableOwners = useSelector(getDatabaseOwners);
+  const availableOwners = useSelector(
+    (state: IReduxStore): Owner[] => state.selectedNode.source.credential.owners
+  );
 
   const [sourceOwner, setSourceOwner] = useState(
     join?.tables && join.tables[0]?.owner

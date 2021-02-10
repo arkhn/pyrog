@@ -1,4 +1,10 @@
-import { ISimpleAction } from 'types';
+import { ISimpleAction, Owner, SerializedOwner } from 'types';
+
+const formatOwner = (o: SerializedOwner | undefined): Owner | undefined =>
+  o && {
+    ...o,
+    schema: JSON.parse(o.schema as any)
+  };
 
 const initialState: any = {
   source: null,
@@ -14,7 +20,13 @@ const selectedNodeReducer = (
     case 'UPDATE_SOURCE':
       return {
         ...state,
-        source: action.payload
+        source: {
+          ...action.payload,
+          credential: {
+            ...action.payload.credential,
+            owners: action.payload.credential.owners.map(formatOwner)
+          }
+        }
       };
 
     case 'CHANGE_SOURCE':
@@ -22,9 +34,9 @@ const selectedNodeReducer = (
         ...initialState,
         source: {
           ...action.payload,
-          credential: action.payload.credential && {
+          credential: {
             ...action.payload.credential,
-            owners: action.payload.credential.owners
+            owners: action.payload.credential.owners.map(formatOwner)
           }
         }
       };
@@ -32,13 +44,23 @@ const selectedNodeReducer = (
     case 'UPDATE_RESOURCE':
       return {
         ...state,
-        resource: action.payload.resource
+        resource: {
+          ...action.payload.resource,
+          primaryKeyOwner:
+            action.payload.resource.primaryKeyOwner &&
+            formatOwner(action.payload.resource.primaryKeyOwner)
+        }
       };
 
     case 'CHANGE_RESOURCE':
       return {
         ...state,
-        resource: action.payload.resource,
+        resource: {
+          ...action.payload.resource,
+          primaryKeyOwner:
+            action.payload.resource.primaryKeyOwner &&
+            formatOwner(action.payload.resource.primaryKeyOwner)
+        },
         attribute: null
       };
 

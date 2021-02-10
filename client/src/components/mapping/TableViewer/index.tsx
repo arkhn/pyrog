@@ -12,30 +12,30 @@ import axios from 'axios';
 import { useSnackbar } from 'notistack';
 
 import './style.scss';
-import { Icon } from '@blueprintjs/core';
-import { useSelector } from 'react-redux';
-import { IReduxStore } from 'types';
-import { PAGAI_URL, RIVER_URL } from '../../../constants';
+import { ControlGroup, Icon } from '@blueprintjs/core';
+import { useDispatch, useSelector } from 'react-redux';
+import { IReduxStore, Owner } from 'types';
+import { RIVER_URL } from '../../../constants';
 import FhirPreview from './FhirPreview';
 import StringSelect from 'components/selects/stringSelect';
-import {
-  getDatabaseOwners,
-  getResourcePrimaryKeyOwner
-} from 'services/selectedNode/selectors';
+import exploreTable from 'services/exploredTable/actions';
+import getExploredTable from 'services/exploredTable/selectors';
 
 const TableViewer = () => {
   const { enqueueSnackbar } = useSnackbar();
+  const dispatch = useDispatch();
   const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
-  const availableOwners = useSelector(getDatabaseOwners);
-  const resourcePkOwner = useSelector(getResourcePrimaryKeyOwner);
+  const { fields, rows, ...exploredTable } = useSelector(getExploredTable);
+  const availableOwners = useSelector(
+    (state: IReduxStore): Owner[] => state.selectedNode.source.credential.owners
+  );
+  const resourcePkOwner = useSelector(
+    (state: IReduxStore) => state.selectedNode.resource?.primaryKeyOwner
+  );
 
   const [owner, setOwner] = React.useState(resourcePkOwner);
   const [table, setTable] = React.useState(resource?.primaryKeyTable);
   const [compatiblePreview, setCompatiblePreview] = React.useState(false);
-
-  const [loadingTable, setLoadingTable] = React.useState(false);
-  const [fields, setFields] = React.useState([] as string[]);
-  const [rows, setRows] = React.useState<any[]>([]);
 
   const [previewData, setPreviewData] = React.useState<any>(undefined);
   const [loadingPreview, setLoadingPreview] = React.useState(false);
@@ -96,49 +96,34 @@ const TableViewer = () => {
 
   React.useEffect(() => {
     if (resource && owner && table) {
-      setLoadingTable(true);
-      axios
-        .get(`${PAGAI_URL}/explore/${resource.id}/${owner.name}/${table}`)
-        .then((res: any) => {
-          setLoadingTable(false);
-          setRows(res.data.rows);
-          setFields(res.data.fields);
-        })
-        .catch((err: any) => {
-          setLoadingTable(false);
-          enqueueSnackbar(
-            err.response ? err.response.data.error : err.message,
-            {
-              variant: 'warning',
-              autoHideDuration: 6000
-            }
-          );
-        });
+      dispatch(exploreTable(resource.id, owner.name, table));
     }
-  }, [resource, availableOwners, owner, table, enqueueSnackbar]);
+  }, [resource, owner, table, dispatch]);
 
   return (
     <div id="tableViewer">
-      <StringSelect
-        icon={'th'}
-        inputItem={owner?.name || ''}
-        items={availableOwners.map(o => o.name)}
-        maxItems={100}
-        onChange={(name: string) => {
-          setOwner(availableOwners.find(o => o.name === name)!);
-          setTable('');
-        }}
-      />
-      <StringSelect
-        icon={'th'}
-        inputItem={table}
-        disabled={!owner}
-        items={owner?.schema ? Object.keys(owner.schema) : []}
-        maxItems={100}
-        onChange={(t: string) => {
-          setTable(t);
-        }}
-      />
+      <ControlGroup>
+        <StringSelect
+          icon={'th'}
+          inputItem={owner?.name || ''}
+          items={availableOwners.map(o => o.name)}
+          maxItems={100}
+          onChange={(name: string) => {
+            setOwner(availableOwners.find(o => o.name === name)!);
+            setTable('');
+          }}
+        />
+        <StringSelect
+          icon={'th'}
+          inputItem={table}
+          disabled={!owner}
+          items={owner?.schema ? Object.keys(owner.schema) : []}
+          maxItems={100}
+          onChange={(t: string) => {
+            setTable(t);
+          }}
+        />
+      </ControlGroup>
       {rows.length > 0 && (
         <Table
           numRows={rows.length}
@@ -151,7 +136,7 @@ const TableViewer = () => {
           onSelection={onSelection}
           selectionModes={SelectionModes.ROWS_ONLY}
           loadingOptions={
-            loadingTable
+            exploredTable.loading
               ? [
                   TableLoadingOption.CELLS,
                   TableLoadingOption.COLUMN_HEADERS,

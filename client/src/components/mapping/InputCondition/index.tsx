@@ -5,11 +5,10 @@ import { useSelector } from 'react-redux';
 import { loader } from 'graphql.macro';
 import { onError } from 'services/apollo';
 
-import { Condition, IReduxStore, Join, Column } from 'types';
+import { Condition, IReduxStore, Join, Column, Owner } from 'types';
 import ColumnSelect from 'components/selects/columnSelect';
 import StringSelect from 'components/selects/stringSelect';
 import ConditionSelect from 'components/selects/conditionSelect';
-import { getDatabaseOwners } from 'services/selectedNode/selectors';
 import { useSnackbar } from 'notistack';
 
 // GRAPHQL
@@ -48,7 +47,9 @@ const conditionToName = (condition: Condition): string =>
 
 const InputCondition = ({ condition }: Props) => {
   const { enqueueSnackbar } = useSnackbar();
-  const availableOwners = useSelector(getDatabaseOwners);
+  const availableOwners = useSelector(
+    (state: IReduxStore): Owner[] => state.selectedNode.source.credential.owners
+  );
   const { resource } = useSelector((state: IReduxStore) => state.selectedNode);
 
   const [conditionValue, setConditionValue] = useState(condition.value);
