@@ -111,7 +111,7 @@ const FhirRiverView = (): React.ReactElement => {
     setRunning(true);
     try {
       await axios.post(
-        `${RIVER_URL}/batch`,
+        `${RIVER_URL}/api/batch/`,
         {
           resources: selectedResources.map(r => ({
             // eslint-disable-next-line @typescript-eslint/camelcase
@@ -141,7 +141,7 @@ const FhirRiverView = (): React.ReactElement => {
   const handleClickCancelBatch = async (): Promise<void> => {
     if (!selectedBatch) return;
     try {
-      await axios.delete(`${RIVER_URL}/batch/${selectedBatch}`);
+      await axios.delete(`${RIVER_URL}/api/batch/${selectedBatch}/`);
       setSelectedBatch('');
       dispatch(listBatch());
     } catch (err) {

@@ -6,7 +6,7 @@ import { RIVER_URL } from '../../constants';
 export const listScripts = (): IThunkAction => {
   return async (dispatch): Promise<IAction> => {
     try {
-      const { data } = await axios.get(`${RIVER_URL}/scripts/`);
+      const { data } = await axios.get(`${RIVER_URL}/api/scripts/`);
       dispatch({
         type: 'LIST_SCRIPTS_SUCCESS',
         payload: data
