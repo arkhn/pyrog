@@ -20,14 +20,14 @@ import {
   IAttribute,
   IInput,
   IReduxStore,
-  Join
+  Join,
+  Owner
 } from 'types';
 import { FHIR_API_URL } from '../../../constants';
 
 import ColumnSelect from 'components/selects/columnSelect';
 import ConceptMapDialog from 'components/mapping/ConceptMap';
 import ScriptSelect from 'components/selects/scriptSelect';
-import { getDatabaseOwners } from 'services/selectedNode/selectors';
 import { useSnackbar } from 'notistack';
 
 // GRAPHQL
@@ -48,7 +48,9 @@ const InputColumn = ({ input, attribute }: Props) => {
   const { attribute: selectedAttribute, resource, source } = useSelector(
     (state: IReduxStore) => state.selectedNode
   );
-  const availableOwners = useSelector(getDatabaseOwners);
+  const availableOwners = useSelector(
+    (state: IReduxStore): Owner[] => state.selectedNode.source.credential.owners
+  );
 
   const [conceptMap, setConceptMap] = useState<ConceptMap | undefined>(
     undefined

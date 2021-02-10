@@ -30,10 +30,6 @@ import { onError } from 'services/apollo';
 
 import './style.scss';
 import StringSelect from 'components/selects/stringSelect';
-import {
-  getDatabaseOwners,
-  getResourcePrimaryKeyOwner
-} from 'services/selectedNode/selectors';
 
 interface Props {
   isOpen: boolean;
@@ -58,8 +54,12 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
   const { source, resource } = useSelector(
     (state: IReduxStore) => state.selectedNode
   );
-  const resourcePkOwner = useSelector(getResourcePrimaryKeyOwner);
-  const availableOwners = useSelector(getDatabaseOwners);
+  const resourcePkOwner = useSelector(
+    (state: IReduxStore) => state.selectedNode.resource?.primaryKeyOwner
+  );
+  const availableOwners = useSelector(
+    (state: IReduxStore): Owner[] => state.selectedNode.source.credential.owners
+  );
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -186,7 +186,7 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
           primaryKeyOwner: {
             ...pkOwner,
             schema: JSON.stringify(pkOwner?.schema)
-          } as SerializedOwner,
+          } as any,
           primaryKeyTable: pkTable,
           primaryKeyColumn: pkColumn,
           filters

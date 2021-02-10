@@ -78,7 +78,7 @@ export interface ICredential {
   model: string;
   login: string;
   decryptedPassword: string;
-  owners: SerializedOwner[];
+  owners: Owner[];
 }
 
 export interface IAccessControl {
@@ -94,7 +94,7 @@ export interface Resource {
   logicalReference: string;
   name: string;
   type: string;
-  primaryKeyOwner: SerializedOwner;
+  primaryKeyOwner: Owner;
   primaryKeyTable: string;
   primaryKeyColumn: string;
   filters: Filter[];
@@ -205,11 +205,22 @@ export interface ScriptsResponse {
   error: string | null;
 }
 
+export interface ExploredTable {
+  resourceId: string;
+  owner: string;
+  table: string;
+  fields: string[];
+  rows: string[];
+  loading: boolean;
+  error: string | null;
+}
+
 // Store
 export interface IReduxStore {
   data: IData;
   dispatch?: any;
   fhir: IFhir;
+  exploredTable: ExploredTable;
   batchList: BatchResponse;
   scriptList: ScriptsResponse;
   selectedNode: ISelectedNode;
