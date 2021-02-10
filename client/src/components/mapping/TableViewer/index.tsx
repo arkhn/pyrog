@@ -90,7 +90,6 @@ const TableViewer = () => {
   }, [table, resource]);
 
   React.useEffect(() => {
-    console.log('here why ?');
     setOwner(resourcePkOwner);
     setTable(resource?.primaryKeyTable);
   }, [resource, resourcePkOwner]);
@@ -99,14 +98,12 @@ const TableViewer = () => {
     if (
       resource &&
       owner &&
-      table &&
-      !exploredTable.loading &&
-      table !== exploredTable.table
+      table
     ) {
       dispatch(exploreTable(resource.id, owner.name, table));
     }
-  }, [resource, owner, table, dispatch, exploredTable]);
-  console.log('--', owner, table);
+  }, [resource, owner, table, dispatch]);
+
   return (
     <div id="tableViewer">
       <StringSelect
@@ -126,7 +123,6 @@ const TableViewer = () => {
         items={owner?.schema ? Object.keys(owner.schema) : []}
         maxItems={100}
         onChange={(t: string) => {
-          console.log('+', t);
           setTable(t);
         }}
       />

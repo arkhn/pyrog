@@ -20,10 +20,12 @@ const selectedNodeReducer = (
     case 'UPDATE_SOURCE':
       return {
         ...state,
-        source: action.payload,
-        credential: action.payload.credential && {
-          ...action.payload.credential,
-          owners: action.payload.credential.owners.map(formatOwner)
+        source: {
+          ...action.payload,
+          credential: {
+            ...action.payload.credential,
+            owners: action.payload.credential.owners.map(formatOwner)
+          }
         }
       };
 
@@ -32,7 +34,7 @@ const selectedNodeReducer = (
         ...initialState,
         source: {
           ...action.payload,
-          credential: action.payload.credential && {
+          credential: {
             ...action.payload.credential,
             owners: action.payload.credential.owners.map(formatOwner)
           }
@@ -44,10 +46,9 @@ const selectedNodeReducer = (
         ...state,
         resource: {
           ...action.payload.resource,
-          primaryKeyOwner: action.payload.resource.primaryKeyOwner && {
-            ...action.payload.resource.primaryKeyOwner,
-            schema: formatOwner(action.payload.resource.primaryKeyOwner)
-          }
+          primaryKeyOwner:
+            action.payload.resource.primaryKeyOwner &&
+            formatOwner(action.payload.resource.primaryKeyOwner)
         }
       };
 
@@ -56,10 +57,9 @@ const selectedNodeReducer = (
         ...state,
         resource: {
           ...action.payload.resource,
-          primaryKeyOwner: action.payload.resource.primaryKeyOwner && {
-            ...action.payload.resource.primaryKeyOwner,
-            schema: formatOwner(action.payload.resource.primaryKeyOwner)
-          }
+          primaryKeyOwner:
+            action.payload.resource.primaryKeyOwner &&
+            formatOwner(action.payload.resource.primaryKeyOwner)
         },
         attribute: null
       };

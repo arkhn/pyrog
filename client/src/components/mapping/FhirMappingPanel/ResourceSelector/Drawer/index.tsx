@@ -19,7 +19,6 @@ import {
   IReduxStore,
   Join,
   Owner,
-  SerializedOwner
 } from 'types';
 import ColumnSelect from 'components/selects/columnSelect';
 import {
