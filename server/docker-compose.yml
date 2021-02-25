@@ -16,7 +16,7 @@ services:
       - REDIS_URL=${REDIS_URL:-redis://redis:6379}
       - ENV=${ENV:-test}
       - DEFINITIONS_DIR=${DEFINITIONS_DIR:-/var/fhir/definitions}
-      - PAGAI_URL=${DEFINITIONS_DIR:-https://dev.arkhn.com/pagai}
+      - RIVER_URL=${DEFINITIONS_DIR:-https://dev.arkhn.com/river}
       - OAUTH2_CLIENT_ID=${OAUTH2_CLIENT_ID:-pyrog-server}
       - OAUTH2_TOKEN_URL=${OAUTH2_TOKEN_URL:-https://dev.arkhn.com/hydra/oauth2/token}
       - TOKEN_INTROSPECTION_URL=${TOKEN_INTROSPECTION_URL:-https://dev.arkhn.com/hydra/oauth2/introspect}

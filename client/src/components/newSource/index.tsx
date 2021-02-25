@@ -17,7 +17,7 @@ import Navbar from 'components/navbar';
 import { onError } from 'services/apollo';
 import StringMultiSelect from 'components/selects/stringMultiSelect';
 
-import { FHIR_API_URL, PAGAI_URL } from '../../constants';
+import { FHIR_API_URL, RIVER_URL } from '../../constants';
 import { ITemplate } from 'types';
 
 import './style.scss';
@@ -185,7 +185,7 @@ const NewSourceView = (): React.ReactElement => {
     password: string;
   }) => {
     try {
-      const { data } = await axios.post(`${PAGAI_URL}/get_owners`, credentials);
+      const { data } = await axios.post(`${RIVER_URL}/pagai/list-owners/`, credentials);
       setAvailableOwners(data);
     } catch (err) {
       setAvailableOwners(null);

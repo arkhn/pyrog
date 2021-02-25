@@ -2,7 +2,7 @@ import axios from 'axios'
 import { objectType, FieldResolver } from 'nexus'
 import { DatabaseType, Credential as Credz } from '@prisma/client'
 
-import { PAGAI_URL } from '../constants'
+import { RIVER_URL } from '../constants'
 import { encrypt, decrypt } from 'utils'
 import { Context } from 'context'
 
@@ -42,7 +42,7 @@ const loadDatabaseSchema = async (
   const { model, host, port, database, login, password } = credentials
   try {
     const { data } = await axios.post(
-      `${PAGAI_URL}/get_owner_schema/${owner}`,
+      `${RIVER_URL}/pagai/owner-schema/${owner}/`,
       {
         model,
         host,

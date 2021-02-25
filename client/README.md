@@ -33,7 +33,6 @@ Here is a brief explanation of the different variables:
 - PORT: the port on which the application will run
 - REACT_APP_HTTP_BACKEND_URL: url to the pyrog server to use. It can be local or you can use something like `https://staging.arkhn.com/pyrog-api`
 - REACT_APP_RIVER_URL: url to river api. It can be local or you can use something like `https://staging.arkhn.com/river`
-- REACT_APP_PAGAI_URL: url to pagai api. It can be local or you can use something like `https://staging.arkhn.com/pagai`
 - REACT_APP_FHIR_API_URL: url to fhir api. It can be local or you can use something like `https://staging.arkhn.com/api`
 - REACT_APP_CLIENT_ID: the id of the client known by hydra (oauth provider)
 - REACT_APP_CLIENT_SECRET: the secret of the client known by hydra (oauth provider)
