@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { IAction, IThunkAction } from 'types';
-import { PAGAI_URL } from '../../constants';
+import { RIVER_URL } from '../../constants';
 
 export const exploreTable = (
   resourceId: string,
@@ -19,7 +19,7 @@ export const exploreTable = (
     });
     try {
       const { data } = await axios.get(
-        `${PAGAI_URL}/explore/${resourceId}/${owner}/${table}`
+        `${RIVER_URL}/pagai/explore/${resourceId}/${owner}/${table}/`
       );
       dispatch({
         type: 'EXPLORE_TABLE_SUCCESS',

@@ -94,6 +94,8 @@ const ColumnSelect = ({
     setColumn(c);
 
     columnChangeCallback && columnChangeCallback({ owner, table, column: c });
+    columnWithJoinsChangeCallback &&
+      columnWithJoinsChangeCallback({ owner, table, column: c }, joins);
   };
 
   const owners = sourceOwners.map((o: Owner) => o.name);

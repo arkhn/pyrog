@@ -42,9 +42,9 @@ const qResourcesForSource = loader(
 const mDeleteResource = loader('src/graphql/mutations/deleteResource.graphql');
 const mUpdateResource = loader('src/graphql/mutations/updateResource.graphql');
 
-const remove__typenameField = (obj: any) => {
+const remove_extra_fields = (obj: any) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { __typename, ...ret } = obj;
+  const { __typename, id, ...ret } = obj;
   return ret;
 };
 
@@ -160,11 +160,11 @@ const Drawer = ({ isOpen, onCloseCallback }: Props): ReactElement => {
         },
         filters: filters.map(filter => ({
           sqlColumn: {
-            ...remove__typenameField(filter.sqlColumn),
+            ...remove_extra_fields(filter.sqlColumn),
             joins: filter.sqlColumn.joins?.map(j => ({
-              ...remove__typenameField(j),
+              ...remove_extra_fields(j),
               tables: j.tables.map(t => ({
-                ...remove__typenameField(t),
+                ...remove_extra_fields(t),
                 owner: t.owner ? { id: t.owner.id } : undefined
               }))
             })),

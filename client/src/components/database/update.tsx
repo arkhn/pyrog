@@ -17,7 +17,7 @@ import StringSelect from 'components/selects/stringSelect';
 import { onError } from 'services/apollo';
 import { IReduxStore, Owner } from 'types';
 import { updateSelectedSource } from 'services/selectedNode/actions';
-import { PAGAI_URL } from '../../constants';
+import { RIVER_URL } from '../../constants';
 import axios from 'axios';
 import StringMultiSelect from 'components/selects/stringMultiSelect';
 
@@ -68,7 +68,7 @@ const UpdateDatabaseCredentials = (): React.ReactElement => {
     password: string;
   }) => {
     try {
-      const { data } = await axios.post(`${PAGAI_URL}/get_owners`, credentials);
+      const { data } = await axios.post(`${RIVER_URL}/pagai/list-owners/`, credentials);
       setAvailableOwners(data);
     } catch (err) {
       setAvailableOwners(null);
