@@ -47,7 +47,7 @@
   "devDependencies": {
     "@graphql-tools/delegate": "^7.0.8",
     "@prisma/cli": "^2.13.1",
-    "@prisma/sdk": "^2.13.1",
+    "@prisma/sdk": "^2.20.0",
     "@types/graphql-type-json": "^0.3.2",
     "@types/jest": "^24.9.0",
     "@types/jwt-decode": "^2.2.1",
