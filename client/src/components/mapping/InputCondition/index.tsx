@@ -35,6 +35,7 @@ const conditionsMap = new Map([
   ['LE', '<='],
   ['GE', '>='],
   ['GT', '>'],
+  ['IN', 'IN'],
   ['NULL', 'IS NULL'],
   ['NOTNULL', 'IS NOT NULL']
 ]);
