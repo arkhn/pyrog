@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Button, Tag } from '@blueprintjs/core';
+import { Button, ButtonGroup, Tag } from '@blueprintjs/core';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import listBatch from '../../services/batchList/actions';
@@ -107,35 +107,37 @@ const FhirRiverView = (): React.ReactElement => {
     setSelectedResources([...selectedResources]);
   };
 
-  const handleClickCreateBatch = async (): Promise<void> => {
-    setRunning(true);
-    try {
-      await axios.post(
-        `${RIVER_URL}/api/batch/`,
-        {
-          resources: selectedResources.map(r => ({
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            resource_id: r.id,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            resource_type: r.definition.type
-          }))
-        },
-        {
-          headers: { 'Content-Type': 'application/json' }
-        }
-      );
-      dispatch(listBatch());
+  const handleClickCreateBatch = (isStream: boolean) =>
+    async (): Promise<void> => {
+      setRunning(true);
+      try {
+        await axios.post(
+          `${RIVER_URL}/api/batch/`,
+          {
+            resources: selectedResources.map(r => ({
+              // eslint-disable-next-line @typescript-eslint/camelcase
+              resource_id: r.id,
+              // eslint-disable-next-line @typescript-eslint/camelcase
+              resource_type: r.definition.type
+            })),
+            is_streaming: isStream
+          },
+          {
+            headers: { 'Content-Type': 'application/json' }
+          }
+        );
+        dispatch(listBatch());
 
-      enqueueSnackbar(`Batch was successfully created`, {
-        variant: 'success'
-      });
-    } catch (err) {
-      const errMessage = err.response ? err.response.data : err.message;
-      enqueueSnackbar(`Error while creating batch ${errMessage}`, {
-        variant: 'error'
-      });
-    }
-    setRunning(false);
+        enqueueSnackbar(`Batch was successfully created`, {
+          variant: 'success'
+        });
+      } catch (err) {
+        const errMessage = err.response ? err.response.data : err.message;
+        enqueueSnackbar(`Error while creating batch ${errMessage}`, {
+          variant: 'error'
+        });
+      }
+      setRunning(false);
   };
 
   const handleClickCancelBatch = async (): Promise<void> => {
@@ -184,16 +186,28 @@ const FhirRiverView = (): React.ReactElement => {
           onRemoveTag={handleTagRemove}
         />
         <div className="align-right">
-          <Button
-            intent="primary"
-            large
-            disabled={!selectedSource.id || credentialsMissing}
-            loading={running}
-            className="button-submit"
-            onClick={handleClickCreateBatch}
-          >
-            Make the river flow
-          </Button>
+          <ButtonGroup vertical={true}>
+            <Button
+              intent="primary"
+              large
+              disabled={!selectedSource.id || credentialsMissing}
+              loading={running}
+              className="button-submit"
+              onClick={handleClickCreateBatch(false)}
+            >
+              Create BATCH
+            </Button>
+            <Button
+              intent="primary"
+              large
+              disabled={!selectedSource.id || credentialsMissing}
+              loading={running}
+              className="button-submit"
+              onClick={handleClickCreateBatch(true)}
+            >
+              Create STREAM
+            </Button>
+          </ButtonGroup>
         </div>
         <h1>Cancel a batch</h1>
         <StringSelect
