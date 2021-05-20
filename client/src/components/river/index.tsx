@@ -185,7 +185,7 @@ const FhirRiverView = (): React.ReactElement => {
           onSelectAll={handleSelectAll}
           onRemoveTag={handleTagRemove}
         />
-        <div className="align-right">
+        <div className="align-right button-group">
           <ButtonGroup>
             <Button
               intent="primary"
@@ -210,18 +210,20 @@ const FhirRiverView = (): React.ReactElement => {
           </ButtonGroup>
         </div>
         <h1>Monitor streaming</h1>
-          <ButtonGroup>
-            <a href={AIRFLOW_RUNS_URL} target="_blank">
-              <Button>
-                Go to airflow
-              </Button>
-            </a>
-            <a href={GRAFANA_URL} target="_blank">
-              <Button>
-                Go to grafana
-              </Button>
-            </a>
-          </ButtonGroup>
+          <div className="button-group">
+            <ButtonGroup>
+              <a href={AIRFLOW_RUNS_URL} target="_blank">
+                <Button>
+                  Go to airflow
+                </Button>
+              </a>
+              <a href={GRAFANA_URL} target="_blank">
+                <Button>
+                  Go to grafana
+                </Button>
+              </a>
+            </ButtonGroup>
+          </div>
         <h1>Cancel a stream</h1>
         <StringSelect
           items={

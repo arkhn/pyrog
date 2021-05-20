@@ -13,6 +13,12 @@ $window-padding: 20px;
     color: #FFA500;
   }
 
+  .button-group {
+    .bp3-button {
+      margin-left: 10px;
+    }
+  }
+
   .button-submit {
     margin: $window-padding 0px;
   }
