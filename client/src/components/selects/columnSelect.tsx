@@ -217,7 +217,7 @@ const ColumnSelect = ({
                           owner: targetOwner
                             ? ({
                                 id: targetOwner.id,
-                                name: sourceOwner.name
+                                name: targetOwner.name
                               } as Owner)
                             : undefined,
                           table: targetTable,
