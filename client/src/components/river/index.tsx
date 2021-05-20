@@ -16,7 +16,7 @@ import SourceSelect from 'components/selects/sourceSelect';
 import ResourceMultiSelect from 'components/selects/resourceMultiSelect';
 
 import { Resource } from 'types';
-import { RIVER_URL } from '../../constants';
+import { AIRFLOW_RUNS_URL, GRAFANA_URL, RIVER_URL } from '../../constants';
 
 import './style.scss';
 
@@ -186,7 +186,7 @@ const FhirRiverView = (): React.ReactElement => {
           onRemoveTag={handleTagRemove}
         />
         <div className="align-right">
-          <ButtonGroup vertical={true}>
+          <ButtonGroup>
             <Button
               intent="primary"
               large
@@ -209,7 +209,20 @@ const FhirRiverView = (): React.ReactElement => {
             </Button>
           </ButtonGroup>
         </div>
-        <h1>Cancel a batch</h1>
+        <h1>Monitor streaming</h1>
+          <ButtonGroup>
+            <a href={AIRFLOW_RUNS_URL} target="_blank">
+              <Button>
+                Go to airflow
+              </Button>
+            </a>
+            <a href={GRAFANA_URL} target="_blank">
+              <Button>
+                Go to grafana
+              </Button>
+            </a>
+          </ButtonGroup>
+        <h1>Cancel a stream</h1>
         <StringSelect
           items={
             batchList
