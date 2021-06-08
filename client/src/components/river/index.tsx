@@ -17,6 +17,7 @@ import ResourceMultiSelect from 'components/selects/resourceMultiSelect';
 
 import { Resource } from 'types';
 import { RIVER_URL } from '../../constants';
+import { UPDATE_FREQUENCIES } from 'components/river/constants';
 
 import './style.scss';
 
@@ -37,6 +38,8 @@ const qSourcesAndResources = loader(
   'src/graphql/queries/sourcesAndResources.graphql'
 );
 
+const UPDATE_FREQUENCY_CHOICES = Object.keys(UPDATE_FREQUENCIES)
+
 const FhirRiverView = (): React.ReactElement => {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
@@ -44,6 +47,7 @@ const FhirRiverView = (): React.ReactElement => {
 
   const [selectedSource, setSelectedSource] = useState({} as Source);
   const [selectedResources, setSelectedResources] = useState([] as Resource[]);
+  const [selectedFrequency, setSelectedFrequency] = useState(UPDATE_FREQUENCY_CHOICES[0]);
   const [running, setRunning] = useState(false);
   const [selectedBatch, setSelectedBatch] = useState('');
 
@@ -109,17 +113,26 @@ const FhirRiverView = (): React.ReactElement => {
 
   const handleClickCreateBatch = async (): Promise<void> => {
     setRunning(true);
+    const runOnce = selectedFrequency === "run once"
+    const route =  runOnce? "api/batch/" : "api/update-batch/";
+    var body: any = {
+      resources: selectedResources.map(r => ({
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        resource_id: r.id,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        resource_type: r.definition.type
+      }))
+    }
+    if (!runOnce) {
+      body = {
+        schedule_interval: UPDATE_FREQUENCIES[selectedFrequency],
+        ...body
+      }
+    }
     try {
       await axios.post(
-        `${RIVER_URL}/api/batch/`,
-        {
-          resources: selectedResources.map(r => ({
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            resource_id: r.id,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            resource_type: r.definition.type
-          }))
-        },
+        `${RIVER_URL}/${route}`,
+        body,
         {
           headers: { 'Content-Type': 'application/json' }
         }
@@ -182,6 +195,17 @@ const FhirRiverView = (): React.ReactElement => {
           onResourceSelect={handleResourceSelect}
           onSelectAll={handleSelectAll}
           onRemoveTag={handleTagRemove}
+        />
+        <h1>Select an update frequency</h1>
+        <p>
+          Select the frequency at which you want the batch to be re-run in order to update your fhir warehouse.
+          Choose "run once" if you don't want any automatic update.
+        </p>
+        <StringSelect
+          items={UPDATE_FREQUENCY_CHOICES}
+          inputItem={selectedFrequency}
+          doSort={false}
+          onChange={(freq: string): void => setSelectedFrequency(freq)}
         />
         <div className="align-right">
           <Button
