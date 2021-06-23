@@ -18,7 +18,7 @@ import Navbar from 'components/navbar';
 import SourceSelect from 'components/selects/sourceSelect';
 import ResourceMultiSelect from 'components/selects/resourceMultiSelect';
 
-import { DagConf, Resource } from 'types';
+import { Resource } from 'types';
 import {
   AIRFLOW_URL,
   AIRFLOW_USER,
