@@ -7,7 +7,7 @@ import {
   Switch,
   Icon
 } from '@blueprintjs/core';
-import { Tooltip2, Classes } from '@blueprintjs/popover2';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useApolloClient, useQuery, useMutation } from '@apollo/react-hooks';
@@ -273,13 +273,9 @@ const NewSourceView = (): React.ReactElement => {
   };
 
   const isServiceNameSwitch = (
-    <Tooltip2
-      content="use a service name"
-      className={Classes.TOOLTIP2_INDICATOR}
-      intent="danger"
-      placement="right"
-    >
+    <Tooltip2 content="use a service name" placement="top">
       <Switch
+        className="switch"
         checked={isServiceNameConn}
         onChange={(): void => setIsServiceNameConn(!isServiceNameConn)}
       />
