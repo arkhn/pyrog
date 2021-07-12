@@ -7,6 +7,7 @@ import {
   Switch,
   Icon
 } from '@blueprintjs/core';
+import { Tooltip2, Classes } from '@blueprintjs/popover2';
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useApolloClient, useQuery, useMutation } from '@apollo/react-hooks';
@@ -271,6 +272,20 @@ const NewSourceView = (): React.ReactElement => {
     setOwners([...owners]);
   };
 
+  const isServiceNameSwitch = (
+    <Tooltip2
+      content="use a service name"
+      className={Classes.TOOLTIP2_INDICATOR}
+      intent="danger"
+      placement="right"
+    >
+      <Switch
+        checked={isServiceNameConn}
+        onChange={(): void => setIsServiceNameConn(!isServiceNameConn)}
+      />
+    </Tooltip2>
+  );
+
   return (
     <div>
       <Navbar />
@@ -377,12 +392,7 @@ const NewSourceView = (): React.ReactElement => {
                   setDatabase(event.target.value);
                 }}
                 placeholder={'Database name'}
-              />
-              <Switch
-                className="credential-field"
-                checked={isServiceNameConn}
-                label="use a service name"
-                onChange={(): void => setIsServiceNameConn(!isServiceNameConn)}
+                rightElement={isServiceNameSwitch}
               />
               <InputGroup
                 className="credential-field"
