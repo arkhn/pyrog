@@ -209,9 +209,7 @@ const NewSourceView = (): React.ReactElement => {
         host,
         port,
         login,
-        database: isServiceNameConn
-          ? `service:${database}`
-          : `database:${database}`,
+        database: isServiceNameConn ? `service:${database}` : database,
         owners,
         password,
         model,

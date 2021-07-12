@@ -132,7 +132,7 @@ const UpdateDatabaseCredentials = (): React.ReactElement => {
       setLogin(login);
       setOwners(owners.map((o: Owner) => o.name));
       setPassword(password);
-      setDatabase(database.split(':')[1]);
+      setDatabase(database.split(':')[1] ?? database);
       setModel(model);
     }
   }, [loading, selectedNode, data]);
@@ -165,9 +165,7 @@ const UpdateDatabaseCredentials = (): React.ReactElement => {
               host,
               port,
               login,
-              database: isServiceNameConn
-                ? `service:${database}`
-                : `database:${database}`,
+              database: isServiceNameConn ? `service:${database}` : database,
               owners,
               password,
               model,
