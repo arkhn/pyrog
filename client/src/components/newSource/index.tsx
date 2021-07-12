@@ -4,6 +4,7 @@ import {
   FormGroup,
   InputGroup,
   HTMLSelect,
+  Switch,
   Icon
 } from '@blueprintjs/core';
 import axios from 'axios';
@@ -53,6 +54,8 @@ const NewSourceView = (): React.ReactElement => {
   const [owners, setOwners] = React.useState<string[]>([]);
   const [password, setPassword] = React.useState('');
   const [database, setDatabase] = React.useState('');
+  const [isServiceNameConn, setIsServiceNameConn] = React.useState(false);
+
   const [model, setModel] = React.useState(models[0]);
   const [availableOwners, setAvailableOwners] = React.useState(
     null as string[] | null
@@ -206,7 +209,9 @@ const NewSourceView = (): React.ReactElement => {
         host,
         port,
         login,
-        database,
+        database: isServiceNameConn
+          ? `service:${database}`
+          : `database:${database}`,
         owners,
         password,
         model,
@@ -374,6 +379,12 @@ const NewSourceView = (): React.ReactElement => {
                   setDatabase(event.target.value);
                 }}
                 placeholder={'Database name'}
+              />
+              <Switch
+                className="credential-field"
+                checked={isServiceNameConn}
+                label="use a service name"
+                onChange={(): void => setIsServiceNameConn(!isServiceNameConn)}
               />
               <InputGroup
                 className="credential-field"
