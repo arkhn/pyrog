@@ -6,7 +6,7 @@ import { RIVER_URL } from '../../constants';
 export const listBatch = (): IThunkAction => {
   return async (dispatch): Promise<IAction> => {
     try {
-      const { data } = await axios.get(`${RIVER_URL}/api/batch/`);
+      const { data } = await axios.get(`${RIVER_URL}/api/batches/`);
       dispatch({
         type: 'LIST_BATCH_SUCCESS',
         payload: data
