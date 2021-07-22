@@ -190,9 +190,9 @@ const FhirRiverView = (): React.ReactElement => {
         <StringSelect
           items={
             batchList
-              ? Object.keys(batchList).map(
-                  (batchId: string) => batchList[batchId].created_at
-                )
+              ? Object.keys(batchList)
+                  .filter((batchId: string) => !batchList[batchId].deleted_at)
+                  .map((batchId: string) => batchList[batchId].created_at)
               : []
           }
           inputItem={
