@@ -191,18 +191,18 @@ const FhirRiverView = (): React.ReactElement => {
           items={
             batchList
               ? Object.keys(batchList).map(
-                  (batchId: string) => batchList[batchId].timestamp
+                  (batchId: string) => batchList[batchId].created_at
                 )
               : []
           }
           inputItem={
             !!selectedBatch && !batchListError
-              ? batchList[selectedBatch].timestamp
+              ? batchList[selectedBatch].created_at
               : 'Select a batch to cancel'
           }
           onChange={(item: string): void => {
             const batchId = Object.keys(batchList).find(
-              batchId => batchList[batchId].timestamp === item
+              batchId => batchList[batchId].created_at === item
             );
             if (batchId) setSelectedBatch(batchId);
           }}
@@ -214,12 +214,11 @@ const FhirRiverView = (): React.ReactElement => {
               {!!selectedBatch &&
                 batchList[selectedBatch].resources.map(resource => {
                   return (
-                    <li key={resource.resource_id}>
+                    <li key={resource}>
                       <Tag>
                         {
-                          resources.find(
-                            (r: Resource) => r.id === resource.resource_id
-                          ).definition.type
+                          resources.find((r: Resource) => r.id === resource)
+                            .definition.type
                         }
                       </Tag>
                     </li>

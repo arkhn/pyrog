@@ -185,15 +185,11 @@ export interface IFhir {
   availableResources: ResourceDefinition[];
 }
 
-export interface BatchResource {
-  resource_id: string;
-  resource_type?: string;
-}
-
 export interface Batch {
   id: string;
-  timestamp: string;
-  resources: BatchResource[];
+  created_at: string;
+  updated_at: string;
+  resources: string[];
 }
 
 export interface BatchResponse {
