@@ -42,7 +42,7 @@ const loadDatabaseSchema = async (
   const { model, host, port, database, login, password } = credentials
   try {
     const { data } = await axios.post(
-      `${RIVER_URL}/pagai/owner-schema/${owner}/`,
+      `${RIVER_URL}/api/owner-schema/${owner}/`,
       {
         model,
         host,

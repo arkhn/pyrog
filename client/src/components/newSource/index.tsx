@@ -189,7 +189,7 @@ const NewSourceView = (): React.ReactElement => {
     password: string;
   }) => {
     try {
-      const { data } = await axios.post(`${RIVER_URL}/pagai/list-owners/`, credentials);
+      const { data } = await axios.post(`${RIVER_URL}/api/list-owners/`, credentials);
       setAvailableOwners(data);
     } catch (err) {
       setAvailableOwners(null);
