@@ -103,9 +103,13 @@ export const upsertCredential: FieldResolver<
     const ownersIDToRemove = source.credential.owners
       .filter(o => !owners?.find(newOwner => o.name === newOwner))
       .map(o => o.id)
-    await ctx.prisma.owner.deleteMany({
-      where: { id: { in: ownersIDToRemove } },
-    })
+    try {
+      await ctx.prisma.owner.deleteMany({
+        where: { id: { in: ownersIDToRemove } },
+      })
+    } catch (err) {
+      console.warn(`could not delete owners ${ownersIDToRemove}: ${err}`)
+    }
     await Promise.all(
       _owners.map(_o =>
         ctx.prisma.owner.upsert({
